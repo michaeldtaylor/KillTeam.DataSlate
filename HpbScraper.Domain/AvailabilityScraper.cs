@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Playwright;
 
@@ -20,8 +21,8 @@ namespace HpbScraper.Domain
 
             await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
             {
-                Headless = false,
-                SlowMo = 50,
+                Headless = true,
+                // SlowMo = 50,
             });
 
             // UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36",
@@ -35,10 +36,11 @@ namespace HpbScraper.Domain
 
             var hpbPropertyMap = new Dictionary<string, List<HpbProperty>>();
 
-            foreach (var viewAllElementId in viewAllElementIds)
+            for (var i = 0; i < viewAllElementIds.Count; i++)
             {
                 try
                 {
+                    var viewAllElementId = viewAllElementIds[i];
                     var viewAllButton = page.Locator("#" + viewAllElementId);
 
                     await viewAllButton.ClickAsync();
@@ -47,19 +49,26 @@ namespace HpbScraper.Domain
                         .Locator("#ContentPlaceHolder1_QuickSearchControl_YearWeekChoice")
                         .EvaluateAsync<string>("sel => sel.options[sel.options.selectedIndex].textContent");
 
+                    Console.WriteLine($"Processing date {dateRange} ({i + 1} of {viewAllElementIds.Count})");
+
                     var contentArea = await page
                         .Locator("#ContentPlaceHolder1_ThePage")
                         .EvaluateAsync<string>("el => el.innerHTML");
 
                     var hpbProperties = HpbPropertyParser.Parse(contentArea, _options);
 
-                    hpbPropertyMap.Add(dateRange, hpbProperties);
+                    if (hpbProperties.Count > 0)
+                    {
+                        hpbPropertyMap.Add(dateRange, hpbProperties);
+                    }
                 }
                 finally
                 {
                     await page.GoBackAsync();
                 }
             }
+
+            await HpbPropertyHtmlWriter.WriteAsync(Path.Combine(outputPath, $"HpbScraper-{DateTime.Now:yyyy-MM-dd-hh-mm-ss}.html"), hpbPropertyMap);
         }
 
         private static async Task<IReadOnlyList<string>> GetAllViewAllButtonIdsAsync(IPage page)
@@ -77,7 +86,7 @@ namespace HpbScraper.Domain
             await page.Locator("#ContentPlaceHolder1_QuickSearchControl_QuickSearchProperties2").SelectOptionAsync(new[] {"ALLBONDUK^^%"});
             await page.Locator("#ContentPlaceHolder1_QuickSearchControl_QuickSearchSleeps").SelectOptionAsync(new[] {"2"});
             await page.Locator("#ContentPlaceHolder1_QuickSearchControl_QuickSearchType").SelectOptionAsync(new[] {"1"});
-            //await page.Locator("#ContentPlaceHolder1_QuickSearchControl_QuickSearchShortNotice").CheckAsync();
+            await page.Locator("#ContentPlaceHolder1_QuickSearchControl_QuickSearchShortNotice").CheckAsync();
             await page.Locator("#ContentPlaceHolder1_QuickSearchControl_QuickSearchPets").CheckAsync();
             await page.Locator("#ContentPlaceHolder1_QuickSearchControl_SearchProperties").ClickAsync();
 

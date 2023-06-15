@@ -59,7 +59,20 @@ namespace HpbScraper.Domain
             //                 <table class="propTypeDetails">
             //                     <tbody>
             //                         <tr>
-            //                             <td class="viewAll"
+            //                             <td>One-bed</td>
+            //                             <td>...</td>
+            //                             <td>...</td>
+            //                             <td>...</td>
+            //                             <td>...</td>
+            //                             <td>...</td>
+            //                             <td>...</td>
+            //                             <td>...</td>
+            //                             <td>...</td>
+            //                             <td>...</td>
+            //                             <td>...</td>
+            //                             <td>...</td>
+            //                             <td>...</td>
+            //                             <td class="viewAll">
             //                                 <a href="/Properties/Bond/TT/202307171BED">View all</a>
             //                             </td>
             //                         </tr>
@@ -68,10 +81,6 @@ namespace HpbScraper.Domain
             //             </td>
             //         </tr>
             //     </tbody>
-            // </table>
-            //
-            // <table>
-            // ...
             // </table>
             //
             // // Ignore all tables below this point
@@ -137,7 +146,13 @@ namespace HpbScraper.Domain
                     }
 
                     var propertyTypeTrNodes = GetTrNodes(propertyTypeTableNode, trNode);
-                    var propertyTypeTrNode = propertyTypeTrNodes.Single(p => p.ChildNodes[1].InnerText == propertyType);
+                    var propertyTypeTrNode = propertyTypeTrNodes.SingleOrDefault(p => p.ChildNodes[1].InnerText == propertyType);
+
+                    if (propertyTypeTrNode == null)
+                    {
+                        continue;
+                    }
+
                     var viewAllTdNode = propertyTypeTrNode.GetByElementAndClass("td", "viewAll");
 
                     // Turn a collection of nodes, into a collection of stock items.
@@ -156,7 +171,7 @@ namespace HpbScraper.Domain
                     // Trossachs, Scotland
                     var location = propertyInfoContainerNode.ChildNodes[2].InnerText;
 
-                    // HTML XPath location: /table[1]/tr[14] gives:
+                    // HTML XPath location: /table[1]/tr[14]/a[1]/@href gives:
                     //
                     // /Properties/Bond/TT/202307171BED
                     var relativeUri = viewAllTdNode!.ChildNodes[0].Attributes["href"].Value;
@@ -170,11 +185,6 @@ namespace HpbScraper.Domain
 
         private static IEnumerable<HtmlNode> GetTrNodes(HtmlNode tableNode, HtmlNode parentNode)
         {
-            // var tbodyNode = tableNode.ChildNodes[1];
-            //var trNodes = htmlDocument.DocumentNode
-            //    .Descendants("tr")
-            //    .Where(x => x.ParentNode == tbodyNode);
-
             var tbodyNode = tableNode.ChildNodes[1];
             var trNodes = parentNode
                 .Descendants("tr")
