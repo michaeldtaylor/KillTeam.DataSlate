@@ -9,7 +9,7 @@ namespace HpbScraper.Domain
 
     public class HpbPropertyParser
     {
-        public static List<HpbProperty> Parse(string contentArea, HpbOptions hpbOptions)
+        public static List<HpbProperty> Parse(string contentArea, HpbOptions hpbOptions, string propertyType = "One-bed")
         {
             if (string.IsNullOrEmpty(contentArea))
             {
@@ -94,78 +94,117 @@ namespace HpbScraper.Domain
             // Note: XPath is 1 indexed. C# is 0 indexed.
             foreach (var tableNode in tableNodes)
             {
-                var propertyInfoContainerNode = tableNode.GetByElementAndClass( "div", "locDescRow1");
+                var trNodes = GetTrNodes(tableNode, htmlDocument.DocumentNode);
 
-                if (propertyInfoContainerNode == null)
+                var skipNext2Rows = false;
+                var skipCount = 0;
+
+                foreach (var trNode in trNodes)
                 {
-                    continue;
+                    if (skipNext2Rows)
+                    {
+                        if (skipCount == 2)
+                        {
+                            skipNext2Rows = false;
+                            skipCount = 0;
+                        }
+
+                        skipCount++;
+
+                        continue;
+                    }
+
+                    var noAvailableNode = trNode.GetByElementAndClass("h3", "noAvailable");
+
+                    if (noAvailableNode != null)
+                    {
+                        skipNext2Rows = true;
+                        continue;
+                    }
+
+                    var propertyInfoContainerNode = trNode.GetByElementAndClass("div", "locDescRow1");
+
+                    if (propertyInfoContainerNode == null)
+                    {
+                        continue;
+                    }
+
+                    var propertyTypeTableNode = trNode.GetByElementAndClass("table", "propTypeDetails");
+
+                    if (propertyTypeTableNode == null)
+                    {
+                        continue;
+                    }
+
+                    var propertyTypeTrNodes = GetTrNodes(propertyTypeTableNode, trNode);
+                    var propertyTypeTrNode = propertyTypeTrNodes.Single(p => p.ChildNodes[1].InnerText == propertyType);
+                    var viewAllTdNode = propertyTypeTrNode.GetByElementAndClass("td", "viewAll");
+
+                    // Turn a collection of nodes, into a collection of stock items.
+                    // HTML XPath location: /h3[1]/#text[1] gives:
+                    //
+                    // Tigh Mor Trossachs (Bond)
+                    var name = propertyInfoContainerNode.ChildNodes[1].InnerText.Replace(" (Bond)", string.Empty);
+
+                    if (hpbOptions.NamesToExclude.Contains(name))
+                    {
+                        continue;
+                    }
+
+                    // HTML XPath location: /h5[1]/#text[1] gives:
+                    //
+                    // Trossachs, Scotland
+                    var location = propertyInfoContainerNode.ChildNodes[2].InnerText;
+
+                    // HTML XPath location: /table[1]/tr[14] gives:
+                    //
+                    // /Properties/Bond/TT/202307171BED
+                    var relativeUri = viewAllTdNode!.ChildNodes[0].Attributes["href"].Value;
+
+                    hpbProperties.Add(new HpbProperty(name, location, new Uri(hpbOptions.BaseUri, relativeUri)));
                 }
-
-                var noAvailableNode = tableNode.GetByElementAndClass( "h3", "noAvailable");
-
-                if (noAvailableNode != null)
-                {
-                    continue;
-                }
-
-                var propertyUrlContainerNode = tableNode.GetByElementAndClass("td", "viewAll");
-
-                if (propertyUrlContainerNode == null)
-                {
-                    continue;
-                }
-
-                // Turn a collection of nodes, into a collection of stock items.
-                // HTML XPath location: /h3[1]/#text[1] gives:
-                //
-                // Tigh Mor Trossachs (Bond)
-                var name = propertyInfoContainerNode.ChildNodes[1].InnerText.Replace(" (Bond)", string.Empty);
-
-                if (hpbOptions.NamesToExclude.Contains(name))
-                {
-                    continue;
-                }
-
-                // HTML XPath location: /h5[1]/#text[1] gives:
-                //
-                // Trossachs, Scotland
-                var location = propertyInfoContainerNode.ChildNodes[2].InnerText;
-
-                // HTML XPath location: /section[1]/header[1]/div[2]/div[2]/#text[1] gives:
-                //
-                // /Properties/Bond/TT/202307171BED
-                var relativeUri = propertyUrlContainerNode.ChildNodes[0].Attributes["href"].Value;
-
-                hpbProperties.Add(new HpbProperty(name, location, new Uri(hpbOptions.BaseUri, relativeUri)));
             }
 
             return hpbProperties;
+        }
+
+        private static IEnumerable<HtmlNode> GetTrNodes(HtmlNode tableNode, HtmlNode parentNode)
+        {
+            // var tbodyNode = tableNode.ChildNodes[1];
+            //var trNodes = htmlDocument.DocumentNode
+            //    .Descendants("tr")
+            //    .Where(x => x.ParentNode == tbodyNode);
+
+            var tbodyNode = tableNode.ChildNodes[1];
+            var trNodes = parentNode
+                .Descendants("tr")
+                .Where(x => x.ParentNode == tbodyNode);
+
+            return trNodes;
         }
 
         private static void RemoveTablesAfterTenancyProgrammeSeparator(HtmlDocument htmlDocument)
         {
             var separator = GetSeparator(htmlDocument);
 
-            while (separator.NextSibling != null)
+            while (separator?.NextSibling != null)
             {
                 separator.NextSibling.Remove();
                 separator = GetSeparator(htmlDocument);
             }
         }
 
-        private static HtmlNode GetSeparator(HtmlDocument htmlDocument)
+        private static HtmlNode? GetSeparator(HtmlDocument htmlDocument)
         {
-            return htmlDocument.DocumentNode
-                .Descendants("h3")
-                .Single(d => d.Attributes.Contains("class") && d.Attributes["class"].Value.Contains("resultsHeader clr"));
+            return htmlDocument.DocumentNode.GetByElementAndClass("h3", "resultsHeader clr");
         }
     }
 
     public static class HtmlNodeHelpers
     {
-        public static HtmlNode? GetByElementAndClass(this HtmlNode tableNode, string elementName, string className)
+        public static HtmlNode? GetByElementAndClass(this HtmlNode htmlNode, string elementName, string className)
         {
-            return tableNode
+            return htmlNode
                 .Descendants(elementName)
                 .SingleOrDefault(d => d.Attributes.Contains("class") && d.Attributes["class"].Value.Contains(className));
         }

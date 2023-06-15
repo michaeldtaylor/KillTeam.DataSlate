@@ -21,7 +21,9 @@
     </ItemGroup>
 
     <ItemGroup>
+      <None Remove="TestData\MultipleProperties-MultipleRoomTypes-2023_06_15.html" />
       <None Remove="TestData\NoAvailability-SingleProperty-2023_06_15.html" />
+      <None Remove="TestData\NoAvailability-SomeProperties-2023_06_15.html" />
     </ItemGroup>
 
 </Project>
