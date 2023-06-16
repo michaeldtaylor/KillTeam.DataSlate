@@ -9,67 +9,66 @@ using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
 using AppConsole = System.Console;
 
-namespace HpbScraper.Console
+namespace HpbScraper.Console;
+
+public static class Program
 {
-    public static class Program
+    private const string AppName = "HPB Scraper";
+
+    public static async Task Main(string[] args)
     {
-        private const string AppName = "HPB Scraper";
+        AppConsole.Title = AppName;
 
-        public static async Task Main(string[] args)
+        var host = CreateHostBuilder(args).Build();
+
+        var availabilityScraper = host.Services.GetRequiredService<HpbAvailabilityScraper>();
+        var outputPath = GetOutputPath();
+
+        await availabilityScraper.ExecuteAsync(outputPath);
+    }
+
+    public static IHostBuilder CreateHostBuilder(string[] args) => new HostBuilder()
+        .UseConsoleLifetime()
+        .ConfigureHostConfiguration(config =>
         {
-            AppConsole.Title = AppName;
+            config.SetBasePath(Directory.GetCurrentDirectory());
 
-            var host = CreateHostBuilder(args).Build();
+            config.AddEnvironmentVariables("DOTNET_");
+            config.AddCommandLine(args);
+        })
+        .ConfigureAppConfiguration((context, config) =>
+        {
+            context.HostingEnvironment.ApplicationName = AppName;
 
-            var availabilityScraper = host.Services.GetRequiredService<HpbAvailabilityScraper>();
-            var outputPath = GetOutputPath();
+            config.AddJsonFile("appsettings.json", false, true);
+        })
+        .ConfigureServices(services =>
+        {
+            services.AddOptions<HpbScraperOptions>()
+                .BindConfiguration("HpbScraper")
+                .ValidateDataAnnotations()
+                .ValidateOnStart();
 
-            await availabilityScraper.ExecuteAsync(outputPath);
+            // Configure Services
+            services.AddSingleton<HpbAvailabilityScraper>();
+            services.AddSingleton<HpbPropertyParser>();
+            services.AddSingleton<HpbPropertyHtmlWriter>();
+        })
+        .ConfigureLogging(logging =>
+        {
+            logging.ClearProviders();
+            logging.AddNLog();
+        });
+
+    private static string GetOutputPath()
+    {
+        var outputPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "HpbScraper");
+
+        if (!Directory.Exists(outputPath))
+        {
+            Directory.CreateDirectory(outputPath);
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) => new HostBuilder()
-            .UseConsoleLifetime()
-            .ConfigureHostConfiguration(config =>
-            {
-                config.SetBasePath(Directory.GetCurrentDirectory());
-
-                config.AddEnvironmentVariables("DOTNET_");
-                config.AddCommandLine(args);
-            })
-            .ConfigureAppConfiguration((context, config) =>
-            {
-                context.HostingEnvironment.ApplicationName = AppName;
-
-                config.AddJsonFile("appsettings.json", false, true);
-            })
-            .ConfigureServices(services =>
-            {
-                services.AddOptions<HpbScraperOptions>()
-                    .BindConfiguration("HpbScraper")
-                    .ValidateDataAnnotations()
-                    .ValidateOnStart();
-
-                // Configure Services
-                services.AddSingleton<HpbAvailabilityScraper>();
-                services.AddSingleton<HpbPropertyParser>();
-                services.AddSingleton<HpbPropertyHtmlWriter>();
-            })
-            .ConfigureLogging(logging =>
-            {
-                logging.ClearProviders();
-                logging.AddNLog();
-            });
-
-        private static string GetOutputPath()
-        {
-            var outputPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "HpbScraper");
-
-            if (!Directory.Exists(outputPath))
-            {
-                Directory.CreateDirectory(outputPath);
-            }
-
-            return outputPath;
-        }
+        return outputPath;
     }
 }
