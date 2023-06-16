@@ -23,6 +23,7 @@
     <ItemGroup>
       <None Remove="TestData\MultipleProperties-MultipleRoomTypes-2023_06_15.html" />
       <None Remove="TestData\MultipleProperties-NoOneBedOption-2023_06_15.html" />
+      <None Remove="TestData\MultipleProperties-NoOptions-2023_06_16.html" />
       <None Remove="TestData\NoAvailability-SingleProperty-2023_06_15.html" />
       <None Remove="TestData\NoAvailability-SomeProperties-2023_06_15.html" />
     </ItemGroup>

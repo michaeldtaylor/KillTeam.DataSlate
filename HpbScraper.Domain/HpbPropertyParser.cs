@@ -2,23 +2,24 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using HtmlAgilityPack;
+using Microsoft.Extensions.Options;
 
 namespace HpbScraper.Domain
 {
-    public record HpbProperty(string Name, string Location, Uri Uri);
-
     public class HpbPropertyParser
     {
-        public static List<HpbProperty> Parse(string contentArea, HpbOptions hpbOptions, string propertyType = "One-bed")
+        private readonly HpbScraperOptions _hpbScraperOptions;
+
+        public HpbPropertyParser(IOptions<HpbScraperOptions> hpbScraperOptions)
+        {
+            _hpbScraperOptions = hpbScraperOptions.Value ?? throw new ArgumentNullException(nameof(hpbScraperOptions));
+        }
+
+        public List<HpbProperty> Parse(string contentArea)
         {
             if (string.IsNullOrEmpty(contentArea))
             {
                 throw new ArgumentNullException(nameof(contentArea));
-            }
-
-            if (hpbOptions == null)
-            {
-                throw new ArgumentNullException(nameof(hpbOptions));
             }
 
             var htmlDocument = new HtmlDocument();
@@ -146,7 +147,7 @@ namespace HpbScraper.Domain
                     }
 
                     var propertyTypeTrNodes = GetTrNodes(propertyTypeTableNode, trNode);
-                    var propertyTypeTrNode = propertyTypeTrNodes.SingleOrDefault(p => p.ChildNodes[1].InnerText == propertyType);
+                    var propertyTypeTrNode = propertyTypeTrNodes.SingleOrDefault(p => p.ChildNodes[1].InnerText == _hpbScraperOptions.PropertySize);
 
                     if (propertyTypeTrNode == null)
                     {
@@ -161,7 +162,7 @@ namespace HpbScraper.Domain
                     // Tigh Mor Trossachs (Bond)
                     var name = propertyInfoContainerNode.ChildNodes[1].InnerText.Replace(" (Bond)", string.Empty);
 
-                    if (hpbOptions.NamesToExclude.Contains(name))
+                    if (_hpbScraperOptions.PropertyNamesToExclude.Contains(name))
                     {
                         continue;
                     }
@@ -176,7 +177,7 @@ namespace HpbScraper.Domain
                     // /Properties/Bond/TT/202307171BED
                     var relativeUri = viewAllTdNode!.ChildNodes[0].Attributes["href"].Value;
 
-                    hpbProperties.Add(new HpbProperty(name, location, new Uri(hpbOptions.BaseUri, relativeUri)));
+                    hpbProperties.Add(new HpbProperty(name, location, new Uri(HpbConstants.BaseUri, relativeUri)));
                 }
             }
 
@@ -185,6 +186,11 @@ namespace HpbScraper.Domain
 
         private static IEnumerable<HtmlNode> GetTrNodes(HtmlNode tableNode, HtmlNode parentNode)
         {
+            if (tableNode.ChildNodes.Count < 2)
+            {
+                return Enumerable.Empty<HtmlNode>();
+            }
+
             var tbodyNode = tableNode.ChildNodes[1];
             var trNodes = parentNode
                 .Descendants("tr")
