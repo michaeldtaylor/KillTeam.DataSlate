@@ -49,7 +49,7 @@ public static class Program
             services.AddHostedService<HpbPoller>();
             services.AddScoped<HpbAvailabilityScraper>();
             services.AddScoped<HpbPropertyParser>();
-            services.AddScoped<HpbPropertyHtmlWriter>();
+            services.AddScoped<HpbHtmlWriter>();
         })
         .ConfigureLogging(logging =>
         {

@@ -23,7 +23,7 @@ public class HpbPoller : BackgroundService
         _serviceProvider = serviceProvider;
     }
 
-    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    protected override async Task ExecuteAsync(CancellationToken cancellationToken)
     {
         var outputPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "HpbScraper");
 
@@ -36,9 +36,9 @@ public class HpbPoller : BackgroundService
 
         Log.Debug($"HpbPoller background task will poll every {"minute".ToQuantity(_hpbScraperOptions.PollFrequencyMinutes.Value)}");
 
-        stoppingToken.Register(() => Log.Debug("HpbPoller background task stopping..."));
+        cancellationToken.Register(() => Log.Debug("HpbPoller background task stopping..."));
 
-        while (!stoppingToken.IsCancellationRequested)
+        while (!cancellationToken.IsCancellationRequested)
         {
             using var scoped = _serviceProvider.CreateScope();
 
@@ -48,7 +48,7 @@ public class HpbPoller : BackgroundService
 
             await hpbAvailabilityScraper.ScrapeAsync(outputPath);
 
-            await Task.Delay(checkFrequencyMilliseconds, stoppingToken);
+            await Task.Delay(checkFrequencyMilliseconds, cancellationToken);
         }
     }
 }

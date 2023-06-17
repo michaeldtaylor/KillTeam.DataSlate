@@ -6,13 +6,13 @@ using Microsoft.Extensions.Options;
 
 namespace HpbScraper.Domain;
 
-public class HpbPropertyHtmlWriter
+public class HpbHtmlWriter
 {
     private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
     private readonly HpbScraperOptions _hpbScraperOptions;
 
-    public HpbPropertyHtmlWriter(IOptions<HpbScraperOptions> hpbScraperOptions)
+    public HpbHtmlWriter(IOptions<HpbScraperOptions> hpbScraperOptions)
     {
         _hpbScraperOptions = hpbScraperOptions.Value ?? throw new ArgumentNullException(nameof(hpbScraperOptions));
     }
@@ -29,6 +29,7 @@ public class HpbPropertyHtmlWriter
         writer.WriteLine("<head>");
         writer.WriteLine("<title>HPB Scraper Results</title>");
         writer.WriteLine("</head>");
+
         writer.WriteLine("<body>");
 
         writer.WriteLine("<h1>HPB properties matching the search criteria</h1>");
@@ -68,7 +69,7 @@ public class HpbPropertyHtmlWriter
 
             foreach (var hpbProperty in hpbPropertyLine.Value)
             {
-                writer.WriteLine($"<li><a href=\"{hpbProperty.Uri}\">{hpbProperty.Name} ({hpbProperty.Location})</a></li>");
+                writer.WriteLine($"<li><a href=\"{hpbProperty.Uri}\" target=\"_blank\">{hpbProperty.Name} ({hpbProperty.Location})</a></li>");
             }
 
             writer.WriteLine("</ul>");

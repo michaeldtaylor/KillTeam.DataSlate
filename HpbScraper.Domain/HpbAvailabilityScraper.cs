@@ -13,16 +13,16 @@ public class HpbAvailabilityScraper
 
     private readonly HpbScraperOptions _hpbScraperOptions;
     private readonly HpbPropertyParser _hpbPropertyParser;
-    private readonly HpbPropertyHtmlWriter _hpbPropertyHtmlWriter;
+    private readonly HpbHtmlWriter _hpbHtmlWriter;
         
     public HpbAvailabilityScraper(
         IOptions<HpbScraperOptions> hpbScraperOptions,
         HpbPropertyParser hpbPropertyParser,
-        HpbPropertyHtmlWriter hpbPropertyHtmlWriter)
+        HpbHtmlWriter hpbHtmlWriter)
     {
         _hpbScraperOptions = hpbScraperOptions.Value ?? throw new ArgumentNullException(nameof(hpbScraperOptions));
         _hpbPropertyParser = hpbPropertyParser ?? throw new ArgumentNullException(nameof(hpbPropertyParser));
-        _hpbPropertyHtmlWriter = hpbPropertyHtmlWriter ?? throw new ArgumentNullException(nameof(hpbPropertyHtmlWriter));
+        _hpbHtmlWriter = hpbHtmlWriter ?? throw new ArgumentNullException(nameof(hpbHtmlWriter));
     }
 
     public async Task ScrapeAsync(string outputPath)
@@ -89,7 +89,7 @@ public class HpbAvailabilityScraper
                 }
             }
 
-            _hpbPropertyHtmlWriter.Write(outputPath, hpbPropertyMap);
+            _hpbHtmlWriter.Write(outputPath, hpbPropertyMap);
         }
     }
 
