@@ -22,8 +22,11 @@ public class HpbScraperOptions
     [Range(0, 8, ErrorMessage = "You can choose between 0 (Studio) and 8 bedrooms")]
     public int? SearchBedrooms { get; set; }
 
+    [Required]
+    [Range(1, 60, ErrorMessage = "You can choose between 1-60 minutes")]
+    public double? PollFrequencyMinutes { get; set; }
+
     public bool? ShowBrowser { get; set; }
 
     public string[] PropertyNamesToExclude { get; set; } = Array.Empty<string>();
 }
-

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Microsoft.Playwright;
@@ -26,7 +25,7 @@ public class HpbAvailabilityScraper
         _hpbPropertyHtmlWriter = hpbPropertyHtmlWriter ?? throw new ArgumentNullException(nameof(hpbPropertyHtmlWriter));
     }
 
-    public async Task ExecuteAsync(string outputPath)
+    public async Task ScrapeAsync(string outputPath)
     {
         using var playwright = await Playwright.CreateAsync();
 

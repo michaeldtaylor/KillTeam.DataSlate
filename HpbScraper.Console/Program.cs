@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Threading.Tasks;
 using HpbScraper.Domain;
 using Microsoft.Extensions.Configuration;
@@ -19,12 +18,9 @@ public static class Program
     {
         AppConsole.Title = AppName;
 
-        var host = CreateHostBuilder(args).Build();
-
-        var availabilityScraper = host.Services.GetRequiredService<HpbAvailabilityScraper>();
-        var outputPath = GetOutputPath();
-
-        await availabilityScraper.ExecuteAsync(outputPath);
+        await CreateHostBuilder(args)
+            .Build()
+            .RunAsync();
     }
 
     public static IHostBuilder CreateHostBuilder(string[] args) => new HostBuilder()
@@ -50,25 +46,14 @@ public static class Program
                 .ValidateOnStart();
 
             // Configure Services
-            services.AddSingleton<HpbAvailabilityScraper>();
-            services.AddSingleton<HpbPropertyParser>();
-            services.AddSingleton<HpbPropertyHtmlWriter>();
+            services.AddHostedService<HpbPoller>();
+            services.AddScoped<HpbAvailabilityScraper>();
+            services.AddScoped<HpbPropertyParser>();
+            services.AddScoped<HpbPropertyHtmlWriter>();
         })
         .ConfigureLogging(logging =>
         {
             logging.ClearProviders();
             logging.AddNLog();
         });
-
-    private static string GetOutputPath()
-    {
-        var outputPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "HpbScraper");
-
-        if (!Directory.Exists(outputPath))
-        {
-            Directory.CreateDirectory(outputPath);
-        }
-
-        return outputPath;
-    }
 }
