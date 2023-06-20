@@ -44,7 +44,17 @@ public class HpbAvailabilityScraper
         var context = await browser.NewContextAsync();
         var page = await context.NewPageAsync();
 
-        await LoginAsync(page);
+        try
+        {
+            await LoginAsync(page);
+        }
+        catch (Exception)
+        {
+            Log.Error("Could not login to the HPB website. The website might be down?");
+
+            return;
+        }
+
         await ConfigureSearchFilter(page);
 
         var viewAllElementIds = await GetAllViewAllButtonIdsAsync(page);
