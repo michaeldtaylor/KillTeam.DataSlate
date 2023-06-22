@@ -20,20 +20,15 @@ public class HpbPoller : BackgroundService
     public HpbPoller(IOptions<HpbScraperOptions> hpbScraperOptions, IServiceProvider serviceProvider)
     {
         _hpbScraperOptions = hpbScraperOptions.Value ?? throw new ArgumentNullException(nameof(hpbScraperOptions));
-        _serviceProvider = serviceProvider;
+        _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
     }
 
     protected override async Task ExecuteAsync(CancellationToken cancellationToken)
     {
-        var outputPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "HpbScraper");
-
-        if (!Directory.Exists(outputPath))
-        {
-            Directory.CreateDirectory(outputPath);
-        }
-
+        var outputPath = GetOutputPath();
         var checkFrequencyMilliseconds = (int)Math.Round(_hpbScraperOptions.PollFrequencyMinutes!.Value.Minutes().TotalMilliseconds);
 
+        Log.Debug($"Output path: {outputPath}");
         Log.Debug($"HpbPoller background task will poll every {"minute".ToQuantity(_hpbScraperOptions.PollFrequencyMinutes.Value)}");
 
         cancellationToken.Register(() => Log.Debug("HpbPoller background task stopping..."));
@@ -43,12 +38,30 @@ public class HpbPoller : BackgroundService
             using var scoped = _serviceProvider.CreateScope();
 
             var hpbAvailabilityScraper = scoped.ServiceProvider.GetRequiredService<HpbAvailabilityScraper>();
+            var hpbHtmlWriter = scoped.ServiceProvider.GetRequiredService<HpbHtmlWriter>();
 
             Log.Debug("HpbPoller background task starting...");
 
-            await hpbAvailabilityScraper.ScrapeAsync(outputPath);
+            var hpbPropertyGroups = await hpbAvailabilityScraper.ScrapeAsync();
+
+            if (hpbPropertyGroups.Count > 0)
+            {
+                hpbHtmlWriter.Write(outputPath, hpbPropertyGroups);
+            }
 
             await Task.Delay(checkFrequencyMilliseconds, cancellationToken);
         }
+    }
+
+    private static string GetOutputPath()
+    {
+        var outputPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "HpbScraper");
+
+        if (!Directory.Exists(outputPath))
+        {
+            Directory.CreateDirectory(outputPath);
+        }
+
+        return outputPath;
     }
 }

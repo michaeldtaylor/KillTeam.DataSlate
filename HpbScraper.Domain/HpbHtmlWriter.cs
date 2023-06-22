@@ -17,7 +17,7 @@ public class HpbHtmlWriter
         _hpbScraperOptions = hpbScraperOptions.Value ?? throw new ArgumentNullException(nameof(hpbScraperOptions));
     }
 
-    public void Write(string outputPath, Dictionary<string, List<HpbProperty>> hpbPropertyMap)
+    public void Write(string outputPath, List<HpbPropertyGroup> hpbPropertyGroups)
     {
         var filePath = Path.Combine(outputPath, $"HpbScraper-{DateTime.Now:yyyy-MM-dd-hhmmss}.html");
 
@@ -62,12 +62,12 @@ public class HpbHtmlWriter
 
         writer.WriteLine("</table>");
 
-        foreach (var hpbPropertyLine in hpbPropertyMap)
+        foreach (var hpbPropertyGroup in hpbPropertyGroups)
         {
-            writer.WriteLine($"<h2>{hpbPropertyLine.Key}</h2>");
+            writer.WriteLine($"<h2>{hpbPropertyGroup.DateRange}</h2>");
             writer.WriteLine("<ul>");
 
-            foreach (var hpbProperty in hpbPropertyLine.Value)
+            foreach (var hpbProperty in hpbPropertyGroup.HpbProperties)
             {
                 writer.WriteLine($"<li><a href=\"{hpbProperty.Uri}\" target=\"_blank\">{hpbProperty.Name} ({hpbProperty.Location})</a></li>");
             }

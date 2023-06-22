@@ -13,19 +13,16 @@ public class HpbAvailabilityScraper
 
     private readonly HpbScraperOptions _hpbScraperOptions;
     private readonly HpbPropertyParser _hpbPropertyParser;
-    private readonly HpbHtmlWriter _hpbHtmlWriter;
         
     public HpbAvailabilityScraper(
         IOptions<HpbScraperOptions> hpbScraperOptions,
-        HpbPropertyParser hpbPropertyParser,
-        HpbHtmlWriter hpbHtmlWriter)
+        HpbPropertyParser hpbPropertyParser)
     {
         _hpbScraperOptions = hpbScraperOptions.Value ?? throw new ArgumentNullException(nameof(hpbScraperOptions));
         _hpbPropertyParser = hpbPropertyParser ?? throw new ArgumentNullException(nameof(hpbPropertyParser));
-        _hpbHtmlWriter = hpbHtmlWriter ?? throw new ArgumentNullException(nameof(hpbHtmlWriter));
     }
 
-    public async Task ScrapeAsync(string outputPath)
+    public async Task<List<HpbPropertyGroup>> ScrapeAsync()
     {
         using var playwright = await Playwright.CreateAsync();
 
@@ -52,20 +49,21 @@ public class HpbAvailabilityScraper
         {
             Log.Error("Could not login to the HPB website. The website might be down?");
 
-            return;
+            return new List<HpbPropertyGroup>();
         }
 
         await ConfigureSearchFilter(page);
+
+        var hpbPropertyGroups = new List<HpbPropertyGroup>();
 
         var viewAllElementIds = await GetAllViewAllButtonIdsAsync(page);
 
         if (viewAllElementIds.Count == 0)
         {
-            Log.Info("There were no HPB properties matching the search criteria");
+            Log.Info("There were no HPB properties matching the search criteria (no 'ViewAll' elements found)");
         }
         else
         {
-            var hpbPropertyMap = new Dictionary<string, List<HpbProperty>>();
 
             for (var i = 0; i < viewAllElementIds.Count; i++)
             {
@@ -88,19 +86,22 @@ public class HpbAvailabilityScraper
 
                     var hpbProperties = _hpbPropertyParser.Parse(contentArea);
 
-                    if (hpbProperties.Count > 0)
+                    if (hpbProperties.Count == 0)
                     {
-                        hpbPropertyMap.Add(dateRange, hpbProperties);
+                        Log.Info("There were no HPB properties matching the search criteria (within parsed content area)");
+                        continue;
                     }
+
+                    hpbPropertyGroups.Add(new HpbPropertyGroup(dateRange, hpbProperties));
                 }
                 finally
                 {
                     await page.GoBackAsync();
                 }
             }
-
-            _hpbHtmlWriter.Write(outputPath, hpbPropertyMap);
         }
+
+        return hpbPropertyGroups;
     }
 
     private static async Task<IReadOnlyList<string>> GetAllViewAllButtonIdsAsync(IPage page)
