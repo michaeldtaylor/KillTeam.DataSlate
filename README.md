@@ -1,6 +1,6 @@
 # Kill Team DataSlate
 
-An interactive CLI app for tracking Kill Team (KT24 V3.0) game sessions — recording every operative activation, dice roll, and damage result to SQLite.
+An interactive CLI app for tracking Kill Team (v3.0) game sessions — recording every operative activation, dice roll, and damage result to SQLite.
 
 ---
 

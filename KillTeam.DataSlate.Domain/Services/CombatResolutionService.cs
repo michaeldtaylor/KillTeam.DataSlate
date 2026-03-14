@@ -1,11 +1,11 @@
-﻿using KillTeam.DataSlate.Domain.Models;
+using KillTeam.DataSlate.Domain.Models;
 
 namespace KillTeam.DataSlate.Domain.Services;
 
 public class CombatResolutionService
 {
     /// <summary>
-    /// Resolves a Shoot action according to KT24 V3.0 rules.
+    /// Resolves a Shoot action according to v3.0 rules.
     /// The attacker and defender dice are already rolled (passed in).
     /// </summary>
     public ShootResult ResolveShoot(ShootContext ctx)

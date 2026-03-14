@@ -68,7 +68,7 @@ CP is awarded depending on which Turning Point is being played:
 CP gain, each team has 3 CP entering the Firefight Phase.
 
 **TP 2–4 note**: The non-initiative team receives an extra CP to offset the tactical disadvantage of
-activating second. This is the standard "catch-up" mechanism in KT24.
+activating second. This is the standard "catch-up" mechanism in v3.0.
 
 ### 2.4 Step 3 — Strategic Gambits
 
@@ -952,7 +952,7 @@ ploy_uses:
 ## Open Questions
 
 1. ~~**Ploy ordering in the ploy loop**: the transcript shows non-initiative player goes first in
-   Step 3. Is this the official KT24 V3.0 rule, or does the initiative player go first? Confirm and
+   Step 3. Is this the official v3.0 rule, or does the initiative player go first? Confirm and
    update the orchestrator accordingly.~~
    **Resolved**: Non-initiative player records ploys first, then initiative player. This matches the
    transcript in §4 and is now canonical. The `StrategyPhaseOrchestrator` ploy loop must call

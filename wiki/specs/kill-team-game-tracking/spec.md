@@ -123,7 +123,7 @@ GameOperativeState
 
 ## Weapon Special Rules
 
-All 25+ KT24 V3.0 weapon special rules. Source of truth: `references/killteam-24-rules-reference.webp`.
+All 25+ v3.0 weapon special rules. Source of truth: `references/killteam-24-rules-reference.webp`.
 Full enforcement design: `spike-weapon-rules.md`. Re-roll UX: `spike-reroll-mechanics.md`. Multi-target: `spike-blast-torrent.md`.
 
 | Rule | Definition (exact, V3.0) | Enforcement tier |
@@ -156,7 +156,7 @@ Full enforcement design: `spike-weapon-rules.md`. Re-roll UX: `spike-reroll-mech
 | **Torrent x"** | Make attacks against all ops within x" of target, visible to shooter. | Multi-target (see spike-blast-torrent.md) |
 
 **Notes:**
-- **Poison** and **Toxic** (present in Plague Marines starter set) have no definition in the KT24 V3.0 reference card. Treated as `SpecialRuleKind.Unknown` — displayed in weapon info but not mechanically enforced.
+- **Poison** and **Toxic** (present in Plague Marines starter set) have no definition in the v3.0 reference card. Treated as `SpecialRuleKind.Unknown` — displayed in weapon info but not mechanically enforced.
 - **Blast/Torrent**: multi-target resolution fires as a modified Shoot sub-flow. Additional targets stored in `action_blast_targets` table. Full flow: `spike-blast-torrent.md`.
 - **Re-roll ordering**: Weapon re-rolls (Balanced/Ceaseless/Relentless) fire first; then attacker CP Re-roll; then defender CP Re-roll. Never re-roll a re-rolled die. Full UX: `spike-reroll-mechanics.md`.
 - **Fight Assist**: displayed on the reference card as a general rule (not a weapon special rule). "+1 to HIT per non-engaged friendly ally in enemy control range (max +2 modifier)." Implemented as a pre-dice prompt in the Fight and Shoot sub-flows.
@@ -523,7 +523,7 @@ dotnet test --filter "FullyQualifiedName~Player"
 - Model configured via `Anthropic:Model` in `appsettings.json` (default: `"claude-sonnet-4-5"`); allows downgrade to `"claude-haiku-4-5"` for lower latency
 - `IAiAdvisor` injected into `SimulateFightOrchestrator`, `SimulateShootOrchestrator`, and optionally into `FightSessionOrchestrator` / `ShootSessionOrchestrator` for live-game access; `NullAiAdvisor` is always registered so the parameter is always satisfied
 - All AI response text passed through `Markup.Escape(...)` before rendering to prevent Spectre.Console markup injection
-- System prompt encodes KT24 V3.0 blocking algorithm, fight die semantics, and key special rules; instructs Claude to respond in 2–4 sentences of plain text (no markdown)
+- System prompt encodes v3.0 blocking algorithm, fight die semantics, and key special rules; instructs Claude to respond in 2–4 sentences of plain text (no markdown)
 - Full design including `AnthropicAdvisor` implementation sketch, system prompt text, and context record types: `spike-ai-advisor.md`
 - `appsettings.json` gains an `"Anthropic": { "ApiKey": "", "Model": "claude-sonnet-4-5" }` section
 

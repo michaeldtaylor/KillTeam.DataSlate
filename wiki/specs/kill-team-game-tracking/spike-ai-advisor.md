@@ -262,7 +262,7 @@ namespace KillTeam.DataSlate.Console.Services;
 public class AnthropicAdvisor(IChatClient chatClient, IAnsiConsole console) : IAiAdvisor
 {
     private const string SystemPrompt = """
-        You are a Kill Team 2024 (KT24 V3.0) tactical advisor embedded in a CLI game-tracking tool.
+        You are a Kill Team v3.0 tactical advisor embedded in a CLI game-tracking tool.
         Your role is to explain dice results and suggest optimal plays in plain, direct English.
 
         Rules context:
