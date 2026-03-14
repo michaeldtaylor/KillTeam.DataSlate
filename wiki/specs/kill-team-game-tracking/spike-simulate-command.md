@@ -23,10 +23,10 @@ Both fight and shoot encounters are available within a single `simulate` session
 
 **Question:** Should users enter operative and weapon stats ad-hoc at runtime, or select from an already-imported roster?
 
-**Decision:** **Always roster-based. Ad-hoc stat entry is removed.** Kill teams already imported into the database (via `import-roster`, which scans `DataSlate:RosterFolder`) are listed directly — no flag required.
+**Decision:** **Always roster-based. Ad-hoc stat entry is removed.** Kill teams already imported into the database (via `import-kill-teams`, which scans `DataSlate:RosterFolder`) are listed directly — no flag required.
 
 **Selection flow:**
-1. `IKillTeamRepository.GetAllAsync()` → load all imported kill teams. If none exist, print `"[red]No rosters found. Run import-roster first.[/]"` and exit.
+1. `IKillTeamRepository.GetAllAsync()` → load all imported kill teams. If none exist, print `"[red]No rosters found. Run import-kill-teams first.[/]"` and exit.
 2. `SelectionPrompt`: "Your kill team:" → lists all imported kill teams by name
 3. `SelectionPrompt`: "Your operative:" → lists operatives in the chosen kill team (Spectre.Console `SelectionPrompt` has built-in type-to-filter search — no custom autocomplete needed)
 4. `SelectionPrompt`: "Opponent kill team (AI):" → player picks the kill team the AI will play
@@ -401,7 +401,7 @@ And no ad-hoc stat entry prompts are shown
 ```
 Given no kill teams have been imported
 When the user runs `dataslate simulate`
-Then the app prints "[red]No kill teams found. Import a roster first with import-roster.[/]"
+Then the app prints "[red]No kill teams found. Import a roster first with import-kill-teams.[/]"
 And exits with code 1
 ```
 

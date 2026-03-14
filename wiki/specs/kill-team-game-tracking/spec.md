@@ -211,8 +211,8 @@ Abbreviated example (Angels of Death):
 **Agent routing hint:** Requires .NET 10 + System.Text.Json + SQLite (Microsoft.Data.Sqlite) + repository pattern.
 
 **Acceptance Criteria:**
-- [ ] `import-roster <filepath>` command reads and validates a single JSON file
-- [ ] `import-roster` (no argument) scans the configured roster folder (default: `./rosters/`; configurable via `DataSlate:RosterFolder` in `appsettings.json`) and imports all `.json` files found; prints a summary per file
+- [ ] `import-kill-teams <filepath>` command reads and validates a single JSON file
+- [ ] `import-kill-teams` (no argument) scans the configured roster folder (default: `./rosters/`; configurable via `DataSlate:RosterFolder` in `appsettings.json`) and imports all `.json` files found; prints a summary per file
 - [ ] Validates required fields: team name, operative names, all stats (move, apl, wounds, save), all weapon fields (name, type, atk, hit, dmg)
 - [ ] `playerName` field in JSON is **ignored** — player names are assigned at game-start time
 - [ ] Imports are idempotent: re-importing the same file by team name updates the existing record rather than duplicating
@@ -531,7 +531,7 @@ dotnet test --filter "FullyQualifiedName~Player"
 
 
 
-- FR-1: The app must be runnable as a single CLI executable with sub-commands (`import-roster`, `new-game`, `play`, `annotate`, `view-game`, `history`, `stats`, `player add`, `player list`, `player delete`, `simulate`)
+- FR-1: The app must be runnable as a single CLI executable with sub-commands (`import-kill-teams`, `new-game`, `play`, `annotate`, `view-game`, `history`, `stats`, `player add`, `player list`, `player delete`, `simulate`)
 - FR-2: Rosters must be importable from a single JSON file path **or** auto-discovered from a configured roster folder (`DataSlate:RosterFolder`); player names are not stored in roster files
 - FR-3: A game must track both teams, all operatives, all turning points, all activations, and all actions
 - FR-4: Combat resolution (hits, blocks, damage) must be calculated by the app from entered dice results — players do not enter damage directly
@@ -655,7 +655,7 @@ Sergeant Intercessor expended.
 ## Technical Considerations
 
 - **SQLite**: `Microsoft.Data.Sqlite` (no EF Core — keep it lightweight)
-- **CLI framework**: Spectre.Console.Cli already in place; add `new-game`, `play`, `annotate`, `view-game`, `history`, `stats`, `import-roster` commands
+- **CLI framework**: Spectre.Console.Cli already in place; add `new-game`, `play`, `annotate`, `view-game`, `history`, `stats`, `import-kill-teams` commands
 - **Dice resolution**: Pure domain logic in `CombatResolutionService` — no side effects, fully unit-testable
 - **JSON import**: `System.Text.Json` — no extra packages needed
 - **In-cover saves**: unconditionally retain 1 defence die as a normal success (not a player prompt); app enforces before defender rolls remaining dice

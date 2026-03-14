@@ -1,4 +1,4 @@
-﻿using KillTeam.DataSlate.Console.Commands;
+using KillTeam.DataSlate.Console.Commands;
 using KillTeam.DataSlate.Console.Infrastructure;
 using KillTeam.DataSlate.Console.Orchestrators;
 using KillTeam.DataSlate.Console.Infrastructure.Repositories;
@@ -72,7 +72,7 @@ public static class Program
                 player.AddCommand<PlayerDeleteCommand>("delete")
                       .WithDescription("Remove a player (blocked if they have games).");
             });
-            cfg.AddCommand<ImportRosterCommand>("import-roster")
+            cfg.AddCommand<ImportRosterCommand>("import-kill-teams")
                .WithDescription("Import a JSON roster file (or scan the roster folder).");
             cfg.AddCommand<NewGameCommand>("new-game").WithDescription("Start a new Kill Team game.");
             cfg.AddCommand<HistoryCommand>("history")

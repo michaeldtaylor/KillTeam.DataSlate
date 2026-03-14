@@ -6,9 +6,9 @@
       "commandLineArgs": "simulate",
       "workingDirectory": "$(ProjectDir)"
     },
-    "import-roster": {
+    "import-kill-teams": {
       "commandName": "Project",
-      "commandLineArgs": "import-roster",
+      "commandLineArgs": "import-kill-teams",
       "workingDirectory": "$(ProjectDir)"
     },
     "new-game": {
