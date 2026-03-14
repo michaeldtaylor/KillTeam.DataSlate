@@ -7,6 +7,10 @@
   "required": ["name", "faction", "operatives"],
   "additionalProperties": false,
   "properties": {
+    "$schema": {
+      "type": "string",
+      "format": "uri"
+    },
     "name": {
       "type": "string",
       "description": "Display name of the kill team (e.g. 'Angels of Death')"
