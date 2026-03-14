@@ -8,7 +8,7 @@ public class GuardResolutionService
         IEnumerable<GameOperativeState> friendlyStates)
         => friendlyStates.Where(s => s.IsOnGuard && !s.IsIncapacitated).ToList();
 
-    public bool IsGuardStillValid(GameOperativeState guard, bool enemyIsInControlRange)
+    public bool IsGuardStillValid(bool enemyIsInControlRange)
         => !enemyIsInControlRange;
 
     public IReadOnlyList<GameOperativeState> ClearAllGuards(IEnumerable<GameOperativeState> states)

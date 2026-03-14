@@ -4,19 +4,19 @@ public class Activation
 {
     public Guid Id { get; init; } = Guid.NewGuid();
 
-    public Guid TurningPointId { get; set; }
+    public Guid TurningPointId { get; init; }
 
-    public int SequenceNumber { get; set; }
+    public int SequenceNumber { get; init; }
 
-    public Guid OperativeId { get; set; }
+    public Guid OperativeId { get; init; }
 
-    public required string TeamName { get; set; }
+    public required string TeamName { get; init; }
 
     public Order OrderSelected { get; set; }
 
-    public bool IsCounteract { get; set; }
+    public bool IsCounteract { get; init; }
 
-    public bool IsGuardInterrupt { get; set; }
+    public bool IsGuardInterrupt { get; init; }
 
-    public string? NarrativeNote { get; set; }
+    public string? NarrativeNote { get; init; }
 }

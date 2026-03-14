@@ -49,8 +49,8 @@ public class StrategyPhaseOrchestrator(
         tp = await turningPointRepository.CreateAsync(tp);
 
         // ─── 3. CP gains ──────────────────────────────────────────────────────
-        int cpA = game.CpTeamA;
-        int cpB = game.CpTeamB;
+        var cpA = game.CpTeamA;
+        var cpB = game.CpTeamB;
 
         if (tpNumber == 1)
         {

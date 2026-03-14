@@ -28,7 +28,7 @@ public class FightSessionOrchestrator(
         TurningPoint tp,
         Activation activation)
     {
-        bool isAttackerTeamA = attacker.TeamName == game.TeamAName;
+        var isAttackerTeamA = attacker.TeamName == game.TeamAName;
 
         // 1. Target selection
         var enemyStates = allOperativeStates
@@ -56,7 +56,7 @@ public class FightSessionOrchestrator(
             console.MarkupLine("[red]Target operative not found.[/]");
             return new FightSessionResult(false, false, 0, 0, Guid.Empty);
         }
-        bool isDefenderTeamA = targetOp.TeamName == game.TeamAName;
+        var isDefenderTeamA = targetOp.TeamName == game.TeamAName;
 
         // 2. Attacker weapon selection (melee only)
         var atkMeleeWeapons = attacker.Weapons.Where(w => w.Type == WeaponType.Melee).ToList();
@@ -66,23 +66,23 @@ public class FightSessionOrchestrator(
             return new FightSessionResult(false, false, 0, 0, targetState.OperativeId);
         }
 
-        bool atkIsInjured = attackerState.CurrentWounds < attacker.Wounds / 2;
+        var atkIsInjured = attackerState.CurrentWounds < attacker.Wounds / 2;
         var atkWeapon = console.Prompt(
             new SelectionPrompt<Weapon>()
                 .Title("Select attacker's melee weapon:")
                 .UseConverter(w =>
                 {
-                    string injured = atkIsInjured ? $" [yellow](Injured: effective Hit {w.Hit + 1}+)[/]" : "";
+                    var injured = atkIsInjured ? $" [yellow](Injured: effective Hit {w.Hit + 1}+)[/]" : "";
                     return $"{Markup.Escape(w.Name)}  (ATK {w.Atk} | Hit {w.Hit}+ | DMG {w.NormalDmg}/{w.CriticalDmg}){injured}";
                 })
                 .AddChoices(atkMeleeWeapons));
 
-        int atkEffectiveHit = atkIsInjured ? atkWeapon.Hit + 1 : atkWeapon.Hit;
+        var atkEffectiveHit = atkIsInjured ? atkWeapon.Hit + 1 : atkWeapon.Hit;
 
         // 3. Defender weapon selection (melee only; 0 ATK if none)
         var defMeleeWeapons = targetOp.Weapons.Where(w => w.Type == WeaponType.Melee).ToList();
         Weapon? defWeapon = null;
-        int defEffectiveHit = 3;
+        var defEffectiveHit = 3;
 
         if (defMeleeWeapons.Count > 0)
         {
@@ -91,7 +91,7 @@ public class FightSessionOrchestrator(
                     .Title("Select defender's melee weapon:")
                     .UseConverter(w => $"{Markup.Escape(w.Name)}  (ATK {w.Atk} | Hit {w.Hit}+ | DMG {w.NormalDmg}/{w.CriticalDmg})")
                     .AddChoices(defMeleeWeapons));
-            bool defIsInjured = targetState.CurrentWounds < targetOp.Wounds / 2;
+            var defIsInjured = targetState.CurrentWounds < targetOp.Wounds / 2;
             defEffectiveHit = defIsInjured ? defWeapon.Hit + 1 : defWeapon.Hit;
         }
         else
@@ -100,7 +100,7 @@ public class FightSessionOrchestrator(
         }
 
         // 4. Fight assist
-        int fightAssist = console.Prompt(
+        var fightAssist = console.Prompt(
             new TextPrompt<int>("How many non-engaged friendly allies within 6\" of target? (0-2):")
                 .Validate(v => v is >= 0 and <= 2));
         atkEffectiveHit = Math.Max(2, atkEffectiveHit - fightAssist);
@@ -111,7 +111,7 @@ public class FightSessionOrchestrator(
             atkRolls, atkWeapon.ParsedRules.ToList(), game.Id, isAttackerTeamA, attacker.Name);
 
         // 6. Defender dice entry
-        int defAtkCount = defWeapon?.Atk ?? 0;
+        var defAtkCount = defWeapon?.Atk ?? 0;
         int[] defRolls = [];
         if (defAtkCount > 0)
         {
@@ -136,13 +136,13 @@ public class FightSessionOrchestrator(
             }
         }
 
-        bool brutalWeapon = atkWeapon.ParsedRules.Any(r => r.Kind == SpecialRuleKind.Brutal);
+        var brutalWeapon = atkWeapon.ParsedRules.Any(r => r.Kind == SpecialRuleKind.Brutal);
 
         // Track wounds during fight
-        int atkCurrentWounds = attackerState.CurrentWounds;
-        int defCurrentWounds = targetState.CurrentWounds;
-        int totalAtkDmgDealt = 0;
-        int totalDefDmgDealt = 0;
+        var atkCurrentWounds = attackerState.CurrentWounds;
+        var defCurrentWounds = targetState.CurrentWounds;
+        var totalAtkDmgDealt = 0;
+        var totalDefDmgDealt = 0;
 
         var currentOwner = DieOwner.Attacker;
 
@@ -187,14 +187,14 @@ public class FightSessionOrchestrator(
             Operative activeOp = activeOwner == DieOwner.Attacker ? attacker : targetOp;
             Operative opponentOp = activeOwner == DieOwner.Attacker ? targetOp : attacker;
             Weapon activeWeapon = activeOwner == DieOwner.Attacker ? atkWeapon : (defWeapon ?? atkWeapon);
-            int activeCurrentWounds = activeOwner == DieOwner.Attacker ? atkCurrentWounds : defCurrentWounds;
-            int opponentCurrentWounds = activeOwner == DieOwner.Attacker ? defCurrentWounds : atkCurrentWounds;
+            var activeCurrentWounds = activeOwner == DieOwner.Attacker ? atkCurrentWounds : defCurrentWounds;
+            var opponentCurrentWounds = activeOwner == DieOwner.Attacker ? defCurrentWounds : atkCurrentWounds;
 
             DisplayFightPools(
                 attacker.Name, atkCurrentWounds, attacker.Wounds, atkPool,
                 targetOp.Name, defCurrentWounds, targetOp.Wounds, defPool);
 
-            bool useBrutal = brutalWeapon && activeOwner == DieOwner.Attacker;
+            var useBrutal = brutalWeapon && activeOwner == DieOwner.Attacker;
             var actions = fightResolutionService.GetAvailableActions(activePool, opponentPool, useBrutal);
 
             if (actions.Count == 0)
@@ -211,7 +211,7 @@ public class FightSessionOrchestrator(
 
             if (actionChoice.Type == FightActionType.Strike)
             {
-                int dmg = fightResolutionService.ApplyStrike(actionChoice.ActiveDie, activeWeapon.NormalDmg, activeWeapon.CriticalDmg);
+                var dmg = fightResolutionService.ApplyStrike(actionChoice.ActiveDie, activeWeapon.NormalDmg, activeWeapon.CriticalDmg);
                 console.MarkupLine($"  ⚔ Strike with die ({actionChoice.ActiveDie.RolledValue}) → {dmg} damage to {Markup.Escape(opponentOp.Name)}");
 
                 if (activeOwner == DieOwner.Attacker)
@@ -252,7 +252,7 @@ public class FightSessionOrchestrator(
 
             // Switch turns
             var nextOwner = activeOwner == DieOwner.Attacker ? DieOwner.Defender : DieOwner.Attacker;
-            bool nextHasDice = nextOwner == DieOwner.Attacker ? atkPool.Remaining.Count > 0 : defPool.Remaining.Count > 0;
+            var nextHasDice = nextOwner == DieOwner.Attacker ? atkPool.Remaining.Count > 0 : defPool.Remaining.Count > 0;
             if (nextHasDice)
             {
                 currentOwner = nextOwner;
@@ -260,8 +260,8 @@ public class FightSessionOrchestrator(
         }
 
         // 10. Apply final wound counts
-        bool atkCausedIncap = defCurrentWounds <= 0 && !targetState.IsIncapacitated;
-        bool defCausedIncap = atkCurrentWounds <= 0 && !attackerState.IsIncapacitated;
+        var atkCausedIncap = defCurrentWounds <= 0 && !targetState.IsIncapacitated;
+        var defCausedIncap = atkCurrentWounds <= 0 && !attackerState.IsIncapacitated;
 
         attackerState.CurrentWounds = atkCurrentWounds;
         targetState.CurrentWounds = defCurrentWounds;
@@ -323,13 +323,13 @@ public class FightSessionOrchestrator(
 
         table.AddRow($"Wounds: {atkWounds}/{atkMaxWounds}", $"Wounds: {defWounds}/{defMaxWounds}");
 
-        int maxRows = Math.Max(atkPool.Remaining.Count, defPool.Remaining.Count);
+        var maxRows = Math.Max(atkPool.Remaining.Count, defPool.Remaining.Count);
         for (int i = 0; i < maxRows; i++)
         {
-            string atkCell = i < atkPool.Remaining.Count
+            var atkCell = i < atkPool.Remaining.Count
                 ? FormatDie("A", i + 1, atkPool.Remaining[i])
                 : "";
-            string defCell = i < defPool.Remaining.Count
+            var defCell = i < defPool.Remaining.Count
                 ? FormatDie("D", i + 1, defPool.Remaining[i])
                 : "";
             table.AddRow(atkCell, defCell);
@@ -339,13 +339,13 @@ public class FightSessionOrchestrator(
 
     private static string FormatDie(string prefix, int num, FightDie die)
     {
-        string result = die.Result == DieResult.Crit ? "[bold yellow]CRIT[/]" : "[green]HIT [/]";
+        var result = die.Result == DieResult.Crit ? "[bold yellow]CRIT[/]" : "[green]HIT [/]";
         return $"{prefix}{num}: {result} [rolled {die.RolledValue}]";
     }
 
     private static string FormatFightAction(FightAction a)
     {
-        string dieInfo = $"die({a.ActiveDie.RolledValue},{(a.ActiveDie.Result == DieResult.Crit ? "CRIT" : "HIT")})";
+        var dieInfo = $"die({a.ActiveDie.RolledValue},{(a.ActiveDie.Result == DieResult.Crit ? "CRIT" : "HIT")})";
         if (a.Type == FightActionType.Strike)
             return $"⚔ Strike with {dieInfo}";
         return $"🛡 Block {dieInfo} → cancel die({a.TargetDie!.RolledValue},{(a.TargetDie.Result == DieResult.Crit ? "CRIT" : "HIT")})";
@@ -377,7 +377,7 @@ public class FightSessionOrchestrator(
                     .AllowEmpty());
             var parts = input.Split([' ', ','], StringSplitOptions.RemoveEmptyEntries);
             var values = new List<int>();
-            bool valid = true;
+            var valid = true;
             foreach (var p in parts)
             {
                 if (int.TryParse(p, out int v) && v is >= 1 and <= 6)

@@ -4,15 +4,15 @@ public class TurningPoint
 {
     public Guid Id { get; init; } = Guid.NewGuid();
 
-    public Guid GameId { get; set; }
+    public Guid GameId { get; init; }
 
-    public int Number { get; set; }
+    public int Number { get; init; }
 
-    public string? TeamWithInitiativeName { get; set; }
+    public string? TeamWithInitiativeName { get; init; }
 
-    public int CpTeamA { get; set; }
+    public int CpTeamA { get; init; }
 
-    public int CpTeamB { get; set; }
+    public int CpTeamB { get; init; }
 
     public bool IsStrategyPhaseComplete { get; set; }
 }

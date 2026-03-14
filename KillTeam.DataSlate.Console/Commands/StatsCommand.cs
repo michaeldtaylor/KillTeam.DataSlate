@@ -66,7 +66,8 @@ public class StatsCommand(IConfiguration config) : AsyncCommand<StatsCommand.Set
             WHERE (team_a_name = @tname COLLATE NOCASE OR team_b_name = @tname COLLATE NOCASE) AND status = 'Completed'
             """;
         statsCmd.Parameters.AddWithValue("@tname", resolvedName);
-        int games = 0, wins = 0;
+        var games = 0;
+        var wins = 0;
         using (var r = await statsCmd.ExecuteReaderAsync())
         {
             if (await r.ReadAsync())
@@ -93,7 +94,7 @@ public class StatsCommand(IConfiguration config) : AsyncCommand<StatsCommand.Set
             WHERE abt.caused_incapacitation = 1 AND act2.team_name = @tname COLLATE NOCASE
             """;
         killCmd.Parameters.AddWithValue("@tname", resolvedName);
-        int kills = 0;
+        var kills = 0;
         using (var r = await killCmd.ExecuteReaderAsync())
         {
             while (await r.ReadAsync())
@@ -115,7 +116,7 @@ public class StatsCommand(IConfiguration config) : AsyncCommand<StatsCommand.Set
             LIMIT 1
             """;
         weaponCmd.Parameters.AddWithValue("@tname", resolvedName);
-        string mostUsedWeapon = "—";
+        var mostUsedWeapon = "—";
         using (var r = await weaponCmd.ExecuteReaderAsync())
         {
             if (await r.ReadAsync())
@@ -124,7 +125,7 @@ public class StatsCommand(IConfiguration config) : AsyncCommand<StatsCommand.Set
             }
         }
 
-        int losses = games - wins;
+        var losses = games - wins;
         var winPct = games > 0 ? $"{wins * 100 / games}%" : "—";
 
         AnsiConsole.MarkupLine($"[bold]{Markup.Escape(resolvedName!)}[/] ({Markup.Escape(faction!)})");
@@ -182,7 +183,8 @@ public class StatsCommand(IConfiguration config) : AsyncCommand<StatsCommand.Set
                 FROM games WHERE (player_a_id = @id OR player_b_id = @id) AND status = 'Completed'
                 """;
             gCmd.Parameters.AddWithValue("@id", id);
-            int g = 0, w = 0;
+            var g = 0;
+            var w = 0;
             using (var r = await gCmd.ExecuteReaderAsync())
             {
                 if (await r.ReadAsync())

@@ -4,17 +4,17 @@ public class GameAction
 {
     public Guid Id { get; init; } = Guid.NewGuid();
 
-    public Guid ActivationId { get; set; }
+    public Guid ActivationId { get; init; }
 
-    public ActionType Type { get; set; }
+    public ActionType Type { get; init; }
 
-    public int ApCost { get; set; }
+    public int ApCost { get; init; }
 
-    public Guid? TargetOperativeId { get; set; }
+    public Guid? TargetOperativeId { get; init; }
 
-    public Guid? WeaponId { get; set; }
+    public Guid? WeaponId { get; init; }
 
-    public int[] AttackerDice { get; set; } = [];
+    public int[] AttackerDice { get; init; } = [];
 
     public int[] DefenderDice { get; set; } = [];
 
@@ -26,7 +26,7 @@ public class GameAction
 
     public int CriticalHits { get; set; }
 
-    public int Blocks { get; set; }
+    public int Blocks { get; init; }
 
     public int NormalDamageDealt { get; set; }
 
@@ -34,9 +34,9 @@ public class GameAction
 
     public bool CausedIncapacitation { get; set; }
 
-    public int SelfDamageDealt { get; set; }
+    public int SelfDamageDealt { get; init; }
 
-    public bool StunApplied { get; set; }
+    public bool StunApplied { get; init; }
 
-    public string? NarrativeNote { get; set; }
+    public string? NarrativeNote { get; init; }
 }

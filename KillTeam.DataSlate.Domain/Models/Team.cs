@@ -2,9 +2,9 @@
 
 public class Team
 {
-    public required string Name { get; set; }
+    public required string Name { get; init; }
 
-    public required string Faction { get; set; }
+    public required string Faction { get; init; }
 
     public List<Operative> Operatives { get; set; } = [];
 }

@@ -28,7 +28,7 @@ public class ShootSessionOrchestrator(
         Activation activation,
         bool hasMovedNonDash = false)
     {
-        bool isAttackerTeamA = attacker.TeamName == game.TeamAName;
+        var isAttackerTeamA = attacker.TeamName == game.TeamAName;
 
         // 1. Target selection: enemy operatives
         var enemyStates = allOperativeStates
@@ -102,11 +102,11 @@ public class ShootSessionOrchestrator(
             new SelectionPrompt<string>()
                 .Title($"Is {Markup.Escape(targetOp.Name)} in cover or obscured?")
                 .AddChoices("In cover", "Obscured", "Neither"));
-        bool inCover = coverChoice == "In cover";
-        bool isObscured = coverChoice == "Obscured";
+        var inCover = coverChoice == "In cover";
+        var isObscured = coverChoice == "Obscured";
 
         // 4. Fight assist (reduces hit threshold)
-        int fightAssist = console.Prompt(
+        var fightAssist = console.Prompt(
             new TextPrompt<int>("How many non-engaged friendly allies within 6\" of target? (0-2):")
                 .Validate(v => v is >= 0 and <= 2));
 
@@ -118,7 +118,7 @@ public class ShootSessionOrchestrator(
             attackDice, weapon.ParsedRules.ToList(), game.Id, isAttackerTeamA, attacker.Name);
 
         // 7. Defence dice entry (player decides how many to roll)
-        int defDiceCount = console.Prompt(
+        var defDiceCount = console.Prompt(
             new TextPrompt<int>("How many defence dice to roll? (0 or more):")
                 .Validate(v => v >= 0));
         if (inCover)
@@ -129,7 +129,7 @@ public class ShootSessionOrchestrator(
             : await RollOrEnterDiceAsync(defDiceCount, $"{Markup.Escape(targetOp.Name)} defence dice");
 
         // 8. Defender CP re-roll
-        bool isDefenderTeamA = targetOp.TeamName == game.TeamAName;
+        var isDefenderTeamA = targetOp.TeamName == game.TeamAName;
         defDice = await rerollOrchestrator.ApplyDefenderRerollAsync(defDice, game.Id, isDefenderTeamA, targetOp.Name);
 
         // 9. Resolve shoot
@@ -151,8 +151,8 @@ public class ShootSessionOrchestrator(
         DisplayShootResult(targetOp.Name, result, inCover, isObscured);
 
         // 10. Apply damage
-        int newWounds = Math.Max(0, targetState.CurrentWounds - result.TotalDamage);
-        bool causedIncap = newWounds <= 0 && !targetState.IsIncapacitated;
+        var newWounds = Math.Max(0, targetState.CurrentWounds - result.TotalDamage);
+        var causedIncap = newWounds <= 0 && !targetState.IsIncapacitated;
 
         targetState.CurrentWounds = newWounds;
         await stateRepository.UpdateWoundsAsync(targetState.Id, newWounds);
@@ -167,8 +167,8 @@ public class ShootSessionOrchestrator(
         }
 
         // 11. Stun check
-        bool stunApplied = result.StunApplied;
-        int selfDamage = 0;
+        var stunApplied = result.StunApplied;
+        var selfDamage = 0;
 
         if (stunApplied)
         {
@@ -181,7 +181,7 @@ public class ShootSessionOrchestrator(
         if (weapon.ParsedRules.Any(r => r.Kind == SpecialRuleKind.Hot) && result.SelfDamageDealt > 0)
         {
             selfDamage = result.SelfDamageDealt;
-            int newAttackerWounds = Math.Max(0, attackerState.CurrentWounds - selfDamage);
+            var newAttackerWounds = Math.Max(0, attackerState.CurrentWounds - selfDamage);
             attackerState.CurrentWounds = newAttackerWounds;
             await stateRepository.UpdateWoundsAsync(attackerState.Id, newAttackerWounds);
             console.MarkupLine($"[red]🔥 Hot! {Markup.Escape(attacker.Name)} takes {selfDamage} self-damage! (W: {newAttackerWounds})[/]");
@@ -275,7 +275,7 @@ public class ShootSessionOrchestrator(
                     .AllowEmpty());
             var parts = input.Split([' ', ','], StringSplitOptions.RemoveEmptyEntries);
             var values = new List<int>();
-            bool valid = true;
+            var valid = true;
             foreach (var p in parts)
             {
                 if (int.TryParse(p, out int v) && v is >= 1 and <= 6)

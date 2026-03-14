@@ -87,7 +87,7 @@ public class FightResolutionService
                 // Brutal: normal dice CANNOT block at all
                 foreach (var targetDie in opponentPool.Remaining)
                 {
-                    bool canBlock = activeDie.Result == DieResult.Crit
+                    var canBlock = activeDie.Result == DieResult.Crit
                         ? true                              // crit blocks anything
                         : targetDie.Result == DieResult.Hit // normal only blocks normals
                             && !brutalWeapon;

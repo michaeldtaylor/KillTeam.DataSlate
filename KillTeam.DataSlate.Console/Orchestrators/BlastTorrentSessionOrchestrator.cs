@@ -27,8 +27,8 @@ public class BlastTorrentSessionOrchestrator(
         TurningPoint tp,
         Activation activation)
     {
-        bool isAttackerTeamA = attacker.TeamName == game.TeamAName;
-        string weaponType = weapon.ParsedRules.Any(r => r.Kind == SpecialRuleKind.Torrent) ? "Torrent" : "Blast";
+        var isAttackerTeamA = attacker.TeamName == game.TeamAName;
+        var weaponType = weapon.ParsedRules.Any(r => r.Kind == SpecialRuleKind.Torrent) ? "Torrent" : "Blast";
 
         console.MarkupLine($"[bold yellow]⚠ [MULTI-TARGET][/] This weapon hits multiple targets. [{weaponType}]");
 
@@ -49,8 +49,8 @@ public class BlastTorrentSessionOrchestrator(
                         {
                             return s.OperativeId.ToString();
                         }
-                        bool isFriendly = o.TeamName == attacker.TeamName;
-                        string friendly = isFriendly ? " [red][FRIENDLY FIRE!][/]" : "";
+                        var isFriendly = o.TeamName == attacker.TeamName;
+                        var friendly = isFriendly ? " [red][FRIENDLY FIRE!][/]" : "";
                         return $"{Markup.Escape(o.Name)} (W:{s.CurrentWounds}/{o.Wounds}){friendly}";
                     })
                     .AddChoices(additionalCandidates)
@@ -60,7 +60,7 @@ public class BlastTorrentSessionOrchestrator(
         var allTargetStates = new List<GameOperativeState> { primaryTargetState }.Concat(additionalTargetStates).ToList();
 
         // Friendly fire confirmation
-        int friendlyCount = allTargetStates.Count(s =>
+        var friendlyCount = allTargetStates.Count(s =>
             allOperatives.TryGetValue(s.OperativeId, out var o) && o.TeamName == attacker.TeamName);
         if (friendlyCount > 0)
         {
@@ -77,8 +77,8 @@ public class BlastTorrentSessionOrchestrator(
             attackDice, weapon.ParsedRules.ToList(), game.Id, isAttackerTeamA, attacker.Name);
 
         // Count shared raw crits (for PiercingCrits)
-        int effectiveHit = weapon.Hit;
-        int rawCrits = attackDice.Count(d => d == 6);
+        var effectiveHit = weapon.Hit;
+        var rawCrits = attackDice.Count(d => d == 6);
 
         // Primary action record
         var action = new GameAction
@@ -92,9 +92,9 @@ public class BlastTorrentSessionOrchestrator(
             AttackerDice = attackDice
         };
 
-        bool anyIncapacitation = false;
-        int totalDamage = 0;
-        bool primaryActionPersisted = false;
+        var anyIncapacitation = false;
+        var totalDamage = 0;
+        var primaryActionPersisted = false;
 
         // Process each target
         for (int i = 0; i < allTargetStates.Count; i++)
@@ -113,10 +113,10 @@ public class BlastTorrentSessionOrchestrator(
                 new SelectionPrompt<string>()
                     .Title($"Is {Markup.Escape(targetOp.Name)} in cover or obscured?")
                     .AddChoices(coverOptions));
-            bool inCover = coverChoice == "In cover";
-            bool isObscured = coverChoice == "Obscured";
+            var inCover = coverChoice == "In cover";
+            var isObscured = coverChoice == "Obscured";
 
-            int defDiceCount = console.Prompt(
+            var defDiceCount = console.Prompt(
                 new TextPrompt<int>($"  How many defence dice for {Markup.Escape(targetOp.Name)}? (0 or more):")
                     .Validate(v => v >= 0));
 
@@ -124,7 +124,7 @@ public class BlastTorrentSessionOrchestrator(
                 ? []
                 : await RollOrEnterDiceAsync(defDiceCount, $"{Markup.Escape(targetOp.Name)} defence dice");
 
-            bool isDefenderTeamA = targetOp.TeamName == game.TeamAName;
+            var isDefenderTeamA = targetOp.TeamName == game.TeamAName;
             defDice = await rerollOrchestrator.ApplyDefenderRerollAsync(defDice, game.Id, isDefenderTeamA, targetOp.Name);
 
             var ctx = new ShootContext(
@@ -140,10 +140,10 @@ public class BlastTorrentSessionOrchestrator(
             );
 
             var result = combatResolutionService.ResolveShoot(ctx);
-            int dmg = result.TotalDamage;
+            var dmg = result.TotalDamage;
 
-            int newWounds = Math.Max(0, targetState.CurrentWounds - dmg);
-            bool causedIncap = newWounds <= 0 && !targetState.IsIncapacitated;
+            var newWounds = Math.Max(0, targetState.CurrentWounds - dmg);
+            var causedIncap = newWounds <= 0 && !targetState.IsIncapacitated;
 
             targetState.CurrentWounds = newWounds;
             await stateRepository.UpdateWoundsAsync(targetState.Id, newWounds);
@@ -255,7 +255,7 @@ public class BlastTorrentSessionOrchestrator(
                     .AllowEmpty());
             var parts = input.Split([' ', ','], StringSplitOptions.RemoveEmptyEntries);
             var values = new List<int>();
-            bool valid = true;
+            var valid = true;
             foreach (var p in parts)
             {
                 if (int.TryParse(p, out int v) && v is >= 1 and <= 6)

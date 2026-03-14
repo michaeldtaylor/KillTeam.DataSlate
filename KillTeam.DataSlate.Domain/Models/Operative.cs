@@ -6,19 +6,19 @@ public class Operative
 
     public required string TeamName { get; set; }
 
-    public required string Name { get; set; }
+    public required string Name { get; init; }
 
-    public required string OperativeType { get; set; }
+    public required string OperativeType { get; init; }
 
-    public int Move { get; set; }
+    public int Move { get; init; }
 
-    public int Apl { get; set; }
+    public int Apl { get; init; }
 
-    public int Wounds { get; set; }
+    public int Wounds { get; init; }
 
-    public int Save { get; set; }
+    public int Save { get; init; }
 
-    public string[] Equipment { get; set; } = [];
+    public string[] Equipment { get; init; } = [];
 
-    public List<Weapon> Weapons { get; set; } = [];
+    public List<Weapon> Weapons { get; init; } = [];
 }

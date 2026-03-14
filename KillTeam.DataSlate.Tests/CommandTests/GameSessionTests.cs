@@ -58,8 +58,8 @@ public class GameSessionTests
         await gameRepo.UpdateCpAsync(gameId, 3, 3);
 
         // Team A has initiative in TP2: +1 for A, +2 for B
-        int cpA = 3 + 1; // initiative team
-        int cpB = 3 + 2; // other team
+        var cpA = 3 + 1; // initiative team
+        var cpB = 3 + 2; // other team
         await gameRepo.UpdateCpAsync(gameId, cpA, cpB);
 
         var updated = await gameRepo.GetByIdAsync(gameId);
@@ -106,7 +106,7 @@ public class GameSessionTests
         var operative = new Operative { TeamName = "Team", Name = "Op", OperativeType = "Op", Wounds = 12 };
         var state = new GameOperativeState { CurrentWounds = 5 };
 
-        bool isInjured = state.CurrentWounds < operative.Wounds / 2;
+        var isInjured = state.CurrentWounds < operative.Wounds / 2;
         isInjured.Should().BeTrue("5 < 6 means the operative is injured");
     }
 
@@ -117,7 +117,7 @@ public class GameSessionTests
         var operative = new Operative { TeamName = "Team", Name = "Op", OperativeType = "Op", Wounds = 12 };
         var state = new GameOperativeState { CurrentWounds = 6 };
 
-        bool isInjured = state.CurrentWounds < operative.Wounds / 2;
+        var isInjured = state.CurrentWounds < operative.Wounds / 2;
         isInjured.Should().BeFalse("6 is not less than 6");
     }
 
@@ -205,7 +205,7 @@ public class GameSessionTests
         var states = (await stateRepo.GetByGameAsync(gameId)).ToList();
         var state = states.Single(s => s.Id == stateId);
 
-        bool eligible = !state.IsReady
+        var eligible = !state.IsReady
             && state.Order == Order.Engage
             && !state.HasUsedCounteractThisTurningPoint
             && !state.IsIncapacitated;

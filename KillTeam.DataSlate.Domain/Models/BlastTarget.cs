@@ -4,23 +4,23 @@ public class BlastTarget
 {
     public Guid Id { get; init; } = Guid.NewGuid();
 
-    public Guid ActionId { get; set; }
+    public Guid ActionId { get; init; }
 
-    public Guid TargetOperativeId { get; set; }
+    public Guid TargetOperativeId { get; init; }
 
-    public string OperativeName { get; set; } = string.Empty;
+    public string OperativeName { get; init; } = string.Empty;
 
-    public int[] DefenderDice { get; set; } = [];
+    public int[] DefenderDice { get; init; } = [];
 
-    public int NormalHits { get; set; }
+    public int NormalHits { get; init; }
 
-    public int CriticalHits { get; set; }
+    public int CriticalHits { get; init; }
 
-    public int Blocks { get; set; }
+    public int Blocks { get; init; }
 
-    public int NormalDamageDealt { get; set; }
+    public int NormalDamageDealt { get; init; }
 
-    public int CriticalDamageDealt { get; set; }
+    public int CriticalDamageDealt { get; init; }
 
-    public bool CausedIncapacitation { get; set; }
+    public bool CausedIncapacitation { get; init; }
 }

@@ -27,7 +27,7 @@ public class GuardInterruptOrchestrator(
         int seqCounter)
     {
         // Determine which team is "friendly" (the guard team = NOT the acting enemy's team)
-        string enemyTeamName = actingEnemy.TeamName;
+        var enemyTeamName = actingEnemy.TeamName;
 
         var friendlyStates = allOperativeStates
             .Where(s => allOperatives.TryGetValue(s.OperativeId, out var o) && o.TeamName != enemyTeamName)
@@ -47,7 +47,7 @@ public class GuardInterruptOrchestrator(
             }
 
             // 1. Check if enemy is in control range (6") — clears guard
-            bool inControlRange = console.Confirm(
+            var inControlRange = console.Confirm(
                 $"Is [bold]{Markup.Escape(actingEnemy.Name)}[/] within 6\" (control range) of [bold]{Markup.Escape(guardOp.Name)}[/]?",
                 defaultValue: false);
 
@@ -60,7 +60,7 @@ public class GuardInterruptOrchestrator(
             }
 
             // 2. Visibility check
-            bool isVisible = console.Confirm(
+            var isVisible = console.Confirm(
                 $"Is [bold]{Markup.Escape(actingEnemy.Name)}[/] visible to [bold]{Markup.Escape(guardOp.Name)}[/]?",
                 defaultValue: true);
 

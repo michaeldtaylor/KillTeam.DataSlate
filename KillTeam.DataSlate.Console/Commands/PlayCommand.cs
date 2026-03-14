@@ -46,16 +46,16 @@ public class PlayCommand(
 
         var teamA = await teamRepository.GetWithOperativesAsync(game.TeamAName);
         var teamB = await teamRepository.GetWithOperativesAsync(game.TeamBName);
-        string teamAName = teamA?.Name ?? "Team A";
-        string teamBName = teamB?.Name ?? "Team B";
+        var teamAName = teamA?.Name ?? "Team A";
+        var teamBName = teamB?.Name ?? "Team B";
 
-        console.Write(new Rule($"[bold]team Game[/]  {Markup.Escape(teamAName)} vs {Markup.Escape(teamBName)}"));
+        console.Write(new Rule($"[bold]Team Game[/]  {Markup.Escape(teamAName)} vs {Markup.Escape(teamBName)}"));
 
         // Determine starting TP
         var currentTp = await turningPointRepository.GetCurrentAsync(game.Id);
-        int startTpNumber = currentTp?.Number ?? 1;
+        var startTpNumber = currentTp?.Number ?? 1;
 
-        for (int tpNumber = startTpNumber; tpNumber <= 4; tpNumber++)
+        for (var tpNumber = startTpNumber; tpNumber <= 4; tpNumber++)
         {
             TurningPoint activeTp;
 
@@ -94,7 +94,7 @@ public class PlayCommand(
         if (game.Status == GameStatus.Completed)
         {
             console.Write(new Rule("[bold green]Game Complete![/]"));
-            string winner = game.WinnerTeamName is null
+            var winner = game.WinnerTeamName is null
                 ? "Draw"
                 : game.WinnerTeamName == game.TeamAName
                     ? $"{teamAName} wins"

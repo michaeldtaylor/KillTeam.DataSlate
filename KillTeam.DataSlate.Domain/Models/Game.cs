@@ -4,21 +4,21 @@ public class Game
 {
     public Guid Id { get; init; } = Guid.NewGuid();
 
-    public DateTime PlayedAt { get; set; }
+    public DateTime PlayedAt { get; init; }
 
-    public string? MissionName { get; set; }
+    public string? MissionName { get; init; }
 
-    public required string TeamAName { get; set; }
+    public required string TeamAName { get; init; }
 
-    public required string TeamBName { get; set; }
+    public required string TeamBName { get; init; }
 
-    public Guid PlayerAId { get; set; }
+    public Guid PlayerAId { get; init; }
 
-    public Guid PlayerBId { get; set; }
+    public Guid PlayerBId { get; init; }
 
-    public GameStatus Status { get; set; } = GameStatus.InProgress;
+    public GameStatus Status { get; init; } = GameStatus.InProgress;
 
-    public string? WinnerTeamName { get; set; }
+    public string? WinnerTeamName { get; init; }
 
     public int VictoryPointsTeamA { get; set; }
 

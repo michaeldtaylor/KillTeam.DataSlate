@@ -4,9 +4,9 @@ public class GameOperativeState
 {
     public Guid Id { get; init; } = Guid.NewGuid();
 
-    public Guid GameId { get; set; }
+    public Guid GameId { get; init; }
 
-    public Guid OperativeId { get; set; }
+    public Guid OperativeId { get; init; }
 
     public int CurrentWounds { get; set; }
 

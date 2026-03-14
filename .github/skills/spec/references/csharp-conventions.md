@@ -213,4 +213,73 @@ public enum SpecialRuleKind
 
 ---
 
+## 9. Blank line between all class/interface members
+
+All members — including methods — in a class or interface must be separated by a blank line. This extends Rule 5 (which covers properties) to methods, events, and any other member.
+
+```csharp
+// ✅ Correct
+public interface IPlayerRepository
+{
+    Task AddAsync(Player player);
+
+    Task<IEnumerable<Player>> GetAllAsync();
+
+    Task DeleteAsync(Guid id);
+}
+
+// ❌ Wrong
+public interface IPlayerRepository
+{
+    Task AddAsync(Player player);
+    Task<IEnumerable<Player>> GetAllAsync();
+    Task DeleteAsync(Guid id);
+}
+```
+
+---
+
+## 10. Use `init` instead of `set` where possible
+
+Properties that are only assigned at construction time must use `init` instead of `set`. This communicates intent and prevents accidental mutation after creation.
+
+```csharp
+// ✅ Correct
+public required string Name { get; init; }
+public int Move { get; init; }
+
+// ❌ Wrong
+public required string Name { get; set; }
+public int Move { get; set; }
+```
+
+Exception — mutable game state: Properties that are mutated during play (e.g. `GameOperativeState.CurrentWounds`, `Game.CpTeamA`) must keep `set`.
+
+Exception — JSON deserialization targets: Internal DTOs used with `System.Text.Json` must keep `set` (and should have a comment noting why).
+
+---
+
+## 11. Always use `var` for local variables
+
+Always use `var` for local variable declarations when the type can be inferred from the right-hand side.
+
+```csharp
+// ✅ Correct
+var folder = config["DataSlate:TeamFolder"] ?? "../teams/";
+var files = Directory.GetFiles(folder, "*.json");
+foreach (var file in files) { ... }
+
+// ❌ Wrong
+string folder = config["DataSlate:TeamFolder"] ?? "../teams/";
+string[] files = Directory.GetFiles(folder, "*.json");
+foreach (string file in files) { ... }
+```
+
+Exception: variables initialized with `null` must keep the explicit type:
+```csharp
+SomeType x = null; // can't infer type from null
+```
+
+---
+
 *More conventions will be added here as the project evolves.*
