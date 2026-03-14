@@ -1,4 +1,5 @@
 {
+  "$schema": "./kill-team.schema.json",
   "name": "Void-Dancer Troupe",
   "faction": "Harlequins",
   "operatives": [

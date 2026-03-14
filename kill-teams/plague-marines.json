@@ -1,4 +1,5 @@
 {
+  "$schema": "./kill-team.schema.json",
   "name": "Plague Marines",
   "faction": "Heretic Astartes",
   "operatives": [
