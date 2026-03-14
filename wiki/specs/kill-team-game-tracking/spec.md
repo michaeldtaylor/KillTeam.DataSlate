@@ -44,8 +44,8 @@ with narrative fluff. Game history and win-rate statistics are available at any 
 Player
   - Id, Name (unique display name, e.g. "Michael")
 
-KillTeam
-  - Id, Name, Faction
+Team
+  - Name (unique, PK), Faction
   - Operatives[]
 
 Operative
@@ -64,23 +64,23 @@ WeaponSpecialRule (value type / record, not a DB entity)
   - Param (int?, e.g. 1 for Piercing 1, 5 for Lethal 5+, 2 for Blast 2")
   - RawText (string — original token from SpecialRules string)
 
-SpecialRuleKind enum: Accurate, Balanced, Blast, Brutal, Ceaseless, Devastating, DDevastating,
+SpecialRuleKind enum: Accurate, Balanced, Blast, Brutal, Ceaseless, Devastating,
   Heavy, HeavyDashOnly, Hot, Lethal, Limited, Piercing, PiercingCrits, Punishing, Range,
   Relentless, Rending, Saturate, Seek, SeekLight, Severe, Shock, Silent, Stun, Torrent, Unknown
 
 Game
   - Id, PlayedAt, MissionName
-  - TeamAId, TeamBId
+  - TeamAName, TeamBName
   - PlayerAId, PlayerBId   ← assigned at new-game time, independent of roster
   - Status (InProgress/Completed)
-  - WinnerTeamId (nullable until game ends)
+  - WinnerTeamName (nullable until game ends)
   - VictoryPointsTeamA, VictoryPointsTeamB
   - CpTeamA, CpTeamB (int — current CP, updated after each spend/gain)
   - TurningPoints[]
 
 TurningPoint
   - Id, GameId, Number (1-4)
-  - TeamWithInitiativeId (FK → kill_teams)
+  - TeamWithInitiativeName (FK → teams)
   - CpTeamA (int)   ← CP at start of Firefight Phase (after Strategy Phase CP gain)
   - CpTeamB (int)
   - IsStrategyPhaseComplete (bool, default false)
@@ -211,8 +211,8 @@ Abbreviated example (Angels of Death):
 **Agent routing hint:** Requires .NET 10 + System.Text.Json + SQLite (Microsoft.Data.Sqlite) + repository pattern.
 
 **Acceptance Criteria:**
-- [ ] `import-kill-teams <filepath>` command reads and validates a single JSON file
-- [ ] `import-kill-teams` (no argument) scans the configured roster folder (default: `./rosters/`; configurable via `DataSlate:RosterFolder` in `appsettings.json`) and imports all `.json` files found; prints a summary per file
+- [ ] `import-teams <filepath>` command reads and validates a single JSON file
+- [ ] `import-teams` (no argument) scans the configured team folder (default: `../teams/`; configurable via `DataSlate:TeamFolder` in `appsettings.json`) and imports all `.json` files found; prints a summary per file
 - [ ] Validates required fields: team name, operative names, all stats (move, apl, wounds, save), all weapon fields (name, type, atk, hit, dmg)
 - [ ] `playerName` field in JSON is **ignored** — player names are assigned at game-start time
 - [ ] Imports are idempotent: re-importing the same file by team name updates the existing record rather than duplicating
@@ -227,9 +227,9 @@ dotnet test --filter "FullyQualifiedName~ImportRoster"
 ```
 
 **Technical Considerations:**
-- `IKillTeamRepository` with `UpsertAsync(KillTeam)` — check by name only (no playerName); `kill_teams.name` should use `COLLATE NOCASE` so "Angels of Death" and "angels of death" are treated as the same team on upsert
-- `IOperativeRepository` with `UpsertByTeamAsync(IEnumerable<Operative>, Guid teamId)`
-- SQLite schema: `kill_teams`, `operatives`, `weapons` tables (no `player_name` column on `kill_teams`)
+- `ITeamRepository` with `UpsertAsync(Team)` — check by name only (no playerName); `teams.name` should use `COLLATE NOCASE` so "Angels of Death" and "angels of death" are treated as the same team on upsert
+- `IOperativeRepository` with `UpsertByTeamAsync(IEnumerable<Operative>, string teamName)`
+- SQLite schema: `teams`, `operatives`, `weapons` tables (no `player_name` column on `teams`)
 - Use `System.Text.Json` with `[JsonPropertyName]` for camelCase JSON
 - Weapon `hit` field stored as string (e.g. "3+") and parsed to int threshold (e.g. 3) on import
 - Folder scan: `Directory.GetFiles(rosterFolder, "*.json")` — wrap each file parse in try/catch to skip invalid files gracefully
@@ -401,7 +401,7 @@ dotnet test --filter "FullyQualifiedName~History OR FullyQualifiedName~Stats"
 - [ ] `Microsoft.Data.Sqlite` NuGet package added to `KillTeam.DataSlate.Console` project only (not Domain)
 - [ ] Database file path configurable via `appsettings.json` key `DataSlate:DatabasePath` (default: `./data/kill-team.db`)
 - [ ] Schema created on first run; migration version tracked in `schema_version` table (integer version, SQL scripts embedded as resources, no rollback)
-- [ ] Tables: `players`, `kill_teams`, `operatives`, `weapons`, `games`, `game_operative_states`, `turning_points`, `activations`, `actions` (Migration 001); `ploy_uses` (Migration 002); `action_blast_targets` (Migration 003)
+- [ ] Tables: `players`, `teams`, `operatives`, `weapons`, `games`, `game_operative_states`, `turning_points`, `activations`, `actions` (Migration 001); `ploy_uses` (Migration 002); `action_blast_targets` (Migration 003)
 - [ ] **Repository interfaces** defined in `KillTeam.DataSlate.Domain` project; **implementations** in `KillTeam.DataSlate.Console` project (consider extracting to `KillTeam.DataSlate.Infrastructure` in a future iteration)
 - [ ] Remove `BondNo`, `Password` fields from `DataSlateOptions` and `appsettings.json` — replaced by `DatabasePath`
 - [ ] Unit tests cover: schema creation, basic CRUD for each entity (using SQLite `:memory:` connection)
@@ -421,7 +421,7 @@ dotnet test --filter "FullyQualifiedName~Repository OR FullyQualifiedName~Schema
 - `AttackDice`/`DefenderDice` stored as `TEXT` (JSON array of ints) in SQLite
 - **Repository interfaces to define in Domain project** (sourced across multiple spikes — all required for compilation):
   - `IPlayerRepository` — `AddAsync`, `GetAllAsync`, `DeleteAsync`, `FindByNameAsync` (spike-schema-ddl §5.1)
-  - `IKillTeamRepository` — `UpsertAsync`, `GetAllAsync`, `FindByNameAsync` (spike-schema-ddl §5.2)
+  - `ITeamRepository` — `UpsertAsync`, `GetAllAsync`, `FindByNameAsync` (spike-schema-ddl §5.2)
   - `IGameRepository` — `CreateAsync`, `GetByIdAsync`, `UpdateStatusAsync`, `UpdateCpAsync` (spike-schema-ddl §5.3 + spike-strategy-phase §5.6)
   - `IGameOperativeStateRepository` — `GetByGameAsync`, `UpdateWoundsAsync`, `UpdateOrderAsync`, `UpdateGuardAsync`, `SetAplModifierAsync` (spike-schema-ddl §5.4)
   - `IActivationRepository` — `CreateAsync`, `GetByTurningPointAsync`, `UpdateNarrativeAsync` (spike-firefight-loop §3)
@@ -488,7 +488,7 @@ dotnet test --filter "FullyQualifiedName~Player"
 - Existing orchestrators (`FightSessionOrchestrator`, `ShootSessionOrchestrator`) are **reused unchanged** — they receive synthetic `Game` (with `CpTeamA/B = 0`), synthetic `TurningPoint`, synthetic `Activation`, and in-memory repository implementations constructed by `SimulateCommand`
 - `InMemoryGameOperativeStateRepository` implements `IGameOperativeStateRepository` with `Dictionary<Guid, GameOperativeState>`; no SQLite dependency
 - `InMemoryActionRepository` implements `IActionRepository` as a no-op; satisfies the interface without writing to DB
-- Roster loading uses the existing `IKillTeamRepository.GetWithOperativesAsync(...)` — no new repository needed
+- Roster loading uses the existing `ITeamRepository.GetWithOperativesAsync(...)` — no new repository needed
 - `simulate` is the first of a planned "test mode" family of commands (see spike §7.5)
 - DI additions: `InMemoryGameOperativeStateRepository` and `InMemoryActionRepository` registered as transient; `cfg.AddCommand<SimulateCommand>("simulate")` in `Program.cs`
 - Full design: `spike-simulate-command.md`
@@ -531,7 +531,7 @@ dotnet test --filter "FullyQualifiedName~Player"
 
 
 
-- FR-1: The app must be runnable as a single CLI executable with sub-commands (`import-kill-teams`, `new-game`, `play`, `annotate`, `view-game`, `history`, `stats`, `player add`, `player list`, `player delete`, `simulate`)
+- FR-1: The app must be runnable as a single CLI executable with sub-commands (`import-teams`, `new-game`, `play`, `annotate`, `view-game`, `history`, `stats`, `player add`, `player list`, `player delete`, `simulate`)
 - FR-2: Rosters must be importable from a single JSON file path **or** auto-discovered from a configured roster folder (`DataSlate:RosterFolder`); player names are not stored in roster files
 - FR-3: A game must track both teams, all operatives, all turning points, all activations, and all actions
 - FR-4: Combat resolution (hits, blocks, damage) must be calculated by the app from entered dice results — players do not enter damage directly
@@ -655,7 +655,7 @@ Sergeant Intercessor expended.
 ## Technical Considerations
 
 - **SQLite**: `Microsoft.Data.Sqlite` (no EF Core — keep it lightweight)
-- **CLI framework**: Spectre.Console.Cli already in place; add `new-game`, `play`, `annotate`, `view-game`, `history`, `stats`, `import-kill-teams` commands
+- **CLI framework**: Spectre.Console.Cli already in place; add `new-game`, `play`, `annotate`, `view-game`, `history`, `stats`, `import-teams` commands
 - **Dice resolution**: Pure domain logic in `CombatResolutionService` — no side effects, fully unit-testable
 - **JSON import**: `System.Text.Json` — no extra packages needed
 - **In-cover saves**: unconditionally retain 1 defence die as a normal success (not a player prompt); app enforces before defender rolls remaining dice
