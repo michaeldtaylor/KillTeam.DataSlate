@@ -33,7 +33,7 @@ public class PlayerDeleteCommand(IPlayerRepository players, IConfiguration confi
         await conn.OpenAsync();
 
         using var cmd = conn.CreateCommand();
-        cmd.CommandText = "SELECT COUNT(*) FROM games WHERE player_a_id=@id OR player_b_id=@id";
+        cmd.CommandText = "SELECT COUNT(*) FROM games WHERE participant1_player_id=@id OR participant2_player_id=@id";
         cmd.Parameters.AddWithValue("@id", player.Id.ToString());
         var count = Convert.ToInt32(await cmd.ExecuteScalarAsync());
 

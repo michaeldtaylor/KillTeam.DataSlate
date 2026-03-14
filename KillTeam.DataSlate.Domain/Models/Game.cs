@@ -8,9 +8,9 @@ public class Game
 
     public string? MissionName { get; init; }
 
-    public required GameParticipant TeamA { get; init; }
+    public required GameParticipant Participant1 { get; init; }
 
-    public required GameParticipant TeamB { get; init; }
+    public required GameParticipant Participant2 { get; init; }
 
     public GameStatus Status { get; init; } = GameStatus.InProgress;
 

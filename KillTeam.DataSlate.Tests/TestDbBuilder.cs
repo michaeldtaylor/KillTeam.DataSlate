@@ -72,8 +72,8 @@ public sealed class TestDbBuilder : IDisposable
     {
         Exec("""
             INSERT INTO games
-                (id, played_at, team_a_id, team_a_name, team_b_id, team_b_name,
-                 player_a_id, player_b_id, status)
+                (id, played_at, participant1_team_id, participant1_team_name, participant2_team_id, participant2_team_name,
+                 participant1_player_id, participant2_player_id, status)
             VALUES (@id, @at, @taId, @taName, @tbId, @tbName, @pa, @pb, @st)
             """,
             ("@id", id.ToString()), ("@at", DateTime.UtcNow.ToString("o")),
@@ -90,7 +90,7 @@ public sealed class TestDbBuilder : IDisposable
         Exec("""
             INSERT INTO turning_points
                 (id, game_id, number, team_with_initiative_id, is_strategy_phase_complete)
-            SELECT @id, @gid, @num, team_a_id, @spc FROM games WHERE id = @gid
+            SELECT @id, @gid, @num, participant1_team_id, @spc FROM games WHERE id = @gid
             """,
             ("@id", id.ToString()), ("@gid", gameId.ToString()), ("@num", number),
             ("@spc", strategyPhaseComplete ? 1 : 0));

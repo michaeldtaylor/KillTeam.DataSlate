@@ -10,9 +10,9 @@ public class TurningPoint
 
     public string? TeamWithInitiativeId { get; init; }
 
-    public int CommandPointsTeamA { get; init; }
+    public int CommandPointsParticipant1 { get; init; }
 
-    public int CommandPointsTeamB { get; init; }
+    public int CommandPointsParticipant2 { get; init; }
 
     public bool IsStrategyPhaseComplete { get; set; }
 }

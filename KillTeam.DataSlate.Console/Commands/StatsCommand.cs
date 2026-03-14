@@ -64,7 +64,7 @@ public class StatsCommand(IConfiguration config) : AsyncCommand<StatsCommand.Set
                 COUNT(*) as games,
                 SUM(CASE WHEN winner_team_id = @tid THEN 1 ELSE 0 END) as wins
             FROM games
-            WHERE (team_a_id = @tid OR team_b_id = @tid) AND status = 'Completed'
+            WHERE (participant1_team_id = @tid OR participant2_team_id = @tid) AND status = 'Completed'
             """;
         statsCmd.Parameters.AddWithValue("@tid", resolvedId);
         var games = 0;
@@ -178,10 +178,10 @@ public class StatsCommand(IConfiguration config) : AsyncCommand<StatsCommand.Set
                 SELECT 
                     COUNT(*) as games,
                     SUM(CASE 
-                        WHEN player_a_id = @id AND winner_team_id = team_a_id THEN 1
-                        WHEN player_b_id = @id AND winner_team_id = team_b_id THEN 1
+                        WHEN participant1_player_id = @id AND winner_team_id = participant1_team_id THEN 1
+                        WHEN participant2_player_id = @id AND winner_team_id = participant2_team_id THEN 1
                         ELSE 0 END) as wins
-                FROM games WHERE (player_a_id = @id OR player_b_id = @id) AND status = 'Completed'
+                FROM games WHERE (participant1_player_id = @id OR participant2_player_id = @id) AND status = 'Completed'
                 """;
             gCmd.Parameters.AddWithValue("@id", id);
             var g = 0;

@@ -140,32 +140,32 @@ internal static class Migrations
         );
 
         CREATE TABLE IF NOT EXISTS games (
-            id                    TEXT PRIMARY KEY,
-            played_at             TEXT NOT NULL,
-            mission_name          TEXT,
-            team_a_id             TEXT NOT NULL,
-            team_a_name           TEXT NOT NULL,
-            team_b_id             TEXT NOT NULL,
-            team_b_name           TEXT NOT NULL,
-            player_a_id           TEXT NOT NULL REFERENCES players (id),
-            player_b_id           TEXT NOT NULL REFERENCES players (id),
-            status                TEXT NOT NULL DEFAULT 'InProgress'
-                                      CHECK (status IN ('InProgress', 'Completed')),
-            cp_team_a             INTEGER NOT NULL DEFAULT 2,
-            cp_team_b             INTEGER NOT NULL DEFAULT 2,
-            winner_team_id        TEXT,
-            victory_points_team_a INTEGER NOT NULL DEFAULT 0,
-            victory_points_team_b INTEGER NOT NULL DEFAULT 0
+            id                          TEXT PRIMARY KEY,
+            played_at                   TEXT NOT NULL,
+            mission_name                TEXT,
+            participant1_team_id        TEXT NOT NULL,
+            participant1_team_name      TEXT NOT NULL,
+            participant2_team_id        TEXT NOT NULL,
+            participant2_team_name      TEXT NOT NULL,
+            participant1_player_id      TEXT NOT NULL REFERENCES players (id),
+            participant2_player_id      TEXT NOT NULL REFERENCES players (id),
+            status                      TEXT NOT NULL DEFAULT 'InProgress'
+                                            CHECK (status IN ('InProgress', 'Completed')),
+            participant1_command_points INTEGER NOT NULL DEFAULT 2,
+            participant2_command_points INTEGER NOT NULL DEFAULT 2,
+            winner_team_id              TEXT,
+            participant1_victory_points INTEGER NOT NULL DEFAULT 0,
+            participant2_victory_points INTEGER NOT NULL DEFAULT 0
         );
 
         CREATE TABLE IF NOT EXISTS turning_points (
-            id                       TEXT PRIMARY KEY,
-            game_id                  TEXT NOT NULL REFERENCES games (id) ON DELETE CASCADE,
-            number                   INTEGER NOT NULL CHECK (number BETWEEN 1 AND 4),
-            team_with_initiative_id  TEXT,
-            command_points_team_a    INTEGER NOT NULL DEFAULT 0,
-            command_points_team_b    INTEGER NOT NULL DEFAULT 0,
-            is_strategy_phase_complete INTEGER NOT NULL DEFAULT 0
+            id                          TEXT PRIMARY KEY,
+            game_id                     TEXT NOT NULL REFERENCES games (id) ON DELETE CASCADE,
+            number                      INTEGER NOT NULL CHECK (number BETWEEN 1 AND 4),
+            team_with_initiative_id     TEXT,
+            command_points_participant1 INTEGER NOT NULL DEFAULT 0,
+            command_points_participant2 INTEGER NOT NULL DEFAULT 0,
+            is_strategy_phase_complete  INTEGER NOT NULL DEFAULT 0
         );
 
         CREATE TABLE IF NOT EXISTS activations (

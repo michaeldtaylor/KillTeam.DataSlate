@@ -32,8 +32,8 @@ public class GameSessionTests
 
         var updated = await gameRepo.GetByIdAsync(gameId);
         updated.Should().NotBeNull();
-        updated!.TeamA.CommandPoints.Should().Be(3, "TP1 gives +1CP to each team");
-        updated.TeamB.CommandPoints.Should().Be(3, "TP1 gives +1CP to each team");
+        updated!.Participant1.CommandPoints.Should().Be(3, "TP1 gives +1CP to each team");
+        updated.Participant2.CommandPoints.Should().Be(3, "TP1 gives +1CP to each team");
     }
 
     [Fact]
@@ -63,8 +63,8 @@ public class GameSessionTests
         await gameRepo.UpdateCpAsync(gameId, cpA, cpB);
 
         var updated = await gameRepo.GetByIdAsync(gameId);
-        updated!.TeamA.CommandPoints.Should().Be(4, "initiative team gains 1CP");
-        updated.TeamB.CommandPoints.Should().Be(5, "other team gains 2CP");
+        updated!.Participant1.CommandPoints.Should().Be(4, "initiative team gains 1CP");
+        updated.Participant2.CommandPoints.Should().Be(5, "other team gains 2CP");
     }
 
     // ─── Wound Reduction ──────────────────────────────────────────────────────

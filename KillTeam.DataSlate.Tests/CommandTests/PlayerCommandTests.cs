@@ -74,7 +74,7 @@ public class PlayerCommandTests
             .WithGame(gameId, "angels_of_death", "Angels of Death", "angels_of_death", "Angels of Death", playerId, playerId);
 
         using var cmd = db.Connection.CreateCommand();
-        cmd.CommandText = "SELECT COUNT(*) FROM games WHERE player_a_id=@id OR player_b_id=@id";
+        cmd.CommandText = "SELECT COUNT(*) FROM games WHERE participant1_player_id=@id OR participant2_player_id=@id";
         cmd.Parameters.AddWithValue("@id", playerId.ToString());
         var count = Convert.ToInt32(cmd.ExecuteScalar());
 

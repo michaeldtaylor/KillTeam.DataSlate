@@ -27,7 +27,7 @@ public class BlastTorrentSessionOrchestrator(
         TurningPoint tp,
         Activation activation)
     {
-        var isAttackerTeamA = attacker.TeamId == game.TeamA.TeamId;
+        var isAttackerTeamA = attacker.TeamId == game.Participant1.TeamId;
         var weaponType = weapon.ParsedRules.Any(r => r.Kind == SpecialRuleKind.Torrent) ? "Torrent" : "Blast";
 
         console.MarkupLine($"[bold yellow]⚠ [MULTI-TARGET][/] This weapon hits multiple targets. [{weaponType}]");
@@ -124,7 +124,7 @@ public class BlastTorrentSessionOrchestrator(
                 ? []
                 : await RollOrEnterDiceAsync(defDiceCount, $"{Markup.Escape(targetOp.Name)} defence dice");
 
-            var isDefenderTeamA = targetOp.TeamId == game.TeamA.TeamId;
+            var isDefenderTeamA = targetOp.TeamId == game.Participant1.TeamId;
             defDice = await rerollOrchestrator.ApplyDefenderRerollAsync(defDice, game.Id, isDefenderTeamA, targetOp.Name);
 
             var ctx = new ShootContext(

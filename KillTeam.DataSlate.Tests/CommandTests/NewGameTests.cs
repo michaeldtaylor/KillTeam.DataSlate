@@ -39,14 +39,14 @@ public class NewGameTests
         {
             Id = Guid.NewGuid(),
             PlayedAt = DateTime.UtcNow,
-            TeamA = new GameParticipant
+            Participant1 = new GameParticipant
             {
                 TeamId = "angels_of_death",
                 TeamName = teamAName,
                 PlayerId = playerId1,
                 CommandPoints = 2
             },
-            TeamB = new GameParticipant
+            Participant2 = new GameParticipant
             {
                 TeamId = "plague_marines",
                 TeamName = teamBName,
@@ -78,8 +78,8 @@ public class NewGameTests
         var foundGame = await gameRepo.GetByIdAsync(created.Id);
         foundGame.Should().NotBeNull();
         foundGame!.Status.Should().Be(GameStatus.InProgress);
-        foundGame.TeamA.CommandPoints.Should().Be(2);
-        foundGame.TeamB.CommandPoints.Should().Be(2);
+        foundGame.Participant1.CommandPoints.Should().Be(2);
+        foundGame.Participant2.CommandPoints.Should().Be(2);
 
         var states = (await stateRepo.GetByGameAsync(created.Id)).ToList();
         states.Should().HaveCount(4);

@@ -44,10 +44,10 @@ public class PlayCommand(
             return 0;
         }
 
-        var teamA = await teamRepository.GetWithOperativesAsync(game.TeamA.TeamName);
-        var teamB = await teamRepository.GetWithOperativesAsync(game.TeamB.TeamName);
-        var teamAName = teamA?.Name ?? game.TeamA.TeamName;
-        var teamBName = teamB?.Name ?? game.TeamB.TeamName;
+        var teamA = await teamRepository.GetWithOperativesAsync(game.Participant1.TeamName);
+        var teamB = await teamRepository.GetWithOperativesAsync(game.Participant2.TeamName);
+        var teamAName = teamA?.Name ?? game.Participant1.TeamName;
+        var teamBName = teamB?.Name ?? game.Participant2.TeamName;
 
         console.Write(new Rule($"[bold]Team Game[/]  {Markup.Escape(teamAName)} vs {Markup.Escape(teamBName)}"));
 
@@ -96,10 +96,10 @@ public class PlayCommand(
             console.Write(new Rule("[bold green]Game Complete![/]"));
             var winner = game.WinnerTeamId is null
                 ? "Draw"
-                : game.WinnerTeamId == game.TeamA.TeamId
+                : game.WinnerTeamId == game.Participant1.TeamId
                     ? $"{teamAName} wins"
                     : $"{teamBName} wins";
-            console.MarkupLine($"Result: [bold]{Markup.Escape(winner)}[/]  |  {Markup.Escape(teamAName)}: {game.TeamA.VictoryPoints} VP  |  {Markup.Escape(teamBName)}: {game.TeamB.VictoryPoints} VP");
+            console.MarkupLine($"Result: [bold]{Markup.Escape(winner)}[/]  |  {Markup.Escape(teamAName)}: {game.Participant1.VictoryPoints} VP  |  {Markup.Escape(teamBName)}: {game.Participant2.VictoryPoints} VP");
         }
 
         return 0;

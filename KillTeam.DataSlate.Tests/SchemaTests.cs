@@ -120,14 +120,14 @@ public class SchemaTests
         {
             Id = Guid.NewGuid(),
             PlayedAt = DateTime.UtcNow,
-            TeamA = new GameParticipant
+            Participant1 = new GameParticipant
             {
                 TeamId = "angels_of_death",
                 TeamName = "Angels of Death",
                 PlayerId = playerId1,
                 CommandPoints = 2
             },
-            TeamB = new GameParticipant
+            Participant2 = new GameParticipant
             {
                 TeamId = "plague_marines",
                 TeamName = "Plague Marines",
@@ -142,7 +142,7 @@ public class SchemaTests
         var found = await repo.GetByIdAsync(created.Id);
         found.Should().NotBeNull();
         found!.Status.Should().Be(GameStatus.InProgress);
-        found.TeamA.CommandPoints.Should().Be(2);
+        found.Participant1.CommandPoints.Should().Be(2);
     }
 
     [Fact]

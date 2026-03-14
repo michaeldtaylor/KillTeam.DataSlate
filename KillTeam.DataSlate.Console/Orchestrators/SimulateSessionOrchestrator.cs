@@ -133,14 +133,14 @@ public class SimulateSessionOrchestrator(
         var game = new Models.Game
         {
             Id = Guid.NewGuid(),
-            TeamA = new Models.GameParticipant
+            Participant1 = new Models.GameParticipant
             {
                 TeamId = playerTeam.Id,
                 TeamName = playerTeam.Name,
                 PlayerId = Guid.Empty,
                 CommandPoints = 0,  // suppresses CP re-roll prompts (RerollOrchestrator skips when game not in DB)
             },
-            TeamB = new Models.GameParticipant
+            Participant2 = new Models.GameParticipant
             {
                 TeamId = aiTeam.Id,
                 TeamName = aiTeam.Name,

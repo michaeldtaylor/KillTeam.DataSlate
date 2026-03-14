@@ -42,8 +42,8 @@ public class HistoryTests
         using var cmd = db.Connection.CreateCommand();
         cmd.CommandText = """
             SELECT COUNT(*) FROM games g
-            JOIN players pa ON pa.id=g.player_a_id
-            JOIN players pb ON pb.id=g.player_b_id
+            JOIN players pa ON pa.id=g.participant1_player_id
+            JOIN players pb ON pb.id=g.participant2_player_id
             WHERE g.status='Completed' AND (pa.name LIKE '%Michael%' OR pb.name LIKE '%Michael%')
             """;
         var count = Convert.ToInt32(cmd.ExecuteScalar());
@@ -78,8 +78,8 @@ public class StatsTests
             var gid = Guid.NewGuid();
             using var insertCmd = db.Connection.CreateCommand();
             insertCmd.CommandText = """
-                INSERT INTO games (id, played_at, team_a_id, team_a_name, team_b_id, team_b_name,
-                    player_a_id, player_b_id, status, winner_team_id, victory_points_team_a, victory_points_team_b)
+                INSERT INTO games (id, played_at, participant1_team_id, participant1_team_name, participant2_team_id, participant2_team_name,
+                    participant1_player_id, participant2_player_id, status, winner_team_id, participant1_victory_points, participant2_victory_points)
                 VALUES (@id, @at, @ta_id, @ta, @tb_id, @tb, @pa, @pb, 'Completed', @winner_id, 5, 3)
                 """;
             insertCmd.Parameters.AddWithValue("@id", gid.ToString());
@@ -98,8 +98,8 @@ public class StatsTests
         using var cmd = db.Connection.CreateCommand();
         cmd.CommandText = """
             SELECT COUNT(*) as games,
-                   SUM(CASE WHEN player_a_id=@pid AND winner_team_id=team_a_id THEN 1 ELSE 0 END) as wins
-            FROM games WHERE (player_a_id=@pid OR player_b_id=@pid) AND status='Completed'
+                   SUM(CASE WHEN participant1_player_id=@pid AND winner_team_id=participant1_team_id THEN 1 ELSE 0 END) as wins
+            FROM games WHERE (participant1_player_id=@pid OR participant2_player_id=@pid) AND status='Completed'
             """;
         cmd.Parameters.AddWithValue("@pid", pid1.ToString());
         using var r = await cmd.ExecuteReaderAsync();

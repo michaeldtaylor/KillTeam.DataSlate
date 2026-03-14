@@ -18,7 +18,7 @@ public class SqliteTurningPointRepository : ITurningPointRepository
         await _db.ExecuteAsync(
             """
             INSERT INTO turning_points
-            (id, game_id, number, team_with_initiative_id, command_points_team_a, command_points_team_b, is_strategy_phase_complete)
+            (id, game_id, number, team_with_initiative_id, command_points_participant1, command_points_participant2, is_strategy_phase_complete)
             VALUES (@id, @gameId, @number, @teamWithInitiativeId, @cpTeamA, @cpTeamB, @isStrategyPhaseComplete)
             """,
             new()
@@ -27,8 +27,8 @@ public class SqliteTurningPointRepository : ITurningPointRepository
                 ["@gameId"] = tp.GameId.ToString(),
                 ["@number"] = tp.Number,
                 ["@teamWithInitiativeId"] = tp.TeamWithInitiativeId,
-                ["@cpTeamA"] = tp.CommandPointsTeamA,
-                ["@cpTeamB"] = tp.CommandPointsTeamB,
+                ["@cpTeamA"] = tp.CommandPointsParticipant1,
+                ["@cpTeamB"] = tp.CommandPointsParticipant2,
                 ["@isStrategyPhaseComplete"] = tp.IsStrategyPhaseComplete ? 1 : 0
             });
         return tp;
@@ -39,7 +39,7 @@ public class SqliteTurningPointRepository : ITurningPointRepository
         return await _db.QuerySingleAsync(
             """
             SELECT tp.id, tp.game_id, tp.number, tp.team_with_initiative_id,
-                   tp.command_points_team_a, tp.command_points_team_b, tp.is_strategy_phase_complete
+                   tp.command_points_participant1, tp.command_points_participant2, tp.is_strategy_phase_complete
             FROM turning_points tp
             JOIN games g ON g.id = tp.game_id
             WHERE tp.game_id = @gameId AND g.status = 'InProgress'
@@ -71,8 +71,8 @@ public class SqliteTurningPointRepository : ITurningPointRepository
         GameId = Guid.Parse(r.GetString(1)),
         Number = r.GetInt32(2),
         TeamWithInitiativeId = r.IsDBNull(3) ? null : r.GetString(3),
-        CommandPointsTeamA = r.GetInt32(4),
-        CommandPointsTeamB = r.GetInt32(5),
+        CommandPointsParticipant1 = r.GetInt32(4),
+        CommandPointsParticipant2 = r.GetInt32(5),
         IsStrategyPhaseComplete = r.GetInt32(6) != 0
     };
 }

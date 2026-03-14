@@ -34,7 +34,7 @@ public class StrategyPhaseOrchestrator(
                 continue;
             }
 
-            initiativeTeamId = winner == teamAName ? game.TeamA.TeamId : game.TeamB.TeamId;
+            initiativeTeamId = winner == teamAName ? game.Participant1.TeamId : game.Participant2.TeamId;
             break;
         }
 
@@ -49,8 +49,8 @@ public class StrategyPhaseOrchestrator(
         tp = await turningPointRepository.CreateAsync(tp);
 
         // ─── 3. CP gains ──────────────────────────────────────────────────────
-        var cpA = game.TeamA.CommandPoints;
-        var cpB = game.TeamB.CommandPoints;
+        var cpA = game.Participant1.CommandPoints;
+        var cpB = game.Participant2.CommandPoints;
 
         if (tpNumber == 1)
         {
@@ -60,7 +60,7 @@ public class StrategyPhaseOrchestrator(
         else
         {
             // Initiative team +1CP, other team +2CP
-            if (initiativeTeamId == game.TeamA.TeamId)
+            if (initiativeTeamId == game.Participant1.TeamId)
             {
                 cpA += 1;
                 cpB += 2;
@@ -73,23 +73,23 @@ public class StrategyPhaseOrchestrator(
         }
 
         await gameRepository.UpdateCpAsync(game.Id, cpA, cpB);
-        game.TeamA.CommandPoints = cpA;
-        game.TeamB.CommandPoints = cpB;
+        game.Participant1.CommandPoints = cpA;
+        game.Participant2.CommandPoints = cpB;
 
         AnsiConsole.MarkupLine(FormatCp(teamAName, cpA) + "  " + FormatCp(teamBName, cpB));
 
         // ─── 5. Ploy recording — non-initiative player first ─────────────────
-        var (nonInitId, nonInitName) = initiativeTeamId == game.TeamA.TeamId
-            ? (game.TeamB.TeamId, teamBName)
-            : (game.TeamA.TeamId, teamAName);
-        var (initId, initName) = initiativeTeamId == game.TeamA.TeamId
-            ? (game.TeamA.TeamId, teamAName)
-            : (game.TeamB.TeamId, teamBName);
+        var (nonInitId, nonInitName) = initiativeTeamId == game.Participant1.TeamId
+            ? (game.Participant2.TeamId, teamBName)
+            : (game.Participant1.TeamId, teamAName);
+        var (initId, initName) = initiativeTeamId == game.Participant1.TeamId
+            ? (game.Participant1.TeamId, teamAName)
+            : (game.Participant2.TeamId, teamBName);
 
-        (cpA, cpB) = await RunPloyLoopAsync(tp, game.TeamA.TeamId, game.TeamB.TeamId,
+        (cpA, cpB) = await RunPloyLoopAsync(tp, game.Participant1.TeamId, game.Participant2.TeamId,
             nonInitId, nonInitName, cpA, cpB, game.Id);
 
-        (cpA, cpB) = await RunPloyLoopAsync(tp, game.TeamA.TeamId, game.TeamB.TeamId,
+        (cpA, cpB) = await RunPloyLoopAsync(tp, game.Participant1.TeamId, game.Participant2.TeamId,
             initId, initName, cpA, cpB, game.Id);
 
         // ─── 6. Mark strategy phase complete ──────────────────────────────────

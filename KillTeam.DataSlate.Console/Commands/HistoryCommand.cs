@@ -26,15 +26,15 @@ public class HistoryCommand(IConfiguration config) : AsyncCommand<HistoryCommand
         using var cmd = conn.CreateCommand();
         cmd.CommandText = """
             SELECT g.id, g.played_at, g.mission_name,
-                   pa.name as player_a_name, g.team_a_name,
-                   pb.name as player_b_name, g.team_b_name,
-                   g.victory_points_team_a, g.victory_points_team_b,
-                   CASE WHEN g.winner_team_id = g.team_a_id THEN g.team_a_name
-                        WHEN g.winner_team_id = g.team_b_id THEN g.team_b_name
+                   pa.name as participant1_player_name, g.participant1_team_name,
+                   pb.name as participant2_player_name, g.participant2_team_name,
+                   g.participant1_victory_points, g.participant2_victory_points,
+                   CASE WHEN g.winner_team_id = g.participant1_team_id THEN g.participant1_team_name
+                        WHEN g.winner_team_id = g.participant2_team_id THEN g.participant2_team_name
                         ELSE '—' END as winner
             FROM games g
-            JOIN players pa ON pa.id = g.player_a_id
-            JOIN players pb ON pb.id = g.player_b_id
+            JOIN players pa ON pa.id = g.participant1_player_id
+            JOIN players pb ON pb.id = g.participant2_player_id
             WHERE g.status = 'Completed'
             """;
 

@@ -37,14 +37,14 @@ public class ViewGameCommand(
         // Load game header
         using var gameCmd = conn.CreateCommand();
         gameCmd.CommandText = """
-            SELECT g.status, g.mission_name, g.victory_points_team_a, g.victory_points_team_b,
-                   pa.name, g.team_a_name, pb.name, g.team_b_name,
-                   CASE WHEN g.winner_team_id = g.team_a_id THEN g.team_a_name
-                        WHEN g.winner_team_id = g.team_b_id THEN g.team_b_name
+            SELECT g.status, g.mission_name, g.participant1_victory_points, g.participant2_victory_points,
+                   pa.name, g.participant1_team_name, pb.name, g.participant2_team_name,
+                   CASE WHEN g.winner_team_id = g.participant1_team_id THEN g.participant1_team_name
+                        WHEN g.winner_team_id = g.participant2_team_id THEN g.participant2_team_name
                         ELSE NULL END
             FROM games g
-            JOIN players pa ON pa.id = g.player_a_id
-            JOIN players pb ON pb.id = g.player_b_id
+            JOIN players pa ON pa.id = g.participant1_player_id
+            JOIN players pb ON pb.id = g.participant2_player_id
             WHERE g.id = @id
             """;
         gameCmd.Parameters.AddWithValue("@id", gameId.ToString());

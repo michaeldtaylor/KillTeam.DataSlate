@@ -156,7 +156,7 @@ public class RerollOrchestrator(IGameRepository gameRepository)
             return pool;
         }
 
-        var cp = isTeamA ? game.TeamA.CommandPoints : game.TeamB.CommandPoints;
+        var cp = isTeamA ? game.Participant1.CommandPoints : game.Participant2.CommandPoints;
         if (cp <= 0)
         {
             return pool;
@@ -182,8 +182,8 @@ public class RerollOrchestrator(IGameRepository gameRepository)
         var newVal = RollD6();
         AnsiConsole.MarkupLine($"  CP re-roll die {choice.Index + 1}: {choice.Value} → [bold]{newVal}[/]");
 
-        var newCpA = isTeamA ? game.TeamA.CommandPoints - 1 : game.TeamA.CommandPoints;
-        var newCpB = isTeamA ? game.TeamB.CommandPoints : game.TeamB.CommandPoints - 1;
+        var newCpA = isTeamA ? game.Participant1.CommandPoints - 1 : game.Participant1.CommandPoints;
+        var newCpB = isTeamA ? game.Participant2.CommandPoints : game.Participant2.CommandPoints - 1;
         await gameRepository.UpdateCpAsync(gameId, newCpA, newCpB);
 
         return pool.Select(d => d.Index == choice.Index

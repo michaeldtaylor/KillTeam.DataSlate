@@ -35,15 +35,15 @@ public class PlayerListCommand(IPlayerRepository players, IConfiguration config)
             await conn.OpenAsync();
 
             using var gCmd = conn.CreateCommand();
-            gCmd.CommandText = "SELECT COUNT(*) FROM games WHERE player_a_id=@id OR player_b_id=@id";
+            gCmd.CommandText = "SELECT COUNT(*) FROM games WHERE participant1_player_id=@id OR participant2_player_id=@id";
             gCmd.Parameters.AddWithValue("@id", p.Id.ToString());
             var games = Convert.ToInt32(await gCmd.ExecuteScalarAsync());
 
             using var wCmd = conn.CreateCommand();
             wCmd.CommandText = """
                 SELECT COUNT(*) FROM games
-                WHERE (player_a_id=@id AND winner_team_id=team_a_id)
-                   OR (player_b_id=@id AND winner_team_id=team_b_id)
+                WHERE (participant1_player_id=@id AND winner_team_id=participant1_team_id)
+                   OR (participant2_player_id=@id AND winner_team_id=participant2_team_id)
                 """;
             wCmd.Parameters.AddWithValue("@id", p.Id.ToString());
             var wins = Convert.ToInt32(await wCmd.ExecuteScalarAsync());
