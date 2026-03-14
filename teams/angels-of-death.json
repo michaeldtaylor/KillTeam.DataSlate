@@ -1,5 +1,6 @@
 {
   "$schema": "../schema/team.schema.json",
+  "id": "angels_of_death",
   "name": "Angels of Death",
   "faction": "Adeptus Astartes",
   "operatives": [

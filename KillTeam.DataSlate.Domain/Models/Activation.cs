@@ -10,7 +10,7 @@ public class Activation
 
     public Guid OperativeId { get; init; }
 
-    public required string TeamName { get; init; }
+    public required string TeamId { get; init; }
 
     public Order OrderSelected { get; set; }
 

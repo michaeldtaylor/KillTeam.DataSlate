@@ -4,7 +4,7 @@ public class Operative
 {
     public Guid Id { get; init; } = Guid.NewGuid();
 
-    public required string TeamName { get; set; }
+    public required string TeamId { get; set; }
 
     public required string Name { get; init; }
 

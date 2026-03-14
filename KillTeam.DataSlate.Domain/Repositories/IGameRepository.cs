@@ -8,7 +8,7 @@ public interface IGameRepository
 
     Task<Game?> GetByIdAsync(Guid id);
 
-    Task UpdateStatusAsync(Guid gameId, GameStatus status, string? winnerTeamName, int vpTeamA, int vpTeamB);
+    Task UpdateStatusAsync(Guid gameId, GameStatus status, string? winnerTeamId, int vpTeamA, int vpTeamB);
 
     Task UpdateCpAsync(Guid gameId, int cpTeamA, int cpTeamB);
 }

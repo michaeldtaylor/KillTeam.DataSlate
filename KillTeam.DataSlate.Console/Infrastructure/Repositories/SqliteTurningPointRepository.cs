@@ -18,17 +18,17 @@ public class SqliteTurningPointRepository : ITurningPointRepository
         await _db.ExecuteAsync(
             """
             INSERT INTO turning_points
-            (id, game_id, number, team_with_initiative_name, cp_team_a, cp_team_b, is_strategy_phase_complete)
-            VALUES (@id, @gameId, @number, @teamWithInitiativeName, @cpTeamA, @cpTeamB, @isStrategyPhaseComplete)
+            (id, game_id, number, team_with_initiative_id, command_points_team_a, command_points_team_b, is_strategy_phase_complete)
+            VALUES (@id, @gameId, @number, @teamWithInitiativeId, @cpTeamA, @cpTeamB, @isStrategyPhaseComplete)
             """,
             new()
             {
                 ["@id"] = tp.Id.ToString(),
                 ["@gameId"] = tp.GameId.ToString(),
                 ["@number"] = tp.Number,
-                ["@teamWithInitiativeName"] = tp.TeamWithInitiativeName,
-                ["@cpTeamA"] = tp.CpTeamA,
-                ["@cpTeamB"] = tp.CpTeamB,
+                ["@teamWithInitiativeId"] = tp.TeamWithInitiativeId,
+                ["@cpTeamA"] = tp.CommandPointsTeamA,
+                ["@cpTeamB"] = tp.CommandPointsTeamB,
                 ["@isStrategyPhaseComplete"] = tp.IsStrategyPhaseComplete ? 1 : 0
             });
         return tp;
@@ -38,8 +38,8 @@ public class SqliteTurningPointRepository : ITurningPointRepository
     {
         return await _db.QuerySingleAsync(
             """
-            SELECT tp.id, tp.game_id, tp.number, tp.team_with_initiative_name,
-                   tp.cp_team_a, tp.cp_team_b, tp.is_strategy_phase_complete
+            SELECT tp.id, tp.game_id, tp.number, tp.team_with_initiative_id,
+                   tp.command_points_team_a, tp.command_points_team_b, tp.is_strategy_phase_complete
             FROM turning_points tp
             JOIN games g ON g.id = tp.game_id
             WHERE tp.game_id = @gameId AND g.status = 'InProgress'
@@ -70,9 +70,9 @@ public class SqliteTurningPointRepository : ITurningPointRepository
         Id = Guid.Parse(r.GetString(0)),
         GameId = Guid.Parse(r.GetString(1)),
         Number = r.GetInt32(2),
-        TeamWithInitiativeName = r.IsDBNull(3) ? null : r.GetString(3),
-        CpTeamA = r.GetInt32(4),
-        CpTeamB = r.GetInt32(5),
+        TeamWithInitiativeId = r.IsDBNull(3) ? null : r.GetString(3),
+        CommandPointsTeamA = r.GetInt32(4),
+        CommandPointsTeamB = r.GetInt32(5),
         IsStrategyPhaseComplete = r.GetInt32(6) != 0
     };
 }

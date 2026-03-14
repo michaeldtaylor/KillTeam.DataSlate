@@ -96,7 +96,7 @@ public class ImportTeamsCommand(
         var team = importer.Import(json);
 
         await teams.UpsertAsync(team);
-        await operatives.UpsertByTeamAsync(team.Operatives, team.Name);
+        await operatives.UpsertByTeamAsync(team.Operatives, team.Id);
         foreach (var op in team.Operatives)
             await weapons.UpsertByOperativeAsync(op.Weapons, op.Id);
 

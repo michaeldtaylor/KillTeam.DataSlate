@@ -11,6 +11,7 @@ public class ImportTeamsTests
 {
     private static readonly string ValidKillTeamJson = """
         {
+          "id": "angels_of_death",
           "name": "Angels of Death",
           "faction": "Adeptus Astartes",
           "operatives": [
@@ -48,7 +49,7 @@ public class ImportTeamsTests
 
         var team = importer.Import(ValidKillTeamJson);
         await teamRepo.UpsertAsync(team);
-        await opRepo.UpsertByTeamAsync(team.Operatives, team.Name);
+        await opRepo.UpsertByTeamAsync(team.Operatives, team.Id);
         foreach (var op in team.Operatives)
             await wpRepo.UpsertByOperativeAsync(op.Weapons, op.Id);
 
@@ -80,7 +81,7 @@ public class ImportTeamsTests
             var json = ValidKillTeamJson.Replace("Adeptus Astartes", faction);
             var team = importer.Import(json);
             await teamRepo.UpsertAsync(team);
-            await opRepo.UpsertByTeamAsync(team.Operatives, team.Name);
+            await opRepo.UpsertByTeamAsync(team.Operatives, team.Id);
             foreach (var op in team.Operatives)
                 await wpRepo.UpsertByOperativeAsync(op.Weapons, op.Id);
         }
@@ -103,6 +104,7 @@ public class ImportTeamsTests
         var importer = new TeamJsonImporter();
         var badJson = """
             {
+              "id": "bad_team",
               "name": "Bad Team",
               "faction": "X",
               "operatives": [

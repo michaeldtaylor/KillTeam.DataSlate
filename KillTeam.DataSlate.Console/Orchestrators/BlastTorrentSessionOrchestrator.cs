@@ -27,7 +27,7 @@ public class BlastTorrentSessionOrchestrator(
         TurningPoint tp,
         Activation activation)
     {
-        var isAttackerTeamA = attacker.TeamName == game.TeamAName;
+        var isAttackerTeamA = attacker.TeamId == game.TeamA.TeamId;
         var weaponType = weapon.ParsedRules.Any(r => r.Kind == SpecialRuleKind.Torrent) ? "Torrent" : "Blast";
 
         console.MarkupLine($"[bold yellow]⚠ [MULTI-TARGET][/] This weapon hits multiple targets. [{weaponType}]");
@@ -49,7 +49,7 @@ public class BlastTorrentSessionOrchestrator(
                         {
                             return s.OperativeId.ToString();
                         }
-                        var isFriendly = o.TeamName == attacker.TeamName;
+                        var isFriendly = o.TeamId == attacker.TeamId;
                         var friendly = isFriendly ? " [red][FRIENDLY FIRE!][/]" : "";
                         return $"{Markup.Escape(o.Name)} (W:{s.CurrentWounds}/{o.Wounds}){friendly}";
                     })
@@ -61,7 +61,7 @@ public class BlastTorrentSessionOrchestrator(
 
         // Friendly fire confirmation
         var friendlyCount = allTargetStates.Count(s =>
-            allOperatives.TryGetValue(s.OperativeId, out var o) && o.TeamName == attacker.TeamName);
+            allOperatives.TryGetValue(s.OperativeId, out var o) && o.TeamId == attacker.TeamId);
         if (friendlyCount > 0)
         {
             console.MarkupLine($"[red]⚠ This will affect {friendlyCount} friendly operative(s).[/]");
@@ -124,7 +124,7 @@ public class BlastTorrentSessionOrchestrator(
                 ? []
                 : await RollOrEnterDiceAsync(defDiceCount, $"{Markup.Escape(targetOp.Name)} defence dice");
 
-            var isDefenderTeamA = targetOp.TeamName == game.TeamAName;
+            var isDefenderTeamA = targetOp.TeamId == game.TeamA.TeamId;
             defDice = await rerollOrchestrator.ApplyDefenderRerollAsync(defDice, game.Id, isDefenderTeamA, targetOp.Name);
 
             var ctx = new ShootContext(

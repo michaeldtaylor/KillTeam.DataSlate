@@ -59,6 +59,11 @@ public class TeamJsonImporter
             throw new TeamValidationException("Missing required field: 'name'.");
         }
 
+        if (string.IsNullOrWhiteSpace(jsonTeam.Id))
+        {
+            throw new TeamValidationException("Missing required field: 'id'.");
+        }
+
         if (jsonTeam.Operatives is null || jsonTeam.Operatives.Count == 0)
         {
             throw new TeamValidationException("Missing required field: 'operatives' (empty or absent).");
@@ -66,6 +71,7 @@ public class TeamJsonImporter
 
         var team = new KillTeam.DataSlate.Domain.Models.Team
         {
+            Id = jsonTeam.Id.Trim(),
             Name = jsonTeam.Name.Trim(),
             Faction = jsonTeam.Faction?.Trim() ?? string.Empty,
             Operatives = []
@@ -101,7 +107,7 @@ public class TeamJsonImporter
             var operative = new Operative
             {
                 Id = CreateVersion5(OperativeNs, $"{team.Name}/{operativeType}"),
-                TeamName = team.Name,
+                TeamId = team.Id,
                 Name = jo.Name.Trim(),
                 OperativeType = operativeType,
                 Move = jo.Stats.Move!.Value,
@@ -197,6 +203,7 @@ public class TeamJsonImporter
 
 internal class JsonTeam
 {
+    [JsonPropertyName("id")]          public string? Id { get; set; }
     [JsonPropertyName("name")]        public string? Name { get; set; }
     [JsonPropertyName("faction")]     public string? Faction { get; set; }
     [JsonPropertyName("operatives")]  public List<JsonOperative>? Operatives { get; set; }

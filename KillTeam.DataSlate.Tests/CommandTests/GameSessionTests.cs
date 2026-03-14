@@ -21,9 +21,9 @@ public class GameSessionTests
 
         using var db = TestDbBuilder.Create()
             .WithPlayer(playerId, "Player1")
-            .WithTeam("Team A", "Faction A")
-            .WithTeam("Team B", "Faction B")
-            .WithGame(gameId, "Team A", "Team B", playerId, playerId);
+            .WithTeam("team_a", "Team A", "Faction A")
+            .WithTeam("team_b", "Team B", "Faction B")
+            .WithGame(gameId, "team_a", "Team A", "team_b", "Team B", playerId, playerId);
 
         var gameRepo = new SqliteGameRepository(db.Connection);
 
@@ -32,8 +32,8 @@ public class GameSessionTests
 
         var updated = await gameRepo.GetByIdAsync(gameId);
         updated.Should().NotBeNull();
-        updated!.CpTeamA.Should().Be(3, "TP1 gives +1CP to each team");
-        updated.CpTeamB.Should().Be(3, "TP1 gives +1CP to each team");
+        updated!.TeamA.CommandPoints.Should().Be(3, "TP1 gives +1CP to each team");
+        updated.TeamB.CommandPoints.Should().Be(3, "TP1 gives +1CP to each team");
     }
 
     [Fact]
@@ -48,9 +48,9 @@ public class GameSessionTests
 
         using var db = TestDbBuilder.Create()
             .WithPlayer(playerId, "Player1")
-            .WithTeam("Team A", "Faction A")
-            .WithTeam("Team B", "Faction B")
-            .WithGame(gameId, "Team A", "Team B", playerId, playerId);
+            .WithTeam("team_a", "Team A", "Faction A")
+            .WithTeam("team_b", "Team B", "Faction B")
+            .WithGame(gameId, "team_a", "Team A", "team_b", "Team B", playerId, playerId);
 
         var gameRepo = new SqliteGameRepository(db.Connection);
 
@@ -63,8 +63,8 @@ public class GameSessionTests
         await gameRepo.UpdateCpAsync(gameId, cpA, cpB);
 
         var updated = await gameRepo.GetByIdAsync(gameId);
-        updated!.CpTeamA.Should().Be(4, "initiative team gains 1CP");
-        updated.CpTeamB.Should().Be(5, "other team gains 2CP");
+        updated!.TeamA.CommandPoints.Should().Be(4, "initiative team gains 1CP");
+        updated.TeamB.CommandPoints.Should().Be(5, "other team gains 2CP");
     }
 
     // ─── Wound Reduction ──────────────────────────────────────────────────────
@@ -81,10 +81,10 @@ public class GameSessionTests
 
         using var db = TestDbBuilder.Create()
             .WithPlayer(playerId, "Player1")
-            .WithTeam("Team A", "Faction")
-            .WithTeam("Team B", "Faction")
-            .WithOperative(opId, "Team A", "Sergeant", wounds: 12, save: 3, apl: 3, move: 3)
-            .WithGame(gameId, "Team A", "Team B", playerId, playerId)
+            .WithTeam("team_a", "Team A", "Faction")
+            .WithTeam("team_b", "Team B", "Faction")
+            .WithOperative(opId, "team_a", "Sergeant", wounds: 12, save: 3, apl: 3, move: 3)
+            .WithGame(gameId, "team_a", "Team A", "team_b", "Team B", playerId, playerId)
             .WithGameOperativeState(stateId, gameId, opId, currentWounds: 12);
 
         var stateRepo = new SqliteGameOperativeStateRepository(db.Connection);
@@ -103,7 +103,7 @@ public class GameSessionTests
     {
         // Injured = currentWounds < startingWounds / 2
         // For a 12W operative: threshold = 12/2 = 6; at 5W → injured
-        var operative = new Operative { TeamName = "Team", Name = "Op", OperativeType = "Op", Wounds = 12 };
+        var operative = new Operative { TeamId = "team_a", Name = "Op", OperativeType = "Op", Wounds = 12 };
         var state = new GameOperativeState { CurrentWounds = 5 };
 
         var isInjured = state.CurrentWounds < operative.Wounds / 2;
@@ -114,7 +114,7 @@ public class GameSessionTests
     public void InjuredThreshold_AtExactlyHalfWounds_IsNotInjured()
     {
         // At exactly 6/12 wounds: 6 < 6 = false → not injured
-        var operative = new Operative { TeamName = "Team", Name = "Op", OperativeType = "Op", Wounds = 12 };
+        var operative = new Operative { TeamId = "team_a", Name = "Op", OperativeType = "Op", Wounds = 12 };
         var state = new GameOperativeState { CurrentWounds = 6 };
 
         var isInjured = state.CurrentWounds < operative.Wounds / 2;
@@ -135,10 +135,10 @@ public class GameSessionTests
 
         using var db = TestDbBuilder.Create()
             .WithPlayer(playerId, "Player1")
-            .WithTeam("Team A", "Faction")
-            .WithTeam("Team B", "Faction")
-            .WithOperative(opId, "Team A", "Warrior", wounds: 10, save: 4, apl: 2, move: 3)
-            .WithGame(gameId, "Team A", "Team B", playerId, playerId)
+            .WithTeam("team_a", "Team A", "Faction")
+            .WithTeam("team_b", "Team B", "Faction")
+            .WithOperative(opId, "team_a", "Warrior", wounds: 10, save: 4, apl: 2, move: 3)
+            .WithGame(gameId, "team_a", "Team A", "team_b", "Team B", playerId, playerId)
             .WithGameOperativeState(stateId, gameId, opId, currentWounds: 10);
 
         var stateRepo = new SqliteGameOperativeStateRepository(db.Connection);
@@ -193,10 +193,10 @@ public class GameSessionTests
 
         using var db = TestDbBuilder.Create()
             .WithPlayer(playerId, "Player1")
-            .WithTeam("Team A", "Faction")
-            .WithTeam("Team B", "Faction")
-            .WithOperative(opId, "Team A", "Grenadier", wounds: 13, save: 3, apl: 2, move: 3)
-            .WithGame(gameId, "Team A", "Team B", playerId, playerId)
+            .WithTeam("team_a", "Team A", "Faction")
+            .WithTeam("team_b", "Team B", "Faction")
+            .WithOperative(opId, "team_a", "Grenadier", wounds: 13, save: 3, apl: 2, move: 3)
+            .WithGame(gameId, "team_a", "Team A", "team_b", "Team B", playerId, playerId)
             .WithGameOperativeState(stateId, gameId, opId, currentWounds: 13, order: "Engage");
 
         var stateRepo = new SqliteGameOperativeStateRepository(db.Connection);

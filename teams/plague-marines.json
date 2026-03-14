@@ -1,5 +1,6 @@
 {
   "$schema": "../schema/team.schema.json",
+  "id": "plague_marines",
   "name": "Plague Marines",
   "faction": "Heretic Astartes",
   "operatives": [

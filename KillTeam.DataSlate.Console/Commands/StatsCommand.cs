@@ -38,19 +38,20 @@ public class StatsCommand(IConfiguration config) : AsyncCommand<StatsCommand.Set
     private static async Task<int> ShowTeamStatsAsync(SqliteConnection conn, string teamName)
     {
         using var teamCmd = conn.CreateCommand();
-        teamCmd.CommandText = "SELECT name, faction FROM teams WHERE name LIKE @name COLLATE NOCASE LIMIT 1";
+        teamCmd.CommandText = "SELECT id, name, faction FROM teams WHERE name LIKE @name COLLATE NOCASE LIMIT 1";
         teamCmd.Parameters.AddWithValue("@name", teamName);
-        string? resolvedName = null, faction = null;
+        string? resolvedId = null, resolvedName = null, faction = null;
         using (var r = await teamCmd.ExecuteReaderAsync())
         {
             if (await r.ReadAsync())
             {
-                resolvedName = r.GetString(0);
-                faction = r.GetString(1);
+                resolvedId = r.GetString(0);
+                resolvedName = r.GetString(1);
+                faction = r.GetString(2);
             }
         }
 
-        if (resolvedName is null)
+        if (resolvedId is null)
         {
             AnsiConsole.MarkupLine($"[red]Team '{Markup.Escape(teamName)}' not found.[/]");
             return 1;
@@ -61,11 +62,11 @@ public class StatsCommand(IConfiguration config) : AsyncCommand<StatsCommand.Set
         statsCmd.CommandText = """
             SELECT 
                 COUNT(*) as games,
-                SUM(CASE WHEN winner_team_name = @tname COLLATE NOCASE THEN 1 ELSE 0 END) as wins
+                SUM(CASE WHEN winner_team_id = @tid THEN 1 ELSE 0 END) as wins
             FROM games
-            WHERE (team_a_name = @tname COLLATE NOCASE OR team_b_name = @tname COLLATE NOCASE) AND status = 'Completed'
+            WHERE (team_a_id = @tid OR team_b_id = @tid) AND status = 'Completed'
             """;
-        statsCmd.Parameters.AddWithValue("@tname", resolvedName);
+        statsCmd.Parameters.AddWithValue("@tid", resolvedId);
         var games = 0;
         var wins = 0;
         using (var r = await statsCmd.ExecuteReaderAsync())
@@ -84,16 +85,16 @@ public class StatsCommand(IConfiguration config) : AsyncCommand<StatsCommand.Set
             JOIN activations act ON act.id = a.activation_id
             JOIN turning_points tp ON tp.id = act.turning_point_id
             JOIN games g ON g.id = tp.game_id
-            WHERE a.caused_incapacitation = 1 AND act.team_name = @tname COLLATE NOCASE
+            WHERE a.caused_incapacitation = 1 AND act.team_id = @tid
             UNION ALL
             SELECT COUNT(*) FROM action_blast_targets abt
             JOIN actions a2 ON a2.id = abt.action_id
             JOIN activations act2 ON act2.id = a2.activation_id
             JOIN turning_points tp2 ON tp2.id = act2.turning_point_id
             JOIN games g2 ON g2.id = tp2.game_id
-            WHERE abt.caused_incapacitation = 1 AND act2.team_name = @tname COLLATE NOCASE
+            WHERE abt.caused_incapacitation = 1 AND act2.team_id = @tid
             """;
-        killCmd.Parameters.AddWithValue("@tname", resolvedName);
+        killCmd.Parameters.AddWithValue("@tid", resolvedId);
         var kills = 0;
         using (var r = await killCmd.ExecuteReaderAsync())
         {
@@ -110,12 +111,12 @@ public class StatsCommand(IConfiguration config) : AsyncCommand<StatsCommand.Set
             FROM actions a
             JOIN activations act ON act.id = a.activation_id
             JOIN weapons w ON w.id = a.weapon_id
-            WHERE a.type IN ('Shoot', 'Fight') AND act.team_name = @tname COLLATE NOCASE AND a.weapon_id IS NOT NULL
+            WHERE a.type IN ('Shoot', 'Fight') AND act.team_id = @tid AND a.weapon_id IS NOT NULL
             GROUP BY a.weapon_id
             ORDER BY uses DESC
             LIMIT 1
             """;
-        weaponCmd.Parameters.AddWithValue("@tname", resolvedName);
+        weaponCmd.Parameters.AddWithValue("@tid", resolvedId);
         var mostUsedWeapon = "—";
         using (var r = await weaponCmd.ExecuteReaderAsync())
         {
@@ -177,8 +178,8 @@ public class StatsCommand(IConfiguration config) : AsyncCommand<StatsCommand.Set
                 SELECT 
                     COUNT(*) as games,
                     SUM(CASE 
-                        WHEN player_a_id = @id AND winner_team_name = team_a_name THEN 1
-                        WHEN player_b_id = @id AND winner_team_name = team_b_name THEN 1
+                        WHEN player_a_id = @id AND winner_team_id = team_a_id THEN 1
+                        WHEN player_b_id = @id AND winner_team_id = team_b_id THEN 1
                         ELSE 0 END) as wins
                 FROM games WHERE (player_a_id = @id OR player_b_id = @id) AND status = 'Completed'
                 """;

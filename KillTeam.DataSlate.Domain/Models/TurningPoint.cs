@@ -8,11 +8,11 @@ public class TurningPoint
 
     public int Number { get; init; }
 
-    public string? TeamWithInitiativeName { get; init; }
+    public string? TeamWithInitiativeId { get; init; }
 
-    public int CpTeamA { get; init; }
+    public int CommandPointsTeamA { get; init; }
 
-    public int CpTeamB { get; init; }
+    public int CommandPointsTeamB { get; init; }
 
     public bool IsStrategyPhaseComplete { get; set; }
 }

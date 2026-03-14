@@ -133,12 +133,20 @@ public class SimulateSessionOrchestrator(
         var game = new Models.Game
         {
             Id = Guid.NewGuid(),
-            TeamAName = playerTeam.Name,
-            TeamBName = aiTeam.Name,
-            PlayerAId = Guid.Empty,
-            PlayerBId = Guid.Empty,
-            CpTeamA = 0,   // suppresses CP re-roll prompts (RerollOrchestrator skips when game not in DB)
-            CpTeamB = 0,
+            TeamA = new Models.GameParticipant
+            {
+                TeamId = playerTeam.Id,
+                TeamName = playerTeam.Name,
+                PlayerId = Guid.Empty,
+                CommandPoints = 0,  // suppresses CP re-roll prompts (RerollOrchestrator skips when game not in DB)
+            },
+            TeamB = new Models.GameParticipant
+            {
+                TeamId = aiTeam.Id,
+                TeamName = aiTeam.Name,
+                PlayerId = Guid.Empty,
+                CommandPoints = 0,
+            },
             PlayedAt = DateTime.UtcNow
         };
 
@@ -154,7 +162,7 @@ public class SimulateSessionOrchestrator(
             Id = Guid.NewGuid(),
             TurningPointId = tp.Id,
             OperativeId = playerOp.Id,
-            TeamName = playerTeam.Name,
+            TeamId = playerTeam.Id,
             OrderSelected = Models.Order.Engage,
             SequenceNumber = 1
         };

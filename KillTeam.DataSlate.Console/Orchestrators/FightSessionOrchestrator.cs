@@ -28,13 +28,13 @@ public class FightSessionOrchestrator(
         TurningPoint tp,
         Activation activation)
     {
-        var isAttackerTeamA = attacker.TeamName == game.TeamAName;
+        var isAttackerTeamA = attacker.TeamId == game.TeamA.TeamId;
 
         // 1. Target selection
         var enemyStates = allOperativeStates
             .Where(s => !s.IsIncapacitated
                 && allOperatives.TryGetValue(s.OperativeId, out var o)
-                && o.TeamName != attacker.TeamName)
+                && o.TeamId != attacker.TeamId)
             .ToList();
 
         if (enemyStates.Count == 0)
@@ -56,7 +56,7 @@ public class FightSessionOrchestrator(
             console.MarkupLine("[red]Target operative not found.[/]");
             return new FightSessionResult(false, false, 0, 0, Guid.Empty);
         }
-        var isDefenderTeamA = targetOp.TeamName == game.TeamAName;
+        var isDefenderTeamA = targetOp.TeamId == game.TeamA.TeamId;
 
         // 2. Attacker weapon selection (melee only)
         var atkMeleeWeapons = attacker.Weapons.Where(w => w.Type == WeaponType.Melee).ToList();

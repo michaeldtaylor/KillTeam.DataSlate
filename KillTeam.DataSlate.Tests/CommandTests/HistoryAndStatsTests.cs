@@ -15,10 +15,10 @@ public class HistoryTests
 
         using var db = TestDbBuilder.Create()
             .WithPlayer(pid1, "Alpha").WithPlayer(pid2, "Beta")
-            .WithTeam("Team A", "Faction A")
-            .WithTeam("Team B", "Faction B")
-            .WithGame(gid1, "Team A", "Team B", pid1, pid2, "Completed")
-            .WithGame(gid2, "Team B", "Team A", pid2, pid1, "Completed");
+            .WithTeam("team_a", "Team A", "Faction A")
+            .WithTeam("team_b", "Team B", "Faction B")
+            .WithGame(gid1, "team_a", "Team A", "team_b", "Team B", pid1, pid2, "Completed")
+            .WithGame(gid2, "team_b", "Team B", "team_a", "Team A", pid2, pid1, "Completed");
 
         using var cmd = db.Connection.CreateCommand();
         cmd.CommandText = "SELECT COUNT(*) FROM games WHERE status='Completed'";
@@ -35,9 +35,9 @@ public class HistoryTests
 
         using var db = TestDbBuilder.Create()
             .WithPlayer(pid1, "Michael").WithPlayer(pid2, "Solomon").WithPlayer(pid3, "David")
-            .WithTeam("Angels", "AS").WithTeam("Plague", "HA")
-            .WithGame(gid1, "Angels", "Plague", pid1, pid2, "Completed") // Michael + Solomon
-            .WithGame(gid2, "Angels", "Plague", pid2, pid3, "Completed"); // Solomon + David
+            .WithTeam("angels", "Angels", "AS").WithTeam("plague", "Plague", "HA")
+            .WithGame(gid1, "angels", "Angels", "plague", "Plague", pid1, pid2, "Completed") // Michael + Solomon
+            .WithGame(gid2, "angels", "Angels", "plague", "Plague", pid2, pid3, "Completed"); // Solomon + David
 
         using var cmd = db.Connection.CreateCommand();
         cmd.CommandText = """
@@ -70,7 +70,7 @@ public class StatsTests
 
         using var db = TestDbBuilder.Create()
             .WithPlayer(pid1, "Alpha").WithPlayer(pid2, "Beta")
-            .WithTeam("Team A", "FA").WithTeam("Team B", "FB");
+            .WithTeam("team_a", "Team A", "FA").WithTeam("team_b", "Team B", "FB");
 
         // 2 completed games, both won by Team A (player Alpha is player_a)
         for (int i = 0; i < 2; i++)
@@ -78,17 +78,19 @@ public class StatsTests
             var gid = Guid.NewGuid();
             using var insertCmd = db.Connection.CreateCommand();
             insertCmd.CommandText = """
-                INSERT INTO games (id, played_at, team_a_name, team_b_name, player_a_id, player_b_id,
-                    status, winner_team_name, victory_points_team_a, victory_points_team_b)
-                VALUES (@id, @at, @ta, @tb, @pa, @pb, 'Completed', @winner, 5, 3)
+                INSERT INTO games (id, played_at, team_a_id, team_a_name, team_b_id, team_b_name,
+                    player_a_id, player_b_id, status, winner_team_id, victory_points_team_a, victory_points_team_b)
+                VALUES (@id, @at, @ta_id, @ta, @tb_id, @tb, @pa, @pb, 'Completed', @winner_id, 5, 3)
                 """;
             insertCmd.Parameters.AddWithValue("@id", gid.ToString());
             insertCmd.Parameters.AddWithValue("@at", DateTime.UtcNow.ToString("o"));
+            insertCmd.Parameters.AddWithValue("@ta_id", "team_a");
             insertCmd.Parameters.AddWithValue("@ta", "Team A");
+            insertCmd.Parameters.AddWithValue("@tb_id", "team_b");
             insertCmd.Parameters.AddWithValue("@tb", "Team B");
             insertCmd.Parameters.AddWithValue("@pa", pid1.ToString());
             insertCmd.Parameters.AddWithValue("@pb", pid2.ToString());
-            insertCmd.Parameters.AddWithValue("@winner", "Team A");
+            insertCmd.Parameters.AddWithValue("@winner_id", "team_a");
             insertCmd.ExecuteNonQuery();
         }
 
@@ -96,7 +98,7 @@ public class StatsTests
         using var cmd = db.Connection.CreateCommand();
         cmd.CommandText = """
             SELECT COUNT(*) as games,
-                   SUM(CASE WHEN player_a_id=@pid AND winner_team_name=team_a_name THEN 1 ELSE 0 END) as wins
+                   SUM(CASE WHEN player_a_id=@pid AND winner_team_id=team_a_id THEN 1 ELSE 0 END) as wins
             FROM games WHERE (player_a_id=@pid OR player_b_id=@pid) AND status='Completed'
             """;
         cmd.Parameters.AddWithValue("@pid", pid1.ToString());
@@ -117,12 +119,12 @@ public class StatsTests
 
         using var db = TestDbBuilder.Create()
             .WithPlayer(pid, "Alpha")
-            .WithTeam("Team A", "FA").WithTeam("Team B", "FB")
-            .WithOperative(opId, "Team A", "Shooter", wounds: 13, save: 3, apl: 3, move: 3)
-            .WithOperative(targetId, "Team B", "Target", wounds: 13, save: 3, apl: 2, move: 3)
-            .WithGame(gameId, "Team A", "Team B", pid, pid)
+            .WithTeam("team_a", "Team A", "FA").WithTeam("team_b", "Team B", "FB")
+            .WithOperative(opId, "team_a", "Shooter", wounds: 13, save: 3, apl: 3, move: 3)
+            .WithOperative(targetId, "team_b", "Target", wounds: 13, save: 3, apl: 2, move: 3)
+            .WithGame(gameId, "team_a", "Team A", "team_b", "Team B", pid, pid)
             .WithTurningPoint(tpId, gameId, 1)
-            .WithActivation(actId, tpId, 1, opId, "Team A");
+            .WithActivation(actId, tpId, 1, opId, "team_a");
 
         // Insert action
         using var aCmd = db.Connection.CreateCommand();
@@ -150,9 +152,9 @@ public class StatsTests
             SELECT COUNT(*) FROM action_blast_targets abt
             JOIN actions a ON a.id = abt.action_id
             JOIN activations act ON act.id = a.activation_id
-            WHERE abt.caused_incapacitation = 1 AND act.team_name = @tname
+            WHERE abt.caused_incapacitation = 1 AND act.team_id = @tid
             """;
-        killCmd.Parameters.AddWithValue("@tname", "Team A");
+        killCmd.Parameters.AddWithValue("@tid", "team_a");
         Convert.ToInt32(killCmd.ExecuteScalar()).Should().Be(1);
     }
 }

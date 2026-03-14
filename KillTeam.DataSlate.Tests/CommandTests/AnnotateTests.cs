@@ -18,11 +18,11 @@ public class AnnotateTests
 
         using var db = TestDbBuilder.Create()
             .WithPlayer(playerId, "Michael")
-            .WithTeam("Angels of Death", "Adeptus Astartes")
-            .WithOperative(opId, "Angels of Death", "Sergeant", wounds: 13, save: 3, apl: 3, move: 3)
-            .WithGame(gameId, "Angels of Death", "Angels of Death", playerId, playerId)
+            .WithTeam("angels_of_death", "Angels of Death", "Adeptus Astartes")
+            .WithOperative(opId, "angels_of_death", "Sergeant", wounds: 13, save: 3, apl: 3, move: 3)
+            .WithGame(gameId, "angels_of_death", "Angels of Death", "angels_of_death", "Angels of Death", playerId, playerId)
             .WithTurningPoint(tpId, gameId, 1)
-            .WithActivation(actId, tpId, 1, opId, "Angels of Death");
+            .WithActivation(actId, tpId, 1, opId, "angels_of_death");
 
         var repo = new SqliteActivationRepository(db.Connection);
 
@@ -44,11 +44,11 @@ public class AnnotateTests
 
         using var db = TestDbBuilder.Create()
             .WithPlayer(playerId, "Michael")
-            .WithTeam("Angels of Death", "Adeptus Astartes")
-            .WithOperative(opId, "Angels of Death", "Sergeant", wounds: 13, save: 3, apl: 3, move: 3)
-            .WithGame(gameId, "Angels of Death", "Angels of Death", playerId, playerId)
+            .WithTeam("angels_of_death", "Angels of Death", "Adeptus Astartes")
+            .WithOperative(opId, "angels_of_death", "Sergeant", wounds: 13, save: 3, apl: 3, move: 3)
+            .WithGame(gameId, "angels_of_death", "Angels of Death", "angels_of_death", "Angels of Death", playerId, playerId)
             .WithTurningPoint(tpId, gameId, 1)
-            .WithActivation(actId, tpId, 1, opId, "Angels of Death");
+            .WithActivation(actId, tpId, 1, opId, "angels_of_death");
 
         var repo = new SqliteActivationRepository(db.Connection);
         await repo.UpdateNarrativeAsync(actId, "First note");
@@ -71,12 +71,12 @@ public class AnnotateTests
 
         using var db = TestDbBuilder.Create()
             .WithPlayer(playerId, "Michael")
-            .WithTeam("Angels of Death", "Adeptus Astartes")
-            .WithOperative(opId, "Angels of Death", "Sergeant", wounds: 13, save: 3, apl: 3, move: 3)
-            .WithOperative(targetOpId, "Angels of Death", "Intercessor", wounds: 13, save: 3, apl: 2, move: 3)
-            .WithGame(gameId, "Angels of Death", "Angels of Death", playerId, playerId)
+            .WithTeam("angels_of_death", "Angels of Death", "Adeptus Astartes")
+            .WithOperative(opId, "angels_of_death", "Sergeant", wounds: 13, save: 3, apl: 3, move: 3)
+            .WithOperative(targetOpId, "angels_of_death", "Intercessor", wounds: 13, save: 3, apl: 2, move: 3)
+            .WithGame(gameId, "angels_of_death", "Angels of Death", "angels_of_death", "Angels of Death", playerId, playerId)
             .WithTurningPoint(tpId, gameId, 1)
-            .WithActivation(actId, tpId, 1, opId, "Angels of Death");
+            .WithActivation(actId, tpId, 1, opId, "angels_of_death");
 
         // Insert action directly
         using var insertCmd = db.Connection.CreateCommand();

@@ -28,13 +28,13 @@ public class ShootSessionOrchestrator(
         Activation activation,
         bool hasMovedNonDash = false)
     {
-        var isAttackerTeamA = attacker.TeamName == game.TeamAName;
+        var isAttackerTeamA = attacker.TeamId == game.TeamA.TeamId;
 
         // 1. Target selection: enemy operatives
         var enemyStates = allOperativeStates
             .Where(s => !s.IsIncapacitated
                 && allOperatives.TryGetValue(s.OperativeId, out var o)
-                && o.TeamName != attacker.TeamName)
+                && o.TeamId != attacker.TeamId)
             .ToList();
 
         if (enemyStates.Count == 0)
@@ -129,7 +129,7 @@ public class ShootSessionOrchestrator(
             : await RollOrEnterDiceAsync(defDiceCount, $"{Markup.Escape(targetOp.Name)} defence dice");
 
         // 8. Defender CP re-roll
-        var isDefenderTeamA = targetOp.TeamName == game.TeamAName;
+        var isDefenderTeamA = targetOp.TeamId == game.TeamA.TeamId;
         defDice = await rerollOrchestrator.ApplyDefenderRerollAsync(defDice, game.Id, isDefenderTeamA, targetOp.Name);
 
         // 9. Resolve shoot

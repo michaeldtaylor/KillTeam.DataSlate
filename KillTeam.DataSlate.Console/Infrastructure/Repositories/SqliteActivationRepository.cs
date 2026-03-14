@@ -18,10 +18,10 @@ public class SqliteActivationRepository : IActivationRepository
         await _db.ExecuteAsync(
             """
             INSERT INTO activations
-            (id, turning_point_id, sequence_number, operative_id, team_name,
+            (id, turning_point_id, sequence_number, operative_id, team_id,
              order_selected, is_counteract, is_guard_interrupt, narrative_note)
             VALUES
-            (@id, @turningPointId, @sequenceNumber, @operativeId, @teamName,
+            (@id, @turningPointId, @sequenceNumber, @operativeId, @teamId,
              @orderSelected, @isCounteract, @isGuardInterrupt, @narrativeNote)
             """,
             new()
@@ -30,7 +30,7 @@ public class SqliteActivationRepository : IActivationRepository
                 ["@turningPointId"] = activation.TurningPointId.ToString(),
                 ["@sequenceNumber"] = activation.SequenceNumber,
                 ["@operativeId"] = activation.OperativeId.ToString(),
-                ["@teamName"] = activation.TeamName,
+                ["@teamId"] = activation.TeamId,
                 ["@orderSelected"] = activation.OrderSelected.ToString(),
                 ["@isCounteract"] = activation.IsCounteract ? 1 : 0,
                 ["@isGuardInterrupt"] = activation.IsGuardInterrupt ? 1 : 0,
@@ -43,7 +43,7 @@ public class SqliteActivationRepository : IActivationRepository
     {
         return await _db.QueryAsync(
             """
-            SELECT id, turning_point_id, sequence_number, operative_id, team_name,
+            SELECT id, turning_point_id, sequence_number, operative_id, team_id,
                    order_selected, is_counteract, is_guard_interrupt, narrative_note
             FROM activations
             WHERE turning_point_id = @tpId
@@ -55,7 +55,7 @@ public class SqliteActivationRepository : IActivationRepository
                 TurningPointId = Guid.Parse(r.GetString(1)),
                 SequenceNumber = r.GetInt32(2),
                 OperativeId = Guid.Parse(r.GetString(3)),
-                TeamName = r.GetString(4),
+                TeamId = r.GetString(4),
                 OrderSelected = Enum.Parse<Order>(r.GetString(5)),
                 IsCounteract = r.GetInt32(6) != 0,
                 IsGuardInterrupt = r.GetInt32(7) != 0,

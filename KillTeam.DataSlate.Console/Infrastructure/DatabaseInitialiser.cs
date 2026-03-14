@@ -110,13 +110,14 @@ internal static class Migrations
         );
 
         CREATE TABLE IF NOT EXISTS teams (
-            name    TEXT PRIMARY KEY,
+            id      TEXT PRIMARY KEY,
+            name    TEXT NOT NULL UNIQUE COLLATE NOCASE,
             faction TEXT NOT NULL
         );
 
         CREATE TABLE IF NOT EXISTS operatives (
             id          TEXT PRIMARY KEY,
-            team_name   TEXT NOT NULL REFERENCES teams (name) ON DELETE CASCADE,
+            team_id     TEXT NOT NULL REFERENCES teams (id) ON DELETE CASCADE,
             name        TEXT NOT NULL,
             operative_type TEXT NOT NULL,
             move           INTEGER NOT NULL DEFAULT 0,
@@ -142,26 +143,28 @@ internal static class Migrations
             id                    TEXT PRIMARY KEY,
             played_at             TEXT NOT NULL,
             mission_name          TEXT,
-            team_a_name           TEXT NOT NULL REFERENCES teams (name),
-            team_b_name           TEXT NOT NULL REFERENCES teams (name),
+            team_a_id             TEXT NOT NULL,
+            team_a_name           TEXT NOT NULL,
+            team_b_id             TEXT NOT NULL,
+            team_b_name           TEXT NOT NULL,
             player_a_id           TEXT NOT NULL REFERENCES players (id),
             player_b_id           TEXT NOT NULL REFERENCES players (id),
             status                TEXT NOT NULL DEFAULT 'InProgress'
                                       CHECK (status IN ('InProgress', 'Completed')),
             cp_team_a             INTEGER NOT NULL DEFAULT 2,
             cp_team_b             INTEGER NOT NULL DEFAULT 2,
-            winner_team_name      TEXT REFERENCES teams (name),
+            winner_team_id        TEXT,
             victory_points_team_a INTEGER NOT NULL DEFAULT 0,
             victory_points_team_b INTEGER NOT NULL DEFAULT 0
         );
 
         CREATE TABLE IF NOT EXISTS turning_points (
-            id                        TEXT PRIMARY KEY,
-            game_id                   TEXT NOT NULL REFERENCES games (id) ON DELETE CASCADE,
-            number                    INTEGER NOT NULL CHECK (number BETWEEN 1 AND 4),
-            team_with_initiative_name TEXT REFERENCES teams (name),
-            cp_team_a                 INTEGER NOT NULL DEFAULT 0,
-            cp_team_b                 INTEGER NOT NULL DEFAULT 0,
+            id                       TEXT PRIMARY KEY,
+            game_id                  TEXT NOT NULL REFERENCES games (id) ON DELETE CASCADE,
+            number                   INTEGER NOT NULL CHECK (number BETWEEN 1 AND 4),
+            team_with_initiative_id  TEXT,
+            command_points_team_a    INTEGER NOT NULL DEFAULT 0,
+            command_points_team_b    INTEGER NOT NULL DEFAULT 0,
             is_strategy_phase_complete INTEGER NOT NULL DEFAULT 0
         );
 
@@ -170,7 +173,7 @@ internal static class Migrations
             turning_point_id   TEXT NOT NULL REFERENCES turning_points (id) ON DELETE CASCADE,
             sequence_number    INTEGER NOT NULL,
             operative_id       TEXT NOT NULL REFERENCES operatives (id),
-            team_name          TEXT NOT NULL REFERENCES teams (name),
+            team_id            TEXT NOT NULL,
             order_selected     TEXT NOT NULL CHECK (order_selected IN ('Engage', 'Conceal')),
             is_counteract      INTEGER NOT NULL DEFAULT 0,
             is_guard_interrupt INTEGER NOT NULL DEFAULT 0,
@@ -233,14 +236,14 @@ internal static class Migrations
         CREATE TABLE IF NOT EXISTS ploy_uses (
             id               TEXT PRIMARY KEY,
             turning_point_id TEXT NOT NULL REFERENCES turning_points (id) ON DELETE CASCADE,
-            team_name        TEXT NOT NULL REFERENCES teams (name),
+            team_id          TEXT NOT NULL,
             ploy_name        TEXT NOT NULL,
             description      TEXT,
             cp_cost          INTEGER NOT NULL DEFAULT 1
         );
 
         CREATE INDEX IF NOT EXISTS idx_ploy_uses_turning_point
-            ON ploy_uses (turning_point_id, team_name);
+            ON ploy_uses (turning_point_id, team_id);
         """;
 
     private const string Migration_003 = """

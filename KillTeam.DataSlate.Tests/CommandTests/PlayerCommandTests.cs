@@ -70,8 +70,8 @@ public class PlayerCommandTests
 
         using var db = TestDbBuilder.Create()
             .WithPlayer(playerId, "Veteran")
-            .WithTeam("Angels of Death", "Adeptus Astartes")
-            .WithGame(gameId, "Angels of Death", "Angels of Death", playerId, playerId);
+            .WithTeam("angels_of_death", "Angels of Death", "Adeptus Astartes")
+            .WithGame(gameId, "angels_of_death", "Angels of Death", "angels_of_death", "Angels of Death", playerId, playerId);
 
         using var cmd = db.Connection.CreateCommand();
         cmd.CommandText = "SELECT COUNT(*) FROM games WHERE player_a_id=@id OR player_b_id=@id";

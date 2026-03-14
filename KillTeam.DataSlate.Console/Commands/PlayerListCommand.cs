@@ -42,8 +42,8 @@ public class PlayerListCommand(IPlayerRepository players, IConfiguration config)
             using var wCmd = conn.CreateCommand();
             wCmd.CommandText = """
                 SELECT COUNT(*) FROM games
-                WHERE (player_a_id=@id AND winner_team_name=team_a_name)
-                   OR (player_b_id=@id AND winner_team_name=team_b_name)
+                WHERE (player_a_id=@id AND winner_team_id=team_a_id)
+                   OR (player_b_id=@id AND winner_team_id=team_b_id)
                 """;
             wCmd.Parameters.AddWithValue("@id", p.Id.ToString());
             var wins = Convert.ToInt32(await wCmd.ExecuteScalarAsync());

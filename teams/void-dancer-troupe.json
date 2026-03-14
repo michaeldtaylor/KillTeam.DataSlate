@@ -1,5 +1,6 @@
 {
   "$schema": "../schema/team.schema.json",
+  "id": "void_dancer_troupe",
   "name": "Void-Dancer Troupe",
   "faction": "Harlequins",
   "operatives": [

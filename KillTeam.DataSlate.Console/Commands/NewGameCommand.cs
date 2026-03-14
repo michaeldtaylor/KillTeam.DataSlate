@@ -70,13 +70,23 @@ public class NewGameCommand(
             Id = Guid.NewGuid(),
             PlayedAt = DateTime.UtcNow,
             MissionName = string.IsNullOrWhiteSpace(missionName) ? null : missionName,
-            TeamAName = teamA.Name,
-            TeamBName = teamB.Name,
-            PlayerAId = playerA.Id,
-            PlayerBId = playerB.Id,
-            Status = GameStatus.InProgress,
-            CpTeamA = 2,
-            CpTeamB = 2
+            TeamA = new GameParticipant
+            {
+                TeamId = teamA.Id,
+                TeamName = teamA.Name,
+                PlayerId = playerA.Id,
+                CommandPoints = 2,
+                VictoryPoints = 0
+            },
+            TeamB = new GameParticipant
+            {
+                TeamId = teamB.Id,
+                TeamName = teamB.Name,
+                PlayerId = playerB.Id,
+                CommandPoints = 2,
+                VictoryPoints = 0
+            },
+            Status = GameStatus.InProgress
         };
 
         var created = await games.CreateAsync(game);

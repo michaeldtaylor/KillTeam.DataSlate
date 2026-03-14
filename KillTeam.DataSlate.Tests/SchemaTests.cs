@@ -112,21 +112,29 @@ public class SchemaTests
         using var db = TestDbBuilder.Create()
             .WithPlayer(playerId1, "Michael")
             .WithPlayer(playerId2, "Solomon")
-            .WithTeam("Angels of Death", "Adeptus Astartes")
-            .WithTeam("Plague Marines", "Heretic Astartes");
+            .WithTeam("angels_of_death", "Angels of Death", "Adeptus Astartes")
+            .WithTeam("plague_marines", "Plague Marines", "Heretic Astartes");
 
         var repo = new SqliteGameRepository(db.Connection);
         var game = new Game
         {
             Id = Guid.NewGuid(),
             PlayedAt = DateTime.UtcNow,
-            TeamAName = "Angels of Death",
-            TeamBName = "Plague Marines",
-            PlayerAId = playerId1,
-            PlayerBId = playerId2,
-            Status = GameStatus.InProgress,
-            CpTeamA = 2,
-            CpTeamB = 2
+            TeamA = new GameParticipant
+            {
+                TeamId = "angels_of_death",
+                TeamName = "Angels of Death",
+                PlayerId = playerId1,
+                CommandPoints = 2
+            },
+            TeamB = new GameParticipant
+            {
+                TeamId = "plague_marines",
+                TeamName = "Plague Marines",
+                PlayerId = playerId2,
+                CommandPoints = 2
+            },
+            Status = GameStatus.InProgress
         };
 
         var created = await repo.CreateAsync(game);
@@ -134,7 +142,7 @@ public class SchemaTests
         var found = await repo.GetByIdAsync(created.Id);
         found.Should().NotBeNull();
         found!.Status.Should().Be(GameStatus.InProgress);
-        found.CpTeamA.Should().Be(2);
+        found.TeamA.CommandPoints.Should().Be(2);
     }
 
     [Fact]
@@ -161,8 +169,8 @@ public class SchemaTests
 
         using var db = TestDbBuilder.Create()
             .WithPlayer(playerId, "Michael")
-            .WithTeam("Angels of Death", "Adeptus Astartes")
-            .WithGame(gameId, "Angels of Death", "Angels of Death", playerId, playerId)
+            .WithTeam("angels_of_death", "Angels of Death", "Adeptus Astartes")
+            .WithGame(gameId, "angels_of_death", "Angels of Death", "angels_of_death", "Angels of Death", playerId, playerId)
             .WithTurningPoint(tpId, gameId, 1, false);
 
         using var cmd = db.Connection.CreateCommand();

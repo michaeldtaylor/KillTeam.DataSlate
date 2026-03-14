@@ -4,12 +4,17 @@
   "title": "Kill Team Roster",
   "description": "Schema for a KT24 V3.0 kill team roster exported from official PDFs",
   "type": "object",
-  "required": ["name", "faction", "operatives"],
+  "required": ["id", "name", "faction", "operatives"],
   "additionalProperties": false,
   "properties": {
     "$schema": {
       "type": "string",
       "format": "uri-reference"
+    },
+    "id": {
+      "type": "string",
+      "description": "Unique slug identifier for the kill team (e.g. 'angels_of_death')",
+      "pattern": "^[a-z0-9_]+$"
     },
     "name": {
       "type": "string",

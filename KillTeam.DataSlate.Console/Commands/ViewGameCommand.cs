@@ -38,15 +38,13 @@ public class ViewGameCommand(
         using var gameCmd = conn.CreateCommand();
         gameCmd.CommandText = """
             SELECT g.status, g.mission_name, g.victory_points_team_a, g.victory_points_team_b,
-                   pa.name, ta.name, pb.name, tb.name,
-                   CASE WHEN g.winner_team_name = g.team_a_name THEN ta.name
-                        WHEN g.winner_team_name = g.team_b_name THEN tb.name
+                   pa.name, g.team_a_name, pb.name, g.team_b_name,
+                   CASE WHEN g.winner_team_id = g.team_a_id THEN g.team_a_name
+                        WHEN g.winner_team_id = g.team_b_id THEN g.team_b_name
                         ELSE NULL END
             FROM games g
             JOIN players pa ON pa.id = g.player_a_id
             JOIN players pb ON pb.id = g.player_b_id
-            JOIN teams ta ON ta.name = g.team_a_name
-            JOIN teams tb ON tb.name = g.team_b_name
             WHERE g.id = @id
             """;
         gameCmd.Parameters.AddWithValue("@id", gameId.ToString());
@@ -80,7 +78,7 @@ public class ViewGameCommand(
         tpCmd.CommandText = """
             SELECT tp.id, tp.number, kt.name
             FROM turning_points tp
-            LEFT JOIN teams kt ON kt.name = tp.team_with_initiative_name
+            LEFT JOIN teams kt ON kt.id = tp.team_with_initiative_id
             WHERE tp.game_id = @gid ORDER BY tp.number
             """;
         tpCmd.Parameters.AddWithValue("@gid", gameId.ToString());
@@ -106,7 +104,7 @@ public class ViewGameCommand(
             var ployList = (await ploys.GetByTurningPointAsync(tpId)).ToList();
             foreach (var p in ployList)
             {
-                var teamLabel = p.TeamName;
+                var teamLabel = p.TeamId;
                 AnsiConsole.MarkupLine($"  [dim]Ploy:[/] {Markup.Escape(p.PloyName)} ({Markup.Escape(teamLabel)}, {p.CpCost}CP)" +
                     (p.Description is not null ? $" — {Markup.Escape(p.Description)}" : ""));
             }

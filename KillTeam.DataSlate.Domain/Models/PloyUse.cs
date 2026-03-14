@@ -6,7 +6,7 @@ public class PloyUse
 
     public Guid TurningPointId { get; init; }
 
-    public required string TeamName { get; init; }
+    public required string TeamId { get; init; }
 
     public required string PloyName { get; init; }
 

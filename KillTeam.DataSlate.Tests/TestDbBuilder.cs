@@ -32,22 +32,22 @@ public sealed class TestDbBuilder : IDisposable
         return this;
     }
 
-    public TestDbBuilder WithTeam(string name, string faction)
+    public TestDbBuilder WithTeam(string id, string name, string faction)
     {
-        Exec("INSERT INTO teams (name, faction) VALUES (@name, @faction)",
-            ("@name", name), ("@faction", faction));
+        Exec("INSERT INTO teams (id, name, faction) VALUES (@id, @name, @faction)",
+            ("@id", id), ("@name", name), ("@faction", faction));
         return this;
     }
 
-    public TestDbBuilder WithOperative(Guid id, string teamName, string name,
+    public TestDbBuilder WithOperative(Guid id, string teamId, string name,
         int wounds, int save, int apl, int move)
     {
         Exec("""
             INSERT INTO operatives
-                (id, team_name, name, operative_type, move, apl, wounds, save)
-            VALUES (@id, @teamName, @name, @name, @move, @apl, @wounds, @save)
+                (id, team_id, name, operative_type, move, apl, wounds, save)
+            VALUES (@id, @teamId, @name, @name, @move, @apl, @wounds, @save)
             """,
-            ("@id", id.ToString()), ("@teamName", teamName), ("@name", name),
+            ("@id", id.ToString()), ("@teamId", teamId), ("@name", name),
             ("@move", move), ("@apl", apl), ("@wounds", wounds), ("@save", save));
         return this;
     }
@@ -66,16 +66,19 @@ public sealed class TestDbBuilder : IDisposable
         return this;
     }
 
-    public TestDbBuilder WithGame(Guid id, string teamAName, string teamBName,
+    public TestDbBuilder WithGame(Guid id, string teamAId, string teamAName,
+        string teamBId, string teamBName,
         Guid playerAId, Guid playerBId, string status = "InProgress")
     {
         Exec("""
             INSERT INTO games
-                (id, played_at, team_a_name, team_b_name, player_a_id, player_b_id, status)
-            VALUES (@id, @at, @ta, @tb, @pa, @pb, @st)
+                (id, played_at, team_a_id, team_a_name, team_b_id, team_b_name,
+                 player_a_id, player_b_id, status)
+            VALUES (@id, @at, @taId, @taName, @tbId, @tbName, @pa, @pb, @st)
             """,
             ("@id", id.ToString()), ("@at", DateTime.UtcNow.ToString("o")),
-            ("@ta", teamAName), ("@tb", teamBName),
+            ("@taId", teamAId), ("@taName", teamAName),
+            ("@tbId", teamBId), ("@tbName", teamBName),
             ("@pa", playerAId.ToString()), ("@pb", playerBId.ToString()),
             ("@st", status));
         return this;
@@ -86,8 +89,8 @@ public sealed class TestDbBuilder : IDisposable
     {
         Exec("""
             INSERT INTO turning_points
-                (id, game_id, number, team_with_initiative_name, is_strategy_phase_complete)
-            SELECT @id, @gid, @num, team_a_name, @spc FROM games WHERE id = @gid
+                (id, game_id, number, team_with_initiative_id, is_strategy_phase_complete)
+            SELECT @id, @gid, @num, team_a_id, @spc FROM games WHERE id = @gid
             """,
             ("@id", id.ToString()), ("@gid", gameId.ToString()), ("@num", number),
             ("@spc", strategyPhaseComplete ? 1 : 0));
@@ -95,15 +98,15 @@ public sealed class TestDbBuilder : IDisposable
     }
 
     public TestDbBuilder WithActivation(Guid id, Guid turningPointId, int seq,
-        Guid operativeId, string teamName, string order = "Engage")
+        Guid operativeId, string teamId, string order = "Engage")
     {
         Exec("""
             INSERT INTO activations
-                (id, turning_point_id, sequence_number, operative_id, team_name, order_selected)
-            VALUES (@id, @tpid, @seq, @opid, @tname, @ord)
+                (id, turning_point_id, sequence_number, operative_id, team_id, order_selected)
+            VALUES (@id, @tpid, @seq, @opid, @tid, @ord)
             """,
             ("@id", id.ToString()), ("@tpid", turningPointId.ToString()), ("@seq", seq),
-            ("@opid", operativeId.ToString()), ("@tname", teamName), ("@ord", order));
+            ("@opid", operativeId.ToString()), ("@tid", teamId), ("@ord", order));
         return this;
     }
 
