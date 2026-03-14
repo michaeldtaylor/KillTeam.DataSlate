@@ -1,5 +1,5 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "kill-team.schema.json",
   "title": "Kill Team Roster",
   "description": "Schema for a KT24 V3.0 kill team roster exported from official PDFs",
@@ -23,10 +23,10 @@
       "type": "array",
       "description": "All operative types available to this kill team",
       "minItems": 1,
-      "items": { "$ref": "#/$defs/operative" }
+      "items": { "$ref": "#/definitions/operative" }
     }
   },
-  "$defs": {
+  "definitions": {
     "operative": {
       "type": "object",
       "required": ["name", "operativeType", "stats", "weapons", "equipment"],
@@ -40,12 +40,12 @@
           "type": "string",
           "description": "Operative type key used for roster selection and DB import"
         },
-        "stats": { "$ref": "#/$defs/stats" },
+        "stats": { "$ref": "#/definitions/stats" },
         "weapons": {
           "type": "array",
           "description": "All weapons available to this operative",
           "minItems": 1,
-          "items": { "$ref": "#/$defs/weapon" }
+          "items": { "$ref": "#/definitions/weapon" }
         },
         "equipment": {
           "type": "array",
