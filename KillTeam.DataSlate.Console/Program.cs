@@ -42,7 +42,7 @@ public static class Program
         services.AddSingleton<IActionRepository>(new SqliteActionRepository(sqlExecutor));
         services.AddSingleton<SqliteOperativeRepository>(new SqliteOperativeRepository(sqlExecutor));
         services.AddSingleton<SqliteWeaponRepository>(new SqliteWeaponRepository(sqlExecutor));
-        services.AddSingleton<RosterJsonImporter>();
+        services.AddSingleton<KillTeamJsonImporter>();
         services.AddSingleton<RerollOrchestrator>();
         services.AddSingleton<StrategyPhaseOrchestrator>();
         services.AddSingleton<CombatResolutionService>();
@@ -72,7 +72,7 @@ public static class Program
                 player.AddCommand<PlayerDeleteCommand>("delete")
                       .WithDescription("Remove a player (blocked if they have games).");
             });
-            cfg.AddCommand<ImportRosterCommand>("import-kill-teams")
+            cfg.AddCommand<ImportKillTeamsCommand>("import-kill-teams")
                .WithDescription("Import a JSON roster file (or scan the roster folder).");
             cfg.AddCommand<NewGameCommand>("new-game").WithDescription("Start a new Kill Team game.");
             cfg.AddCommand<HistoryCommand>("history")

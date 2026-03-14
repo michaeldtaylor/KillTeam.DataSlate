@@ -7,7 +7,7 @@ using Xunit;
 
 namespace KillTeam.DataSlate.Tests.ImportTests;
 
-public class ImportRosterTests
+public class ImportKillTeamsTests
 {
     private static readonly string ValidRosterJson = """
         {
@@ -41,7 +41,7 @@ public class ImportRosterTests
     public async Task ValidImport_CreatesKillTeamWithOperativesAndWeapons()
     {
         using var db = TestDbBuilder.Create();
-        var importer = new RosterJsonImporter();
+        var importer = new KillTeamJsonImporter();
         var killTeamRepo = new SqliteKillTeamRepository(db.Connection);
         var opRepo = new SqliteOperativeRepository(db.Connection);
         var wpRepo = new SqliteWeaponRepository(db.Connection);
@@ -70,7 +70,7 @@ public class ImportRosterTests
     public async Task ReImport_SameTeamName_UpdatesExistingRecord()
     {
         using var db = TestDbBuilder.Create();
-        var importer = new RosterJsonImporter();
+        var importer = new KillTeamJsonImporter();
         var killTeamRepo = new SqliteKillTeamRepository(db.Connection);
         var opRepo = new SqliteOperativeRepository(db.Connection);
         var wpRepo = new SqliteWeaponRepository(db.Connection);
@@ -97,7 +97,7 @@ public class ImportRosterTests
     [Fact]
     public void MissingField_ThrowsValidationError()
     {
-        var importer = new RosterJsonImporter();
+        var importer = new KillTeamJsonImporter();
         var badJson = """
             {
               "name": "Bad Team",
@@ -120,7 +120,7 @@ public class ImportRosterTests
     [Fact]
     public void InvalidJson_ThrowsValidationException()
     {
-        var importer = new RosterJsonImporter();
+        var importer = new KillTeamJsonImporter();
         var badJson = "{ this is not valid json }";
 
         var act = () => importer.Import(badJson);

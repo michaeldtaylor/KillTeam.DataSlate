@@ -5,7 +5,7 @@ using KillTeam.DataSlate.Domain.Services;
 
 namespace KillTeam.DataSlate.Console.Services;
 
-public class RosterJsonImporter
+public class KillTeamJsonImporter
 {
     public KillTeam.DataSlate.Domain.Models.KillTeam Import(string json)
     {

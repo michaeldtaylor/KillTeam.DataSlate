@@ -11,12 +11,12 @@ namespace KillTeam.DataSlate.Console.Commands;
 
 /// <summary>Imports a kill team roster from a JSON file or scans a folder for all roster files.</summary>
 [Description("Import a kill team roster from a JSON file (or scan a folder).")]
-public class ImportRosterCommand(
-    RosterJsonImporter importer,
+public class ImportKillTeamsCommand(
+    KillTeamJsonImporter importer,
     IKillTeamRepository killTeams,
     SqliteOperativeRepository operatives,
     SqliteWeaponRepository weapons,
-    IConfiguration config) : AsyncCommand<ImportRosterCommand.Settings>
+    IConfiguration config) : AsyncCommand<ImportKillTeamsCommand.Settings>
 {
     public class Settings : CommandSettings
     {
