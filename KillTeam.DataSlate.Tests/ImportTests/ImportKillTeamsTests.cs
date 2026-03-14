@@ -9,7 +9,7 @@ namespace KillTeam.DataSlate.Tests.ImportTests;
 
 public class ImportKillTeamsTests
 {
-    private static readonly string ValidRosterJson = """
+    private static readonly string ValidKillTeamJson = """
         {
           "name": "Angels of Death",
           "faction": "Adeptus Astartes",
@@ -46,7 +46,7 @@ public class ImportKillTeamsTests
         var opRepo = new SqliteOperativeRepository(db.Connection);
         var wpRepo = new SqliteWeaponRepository(db.Connection);
 
-        var team = importer.Import(ValidRosterJson);
+        var team = importer.Import(ValidKillTeamJson);
         await killTeamRepo.UpsertAsync(team);
         await opRepo.UpsertByTeamAsync(team.Operatives, team.Id);
         foreach (var op in team.Operatives)
@@ -78,7 +78,7 @@ public class ImportKillTeamsTests
         async Task DoImport(string faction)
         {
             // Patch faction in JSON for second import
-            var json = ValidRosterJson.Replace("Adeptus Astartes", faction);
+            var json = ValidKillTeamJson.Replace("Adeptus Astartes", faction);
             var team = importer.Import(json);
             await killTeamRepo.UpsertAsync(team);
             await opRepo.UpsertByTeamAsync(team.Operatives, team.Id);
@@ -113,7 +113,7 @@ public class ImportKillTeamsTests
 
         var act = () => importer.Import(badJson);
 
-        act.Should().Throw<RosterValidationException>()
+        act.Should().Throw<KillTeamValidationException>()
            .WithMessage("*save*");
     }
 
@@ -125,7 +125,7 @@ public class ImportKillTeamsTests
 
         var act = () => importer.Import(badJson);
 
-        act.Should().Throw<RosterValidationException>();
+        act.Should().Throw<KillTeamValidationException>();
     }
 }
 

@@ -9,51 +9,51 @@ public class KillTeamJsonImporter
 {
     public KillTeam.DataSlate.Domain.Models.KillTeam Import(string json)
     {
-        JsonRoster? roster;
+        JsonKillTeam? killTeam;
         try
         {
-            roster = JsonSerializer.Deserialize<JsonRoster>(json,
+            killTeam = JsonSerializer.Deserialize<JsonKillTeam>(json,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
         }
         catch (JsonException ex)
         {
-            throw new RosterValidationException($"Invalid JSON: {ex.Message}");
+            throw new KillTeamValidationException($"Invalid JSON: {ex.Message}");
         }
 
-        if (roster is null)
-            throw new RosterValidationException("Empty or null JSON.");
+        if (killTeam is null)
+            throw new KillTeamValidationException("Empty or null JSON.");
 
-        if (string.IsNullOrWhiteSpace(roster.Name))
-            throw new RosterValidationException("Missing required field: 'name'.");
+        if (string.IsNullOrWhiteSpace(killTeam.Name))
+            throw new KillTeamValidationException("Missing required field: 'name'.");
 
-        if (roster.Operatives is null || roster.Operatives.Count == 0)
-            throw new RosterValidationException("Missing required field: 'operatives' (empty or absent).");
+        if (killTeam.Operatives is null || killTeam.Operatives.Count == 0)
+            throw new KillTeamValidationException("Missing required field: 'operatives' (empty or absent).");
 
         var team = new KillTeam.DataSlate.Domain.Models.KillTeam
         {
             Id = Guid.NewGuid(),
-            Name = roster.Name.Trim(),
-            Faction = roster.Faction?.Trim() ?? string.Empty,
+            Name = killTeam.Name.Trim(),
+            Faction = killTeam.Faction?.Trim() ?? string.Empty,
             Operatives = []
         };
 
-        for (var opIdx = 0; opIdx < roster.Operatives.Count; opIdx++)
+        for (var opIdx = 0; opIdx < killTeam.Operatives.Count; opIdx++)
         {
-            var jo = roster.Operatives[opIdx];
+            var jo = killTeam.Operatives[opIdx];
             var opPrefix = $"operatives[{opIdx}]";
 
             if (string.IsNullOrWhiteSpace(jo.Name))
-                throw new RosterValidationException($"Missing required field: '{opPrefix}.name'.");
+                throw new KillTeamValidationException($"Missing required field: '{opPrefix}.name'.");
 
             if (jo.Stats is null)
-                throw new RosterValidationException($"Missing required field: '{opPrefix}.stats'.");
+                throw new KillTeamValidationException($"Missing required field: '{opPrefix}.stats'.");
 
             ValidateStat(jo.Stats.Move, $"{opPrefix}.stats.move");
             ValidateStat(jo.Stats.Apl, $"{opPrefix}.stats.apl");
             ValidateStat(jo.Stats.Wounds, $"{opPrefix}.stats.wounds");
 
             if (jo.Stats.Save is null || jo.Stats.Save.Value.ValueKind == JsonValueKind.Undefined)
-                throw new RosterValidationException($"Missing required field: '{opPrefix}.stats.save'.");
+                throw new KillTeamValidationException($"Missing required field: '{opPrefix}.stats.save'.");
 
             var saveRaw = jo.Stats.Save.Value.ValueKind == JsonValueKind.Number
                 ? jo.Stats.Save.Value.GetInt32().ToString()
@@ -80,19 +80,19 @@ public class KillTeamJsonImporter
                     var wPrefix = $"{opPrefix}.weapons[{wIdx}]";
 
                     if (string.IsNullOrWhiteSpace(jw.Name))
-                        throw new RosterValidationException($"Missing required field: '{wPrefix}.name'.");
+                        throw new KillTeamValidationException($"Missing required field: '{wPrefix}.name'.");
                     if (string.IsNullOrWhiteSpace(jw.Type))
-                        throw new RosterValidationException($"Missing required field: '{wPrefix}.type'.");
+                        throw new KillTeamValidationException($"Missing required field: '{wPrefix}.type'.");
                     if (jw.Atk is null)
-                        throw new RosterValidationException($"Missing required field: '{wPrefix}.atk'.");
+                        throw new KillTeamValidationException($"Missing required field: '{wPrefix}.atk'.");
                     if (string.IsNullOrWhiteSpace(jw.Hit))
-                        throw new RosterValidationException($"Missing required field: '{wPrefix}.hit'.");
+                        throw new KillTeamValidationException($"Missing required field: '{wPrefix}.hit'.");
                     if (string.IsNullOrWhiteSpace(jw.Dmg))
-                        throw new RosterValidationException($"Missing required field: '{wPrefix}.dmg'.");
+                        throw new KillTeamValidationException($"Missing required field: '{wPrefix}.dmg'.");
 
                     var (normalDmg, critDmg) = ParseDamage(jw.Dmg, wPrefix);
                     if (!Enum.TryParse<WeaponType>(jw.Type, ignoreCase: true, out var wt))
-                        throw new RosterValidationException($"Invalid weapon type '{jw.Type}' at '{wPrefix}.type'. Expected 'Ranged' or 'Melee'.");
+                        throw new KillTeamValidationException($"Invalid weapon type '{jw.Type}' at '{wPrefix}.type'. Expected 'Ranged' or 'Melee'.");
 
                     operative.Weapons.Add(new Weapon
                     {
@@ -118,7 +118,7 @@ public class KillTeamJsonImporter
     private static void ValidateStat(object? value, string fieldPath)
     {
         if (value is null)
-            throw new RosterValidationException($"Missing required field: '{fieldPath}'.");
+            throw new KillTeamValidationException($"Missing required field: '{fieldPath}'.");
     }
 
     private static int ParseStat(string raw)
@@ -132,7 +132,7 @@ public class KillTeamJsonImporter
         var parts = raw.Trim().Split('/');
         if (parts.Length != 2 || !int.TryParse(parts[0].Trim(), out var n) ||
             !int.TryParse(parts[1].Trim(), out var c))
-            throw new RosterValidationException(
+            throw new KillTeamValidationException(
                 $"Invalid damage format '{raw}' at '{fieldPath}.dmg'. Expected 'N/C' e.g. '3/4'.");
         return (n, c);
     }
@@ -140,7 +140,7 @@ public class KillTeamJsonImporter
 
 // ─── Internal JSON DTOs ───────────────────────────────────────────────────────
 
-internal class JsonRoster
+internal class JsonKillTeam
 {
     [JsonPropertyName("name")]        public string? Name { get; set; }
     [JsonPropertyName("faction")]     public string? Faction { get; set; }

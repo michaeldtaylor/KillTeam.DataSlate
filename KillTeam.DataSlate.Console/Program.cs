@@ -73,7 +73,7 @@ public static class Program
                       .WithDescription("Remove a player (blocked if they have games).");
             });
             cfg.AddCommand<ImportKillTeamsCommand>("import-kill-teams")
-               .WithDescription("Import a JSON roster file (or scan the roster folder).");
+               .WithDescription("Import a JSON killTeam file (or scan the killTeam folder).");
             cfg.AddCommand<NewGameCommand>("new-game").WithDescription("Start a new Kill Team game.");
             cfg.AddCommand<HistoryCommand>("history")
                .WithDescription("View completed game history.");

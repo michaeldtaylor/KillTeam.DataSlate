@@ -82,7 +82,7 @@ public class NewGameTests
     }
 
     [Fact]
-    public async Task SingleRosterImported_ReturnsLessThanTwoTeams()
+    public async Task SingleKillTeamImported_ReturnsLessThanTwoTeams()
     {
         var playerId = Guid.NewGuid();
         var teamId = Guid.NewGuid();

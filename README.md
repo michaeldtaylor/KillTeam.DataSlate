@@ -12,10 +12,10 @@ An interactive CLI app for tracking Kill Team (KT24 V3.0) game sessions — reco
    killteam player add "Solomon"
    ```
 
-2. **Import rosters** — load kill team JSON files:
+2. **Import kill teams** — load kill team JSON files:
    ```
-   killteam import-kill-teams ./rosters/angels-of-death.json
-   killteam import-kill-teams ./rosters/          # scans entire folder
+   killteam import-kill-teams ../kill-teams/angels-of-death.json
+   killteam import-kill-teams ../kill-teams/          # scans entire folder
    ```
 
 3. **Start a new game** — interactive prompts select players and teams:
@@ -47,19 +47,19 @@ An interactive CLI app for tracking Kill Team (KT24 V3.0) game sessions — reco
 | `player list` | List all players with win/loss stats |
 | `player delete <name>` | Delete a player (blocked if they have recorded games) |
 
-### Roster Import
+### Kill Team Import
 
 | Command | Description |
 |---------|-------------|
 | `import-kill-teams <path>` | Import a kill team from a JSON file or scan a folder for all `.json` files |
 
-Roster files use the standard Kill Team JSON format. Key fields:
+kill team file use the standard Kill Team JSON format. Key fields:
 - `save`: `"3+"` (string) or `3` (int) — save threshold
 - `dmg`: `"3/4"` — normal damage / critical damage
 - `hit`: `"3+"` — hit threshold
 - `special_rules`: array of strings, e.g. `["Piercing 1", "Lethal 5+", "Balanced"]`
 
-Re-importing a roster by the same team name updates the existing record.
+Re-importing a kill team by the same team name updates the existing record.
 
 ### Game Setup
 
@@ -105,14 +105,14 @@ Settings are in `appsettings.json` under the `DataSlate` section:
 | Key | Default | Description |
 |-----|---------|-------------|
 | `DataSlate:DatabasePath` | `./data/kill-team.db` | Path to the SQLite database file |
-| `DataSlate:RosterFolder` | `./rosters/` | Default folder scanned by `import-kill-teams` when given a directory |
+| `DataSlate:KillTeamFolder` | `../kill-teams/` | Default folder scanned by `import-kill-teams` when given a directory |
 
 Example `appsettings.json`:
 ```json
 {
   "DataSlate": {
     "DatabasePath": "./data/kill-team.db",
-    "RosterFolder": "./rosters/"
+    "KillTeamFolder": "../kill-teams/"
   }
 }
 ```

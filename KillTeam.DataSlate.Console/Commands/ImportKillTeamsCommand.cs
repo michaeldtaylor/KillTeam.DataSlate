@@ -9,8 +9,8 @@ using Spectre.Console.Cli;
 
 namespace KillTeam.DataSlate.Console.Commands;
 
-/// <summary>Imports a kill team roster from a JSON file or scans a folder for all roster files.</summary>
-[Description("Import a kill team roster from a JSON file (or scan a folder).")]
+/// <summary>Imports a kill team killTeam from a JSON file or scans a folder for all killTeam files.</summary>
+[Description("Import a kill team killTeam from a JSON file (or scan a folder).")]
 public class ImportKillTeamsCommand(
     KillTeamJsonImporter importer,
     IKillTeamRepository killTeams,
@@ -20,7 +20,7 @@ public class ImportKillTeamsCommand(
 {
     public class Settings : CommandSettings
     {
-        [Description("Path to a roster JSON file, or a folder to scan. Defaults to the configured RosterFolder.")]
+        [Description("Path to a killTeam JSON file, or a folder to scan. Defaults to the configured KillTeamFolder.")]
         [CommandArgument(0, "[filepath]")]
         public string? FilePath { get; set; }
     }
@@ -31,17 +31,17 @@ public class ImportKillTeamsCommand(
             return await ImportSingleFile(settings.FilePath);
 
         // Folder scan
-        var folder = config["DataSlate:RosterFolder"] ?? "./rosters/";
+        var folder = config["DataSlate:KillTeamFolder"] ?? "../kill-teams/";
         if (!Directory.Exists(folder))
         {
-            AnsiConsole.MarkupLine($"[yellow]Roster folder not found: {Markup.Escape(folder)}[/]");
+            AnsiConsole.MarkupLine($"[yellow]killTeam folder not found: {Markup.Escape(folder)}[/]");
             return 1;
         }
 
         var files = Directory.GetFiles(folder, "*.json");
         if (files.Length == 0)
         {
-            AnsiConsole.MarkupLine("[dim]No JSON files found in roster folder.[/]");
+            AnsiConsole.MarkupLine("[dim]No JSON files found in killTeam folder.[/]");
             return 0;
         }
 
@@ -59,7 +59,7 @@ public class ImportKillTeamsCommand(
             }
         }
 
-        AnsiConsole.MarkupLine($"[green]Imported {success} of {files.Length} roster file(s).[/]");
+        AnsiConsole.MarkupLine($"[green]Imported {success} of {files.Length} killTeam file(s).[/]");
         return 0;
     }
 
@@ -76,7 +76,7 @@ public class ImportKillTeamsCommand(
             await ImportFileAsync(path);
             return 0;
         }
-        catch (RosterValidationException ex)
+        catch (KillTeamValidationException ex)
         {
             AnsiConsole.MarkupLine($"[red]Import failed: {Markup.Escape(ex.Message)}[/]");
             return 1;
