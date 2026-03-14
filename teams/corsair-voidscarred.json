@@ -1,0 +1,631 @@
+{
+  "$schema": "../schema/team.schema.json",
+  "id": "corsair_voidscarred",
+  "name": "Corsair Voidscarred",
+  "faction": "Anhrathe",
+  "operatives": [
+    {
+      "name": "Voidscarred Felarch",
+      "operativeType": "Voidscarred Felarch",
+      "stats": {
+        "move": 7,
+        "apl": 2,
+        "wounds": 9,
+        "save": "4+"
+      },
+      "weapons": [
+        {
+          "hit": "3+",
+          "specialRules": "\u0007Range 8\", Piercing 1, Stun",
+          "dmg": "4/5",
+          "type": "Ranged",
+          "name": "\u0007\t Neuro disruptor",
+          "atk": 4
+        },
+        {
+          "hit": "3+",
+          "specialRules": "\u0007Range 8\", Rending",
+          "dmg": "3/4",
+          "type": "Ranged",
+          "name": "\u0007\t Shuriken pistol",
+          "atk": 4
+        },
+        {
+          "hit": "3+",
+          "specialRules": "\u0007Rending",
+          "dmg": "3/4",
+          "type": "Ranged",
+          "name": "\u0007\t    Shuriken rifle",
+          "atk": 4
+        },
+        {
+          "hit": "3+",
+          "specialRules": "\u0007Lethal 5+",
+          "dmg": "4/6",
+          "type": "Melee",
+          "name": "\u0007\t Power weapon",
+          "atk": 4
+        }
+      ],
+      "equipment": [
+        "Diuturnal Mantles",
+        "Mistfield",
+        "Runes Of Guidance",
+        "Star Charts",
+        "Portable Barricade",
+        "Utility Grenades",
+        "Ammo Cache",
+        "Razor Wire",
+        "Comms Device",
+        "Mines",
+        "Light Barricades",
+        "Heavy Barricade",
+        "Ladders",
+        "Explosive Grenades",
+        "Breaching Charge"
+      ]
+    },
+    {
+      "name": "Voidscarred Fate Dealer",
+      "operativeType": "Voidscarred Fate Dealer",
+      "stats": {
+        "move": 7,
+        "apl": 2,
+        "wounds": 8,
+        "save": "4+"
+      },
+      "weapons": [
+        {
+          "hit": "3+",
+          "specialRules": "",
+          "dmg": "3/4",
+          "type": "Ranged",
+          "name": "\u0007\t Ranger long rifle (mobile)",
+          "atk": 4
+        },
+        {
+          "hit": "2+",
+          "specialRules": "\u0007Devastating 3, Heavy, Silent",
+          "dmg": "3/3",
+          "type": "Ranged",
+          "name": "\u0007\t Ranger long rifle (stationary)",
+          "atk": 4
+        },
+        {
+          "hit": "3+",
+          "specialRules": "\u0007Range 8\", Rending",
+          "dmg": "3/4",
+          "type": "Ranged",
+          "name": "\u0007\t Shuriken pistol",
+          "atk": 4
+        },
+        {
+          "hit": "3+",
+          "specialRules": "",
+          "dmg": "2/3",
+          "type": "Melee",
+          "name": "\u0007\t Fists",
+          "atk": 3
+        }
+      ],
+      "equipment": [
+        "Diuturnal Mantles",
+        "Mistfield",
+        "Runes Of Guidance",
+        "Star Charts",
+        "Portable Barricade",
+        "Utility Grenades",
+        "Ammo Cache",
+        "Razor Wire",
+        "Comms Device",
+        "Mines",
+        "Light Barricades",
+        "Heavy Barricade",
+        "Ladders",
+        "Explosive Grenades",
+        "Breaching Charge"
+      ]
+    },
+    {
+      "name": "Voidscarred Gunner",
+      "operativeType": "Voidscarred Gunner",
+      "stats": {
+        "move": 7,
+        "apl": 2,
+        "wounds": 8,
+        "save": "4+"
+      },
+      "weapons": [
+        {
+          "hit": "3+",
+          "specialRules": "\u0007Piercing 2",
+          "dmg": "4/5",
+          "type": "Ranged",
+          "name": "\u0007\t    Blaster",
+          "atk": 4
+        },
+        {
+          "hit": "3+",
+          "specialRules": "\u0007Rending, Torrent 2\"",
+          "dmg": "4/5",
+          "type": "Melee",
+          "name": "\u0007\t Shredder",
+          "atk": 4
+        },
+        {
+          "hit": "3+",
+          "specialRules": "\u0007Range 8\", Rending",
+          "dmg": "3/4",
+          "type": "Ranged",
+          "name": "\u0007\t Shuriken pistol",
+          "atk": 4
+        },
+        {
+          "hit": "3+",
+          "specialRules": "",
+          "dmg": "2/3",
+          "type": "Melee",
+          "name": "\u0007\t Fists",
+          "atk": 3
+        }
+      ],
+      "equipment": [
+        "Diuturnal Mantles",
+        "Mistfield",
+        "Runes Of Guidance",
+        "Star Charts",
+        "Portable Barricade",
+        "Utility Grenades",
+        "Ammo Cache",
+        "Razor Wire",
+        "Comms Device",
+        "Mines",
+        "Light Barricades",
+        "Heavy Barricade",
+        "Ladders",
+        "Explosive Grenades",
+        "Breaching Charge"
+      ]
+    },
+    {
+      "name": "Voidscarred Heavy Gunner",
+      "operativeType": "Voidscarred Heavy Gunner",
+      "stats": {
+        "move": 7,
+        "apl": 2,
+        "wounds": 8,
+        "save": "4+"
+      },
+      "weapons": [
+        {
+          "hit": "3+",
+          "specialRules": "\u0007Heavy (Dash only), Rending",
+          "dmg": "4/5",
+          "type": "Ranged",
+          "name": "\u0007\t Shuriken cannon (focused)",
+          "atk": 5
+        },
+        {
+          "hit": "3+",
+          "specialRules": "\u0007Heavy (Dash only), Rending, Torrent 1\"",
+          "dmg": "4/5",
+          "type": "Ranged",
+          "name": "\u0007\t Shuriken cannon (sweeping)",
+          "atk": 4
+        },
+        {
+          "hit": "3+",
+          "specialRules": "\u0007Range 8\", Rending",
+          "dmg": "3/4",
+          "type": "Ranged",
+          "name": "\u0007\t Shuriken pistol",
+          "atk": 4
+        },
+        {
+          "hit": "3+",
+          "specialRules": "\u0007Devastating 4, Heavy (Dash only), Piercing 2",
+          "dmg": "6/3",
+          "type": "Ranged",
+          "name": "\u0007\t Wraithcannon",
+          "atk": 4
+        },
+        {
+          "hit": "3+",
+          "specialRules": "",
+          "dmg": "2/3",
+          "type": "Melee",
+          "name": "\u0007\t Fists",
+          "atk": 3
+        }
+      ],
+      "equipment": [
+        "Diuturnal Mantles",
+        "Mistfield",
+        "Runes Of Guidance",
+        "Star Charts",
+        "Portable Barricade",
+        "Utility Grenades",
+        "Ammo Cache",
+        "Razor Wire",
+        "Comms Device",
+        "Mines",
+        "Light Barricades",
+        "Heavy Barricade",
+        "Ladders",
+        "Explosive Grenades",
+        "Breaching Charge"
+      ]
+    },
+    {
+      "name": "Voidscarred Kurnathi",
+      "operativeType": "Voidscarred Kurnathi",
+      "stats": {
+        "move": 7,
+        "apl": 2,
+        "wounds": 8,
+        "save": "4+"
+      },
+      "weapons": [
+        {
+          "hit": "3+",
+          "specialRules": "\u0007Range 8\", Rending",
+          "dmg": "3/4",
+          "type": "Ranged",
+          "name": "\u0007\t Shuriken pistol",
+          "atk": 4
+        },
+        {
+          "hit": "3+",
+          "specialRules": "Ceaseless, Lethal 5+",
+          "dmg": "4/6",
+          "type": "Melee",
+          "name": "\u0007\t Dual power weapons",
+          "atk": 4
+        }
+      ],
+      "equipment": [
+        "Diuturnal Mantles",
+        "Mistfield",
+        "Runes Of Guidance",
+        "Star Charts",
+        "Portable Barricade",
+        "Utility Grenades",
+        "Ammo Cache",
+        "Razor Wire",
+        "Comms Device",
+        "Mines",
+        "Light Barricades",
+        "Heavy Barricade",
+        "Ladders",
+        "Explosive Grenades",
+        "Breaching Charge"
+      ]
+    },
+    {
+      "name": "Voidscarred Kurnite Hunter",
+      "operativeType": "Voidscarred Kurnite Hunter",
+      "stats": {
+        "move": 7,
+        "apl": 2,
+        "wounds": 8,
+        "save": "4+"
+      },
+      "weapons": [
+        {
+          "hit": "3+",
+          "specialRules": "\u0007Rending, Saturate, Seek Light, Silent",
+          "dmg": "1/2",
+          "type": "Melee",
+          "name": "\u0007\t Faolch├║",
+          "atk": 4
+        },
+        {
+          "hit": "3+",
+          "specialRules": "\u0007Range 8\", Rending",
+          "dmg": "3/4",
+          "type": "Ranged",
+          "name": "\u0007\t Shuriken pistol",
+          "atk": 4
+        },
+        {
+          "hit": "3+",
+          "specialRules": "\u0007Lethal 5+",
+          "dmg": "4/6",
+          "type": "Melee",
+          "name": "\u0007\t Power weapon",
+          "atk": 4
+        }
+      ],
+      "equipment": [
+        "Diuturnal Mantles",
+        "Mistfield",
+        "Runes Of Guidance",
+        "Star Charts",
+        "Portable Barricade",
+        "Utility Grenades",
+        "Ammo Cache",
+        "Razor Wire",
+        "Comms Device",
+        "Mines",
+        "Light Barricades",
+        "Heavy Barricade",
+        "Ladders",
+        "Explosive Grenades",
+        "Breaching Charge"
+      ]
+    },
+    {
+      "name": "Voidscarred Shade Runner",
+      "operativeType": "Voidscarred Shade Runner",
+      "stats": {
+        "move": 7,
+        "apl": 2,
+        "wounds": 8,
+        "save": "4+"
+      },
+      "weapons": [
+        {
+          "hit": "3+",
+          "specialRules": "\u0007Range 8\", Rending",
+          "dmg": "3/4",
+          "type": "Ranged",
+          "name": "\u0007\t Shuriken pistol",
+          "atk": 4
+        },
+        {
+          "hit": "3+",
+          "specialRules": "\u0007Range 6\", Silent",
+          "dmg": "2/4",
+          "type": "Melee",
+          "name": "\u0007\t Throwing blades",
+          "atk": 4
+        },
+        {
+          "hit": "3+",
+          "specialRules": "\u0007Ceaseless, Lethal 5+",
+          "dmg": "3/5",
+          "type": "Melee",
+          "name": "\u0007\t Hekatarii blades",
+          "atk": 4
+        }
+      ],
+      "equipment": [
+        "Diuturnal Mantles",
+        "Mistfield",
+        "Runes Of Guidance",
+        "Star Charts",
+        "Portable Barricade",
+        "Utility Grenades",
+        "Ammo Cache",
+        "Razor Wire",
+        "Comms Device",
+        "Mines",
+        "Light Barricades",
+        "Heavy Barricade",
+        "Ladders",
+        "Explosive Grenades",
+        "Breaching Charge"
+      ]
+    },
+    {
+      "name": "Voidscarred Soul Weaver",
+      "operativeType": "Voidscarred Soul Weaver",
+      "stats": {
+        "move": 7,
+        "apl": 2,
+        "wounds": 8,
+        "save": "4+"
+      },
+      "weapons": [
+        {
+          "hit": "3+",
+          "specialRules": "\u0007Range 8\", Rending",
+          "dmg": "3/4",
+          "type": "Ranged",
+          "name": "\u0007\t Shuriken pistol",
+          "atk": 4
+        },
+        {
+          "hit": "3+",
+          "specialRules": "\u0007Lethal 5+",
+          "dmg": "4/6",
+          "type": "Melee",
+          "name": "\u0007\t Power weapon",
+          "atk": 4
+        }
+      ],
+      "equipment": [
+        "Diuturnal Mantles",
+        "Mistfield",
+        "Runes Of Guidance",
+        "Star Charts",
+        "Portable Barricade",
+        "Utility Grenades",
+        "Ammo Cache",
+        "Razor Wire",
+        "Comms Device",
+        "Mines",
+        "Light Barricades",
+        "Heavy Barricade",
+        "Ladders",
+        "Explosive Grenades",
+        "Breaching Charge"
+      ]
+    },
+    {
+      "name": "Voidscarred Starstorm Duellist",
+      "operativeType": "Voidscarred Starstorm Duellist",
+      "stats": {
+        "move": 7,
+        "apl": 2,
+        "wounds": 8,
+        "save": "4+"
+      },
+      "weapons": [
+        {
+          "hit": "3+",
+          "specialRules": "\u0007Range 3\", Devastating 3, Piercing 2",
+          "dmg": "5/3",
+          "type": "Ranged",
+          "name": "\u0007\t Fusion pistol",
+          "atk": 4
+        },
+        {
+          "hit": "3+",
+          "specialRules": "\u0007Range 8\", Rending",
+          "dmg": "3/4",
+          "type": "Ranged",
+          "name": "\u0007\t Shuriken pistol",
+          "atk": 4
+        },
+        {
+          "hit": "3+",
+          "specialRules": "",
+          "dmg": "2/3",
+          "type": "Melee",
+          "name": "\u0007\t Fists",
+          "atk": 3
+        }
+      ],
+      "equipment": [
+        "Diuturnal Mantles",
+        "Mistfield",
+        "Runes Of Guidance",
+        "Star Charts",
+        "Portable Barricade",
+        "Utility Grenades",
+        "Ammo Cache",
+        "Razor Wire",
+        "Comms Device",
+        "Mines",
+        "Light Barricades",
+        "Heavy Barricade",
+        "Ladders",
+        "Explosive Grenades",
+        "Breaching Charge"
+      ]
+    },
+    {
+      "name": "Voidscarred Warrior",
+      "operativeType": "Voidscarred Warrior",
+      "stats": {
+        "move": 7,
+        "apl": 2,
+        "wounds": 8,
+        "save": "4+"
+      },
+      "weapons": [
+        {
+          "hit": "3+",
+          "specialRules": "\u0007Range 8\", Rending",
+          "dmg": "3/4",
+          "type": "Ranged",
+          "name": "\u0007\t Shuriken pistol",
+          "atk": 4
+        },
+        {
+          "hit": "3+",
+          "specialRules": "\u0007Rending",
+          "dmg": "3/4",
+          "type": "Ranged",
+          "name": "\u0007\t    Shuriken rifle",
+          "atk": 4
+        },
+        {
+          "hit": "3+",
+          "specialRules": "\u0007Lethal 5+",
+          "dmg": "4/6",
+          "type": "Melee",
+          "name": "\u0007\t Power weapon",
+          "atk": 4
+        },
+        {
+          "hit": "3+",
+          "specialRules": "",
+          "dmg": "2/3",
+          "type": "Melee",
+          "name": "\u0007\t Fists",
+          "atk": 3
+        }
+      ],
+      "equipment": [
+        "Diuturnal Mantles",
+        "Mistfield",
+        "Runes Of Guidance",
+        "Star Charts",
+        "Portable Barricade",
+        "Utility Grenades",
+        "Ammo Cache",
+        "Razor Wire",
+        "Comms Device",
+        "Mines",
+        "Light Barricades",
+        "Heavy Barricade",
+        "Ladders",
+        "Explosive Grenades",
+        "Breaching Charge"
+      ]
+    },
+    {
+      "name": "Voidscarred Way Seeker",
+      "operativeType": "Voidscarred Way Seeker",
+      "stats": {
+        "move": 7,
+        "apl": 2,
+        "wounds": 8,
+        "save": "4+"
+      },
+      "weapons": [
+        {
+          "hit": "3+",
+          "specialRules": "\u0007P SYCHIC, Severe, Silent, Stun",
+          "dmg": "1/2",
+          "type": "Melee",
+          "name": "\u0007\t Freezing grasp",
+          "atk": 4
+        },
+        {
+          "hit": "3+",
+          "specialRules": "PSYCHIC, 2\" Devastating 2",
+          "dmg": "4/3",
+          "type": "Melee",
+          "name": "\u0007\t Lightning strike",
+          "atk": 4
+        },
+        {
+          "hit": "3+",
+          "specialRules": "\u0007Range 8\", Rending",
+          "dmg": "3/4",
+          "type": "Ranged",
+          "name": "\u0007\t Shuriken pistol",
+          "atk": 4
+        },
+        {
+          "hit": "3+",
+          "specialRules": "\u0007PSYCHIC, Shock",
+          "dmg": "3/5",
+          "type": "Melee",
+          "name": "\u0007\t Witch staff",
+          "atk": 4
+        }
+      ],
+      "equipment": [
+        "Diuturnal Mantles",
+        "Mistfield",
+        "Runes Of Guidance",
+        "Star Charts",
+        "Portable Barricade",
+        "Utility Grenades",
+        "Ammo Cache",
+        "Razor Wire",
+        "Comms Device",
+        "Mines",
+        "Light Barricades",
+        "Heavy Barricade",
+        "Ladders",
+        "Explosive Grenades",
+        "Breaching Charge"
+      ]
+    }
+  ]
+}

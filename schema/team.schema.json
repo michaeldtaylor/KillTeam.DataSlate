@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "team.schema.json",
-  "title": "Kill Team Roster",
-  "description": "Schema for a KT24 V3.0 kill team roster exported from official PDFs",
+  "title": "Kill Team - Team Schema",
+  "description": "Schema for a Kill Team Version 3 team exported from official PDFs",
   "type": "object",
   "required": ["id", "name", "faction", "operatives"],
   "additionalProperties": false,

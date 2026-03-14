@@ -1,0 +1,368 @@
+{
+  "$schema": "../schema/team.schema.json",
+  "id": "blades_of_khaine",
+  "name": "Blades of Khaine",
+  "faction": "Asuryani",
+  "operatives": [
+    {
+      "name": "Dire Avenger Exarch",
+      "operativeType": "Dire Avenger Exarch",
+      "stats": {
+        "move": 7,
+        "apl": 3,
+        "wounds": 9,
+        "save": "3+"
+      },
+      "weapons": [
+        {
+          "dmg": "3/4",
+          "type": "Ranged",
+          "hit": "3+",
+          "specialRules": "\u0007Rending",
+          "name": "\u0007\t    Shuriken catapult",
+          "atk": 4
+        },
+        {
+          "dmg": "3/4",
+          "type": "Ranged",
+          "hit": "3+",
+          "specialRules": "\u0007Range 8\", Rending",
+          "name": "\u0007\t Shuriken pistol",
+          "atk": 4
+        },
+        {
+          "dmg": "3/4",
+          "type": "Ranged",
+          "hit": "3+",
+          "specialRules": "\u0007Ceaseless, Rending",
+          "name": "\u0007\t Twin shuriken catapult",
+          "atk": 4
+        },
+        {
+          "dmg": "4/5",
+          "type": "Melee",
+          "hit": "3+",
+          "specialRules": "\u0007Lethal 5+, Rending",
+          "name": "\u0007\t Diresword",
+          "atk": 5
+        },
+        {
+          "dmg": "2/4",
+          "type": "Melee",
+          "hit": "3+",
+          "specialRules": "",
+          "name": "\u0007\t Fists",
+          "atk": 4
+        },
+        {
+          "dmg": "2/3",
+          "type": "Melee",
+          "hit": "4+",
+          "specialRules": "",
+          "name": "\u0007\t Gun butts",
+          "atk": 3
+        },
+        {
+          "dmg": "4/6",
+          "type": "Melee",
+          "hit": "3+",
+          "specialRules": "\u0007Lethal 5+",
+          "name": "\u0007\t Power weapon",
+          "atk": 5
+        }
+      ],
+      "equipment": [
+        "Rune Of Prophecy",
+        "Rune Of Shielding",
+        "Rune Of Foresight",
+        "Wraithbone Talisman",
+        "Portable Barricade",
+        "Utility Grenades",
+        "Ammo Cache",
+        "Razor Wire",
+        "Comms Device",
+        "Mines",
+        "Light Barricades",
+        "Heavy Barricade",
+        "Ladders",
+        "Explosive Grenades"
+      ]
+    },
+    {
+      "name": "Dire Avenger Warrior",
+      "operativeType": "Dire Avenger Warrior",
+      "stats": {
+        "move": 7,
+        "apl": 3,
+        "wounds": 8,
+        "save": "4+"
+      },
+      "weapons": [
+        {
+          "dmg": "3/4",
+          "type": "Ranged",
+          "hit": "3+",
+          "specialRules": "\u0007Rending",
+          "name": "\u0007\t    Shuriken catapult",
+          "atk": 4
+        },
+        {
+          "dmg": "2/4",
+          "type": "Melee",
+          "hit": "3+",
+          "specialRules": "",
+          "name": "\u0007\t Fists",
+          "atk": 4
+        }
+      ],
+      "equipment": [
+        "Rune Of Prophecy",
+        "Rune Of Shielding",
+        "Rune Of Foresight",
+        "Wraithbone Talisman",
+        "Portable Barricade",
+        "Utility Grenades",
+        "Ammo Cache",
+        "Razor Wire",
+        "Comms Device",
+        "Mines",
+        "Light Barricades",
+        "Heavy Barricade",
+        "Ladders",
+        "Explosive Grenades"
+      ]
+    },
+    {
+      "name": "Howling Banshee Exarch",
+      "operativeType": "Howling Banshee Exarch",
+      "stats": {
+        "move": 7,
+        "apl": 3,
+        "wounds": 9,
+        "save": "3+"
+      },
+      "weapons": [
+        {
+          "dmg": "3/4",
+          "type": "Ranged",
+          "hit": "3+",
+          "specialRules": "\u0007Range 8\", Rending",
+          "name": "\u0007\t Shuriken pistol",
+          "atk": 4
+        },
+        {
+          "dmg": "2/3",
+          "type": "Ranged",
+          "hit": "3+",
+          "specialRules": "\u0007Range 8\", Rending, Torrent 2\"",
+          "name": "\u0007\t Triskele (throw)",
+          "atk": 4
+        },
+        {
+          "dmg": "3/7",
+          "type": "Melee",
+          "hit": "3+",
+          "specialRules": "\u0007Lethal 5+",
+          "name": "\u0007\t Executioner",
+          "atk": 5
+        },
+        {
+          "dmg": "4/6",
+          "type": "Melee",
+          "hit": "3+",
+          "specialRules": "\u0007Ceaseless, Lethal 5+",
+          "name": "\u0007\t Mirrorswords",
+          "atk": 5
+        },
+        {
+          "dmg": "4/6",
+          "type": "Melee",
+          "hit": "3+",
+          "specialRules": "\u0007Lethal 5+",
+          "name": "\u0007\t Power weapon",
+          "atk": 5
+        },
+        {
+          "dmg": "4/5",
+          "type": "Melee",
+          "hit": "3+",
+          "specialRules": "\u0007Rending",
+          "name": "\u0007\t Triskele (slice)",
+          "atk": 5
+        }
+      ],
+      "equipment": [
+        "Rune Of Prophecy",
+        "Rune Of Shielding",
+        "Rune Of Foresight",
+        "Wraithbone Talisman",
+        "Portable Barricade",
+        "Utility Grenades",
+        "Ammo Cache",
+        "Razor Wire",
+        "Comms Device",
+        "Mines",
+        "Light Barricades",
+        "Heavy Barricade",
+        "Ladders",
+        "Explosive Grenades"
+      ]
+    },
+    {
+      "name": "Howling Banshee Warrior",
+      "operativeType": "Howling Banshee Warrior",
+      "stats": {
+        "move": 7,
+        "apl": 3,
+        "wounds": 8,
+        "save": "4+"
+      },
+      "weapons": [
+        {
+          "dmg": "3/4",
+          "type": "Ranged",
+          "hit": "3+",
+          "specialRules": "\u0007Range 8\", Rending",
+          "name": "\u0007\t Shuriken pistol",
+          "atk": 4
+        },
+        {
+          "dmg": "4/6",
+          "type": "Melee",
+          "hit": "3+",
+          "specialRules": "\u0007Lethal 5+",
+          "name": "\u0007\t Power weapon",
+          "atk": 4
+        }
+      ],
+      "equipment": [
+        "Rune Of Prophecy",
+        "Rune Of Shielding",
+        "Rune Of Foresight",
+        "Wraithbone Talisman",
+        "Portable Barricade",
+        "Utility Grenades",
+        "Ammo Cache",
+        "Razor Wire",
+        "Comms Device",
+        "Mines",
+        "Light Barricades",
+        "Heavy Barricade",
+        "Ladders",
+        "Explosive Grenades"
+      ]
+    },
+    {
+      "name": "Striking Scorpion Exarch",
+      "operativeType": "Striking Scorpion Exarch",
+      "stats": {
+        "move": 7,
+        "apl": 3,
+        "wounds": 9,
+        "save": "3+"
+      },
+      "weapons": [
+        {
+          "dmg": "3/4",
+          "type": "Ranged",
+          "hit": "3+",
+          "specialRules": "\u0007Range 8\", Rending",
+          "name": "\u0007\t Shuriken pistol",
+          "atk": 4
+        },
+        {
+          "dmg": "3/4",
+          "type": "Ranged",
+          "hit": "4+",
+          "specialRules": "\u0007Range 8\", Ceaseless, Rending",
+          "name": "\u0007\t Twin shuriken pistols",
+          "atk": 4
+        },
+        {
+          "dmg": "5/6",
+          "type": "Melee",
+          "hit": "3+",
+          "specialRules": "\u0007Rending",
+          "name": "\u0007\t Biting blade",
+          "atk": 5
+        },
+        {
+          "dmg": "4/6",
+          "type": "Melee",
+          "hit": "3+",
+          "specialRules": "\u0007Brutal, Lethal 5+",
+          "name": "\u0007\t ScorpionΓÇÖs claw and chainsword",
+          "atk": 5
+        },
+        {
+          "dmg": "4/5",
+          "type": "Melee",
+          "hit": "3+",
+          "specialRules": "\u0007Ceaseless, Rending",
+          "name": "\u0007\t Twin chainswords",
+          "atk": 5
+        }
+      ],
+      "equipment": [
+        "Rune Of Prophecy",
+        "Rune Of Shielding",
+        "Rune Of Foresight",
+        "Wraithbone Talisman",
+        "Portable Barricade",
+        "Utility Grenades",
+        "Ammo Cache",
+        "Razor Wire",
+        "Comms Device",
+        "Mines",
+        "Light Barricades",
+        "Heavy Barricade",
+        "Ladders",
+        "Explosive Grenades"
+      ]
+    },
+    {
+      "name": "Striking Scorpion Warrior",
+      "operativeType": "Striking Scorpion Warrior",
+      "stats": {
+        "move": 7,
+        "apl": 3,
+        "wounds": 8,
+        "save": "4+"
+      },
+      "weapons": [
+        {
+          "dmg": "3/4",
+          "type": "Ranged",
+          "hit": "3+",
+          "specialRules": "\u0007Range 8\", Rending",
+          "name": "\u0007\t Shuriken pistol",
+          "atk": 4
+        },
+        {
+          "dmg": "4/5",
+          "type": "Melee",
+          "hit": "3+",
+          "specialRules": "\u0007Rending",
+          "name": "\u0007\t Chainsword",
+          "atk": 4
+        }
+      ],
+      "equipment": [
+        "Rune Of Prophecy",
+        "Rune Of Shielding",
+        "Rune Of Foresight",
+        "Wraithbone Talisman",
+        "Portable Barricade",
+        "Utility Grenades",
+        "Ammo Cache",
+        "Razor Wire",
+        "Comms Device",
+        "Mines",
+        "Light Barricades",
+        "Heavy Barricade",
+        "Ladders",
+        "Explosive Grenades"
+      ]
+    }
+  ]
+}

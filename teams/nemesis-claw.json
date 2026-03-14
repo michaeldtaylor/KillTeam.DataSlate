@@ -1,0 +1,488 @@
+{
+  "$schema": "../schema/team.schema.json",
+  "id": "nemesis_claw",
+  "name": "Nemesis Claw",
+  "faction": "Heretic Astartes",
+  "operatives": [
+    {
+      "name": "Night Lord Visionary",
+      "operativeType": "Night Lord Visionary",
+      "stats": {
+        "move": 6,
+        "apl": 3,
+        "wounds": 15,
+        "save": "3+"
+      },
+      "weapons": [
+        {
+          "type": "Ranged",
+          "specialRules": "\u0007Range 8\"",
+          "hit": "3+",
+          "atk": 4,
+          "dmg": "3/4",
+          "name": "Bolt pistol"
+        },
+        {
+          "type": "Ranged",
+          "specialRules": "\u0007Range 8\", Piercing 1",
+          "hit": "3+",
+          "atk": 4,
+          "dmg": "3/5",
+          "name": "Plasma pistol (standard)"
+        },
+        {
+          "type": "Ranged",
+          "specialRules": "\u0007Range 8\", Hot, Lethal 5+, Piercing 1",
+          "hit": "3+",
+          "atk": 4,
+          "dmg": "4/5",
+          "name": "Plasma pistol (supercharge)"
+        },
+        {
+          "type": "Melee",
+          "specialRules": "\u0007Rending",
+          "hit": "3+",
+          "atk": 5,
+          "dmg": "4/5",
+          "name": "Nostraman chainblade"
+        },
+        {
+          "type": "Melee",
+          "specialRules": "\u0007Brutal",
+          "hit": "4+",
+          "atk": 5,
+          "dmg": "5/7",
+          "name": "Power fist"
+        },
+        {
+          "type": "Melee",
+          "specialRules": "\u0007Shock",
+          "hit": "3+",
+          "atk": 5,
+          "dmg": "4/6",
+          "name": "Power maul"
+        },
+        {
+          "type": "Melee",
+          "specialRules": "\u0007Lethal 5+",
+          "hit": "3+",
+          "atk": 5,
+          "dmg": "4/6",
+          "name": "Power weapon"
+        }
+      ],
+      "equipment": [
+        "Flayed Skin",
+        "Chain Snare",
+        "Grisly Trophy",
+        "Comms Jammers",
+        "Portable Barricade",
+        "Utility Grenades",
+        "Ammo Cache",
+        "Razor Wire",
+        "Comms Device",
+        "Mines",
+        "Light Barricades",
+        "Heavy Barricade",
+        "Ladders",
+        "Explosive Grenades",
+        "Breaching Charge"
+      ]
+    },
+    {
+      "name": "Night Lord Fearmonger",
+      "operativeType": "Night Lord Fearmonger",
+      "stats": {
+        "move": 6,
+        "apl": 3,
+        "wounds": 14,
+        "save": "3+"
+      },
+      "weapons": [
+        {
+          "type": "Ranged",
+          "specialRules": "",
+          "hit": "3+",
+          "atk": 4,
+          "dmg": "3/4",
+          "name": "Scoped bolt pistol (long range)"
+        },
+        {
+          "type": "Ranged",
+          "specialRules": "\u0007Range 6\", Blast 2\", Devastating 3, Limited 1, Saturate, Terrorchem*",
+          "hit": "3+",
+          "atk": 5,
+          "dmg": "2/0",
+          "name": "Terrorchem vial"
+        },
+        {
+          "type": "Melee",
+          "specialRules": "\u0007Terrorchem*",
+          "hit": "3+",
+          "atk": 5,
+          "dmg": "3/5",
+          "name": "Tainted blade"
+        }
+      ],
+      "equipment": [
+        "Flayed Skin",
+        "Chain Snare",
+        "Grisly Trophy",
+        "Comms Jammers",
+        "Portable Barricade",
+        "Utility Grenades",
+        "Ammo Cache",
+        "Razor Wire",
+        "Comms Device",
+        "Mines",
+        "Light Barricades",
+        "Heavy Barricade",
+        "Ladders",
+        "Explosive Grenades",
+        "Breaching Charge"
+      ]
+    },
+    {
+      "name": "Night Lord Gunner",
+      "operativeType": "Night Lord Gunner",
+      "stats": {
+        "move": 6,
+        "apl": 3,
+        "wounds": 14,
+        "save": "3+"
+      },
+      "weapons": [
+        {
+          "type": "Ranged",
+          "specialRules": "\u0007Range 8\"",
+          "hit": "3+",
+          "atk": 4,
+          "dmg": "3/4",
+          "name": "\u0007\t Bolt pistol"
+        },
+        {
+          "type": "Ranged",
+          "specialRules": "\u0007Range 8\", Saturate, Torrent 2\"",
+          "hit": "2+",
+          "atk": 4,
+          "dmg": "3/3",
+          "name": "\u0007\t Flamer"
+        },
+        {
+          "type": "Ranged",
+          "specialRules": "\u0007Range 6\", Devastating 4, Piercing 2",
+          "hit": "3+",
+          "atk": 4,
+          "dmg": "6/3",
+          "name": "\u0007\t Meltagun"
+        },
+        {
+          "type": "Ranged",
+          "specialRules": "\u0007Piercing 1",
+          "hit": "3+",
+          "atk": 4,
+          "dmg": "4/6",
+          "name": "\u0007\t Plasma gun (standard)"
+        },
+        {
+          "type": "Ranged",
+          "specialRules": "\u0007Hot, Lethal 5+, Piercing 1",
+          "hit": "3+",
+          "atk": 4,
+          "dmg": "5/6",
+          "name": "\u0007\t Plasma gun (supercharge)"
+        },
+        {
+          "type": "Melee",
+          "specialRules": "",
+          "hit": "3+",
+          "atk": 4,
+          "dmg": "3/4",
+          "name": "\u0007\t Fists"
+        }
+      ],
+      "equipment": [
+        "Flayed Skin",
+        "Chain Snare",
+        "Grisly Trophy",
+        "Comms Jammers",
+        "Portable Barricade",
+        "Utility Grenades",
+        "Ammo Cache",
+        "Razor Wire",
+        "Comms Device",
+        "Mines",
+        "Light Barricades",
+        "Heavy Barricade",
+        "Ladders",
+        "Explosive Grenades",
+        "Breaching Charge"
+      ]
+    },
+    {
+      "name": "Night Lord Heavy Gunner",
+      "operativeType": "Night Lord Heavy Gunner",
+      "stats": {
+        "move": 6,
+        "apl": 3,
+        "wounds": 14,
+        "save": "3+"
+      },
+      "weapons": [
+        {
+          "type": "Ranged",
+          "specialRules": "\u0007Range 8\"",
+          "hit": "3+",
+          "atk": 4,
+          "dmg": "3/4",
+          "name": "\u0007\t Bolt pistol"
+        },
+        {
+          "type": "Ranged",
+          "specialRules": "\u0007Heavy (Reposition only), Piercing Crits 1",
+          "hit": "3+",
+          "atk": 5,
+          "dmg": "4/5",
+          "name": "\u0007\t Heavy bolter (focused)"
+        },
+        {
+          "type": "Ranged",
+          "specialRules": "\u0007Heavy (Reposition only), Piercing Crits 1, Torrent 1\"",
+          "hit": "3+",
+          "atk": 4,
+          "dmg": "4/5",
+          "name": "\u0007\t Heavy bolter (sweeping)"
+        },
+        {
+          "type": "Ranged",
+          "specialRules": "\u0007Blast 2\", Heavy (Reposition only)",
+          "hit": "3+",
+          "atk": 4,
+          "dmg": "3/5",
+          "name": "\u0007\t Missile launcher (frag)"
+        },
+        {
+          "type": "Ranged",
+          "specialRules": "\u0007Heavy (Reposition only), Piercing 1",
+          "hit": "3+",
+          "atk": 4,
+          "dmg": "5/7",
+          "name": "\u0007\t Missile launcher (krak)"
+        },
+        {
+          "type": "Melee",
+          "specialRules": "",
+          "hit": "3+",
+          "atk": 4,
+          "dmg": "3/4",
+          "name": "\u0007\t Fists"
+        }
+      ],
+      "equipment": [
+        "Flayed Skin",
+        "Chain Snare",
+        "Grisly Trophy",
+        "Comms Jammers",
+        "Portable Barricade",
+        "Utility Grenades",
+        "Ammo Cache",
+        "Razor Wire",
+        "Comms Device",
+        "Mines",
+        "Light Barricades",
+        "Heavy Barricade",
+        "Ladders",
+        "Explosive Grenades",
+        "Breaching Charge"
+      ]
+    },
+    {
+      "name": "Night Lord Screecher",
+      "operativeType": "Night Lord Screecher",
+      "stats": {
+        "move": 6,
+        "apl": 3,
+        "wounds": 14,
+        "save": "3+"
+      },
+      "weapons": [
+        {
+          "type": "Melee",
+          "specialRules": "\u0007Ceaseless, Lethal 5+",
+          "hit": "3+",
+          "atk": 5,
+          "dmg": "4/5",
+          "name": "\u0007\t Lightning claws"
+        }
+      ],
+      "equipment": [
+        "Flayed Skin",
+        "Chain Snare",
+        "Grisly Trophy",
+        "Comms Jammers",
+        "Portable Barricade",
+        "Utility Grenades",
+        "Ammo Cache",
+        "Razor Wire",
+        "Comms Device",
+        "Mines",
+        "Light Barricades",
+        "Heavy Barricade",
+        "Ladders",
+        "Explosive Grenades",
+        "Breaching Charge"
+      ]
+    },
+    {
+      "name": "Night Lord Skinthief",
+      "operativeType": "Night Lord Skinthief",
+      "stats": {
+        "move": 6,
+        "apl": 3,
+        "wounds": 14,
+        "save": "3+"
+      },
+      "weapons": [
+        {
+          "type": "Ranged",
+          "specialRules": "\u0007Range 8\"",
+          "hit": "3+",
+          "atk": 4,
+          "dmg": "3/4",
+          "name": "\u0007\t Bolt pistol"
+        },
+        {
+          "type": "Melee",
+          "specialRules": "\u0007Rending",
+          "hit": "3+",
+          "atk": 5,
+          "dmg": "4/6",
+          "name": "\u0007\t Nostraman chainglaive"
+        }
+      ],
+      "equipment": [
+        "Flayed Skin",
+        "Chain Snare",
+        "Grisly Trophy",
+        "Comms Jammers",
+        "Portable Barricade",
+        "Utility Grenades",
+        "Ammo Cache",
+        "Razor Wire",
+        "Comms Device",
+        "Mines",
+        "Light Barricades",
+        "Heavy Barricade",
+        "Ladders",
+        "Explosive Grenades",
+        "Breaching Charge"
+      ]
+    },
+    {
+      "name": "Night Lord Ventrilokar",
+      "operativeType": "Night Lord Ventrilokar",
+      "stats": {
+        "move": 6,
+        "apl": 3,
+        "wounds": 14,
+        "save": "3+"
+      },
+      "weapons": [
+        {
+          "type": "Ranged",
+          "specialRules": "\u0007Range 8\"",
+          "hit": "3+",
+          "atk": 4,
+          "dmg": "3/4",
+          "name": "\u0007\t Bolt pistol"
+        },
+        {
+          "type": "Melee",
+          "specialRules": "",
+          "hit": "3+",
+          "atk": 5,
+          "dmg": "4/5",
+          "name": "\u0007\t Chainsword"
+        }
+      ],
+      "equipment": [
+        "Flayed Skin",
+        "Chain Snare",
+        "Grisly Trophy",
+        "Comms Jammers",
+        "Portable Barricade",
+        "Utility Grenades",
+        "Ammo Cache",
+        "Razor Wire",
+        "Comms Device",
+        "Mines",
+        "Light Barricades",
+        "Heavy Barricade",
+        "Ladders",
+        "Explosive Grenades",
+        "Breaching Charge"
+      ]
+    },
+    {
+      "name": "Night Lord Warrior",
+      "operativeType": "Night Lord Warrior",
+      "stats": {
+        "move": 6,
+        "apl": 3,
+        "wounds": 14,
+        "save": "3+"
+      },
+      "weapons": [
+        {
+          "type": "Ranged",
+          "specialRules": "\u0007Range 8\"",
+          "hit": "3+",
+          "atk": 4,
+          "dmg": "3/4",
+          "name": "\u0007\t Bolt pistol"
+        },
+        {
+          "type": "Ranged",
+          "specialRules": "",
+          "hit": "3+",
+          "atk": 4,
+          "dmg": "3/4",
+          "name": "\u0007\t    Boltgun"
+        },
+        {
+          "type": "Melee",
+          "specialRules": "",
+          "hit": "3+",
+          "atk": 5,
+          "dmg": "4/5",
+          "name": "\u0007\t Chainsword"
+        },
+        {
+          "type": "Melee",
+          "specialRules": "",
+          "hit": "3+",
+          "atk": 4,
+          "dmg": "3/4",
+          "name": "\u0007\t Fists"
+        }
+      ],
+      "equipment": [
+        "Flayed Skin",
+        "Chain Snare",
+        "Grisly Trophy",
+        "Comms Jammers",
+        "Portable Barricade",
+        "Utility Grenades",
+        "Ammo Cache",
+        "Razor Wire",
+        "Comms Device",
+        "Mines",
+        "Light Barricades",
+        "Heavy Barricade",
+        "Ladders",
+        "Explosive Grenades",
+        "Breaching Charge"
+      ]
+    }
+  ]
+}
