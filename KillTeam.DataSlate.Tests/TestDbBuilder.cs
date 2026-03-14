@@ -125,7 +125,9 @@ public sealed class TestDbBuilder : IDisposable
         using var cmd = _conn.CreateCommand();
         cmd.CommandText = sql;
         foreach (var (name, value) in parameters)
+        {
             cmd.Parameters.AddWithValue(name, value);
+        }
         cmd.ExecuteNonQuery();
     }
 }

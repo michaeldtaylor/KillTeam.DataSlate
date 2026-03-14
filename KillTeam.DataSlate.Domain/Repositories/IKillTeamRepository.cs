@@ -1,5 +1,7 @@
 using Models = KillTeam.DataSlate.Domain.Models;
+
 namespace KillTeam.DataSlate.Domain.Repositories;
+
 public interface IKillTeamRepository
 {
     Task UpsertAsync(Models.KillTeam team);

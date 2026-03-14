@@ -1,5 +1,7 @@
 using KillTeam.DataSlate.Domain.Models;
+
 namespace KillTeam.DataSlate.Domain.Repositories;
+
 public interface IGameRepository
 {
     Task<Game> CreateAsync(Game game);

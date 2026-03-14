@@ -34,11 +34,17 @@ public class GuardInterruptOrchestrator(
             .ToList();
 
         var eligibleGuards = guardResolutionService.GetEligibleGuards(friendlyStates);
-        if (eligibleGuards.Count == 0) return seqCounter;
+        if (eligibleGuards.Count == 0)
+        {
+            return seqCounter;
+        }
 
         foreach (var guardState in eligibleGuards)
         {
-            if (!allOperatives.TryGetValue(guardState.OperativeId, out var guardOp)) continue;
+            if (!allOperatives.TryGetValue(guardState.OperativeId, out var guardOp))
+            {
+                continue;
+            }
 
             // 1. Check if enemy is in control range (6") — clears guard
             bool inControlRange = console.Confirm(

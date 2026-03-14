@@ -69,7 +69,10 @@ public class CombatResolutionService
         {
             normalHits += critHits;
             critHits = 0;
-            if (normalHits > 0) normalHits--;
+            if (normalHits > 0)
+            {
+                normalHits--;
+            }
         }
 
         // ─── 4. Classify defence dice ─────────────────────────────────────────
@@ -89,12 +92,21 @@ public class CombatResolutionService
 
         foreach (var die in defenceDiceList)
         {
-            if (die == 6) critSaves++;
-            else if (die >= ctx.SaveThreshold) normalSaves++;
+            if (die == 6)
+            {
+                critSaves++;
+            }
+            else if (die >= ctx.SaveThreshold)
+            {
+                normalSaves++;
+            }
         }
 
         // In cover: unconditionally +1 normal save
-        if (ctx.InCover) normalSaves++;
+        if (ctx.InCover)
+        {
+            normalSaves++;
+        }
 
         // PiercingCrits x: if rawCrits >= 1, remove x saves (crit saves first, then normal)
         if (piercingCrits?.Param is > 0 && rawCrits >= 1)

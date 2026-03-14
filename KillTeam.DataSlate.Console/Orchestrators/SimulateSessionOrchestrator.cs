@@ -24,7 +24,10 @@ public class SimulateSessionOrchestrator(
         console.WriteLine();
 
         var (playerOp, aiOp, playerTeam, aiTeam) = await SelectOperativesAsync();
-        if (playerOp is null || aiOp is null) return;
+        if (playerOp is null || aiOp is null)
+        {
+            return;
+        }
 
         await RunSessionLoopAsync(playerOp, aiOp, playerTeam!, aiTeam!);
     }

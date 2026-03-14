@@ -1,7 +1,10 @@
 namespace KillTeam.DataSlate.Domain.Models;
+
 public class KillTeam
 {
-    public string Name { get; set; } = string.Empty;
-    public string Faction { get; set; } = string.Empty;
+    public required string Name { get; set; }
+
+    public required string Faction { get; set; }
+
     public List<Operative> Operatives { get; set; } = [];
 }

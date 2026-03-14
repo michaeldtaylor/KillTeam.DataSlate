@@ -171,7 +171,10 @@ public class FirefightPhaseOrchestrator(
                     .Title($"[bold]{Markup.Escape(op.Name)}[/] — {remainingAp} AP remaining. Choose an action:")
                     .AddChoices(availableActions));
 
-            if (selectedAction == "End Activation") break;
+            if (selectedAction == "End Activation")
+            {
+                break;
+            }
 
             if (selectedAction == "Shoot")
             {
@@ -225,7 +228,9 @@ public class FirefightPhaseOrchestrator(
                 await actionRepository.CreateAsync(moveAction);
 
                 if (!isDash)
-                    hasMovedNonDash = true;
+            {
+                hasMovedNonDash = true;
+            }
             }
 
             remainingAp--;
@@ -238,7 +243,10 @@ public class FirefightPhaseOrchestrator(
                 game = (await gameRepository.GetByIdAsync(game.Id))!;
             }
 
-            if (state.IsIncapacitated) break;
+            if (state.IsIncapacitated)
+            {
+                break;
+            }
         }
 
         state.IsReady = false;
@@ -345,7 +353,10 @@ public class FirefightPhaseOrchestrator(
             .Where(s => allOperatives.TryGetValue(s.OperativeId, out var o) && o.KillTeamName == game.TeamBName)
             .All(s => s.IsIncapacitated);
 
-        if (teamAAllIncap || teamBAllIncap) return true;
+        if (teamAAllIncap || teamBAllIncap)
+        {
+            return true;
+        }
 
         bool teamAReady = allStates.Any(s =>
             !s.IsIncapacitated && s.IsReady
@@ -370,7 +381,11 @@ public class FirefightPhaseOrchestrator(
             .Where(s => allOperatives.TryGetValue(s.OperativeId, out var o) && o.KillTeamName == game.TeamBName)
             .All(s => s.IsIncapacitated);
 
-        if (teamAAllIncap || teamBAllIncap) return true;
+        if (teamAAllIncap || teamBAllIncap)
+        {
+            return true;
+        }
+
         return tp.Number >= 4 && IsTurningPointOver(allStates, allOperatives, game);
     }
 
@@ -430,9 +445,13 @@ public class FirefightPhaseOrchestrator(
         await gameRepository.UpdateStatusAsync(game.Id, GameStatus.Completed, winnerTeamName, vpA, vpB);
 
         if (winnerTeamName is not null)
+        {
             console.MarkupLine($"[bold green]Winner: {(winnerTeamName == game.TeamAName ? "Team A" : "Team B")} — {(winnerTeamName == game.TeamAName ? vpA : vpB)} VP[/]");
+        }
         else
+        {
             console.MarkupLine($"[yellow]Draw! Team A: {vpA} VP  |  Team B: {vpB} VP[/]");
+        }
     }
 
     private static List<(Operative op, GameOperativeState state)> GetReadyOps(
@@ -451,7 +470,10 @@ public class FirefightPhaseOrchestrator(
         List<(Operative op, GameOperativeState state)> readyOps,
         string title)
     {
-        if (readyOps.Count == 1) return readyOps[0];
+        if (readyOps.Count == 1)
+        {
+            return readyOps[0];
+        }
 
         return console.Prompt(
             new SelectionPrompt<(Operative op, GameOperativeState state)>()
@@ -472,9 +494,20 @@ public class FirefightPhaseOrchestrator(
         {
             actions.Add("Reposition");
             actions.Add("Dash");
-            if (state.Order == Order.Engage) actions.Add("Charge");
-            if (op.Weapons.Any(w => w.Type == WeaponType.Ranged)) actions.Add("Shoot");
-            if (op.Weapons.Any(w => w.Type == WeaponType.Melee)) actions.Add("Fight");
+            if (state.Order == Order.Engage)
+            {
+                actions.Add("Charge");
+            }
+
+            if (op.Weapons.Any(w => w.Type == WeaponType.Ranged))
+            {
+                actions.Add("Shoot");
+            }
+
+            if (op.Weapons.Any(w => w.Type == WeaponType.Melee))
+            {
+                actions.Add("Fight");
+            }
             actions.Add("Fall Back");
             actions.Add("Guard");
             actions.Add("Other");
@@ -500,7 +533,10 @@ public class FirefightPhaseOrchestrator(
 
         foreach (var state in allStates)
         {
-            if (!allOperatives.TryGetValue(state.OperativeId, out var op)) continue;
+            if (!allOperatives.TryGetValue(state.OperativeId, out var op))
+            {
+                continue;
+            }
 
             string teamTag = op.KillTeamName == game.TeamAName ? "[blue]A[/]" : "[red]B[/]";
             string name = $"{teamTag} {Markup.Escape(op.Name)}";

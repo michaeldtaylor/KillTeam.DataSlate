@@ -25,9 +25,15 @@ internal sealed class SqliteExecutor : ISqlExecutor
 
     private static void BindParameters(SqliteCommand cmd, Dictionary<string, object?>? parameters)
     {
-        if (parameters is null) return;
+        if (parameters is null)
+        {
+            return;
+        }
+
         foreach (var (k, v) in parameters)
+        {
             cmd.Parameters.AddWithValue(k, v ?? DBNull.Value);
+        }
     }
 
     public async Task ExecuteAsync(string sql, Dictionary<string, object?> parameters)
@@ -40,7 +46,13 @@ internal sealed class SqliteExecutor : ISqlExecutor
             BindParameters(cmd, parameters);
             await cmd.ExecuteNonQueryAsync();
         }
-        finally { if (owned) await conn.DisposeAsync(); }
+        finally
+        {
+            if (owned)
+            {
+                await conn.DisposeAsync();
+            }
+        }
     }
 
     public async Task<IReadOnlyList<T>> QueryAsync<T>(string sql, Func<SqliteDataReader, T> map,
@@ -55,10 +67,18 @@ internal sealed class SqliteExecutor : ISqlExecutor
             using var reader = await cmd.ExecuteReaderAsync();
             var results = new List<T>();
             while (await reader.ReadAsync())
+            {
                 results.Add(map(reader));
+            }
             return results;
         }
-        finally { if (owned) await conn.DisposeAsync(); }
+        finally
+        {
+            if (owned)
+            {
+                await conn.DisposeAsync();
+            }
+        }
     }
 
     public async Task<T?> QuerySingleAsync<T>(string sql, Func<SqliteDataReader, T> map,
@@ -73,7 +93,13 @@ internal sealed class SqliteExecutor : ISqlExecutor
             using var reader = await cmd.ExecuteReaderAsync();
             return await reader.ReadAsync() ? map(reader) : default;
         }
-        finally { if (owned) await conn.DisposeAsync(); }
+        finally
+        {
+            if (owned)
+            {
+                await conn.DisposeAsync();
+            }
+        }
     }
 
     public async Task<T?> ScalarAsync<T>(string sql,
@@ -86,10 +112,20 @@ internal sealed class SqliteExecutor : ISqlExecutor
             cmd.CommandText = sql;
             BindParameters(cmd, parameters);
             var result = await cmd.ExecuteScalarAsync();
-            if (result is null || result == DBNull.Value) return default;
+            if (result is null || result == DBNull.Value)
+            {
+                return default;
+            }
+
             return (T)Convert.ChangeType(result, typeof(T));
         }
-        finally { if (owned) await conn.DisposeAsync(); }
+        finally
+        {
+            if (owned)
+            {
+                await conn.DisposeAsync();
+            }
+        }
     }
 
     public async Task ExecuteTransactionAsync(Func<SqliteConnection, SqliteTransaction, Task> work)
@@ -109,6 +145,12 @@ internal sealed class SqliteExecutor : ISqlExecutor
                 throw;
             }
         }
-        finally { if (owned) await conn.DisposeAsync(); }
+        finally
+        {
+            if (owned)
+            {
+                await conn.DisposeAsync();
+            }
+        }
     }
 }

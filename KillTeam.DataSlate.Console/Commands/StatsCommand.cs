@@ -28,7 +28,9 @@ public class StatsCommand(IConfiguration config) : AsyncCommand<StatsCommand.Set
         await conn.OpenAsync();
 
         if (!string.IsNullOrWhiteSpace(settings.TeamName))
+        {
             return await ShowTeamStatsAsync(conn, settings.TeamName);
+        }
 
         return await ShowPlayerStatsAsync(conn, settings.PlayerName);
     }
@@ -67,7 +69,11 @@ public class StatsCommand(IConfiguration config) : AsyncCommand<StatsCommand.Set
         int games = 0, wins = 0;
         using (var r = await statsCmd.ExecuteReaderAsync())
         {
-            if (await r.ReadAsync()) { games = r.GetInt32(0); wins = r.GetInt32(1); }
+            if (await r.ReadAsync())
+            {
+                games = r.GetInt32(0);
+                wins = r.GetInt32(1);
+            }
         }
 
         // Total kills
@@ -90,7 +96,10 @@ public class StatsCommand(IConfiguration config) : AsyncCommand<StatsCommand.Set
         int kills = 0;
         using (var r = await killCmd.ExecuteReaderAsync())
         {
-            while (await r.ReadAsync()) kills += r.GetInt32(0);
+            while (await r.ReadAsync())
+            {
+                kills += r.GetInt32(0);
+            }
         }
 
         // Most used weapon
@@ -109,7 +118,10 @@ public class StatsCommand(IConfiguration config) : AsyncCommand<StatsCommand.Set
         string mostUsedWeapon = "—";
         using (var r = await weaponCmd.ExecuteReaderAsync())
         {
-            if (await r.ReadAsync()) mostUsedWeapon = r.GetString(0);
+            if (await r.ReadAsync())
+            {
+                mostUsedWeapon = r.GetString(0);
+            }
         }
 
         int losses = games - wins;
@@ -138,8 +150,12 @@ public class StatsCommand(IConfiguration config) : AsyncCommand<StatsCommand.Set
 
         var players = new List<(string Id, string Name)>();
         using (var r = await playersCmd.ExecuteReaderAsync())
+        {
             while (await r.ReadAsync())
+            {
                 players.Add((r.GetString(0), r.GetString(1)));
+            }
+        }
 
         if (players.Count == 0)
         {
@@ -168,7 +184,13 @@ public class StatsCommand(IConfiguration config) : AsyncCommand<StatsCommand.Set
             gCmd.Parameters.AddWithValue("@id", id);
             int g = 0, w = 0;
             using (var r = await gCmd.ExecuteReaderAsync())
-                if (await r.ReadAsync()) { g = r.GetInt32(0); w = r.GetInt32(1); }
+            {
+                if (await r.ReadAsync())
+                {
+                    g = r.GetInt32(0);
+                    w = r.GetInt32(1);
+                }
+            }
 
             var pct = g > 0 ? $"{w * 100 / g}%" : "—";
             table.AddRow(Markup.Escape(name), g.ToString(), w.ToString(), pct);

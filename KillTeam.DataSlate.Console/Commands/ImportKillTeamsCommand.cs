@@ -28,7 +28,9 @@ public class ImportKillTeamsCommand(
     public override async Task<int> ExecuteAsync(CommandContext context, Settings settings)
     {
         if (!string.IsNullOrWhiteSpace(settings.FilePath))
+        {
             return await ImportSingleFile(settings.FilePath);
+        }
 
         // Folder scan
         var folder = config["DataSlate:KillTeamFolder"] ?? "../kill-teams/";

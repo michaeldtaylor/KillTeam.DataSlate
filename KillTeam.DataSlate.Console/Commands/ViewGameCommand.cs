@@ -71,7 +71,9 @@ public class ViewGameCommand(
 
         AnsiConsole.MarkupLine($"[bold]=== {Markup.Escape(playerA)} ({Markup.Escape(teamA)}) vs {Markup.Escape(playerB)} ({Markup.Escape(teamB)}) ===[/]");
         if (missionName is not null)
+        {
             AnsiConsole.MarkupLine($"Mission: {Markup.Escape(missionName)}");
+        }
 
         // Load turning points
         using var tpCmd = conn.CreateCommand();
@@ -85,14 +87,20 @@ public class ViewGameCommand(
 
         var tpList = new List<(Guid Id, int Number, string? InitTeam)>();
         using (var r = await tpCmd.ExecuteReaderAsync())
+        {
             while (await r.ReadAsync())
+            {
                 tpList.Add((Guid.Parse(r.GetString(0)), r.GetInt32(1), r.IsDBNull(2) ? null : r.GetString(2)));
+            }
+        }
 
         foreach (var (tpId, tpNum, initTeam) in tpList)
         {
             AnsiConsole.MarkupLine($"\n[bold]=== Turning Point {tpNum} ===[/]");
             if (initTeam is not null)
+            {
                 AnsiConsole.MarkupLine($"  Initiative: {Markup.Escape(initTeam)}");
+            }
 
             // Show ploys
             var ployList = (await ploys.GetByTurningPointAsync(tpId)).ToList();
@@ -114,7 +122,9 @@ public class ViewGameCommand(
                 var flagStr = flags.Count > 0 ? $" [dim]({string.Join(", ", flags)})[/]" : "";
                 AnsiConsole.MarkupLine($"  [Act {act.SequenceNumber}] {Markup.Escape(opName)} ({act.OrderSelected}){flagStr}");
                 if (act.NarrativeNote is not null)
+                {
                     AnsiConsole.MarkupLine($"    [dim]🖊 {Markup.Escape(act.NarrativeNote)}[/]");
+                }
 
                 // Show actions
                 var actionList = (await actions.GetByActivationAsync(act.Id)).ToList();
@@ -129,7 +139,9 @@ public class ViewGameCommand(
                     var targetStr = targetName is not null ? $" → {Markup.Escape(targetName)}" : "";
                     AnsiConsole.MarkupLine($"    {a.Type}{targetStr}: {dmg} dmg{coverStr}{obscStr}{incapStr}");
                     if (a.NarrativeNote is not null)
+                    {
                         AnsiConsole.MarkupLine($"      [dim]🖊 {Markup.Escape(a.NarrativeNote)}[/]");
+                    }
                 }
             }
         }
@@ -137,9 +149,13 @@ public class ViewGameCommand(
         // Final score
         AnsiConsole.WriteLine();
         if (status == "Completed" && winner is not null)
+        {
             AnsiConsole.MarkupLine($"[bold]Final Score:[/] {teamA} {vpA} — {vpB} {teamB}  |  Winner: [green]{Markup.Escape(winner)}[/]");
+        }
         else
+        {
             AnsiConsole.MarkupLine($"[dim](In Progress — TP{tpList.LastOrDefault().Number})[/]");
+        }
 
         return 0;
     }

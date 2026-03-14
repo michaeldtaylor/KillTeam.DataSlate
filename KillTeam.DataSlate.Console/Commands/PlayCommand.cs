@@ -82,8 +82,10 @@ public class PlayCommand(
 
             // Check if game ended
             game = (await gameRepository.GetByIdAsync(game.Id))!;
-            if (game.Status == GameStatus.Completed)
-                break;
+        if (game.Status == GameStatus.Completed)
+        {
+            break;
+        }
 
             // Prepare for next TP
             currentTp = await turningPointRepository.GetCurrentAsync(game.Id);

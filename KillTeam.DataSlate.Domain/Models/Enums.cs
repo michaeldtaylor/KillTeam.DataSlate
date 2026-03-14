@@ -1,9 +1,13 @@
 namespace KillTeam.DataSlate.Domain.Models;
 
 public enum GameStatus { InProgress, Completed }
+
 public enum Order { Engage, Conceal }
+
 public enum ActionType { Reposition, Dash, FallBack, Charge, Shoot, Fight, Guard, Other }
+
 public enum WeaponType { Ranged, Melee }
+
 public enum SpecialRuleKind
 {
     Accurate, Balanced, Blast, Brutal, Ceaseless, Devastating, DDevastating,

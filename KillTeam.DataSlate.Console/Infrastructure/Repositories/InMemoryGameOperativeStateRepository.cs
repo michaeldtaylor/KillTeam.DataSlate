@@ -11,7 +11,9 @@ public class InMemoryGameOperativeStateRepository : IGameOperativeStateRepositor
     public void Seed(IEnumerable<GameOperativeState> states)
     {
         foreach (var s in states)
+        {
             _states[s.Id] = s;
+        }
     }
 
     public Task CreateAsync(GameOperativeState state)
@@ -26,43 +28,71 @@ public class InMemoryGameOperativeStateRepository : IGameOperativeStateRepositor
 
     public Task UpdateWoundsAsync(Guid id, int currentWounds)
     {
-        if (_states.TryGetValue(id, out var s)) s.CurrentWounds = currentWounds;
+        if (_states.TryGetValue(id, out var s))
+        {
+            s.CurrentWounds = currentWounds;
+        }
+
         return Task.CompletedTask;
     }
 
     public Task UpdateOrderAsync(Guid id, Order order)
     {
-        if (_states.TryGetValue(id, out var s)) s.Order = order;
+        if (_states.TryGetValue(id, out var s))
+        {
+            s.Order = order;
+        }
+
         return Task.CompletedTask;
     }
 
     public Task UpdateGuardAsync(Guid id, bool isOnGuard)
     {
-        if (_states.TryGetValue(id, out var s)) s.IsOnGuard = isOnGuard;
+        if (_states.TryGetValue(id, out var s))
+        {
+            s.IsOnGuard = isOnGuard;
+        }
+
         return Task.CompletedTask;
     }
 
     public Task SetAplModifierAsync(Guid id, int aplModifier)
     {
-        if (_states.TryGetValue(id, out var s)) s.AplModifier = aplModifier;
+        if (_states.TryGetValue(id, out var s))
+        {
+            s.AplModifier = aplModifier;
+        }
+
         return Task.CompletedTask;
     }
 
     public Task SetReadyAsync(Guid id, bool isReady)
     {
-        if (_states.TryGetValue(id, out var s)) s.IsReady = isReady;
+        if (_states.TryGetValue(id, out var s))
+        {
+            s.IsReady = isReady;
+        }
+
         return Task.CompletedTask;
     }
 
     public Task SetIncapacitatedAsync(Guid id, bool isIncapacitated)
     {
-        if (_states.TryGetValue(id, out var s)) s.IsIncapacitated = isIncapacitated;
+        if (_states.TryGetValue(id, out var s))
+        {
+            s.IsIncapacitated = isIncapacitated;
+        }
+
         return Task.CompletedTask;
     }
 
     public Task SetCounteractUsedAsync(Guid id, bool used)
     {
-        if (_states.TryGetValue(id, out var s)) s.HasUsedCounteractThisTurningPoint = used;
+        if (_states.TryGetValue(id, out var s))
+        {
+            s.HasUsedCounteractThisTurningPoint = used;
+        }
+
         return Task.CompletedTask;
     }
 

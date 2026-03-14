@@ -221,7 +221,9 @@ public class ShootSessionOrchestrator(
             new TextPrompt<string>("Narrative note [dim](optional, press enter to skip)[/]:")
                 .AllowEmpty());
         if (!string.IsNullOrWhiteSpace(note))
+        {
             await actionRepository.UpdateNarrativeAsync(action.Id, note);
+        }
 
         return new ShootSessionResult(causedIncap, result.TotalDamage, targetState.OperativeId);
     }
@@ -235,14 +237,24 @@ public class ShootSessionOrchestrator(
         table.AddRow("Unblocked Crits", $"[bold]{result.UnblockedCrits}[/]");
         table.AddRow("Unblocked Normals", $"[bold]{result.UnblockedNormals}[/]");
         table.AddRow("Total Damage", $"[bold red]{result.TotalDamage}[/]");
-        if (inCover) table.AddRow("Cover Save", "[green]Applied[/]");
-        if (isObscured) table.AddRow("Obscured", "[green]Crits converted[/]");
+        if (inCover)
+        {
+            table.AddRow("Cover Save", "[green]Applied[/]");
+        }
+
+        if (isObscured)
+        {
+            table.AddRow("Obscured", "[green]Crits converted[/]");
+        }
         console.Write(table);
     }
 
     internal async Task<int[]> RollOrEnterDiceAsync(int count, string label)
     {
-        if (count == 0) return [];
+        if (count == 0)
+        {
+            return [];
+        }
 
         var choice = console.Prompt(
             new SelectionPrompt<string>()
@@ -267,11 +279,21 @@ public class ShootSessionOrchestrator(
             foreach (var p in parts)
             {
                 if (int.TryParse(p, out int v) && v is >= 1 and <= 6)
+                {
                     values.Add(v);
-                else { valid = false; break; }
+                }
+                else
+                {
+                    valid = false;
+                    break;
+                }
             }
+
             if (valid && values.Count > 0)
+            {
                 return values.ToArray();
+            }
+
             console.MarkupLine("[red]Invalid input. Enter integers 1-6 separated by spaces or commas.[/]");
         }
     }

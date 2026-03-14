@@ -65,7 +65,10 @@ public class RerollOrchestrator(IGameRepository gameRepository)
     private static async Task<List<RollableDie>> ApplyBalancedAsync(
         List<RollableDie> pool, string label)
     {
-        if (pool.Count == 0) return pool;
+        if (pool.Count == 0)
+        {
+            return pool;
+        }
 
         var choice = await Task.FromResult(AnsiConsole.Prompt(
             new SelectionPrompt<RollableDie>()
@@ -83,7 +86,10 @@ public class RerollOrchestrator(IGameRepository gameRepository)
 
     private static List<RollableDie> ApplyCeaseless(List<RollableDie> pool, string label)
     {
-        if (pool.Count == 0) return pool;
+        if (pool.Count == 0)
+        {
+            return pool;
+        }
 
         var face = AnsiConsole.Prompt(
             new TextPrompt<int>($"[yellow]{label}[/] [dim](Ceaseless)[/] Re-roll all dice showing which value? (1-6):")
@@ -91,7 +97,10 @@ public class RerollOrchestrator(IGameRepository gameRepository)
 
         return pool.Select(d =>
         {
-            if (d.Value != face || d.HasBeenRerolled) return d;
+            if (d.Value != face || d.HasBeenRerolled)
+            {
+                return d;
+            }
             var newVal = RollD6();
             AnsiConsole.MarkupLine($"  Ceaseless re-roll die {d.Index + 1}: {d.Value} → [bold]{newVal}[/]");
             return d with { Value = newVal, HasBeenRerolled = true };
@@ -101,10 +110,16 @@ public class RerollOrchestrator(IGameRepository gameRepository)
     private static async Task<List<RollableDie>> ApplyRelentlessAsync(
         List<RollableDie> pool, string label)
     {
-        if (pool.Count == 0) return pool;
+        if (pool.Count == 0)
+        {
+            return pool;
+        }
 
         var eligible = pool.Where(d => !d.HasBeenRerolled).ToList();
-        if (eligible.Count == 0) return pool;
+        if (eligible.Count == 0)
+        {
+            return pool;
+        }
 
         var chosen = await Task.FromResult(AnsiConsole.Prompt(
             new MultiSelectionPrompt<RollableDie>()
@@ -119,7 +134,10 @@ public class RerollOrchestrator(IGameRepository gameRepository)
             var newVal = RollD6();
             AnsiConsole.MarkupLine($"  Relentless re-roll die {d.Index + 1}: {d.Value} → [bold]{newVal}[/]");
             var idx = updated.FindIndex(x => x.Index == d.Index);
-            if (idx >= 0) updated[idx] = d with { Value = newVal, HasBeenRerolled = true };
+            if (idx >= 0)
+            {
+                updated[idx] = d with { Value = newVal, HasBeenRerolled = true };
+            }
         }
         return updated;
     }
@@ -127,19 +145,33 @@ public class RerollOrchestrator(IGameRepository gameRepository)
     private async Task<List<RollableDie>> ApplyCpRerollAsync(
         List<RollableDie> pool, Guid gameId, bool isTeamA, string label)
     {
-        if (pool.Count == 0) return pool;
+        if (pool.Count == 0)
+        {
+            return pool;
+        }
 
         var game = await gameRepository.GetByIdAsync(gameId);
-        if (game is null) return pool;
+        if (game is null)
+        {
+            return pool;
+        }
 
         var cp = isTeamA ? game.CpTeamA : game.CpTeamB;
-        if (cp <= 0) return pool;
+        if (cp <= 0)
+        {
+            return pool;
+        }
 
         var eligible = pool.Where(d => !d.HasBeenRerolled).ToList();
-        if (eligible.Count == 0) return pool;
+        if (eligible.Count == 0)
+        {
+            return pool;
+        }
 
         if (!AnsiConsole.Confirm($"[yellow]{label}[/] Spend 1CP (have {cp}CP) to re-roll one die?", defaultValue: false))
+        {
             return pool;
+        }
 
         var choice = await Task.FromResult(AnsiConsole.Prompt(
             new SelectionPrompt<RollableDie>()

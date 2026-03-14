@@ -79,10 +79,12 @@ public class HistoryCommand(IConfiguration config) : AsyncCommand<HistoryCommand
             .AddColumn("Winner");
 
         foreach (var r in rows)
+        {
             table.AddRow(r.Date, Markup.Escape(r.Mission),
                 $"{Markup.Escape(r.PlayerA)} ({Markup.Escape(r.TeamA)})",
                 $"{Markup.Escape(r.PlayerB)} ({Markup.Escape(r.TeamB)})",
                 r.VpA.ToString(), r.VpB.ToString(), Markup.Escape(r.Winner));
+        }
 
         AnsiConsole.Write(table);
         return 0;

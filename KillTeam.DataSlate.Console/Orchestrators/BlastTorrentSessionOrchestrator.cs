@@ -45,7 +45,10 @@ public class BlastTorrentSessionOrchestrator(
                     .Title("Select additional targets (space to toggle, enter to confirm):")
                     .UseConverter(s =>
                     {
-                        if (!allOperatives.TryGetValue(s.OperativeId, out var o)) return s.OperativeId.ToString();
+                        if (!allOperatives.TryGetValue(s.OperativeId, out var o))
+                        {
+                            return s.OperativeId.ToString();
+                        }
                         bool isFriendly = o.KillTeamName == attacker.KillTeamName;
                         string friendly = isFriendly ? " [red][FRIENDLY FIRE!][/]" : "";
                         return $"{Markup.Escape(o.Name)} (W:{s.CurrentWounds}/{o.Wounds}){friendly}";
@@ -63,7 +66,9 @@ public class BlastTorrentSessionOrchestrator(
         {
             console.MarkupLine($"[red]⚠ This will affect {friendlyCount} friendly operative(s).[/]");
             if (!console.Confirm("Confirm?", defaultValue: false))
+            {
                 return new BlastSessionResult(false, 0);
+            }
         }
 
         // Shared attack dice
@@ -95,7 +100,11 @@ public class BlastTorrentSessionOrchestrator(
         for (int i = 0; i < allTargetStates.Count; i++)
         {
             var targetState = allTargetStates[i];
-            if (!allOperatives.TryGetValue(targetState.OperativeId, out var targetOp)) continue;
+
+            if (!allOperatives.TryGetValue(targetState.OperativeId, out var targetOp))
+            {
+                continue;
+            }
 
             console.Write(new Rule($"[bold]{Markup.Escape(targetOp.Name)}[/] (W: {targetState.CurrentWounds}/{targetOp.Wounds})"));
 
@@ -187,13 +196,17 @@ public class BlastTorrentSessionOrchestrator(
         }
 
         if (!primaryActionPersisted)
+        {
             await actionRepository.CreateAsync(action);
+        }
 
         var note = console.Prompt(
             new TextPrompt<string>("Narrative note [dim](optional, press enter to skip)[/]:")
                 .AllowEmpty());
         if (!string.IsNullOrWhiteSpace(note))
+        {
             await actionRepository.UpdateNarrativeAsync(action.Id, note);
+        }
 
         return new BlastSessionResult(anyIncapacitation, totalDamage);
     }
@@ -204,14 +217,24 @@ public class BlastTorrentSessionOrchestrator(
         table.AddRow("Unblocked Crits", result.UnblockedCrits.ToString());
         table.AddRow("Unblocked Normals", result.UnblockedNormals.ToString());
         table.AddRow("Total Damage", $"[bold]{result.TotalDamage}[/]");
-        if (inCover) table.AddRow("Cover", "[green]In Cover[/]");
-        if (isObscured) table.AddRow("Obscured", "[green]Obscured[/]");
+        if (inCover)
+        {
+            table.AddRow("Cover", "[green]In Cover[/]");
+        }
+
+        if (isObscured)
+        {
+            table.AddRow("Obscured", "[green]Obscured[/]");
+        }
         console.Write(table);
     }
 
     private async Task<int[]> RollOrEnterDiceAsync(int count, string label)
     {
-        if (count == 0) return [];
+        if (count == 0)
+        {
+            return [];
+        }
 
         var choice = console.Prompt(
             new SelectionPrompt<string>()
@@ -236,11 +259,21 @@ public class BlastTorrentSessionOrchestrator(
             foreach (var p in parts)
             {
                 if (int.TryParse(p, out int v) && v is >= 1 and <= 6)
+                {
                     values.Add(v);
-                else { valid = false; break; }
+                }
+                else
+                {
+                    valid = false;
+                    break;
+                }
             }
+
             if (valid && values.Count > 0)
+            {
                 return values.ToArray();
+            }
+
             console.MarkupLine("[red]Invalid input. Enter integers 1-6 separated by spaces or commas.[/]");
         }
     }

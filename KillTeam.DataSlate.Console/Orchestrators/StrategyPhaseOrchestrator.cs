@@ -60,8 +60,16 @@ public class StrategyPhaseOrchestrator(
         else
         {
             // Initiative team +1CP, other team +2CP
-            if (initiativeTeamName == game.TeamAName) { cpA += 1; cpB += 2; }
-            else { cpA += 2; cpB += 1; }
+            if (initiativeTeamName == game.TeamAName)
+            {
+                cpA += 1;
+                cpB += 2;
+            }
+            else
+            {
+                cpA += 2;
+                cpB += 1;
+            }
         }
 
         await gameRepository.UpdateCpAsync(game.Id, cpA, cpB);
@@ -125,8 +133,14 @@ public class StrategyPhaseOrchestrator(
                 CpCost = cpCost
             });
 
-            if (activeTeamName == teamAName) cpA -= cpCost;
-            else cpB -= cpCost;
+            if (activeTeamName == teamAName)
+            {
+                cpA -= cpCost;
+            }
+            else
+            {
+                cpB -= cpCost;
+            }
 
             await gameRepository.UpdateCpAsync(gameId, cpA, cpB);
             AnsiConsole.MarkupLine(FormatCp(activeTeamName, activeTeamName == teamAName ? cpA : cpB));

@@ -83,8 +83,15 @@ public class NewGameCommand(
 
         // Create operative states for both teams
         var allOperatives = new List<Operative>();
-        if (fullTeamA?.Operatives is not null) allOperatives.AddRange(fullTeamA.Operatives);
-        if (fullTeamB?.Operatives is not null) allOperatives.AddRange(fullTeamB.Operatives);
+        if (fullTeamA?.Operatives is not null)
+        {
+            allOperatives.AddRange(fullTeamA.Operatives);
+        }
+
+        if (fullTeamB?.Operatives is not null)
+        {
+            allOperatives.AddRange(fullTeamB.Operatives);
+        }
 
         foreach (var op in allOperatives)
         {
@@ -106,7 +113,9 @@ public class NewGameCommand(
         AnsiConsole.MarkupLine($"[green]Game {created.Id}[/]");
         AnsiConsole.MarkupLine($"  {Markup.Escape(playerA.Name)} ([green]{Markup.Escape(teamA.Name)}[/]) vs {Markup.Escape(playerB.Name)} ([blue]{Markup.Escape(teamB.Name)}[/])");
         if (!string.IsNullOrEmpty(missionName))
+        {
             AnsiConsole.MarkupLine($"  Mission: {Markup.Escape(missionName)}");
+        }
         AnsiConsole.MarkupLine($"  {allOperatives.Count} operative state(s) initialized.");
 
         return 0;

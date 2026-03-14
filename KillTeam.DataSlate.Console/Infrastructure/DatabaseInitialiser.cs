@@ -13,8 +13,11 @@ public class DatabaseInitialiser
         _connectionString = $"Data Source={path}";
 
         var dir = Path.GetDirectoryName(path);
+
         if (!string.IsNullOrEmpty(dir))
+        {
             Directory.CreateDirectory(dir);
+        }
     }
 
     public async Task InitialiseAsync()
@@ -29,14 +32,18 @@ public class DatabaseInitialiser
         var currentVersion = await GetCurrentVersionAsync(conn);
 
         foreach (var (version, sql) in Migrations.All.Where(m => m.Version > currentVersion))
+        {
             await ApplyMigrationAsync(conn, version, sql);
+        }
     }
 
     public static void ApplyAllMigrations(SqliteConnection conn)
     {
         var currentVersion = GetCurrentVersionAsync(conn).GetAwaiter().GetResult();
         foreach (var (version, sql) in Migrations.All.Where(m => m.Version > currentVersion))
+        {
             ApplyMigrationAsync(conn, version, sql).GetAwaiter().GetResult();
+        }
     }
 
     private static async Task<int> GetCurrentVersionAsync(SqliteConnection conn)
@@ -44,7 +51,10 @@ public class DatabaseInitialiser
         using var check = conn.CreateCommand();
         check.CommandText = "SELECT name FROM sqlite_master WHERE type='table' AND name='schema_version'";
         var exists = await check.ExecuteScalarAsync() is not null;
-        if (!exists) return 0;
+        if (!exists)
+        {
+            return 0;
+        }
 
         using var read = conn.CreateCommand();
         read.CommandText = "SELECT version FROM schema_version LIMIT 1";

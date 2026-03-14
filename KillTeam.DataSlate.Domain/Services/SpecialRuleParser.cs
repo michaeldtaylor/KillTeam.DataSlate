@@ -7,7 +7,9 @@ public static class SpecialRuleParser
     public static List<WeaponSpecialRule> Parse(string raw)
     {
         if (string.IsNullOrWhiteSpace(raw))
+        {
             return [];
+        }
 
         var results = new List<WeaponSpecialRule>();
         var tokens = raw.Split([',', ';'], StringSplitOptions.RemoveEmptyEntries);
@@ -30,11 +32,15 @@ public static class SpecialRuleParser
 
         // Special cases
         if (token.Equals("Heavy (Dash only)", StringComparison.OrdinalIgnoreCase))
+        {
             return new WeaponSpecialRule(SpecialRuleKind.HeavyDashOnly, null, token);
+        }
 
         if (token.StartsWith("D.", StringComparison.OrdinalIgnoreCase) ||
             token.StartsWith("D ", StringComparison.OrdinalIgnoreCase))
+        {
             return new WeaponSpecialRule(SpecialRuleKind.DDevastating, param, token);
+        }
 
         if (token.Equals("PiercingCrits", StringComparison.OrdinalIgnoreCase) ||
             token.Equals("Piercing Crits", StringComparison.OrdinalIgnoreCase))
@@ -46,7 +52,9 @@ public static class SpecialRuleParser
 
         // Try direct enum parse
         if (Enum.TryParse<SpecialRuleKind>(name, ignoreCase: true, out var kind))
+        {
             return new WeaponSpecialRule(kind, param, token);
+        }
 
         return new WeaponSpecialRule(SpecialRuleKind.Unknown, null, token);
     }

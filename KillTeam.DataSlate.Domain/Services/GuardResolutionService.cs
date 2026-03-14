@@ -15,7 +15,9 @@ public class GuardResolutionService
     {
         var list = states.ToList();
         foreach (var s in list)
+        {
             s.IsOnGuard = false;
+        }
         return list;
     }
 }

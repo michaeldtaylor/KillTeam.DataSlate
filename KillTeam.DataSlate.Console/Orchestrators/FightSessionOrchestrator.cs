@@ -197,7 +197,10 @@ public class FightSessionOrchestrator(
             bool useBrutal = brutalWeapon && activeOwner == DieOwner.Attacker;
             var actions = fightResolutionService.GetAvailableActions(activePool, opponentPool, useBrutal);
 
-            if (actions.Count == 0) break;
+            if (actions.Count == 0)
+            {
+                break;
+            }
 
             // Show action menu
             var actionChoice = console.Prompt(
@@ -251,7 +254,9 @@ public class FightSessionOrchestrator(
             var nextOwner = activeOwner == DieOwner.Attacker ? DieOwner.Defender : DieOwner.Attacker;
             bool nextHasDice = nextOwner == DieOwner.Attacker ? atkPool.Remaining.Count > 0 : defPool.Remaining.Count > 0;
             if (nextHasDice)
+            {
                 currentOwner = nextOwner;
+            }
         }
 
         // 10. Apply final wound counts
@@ -348,7 +353,10 @@ public class FightSessionOrchestrator(
 
     private async Task<int[]> RollOrEnterDiceAsync(int count, string label)
     {
-        if (count == 0) return [];
+        if (count == 0)
+        {
+            return [];
+        }
 
         var choice = console.Prompt(
             new SelectionPrompt<string>()
@@ -373,11 +381,21 @@ public class FightSessionOrchestrator(
             foreach (var p in parts)
             {
                 if (int.TryParse(p, out int v) && v is >= 1 and <= 6)
+                {
                     values.Add(v);
-                else { valid = false; break; }
+                }
+                else
+                {
+                    valid = false;
+                    break;
+                }
             }
+
             if (valid && values.Count > 0)
+            {
                 return values.ToArray();
+            }
+
             console.MarkupLine("[red]Invalid input. Enter integers 1-6 separated by spaces or commas.[/]");
         }
     }

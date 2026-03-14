@@ -50,13 +50,19 @@ public class KillTeamJsonImporter
         }
 
         if (killTeam is null)
+        {
             throw new KillTeamValidationException("Empty or null JSON.");
+        }
 
         if (string.IsNullOrWhiteSpace(killTeam.Name))
+        {
             throw new KillTeamValidationException("Missing required field: 'name'.");
+        }
 
         if (killTeam.Operatives is null || killTeam.Operatives.Count == 0)
+        {
             throw new KillTeamValidationException("Missing required field: 'operatives' (empty or absent).");
+        }
 
         var team = new KillTeam.DataSlate.Domain.Models.KillTeam
         {
@@ -71,10 +77,14 @@ public class KillTeamJsonImporter
             var opPrefix = $"operatives[{opIdx}]";
 
             if (string.IsNullOrWhiteSpace(jo.Name))
+            {
                 throw new KillTeamValidationException($"Missing required field: '{opPrefix}.name'.");
+            }
 
             if (jo.Stats is null)
+            {
                 throw new KillTeamValidationException($"Missing required field: '{opPrefix}.stats'.");
+            }
 
             ValidateStat(jo.Stats.Move, $"{opPrefix}.stats.move");
             ValidateStat(jo.Stats.Apl, $"{opPrefix}.stats.apl");
@@ -109,15 +119,29 @@ public class KillTeamJsonImporter
                     var wPrefix = $"{opPrefix}.weapons[{wIdx}]";
 
                     if (string.IsNullOrWhiteSpace(jw.Name))
+                    {
                         throw new KillTeamValidationException($"Missing required field: '{wPrefix}.name'.");
+                    }
+
                     if (string.IsNullOrWhiteSpace(jw.Type))
+                    {
                         throw new KillTeamValidationException($"Missing required field: '{wPrefix}.type'.");
+                    }
+
                     if (jw.Atk is null)
+                    {
                         throw new KillTeamValidationException($"Missing required field: '{wPrefix}.atk'.");
+                    }
+
                     if (string.IsNullOrWhiteSpace(jw.Hit))
+                    {
                         throw new KillTeamValidationException($"Missing required field: '{wPrefix}.hit'.");
+                    }
+
                     if (string.IsNullOrWhiteSpace(jw.Dmg))
+                    {
                         throw new KillTeamValidationException($"Missing required field: '{wPrefix}.dmg'.");
+                    }
 
                     var (normalDmg, critDmg) = ParseDamage(jw.Dmg, wPrefix);
                     if (!Enum.TryParse<WeaponType>(jw.Type, ignoreCase: true, out var wt))
@@ -147,7 +171,9 @@ public class KillTeamJsonImporter
     private static void ValidateStat(object? value, string fieldPath)
     {
         if (value is null)
+        {
             throw new KillTeamValidationException($"Missing required field: '{fieldPath}'.");
+        }
     }
 
     private static int ParseStat(string raw)

@@ -44,7 +44,9 @@ public class PlayerDeleteCommand(IPlayerRepository players, IConfiguration confi
         }
 
         if (!AnsiConsole.Confirm($"Delete player '{name}'?"))
+        {
             return 0;
+        }
 
         await players.DeleteAsync(player.Id);
         AnsiConsole.MarkupLine($"[green]Player '{Markup.Escape(name)}' deleted.[/]");

@@ -17,8 +17,16 @@ public class FightResolutionService
 {
     public DieResult CalculateDie(int roll, int hitThreshold)
     {
-        if (roll == 6) return DieResult.Crit;
-        if (roll >= hitThreshold) return DieResult.Hit;
+        if (roll == 6)
+        {
+            return DieResult.Crit;
+        }
+
+        if (roll >= hitThreshold)
+        {
+            return DieResult.Hit;
+        }
+
         return DieResult.Miss;
     }
 
@@ -29,7 +37,9 @@ public class FightResolutionService
         {
             var result = CalculateDie(rolls[i], hitThreshold);
             if (result != DieResult.Miss)
+            {
                 dice.Add(new FightDie(i, rolls[i], result));
+            }
         }
         return new FightDicePool(owner, dice);
     }
@@ -83,7 +93,9 @@ public class FightResolutionService
                             && !brutalWeapon;
 
                     if (canBlock)
+                    {
                         actions.Add(new FightAction(FightActionType.Block, activeDie, targetDie));
+                    }
                 }
             }
         }
