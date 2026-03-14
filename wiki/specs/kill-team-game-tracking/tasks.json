@@ -1,0 +1,317 @@
+[
+  {
+    "id": "T-001",
+    "story": "US-006",
+    "title": "Fix Program.cs entry point and wire ServiceCollection",
+    "description": "In KillTeam.DataSlate.Console/Program.cs, remove the current `await host.RunAsync()` call and the IHostedService wiring entirely. Replace with: build a ServiceCollection, register all services (DatabaseInitialiser, repositories, etc.), call `serviceCollection.BuildServiceProvider()`, pass the ServiceProvider to `MyTypeRegistrar`, construct a `CommandApp` with that registrar, and call `app.Run(args)` so the process exits after the command completes. Also remove BondNo and Password fields from DataSlateOptions and appsettings.json; replace with `DatabasePath` (string, default \"./data/killteam.db\") and `RosterFolder` (string, default \"./rosters/\") under the `DataSlate` config section. This task must be completed first as all other tasks depend on a working entry point.",
+    "workstream": "backend",
+    "depends_on": [],
+    "status": "pending"
+  },
+  {
+    "id": "T-002",
+    "story": "US-006",
+    "title": "Define all repository interfaces in Domain project",
+    "description": "In KillTeam.DataSlate.Domain, create the following repository interfaces (each in its own file under a Repositories/ subfolder):\n- `IPlayerRepository`: `Task AddAsync(Player player)`, `Task<IEnumerable<Player>> GetAllAsync()`, `Task DeleteAsync(Guid id)`, `Task<Player?> FindByNameAsync(string name)`\n- `IKillTeamRepository`: `Task UpsertAsync(KillTeam team)`, `Task<IEnumerable<KillTeam>> GetAllAsync()`, `Task<KillTeam?> FindByNameAsync(string name)`\n- `IGameRepository`: `Task<Game> CreateAsync(Game game)`, `Task<Game?> GetByIdAsync(Guid id)`, `Task UpdateStatusAsync(Guid gameId, GameStatus status, Guid? winnerTeamId)`, `Task UpdateCpAsync(Guid gameId, int cpTeamA, int cpTeamB)`\n- `IGameOperativeStateRepository`: `Task<IEnumerable<GameOperativeState>> GetByGameAsync(Guid gameId)`, `Task UpdateWoundsAsync(Guid id, int currentWounds)`, `Task UpdateOrderAsync(Guid id, Order order)`, `Task UpdateGuardAsync(Guid id, bool isOnGuard)`, `Task SetAplModifierAsync(Guid id, int aplModifier)`\n- `IActivationRepository`: `Task<Activation> CreateAsync(Activation activation)`, `Task<IEnumerable<Activation>> GetByTurningPointAsync(Guid turningPointId)`, `Task UpdateNarrativeAsync(Guid id, string? note)`\n- `ITurningPointRepository`: `Task<TurningPoint> CreateAsync(TurningPoint tp)`, `Task<TurningPoint?> GetCurrentAsync(Guid gameId)`, `Task CompleteStrategyPhaseAsync(Guid id)`, `Task<bool> IsStrategyPhaseCompleteAsync(Guid id)`\n- `IPloyRepository`: `Task RecordPloyUseAsync(PloyUse ploy)`, `Task<IEnumerable<PloyUse>> GetByTurningPointAsync(Guid turningPointId)`\n- `IBlastTargetRepository`: `Task CreateAsync(BlastTarget target)`, `Task<IEnumerable<BlastTarget>> GetByActionIdAsync(Guid actionId)`\n- `IActionRepository`: `Task<Domain.Models.Action> CreateAsync(Domain.Models.Action action)`, `Task UpdateNarrativeAsync(Guid id, string? note)`\nAlso define all domain model classes (Player, KillTeam, Operative, Weapon, WeaponSpecialRule, Game, TurningPoint, Activation, Action, GameOperativeState, PloyUse, BlastTarget) in KillTeam.DataSlate.Domain/Models/ with all fields from the spec domain model. Include enums: GameStatus (InProgress, Completed), Order (Engage, Conceal), ActionType (Reposition, Dash, FallBack, Charge, Shoot, Fight, Guard, Other), SpecialRuleKind (Accurate, Balanced, Blast, Brutal, Ceaseless, Devastating, DDevastating, Heavy, HeavyDashOnly, Hot, Lethal, Limited, Piercing, PiercingCrits, Punishing, Range, Relentless, Rending, Saturate, Seek, SeekLight, Severe, Shock, Silent, Stun, Torrent, Unknown).",
+    "workstream": "backend",
+    "depends_on": ["T-001"],
+    "status": "pending"
+  },
+  {
+    "id": "T-003",
+    "story": "US-006",
+    "title": "Implement SQLite schema DDL and DatabaseInitialiser",
+    "description": "In KillTeam.DataSlate.Console, implement `DatabaseInitialiser` (in Infrastructure/DatabaseInitialiser.cs). On startup it must: open (or create) the SQLite file at the path from `DataSlate:DatabasePath`, run `PRAGMA foreign_keys = ON`, create a `schema_version` table if it does not exist, then apply any pending migration SQL scripts embedded as resources. Migration 001 creates: `players` (id TEXT PK, name TEXT UNIQUE COLLATE NOCASE, created_at TEXT), `kill_teams` (id TEXT PK, name TEXT UNIQUE COLLATE NOCASE, faction TEXT), `operatives` (id TEXT PK, kill_team_id TEXT FK, name TEXT, operative_type TEXT, move INT, apl INT, wounds INT, save INT, equipment TEXT), `weapons` (id TEXT PK, operative_id TEXT FK, name TEXT, type TEXT, atk INT, hit INT, normal_dmg INT, critical_dmg INT, special_rules TEXT), `games` (id TEXT PK, played_at TEXT, mission_name TEXT, team_a_id TEXT FK, team_b_id TEXT FK, player_a_id TEXT FK, player_b_id TEXT FK, status TEXT, winner_team_id TEXT, vp_team_a INT, vp_team_b INT, cp_team_a INT, cp_team_b INT), `game_operative_states` (id TEXT PK, game_id TEXT FK, operative_id TEXT FK, current_wounds INT, order TEXT, is_ready INT, is_on_guard INT, is_incapacitated INT, has_used_counteract INT, apl_modifier INT), `turning_points` (id TEXT PK, game_id TEXT FK, number INT, team_with_initiative_id TEXT, cp_team_a INT, cp_team_b INT, is_strategy_phase_complete INT), `activations` (id TEXT PK, turning_point_id TEXT FK, sequence_number INT, operative_id TEXT FK, team_id TEXT FK, order_selected TEXT, is_counteract INT, is_guard_interrupt INT, narrative_note TEXT), `actions` (id TEXT PK, activation_id TEXT FK, type TEXT, ap_cost INT, target_operative_id TEXT, weapon_id TEXT, attacker_dice TEXT, defender_dice TEXT, target_in_cover INT, is_obscured INT, normal_hits INT, critical_hits INT, blocks INT, normal_damage_dealt INT, critical_damage_dealt INT, caused_incapacitation INT, self_damage_dealt INT, stun_applied INT, narrative_note TEXT). Migration 002 creates `ploy_uses` (id TEXT PK, turning_point_id TEXT FK, team_id TEXT FK, ploy_name TEXT, cp_cost INT). Migration 003 creates `action_blast_targets` (id TEXT PK, action_id TEXT FK, target_operative_id TEXT, defender_dice TEXT, normal_hits INT, critical_hits INT, blocks INT, normal_damage_dealt INT, critical_damage_dealt INT, caused_incapacitation INT). See spike-schema-ddl.md for full DDL. Register `DatabaseInitialiser` as a hosted startup service (called once from Program.cs before `app.Run(args)`).",
+    "workstream": "backend",
+    "depends_on": ["T-002"],
+    "status": "pending"
+  },
+  {
+    "id": "T-004",
+    "story": "US-006",
+    "title": "Implement SQLite repository: Players and KillTeams",
+    "description": "In KillTeam.DataSlate.Console/Infrastructure/Repositories/, implement:\n- `SqlitePlayerRepository : IPlayerRepository` — AddAsync inserts into `players`; GetAllAsync returns all rows; DeleteAsync deletes by id; FindByNameAsync does case-insensitive LIKE lookup (or relies on COLLATE NOCASE). Use `SqliteConnection` directly (no ORM). Open connection via injected connection factory or `IDbConnectionFactory`. Enable `PRAGMA foreign_keys = ON` on each opened connection.\n- `SqliteKillTeamRepository : IKillTeamRepository` — UpsertAsync does an INSERT OR REPLACE by name (COLLATE NOCASE); GetAllAsync returns all rows; FindByNameAsync returns first match case-insensitively. Operatives and weapons are NOT handled here (see T-005).\nRegister both via DI in Program.cs `ServiceCollection`.",
+    "workstream": "backend",
+    "depends_on": ["T-003"],
+    "status": "pending"
+  },
+  {
+    "id": "T-005",
+    "story": "US-006",
+    "title": "Implement SQLite repositories: Operatives, Weapons, and Actions",
+    "description": "In KillTeam.DataSlate.Console/Infrastructure/Repositories/, implement:\n- `SqliteOperativeRepository` with `UpsertByTeamAsync(IEnumerable<Operative> operatives, Guid teamId)` — deletes all existing operatives for the team, then bulk-inserts new ones.\n- `SqliteWeaponRepository` with `UpsertByOperativeAsync(IEnumerable<Weapon> weapons, Guid operativeId)` — same pattern.\n- `SqliteActionRepository : IActionRepository` — CreateAsync inserts a new action row; UpdateNarrativeAsync updates narrative_note by id. AttackerDice and DefenderDice serialised as JSON arrays (e.g., `[6,4,2,1]`) using `System.Text.Json.JsonSerializer`.\nRegister all via DI in Program.cs.",
+    "workstream": "backend",
+    "depends_on": ["T-004"],
+    "status": "pending"
+  },
+  {
+    "id": "T-006",
+    "story": "US-006",
+    "title": "Implement SQLite repositories: Games, TurningPoints, Activations",
+    "description": "In KillTeam.DataSlate.Console/Infrastructure/Repositories/, implement:\n- `SqliteGameRepository : IGameRepository` — CreateAsync, GetByIdAsync (join to players + teams), UpdateStatusAsync (sets status + winner_team_id), UpdateCpAsync (updates cp_team_a + cp_team_b).\n- `SqliteTurningPointRepository : ITurningPointRepository` — CreateAsync, GetCurrentAsync (latest incomplete TP for game), CompleteStrategyPhaseAsync (sets is_strategy_phase_complete=1), IsStrategyPhaseCompleteAsync.\n- `SqliteActivationRepository : IActivationRepository` — CreateAsync, GetByTurningPointAsync (returns list ordered by sequence_number), UpdateNarrativeAsync.\nRegister all via DI in Program.cs.",
+    "workstream": "backend",
+    "depends_on": ["T-005"],
+    "status": "pending"
+  },
+  {
+    "id": "T-007",
+    "story": "US-006",
+    "title": "Implement SQLite repositories: GameOperativeState, PloyUses, BlastTargets",
+    "description": "In KillTeam.DataSlate.Console/Infrastructure/Repositories/, implement:\n- `SqliteGameOperativeStateRepository : IGameOperativeStateRepository` — GetByGameAsync, UpdateWoundsAsync, UpdateOrderAsync, UpdateGuardAsync (sets is_on_guard), SetAplModifierAsync.\n- `SqlitePloyRepository : IPloyRepository` — RecordPloyUseAsync (insert into ploy_uses), GetByTurningPointAsync.\n- `SqliteBlastTargetRepository : IBlastTargetRepository` — CreateAsync (insert into action_blast_targets), GetByActionIdAsync.\nAlso create a `IDbConnectionFactory` interface in Domain and a `SqliteConnectionFactory` implementation in Console that creates a `SqliteConnection` from the configured connection string (from `DataSlate:DatabasePath`), opens it, and runs `PRAGMA foreign_keys = ON`. Register all via DI.",
+    "workstream": "backend",
+    "depends_on": ["T-006"],
+    "status": "pending"
+  },
+  {
+    "id": "T-008",
+    "story": "US-006",
+    "title": "Create TestDbBuilder helper and schema/CRUD unit tests",
+    "description": "In KillTeam.DataSlate.Tests, create `TestDbBuilder` (in Helpers/TestDbBuilder.cs). It opens a `SqliteConnection(\"Data Source=:memory:\")`, applies all 3 migration DDL scripts (same embedded scripts used by DatabaseInitialiser), and exposes fluent methods:\n- `WithPlayer(Guid id, string name)`\n- `WithKillTeam(Guid id, string name, string faction)`\n- `WithOperative(Guid id, Guid teamId, string name, ...stats...)`\n- `WithWeapon(Guid id, Guid operativeId, ...)`\n- `WithGame(Guid id, Guid teamAId, Guid teamBId, Guid playerAId, Guid playerBId)`\n- `WithTurningPoint(Guid id, Guid gameId, int number, bool strategyPhaseComplete = false)` — 4-param signature as per spec\n- `Build()` returning the open `SqliteConnection`\nWrite xUnit tests in `KillTeam.DataSlate.Tests/RepositoryTests/`:\n- `SchemaTests.Schema_CreatesAllTables_OnFirstRun` — verifies all 10 tables exist after DatabaseInitialiser runs on :memory: DB\n- `PlayerRepositoryTests.AddAsync_ThenGetAllAsync_ReturnsSavedPlayer`\n- `KillTeamRepositoryTests.UpsertAsync_SameName_UpdatesExistingRecord`\n- `GameRepositoryTests.CreateAsync_ThenGetByIdAsync_ReturnsGame`\n- `GameOperativeStateRepositoryTests.UpdateWoundsAsync_UpdatesCurrentWounds`\n- `ActivationRepositoryTests.CreateAsync_ThenGetByTurningPoint_ReturnsActivation`\nAll tests use FluentAssertions.",
+    "workstream": "backend",
+    "depends_on": ["T-007"],
+    "status": "pending"
+  },
+  {
+    "id": "T-009",
+    "story": "US-007",
+    "title": "Implement player add / list / delete commands",
+    "description": "In KillTeam.DataSlate.Console/Commands/, implement Spectre.Console.Cli commands:\n- `PlayerAddCommand` — takes `<name>` as argument; trims whitespace; calls `IPlayerRepository.FindByNameAsync` to check for duplicates (case-insensitive); if duplicate, prints `\"Player 'Michael' already exists.\"`; otherwise calls `AddAsync` and prints `\"Player 'Michael' created.\"`\n- `PlayerListCommand` — calls `IPlayerRepository.GetAllAsync()`; for each player queries `SELECT COUNT(*) FROM games WHERE player_a_id=@id OR player_b_id=@id` for games played and `SELECT COUNT(*) FROM games WHERE (player_a_id=@id AND winner_team_id=team_a_id) OR (player_b_id=@id AND winner_team_id=team_b_id)` for wins; renders a Spectre.Console table with columns: Name, Games Played, Wins, Win %; prints `\"No players registered yet.\"` if empty\n- `PlayerDeleteCommand` — takes `<name>` as argument; looks up player by name; queries `SELECT COUNT(*) FROM games WHERE player_a_id=@id OR player_b_id=@id`; if count > 0, prints `\"Cannot delete 'Michael' — they have N recorded games.\"`; otherwise prompts for confirmation (Y/N), then calls `IPlayerRepository.DeleteAsync`\nWire these as sub-commands of a `player` command group in Program.cs using Spectre.Console.Cli branching. The game-history guard lives in `PlayerDeleteCommand`, NOT in the repository.",
+    "workstream": "backend",
+    "depends_on": ["T-007"],
+    "status": "pending"
+  },
+  {
+    "id": "T-010",
+    "story": "US-007",
+    "title": "Unit tests for player commands",
+    "description": "In KillTeam.DataSlate.Tests/CommandTests/, write xUnit unit tests using FluentAssertions and in-memory SQLite (via TestDbBuilder):\n- `PlayerTests.AddAsync_NewName_CreatesPlayer` — calls PlayerAddCommand with a new name, asserts player is in DB\n- `PlayerTests.AddAsync_DuplicateName_ReturnsError` — adds same name twice, asserts second call produces duplicate error message\n- `PlayerTests.GetAllAsync_ReturnsAllPlayers` — seeds 2 players, asserts both returned\n- `PlayerTests.DeleteAsync_NoGameHistory_DeletesPlayer` — adds player with no games, deletes, asserts gone\n- `PlayerTests.DeleteAsync_WithGameHistory_BlocksDeletion` — seeds player with a game, asserts deletion blocked with correct error message\nTest method naming follows `MethodName_Scenario_ExpectedResult` convention.",
+    "workstream": "backend",
+    "depends_on": ["T-009"],
+    "status": "pending"
+  },
+  {
+    "id": "T-011",
+    "story": "US-001",
+    "title": "Implement RosterJsonImporter and weapon/stat parsing",
+    "description": "In KillTeam.DataSlate.Domain/Services/ (or Console/Services/), implement `RosterJsonImporter`. It must:\n- Deserialise the JSON roster file using `System.Text.Json` with `[JsonPropertyName]` attributes for camelCase fields (name, faction, operatives[].name, operativeType, stats.move/apl/wounds/save, weapons[].name/type/atk/hit/dmg/specialRules, equipment[])\n- Validate required fields: team name, all operative names, all stats (move, apl, wounds, save), all weapon fields (name, type, atk, hit, dmg). Throw a `RosterValidationException` listing missing fields.\n- Parse weapon hit threshold: strip `+`, parse int (e.g. `\"3+\"` → 3)\n- Parse weapon damage: split on `/`, parse both ints (e.g. `\"3/4\"` → NormalDmg=3, CriticalDmg=4)\n- Parse save: strip `+`, parse int\n- Ignore any `playerName` field in JSON\n- Return a fully populated `KillTeam` domain object (with nested `Operative` and `Weapon` objects, new Guid IDs assigned)\nCreate a `SpecialRuleParser` class in Domain/Services/ that parses a raw `specialRules` string (comma/semicolon-separated tokens) into `List<WeaponSpecialRule>`. Each token maps to a `SpecialRuleKind` enum value and optional int `Param`. Unrecognised tokens → `SpecialRuleKind.Unknown`. Called at use-time, not stored.",
+    "workstream": "backend",
+    "depends_on": ["T-002"],
+    "status": "pending"
+  },
+  {
+    "id": "T-012",
+    "story": "US-001",
+    "title": "Implement import-roster command (single file and folder scan)",
+    "description": "In KillTeam.DataSlate.Console/Commands/, implement `ImportRosterCommand`. It accepts an optional `<filepath>` argument.\n- If filepath is provided: parse and import that single JSON file using `RosterJsonImporter`; on success call `IKillTeamRepository.UpsertAsync` (upsert by name, COLLATE NOCASE) then `IOperativeRepository.UpsertByTeamAsync` (delete + re-insert); print `\"Imported 'Angels of Death' — 6 operatives, 14 weapons\"`; on parse/validation error print descriptive message and exit with non-zero code.\n- If no filepath: read `DataSlate:RosterFolder` from config (default `./rosters/`); call `Directory.GetFiles(rosterFolder, \"*.json\")`; wrap each file's parse+import in try/catch; on error print `\"Warning: skipped '<file>' — <reason>\"` but continue; print a summary line per successful file at the end.\n- Idempotency: re-importing a team by the same name (case-insensitive) updates rather than duplicates (the upsert logic handles this).\nWire as `import-roster` top-level command in Program.cs.",
+    "workstream": "backend",
+    "depends_on": ["T-011", "T-005"],
+    "status": "pending"
+  },
+  {
+    "id": "T-013",
+    "story": "US-001",
+    "title": "Unit tests for roster import",
+    "description": "In KillTeam.DataSlate.Tests/ImportTests/, write xUnit unit tests using FluentAssertions and in-memory SQLite (via TestDbBuilder):\n- `ImportRosterTests.ValidImport_CreatesKillTeamWithOperativesAndWeapons` — import a valid roster JSON, assert team, operative count, and weapon count are persisted\n- `ImportRosterTests.ReImport_SameTeamName_UpdatesExistingRecord` — import the same JSON twice, assert no duplicate team record\n- `ImportRosterTests.MissingField_ThrowsValidationError` — JSON missing operative stats, asserts `RosterValidationException` with field name\n- `ImportRosterTests.InvalidJson_ReturnsError` — malformed JSON string, asserts error returned (not exception propagated to caller)\n- `ImportRosterTests.FolderScan_MixedFiles_ImportsValidSkipsInvalid` — folder with 1 valid + 1 malformed file, asserts 1 imported + 1 warning\n- `SpecialRuleParserTests.Parse_HeavyDashOnly_ReturnsCorrectKind` — `\"Heavy (Dash only)\"` → SpecialRuleKind.HeavyDashOnly\n- `SpecialRuleParserTests.Parse_Piercing1_ReturnsKindWithParam1` — `\"Piercing 1\"` → Kind=Piercing, Param=1",
+    "workstream": "backend",
+    "depends_on": ["T-012"],
+    "status": "pending"
+  },
+  {
+    "id": "T-014",
+    "story": "US-002",
+    "title": "Implement new-game command: setup game state",
+    "description": "In KillTeam.DataSlate.Console/Commands/, implement `NewGameCommand`. It must:\n1. Load all registered players via `IPlayerRepository.GetAllAsync()`; if < 2, print `\"No players registered — run \\`player add <name>\\` first\"` and exit\n2. Load all imported kill teams via `IKillTeamRepository.GetAllAsync()`; if < 2, print `\"Not enough rosters imported — run \\`import-roster\\` first\"` and exit\n3. Use Spectre.Console `SelectionPrompt` to prompt: Team A (from team list), Player for Team A (from player list), Team B (from team list), Player for Team B (from player list)\n4. Use `TextPrompt<string>` for optional mission name (allow empty)\n5. Create a `Game` domain object: PlayedAt = DateTime.UtcNow, Status = InProgress, CpTeamA = 2, CpTeamB = 2; persist via `IGameRepository.CreateAsync`\n6. Create `GameOperativeState` records for every operative in both teams: CurrentWounds = operative.Wounds (full), Order = Conceal, IsReady = true, IsOnGuard = false, IsIncapacitated = false, AplModifier = 0, HasUsedCounteractThisTurningPoint = false; persist all via `IGameOperativeStateRepository`\n7. Print summary: `\"Game #<id>: <PlayerA> (Angels of Death) vs <PlayerB> (Plague Marines) — started\"` followed by the game ID\nWire as `new-game` top-level command in Program.cs.",
+    "workstream": "backend",
+    "depends_on": ["T-006", "T-007", "T-009"],
+    "status": "pending"
+  },
+  {
+    "id": "T-015",
+    "story": "US-002",
+    "title": "Unit tests for new-game command",
+    "description": "In KillTeam.DataSlate.Tests/CommandTests/, write xUnit unit tests using FluentAssertions and in-memory SQLite (via TestDbBuilder):\n- `NewGameTests.HappyPath_CreatesGameWithOperativeStates` — seeds 2 players and 2 teams (each with 2 operatives), calls NewGameCommand logic, asserts: Game row created with Status=InProgress, CpTeamA=2, CpTeamB=2, 4 GameOperativeState rows created with CurrentWounds=full, Order=Conceal, IsReady=true\n- `NewGameTests.SingleRosterImported_ReturnsError` — seeds only 1 team, asserts error message\n- `NewGameTests.NoPlayersRegistered_ReturnsError` — no players in DB, asserts `\"No players registered\"` message",
+    "workstream": "backend",
+    "depends_on": ["T-014"],
+    "status": "pending"
+  },
+  {
+    "id": "T-016",
+    "story": "US-003",
+    "title": "Implement CombatResolutionService (Shoot)",
+    "description": "In KillTeam.DataSlate.Domain/Services/, implement `CombatResolutionService` with method `ResolveShoot(ShootContext ctx) : ShootResult`.\n`ShootContext` record: `int[] AttackDice`, `int[] DefenceDice`, `bool InCover`, `bool IsObscured`, `int HitThreshold`, `int SaveThreshold`, `int NormalDmg`, `int CritDmg`, `List<WeaponSpecialRule> WeaponRules`, `int AttackerFightAssistBonus` (0-2).\n`ShootResult` record: `int UnblockedCrits`, `int UnblockedNormals`, `int TotalDamage`, `int AttackerRawCritHits`, `bool StunApplied`, `int SelfDamageDealt`.\nResolution algorithm:\n1. Apply Accurate x: add x bonus normal hits to attack pool before rolling\n2. Classify attack dice: 6 = crit; >= (HitThreshold - FightAssistBonus) = normal hit; else miss. Apply Lethal x: roll >= lethalThreshold counts as crit. Discard misses. Apply Rending, Punishing, Severe dice modifications.\n3. If IsObscured: convert all crits to normal hits, discard 1 normal hit; record AttackerRawCritHits before this step (for PiercingCrits)\n4. Apply Piercing x: remove x defence dice from the pool before rolling (minimum 0)\n5. Classify defence dice: 6 = crit save; >= SaveThreshold = normal save; else miss. If InCover: unconditionally add 1 extra normal save (before rolling remaining dice). Apply Saturate/Seek/SeekLight (negate cover / negate terrain) per rules.\n6. Apply Piercing Crits x: if AttackerRawCritHits >= 1, remove x defence saves\n7. Blocking algorithm (app allocates defender saves optimally): (a) each crit save cancels 1 crit attack; (b) 2 normal saves cancel 1 crit attack (if crits remain); (c) each remaining normal save cancels 1 normal attack\n8. Apply Devastating x: crits deal x damage instead of weapon CritDmg\n9. Calculate TotalDamage = unblockedCrits * critDmg + unblockedNormals * normalDmg\n10. Apply Hot: roll 1D6; if result < HitThreshold, SelfDamageDealt = 2 * result\n11. Apply Stun: if UnblockedCrits >= 1, StunApplied = true\nThis is pure domain logic with no side effects. See also spike-weapon-rules.md and spike-shoot-ui.md.",
+    "workstream": "backend",
+    "depends_on": ["T-002"],
+    "status": "pending"
+  },
+  {
+    "id": "T-017",
+    "story": "US-003",
+    "title": "Unit tests for CombatResolutionService (Shoot)",
+    "description": "In KillTeam.DataSlate.Tests/DomainTests/, write the following xUnit tests in `CombatResolutionServiceTests` using FluentAssertions:\n- `ResolveShoot_TwoNormalSavesBlockOneCrit` — attack: [6,5,4], defence: [5,4], inCover:false, hit:3, save:3 → UnblockedCrits=0, UnblockedNormals=2, TotalDamage=6\n- `ResolveShoot_OneCritSaveBlocksCrit` — attack: [6,5], defence: [6], inCover:false → UnblockedCrits=0, UnblockedNormals=1, TotalDamage=3\n- `ResolveShoot_OneCritSaveBlocksNormal_WhenNoCritsRemain` — attack: [5,4], defence: [6] → UnblockedNormals=1, TotalDamage=3\n- `ResolveShoot_InCover_UnconditionallyRetains1NormalSave` — attack: [5], defence: [1], inCover:true → TotalDamage=0\n- `ResolveShoot_SingleNormalSaveBlocksNormal_NotCrit` — attack: [6,5], defence: [4] → UnblockedCrits=1, UnblockedNormals=0, TotalDamage=4\nPlus weapon rule tests in `WeaponSpecialRuleTests`:\n- `CalculateDie_Lethal5_Roll5ReturnsCrit`\n- `ResolveShoot_Piercing1_RemovesOneDefenceDie`\n- `ResolveShoot_StunWeapon_AppliesAplModifierOnCritRetained`\n- `ApplyRending_WithCritPresent_ConvertsOneHitToCrit`\n- `ApplyAccurate_Accurate1_AddsOneBonusNormalHit`\n(These correspond exactly to the test stubs in the spec.)",
+    "workstream": "backend",
+    "depends_on": ["T-016"],
+    "status": "pending"
+  },
+  {
+    "id": "T-018",
+    "story": "US-003",
+    "title": "Implement FightResolutionService",
+    "description": "In KillTeam.DataSlate.Domain/Services/, implement `FightResolutionService` with the following:\n- `DieResult` enum: Crit, Hit, Miss\n- `DieOwner` enum: Attacker, Defender\n- `FightActionType` enum: Strike, Block\n- `FightDie` record: `int Id`, `int RolledValue`, `DieResult Result`\n- `FightDicePool` record: `DieOwner Owner`, `IReadOnlyList<FightDie> Remaining`\n- `DieResult CalculateDie(int roll, int hitThreshold)` — 6 = crit; >= hitThreshold = hit; else miss\n- `FightDicePool CalculateDice(int[] rolls, int hitThreshold, DieOwner owner)` — classify all rolls, discard misses, return pool\n- `int ApplyStrike(FightDie die, int normalDmg, int critDmg)` — returns critDmg if Crit else normalDmg\n- `(FightDicePool updatedBlocker, FightDicePool updatedOpponent) ApplySingleBlock(FightDie blockingDie, FightDie targetDie, FightDicePool blockerPool, FightDicePool opponentPool)` — removes both dice from their pools\n- `IReadOnlyList<FightAction> GetAvailableActions(FightDicePool activePool, FightDicePool opponentPool, bool brutalWeapon = false)` — a normal die can Strike any opponent die; a normal die can Block an opponent normal die only (not crits) unless brutalWeapon=true (in which case normal dice CANNOT Block at all); a crit die can Strike any die OR Block any die\n- Fight is only available in the action menu if the activating operative has >= 1 melee weapon\n- If the defender has no melee weapons, skip weapon selection for the defender — only save stat used\nSee spike-fight-ui.md for the full state machine and worked example.",
+    "workstream": "backend",
+    "depends_on": ["T-002"],
+    "status": "pending"
+  },
+  {
+    "id": "T-019",
+    "story": "US-003",
+    "title": "Unit tests for FightResolutionService",
+    "description": "In KillTeam.DataSlate.Tests/DomainTests/, write the following xUnit tests in `FightResolutionServiceTests` using FluentAssertions (matching exactly the test stubs in the spec):\n- `CalculateDie_ReturnsCorrectResult_ForHitThreshold3` — [Theory][InlineData] for rolls 6,4,3,2,1 returning Crit,Hit,Hit,Miss,Miss\n- `CalculateDice_DiscardsMisses_OnlyHitsAndCritsEnterPool` — rolls [6,6,4,3,1] at threshold 3 → pool has 4 dice, 2 crits\n- `ApplyStrike_WithCrit_DealsCritDamage` — crit die, normalDmg=4, critDmg=5 → returns 5\n- `ApplySingleBlock_NormalDie_RemovesOpponentNormal` — as per spec: D1:HIT blocks A3:HIT, A2:CRIT untouched, D1 spent\n- `GetAvailableActions_NormalDie_DoesNotOfferBlockAgainstCrit` — defender has 1 normal, attacker has 1 crit → no Block actions\n- `GetAvailableActions_CritDie_OffersBlockAgainstCritAndNormal` — attacker crit vs defender [crit, normal] → 2 block options\nAlso add weapon rule fight tests from `WeaponSpecialRuleTests`:\n- `GetAvailableActions_BrutalWeapon_NormalDieCannotBlock`\n- `ApplyStrike_Devastating3_CritDeals3Damage`\nAdd Verify.Xunit snapshot test:\n- `FightSessionResultSnapshotTests.FullFightWorkedExample_Snapshot` — scripted 6-turn Grenadier vs Champion example from spike-fight-ui.md",
+    "workstream": "backend",
+    "depends_on": ["T-018"],
+    "status": "pending"
+  },
+  {
+    "id": "T-020",
+    "story": "US-003",
+    "title": "Implement RerollOrchestrator",
+    "description": "In KillTeam.DataSlate.Domain/Services/ (or Console/Services/ since it uses Spectre.Console for prompts), implement `RerollOrchestrator`. It manages in-memory re-roll state using `RollableDie` record: `int Index`, `int Value`, `bool HasBeenRerolled`.\nRe-roll ordering (must follow this sequence):\n1. **Weapon re-rolls** (before CP re-roll):\n   - **Balanced**: prompt attacker to pick exactly 1 die to re-roll (SelectionPrompt); re-roll that die via `System.Random`; mark HasBeenRerolled=true\n   - **Ceaseless**: prompt attacker to choose a face value; all dice matching that value are re-rolled automatically\n   - **Relentless**: show checkbox MultiSelectionPrompt for any/all attack dice; re-roll selected; mark each HasBeenRerolled=true\n2. **CP Re-roll (attacker)**: after weapon re-rolls, if CP >= 1, prompt `\"Spend 1CP to re-roll one attack die? (Y/N)\"`. If yes, show SelectionPrompt of dice NOT already HasBeenRerolled=true; re-roll selected die; deduct 1CP from team via `IGameRepository.UpdateCpAsync`; mark HasBeenRerolled=true.\n3. **CP Re-roll (defender)**: same prompt for defender after defence dice entry.\n- **For Blast/Torrent**: attacker CP re-roll is offered ONCE on the shared attack pool (before the per-target loop); defender CP re-roll is offered ONCE PER TARGET inside the target loop.\n- A die with HasBeenRerolled=true must NEVER appear in any re-roll prompt.\n- Only final `int[]` values are persisted to the action record (not the RollableDie objects).\nSee spike-reroll-mechanics.md.",
+    "workstream": "frontend",
+    "depends_on": ["T-016", "T-018"],
+    "status": "pending"
+  },
+  {
+    "id": "T-021",
+    "story": "US-003",
+    "title": "Implement StrategyPhaseOrchestrator",
+    "description": "In KillTeam.DataSlate.Console/Services/ (or Orchestrators/), implement `StrategyPhaseOrchestrator`. It drives the Strategy Phase for a given game and turning point number:\n1. Prompt `\"Who won initiative?\"` using `SelectionPrompt` listing Player A and Player B names; store `TeamWithInitiativeId` on the TurningPoint via `ITurningPointRepository.CreateAsync`.\n2. Tie re-roll: if player enters 'T' (tie), repeat the prompt.\n3. Calculate and apply CP gains: TP1 → both teams +1CP; TP2-4 → initiative team +1CP, other team +2CP. Update live CP on `games` table via `IGameRepository.UpdateCpAsync`. Snapshot CP to `turning_points.cp_team_a/b` at this point (read-only during Firefight).\n4. Display current CP inline as `[NCP]` — use Spectre.Console markup: >= 3 white, 1-2 yellow, 0 red.\n5. Ploy recording: prompt `\"Record a ploy? (Y/N)\"`. If Y, prompt for team (initiative team or non-initiative), ploy name (free text), CP cost (int). Call `IPloyRepository.RecordPloyUseAsync`; deduct CP via `IGameRepository.UpdateCpAsync`. Repeat until player says N. **Non-initiative player records ploys first, then initiative player**.\n6. Mark strategy phase complete via `ITurningPointRepository.CompleteStrategyPhaseAsync`.\n7. Set `TurningPoint.IsStrategyPhaseComplete = true` so game can resume mid-TP.\nSee spike-strategy-phase.md.",
+    "workstream": "frontend",
+    "depends_on": ["T-006", "T-007"],
+    "status": "pending"
+  },
+  {
+    "id": "T-022",
+    "story": "US-003",
+    "title": "Implement FirefightPhaseOrchestrator: activation loop and operative selection",
+    "description": "In KillTeam.DataSlate.Console/Orchestrators/ (or Services/), implement `FirefightPhaseOrchestrator`. The core activation loop:\n1. Display board state: for each team, show all operatives with name, current wounds / starting wounds, order (Engage/Conceal), Ready/Expended, Injured/Incapacitated status, IsOnGuard flag. Injured = currentWounds < startingWounds/2; display `\"(Injured)\"` inline.\n2. Determine whose turn to activate: initiative team activates first; alternate each activation. When one team's ready operatives are exhausted but the other still has some, continue with the team that has ready operatives.\n3. Prompt the active player: `\"Activate an operative\"` using `SelectionPrompt` listing only ready (non-incapacitated) operatives.\n4. On selection, begin operative activation: prompt for Order (Engage/Conceal) via `SelectionPrompt`; persist order to `GameOperativeState` via `UpdateOrderAsync`.\n5. AP loop: calculate available AP = operative.APL + AplModifier (from GameOperativeState). Build action menu filtering: hide Fight if operative has no melee weapons; show remaining AP in menu. Loop until AP exhausted or player selects `\"End Activation\"`.\n6. After activation ends: mark operative as expended (IsReady=false) in DB; persist `Activation` record via `IActivationRepository.CreateAsync`.\n7. **Counteract**: when all your operatives are expended but opponent has ready operatives, check for eligible counteract operatives: expended + Engage order + HasUsedCounteractThisTurningPoint=false. If any exist, prompt `\"Counteract? (Y/N)\"`. If yes, SelectionPrompt from eligible ops; allow 1AP action (movement capped at 2\" effective move); set `HasUsedCounteractThisTurningPoint=true`; set `Activation.IsCounteract=true`.\n8. End of Turning Point: all operatives expended (no counteract remaining). Reset IsReady=true, HasUsedCounteractThisTurningPoint=false, AplModifier=0 for all non-incapacitated operatives.\n9. Check end-game: after TP4 or all operatives on one side incapacitated → trigger end-game flow (prompt VP, mark Completed, record winner).\nSee spike-firefight-loop.md.",
+    "workstream": "frontend",
+    "depends_on": ["T-021"],
+    "status": "pending"
+  },
+  {
+    "id": "T-023",
+    "story": "US-003",
+    "title": "Implement Shoot action UI flow",
+    "description": "In KillTeam.DataSlate.Console/Orchestrators/ (or Services/), implement `ShootActionHandler` that handles the full Shoot action interactive flow:\n1. `SelectionPrompt` for target — show all visible (non-incapacitated) enemy operatives with wounds/order\n2. `SelectionPrompt` for weapon — show ranged weapons only; if operative is Injured, display Hit threshold+1 next to weapon name; if operative moved this activation and weapon has Heavy (not HeavyDashOnly), mark weapon as unavailable\n3. Cover/obscured prompt: `\"Cover status: (1) No cover  (2) In cover  (3) Obscured\"` — if Obscured: set IsObscured=true on action\n4. Fight Assist prompt: `\"Fight Assist — how many non-engaged, non-incapacitated friendly allies are within 6\\\" of the target?\"` (0-2); subtract from effective HitThreshold (minimum 2)\n5. Dice entry: `\"Roll dice or enter results? (R/E)\"` — if R: `System.Random` generates `weapon.Atk` values in [1,6], displays them; if E: `TextPrompt` for comma-separated ints\n6. Apply weapon re-rolls via `RerollOrchestrator` (Balanced/Ceaseless/Relentless order), then CP re-roll for attacker\n7. Defence dice: if InCover, pre-add 1 normal save; prompt `\"Roll or enter defence dice? (R/E)\"` for remaining dice; apply CP re-roll for defender\n8. Apply Piercing x (remove dice before classification), Saturate/Seek/SeekLight (negate cover types)\n9. Call `CombatResolutionService.ResolveShoot(ctx)` with effective hit threshold (adjusted for Injured + FightAssist)\n10. Display result: hits, blocks, damage; update target `GameOperativeState.CurrentWounds` via `UpdateWoundsAsync`; if wounds <= 0 mark incapacitated\n11. Post-effects: if StunApplied, call `SetAplModifierAsync` on target with -1; if SelfDamageDealt > 0 (Hot), apply self-damage and display warning\n12. Persist `Action` record with all fields (attacker_dice, defender_dice, is_obscured, stun_applied, self_damage_dealt, caused_incapacitation, etc.)\nSee spike-shoot-ui.md.",
+    "workstream": "frontend",
+    "depends_on": ["T-016", "T-020", "T-022"],
+    "status": "pending"
+  },
+  {
+    "id": "T-024",
+    "story": "US-003",
+    "title": "Implement Fight action UI flow",
+    "description": "In KillTeam.DataSlate.Console/Orchestrators/ (or Services/), implement `FightActionHandler` that handles the full Fight action interactive flow:\n1. Show Fight action only if activating operative has >= 1 melee weapon\n2. `SelectionPrompt` for target — show enemies within control range (typically 1\"); inform player if none available\n3. `SelectionPrompt` for attacker melee weapon (from operative's melee weapons); if Injured display Hit+1 inline\n4. If defender has melee weapons: `SelectionPrompt` for defender melee weapon; if no melee weapons: skip this prompt (use save stat only)\n5. Fight Assist prompt (same as Shoot — 0-2 allies within 6\" of target)\n6. Attack dice entry (R/E) for attacker, then weapon re-rolls via `RerollOrchestrator`, then CP re-roll attacker\n7. Defence dice entry (R/E) for defender; if InCover, unconditionally pre-add 1 normal save before rolling; CP re-roll defender\n8. Classify dice via `FightResolutionService.CalculateDice`; display classified pools to both players\n9. **Alternating resolution loop** (attacker acts first):\n   - On each turn: call `FightResolutionService.GetAvailableActions(activePool, opponentPool, brutalWeapon)` — if brutalWeapon=true (Brutal weapon on attacker) normal dice of defender cannot Block\n   - Present `SelectionPrompt`: `\"Strike <die> (deal N damage)\"` or `\"Block <die> → cancel <opponent die>\"`\n   - Apply choice via `ApplyStrike` or `ApplySingleBlock`; apply damage immediately; check if target incapacitated\n   - When one pool is exhausted: remaining player continues Strike-only (no blocks available), still one die per turn\n   - Loop until both pools exhausted OR either operative incapacitated\n10. Apply Shock: if attacker retained crits, discard defender's worst success\n11. Update `GameOperativeState.CurrentWounds` for both operatives (attacker may take damage too)\n12. Mark incapacitated if wounds <= 0; set `CausedIncapacitation=true` on Action\n13. Persist `Action` record; also create an `Activation` for the defender's fight response if applicable\nSee spike-fight-ui.md.",
+    "workstream": "frontend",
+    "depends_on": ["T-018", "T-020", "T-022"],
+    "status": "pending"
+  },
+  {
+    "id": "T-025",
+    "story": "US-003",
+    "title": "Implement Guard action and GuardResolutionService",
+    "description": "In KillTeam.DataSlate.Domain/Services/, implement `GuardResolutionService` with:\n- `IReadOnlyList<GameOperativeState> GetEligibleGuards(IEnumerable<GameOperativeState> allStates, Guid actingTeamId)` — returns non-incapacitated operatives on Engage order with IsOnGuard=true belonging to the OPPOSITE team of the active operative\n- `bool IsGuardStillValid(GameOperativeState guard, Action lastEnemyAction, GameOperativeState guardOperativeState)` — guard is auto-cleared if: enemy enters control range (Charge/Fight action), or guard's order changes, or operative incapacitated; returns false if any clearing condition met\n- `void ClearAllGuards(IEnumerable<GameOperativeState> states)` — sets IsOnGuard=false for all (called at TP start and order change)\nIn `FirefightPhaseOrchestrator`, after every visible enemy action, call `CheckGuardInterrupts`:\n1. Call `GuardResolutionService.GetEligibleGuards`\n2. For each eligible guard: prompt the guard's controlling player `\"<Operative> is on Guard — interrupt? (Shoot/Fight/Skip)?\"`\n3. If chosen: run `ShootActionHandler` or `FightActionHandler` for the guard operative; create `Activation` with `IsGuardInterrupt=true`\n4. After resolving or skipping: call `IsGuardStillValid`; if false, call `UpdateGuardAsync(id, false)` to clear guard\nGuard action itself (during a normal activation): costs 1AP; sets `IsOnGuard=true` via `UpdateGuardAsync`; guard persists until cleared.\nInactive until TP boundary: all guards cleared at start of each new Turning Point via `ClearAllGuards`.\nSee spike-guard-action.md.",
+    "workstream": "frontend",
+    "depends_on": ["T-022", "T-023"],
+    "status": "pending"
+  },
+  {
+    "id": "T-026",
+    "story": "US-003",
+    "title": "Implement Blast/Torrent multi-target flow",
+    "description": "In KillTeam.DataSlate.Console/Orchestrators/ (or Services/), implement `BlastTorrentActionHandler` that handles multi-target Shoot for weapons with Blast x\" or Torrent x\" special rules:\n1. Prompt for primary target normally (via target SelectionPrompt)\n2. Blast x\": show `MultiSelectionPrompt` of all non-incapacitated operatives (both teams!) within x\" of the primary target AND visible to the target (player manually declares range); friendly fire supported with ⚠ warning\n3. Torrent x\": show `MultiSelectionPrompt` of all non-incapacitated operatives within x\" of the primary target AND visible to the SHOOTER\n4. Roll attack dice ONCE (shared pool) — R/E prompt as normal\n5. Apply weapon re-rolls (Balanced/Ceaseless/Relentless) on shared pool\n6. **Attacker CP re-roll offered ONCE on shared pool** (before per-target loop)\n7. For each target (primary + additional):\n   a. Target rolls their own defence dice (R/E)\n   b. Apply Piercing Crits: evaluated per target using the SHARED crit count (pre-Obscured)\n   c. Apply Saturate (negates cover for all targets automatically — no per-target prompt)\n   d. CP re-roll offered to DEFENDER once per target\n   e. Resolve damage via `CombatResolutionService.ResolveShoot`\n   f. Update wounds; check incapacitation; persist `BlastTarget` via `IBlastTargetRepository.CreateAsync`\n8. D\" Devastating x: after damage resolved, apply x damage to all operatives within D\" of primary target (separate check)\n9. Persist primary `Action` record; additional targets in `action_blast_targets` table\nSee spike-blast-torrent.md.",
+    "workstream": "frontend",
+    "depends_on": ["T-023", "T-020"],
+    "status": "pending"
+  },
+  {
+    "id": "T-027",
+    "story": "US-003",
+    "title": "Implement play command and game resume logic",
+    "description": "In KillTeam.DataSlate.Console/Commands/, implement `PlayCommand`. It accepts `<game-id>` as argument.\n1. Load game via `IGameRepository.GetByIdAsync`; if not found print error; if status=Completed print `\"Game is already completed.\"`\n2. Load all `GameOperativeState` records for the game and all operative/team data\n3. Resume detection: call `ITurningPointRepository.GetCurrentAsync(gameId)`. If a turning point exists and `IsStrategyPhaseComplete=false`, resume the Strategy Phase from the correct step. If `IsStrategyPhaseComplete=true`, resume the Firefight Phase (restore operative states from DB)\n4. For each new turning point (1-4): call `StrategyPhaseOrchestrator.RunAsync(game, tpNumber)` then `FirefightPhaseOrchestrator.RunAsync(game, turningPoint)`\n5. End-game: after TP4 or one-side-wipe: prompt for VP scores for both teams; call `IGameRepository.UpdateStatusAsync` with Status=Completed and WinnerTeamId; print `\"Game complete! Winner: <PlayerName> (<TeamName>)\"`\n6. App can be killed mid-game and resumed on next `play <game-id>` invocation (state fully in SQLite)\nWire as `play` top-level command in Program.cs.",
+    "workstream": "frontend",
+    "depends_on": ["T-021", "T-022", "T-023", "T-024", "T-025", "T-026"],
+    "status": "pending"
+  },
+  {
+    "id": "T-028",
+    "story": "US-003",
+    "title": "Unit tests for Strategy Phase and Firefight loop",
+    "description": "In KillTeam.DataSlate.Tests/, write xUnit unit tests using FluentAssertions:\n`GameSessionTests` class (filter: `FullyQualifiedName~GameSession`):\n- `InitiativeRotation_TeamBWinsTP2Initiative_TeamBActivatesFirst` — assert activation order reversal based on initiative winner\n- `CpCalculation_TP1_BothTeamsGain1Cp` — TP1: both gain 1CP from base 2CP → 3CP each\n- `CpCalculation_TP2_InitiativeTeamGains1_OtherGains2` — TP2: initiative team gets +1, other +2\n- `WoundReduction_AfterShoot_UpdatesCurrentWounds` — shoot deals 6 damage to 12W operative → currentWounds=6\n- `InjuredThreshold_At6Of12Wounds_ShowsInjuredPenalties` — currentWounds=6, startingWounds=12 → isInjured=true, Hit+1, Move-2\n- `Incapacitation_WoundsReachZero_MarksIncapacitated` — wounds reduced to 0 → IsIncapacitated=true\n- `CoverSave_InCover_UnconditionallyAddsOneSave` — even with no dice saves, cover adds 1 normal save\n- `Counteract_AllExpendedOpponentHasReady_OffersCounteract` — validate counteract eligibility conditions\n`CombatResolutionTests` class (filter: `FullyQualifiedName~CombatResolution`):\n- The 5 ResolveShoot tests already listed in T-017 (ensure they live under the CombatResolution filter too)",
+    "workstream": "backend",
+    "depends_on": ["T-021", "T-022"],
+    "status": "pending"
+  },
+  {
+    "id": "T-029",
+    "story": "US-004",
+    "title": "Implement annotate command",
+    "description": "In KillTeam.DataSlate.Console/Commands/, implement `AnnotateCommand`. It accepts `<game-id>` as argument and works on both in-progress and completed games:\n1. Load all activations for the game (joining across turning points) via `IActivationRepository.GetByTurningPointAsync` for each TP; order by TP number then sequence number\n2. Display a numbered list: `\"[TP1, Act 1] Intercessor Sergeant (Engage)\"` etc.; if existing NarrativeNote, show inline prefixed with 🖊\n3. Use `SelectionPrompt` for player to select an activation to annotate\n4. Offer: `\"(1) Annotate this activation  (2) Drill down to a specific action  (3) Cancel\"`\n5. If annotating activation: `TextPrompt<string>` for narrative text; call `IActivationRepository.UpdateNarrativeAsync`; confirm `\"Annotation saved.\"`\n6. If drilling down: load all `Action` records for selected activation via `IActionRepository`; show numbered list with action type, weapon (if any), damage, existing narrative; `SelectionPrompt` for action; `TextPrompt` for note; call `IActionRepository.UpdateNarrativeAsync`\n7. Existing annotations can be overwritten (no special confirmation required for overwrite)\nWire as `annotate` top-level command in Program.cs. NarrativeNote columns are nullable TEXT on both `activations` and `actions` tables (already part of schema from T-003).",
+    "workstream": "frontend",
+    "depends_on": ["T-006", "T-007"],
+    "status": "pending"
+  },
+  {
+    "id": "T-030",
+    "story": "US-004",
+    "title": "Unit tests for annotate command",
+    "description": "In KillTeam.DataSlate.Tests/CommandTests/, write xUnit tests using FluentAssertions and in-memory SQLite (via TestDbBuilder):\n- `AnnotateTests.SaveAnnotation_OnActivation_PersistsNarrativeNote` — seed a game+activation, call UpdateNarrativeAsync with a note, query DB and assert narrative_note column matches\n- `AnnotateTests.OverwriteAnnotation_ReplacesExistingNote` — seed activation with existing note, overwrite with new note, assert only new note is stored\n- `AnnotateTests.SaveAnnotation_OnAction_PersistsActionNarrativeNote` — same pattern for the action-level annotation via `IActionRepository.UpdateNarrativeAsync`\nTest method naming follows `MethodName_Scenario_ExpectedResult` convention.",
+    "workstream": "frontend",
+    "depends_on": ["T-029"],
+    "status": "pending"
+  },
+  {
+    "id": "T-031",
+    "story": "US-005",
+    "title": "Implement history command",
+    "description": "In KillTeam.DataSlate.Console/Commands/, implement `HistoryCommand`. It accepts optional `--player <name>` flag.\n1. Query completed games from `games` table joining to `players` (player_a_id, player_b_id) and `kill_teams` (team_a_id, team_b_id)\n2. If `--player` flag provided: filter with case-insensitive LIKE on player name\n3. Render a Spectre.Console `Table` with columns: Date (formatted `yyyy-MM-dd`), Mission, Player A (team name), Player B (team name), Score A, Score B, Winner\n4. If no games found: print `\"No games recorded yet.\"`\n5. History display scope: game-level data only (date, mission, teams, VP, winner). Strategy Phase detail (ploys, initiative per TP) is NOT shown here — use `view-game` for full detail.\nWire as `history` top-level command in Program.cs.",
+    "workstream": "frontend",
+    "depends_on": ["T-006"],
+    "status": "pending"
+  },
+  {
+    "id": "T-032",
+    "story": "US-005",
+    "title": "Implement stats command",
+    "description": "In KillTeam.DataSlate.Console/Commands/, implement `StatsCommand`. It accepts optional `--team <name>` flag.\n- **Without --team flag** (per-player stats): for each player, calculate: Games Played = COUNT of games where player_a_id=id OR player_b_id=id; Wins = COUNT where player won (winner_team_id matches their team); Win % = Wins/GamesPlayed*100. Also show per-player breakdown of teams used and win rate per team. Render as Spectre.Console Table.\n- **With --team flag** (per-team stats): case-insensitive match on team name; show Games Played, Wins, Losses, Win %; Most Used Weapon (JOIN actions → weapons GROUP BY weaponId WHERE type IN (Shoot, Fight), MAX count — a single Blast/Torrent action counts as 1 use regardless of targets hit); Total Kills (UNION query: `SELECT COUNT(*) FROM actions a JOIN activations act ON act.id=a.activation_id WHERE a.caused_incapacitation=1 AND act.team_id=@teamId UNION ALL SELECT COUNT(*) FROM action_blast_targets abt JOIN actions a2 ON a2.id=abt.action_id JOIN activations act2 ON act2.id=a2.activation_id WHERE abt.caused_incapacitation=1 AND act2.team_id=@teamId`); player names who used this team.\n- `--player <name>` also supported: same as history filter for stats.\n- Print `\"No games recorded yet.\"` if empty.\nWire as `stats` top-level command in Program.cs.",
+    "workstream": "frontend",
+    "depends_on": ["T-006", "T-007"],
+    "status": "pending"
+  },
+  {
+    "id": "T-033",
+    "story": "US-005",
+    "title": "Implement view-game command",
+    "description": "In KillTeam.DataSlate.Console/Commands/, implement `ViewGameCommand`. It accepts `<game-id>` as argument.\n1. Load game, all turning points, all activations (with operative + team info), all actions (with weapon + target info), all ploy uses, all narrative notes\n2. Print header: `\"=== <PlayerA> (TeamA) vs <PlayerB> (TeamB) ===\"`\n3. For each Turning Point: print `\"=== Turning Point N ===` then Strategy Phase summary (initiative winner, CP gained, ploys used if any)\n4. For each Activation in order: print `\"[Act N] <OperativeName> (<Order>)\"` + `\"(Guard Interrupt)\"` or `\"(Counteract)\"` if applicable; indented narrative note (🖊) if present\n5. For each Action within activation: print action type, weapon name, target name (if applicable), attacker dice, defender dice, hits, blocks, damage, cover status, `\"(Incapacitated!)\"` if caused_incapacitation=1; narrative note (🖊) inline if present\n6. Print final score: `\"Final Score: TeamA VP vs TeamB VP — Winner: <TeamName>\"`; if game is in-progress print `\"(In Progress)\"`\n7. Handle missing game ID gracefully: print `\"Game <id> not found.\"`\nWire as `view-game` top-level command in Program.cs.",
+    "workstream": "frontend",
+    "depends_on": ["T-006", "T-007"],
+    "status": "pending"
+  },
+  {
+    "id": "T-034",
+    "story": "US-005",
+    "title": "Unit tests for history, stats, and view-game",
+    "description": "In KillTeam.DataSlate.Tests/CommandTests/, write xUnit tests using FluentAssertions and in-memory SQLite (via TestDbBuilder):\n`HistoryTests` class (filter: `FullyQualifiedName~History`):\n- `HistoryTests.Query_ReturnsCompletedGamesInOrder` — seed 2 completed games, assert both appear in result ordered by date\n- `HistoryTests.Query_WithPlayerFilter_ReturnsOnlyMatchingGames` — seed 2 games with different players, filter by player name, assert correct subset returned\n- `HistoryTests.Query_NoGames_ReturnsEmptyResult` — assert empty result handled gracefully\n`StatsTests` class (filter: `FullyQualifiedName~Stats`):\n- `StatsTests.PerPlayerStats_CalculatesWinsAndGamesPlayed` — seed 3 games, 2 wins for Player A, assert aggregation\n- `StatsTests.PerTeamStats_KillsCount_IncludesBlastTargetIncapacitations` — seed 1 action with caused_incapacitation=1 in action_blast_targets; assert kill count = 1\n- `StatsTests.PerTeamStats_MostUsedWeapon_CountsBlastAsSingleUse` — 1 blast action with 3 blast targets; assert weapon use count = 1 (not 3)",
+    "workstream": "frontend",
+    "depends_on": ["T-031", "T-032", "T-033"],
+    "status": "pending"
+  },
+  {
+    "id": "T-035",
+    "story": "US-005",
+    "title": "Update README with full command reference",
+    "description": "Update `README.md` in the repo root with a complete command reference section. Include:\n- All CLI commands with syntax and examples: `import-roster [filepath]`, `player add <name>`, `player list`, `player delete <name>`, `new-game`, `play <game-id>`, `annotate <game-id>`, `view-game <game-id>`, `history [--player <name>]`, `stats [--team <name>]`\n- Configuration: `appsettings.json` keys `DataSlate:DatabasePath` (default `./data/killteam.db`) and `DataSlate:RosterFolder` (default `./rosters/`)\n- Getting started section: (1) add players, (2) import rosters, (3) start a game, (4) play through TPs, (5) view history\n- Note on DB recovery: `\"If DB is missing/corrupt, delete data/killteam.db — it will be recreated on next run (data loss).\"`\n- Roster JSON format notes: `\"3+\"` → hit threshold int, `\"3/4\"` → normal/crit damage, `\"3+\"` → save threshold\nDo not create any new .md files — update only README.md.",
+    "workstream": "frontend",
+    "depends_on": ["T-027", "T-029", "T-031", "T-032", "T-033"],
+    "status": "pending"
+  }
+]

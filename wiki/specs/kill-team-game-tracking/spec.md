@@ -1,6 +1,6 @@
 # Spec: Kill Team Game Tracking
 
-Last updated: 2026-03-12 (AI review fixes: critical R-01–R-06 + yellow R-07–R-16 all addressed)
+Last updated: 2026-03-14 (Updated US-008 after human review of simulate spike)
 
 ## Introduction
 
@@ -462,9 +462,76 @@ dotnet test --filter "FullyQualifiedName~Player"
 
 ---
 
+### US-008: Simulate Combat Encounter
+
+**As a** player learning weapon mechanics,
+**I want to** run a simulated fight or shoot encounter with operatives selected from two real rosters,
+**so that** I can experience the full player-vs-AI combat flow and understand how weapon special rules interact without needing an active game session.
+
+**Trigger:** `dataslate simulate`
+
+**Full spike:** `spike-simulate-command.md`
+
+**Acceptance Criteria:**
+- [ ] `dataslate simulate` prompts for operative selection from imported rosters (your kill team → your operative → opponent kill team → opponent operative) using `SelectionPrompt` with built-in search/filter; no ad-hoc stat entry
+- [ ] If no kill teams have been imported, the command errors with a clear message and exits
+- [ ] After operative selection, the session enters a loop: player can run Fight, Shoot, or Done without re-selecting operatives
+- [ ] Fight simulation runs the full alternating Strike/Block loop via the existing `FightSessionOrchestrator` (unchanged), with player controlling their operative and the AI Advisor (US-009) available at each turn
+- [ ] Shoot simulation runs the full `CombatResolutionService` pipeline via the existing `ShootSessionOrchestrator` (unchanged)
+- [ ] Both fight and shoot are available in the same session; wound state resets to full at the start of each new encounter
+- [ ] Nothing is written to SQLite; state is maintained via `InMemoryGameOperativeStateRepository` and `InMemoryActionRepository`
+- [ ] Weapon re-rolls (Balanced, Ceaseless, Relentless) are enforced; CP re-roll is suppressed (synthetic game has 0 CP)
+- [ ] Selecting a Blast or Torrent weapon shows an unsupported warning and returns the user to weapon selection
+
+**Technical Considerations:**
+- New classes: `SimulateCommand`, `InMemoryGameOperativeStateRepository`, `InMemoryActionRepository` — all in `KillTeam.DataSlate.Console`
+- Existing orchestrators (`FightSessionOrchestrator`, `ShootSessionOrchestrator`) are **reused unchanged** — they receive synthetic `Game` (with `CpTeamA/B = 0`), synthetic `TurningPoint`, synthetic `Activation`, and in-memory repository implementations constructed by `SimulateCommand`
+- `InMemoryGameOperativeStateRepository` implements `IGameOperativeStateRepository` with `Dictionary<Guid, GameOperativeState>`; no SQLite dependency
+- `InMemoryActionRepository` implements `IActionRepository` as a no-op; satisfies the interface without writing to DB
+- Roster loading uses the existing `IKillTeamRepository.GetWithOperativesAsync(...)` — no new repository needed
+- `simulate` is the first of a planned "test mode" family of commands (see spike §7.5)
+- DI additions: `InMemoryGameOperativeStateRepository` and `InMemoryActionRepository` registered as transient; `cfg.AddCommand<SimulateCommand>("simulate")` in `Program.cs`
+- Full design: `spike-simulate-command.md`
+
+---
+
+### US-009: AI Combat Advisor
+
+**As a** player wanting tactical guidance,
+**I want to** ask an AI advisor to explain dice results and suggest optimal plays,
+**so that** I can learn the game mechanics more deeply.
+
+**Trigger:** Accessible from within the simulate command (US-008) via a `"? Ask AI Advisor"` menu option, and optionally from a live game (US-001) via the same option in fight/shoot flows.
+
+**Full spike:** `spike-ai-advisor.md`
+
+**Acceptance Criteria:**
+- [ ] When `ANTHROPIC_API_KEY` is set (or `Anthropic:ApiKey` in `appsettings.json`), the `"? Ask AI Advisor"` option appears in the fight action menu (at each turn) and as a follow-up prompt after shoot resolution
+- [ ] When no API key is configured, the advisor option is silently hidden everywhere; a single startup message `"AI Advisor not configured — set ANTHROPIC_API_KEY to enable."` is shown when running `dataslate simulate`
+- [ ] Selecting "? Ask AI Advisor" shows a loading spinner, then displays advice in a Spectre.Console `Panel` with `"🤖 AI Advisor"` header
+- [ ] Shoot advice explains why the result occurred (which rules triggered, how blocking resolved) in 2–4 sentences
+- [ ] Fight advice names the specific recommended action (Strike or Block with which die) and explains the tactical reasoning
+- [ ] After showing fight advice, the action menu is re-displayed (the fight loop does not advance — the advisor is non-committal)
+- [ ] API errors (network failure, rate limit, invalid key) degrade gracefully: `"[dim yellow]AI Advisor unavailable: <reason>[/]"` is shown and the game continues normally without throwing
+- [ ] The advisor does not modify any game state, and nothing is written to SQLite as a result of advisor interactions
+
+**Technical Considerations:**
+- NuGet packages: `Anthropic` (official C# SDK) + `Microsoft.Extensions.AI.Abstractions` added to `KillTeam.DataSlate.Console.csproj`
+- `IAiAdvisor` interface + context records (`ShootAdvisorContext`, `FightAdvisorContext`, `FightResultAdvisorContext`) defined in `KillTeam.DataSlate.Domain.Services` — no infrastructure dependency
+- `AnthropicAdvisor` and `NullAiAdvisor` implementations in `KillTeam.DataSlate.Console.Services`
+- DI registration: if API key present → `services.AddSingleton<IAiAdvisor>(sp => new AnthropicAdvisor(new AnthropicClient(apiKey).AsIChatClient(model), console))`, else → `services.AddSingleton<IAiAdvisor, NullAiAdvisor>()`
+- Model configured via `Anthropic:Model` in `appsettings.json` (default: `"claude-sonnet-4-5"`); allows downgrade to `"claude-haiku-4-5"` for lower latency
+- `IAiAdvisor` injected into `SimulateFightOrchestrator`, `SimulateShootOrchestrator`, and optionally into `FightSessionOrchestrator` / `ShootSessionOrchestrator` for live-game access; `NullAiAdvisor` is always registered so the parameter is always satisfied
+- All AI response text passed through `Markup.Escape(...)` before rendering to prevent Spectre.Console markup injection
+- System prompt encodes KT24 V3.0 blocking algorithm, fight die semantics, and key special rules; instructs Claude to respond in 2–4 sentences of plain text (no markdown)
+- Full design including `AnthropicAdvisor` implementation sketch, system prompt text, and context record types: `spike-ai-advisor.md`
+- `appsettings.json` gains an `"Anthropic": { "ApiKey": "", "Model": "claude-sonnet-4-5" }` section
+
+---
 
 
-- FR-1: The app must be runnable as a single CLI executable with sub-commands (`import-roster`, `new-game`, `play`, `annotate`, `view-game`, `history`, `stats`, `player add`, `player list`, `player delete`)
+
+- FR-1: The app must be runnable as a single CLI executable with sub-commands (`import-roster`, `new-game`, `play`, `annotate`, `view-game`, `history`, `stats`, `player add`, `player list`, `player delete`, `simulate`)
 - FR-2: Rosters must be importable from a single JSON file path **or** auto-discovered from a configured roster folder (`DataSlate:RosterFolder`); player names are not stored in roster files
 - FR-3: A game must track both teams, all operatives, all turning points, all activations, and all actions
 - FR-4: Combat resolution (hits, blocks, damage) must be calculated by the app from entered dice results — players do not enter damage directly
@@ -933,6 +1000,9 @@ Items explicitly requested but deferred until the basic game tracking is working
 - **Colour & ANSI art** — use Spectre.Console's full colour palette and panel/box rendering; add faction-coloured operative names, ASCII art banners at game start; requires no spec changes, purely cosmetic layer on top of existing prompts
 - **Menu system** — interactive main menu as an alternative to issuing CLI sub-commands directly; useful for non-technical users; can be implemented as a `menu` command or as the default when no arguments are given
 - **PDF roster import** — direct import from Kill Team app PDF exports, bypassing the manual JSON authoring step
+- **Simulate batch mode** — `dataslate simulate --runs N` to run N simulations automatically and report average/min/max damage; useful for statistical weapon comparisons (follow-up to US-008)
+- **AI tool-calling mode** — `dataslate simulate --tools` to enable the advisor to call `CombatResolutionService` internally and compare alternative dice outcomes (follow-up to US-009)
+- **Simulate Blast/Torrent** — extend `SimulateShootOrchestrator` to support multi-target weapons with ad-hoc entry for additional target wound/save stats (follow-up to US-008)
 
 ---
 
@@ -942,3 +1012,9 @@ Items explicitly requested but deferred until the basic game tracking is working
 - Should `view-game` render narrative notes as prose (formatted block) or inline with the action log? (Recommendation: inline, prefixed with 🖊)
 - Should equipment items (grenades, mines, etc.) be modelled as first-class entities with tracked uses, or remain as free-text notes? (Resolved for this iteration: free-text JSON blob on Operative; no usage tracking)
 - Should CP usage / ploy names be tracked structurally, or is free-text sufficient? (Recommendation: free-text `PloyName` field on TurningPoint as a list, sufficient for MVP)
+- **[US-008]** Should simulate support a "starting wounds below max" option to test injured-state interactions? (Recommendation: defer; add `--wounded` prompt in a follow-up)
+- **[US-008]** Should simulate log cumulative stats across "simulate again" runs (avg damage, min, max)? (Recommendation: defer to batch-mode story)
+- **[US-008]** Should `--roster` accept a substring/fuzzy match or require exact case-insensitive match? (Recommendation: exact case-insensitive, same as existing roster commands, with a "Did you mean X?" hint if a LIKE match is found)
+- **[US-009]** Should the advisor maintain conversation history across multiple "? Ask AI Advisor" calls in a single session for more contextual advice? (Recommendation: stateless for initial implementation; add as follow-up)
+- **[US-009]** Should advisor inputs/outputs be logged to a file for debugging? (Recommendation: add opt-in `DataSlate:AiAdvisorLogPath` config key)
+- **[US-009]** Should the AI advisor be available during Blast/Torrent multi-target flows? (Recommendation: defer until Blast/Torrent simulate support is added)
