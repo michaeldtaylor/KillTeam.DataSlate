@@ -34,7 +34,7 @@ The advisor is built on `IChatClient` from `Microsoft.Extensions.AI.Abstractions
 // appsettings.json
 {
   "DataSlate": {
-    "DatabasePath": "./data/killteam.db",
+    "DatabasePath": "./data/kill-team.db",
     "RosterFolder": "./rosters/"
   },
   "Anthropic": {
@@ -482,7 +482,7 @@ else
 ```json
 {
   "DataSlate": {
-    "DatabasePath": "./data/killteam.db",
+    "DatabasePath": "./data/kill-team.db",
     "RosterFolder": "./rosters/"
   },
   "Anthropic": {

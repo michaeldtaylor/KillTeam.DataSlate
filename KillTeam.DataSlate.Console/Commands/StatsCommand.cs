@@ -23,7 +23,7 @@ public class StatsCommand(IConfiguration config) : AsyncCommand<StatsCommand.Set
 
     public override async Task<int> ExecuteAsync(CommandContext context, Settings settings)
     {
-        var dbPath = config["DataSlate:DatabasePath"] ?? "./data/killteam.db";
+        var dbPath = config["DataSlate:DatabasePath"] ?? "./data/kill-team.db";
         await using var conn = new SqliteConnection($"Data Source={dbPath}");
         await conn.OpenAsync();
 

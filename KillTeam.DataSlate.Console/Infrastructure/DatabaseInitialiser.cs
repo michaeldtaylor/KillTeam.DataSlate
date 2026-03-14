@@ -9,7 +9,7 @@ public class DatabaseInitialiser
 
     public DatabaseInitialiser(IConfiguration config)
     {
-        var path = config["DataSlate:DatabasePath"] ?? "./data/killteam.db";
+        var path = config["DataSlate:DatabasePath"] ?? "./data/kill-team.db";
         _connectionString = $"Data Source={path}";
 
         var dir = Path.GetDirectoryName(path);

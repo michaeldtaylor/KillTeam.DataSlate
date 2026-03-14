@@ -1052,7 +1052,7 @@ assertions in `DatabaseInitialiser_Initialise_CreatesAllTables`.
 // In Program.cs, before CommandApp.Run(args):
 var services = new ServiceCollection();
 
-var dbPath = config["KillTeamAgent:DatabasePath"] ?? "./data/killteam.db";
+var dbPath = config["KillTeamAgent:DatabasePath"] ?? "./data/kill-team.db";
 var connStr = $"Data Source={dbPath}";
 
 services.AddSingleton(new DatabaseInitialiser(connStr));

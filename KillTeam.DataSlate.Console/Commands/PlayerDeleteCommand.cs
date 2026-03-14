@@ -28,7 +28,7 @@ public class PlayerDeleteCommand(IPlayerRepository players, IConfiguration confi
             return 1;
         }
 
-        var dbPath = config["DataSlate:DatabasePath"] ?? "./data/killteam.db";
+        var dbPath = config["DataSlate:DatabasePath"] ?? "./data/kill-team.db";
         await using var conn = new SqliteConnection($"Data Source={dbPath}");
         await conn.OpenAsync();
 

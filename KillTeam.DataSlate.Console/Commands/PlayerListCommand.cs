@@ -20,7 +20,7 @@ public class PlayerListCommand(IPlayerRepository players, IConfiguration config)
             return 0;
         }
 
-        var dbPath = config["DataSlate:DatabasePath"] ?? "./data/killteam.db";
+        var dbPath = config["DataSlate:DatabasePath"] ?? "./data/kill-team.db";
         var connStr = $"Data Source={dbPath}";
 
         var table = new Table()

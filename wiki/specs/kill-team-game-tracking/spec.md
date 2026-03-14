@@ -399,7 +399,7 @@ dotnet test --filter "FullyQualifiedName~History OR FullyQualifiedName~Stats"
 
 **Acceptance Criteria:**
 - [ ] `Microsoft.Data.Sqlite` NuGet package added to `KillTeam.DataSlate.Console` project only (not Domain)
-- [ ] Database file path configurable via `appsettings.json` key `DataSlate:DatabasePath` (default: `./data/killteam.db`)
+- [ ] Database file path configurable via `appsettings.json` key `DataSlate:DatabasePath` (default: `./data/kill-team.db`)
 - [ ] Schema created on first run; migration version tracked in `schema_version` table (integer version, SQL scripts embedded as resources, no rollback)
 - [ ] Tables: `players`, `kill_teams`, `operatives`, `weapons`, `games`, `game_operative_states`, `turning_points`, `activations`, `actions` (Migration 001); `ploy_uses` (Migration 002); `action_blast_targets` (Migration 003)
 - [ ] **Repository interfaces** defined in `KillTeam.DataSlate.Domain` project; **implementations** in `KillTeam.DataSlate.Console` project (consider extracting to `KillTeam.DataSlate.Infrastructure` in a future iteration)
@@ -414,7 +414,7 @@ dotnet test --filter "FullyQualifiedName~Repository OR FullyQualifiedName~Schema
 
 **Technical Considerations:**
 - `DatabaseInitialiser` runs on startup: creates DB file if missing, applies any pending migrations
-- Connection string: `Data Source=./data/killteam.db`
+- Connection string: `Data Source=./data/kill-team.db`
 - Use `SqliteConnection` directly (no ORM) — keeps dependencies minimal
 - Foreign keys enabled: `PRAGMA foreign_keys = ON` on connection open
 - Tests: use `Data Source=:memory:` for in-memory SQLite; create a `TestDbBuilder` helper to construct test fixtures. `TestDbBuilder.WithTurningPoint` signature: `(Guid id, Guid gameId, int number, bool strategyPhaseComplete = false)` — 4 params (adopting spike-strategy-phase §10.3 as canonical version)
@@ -665,7 +665,7 @@ Sergeant Intercessor expended.
 - **Save parsing**: "3+" → 3 (same pattern as hit threshold)
 - **Injured state display**: shown inline wherever operative name appears; Hit threshold and Move stat auto-adjusted in resolution
 - **Program.cs fix (REQUIRED)**: current `await host.RunAsync()` blocks CLI from running. Fix: remove `await host.RunAsync()` and the `IHostedService` wiring entirely; build a `ServiceCollection`, register services, build a `ServiceProvider`, pass it to `MyTypeRegistrar`, and call `CommandApp.Run(args)` — the app exits after the command completes
-- **`DataSlateOptions` cleanup (REQUIRED)**: Remove `BondNo` and `Password` fields; replace with `DatabasePath` (string, default `"./data/killteam.db"`); update `appsettings.json` accordingly
+- **`DataSlateOptions` cleanup (REQUIRED)**: Remove `BondNo` and `Password` fields; replace with `DatabasePath` (string, default `"./data/kill-team.db"`); update `appsettings.json` accordingly
 - **Weapon special rules**: All 25+ KT V3.0 weapon special rules are defined and categorised in `spike-weapon-rules.md`. Rules are stored as a raw `specialRules` string on the `Weapon` domain model and parsed at use time via `SpecialRuleParser`. Combat services accept a `ShootContext` record (bundling `WeaponRules`) and a `brutalWeapon` flag on fight actions. `Poison` and `Toxic` (present in starter set rosters) have no V3.0 reference definition and are treated as display-only `Unknown` rules.
 - **Shoot action UI flow**: Full Shoot action interactive CLI flow — target selection, weapon selection, cover/obscured prompt, attack and defence dice entry, re-roll prompts, save allocation, damage application, Stun and Hot post-effects, and persistence — is defined in `spike-shoot-ui.md`. Key design decisions: `PiercingCrits` is evaluated on the pre-Obscured crit count; `IsObscured` is a new field on `ShootContext` and the `actions` table; `ShootResult` exposes `AttackerRawCritHits` for Stun and PiercingCrits resolution. New `actions` columns: `is_obscured`, `self_damage_dealt`, `stun_applied`.
 - **Guard action interrupt flow**: Guard (1AP, ITD) sets `IsOnGuard` on `GameOperativeState`. After every visible enemy action during the Firefight Phase, the app checks for eligible guard operatives and prompts a FIGHT or SHOOT interrupt. The guard resolves, is skipped (state retained), or is auto-cleared (enemy enters control range / TP starts / order changes / incapacitated). `IsGuardInterrupt = true` on the resulting `Activation`. New `game_operative_states` column: `is_on_guard`. New `activations` column: `is_guard_interrupt`. Full flow defined in `spike-guard-action.md`.
@@ -680,7 +680,7 @@ Sergeant Intercessor expended.
 ## Documentation & Support Overview
 
 - **Docs to update:** `README.md` — full command reference with examples
-- **Support notes:** If DB is missing/corrupt, delete `data/killteam.db` — it will be recreated on next run (data loss). Roster JSON errors are printed with field-level detail.
+- **Support notes:** If DB is missing/corrupt, delete `data/kill-team.db` — it will be recreated on next run (data loss). Roster JSON errors are printed with field-level detail.
 
 ---
 

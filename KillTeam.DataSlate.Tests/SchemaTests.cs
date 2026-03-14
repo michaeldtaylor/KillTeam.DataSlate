@@ -1,0 +1,179 @@
+using FluentAssertions;
+using Microsoft.Data.Sqlite;
+using KillTeam.DataSlate.Console.Infrastructure;
+using KillTeam.DataSlate.Console.Infrastructure.Repositories;
+using KillTeam.DataSlate.Domain.Models;
+using Xunit;
+
+namespace KillTeam.DataSlate.Tests;
+
+public class SchemaTests
+{
+    [Fact]
+    public void DatabaseInitialiser_Initialise_CreatesAllTables()
+    {
+        using var db = TestDbBuilder.Create();
+
+        string[] expectedTables =
+        [
+            "schema_version", "players", "kill_teams", "operatives", "weapons",
+            "games", "turning_points", "activations", "actions", "game_operative_states",
+            "ploy_uses", "action_blast_targets"
+        ];
+
+        foreach (var table in expectedTables)
+        {
+            using var cmd = db.Connection.CreateCommand();
+            cmd.CommandText = "SELECT name FROM sqlite_master WHERE type='table' AND name=@name";
+            cmd.Parameters.AddWithValue("@name", table);
+            var result = cmd.ExecuteScalar();
+            result.Should().NotBeNull($"table '{table}' should exist");
+        }
+    }
+
+    [Fact]
+    public void DatabaseInitialiser_Initialise_IsIdempotent()
+    {
+        using var conn = new SqliteConnection("Data Source=:memory:");
+        conn.Open();
+        using var pragma = conn.CreateCommand();
+        pragma.CommandText = "PRAGMA foreign_keys = ON";
+        pragma.ExecuteNonQuery();
+
+        // First apply
+        DatabaseInitialiser.ApplyAllMigrations(conn);
+        // Second apply — must not throw
+        DatabaseInitialiser.ApplyAllMigrations(conn);
+
+        using var cmd = conn.CreateCommand();
+        cmd.CommandText = "SELECT version FROM schema_version";
+        var version = Convert.ToInt32(cmd.ExecuteScalar());
+        version.Should().Be(4);
+    }
+
+    [Fact]
+    public async Task PlayerRepository_Add_PersistsPlayer()
+    {
+        using var db = TestDbBuilder.Create();
+        var repo = new SqlitePlayerRepository(db.Connection);
+        var player = new Player { Id = Guid.NewGuid(), Name = "Michael" };
+
+        await repo.AddAsync(player);
+
+        var found = await repo.FindByNameAsync("Michael");
+        found.Should().NotBeNull();
+        found!.Id.Should().Be(player.Id);
+        found.Name.Should().Be("Michael");
+    }
+
+    [Fact]
+    public async Task PlayerRepository_Add_DuplicateName_Throws()
+    {
+        using var db = TestDbBuilder.Create();
+        var repo = new SqlitePlayerRepository(db.Connection);
+        await repo.AddAsync(new Player { Id = Guid.NewGuid(), Name = "Solomon" });
+
+        await Assert.ThrowsAsync<SqliteException>(
+            () => repo.AddAsync(new Player { Id = Guid.NewGuid(), Name = "Solomon" }));
+    }
+
+    [Fact]
+    public async Task PlayerRepository_FindByName_IsCaseInsensitive()
+    {
+        using var db = TestDbBuilder.Create();
+        var repo = new SqlitePlayerRepository(db.Connection);
+        await repo.AddAsync(new Player { Id = Guid.NewGuid(), Name = "Michael" });
+
+        var found = await repo.FindByNameAsync("michael");
+        found.Should().NotBeNull();
+        found!.Name.Should().Be("Michael");
+    }
+
+    [Fact]
+    public async Task PlayerRepository_Delete_RemovesPlayer()
+    {
+        using var db = TestDbBuilder.Create();
+        var repo = new SqlitePlayerRepository(db.Connection);
+        var player = new Player { Id = Guid.NewGuid(), Name = "Doomed" };
+        await repo.AddAsync(player);
+
+        await repo.DeleteAsync(player.Id);
+
+        var found = await repo.FindByNameAsync("Doomed");
+        found.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task GameRepository_Create_PersistsGame()
+    {
+        var playerId1 = Guid.NewGuid();
+        var playerId2 = Guid.NewGuid();
+        var teamId1 = Guid.NewGuid();
+        var teamId2 = Guid.NewGuid();
+
+        using var db = TestDbBuilder.Create()
+            .WithPlayer(playerId1, "Michael")
+            .WithPlayer(playerId2, "Solomon")
+            .WithKillTeam(teamId1, "Angels of Death", "Adeptus Astartes")
+            .WithKillTeam(teamId2, "Plague Marines", "Heretic Astartes");
+
+        var repo = new SqliteGameRepository(db.Connection);
+        var game = new Game
+        {
+            Id = Guid.NewGuid(),
+            PlayedAt = DateTime.UtcNow,
+            TeamAId = teamId1,
+            TeamBId = teamId2,
+            PlayerAId = playerId1,
+            PlayerBId = playerId2,
+            Status = GameStatus.InProgress,
+            CpTeamA = 2,
+            CpTeamB = 2
+        };
+
+        var created = await repo.CreateAsync(game);
+
+        var found = await repo.GetByIdAsync(created.Id);
+        found.Should().NotBeNull();
+        found!.Status.Should().Be(GameStatus.InProgress);
+        found.CpTeamA.Should().Be(2);
+    }
+
+    [Fact]
+    public void TestDbBuilder_WithPlayer_SeedsCorrectly()
+    {
+        var playerId = Guid.NewGuid();
+
+        using var db = TestDbBuilder.Create()
+            .WithPlayer(playerId, "Michael");
+
+        using var cmd = db.Connection.CreateCommand();
+        cmd.CommandText = "SELECT name FROM players WHERE id = @id";
+        cmd.Parameters.AddWithValue("@id", playerId.ToString());
+        var name = cmd.ExecuteScalar() as string;
+        name.Should().Be("Michael");
+    }
+
+    [Fact]
+    public void TestDbBuilder_WithTurningPoint_SeedsCorrectly()
+    {
+        var playerId = Guid.NewGuid();
+        var teamId = Guid.NewGuid();
+        var gameId = Guid.NewGuid();
+        var tpId = Guid.NewGuid();
+
+        using var db = TestDbBuilder.Create()
+            .WithPlayer(playerId, "Michael")
+            .WithKillTeam(teamId, "Angels of Death", "Adeptus Astartes")
+            .WithGame(gameId, teamId, teamId, playerId, playerId)
+            .WithTurningPoint(tpId, gameId, 1, false);
+
+        using var cmd = db.Connection.CreateCommand();
+        cmd.CommandText = "SELECT number, is_strategy_phase_complete FROM turning_points WHERE id = @id";
+        cmd.Parameters.AddWithValue("@id", tpId.ToString());
+        using var reader = cmd.ExecuteReader();
+        reader.Read().Should().BeTrue();
+        reader.GetInt32(0).Should().Be(1);
+        reader.GetInt32(1).Should().Be(0);
+    }
+}
