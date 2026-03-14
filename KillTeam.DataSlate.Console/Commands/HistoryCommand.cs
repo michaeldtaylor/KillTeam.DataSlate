@@ -1,4 +1,4 @@
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Configuration;
 using Spectre.Console;
@@ -35,8 +35,8 @@ public class HistoryCommand(IConfiguration config) : AsyncCommand<HistoryCommand
             FROM games g
             JOIN players pa ON pa.id = g.player_a_id
             JOIN players pb ON pb.id = g.player_b_id
-            JOIN kill_teams ta ON ta.name = g.team_a_name
-            JOIN kill_teams tb ON tb.name = g.team_b_name
+            JOIN teams ta ON ta.name = g.team_a_name
+            JOIN teams tb ON tb.name = g.team_b_name
             WHERE g.status = 'Completed'
             """;
 

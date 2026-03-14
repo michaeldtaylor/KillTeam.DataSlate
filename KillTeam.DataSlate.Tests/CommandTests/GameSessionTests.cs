@@ -1,4 +1,4 @@
-using FluentAssertions;
+﻿using FluentAssertions;
 using KillTeam.DataSlate.Console.Infrastructure.Repositories;
 using KillTeam.DataSlate.Domain.Models;
 using KillTeam.DataSlate.Domain.Services;
@@ -103,7 +103,7 @@ public class GameSessionTests
     {
         // Injured = currentWounds < startingWounds / 2
         // For a 12W operative: threshold = 12/2 = 6; at 5W → injured
-        var operative = new Operative { KillTeamName = "Team", Name = "Op", OperativeType = "Op", Wounds = 12 };
+        var operative = new Operative { TeamName = "Team", Name = "Op", OperativeType = "Op", Wounds = 12 };
         var state = new GameOperativeState { CurrentWounds = 5 };
 
         bool isInjured = state.CurrentWounds < operative.Wounds / 2;
@@ -114,7 +114,7 @@ public class GameSessionTests
     public void InjuredThreshold_AtExactlyHalfWounds_IsNotInjured()
     {
         // At exactly 6/12 wounds: 6 < 6 = false → not injured
-        var operative = new Operative { KillTeamName = "Team", Name = "Op", OperativeType = "Op", Wounds = 12 };
+        var operative = new Operative { TeamName = "Team", Name = "Op", OperativeType = "Op", Wounds = 12 };
         var state = new GameOperativeState { CurrentWounds = 6 };
 
         bool isInjured = state.CurrentWounds < operative.Wounds / 2;

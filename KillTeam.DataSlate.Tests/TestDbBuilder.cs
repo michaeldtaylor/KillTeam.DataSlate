@@ -1,4 +1,4 @@
-using Microsoft.Data.Sqlite;
+﻿using Microsoft.Data.Sqlite;
 using KillTeam.DataSlate.Console.Infrastructure;
 
 namespace KillTeam.DataSlate.Tests;
@@ -34,7 +34,7 @@ public sealed class TestDbBuilder : IDisposable
 
     public TestDbBuilder WithKillTeam(string name, string faction)
     {
-        Exec("INSERT INTO kill_teams (name, faction) VALUES (@name, @faction)",
+        Exec("INSERT INTO teams (name, faction) VALUES (@name, @faction)",
             ("@name", name), ("@faction", faction));
         return this;
     }
@@ -44,7 +44,7 @@ public sealed class TestDbBuilder : IDisposable
     {
         Exec("""
             INSERT INTO operatives
-                (id, kill_team_name, name, operative_type, move, apl, wounds, save)
+                (id, team_name, name, operative_type, move, apl, wounds, save)
             VALUES (@id, @teamName, @name, @name, @move, @apl, @wounds, @save)
             """,
             ("@id", id.ToString()), ("@teamName", teamName), ("@name", name),

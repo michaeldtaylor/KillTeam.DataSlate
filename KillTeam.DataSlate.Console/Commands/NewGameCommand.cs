@@ -1,4 +1,4 @@
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using KillTeam.DataSlate.Domain.Models;
 using KillTeam.DataSlate.Domain.Repositories;
 using Spectre.Console;
@@ -6,11 +6,11 @@ using Spectre.Console.Cli;
 
 namespace KillTeam.DataSlate.Console.Commands;
 
-/// <summary>Creates a new game session, prompting for players, kill teams, and mission.</summary>
-[Description("Start a new game — select players, kill teams, and mission.")]
+/// <summary>Creates a new game session, prompting for players, teams, and mission.</summary>
+[Description("Start a new game — select players, teams, and mission.")]
 public class NewGameCommand(
     IPlayerRepository players,
-    IKillTeamRepository killTeams,
+    ITeamRepository teams,
     IGameRepository games,
     IGameOperativeStateRepository gameStates) : AsyncCommand
 {
@@ -23,16 +23,16 @@ public class NewGameCommand(
             return 1;
         }
 
-        var allTeams = (await killTeams.GetAllAsync()).ToList();
+        var allTeams = (await teams.GetAllAsync()).ToList();
         if (allTeams.Count < 2)
         {
-            AnsiConsole.MarkupLine("[red]Not enough kill teams imported — run `import-kill-teams` first.[/]");
+            AnsiConsole.MarkupLine("[red]Not enough teams imported — run `import-kill-teams` first.[/]");
             return 1;
         }
 
         // Team A selection
         var teamA = AnsiConsole.Prompt(
-            new SelectionPrompt<KillTeam.DataSlate.Domain.Models.KillTeam>()
+            new SelectionPrompt<KillTeam.DataSlate.Domain.Models.Team>()
                 .Title("Select [green]Team A[/]:")
                 .UseConverter(t => t.Name)
                 .AddChoices(allTeams));
@@ -46,7 +46,7 @@ public class NewGameCommand(
         // Team B selection (exclude Team A)
         var teamBChoices = allTeams.Where(t => t.Name != teamA.Name).ToList();
         var teamB = AnsiConsole.Prompt(
-            new SelectionPrompt<KillTeam.DataSlate.Domain.Models.KillTeam>()
+            new SelectionPrompt<KillTeam.DataSlate.Domain.Models.Team>()
                 .Title("Select [blue]Team B[/]:")
                 .UseConverter(t => t.Name)
                 .AddChoices(teamBChoices));
@@ -62,8 +62,8 @@ public class NewGameCommand(
             new TextPrompt<string>("Mission name [dim](optional)[/]:").AllowEmpty());
 
         // Load full team data with operatives
-        var fullTeamA = await killTeams.GetWithOperativesAsync(teamA.Name);
-        var fullTeamB = await killTeams.GetWithOperativesAsync(teamB.Name);
+        var fullTeamA = await teams.GetWithOperativesAsync(teamA.Name);
+        var fullTeamB = await teams.GetWithOperativesAsync(teamB.Name);
 
         var game = new Game
         {

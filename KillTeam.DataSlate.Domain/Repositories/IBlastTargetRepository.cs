@@ -1,4 +1,4 @@
-using KillTeam.DataSlate.Domain.Models;
+﻿using KillTeam.DataSlate.Domain.Models;
 
 namespace KillTeam.DataSlate.Domain.Repositories;
 

@@ -36,15 +36,15 @@ if (operative is null)
 // ✅ Correct
 if (string.IsNullOrWhiteSpace(name))
 {
-    throw new KillTeamValidationException("Name is required.");
+    throw new TeamValidationException("Name is required.");
 }
 
 // ❌ Wrong — braceless
 if (string.IsNullOrWhiteSpace(name))
-    throw new KillTeamValidationException("Name is required.");
+    throw new TeamValidationException("Name is required.");
 
 // ❌ Wrong — inline (even though single-line)
-if (string.IsNullOrWhiteSpace(name)) throw new KillTeamValidationException("Name is required.");
+if (string.IsNullOrWhiteSpace(name)) throw new TeamValidationException("Name is required.");
 ```
 
 ---
@@ -58,13 +58,13 @@ using System.Collections.Generic;
 
 namespace KillTeam.DataSlate.Console.Commands;
 
-public class ImportKillTeamsCommand
+public class ImportTeamsCommand
 {
 
 // ❌ Wrong — no blank lines
 using System;
 namespace KillTeam.DataSlate.Console.Commands;
-public class ImportKillTeamsCommand
+public class ImportTeamsCommand
 {
 ```
 
@@ -78,7 +78,7 @@ When a method starts with one or more variable declarations, add a blank line be
 // ✅ Correct
 public async Task<int> ExecuteAsync(CommandContext context, Settings settings)
 {
-    var folder = config["DataSlate:KillTeamFolder"] ?? "../kill-teams/";
+    var folder = config["DataSlate:TeamFolder"] ?? "../teams/";
     var files = Directory.GetFiles(folder, "*.json");
 
     foreach (var file in files)
@@ -90,7 +90,7 @@ public async Task<int> ExecuteAsync(CommandContext context, Settings settings)
 // ❌ Wrong — no blank line
 public async Task<int> ExecuteAsync(CommandContext context, Settings settings)
 {
-    var folder = config["DataSlate:KillTeamFolder"] ?? "../kill-teams/";
+    var folder = config["DataSlate:TeamFolder"] ?? "../teams/";
     var files = Directory.GetFiles(folder, "*.json");
     foreach (var file in files)
     {
@@ -144,11 +144,71 @@ public class Game
 }
 ```
 
-**Exception — serialization targets:** When a class is used as a `System.Text.Json` deserialization target (e.g. internal `JsonKillTeam` DTOs), `required` may be omitted if it would require `[JsonConstructor]` / `SetsRequiredMembers` boilerplate. Add a brief comment:
+**Exception — serialization targets:** When a class is used as a `System.Text.Json` deserialization target (e.g. internal `JsonTeam` DTOs), `required` may be omitted if it would require `[JsonConstructor]` / `SetsRequiredMembers` boilerplate. Add a brief comment:
 
 ```csharp
 // System.Text.Json deserialization target — required omitted intentionally
 public string? Name { get; set; }
+```
+
+---
+
+---
+
+## 7. Enum values each on their own line
+
+Each enum member must be on its own line. Never put multiple values on a single line.
+
+```csharp
+// ✅ Correct
+public enum ActionType
+{
+    Reposition,
+    Dash,
+    FallBack,
+    Charge,
+    Shoot,
+    Fight,
+    Guard,
+    Other,
+}
+
+// ❌ Wrong — multiple values per line
+public enum ActionType { Reposition, Dash, FallBack, Charge, Shoot, Fight, Guard, Other }
+```
+
+---
+
+## 8. Trailing comma on last item
+
+Always include a trailing comma on the last item of:
+- Enums
+- Multi-line collection initialisers
+- Multi-line argument/parameter lists
+
+```csharp
+// ✅ Correct — enum
+public enum SpecialRuleKind
+{
+    Devastating,
+    AP,
+    Lethal,
+}
+
+// ✅ Correct — collection initialiser
+var weapons = new List<Weapon>
+{
+    new() { Name = "Bolt Rifle" },
+    new() { Name = "Chainsword" },
+};
+
+// ❌ Wrong — no trailing comma
+public enum SpecialRuleKind
+{
+    Devastating,
+    AP,
+    Lethal
+}
 ```
 
 ---

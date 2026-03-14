@@ -1,4 +1,4 @@
-using KillTeam.DataSlate.Domain.Models;
+﻿using KillTeam.DataSlate.Domain.Models;
 using KillTeam.DataSlate.Domain.Repositories;
 using KillTeam.DataSlate.Domain.Services;
 using Spectre.Console;
@@ -27,10 +27,10 @@ public class GuardInterruptOrchestrator(
         int seqCounter)
     {
         // Determine which team is "friendly" (the guard team = NOT the acting enemy's team)
-        string enemyTeamName = actingEnemy.KillTeamName;
+        string enemyTeamName = actingEnemy.TeamName;
 
         var friendlyStates = allOperativeStates
-            .Where(s => allOperatives.TryGetValue(s.OperativeId, out var o) && o.KillTeamName != enemyTeamName)
+            .Where(s => allOperatives.TryGetValue(s.OperativeId, out var o) && o.TeamName != enemyTeamName)
             .ToList();
 
         var eligibleGuards = guardResolutionService.GetEligibleGuards(friendlyStates);
@@ -90,7 +90,7 @@ public class GuardInterruptOrchestrator(
                 TurningPointId = tp.Id,
                 SequenceNumber = seqCounter,
                 OperativeId = guardOp.Id,
-                TeamName = guardOp.KillTeamName,
+                TeamName = guardOp.TeamName,
                 OrderSelected = guardState.Order,
                 IsGuardInterrupt = true
             };

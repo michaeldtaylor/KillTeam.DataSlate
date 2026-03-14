@@ -1,4 +1,4 @@
-using Microsoft.Data.Sqlite;
+﻿using Microsoft.Data.Sqlite;
 using KillTeam.DataSlate.Domain.Models;
 
 namespace KillTeam.DataSlate.Console.Infrastructure.Repositories;

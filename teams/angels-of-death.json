@@ -1,0 +1,628 @@
+{
+  "$schema": "../schema/team.schema.json",
+  "name": "Angels of Death",
+  "faction": "Adeptus Astartes",
+  "operatives": [
+    {
+      "name": "Space Marine Captain",
+      "operativeType": "Space Marine Captain",
+      "stats": {
+        "move": 6,
+        "apl": 3,
+        "wounds": 15,
+        "save": "3+"
+      },
+      "weapons": [
+        {
+          "name": "Plasma pistol (standard)",
+          "type": "Ranged",
+          "atk": 4,
+          "hit": "3+",
+          "dmg": "3/5",
+          "specialRules": "Range 8\", Piercing 1"
+        },
+        {
+          "name": "Plasma pistol (supercharge)",
+          "type": "Ranged",
+          "atk": 4,
+          "hit": "3+",
+          "dmg": "4/5",
+          "specialRules": "Range 8\", Hot, Lethal 5+, Piercing 1"
+        },
+        {
+          "name": "Power fist",
+          "type": "Melee",
+          "atk": 5,
+          "hit": "3+",
+          "dmg": "5/7",
+          "specialRules": "Brutal"
+        }
+      ],
+      "equipment": [
+        "Purity Seals",
+        "Chapter Reliquaries",
+        "Tilting Shields",
+        "Auspex",
+        "Portable Barricade",
+        "Utility Grenades",
+        "Ammo Cache",
+        "Razor Wire",
+        "Comms Device",
+        "Mines",
+        "Light Barricades",
+        "Heavy Barricade",
+        "Ladders",
+        "Explosive Grenades",
+        "Breaching Charge"
+      ]
+    },
+    {
+      "name": "Assault Intercessor Sergeant",
+      "operativeType": "Assault Intercessor Sergeant",
+      "stats": {
+        "move": 6,
+        "apl": 3,
+        "wounds": 15,
+        "save": "3+"
+      },
+      "weapons": [
+        {
+          "name": "Hand flamer",
+          "type": "Ranged",
+          "atk": 4,
+          "hit": "2+",
+          "dmg": "3/3",
+          "specialRules": "Range 6\", Saturate, Torrent 1\""
+        },
+        {
+          "name": "Heavy bolt pistol",
+          "type": "Ranged",
+          "atk": 4,
+          "hit": "3+",
+          "dmg": "3/4",
+          "specialRules": "Range 8\", Piercing Crits 1"
+        },
+        {
+          "name": "Plasma pistol (standard)",
+          "type": "Ranged",
+          "atk": 4,
+          "hit": "3+",
+          "dmg": "3/5",
+          "specialRules": "Range 8\", Piercing 1"
+        },
+        {
+          "name": "Plasma pistol (supercharge)",
+          "type": "Ranged",
+          "atk": 4,
+          "hit": "3+",
+          "dmg": "4/5",
+          "specialRules": "Range 8\", Hot, Lethal 5+, Piercing 1"
+        },
+        {
+          "name": "Chainsword",
+          "type": "Melee",
+          "atk": 5,
+          "hit": "3+",
+          "dmg": "4/5",
+          "specialRules": ""
+        },
+        {
+          "name": "Power fist",
+          "type": "Melee",
+          "atk": 5,
+          "hit": "4+",
+          "dmg": "5/7",
+          "specialRules": "Brutal"
+        },
+        {
+          "name": "Power weapon",
+          "type": "Melee",
+          "atk": 5,
+          "hit": "3+",
+          "dmg": "4/6",
+          "specialRules": "Lethal 5+"
+        },
+        {
+          "name": "Thunder hammer",
+          "type": "Melee",
+          "atk": 5,
+          "hit": "4+",
+          "dmg": "5/6",
+          "specialRules": "Shock, Stun"
+        }
+      ],
+      "equipment": [
+        "Purity Seals",
+        "Chapter Reliquaries",
+        "Tilting Shields",
+        "Auspex",
+        "Portable Barricade",
+        "Utility Grenades",
+        "Ammo Cache",
+        "Razor Wire",
+        "Comms Device",
+        "Mines",
+        "Light Barricades",
+        "Heavy Barricade",
+        "Ladders",
+        "Explosive Grenades",
+        "Breaching Charge"
+      ]
+    },
+    {
+      "name": "Intercessor Sergeant",
+      "operativeType": "Intercessor Sergeant",
+      "stats": {
+        "move": 6,
+        "apl": 3,
+        "wounds": 15,
+        "save": "3+"
+      },
+      "weapons": [
+        {
+          "name": "Auto bolt rifle",
+          "type": "Ranged",
+          "atk": 4,
+          "hit": "3+",
+          "dmg": "3/4",
+          "specialRules": "Torrent 1\""
+        },
+        {
+          "name": "Bolt rifle",
+          "type": "Ranged",
+          "atk": 4,
+          "hit": "3+",
+          "dmg": "3/4",
+          "specialRules": "Piercing Crits 1"
+        },
+        {
+          "name": "Stalker bolt rifle (heavy)",
+          "type": "Ranged",
+          "atk": 4,
+          "hit": "3+",
+          "dmg": "3/5",
+          "specialRules": "Heavy (Dash only), Lethal 5+, Piercing Crits 1"
+        },
+        {
+          "name": "Stalker bolt rifle (mobile)",
+          "type": "Ranged",
+          "atk": 4,
+          "hit": "3+",
+          "dmg": "3/4",
+          "specialRules": ""
+        },
+        {
+          "name": "Chainsword",
+          "type": "Melee",
+          "atk": 4,
+          "hit": "3+",
+          "dmg": "4/5",
+          "specialRules": ""
+        },
+        {
+          "name": "Fists",
+          "type": "Melee",
+          "atk": 4,
+          "hit": "3+",
+          "dmg": "3/4",
+          "specialRules": ""
+        },
+        {
+          "name": "Power fist",
+          "type": "Melee",
+          "atk": 4,
+          "hit": "4+",
+          "dmg": "5/7",
+          "specialRules": "Brutal"
+        },
+        {
+          "name": "Power weapon",
+          "type": "Melee",
+          "atk": 4,
+          "hit": "3+",
+          "dmg": "4/6",
+          "specialRules": "Lethal 5+"
+        },
+        {
+          "name": "Thunder hammer",
+          "type": "Melee",
+          "atk": 4,
+          "hit": "4+",
+          "dmg": "5/6",
+          "specialRules": "Shock, Stun"
+        }
+      ],
+      "equipment": [
+        "Purity Seals",
+        "Chapter Reliquaries",
+        "Tilting Shields",
+        "Auspex",
+        "Portable Barricade",
+        "Utility Grenades",
+        "Ammo Cache",
+        "Razor Wire",
+        "Comms Device",
+        "Mines",
+        "Light Barricades",
+        "Heavy Barricade",
+        "Ladders",
+        "Explosive Grenades",
+        "Breaching Charge"
+      ]
+    },
+    {
+      "name": "Assault Intercessor Grenadier",
+      "operativeType": "Assault Intercessor Grenadier",
+      "stats": {
+        "move": 6,
+        "apl": 3,
+        "wounds": 14,
+        "save": "3+"
+      },
+      "weapons": [
+        {
+          "name": "Heavy bolt pistol",
+          "type": "Ranged",
+          "atk": 4,
+          "hit": "3+",
+          "dmg": "3/4",
+          "specialRules": "Range 8\", Piercing Crits 1"
+        },
+        {
+          "name": "Chainsword",
+          "type": "Melee",
+          "atk": 5,
+          "hit": "3+",
+          "dmg": "4/5",
+          "specialRules": ""
+        }
+      ],
+      "equipment": [
+        "Purity Seals",
+        "Chapter Reliquaries",
+        "Tilting Shields",
+        "Auspex",
+        "Portable Barricade",
+        "Utility Grenades",
+        "Ammo Cache",
+        "Razor Wire",
+        "Comms Device",
+        "Mines",
+        "Light Barricades",
+        "Heavy Barricade",
+        "Ladders",
+        "Explosive Grenades",
+        "Breaching Charge"
+      ]
+    },
+    {
+      "name": "Assault Intercessor Warrior",
+      "operativeType": "Assault Intercessor Warrior",
+      "stats": {
+        "move": 6,
+        "apl": 3,
+        "wounds": 14,
+        "save": "3+"
+      },
+      "weapons": [
+        {
+          "name": "Heavy bolt pistol",
+          "type": "Ranged",
+          "atk": 4,
+          "hit": "3+",
+          "dmg": "3/4",
+          "specialRules": "Range 8\", Piercing Crits 1"
+        },
+        {
+          "name": "Chainsword",
+          "type": "Melee",
+          "atk": 5,
+          "hit": "3+",
+          "dmg": "4/5",
+          "specialRules": ""
+        }
+      ],
+      "equipment": [
+        "Purity Seals",
+        "Chapter Reliquaries",
+        "Tilting Shields",
+        "Auspex",
+        "Portable Barricade",
+        "Utility Grenades",
+        "Ammo Cache",
+        "Razor Wire",
+        "Comms Device",
+        "Mines",
+        "Light Barricades",
+        "Heavy Barricade",
+        "Ladders",
+        "Explosive Grenades",
+        "Breaching Charge"
+      ]
+    },
+    {
+      "name": "Eliminator Sniper",
+      "operativeType": "Eliminator Sniper",
+      "stats": {
+        "move": 7,
+        "apl": 3,
+        "wounds": 12,
+        "save": "3+"
+      },
+      "weapons": [
+        {
+          "name": "Bolt pistol",
+          "type": "Ranged",
+          "atk": 4,
+          "hit": "3+",
+          "dmg": "3/4",
+          "specialRules": "Range 8\""
+        },
+        {
+          "name": "Bolt sniper rifle (executioner)",
+          "type": "Ranged",
+          "atk": 4,
+          "hit": "2+",
+          "dmg": "3/4",
+          "specialRules": "Heavy (Dash only), Saturate, Seek Light, Silent"
+        },
+        {
+          "name": "Bolt sniper rifle (hyperfrag)",
+          "type": "Ranged",
+          "atk": 4,
+          "hit": "2+",
+          "dmg": "2/4",
+          "specialRules": "Blast 1\", Heavy (Dash only), Silent"
+        },
+        {
+          "name": "Bolt sniper rifle (mortis)",
+          "type": "Ranged",
+          "atk": 4,
+          "hit": "2+",
+          "dmg": "3/3",
+          "specialRules": "Devastating 3, Heavy (Dash only), Piercing 1, Silent"
+        },
+        {
+          "name": "Fists",
+          "type": "Melee",
+          "atk": 4,
+          "hit": "3+",
+          "dmg": "3/4",
+          "specialRules": ""
+        }
+      ],
+      "equipment": [
+        "Purity Seals",
+        "Chapter Reliquaries",
+        "Tilting Shields",
+        "Auspex",
+        "Portable Barricade",
+        "Utility Grenades",
+        "Ammo Cache",
+        "Razor Wire",
+        "Comms Device",
+        "Mines",
+        "Light Barricades",
+        "Heavy Barricade",
+        "Ladders",
+        "Explosive Grenades",
+        "Breaching Charge"
+      ]
+    },
+    {
+      "name": "Heavy Intercessor Gunner",
+      "operativeType": "Heavy Intercessor Gunner",
+      "stats": {
+        "move": 5,
+        "apl": 3,
+        "wounds": 18,
+        "save": "3+"
+      },
+      "weapons": [
+        {
+          "name": "Bolt pistol",
+          "type": "Ranged",
+          "atk": 4,
+          "hit": "3+",
+          "dmg": "3/4",
+          "specialRules": "Range 8\""
+        },
+        {
+          "name": "Heavy bolter (focused)",
+          "type": "Ranged",
+          "atk": 5,
+          "hit": "3+",
+          "dmg": "4/5",
+          "specialRules": "Piercing Crits 1"
+        },
+        {
+          "name": "Heavy bolter (sweeping)",
+          "type": "Ranged",
+          "atk": 4,
+          "hit": "3+",
+          "dmg": "4/5",
+          "specialRules": "Piercing Crits 1, Torrent 1\""
+        },
+        {
+          "name": "Fists",
+          "type": "Melee",
+          "atk": 4,
+          "hit": "3+",
+          "dmg": "3/4",
+          "specialRules": ""
+        }
+      ],
+      "equipment": [
+        "Purity Seals",
+        "Chapter Reliquaries",
+        "Tilting Shields",
+        "Auspex",
+        "Portable Barricade",
+        "Utility Grenades",
+        "Ammo Cache",
+        "Razor Wire",
+        "Comms Device",
+        "Mines",
+        "Light Barricades",
+        "Heavy Barricade",
+        "Ladders",
+        "Explosive Grenades",
+        "Breaching Charge"
+      ]
+    },
+    {
+      "name": "Intercessor Gunner",
+      "operativeType": "Intercessor Gunner",
+      "stats": {
+        "move": 6,
+        "apl": 3,
+        "wounds": 14,
+        "save": "3+"
+      },
+      "weapons": [
+        {
+          "name": "Auto bolt rifle",
+          "type": "Ranged",
+          "atk": 4,
+          "hit": "3+",
+          "dmg": "3/4",
+          "specialRules": "Torrent 1\""
+        },
+        {
+          "name": "Auxiliary grenade launcher (frag)",
+          "type": "Ranged",
+          "atk": 4,
+          "hit": "3+",
+          "dmg": "2/4",
+          "specialRules": "Blast 2\""
+        },
+        {
+          "name": "Auxiliary grenade launcher (krak)",
+          "type": "Ranged",
+          "atk": 4,
+          "hit": "3+",
+          "dmg": "4/5",
+          "specialRules": "Piercing 1"
+        },
+        {
+          "name": "Bolt rifle",
+          "type": "Ranged",
+          "atk": 4,
+          "hit": "3+",
+          "dmg": "3/4",
+          "specialRules": "Piercing Crits 1"
+        },
+        {
+          "name": "Stalker bolt rifle (heavy)",
+          "type": "Ranged",
+          "atk": 4,
+          "hit": "3+",
+          "dmg": "3/5",
+          "specialRules": "Heavy (Dash only), Lethal 5+, Piercing Crits 1"
+        },
+        {
+          "name": "Stalker bolt rifle (mobile)",
+          "type": "Ranged",
+          "atk": 4,
+          "hit": "3+",
+          "dmg": "3/4",
+          "specialRules": ""
+        },
+        {
+          "name": "Fists",
+          "type": "Melee",
+          "atk": 4,
+          "hit": "3+",
+          "dmg": "3/4",
+          "specialRules": ""
+        }
+      ],
+      "equipment": [
+        "Purity Seals",
+        "Chapter Reliquaries",
+        "Tilting Shields",
+        "Auspex",
+        "Portable Barricade",
+        "Utility Grenades",
+        "Ammo Cache",
+        "Razor Wire",
+        "Comms Device",
+        "Mines",
+        "Light Barricades",
+        "Heavy Barricade",
+        "Ladders",
+        "Explosive Grenades",
+        "Breaching Charge"
+      ]
+    },
+    {
+      "name": "Intercessor Warrior",
+      "operativeType": "Intercessor Warrior",
+      "stats": {
+        "move": 6,
+        "apl": 3,
+        "wounds": 14,
+        "save": "3+"
+      },
+      "weapons": [
+        {
+          "name": "Auto bolt rifle",
+          "type": "Ranged",
+          "atk": 4,
+          "hit": "3+",
+          "dmg": "3/4",
+          "specialRules": "Torrent 1\""
+        },
+        {
+          "name": "Bolt rifle",
+          "type": "Ranged",
+          "atk": 4,
+          "hit": "3+",
+          "dmg": "3/4",
+          "specialRules": "Piercing Crits 1"
+        },
+        {
+          "name": "Stalker bolt rifle (heavy)",
+          "type": "Ranged",
+          "atk": 4,
+          "hit": "3+",
+          "dmg": "3/5",
+          "specialRules": "Heavy (Dash only), Lethal 5+, Piercing Crits 1"
+        },
+        {
+          "name": "Stalker bolt rifle (mobile)",
+          "type": "Ranged",
+          "atk": 4,
+          "hit": "3+",
+          "dmg": "3/4",
+          "specialRules": ""
+        },
+        {
+          "name": "Fists",
+          "type": "Melee",
+          "atk": 4,
+          "hit": "3+",
+          "dmg": "3/4",
+          "specialRules": ""
+        }
+      ],
+      "equipment": [
+        "Purity Seals",
+        "Chapter Reliquaries",
+        "Tilting Shields",
+        "Auspex",
+        "Portable Barricade",
+        "Utility Grenades",
+        "Ammo Cache",
+        "Razor Wire",
+        "Comms Device",
+        "Mines",
+        "Light Barricades",
+        "Heavy Barricade",
+        "Ladders",
+        "Explosive Grenades",
+        "Breaching Charge"
+      ]
+    }
+  ]
+}

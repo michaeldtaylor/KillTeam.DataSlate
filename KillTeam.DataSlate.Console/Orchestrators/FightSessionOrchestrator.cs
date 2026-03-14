@@ -1,4 +1,4 @@
-using KillTeam.DataSlate.Domain.Models;
+﻿using KillTeam.DataSlate.Domain.Models;
 using KillTeam.DataSlate.Domain.Repositories;
 using KillTeam.DataSlate.Domain.Services;
 using Spectre.Console;
@@ -28,13 +28,13 @@ public class FightSessionOrchestrator(
         TurningPoint tp,
         Activation activation)
     {
-        bool isAttackerTeamA = attacker.KillTeamName == game.TeamAName;
+        bool isAttackerTeamA = attacker.TeamName == game.TeamAName;
 
         // 1. Target selection
         var enemyStates = allOperativeStates
             .Where(s => !s.IsIncapacitated
                 && allOperatives.TryGetValue(s.OperativeId, out var o)
-                && o.KillTeamName != attacker.KillTeamName)
+                && o.TeamName != attacker.TeamName)
             .ToList();
 
         if (enemyStates.Count == 0)
@@ -56,7 +56,7 @@ public class FightSessionOrchestrator(
             console.MarkupLine("[red]Target operative not found.[/]");
             return new FightSessionResult(false, false, 0, 0, Guid.Empty);
         }
-        bool isDefenderTeamA = targetOp.KillTeamName == game.TeamAName;
+        bool isDefenderTeamA = targetOp.TeamName == game.TeamAName;
 
         // 2. Attacker weapon selection (melee only)
         var atkMeleeWeapons = attacker.Weapons.Where(w => w.Type == WeaponType.Melee).ToList();

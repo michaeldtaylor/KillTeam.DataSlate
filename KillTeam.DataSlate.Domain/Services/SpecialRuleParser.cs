@@ -1,4 +1,4 @@
-using KillTeam.DataSlate.Domain.Models;
+﻿using KillTeam.DataSlate.Domain.Models;
 
 namespace KillTeam.DataSlate.Domain.Services;
 
@@ -36,10 +36,9 @@ public static class SpecialRuleParser
             return new WeaponSpecialRule(SpecialRuleKind.HeavyDashOnly, null, token);
         }
 
-        if (token.StartsWith("D.", StringComparison.OrdinalIgnoreCase) ||
-            token.StartsWith("D ", StringComparison.OrdinalIgnoreCase))
+        if (token.StartsWith("Seek Light", StringComparison.OrdinalIgnoreCase))
         {
-            return new WeaponSpecialRule(SpecialRuleKind.DDevastating, param, token);
+            return new WeaponSpecialRule(SpecialRuleKind.SeekLight, null, token);
         }
 
         if (token.Equals("PiercingCrits", StringComparison.OrdinalIgnoreCase) ||

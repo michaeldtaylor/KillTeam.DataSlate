@@ -1,4 +1,4 @@
-using System.Text.Json;
+﻿using System.Text.Json;
 using Microsoft.Data.Sqlite;
 using KillTeam.DataSlate.Domain.Models;
 
@@ -13,28 +13,28 @@ public class SqliteOperativeRepository
     public SqliteOperativeRepository(SqliteConnection connection)
         : this(new SqliteExecutor(connection)) { }
 
-    public async Task UpsertByTeamAsync(IEnumerable<Operative> operatives, string killTeamName)
+    public async Task UpsertByTeamAsync(IEnumerable<Operative> operatives, string TeamName)
     {
         await _db.ExecuteTransactionAsync(async (conn, tx) =>
         {
             using var del = conn.CreateCommand();
             del.Transaction = tx;
-            del.CommandText = "DELETE FROM operatives WHERE kill_team_name = @teamName";
-            del.Parameters.AddWithValue("@teamName", killTeamName);
+            del.CommandText = "DELETE FROM operatives WHERE team_name = @teamName";
+            del.Parameters.AddWithValue("@teamName", TeamName);
             await del.ExecuteNonQueryAsync();
 
             foreach (var operative in operatives)
             {
-                operative.KillTeamName = killTeamName;
+                operative.TeamName = TeamName;
                 using var cmd = conn.CreateCommand();
                 cmd.Transaction = tx;
                 cmd.CommandText = """
                     INSERT INTO operatives
-                    (id, kill_team_name, name, operative_type, move, apl, wounds, save, equipment_json)
-                    VALUES (@id, @killTeamName, @name, @operativeType, @move, @apl, @wounds, @save, @equipmentJson)
+                    (id, team_name, name, operative_type, move, apl, wounds, save, equipment_json)
+                    VALUES (@id, @TeamName, @name, @operativeType, @move, @apl, @wounds, @save, @equipmentJson)
                     """;
                 cmd.Parameters.AddWithValue("@id", operative.Id.ToString());
-                cmd.Parameters.AddWithValue("@killTeamName", operative.KillTeamName);
+                cmd.Parameters.AddWithValue("@TeamName", operative.TeamName);
                 cmd.Parameters.AddWithValue("@name", operative.Name);
                 cmd.Parameters.AddWithValue("@operativeType", operative.OperativeType);
                 cmd.Parameters.AddWithValue("@move", operative.Move);

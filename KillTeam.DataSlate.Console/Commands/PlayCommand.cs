@@ -1,4 +1,4 @@
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using KillTeam.DataSlate.Console.Orchestrators;
 using KillTeam.DataSlate.Domain.Models;
 using KillTeam.DataSlate.Domain.Repositories;
@@ -13,7 +13,7 @@ public class PlayCommand(
     IAnsiConsole console,
     IGameRepository gameRepository,
     ITurningPointRepository turningPointRepository,
-    IKillTeamRepository killTeamRepository,
+    ITeamRepository teamRepository,
     StrategyPhaseOrchestrator strategyPhaseOrchestrator,
     FirefightPhaseOrchestrator firefightPhaseOrchestrator) : AsyncCommand<PlayCommand.Settings>
 {
@@ -44,12 +44,12 @@ public class PlayCommand(
             return 0;
         }
 
-        var teamA = await killTeamRepository.GetWithOperativesAsync(game.TeamAName);
-        var teamB = await killTeamRepository.GetWithOperativesAsync(game.TeamBName);
+        var teamA = await teamRepository.GetWithOperativesAsync(game.TeamAName);
+        var teamB = await teamRepository.GetWithOperativesAsync(game.TeamBName);
         string teamAName = teamA?.Name ?? "Team A";
         string teamBName = teamB?.Name ?? "Team B";
 
-        console.Write(new Rule($"[bold]Kill Team Game[/]  {Markup.Escape(teamAName)} vs {Markup.Escape(teamBName)}"));
+        console.Write(new Rule($"[bold]team Game[/]  {Markup.Escape(teamAName)} vs {Markup.Escape(teamBName)}"));
 
         // Determine starting TP
         var currentTp = await turningPointRepository.GetCurrentAsync(game.Id);

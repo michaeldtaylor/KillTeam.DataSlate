@@ -1,4 +1,4 @@
-using KillTeam.DataSlate.Console.Commands;
+﻿using KillTeam.DataSlate.Console.Commands;
 using KillTeam.DataSlate.Console.Infrastructure;
 using KillTeam.DataSlate.Console.Orchestrators;
 using KillTeam.DataSlate.Console.Infrastructure.Repositories;
@@ -32,7 +32,7 @@ public static class Program
         var sqlExecutor = new SqliteExecutor(config);
         services.AddSingleton<ISqlExecutor>(sqlExecutor);
         services.AddSingleton<IPlayerRepository>(new SqlitePlayerRepository(sqlExecutor));
-        services.AddSingleton<IKillTeamRepository>(new SqliteKillTeamRepository(sqlExecutor));
+        services.AddSingleton<ITeamRepository>(new SqliteTeamRepository(sqlExecutor));
         services.AddSingleton<IGameRepository>(new SqliteGameRepository(sqlExecutor));
         services.AddSingleton<IGameOperativeStateRepository>(new SqliteGameOperativeStateRepository(sqlExecutor));
         services.AddSingleton<IActivationRepository>(new SqliteActivationRepository(sqlExecutor));
@@ -42,7 +42,7 @@ public static class Program
         services.AddSingleton<IActionRepository>(new SqliteActionRepository(sqlExecutor));
         services.AddSingleton<SqliteOperativeRepository>(new SqliteOperativeRepository(sqlExecutor));
         services.AddSingleton<SqliteWeaponRepository>(new SqliteWeaponRepository(sqlExecutor));
-        services.AddSingleton<KillTeamJsonImporter>();
+        services.AddSingleton<TeamJsonImporter>();
         services.AddSingleton<RerollOrchestrator>();
         services.AddSingleton<StrategyPhaseOrchestrator>();
         services.AddSingleton<CombatResolutionService>();
@@ -72,9 +72,9 @@ public static class Program
                 player.AddCommand<PlayerDeleteCommand>("delete")
                       .WithDescription("Remove a player (blocked if they have games).");
             });
-            cfg.AddCommand<ImportKillTeamsCommand>("import-kill-teams")
-               .WithDescription("Import a JSON killTeam file (or scan the killTeam folder).");
-            cfg.AddCommand<NewGameCommand>("new-game").WithDescription("Start a new Kill Team game.");
+            cfg.AddCommand<ImportTeamsCommand>("import-teams")
+               .WithDescription("Import a JSON team file (or scan the team folder).");
+            cfg.AddCommand<NewGameCommand>("new-game").WithDescription("Start a new team game.");
             cfg.AddCommand<HistoryCommand>("history")
                .WithDescription("View completed game history.");
             cfg.AddCommand<StatsCommand>("stats")
@@ -84,7 +84,7 @@ public static class Program
             cfg.AddCommand<AnnotateCommand>("annotate")
                .WithDescription("Add narrative notes to activations and actions.");
             cfg.AddCommand<PlayCommand>("play")
-               .WithDescription("Play a Kill Team game (strategy + firefight phases).");
+               .WithDescription("Play a team game (strategy + firefight phases).");
             cfg.AddCommand<SimulateCommand>("simulate")
                .WithDescription("Simulate fight/shoot encounters without a saved game.");
         });

@@ -1,4 +1,4 @@
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using KillTeam.DataSlate.Domain.Repositories;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Configuration;

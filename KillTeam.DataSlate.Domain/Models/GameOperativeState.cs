@@ -1,4 +1,4 @@
-namespace KillTeam.DataSlate.Domain.Models;
+﻿namespace KillTeam.DataSlate.Domain.Models;
 
 public class GameOperativeState
 {

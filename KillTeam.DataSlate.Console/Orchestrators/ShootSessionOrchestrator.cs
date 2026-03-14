@@ -1,4 +1,4 @@
-using KillTeam.DataSlate.Domain.Models;
+﻿using KillTeam.DataSlate.Domain.Models;
 using KillTeam.DataSlate.Domain.Repositories;
 using KillTeam.DataSlate.Domain.Services;
 using Spectre.Console;
@@ -28,13 +28,13 @@ public class ShootSessionOrchestrator(
         Activation activation,
         bool hasMovedNonDash = false)
     {
-        bool isAttackerTeamA = attacker.KillTeamName == game.TeamAName;
+        bool isAttackerTeamA = attacker.TeamName == game.TeamAName;
 
         // 1. Target selection: enemy operatives
         var enemyStates = allOperativeStates
             .Where(s => !s.IsIncapacitated
                 && allOperatives.TryGetValue(s.OperativeId, out var o)
-                && o.KillTeamName != attacker.KillTeamName)
+                && o.TeamName != attacker.TeamName)
             .ToList();
 
         if (enemyStates.Count == 0)
@@ -129,7 +129,7 @@ public class ShootSessionOrchestrator(
             : await RollOrEnterDiceAsync(defDiceCount, $"{Markup.Escape(targetOp.Name)} defence dice");
 
         // 8. Defender CP re-roll
-        bool isDefenderTeamA = targetOp.KillTeamName == game.TeamAName;
+        bool isDefenderTeamA = targetOp.TeamName == game.TeamAName;
         defDice = await rerollOrchestrator.ApplyDefenderRerollAsync(defDice, game.Id, isDefenderTeamA, targetOp.Name);
 
         // 9. Resolve shoot

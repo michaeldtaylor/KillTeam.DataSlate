@@ -1,4 +1,4 @@
-using FluentAssertions;
+﻿using FluentAssertions;
 using Microsoft.Data.Sqlite;
 using KillTeam.DataSlate.Console.Infrastructure;
 using KillTeam.DataSlate.Console.Infrastructure.Repositories;
@@ -16,7 +16,7 @@ public class SchemaTests
 
         string[] expectedTables =
         [
-            "schema_version", "players", "kill_teams", "operatives", "weapons",
+            "schema_version", "players", "teams", "operatives", "weapons",
             "games", "turning_points", "activations", "actions", "game_operative_states",
             "ploy_uses", "action_blast_targets"
         ];

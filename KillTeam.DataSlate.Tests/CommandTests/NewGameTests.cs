@@ -1,4 +1,4 @@
-using FluentAssertions;
+﻿using FluentAssertions;
 using KillTeam.DataSlate.Console.Infrastructure.Repositories;
 using KillTeam.DataSlate.Domain.Models;
 using Xunit;
@@ -32,7 +32,7 @@ public class NewGameTests
 
         var gameRepo = new SqliteGameRepository(db.Connection);
         var stateRepo = new SqliteGameOperativeStateRepository(db.Connection);
-        var killTeamRepo = new SqliteKillTeamRepository(db.Connection);
+        var teamRepo = new SqliteTeamRepository(db.Connection);
 
         // Act — simulate what NewGameCommand does
         var game = new Game
@@ -49,8 +49,8 @@ public class NewGameTests
         };
         var created = await gameRepo.CreateAsync(game);
 
-        var fullTeamA = await killTeamRepo.GetWithOperativesAsync(teamAName);
-        var fullTeamB = await killTeamRepo.GetWithOperativesAsync(teamBName);
+        var fullTeamA = await teamRepo.GetWithOperativesAsync(teamAName);
+        var fullTeamB = await teamRepo.GetWithOperativesAsync(teamBName);
         var allOps = (fullTeamA?.Operatives ?? []).Concat(fullTeamB?.Operatives ?? []).ToList();
 
         foreach (var op in allOps)
@@ -90,8 +90,8 @@ public class NewGameTests
             .WithPlayer(playerId, "Michael")
             .WithKillTeam("Angels of Death", "Adeptus Astartes");
 
-        var killTeamRepo = new SqliteKillTeamRepository(db.Connection);
-        var teams = (await killTeamRepo.GetAllAsync()).ToList();
+        var teamRepo = new SqliteTeamRepository(db.Connection);
+        var teams = (await teamRepo.GetAllAsync()).ToList();
 
         teams.Should().HaveCount(1, "NewGameCommand would reject this with < 2 teams");
     }

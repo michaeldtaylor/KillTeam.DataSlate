@@ -1,4 +1,4 @@
-namespace KillTeam.DataSlate.Domain.Services;
+﻿namespace KillTeam.DataSlate.Domain.Services;
 
 public enum DieResult { Crit, Hit, Miss }
 public enum DieOwner { Attacker, Defender }

@@ -1,4 +1,4 @@
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Configuration;
 using Spectre.Console;
@@ -45,8 +45,8 @@ public class ViewGameCommand(
             FROM games g
             JOIN players pa ON pa.id = g.player_a_id
             JOIN players pb ON pb.id = g.player_b_id
-            JOIN kill_teams ta ON ta.name = g.team_a_name
-            JOIN kill_teams tb ON tb.name = g.team_b_name
+            JOIN teams ta ON ta.name = g.team_a_name
+            JOIN teams tb ON tb.name = g.team_b_name
             WHERE g.id = @id
             """;
         gameCmd.Parameters.AddWithValue("@id", gameId.ToString());
@@ -80,7 +80,7 @@ public class ViewGameCommand(
         tpCmd.CommandText = """
             SELECT tp.id, tp.number, kt.name
             FROM turning_points tp
-            LEFT JOIN kill_teams kt ON kt.name = tp.team_with_initiative_name
+            LEFT JOIN teams kt ON kt.name = tp.team_with_initiative_name
             WHERE tp.game_id = @gid ORDER BY tp.number
             """;
         tpCmd.Parameters.AddWithValue("@gid", gameId.ToString());

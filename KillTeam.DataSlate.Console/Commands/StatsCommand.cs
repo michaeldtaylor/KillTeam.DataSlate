@@ -1,4 +1,4 @@
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Configuration;
 using Spectre.Console;
@@ -6,13 +6,13 @@ using Spectre.Console.Cli;
 
 namespace KillTeam.DataSlate.Console.Commands;
 
-/// <summary>Displays win/loss statistics per player or per kill team.</summary>
-[Description("Show win/loss statistics per player or per kill team.")]
+/// <summary>Displays win/loss statistics per player or per team.</summary>
+[Description("Show win/loss statistics per player or per team.")]
 public class StatsCommand(IConfiguration config) : AsyncCommand<StatsCommand.Settings>
 {
     public class Settings : CommandSettings
     {
-        [Description("Show statistics for a specific kill team (case-insensitive).")]
+        [Description("Show statistics for a specific team (case-insensitive).")]
         [CommandOption("--team <name>")]
         public string? TeamName { get; set; }
 
@@ -38,7 +38,7 @@ public class StatsCommand(IConfiguration config) : AsyncCommand<StatsCommand.Set
     private static async Task<int> ShowTeamStatsAsync(SqliteConnection conn, string teamName)
     {
         using var teamCmd = conn.CreateCommand();
-        teamCmd.CommandText = "SELECT name, faction FROM kill_teams WHERE name LIKE @name COLLATE NOCASE LIMIT 1";
+        teamCmd.CommandText = "SELECT name, faction FROM teams WHERE name LIKE @name COLLATE NOCASE LIMIT 1";
         teamCmd.Parameters.AddWithValue("@name", teamName);
         string? resolvedName = null, faction = null;
         using (var r = await teamCmd.ExecuteReaderAsync())

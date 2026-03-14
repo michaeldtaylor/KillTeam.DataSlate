@@ -1,4 +1,4 @@
-using KillTeam.DataSlate.Console.Infrastructure.Repositories;
+﻿using KillTeam.DataSlate.Console.Infrastructure.Repositories;
 using KillTeam.DataSlate.Domain.Repositories;
 using KillTeam.DataSlate.Domain.Services;
 using Spectre.Console;
@@ -12,7 +12,7 @@ namespace KillTeam.DataSlate.Console.Orchestrators;
 /// </summary>
 public class SimulateSessionOrchestrator(
     IAnsiConsole console,
-    IKillTeamRepository killTeamRepository,
+    ITeamRepository teamRepository,
     CombatResolutionService combatResolutionService,
     FightResolutionService fightResolutionService,
     RerollOrchestrator rerollOrchestrator)
@@ -34,23 +34,23 @@ public class SimulateSessionOrchestrator(
 
     // --- Operative selection -------------------------------------------------
 
-    private async Task<(Models.Operative? playerOp, Models.Operative? aiOp, Models.KillTeam? playerTeam, Models.KillTeam? aiTeam)> SelectOperativesAsync()
+    private async Task<(Models.Operative? playerOp, Models.Operative? aiOp, Models.Team? playerTeam, Models.Team? aiTeam)> SelectOperativesAsync()
     {
-        var allTeams = (await killTeamRepository.GetAllAsync()).ToList();
+        var allTeams = (await teamRepository.GetAllAsync()).ToList();
         if (allTeams.Count == 0)
         {
-            console.MarkupLine("[red]No kill teams imported. Run [bold]import-kill-teams[/] first.[/]");
+            console.MarkupLine("[red]No teams imported. Run [bold]import-kill-teams[/] first.[/]");
             return (null, null, null, null);
         }
 
-        // Step 1 - your kill team
+        // Step 1 - your team
         var playerTeamStub = console.Prompt(
-            new SelectionPrompt<Models.KillTeam>()
-                .Title("Select [bold]your[/] kill team:")
+            new SelectionPrompt<Models.Team>()
+                .Title("Select [bold]your[/] team:")
                 .UseConverter(t => $"{Markup.Escape(t.Name)} [dim]({Markup.Escape(t.Faction)})[/]")
                 .AddChoices(allTeams));
 
-        var playerTeam = (await killTeamRepository.GetWithOperativesAsync(playerTeamStub.Name))!;
+        var playerTeam = (await teamRepository.GetWithOperativesAsync(playerTeamStub.Name))!;
 
         // Step 2 - your operative
         var playerOp = console.Prompt(
@@ -59,16 +59,16 @@ public class SimulateSessionOrchestrator(
                 .UseConverter(FormatOperative)
                 .AddChoices(playerTeam.Operatives));
 
-        // Step 3 - AI's kill team (any team, including same as player)
+        // Step 3 - AI's team (any team, including same as player)
         var aiTeamStub = console.Prompt(
-            new SelectionPrompt<Models.KillTeam>()
-                .Title("Select the [bold]AI[/] kill team:")
+            new SelectionPrompt<Models.Team>()
+                .Title("Select the [bold]AI[/] team:")
                 .UseConverter(t => $"{Markup.Escape(t.Name)} [dim]({Markup.Escape(t.Faction)})[/]")
                 .AddChoices(allTeams));
 
         var aiTeam = aiTeamStub.Name == playerTeam.Name
             ? playerTeam
-            : (await killTeamRepository.GetWithOperativesAsync(aiTeamStub.Name))!;
+            : (await teamRepository.GetWithOperativesAsync(aiTeamStub.Name))!;
 
         // Step 4 - AI's operative
         var aiOp = console.Prompt(
@@ -85,7 +85,7 @@ public class SimulateSessionOrchestrator(
 
     private async Task RunSessionLoopAsync(
         Models.Operative playerOp, Models.Operative aiOp,
-        Models.KillTeam playerTeam, Models.KillTeam aiTeam)
+        Models.Team playerTeam, Models.Team aiTeam)
     {
         while (true)
         {
@@ -126,7 +126,7 @@ public class SimulateSessionOrchestrator(
 
     private async Task RunEncounterAsync(
         Models.Operative playerOp, Models.Operative aiOp,
-        Models.KillTeam playerTeam, Models.KillTeam aiTeam,
+        Models.Team playerTeam, Models.Team aiTeam,
         Models.ActionType actionType)
     {
         // Synthetic domain objects - no DB interaction
@@ -222,8 +222,8 @@ public class SimulateSessionOrchestrator(
         $"{Markup.Escape(o.Name)} [dim](M{o.Move}\" APL{o.Apl} W{o.Wounds} SV{o.Save}+)[/]";
 
     private void DisplayMatchup(
-        Models.Operative playerOp, Models.KillTeam playerTeam,
-        Models.Operative aiOp, Models.KillTeam aiTeam)
+        Models.Operative playerOp, Models.Team playerTeam,
+        Models.Operative aiOp, Models.Team aiTeam)
     {
         console.WriteLine();
         var table = new Table()
