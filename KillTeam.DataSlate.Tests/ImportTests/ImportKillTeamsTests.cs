@@ -75,23 +75,33 @@ public class ImportKillTeamsTests
         var opRepo = new SqliteOperativeRepository(db.Connection);
         var wpRepo = new SqliteWeaponRepository(db.Connection);
 
-        async Task DoImport(string faction)
+        async Task<Guid> DoImport(string faction)
         {
-            // Patch faction in JSON for second import
             var json = ValidKillTeamJson.Replace("Adeptus Astartes", faction);
             var team = importer.Import(json);
+            // Simulate the ID-preservation logic from ImportKillTeamsCommand
+            var existing = await killTeamRepo.FindByNameAsync(team.Name);
+            if (existing is not null) team.Id = existing.Id;
             await killTeamRepo.UpsertAsync(team);
             await opRepo.UpsertByTeamAsync(team.Operatives, team.Id);
             foreach (var op in team.Operatives)
                 await wpRepo.UpsertByOperativeAsync(op.Weapons, op.Id);
+            return team.Id;
         }
 
-        await DoImport("Adeptus Astartes");
-        await DoImport("Space Marines"); // same name, different faction
+        var firstId  = await DoImport("Adeptus Astartes");
+        var secondId = await DoImport("Space Marines"); // same name, updated faction
 
         using var cmd = db.Connection.CreateCommand();
         cmd.CommandText = "SELECT COUNT(*) FROM kill_teams";
         Convert.ToInt32(cmd.ExecuteScalar()).Should().Be(1, "re-import should not create a second row");
+
+        secondId.Should().Be(firstId, "re-import should preserve the kill team ID");
+
+        // Verify faction was updated
+        cmd.CommandText = "SELECT faction FROM kill_teams WHERE id = @id";
+        cmd.Parameters.AddWithValue("@id", firstId.ToString());
+        ((string?)cmd.ExecuteScalar()).Should().Be("Space Marines");
     }
 
     [Fact]
