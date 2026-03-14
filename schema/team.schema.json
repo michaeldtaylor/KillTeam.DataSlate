@@ -2,60 +2,131 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "team.schema.json",
   "title": "Kill Team - Team Schema",
-  "description": "Schema for a Kill Team Version 3 team exported from official PDFs",
+  "description": "Schema for a Kill Team v3.0 team exported from official GW PDFs",
   "type": "object",
   "required": ["id", "name", "faction", "operatives"],
   "additionalProperties": false,
   "properties": {
-    "$schema": {
-      "type": "string",
-      "format": "uri-reference"
-    },
+    "$schema": { "type": "string", "format": "uri-reference" },
     "id": {
       "type": "string",
-      "description": "Unique slug identifier for the kill team (e.g. 'angels_of_death')",
-      "pattern": "^[a-z0-9_]+$"
+      "description": "Unique slug (e.g. 'angels-of-death')",
+      "pattern": "^[a-z0-9-]+$"
     },
-    "name": {
-      "type": "string",
-      "description": "Display name of the kill team (e.g. 'Angels of Death')"
+    "name": { "type": "string" },
+    "faction": { "type": "string" },
+    "factionRules": {
+      "type": "array",
+      "description": "Faction rules from the Faction Rules PDF",
+      "items": { "$ref": "#/$defs/namedRule" }
     },
-    "faction": {
+    "strategyPloys": {
+      "type": "array",
+      "description": "Strategy ploys from the Strategy Ploys PDF",
+      "items": { "$ref": "#/$defs/namedRule" }
+    },
+    "firefightPloys": {
+      "type": "array",
+      "description": "Firefight ploys from the Firefight Ploys PDF",
+      "items": { "$ref": "#/$defs/namedRule" }
+    },
+    "equipment": {
+      "type": "array",
+      "description": "Equipment available to the kill team (faction + universal)",
+      "items": { "$ref": "#/$defs/equipmentItem" }
+    },
+    "operativeSelection": {
+      "type": "object",
+      "description": "Team composition rules from the Operative Selection PDF",
+      "additionalProperties": false,
+      "properties": {
+        "archetype": { "type": "string" },
+        "text": { "type": "string" }
+      }
+    },
+    "supplementaryInfo": {
       "type": "string",
-      "description": "Faction keyword as printed on datacards (e.g. 'Adeptus Astartes')"
+      "description": "Raw text from the Supplementary Information PDF (errata, FAQs)"
     },
     "operatives": {
       "type": "array",
-      "description": "All operative types available to this kill team",
       "minItems": 1,
       "items": { "$ref": "#/$defs/operative" }
     }
   },
   "$defs": {
-    "operative": {
+    "namedRule": {
       "type": "object",
-      "required": ["name", "operativeType", "stats", "weapons", "equipment"],
+      "required": ["name", "text"],
       "additionalProperties": false,
       "properties": {
-        "name": {
-          "type": "string",
-          "description": "Operative display name"
+        "name": { "type": "string" },
+        "text": { "type": "string" }
+      }
+    },
+    "equipmentItem": {
+      "type": "object",
+      "required": ["name"],
+      "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string" },
+        "description": { "type": "string" }
+      }
+    },
+    "ability": {
+      "type": "object",
+      "required": ["name", "text"],
+      "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string" },
+        "apCost": {
+          "type": "integer",
+          "description": "AP cost of the action. Absent for passive rules and strategic gambits.",
+          "minimum": 0
         },
-        "operativeType": {
+        "text": { "type": "string" }
+      }
+    },
+    "weaponRule": {
+      "type": "object",
+      "required": ["name", "text"],
+      "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string" },
+        "text": { "type": "string" }
+      }
+    },
+    "operative": {
+      "type": "object",
+      "required": ["name", "operativeType", "stats", "weapons"],
+      "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string" },
+        "operativeType": { "type": "string" },
+        "keywords": {
+          "type": "array",
+          "description": "All keywords on the datacard",
+          "items": { "type": "string" }
+        },
+        "primaryKeyword": {
           "type": "string",
-          "description": "Operative type key used for roster selection and DB import"
+          "description": "The team keyword (first in the list, highlighted orange in the PDF)"
         },
         "stats": { "$ref": "#/$defs/stats" },
         "weapons": {
           "type": "array",
-          "description": "All weapons available to this operative",
           "minItems": 1,
           "items": { "$ref": "#/$defs/weapon" }
         },
-        "equipment": {
+        "abilities": {
           "type": "array",
-          "description": "Equipment names available to this operative (faction + universal)",
-          "items": { "type": "string" }
+          "description": "Named abilities, actions (with AP cost), and passive rules",
+          "items": { "$ref": "#/$defs/ability" }
+        },
+        "weaponRules": {
+          "type": "array",
+          "description": "Custom weapon rule definitions referenced by * in weapon special rules",
+          "items": { "$ref": "#/$defs/weaponRule" }
         }
       }
     },
@@ -64,27 +135,10 @@
       "required": ["move", "apl", "wounds", "save"],
       "additionalProperties": false,
       "properties": {
-        "move": {
-          "type": "integer",
-          "description": "Move characteristic in inches (e.g. 6 for 6\")",
-          "minimum": 1
-        },
-        "apl": {
-          "type": "integer",
-          "description": "Action Point Limit",
-          "minimum": 1,
-          "maximum": 5
-        },
-        "wounds": {
-          "type": "integer",
-          "description": "Wounds characteristic",
-          "minimum": 1
-        },
-        "save": {
-          "type": "string",
-          "description": "Save characteristic (e.g. '3+')",
-          "pattern": "^[2-6]\\+$"
-        }
+        "move": { "type": "integer", "minimum": 1 },
+        "apl": { "type": "integer", "minimum": 1, "maximum": 5 },
+        "wounds": { "type": "integer", "minimum": 1 },
+        "save": { "type": "string", "pattern": "^[2-6]\\+$" }
       }
     },
     "weapon": {
@@ -92,34 +146,12 @@
       "required": ["name", "type", "atk", "hit", "dmg", "specialRules"],
       "additionalProperties": false,
       "properties": {
-        "name": {
-          "type": "string",
-          "description": "Weapon name as printed on the datacard (e.g. 'Bolt rifle', 'Plasma pistol (standard)')"
-        },
-        "type": {
-          "type": "string",
-          "description": "Ranged or Melee",
-          "enum": ["Ranged", "Melee"]
-        },
-        "atk": {
-          "type": "integer",
-          "description": "Attack dice count",
-          "minimum": 1
-        },
-        "hit": {
-          "type": "string",
-          "description": "Hit threshold (e.g. '3+', '2+')",
-          "pattern": "^[2-6]\\+$"
-        },
-        "dmg": {
-          "type": "string",
-          "description": "Damage as 'normal/critical' (e.g. '3/5')",
-          "pattern": "^\\d+/\\d+$"
-        },
-        "specialRules": {
-          "type": "string",
-          "description": "Comma-separated special rules as printed (e.g. 'Range 8\", Piercing 1'). Empty string if none."
-        }
+        "name": { "type": "string" },
+        "type": { "type": "string", "enum": ["Ranged", "Melee"] },
+        "atk": { "type": "integer", "minimum": 1 },
+        "hit": { "type": "string", "pattern": "^[2-6]\\+$" },
+        "dmg": { "type": "string", "pattern": "^\\d+/\\d+$" },
+        "specialRules": { "type": "string" }
       }
     }
   }

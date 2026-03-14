@@ -43,8 +43,6 @@ public static class Program
         services.AddSingleton<SqliteOperativeRepository>(new SqliteOperativeRepository(sqlExecutor));
         services.AddSingleton<SqliteWeaponRepository>(new SqliteWeaponRepository(sqlExecutor));
         services.AddSingleton<TeamJsonImporter>();
-        services.AddSingleton<PdfWeaponTypeDetector>();
-        services.AddSingleton<PdfTeamExtractor>();
         services.AddSingleton<RerollOrchestrator>();
         services.AddSingleton<StrategyPhaseOrchestrator>();
         services.AddSingleton<CombatResolutionService>();
@@ -76,8 +74,6 @@ public static class Program
             });
             cfg.AddCommand<ImportTeamsCommand>("import-teams")
                .WithDescription("Import a JSON team file (or scan the team folder).");
-            cfg.AddCommand<ExtractTeamCommand>("extract-team")
-               .WithDescription("Extract a team from GW PDFs into a teams/ JSON file.");
             cfg.AddCommand<NewGameCommand>("new-game").WithDescription("Start a new team game.");
             cfg.AddCommand<HistoryCommand>("history")
                .WithDescription("View completed game history.");

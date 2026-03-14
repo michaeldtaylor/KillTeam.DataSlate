@@ -1,8 +1,8 @@
-using KillTeam.DataSlate.Domain.Models;
+using KillTeam.TeamExtractor.Models;
 using UglyToad.PdfPig;
 using UglyToad.PdfPig.Core;
 
-namespace KillTeam.DataSlate.Console.Services;
+namespace KillTeam.TeamExtractor.Services;
 
 /// <summary>
 /// Detects weapon type (Ranged or Melee) from a GW Kill Team datacards PDF using
@@ -54,7 +54,6 @@ public class PdfWeaponTypeDetector
             }
 
             var tableTopY = atkWord.BoundingBox.Bottom;
-
             var iconPathRects = new List<PdfRectangle>();
 
             foreach (var path in page.ExperimentalAccess.Paths)
