@@ -2,7 +2,7 @@ namespace KillTeam.DataSlate.Domain.Models;
 public class Operative
 {
     public Guid Id { get; init; } = Guid.NewGuid();
-    public Guid KillTeamId { get; set; }
+    public string KillTeamName { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
     public string OperativeType { get; set; } = string.Empty;
     public int Move { get; set; }

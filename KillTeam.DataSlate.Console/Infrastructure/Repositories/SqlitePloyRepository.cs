@@ -18,14 +18,14 @@ public class SqlitePloyRepository : IPloyRepository
         await _db.ExecuteAsync(
             """
             INSERT INTO ploy_uses
-            (id, turning_point_id, team_id, ploy_name, description, cp_cost)
-            VALUES (@id, @turningPointId, @teamId, @ployName, @description, @cpCost)
+            (id, turning_point_id, team_name, ploy_name, description, cp_cost)
+            VALUES (@id, @turningPointId, @teamName, @ployName, @description, @cpCost)
             """,
             new()
             {
                 ["@id"] = ploy.Id.ToString(),
                 ["@turningPointId"] = ploy.TurningPointId.ToString(),
-                ["@teamId"] = ploy.TeamId.ToString(),
+                ["@teamName"] = ploy.TeamName,
                 ["@ployName"] = ploy.PloyName,
                 ["@description"] = ploy.Description,
                 ["@cpCost"] = ploy.CpCost
@@ -36,14 +36,14 @@ public class SqlitePloyRepository : IPloyRepository
     {
         return await _db.QueryAsync(
             """
-            SELECT id, turning_point_id, team_id, ploy_name, description, cp_cost
+            SELECT id, turning_point_id, team_name, ploy_name, description, cp_cost
             FROM ploy_uses WHERE turning_point_id = @tpId
             """,
             r => new PloyUse
             {
                 Id = Guid.Parse(r.GetString(0)),
                 TurningPointId = Guid.Parse(r.GetString(1)),
-                TeamId = Guid.Parse(r.GetString(2)),
+                TeamName = r.GetString(2),
                 PloyName = r.GetString(3),
                 Description = r.IsDBNull(4) ? null : r.GetString(4),
                 CpCost = r.GetInt32(5)

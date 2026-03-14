@@ -5,7 +5,7 @@ public class Activation
     public Guid TurningPointId { get; set; }
     public int SequenceNumber { get; set; }
     public Guid OperativeId { get; set; }
-    public Guid TeamId { get; set; }
+    public string TeamName { get; set; } = string.Empty;
     public Order OrderSelected { get; set; }
     public bool IsCounteract { get; set; }
     public bool IsGuardInterrupt { get; set; }

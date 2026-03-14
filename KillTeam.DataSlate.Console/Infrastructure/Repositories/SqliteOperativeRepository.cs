@@ -13,28 +13,28 @@ public class SqliteOperativeRepository
     public SqliteOperativeRepository(SqliteConnection connection)
         : this(new SqliteExecutor(connection)) { }
 
-    public async Task UpsertByTeamAsync(IEnumerable<Operative> operatives, Guid teamId)
+    public async Task UpsertByTeamAsync(IEnumerable<Operative> operatives, string killTeamName)
     {
         await _db.ExecuteTransactionAsync(async (conn, tx) =>
         {
             using var del = conn.CreateCommand();
             del.Transaction = tx;
-            del.CommandText = "DELETE FROM operatives WHERE kill_team_id = @teamId";
-            del.Parameters.AddWithValue("@teamId", teamId.ToString());
+            del.CommandText = "DELETE FROM operatives WHERE kill_team_name = @teamName";
+            del.Parameters.AddWithValue("@teamName", killTeamName);
             await del.ExecuteNonQueryAsync();
 
             foreach (var operative in operatives)
             {
-                operative.KillTeamId = teamId;
+                operative.KillTeamName = killTeamName;
                 using var cmd = conn.CreateCommand();
                 cmd.Transaction = tx;
                 cmd.CommandText = """
                     INSERT INTO operatives
-                    (id, kill_team_id, name, operative_type, move, apl, wounds, save, equipment_json)
-                    VALUES (@id, @killTeamId, @name, @operativeType, @move, @apl, @wounds, @save, @equipmentJson)
+                    (id, kill_team_name, name, operative_type, move, apl, wounds, save, equipment_json)
+                    VALUES (@id, @killTeamName, @name, @operativeType, @move, @apl, @wounds, @save, @equipmentJson)
                     """;
                 cmd.Parameters.AddWithValue("@id", operative.Id.ToString());
-                cmd.Parameters.AddWithValue("@killTeamId", operative.KillTeamId.ToString());
+                cmd.Parameters.AddWithValue("@killTeamName", operative.KillTeamName);
                 cmd.Parameters.AddWithValue("@name", operative.Name);
                 cmd.Parameters.AddWithValue("@operativeType", operative.OperativeType);
                 cmd.Parameters.AddWithValue("@move", operative.Move);

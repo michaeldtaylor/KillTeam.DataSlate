@@ -108,22 +108,20 @@ public class SchemaTests
     {
         var playerId1 = Guid.NewGuid();
         var playerId2 = Guid.NewGuid();
-        var teamId1 = Guid.NewGuid();
-        var teamId2 = Guid.NewGuid();
 
         using var db = TestDbBuilder.Create()
             .WithPlayer(playerId1, "Michael")
             .WithPlayer(playerId2, "Solomon")
-            .WithKillTeam(teamId1, "Angels of Death", "Adeptus Astartes")
-            .WithKillTeam(teamId2, "Plague Marines", "Heretic Astartes");
+            .WithKillTeam("Angels of Death", "Adeptus Astartes")
+            .WithKillTeam("Plague Marines", "Heretic Astartes");
 
         var repo = new SqliteGameRepository(db.Connection);
         var game = new Game
         {
             Id = Guid.NewGuid(),
             PlayedAt = DateTime.UtcNow,
-            TeamAId = teamId1,
-            TeamBId = teamId2,
+            TeamAName = "Angels of Death",
+            TeamBName = "Plague Marines",
             PlayerAId = playerId1,
             PlayerBId = playerId2,
             Status = GameStatus.InProgress,
@@ -158,14 +156,13 @@ public class SchemaTests
     public void TestDbBuilder_WithTurningPoint_SeedsCorrectly()
     {
         var playerId = Guid.NewGuid();
-        var teamId = Guid.NewGuid();
         var gameId = Guid.NewGuid();
         var tpId = Guid.NewGuid();
 
         using var db = TestDbBuilder.Create()
             .WithPlayer(playerId, "Michael")
-            .WithKillTeam(teamId, "Angels of Death", "Adeptus Astartes")
-            .WithGame(gameId, teamId, teamId, playerId, playerId)
+            .WithKillTeam("Angels of Death", "Adeptus Astartes")
+            .WithGame(gameId, "Angels of Death", "Angels of Death", playerId, playerId)
             .WithTurningPoint(tpId, gameId, 1, false);
 
         using var cmd = db.Connection.CreateCommand();

@@ -4,6 +4,6 @@ public interface IKillTeamRepository
 {
     Task UpsertAsync(Models.KillTeam team);
     Task<IEnumerable<Models.KillTeam>> GetAllAsync();
-    Task<Models.KillTeam?> FindByNameAsync(string name);
-    Task<Models.KillTeam?> GetWithOperativesAsync(Guid id);
+    Task<Models.KillTeam?> GetByNameAsync(string name);
+    Task<Models.KillTeam?> GetWithOperativesAsync(string name);
 }

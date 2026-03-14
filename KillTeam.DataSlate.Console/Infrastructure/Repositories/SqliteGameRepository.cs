@@ -18,25 +18,25 @@ public class SqliteGameRepository : IGameRepository
         await _db.ExecuteAsync(
             """
             INSERT INTO games
-            (id, played_at, mission_name, team_a_id, team_b_id, player_a_id, player_b_id,
-             status, cp_team_a, cp_team_b, winner_team_id, victory_points_team_a, victory_points_team_b)
+            (id, played_at, mission_name, team_a_name, team_b_name, player_a_id, player_b_id,
+             status, cp_team_a, cp_team_b, winner_team_name, victory_points_team_a, victory_points_team_b)
             VALUES
-            (@id, @playedAt, @missionName, @teamAId, @teamBId, @playerAId, @playerBId,
-             @status, @cpTeamA, @cpTeamB, @winnerTeamId, @vpTeamA, @vpTeamB)
+            (@id, @playedAt, @missionName, @teamAName, @teamBName, @playerAId, @playerBId,
+             @status, @cpTeamA, @cpTeamB, @winnerTeamName, @vpTeamA, @vpTeamB)
             """,
             new()
             {
                 ["@id"] = game.Id.ToString(),
                 ["@playedAt"] = game.PlayedAt.ToUniversalTime().ToString("o"),
                 ["@missionName"] = game.MissionName,
-                ["@teamAId"] = game.TeamAId.ToString(),
-                ["@teamBId"] = game.TeamBId.ToString(),
+                ["@teamAName"] = game.TeamAName,
+                ["@teamBName"] = game.TeamBName,
                 ["@playerAId"] = game.PlayerAId.ToString(),
                 ["@playerBId"] = game.PlayerBId.ToString(),
                 ["@status"] = game.Status.ToString(),
                 ["@cpTeamA"] = game.CpTeamA,
                 ["@cpTeamB"] = game.CpTeamB,
-                ["@winnerTeamId"] = game.WinnerTeamId?.ToString(),
+                ["@winnerTeamName"] = game.WinnerTeamName,
                 ["@vpTeamA"] = game.VictoryPointsTeamA,
                 ["@vpTeamB"] = game.VictoryPointsTeamB
             });
@@ -47,26 +47,26 @@ public class SqliteGameRepository : IGameRepository
     {
         return await _db.QuerySingleAsync(
             """
-            SELECT id, played_at, mission_name, team_a_id, team_b_id, player_a_id, player_b_id,
-                   status, cp_team_a, cp_team_b, winner_team_id, victory_points_team_a, victory_points_team_b
+            SELECT id, played_at, mission_name, team_a_name, team_b_name, player_a_id, player_b_id,
+                   status, cp_team_a, cp_team_b, winner_team_name, victory_points_team_a, victory_points_team_b
             FROM games WHERE id = @id
             """,
             MapGame,
             new() { ["@id"] = id.ToString() });
     }
 
-    public async Task UpdateStatusAsync(Guid gameId, GameStatus status, Guid? winnerTeamId, int vpTeamA, int vpTeamB)
+    public async Task UpdateStatusAsync(Guid gameId, GameStatus status, string? winnerTeamName, int vpTeamA, int vpTeamB)
     {
         await _db.ExecuteAsync(
             """
-            UPDATE games SET status = @status, winner_team_id = @winnerId,
+            UPDATE games SET status = @status, winner_team_name = @winnerName,
                 victory_points_team_a = @vpA, victory_points_team_b = @vpB
             WHERE id = @id
             """,
             new()
             {
                 ["@status"] = status.ToString(),
-                ["@winnerId"] = winnerTeamId?.ToString(),
+                ["@winnerName"] = winnerTeamName,
                 ["@vpA"] = vpTeamA,
                 ["@vpB"] = vpTeamB,
                 ["@id"] = gameId.ToString()
@@ -85,14 +85,14 @@ public class SqliteGameRepository : IGameRepository
         Id = Guid.Parse(r.GetString(0)),
         PlayedAt = DateTime.Parse(r.GetString(1)).ToUniversalTime(),
         MissionName = r.IsDBNull(2) ? null : r.GetString(2),
-        TeamAId = Guid.Parse(r.GetString(3)),
-        TeamBId = Guid.Parse(r.GetString(4)),
+        TeamAName = r.GetString(3),
+        TeamBName = r.GetString(4),
         PlayerAId = Guid.Parse(r.GetString(5)),
         PlayerBId = Guid.Parse(r.GetString(6)),
         Status = Enum.Parse<GameStatus>(r.GetString(7)),
         CpTeamA = r.GetInt32(8),
         CpTeamB = r.GetInt32(9),
-        WinnerTeamId = r.IsDBNull(10) ? null : Guid.Parse(r.GetString(10)),
+        WinnerTeamName = r.IsDBNull(10) ? null : r.GetString(10),
         VictoryPointsTeamA = r.GetInt32(11),
         VictoryPointsTeamB = r.GetInt32(12)
     };

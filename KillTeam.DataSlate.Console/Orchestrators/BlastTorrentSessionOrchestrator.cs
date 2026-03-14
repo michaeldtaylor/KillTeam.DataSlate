@@ -27,7 +27,7 @@ public class BlastTorrentSessionOrchestrator(
         TurningPoint tp,
         Activation activation)
     {
-        bool isAttackerTeamA = attacker.KillTeamId == game.TeamAId;
+        bool isAttackerTeamA = attacker.KillTeamName == game.TeamAName;
         string weaponType = weapon.ParsedRules.Any(r => r.Kind == SpecialRuleKind.Torrent) ? "Torrent" : "Blast";
 
         console.MarkupLine($"[bold yellow]⚠ [MULTI-TARGET][/] This weapon hits multiple targets. [{weaponType}]");
@@ -46,7 +46,7 @@ public class BlastTorrentSessionOrchestrator(
                     .UseConverter(s =>
                     {
                         if (!allOperatives.TryGetValue(s.OperativeId, out var o)) return s.OperativeId.ToString();
-                        bool isFriendly = o.KillTeamId == attacker.KillTeamId;
+                        bool isFriendly = o.KillTeamName == attacker.KillTeamName;
                         string friendly = isFriendly ? " [red][FRIENDLY FIRE!][/]" : "";
                         return $"{Markup.Escape(o.Name)} (W:{s.CurrentWounds}/{o.Wounds}){friendly}";
                     })
@@ -58,7 +58,7 @@ public class BlastTorrentSessionOrchestrator(
 
         // Friendly fire confirmation
         int friendlyCount = allTargetStates.Count(s =>
-            allOperatives.TryGetValue(s.OperativeId, out var o) && o.KillTeamId == attacker.KillTeamId);
+            allOperatives.TryGetValue(s.OperativeId, out var o) && o.KillTeamName == attacker.KillTeamName);
         if (friendlyCount > 0)
         {
             console.MarkupLine($"[red]⚠ This will affect {friendlyCount} friendly operative(s).[/]");
@@ -115,7 +115,7 @@ public class BlastTorrentSessionOrchestrator(
                 ? []
                 : await RollOrEnterDiceAsync(defDiceCount, $"{Markup.Escape(targetOp.Name)} defence dice");
 
-            bool isDefenderTeamA = targetOp.KillTeamId == game.TeamAId;
+            bool isDefenderTeamA = targetOp.KillTeamName == game.TeamAName;
             defDice = await rerollOrchestrator.ApplyDefenderRerollAsync(defDice, game.Id, isDefenderTeamA, targetOp.Name);
 
             var ctx = new ShootContext(

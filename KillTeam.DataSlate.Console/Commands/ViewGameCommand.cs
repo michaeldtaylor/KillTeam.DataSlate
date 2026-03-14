@@ -39,14 +39,14 @@ public class ViewGameCommand(
         gameCmd.CommandText = """
             SELECT g.status, g.mission_name, g.victory_points_team_a, g.victory_points_team_b,
                    pa.name, ta.name, pb.name, tb.name,
-                   CASE WHEN g.winner_team_id = g.team_a_id THEN ta.name
-                        WHEN g.winner_team_id = g.team_b_id THEN tb.name
+                   CASE WHEN g.winner_team_name = g.team_a_name THEN ta.name
+                        WHEN g.winner_team_name = g.team_b_name THEN tb.name
                         ELSE NULL END
             FROM games g
             JOIN players pa ON pa.id = g.player_a_id
             JOIN players pb ON pb.id = g.player_b_id
-            JOIN kill_teams ta ON ta.id = g.team_a_id
-            JOIN kill_teams tb ON tb.id = g.team_b_id
+            JOIN kill_teams ta ON ta.name = g.team_a_name
+            JOIN kill_teams tb ON tb.name = g.team_b_name
             WHERE g.id = @id
             """;
         gameCmd.Parameters.AddWithValue("@id", gameId.ToString());
@@ -78,7 +78,7 @@ public class ViewGameCommand(
         tpCmd.CommandText = """
             SELECT tp.id, tp.number, kt.name
             FROM turning_points tp
-            LEFT JOIN kill_teams kt ON kt.id = tp.team_with_initiative_id
+            LEFT JOIN kill_teams kt ON kt.name = tp.team_with_initiative_name
             WHERE tp.game_id = @gid ORDER BY tp.number
             """;
         tpCmd.Parameters.AddWithValue("@gid", gameId.ToString());
@@ -98,7 +98,7 @@ public class ViewGameCommand(
             var ployList = (await ploys.GetByTurningPointAsync(tpId)).ToList();
             foreach (var p in ployList)
             {
-                var teamLabel = await GetTeamNameAsync(conn, p.TeamId);
+                var teamLabel = p.TeamName;
                 AnsiConsole.MarkupLine($"  [dim]Ploy:[/] {Markup.Escape(p.PloyName)} ({Markup.Escape(teamLabel)}, {p.CpCost}CP)" +
                     (p.Description is not null ? $" — {Markup.Escape(p.Description)}" : ""));
             }
@@ -148,14 +148,6 @@ public class ViewGameCommand(
     {
         using var cmd = conn.CreateCommand();
         cmd.CommandText = "SELECT name FROM operatives WHERE id = @id";
-        cmd.Parameters.AddWithValue("@id", id.ToString());
-        return await cmd.ExecuteScalarAsync() as string ?? id.ToString()[..8];
-    }
-
-    private static async Task<string> GetTeamNameAsync(SqliteConnection conn, Guid id)
-    {
-        using var cmd = conn.CreateCommand();
-        cmd.CommandText = "SELECT name FROM kill_teams WHERE id = @id";
         cmd.Parameters.AddWithValue("@id", id.ToString());
         return await cmd.ExecuteScalarAsync() as string ?? id.ToString()[..8];
     }

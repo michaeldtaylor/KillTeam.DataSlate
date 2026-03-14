@@ -11,7 +11,6 @@ public class AnnotateTests
     public async Task SaveAnnotation_OnActivation_PersistsNarrativeNote()
     {
         var playerId = Guid.NewGuid();
-        var teamId = Guid.NewGuid();
         var opId = Guid.NewGuid();
         var gameId = Guid.NewGuid();
         var tpId = Guid.NewGuid();
@@ -19,11 +18,11 @@ public class AnnotateTests
 
         using var db = TestDbBuilder.Create()
             .WithPlayer(playerId, "Michael")
-            .WithKillTeam(teamId, "Angels of Death", "Adeptus Astartes")
-            .WithOperative(opId, teamId, "Sergeant", wounds: 13, save: 3, apl: 3, move: 3)
-            .WithGame(gameId, teamId, teamId, playerId, playerId)
+            .WithKillTeam("Angels of Death", "Adeptus Astartes")
+            .WithOperative(opId, "Angels of Death", "Sergeant", wounds: 13, save: 3, apl: 3, move: 3)
+            .WithGame(gameId, "Angels of Death", "Angels of Death", playerId, playerId)
             .WithTurningPoint(tpId, gameId, 1)
-            .WithActivation(actId, tpId, 1, opId, teamId);
+            .WithActivation(actId, tpId, 1, opId, "Angels of Death");
 
         var repo = new SqliteActivationRepository(db.Connection);
 
@@ -38,7 +37,6 @@ public class AnnotateTests
     public async Task OverwriteAnnotation_ReplacesExistingNote()
     {
         var playerId = Guid.NewGuid();
-        var teamId = Guid.NewGuid();
         var opId = Guid.NewGuid();
         var gameId = Guid.NewGuid();
         var tpId = Guid.NewGuid();
@@ -46,11 +44,11 @@ public class AnnotateTests
 
         using var db = TestDbBuilder.Create()
             .WithPlayer(playerId, "Michael")
-            .WithKillTeam(teamId, "Angels of Death", "Adeptus Astartes")
-            .WithOperative(opId, teamId, "Sergeant", wounds: 13, save: 3, apl: 3, move: 3)
-            .WithGame(gameId, teamId, teamId, playerId, playerId)
+            .WithKillTeam("Angels of Death", "Adeptus Astartes")
+            .WithOperative(opId, "Angels of Death", "Sergeant", wounds: 13, save: 3, apl: 3, move: 3)
+            .WithGame(gameId, "Angels of Death", "Angels of Death", playerId, playerId)
             .WithTurningPoint(tpId, gameId, 1)
-            .WithActivation(actId, tpId, 1, opId, teamId);
+            .WithActivation(actId, tpId, 1, opId, "Angels of Death");
 
         var repo = new SqliteActivationRepository(db.Connection);
         await repo.UpdateNarrativeAsync(actId, "First note");
@@ -64,7 +62,6 @@ public class AnnotateTests
     public async Task SaveAnnotation_OnAction_PersistsActionNarrativeNote()
     {
         var playerId = Guid.NewGuid();
-        var teamId = Guid.NewGuid();
         var opId = Guid.NewGuid();
         var targetOpId = Guid.NewGuid();
         var gameId = Guid.NewGuid();
@@ -74,12 +71,12 @@ public class AnnotateTests
 
         using var db = TestDbBuilder.Create()
             .WithPlayer(playerId, "Michael")
-            .WithKillTeam(teamId, "Angels of Death", "Adeptus Astartes")
-            .WithOperative(opId, teamId, "Sergeant", wounds: 13, save: 3, apl: 3, move: 3)
-            .WithOperative(targetOpId, teamId, "Intercessor", wounds: 13, save: 3, apl: 2, move: 3)
-            .WithGame(gameId, teamId, teamId, playerId, playerId)
+            .WithKillTeam("Angels of Death", "Adeptus Astartes")
+            .WithOperative(opId, "Angels of Death", "Sergeant", wounds: 13, save: 3, apl: 3, move: 3)
+            .WithOperative(targetOpId, "Angels of Death", "Intercessor", wounds: 13, save: 3, apl: 2, move: 3)
+            .WithGame(gameId, "Angels of Death", "Angels of Death", playerId, playerId)
             .WithTurningPoint(tpId, gameId, 1)
-            .WithActivation(actId, tpId, 1, opId, teamId);
+            .WithActivation(actId, tpId, 1, opId, "Angels of Death");
 
         // Insert action directly
         using var insertCmd = db.Connection.CreateCommand();

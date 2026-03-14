@@ -93,13 +93,8 @@ public class ImportKillTeamsCommand(
         var json = await File.ReadAllTextAsync(path);
         var team = importer.Import(json);
 
-        // Reuse existing ID so game references remain valid on re-import
-        var existing = await killTeams.FindByNameAsync(team.Name);
-        if (existing is not null)
-            team.Id = existing.Id;
-
         await killTeams.UpsertAsync(team);
-        await operatives.UpsertByTeamAsync(team.Operatives, team.Id);
+        await operatives.UpsertByTeamAsync(team.Operatives, team.Name);
         foreach (var op in team.Operatives)
             await weapons.UpsertByOperativeAsync(op.Weapons, op.Id);
 

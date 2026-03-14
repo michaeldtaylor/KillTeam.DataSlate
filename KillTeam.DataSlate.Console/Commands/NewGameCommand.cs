@@ -44,7 +44,7 @@ public class NewGameCommand(
                 .AddChoices(allPlayers));
 
         // Team B selection (exclude Team A)
-        var teamBChoices = allTeams.Where(t => t.Id != teamA.Id).ToList();
+        var teamBChoices = allTeams.Where(t => t.Name != teamA.Name).ToList();
         var teamB = AnsiConsole.Prompt(
             new SelectionPrompt<KillTeam.DataSlate.Domain.Models.KillTeam>()
                 .Title("Select [blue]Team B[/]:")
@@ -62,16 +62,16 @@ public class NewGameCommand(
             new TextPrompt<string>("Mission name [dim](optional)[/]:").AllowEmpty());
 
         // Load full team data with operatives
-        var fullTeamA = await killTeams.GetWithOperativesAsync(teamA.Id);
-        var fullTeamB = await killTeams.GetWithOperativesAsync(teamB.Id);
+        var fullTeamA = await killTeams.GetWithOperativesAsync(teamA.Name);
+        var fullTeamB = await killTeams.GetWithOperativesAsync(teamB.Name);
 
         var game = new Game
         {
             Id = Guid.NewGuid(),
             PlayedAt = DateTime.UtcNow,
             MissionName = string.IsNullOrWhiteSpace(missionName) ? null : missionName,
-            TeamAId = teamA.Id,
-            TeamBId = teamB.Id,
+            TeamAName = teamA.Name,
+            TeamBName = teamB.Name,
             PlayerAId = playerA.Id,
             PlayerBId = playerB.Id,
             Status = GameStatus.InProgress,

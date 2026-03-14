@@ -13,8 +13,8 @@ public class NewGameTests
         // Arrange
         var playerId1 = Guid.NewGuid();
         var playerId2 = Guid.NewGuid();
-        var teamId1 = Guid.NewGuid();
-        var teamId2 = Guid.NewGuid();
+        const string teamAName = "Angels of Death";
+        const string teamBName = "Plague Marines";
         var op1Id = Guid.NewGuid();
         var op2Id = Guid.NewGuid();
         var op3Id = Guid.NewGuid();
@@ -23,12 +23,12 @@ public class NewGameTests
         using var db = TestDbBuilder.Create()
             .WithPlayer(playerId1, "Michael")
             .WithPlayer(playerId2, "Solomon")
-            .WithKillTeam(teamId1, "Angels of Death", "Adeptus Astartes")
-            .WithKillTeam(teamId2, "Plague Marines", "Heretic Astartes")
-            .WithOperative(op1Id, teamId1, "Sergeant", wounds: 13, save: 3, apl: 3, move: 3)
-            .WithOperative(op2Id, teamId1, "Intercessor", wounds: 13, save: 3, apl: 2, move: 3)
-            .WithOperative(op3Id, teamId2, "Champion", wounds: 14, save: 3, apl: 3, move: 3)
-            .WithOperative(op4Id, teamId2, "Warrior", wounds: 14, save: 3, apl: 2, move: 3);
+            .WithKillTeam(teamAName, "Adeptus Astartes")
+            .WithKillTeam(teamBName, "Heretic Astartes")
+            .WithOperative(op1Id, teamAName, "Sergeant", wounds: 13, save: 3, apl: 3, move: 3)
+            .WithOperative(op2Id, teamAName, "Intercessor", wounds: 13, save: 3, apl: 2, move: 3)
+            .WithOperative(op3Id, teamBName, "Champion", wounds: 14, save: 3, apl: 3, move: 3)
+            .WithOperative(op4Id, teamBName, "Warrior", wounds: 14, save: 3, apl: 2, move: 3);
 
         var gameRepo = new SqliteGameRepository(db.Connection);
         var stateRepo = new SqliteGameOperativeStateRepository(db.Connection);
@@ -39,8 +39,8 @@ public class NewGameTests
         {
             Id = Guid.NewGuid(),
             PlayedAt = DateTime.UtcNow,
-            TeamAId = teamId1,
-            TeamBId = teamId2,
+            TeamAName = teamAName,
+            TeamBName = teamBName,
             PlayerAId = playerId1,
             PlayerBId = playerId2,
             Status = GameStatus.InProgress,
@@ -49,8 +49,8 @@ public class NewGameTests
         };
         var created = await gameRepo.CreateAsync(game);
 
-        var fullTeamA = await killTeamRepo.GetWithOperativesAsync(teamId1);
-        var fullTeamB = await killTeamRepo.GetWithOperativesAsync(teamId2);
+        var fullTeamA = await killTeamRepo.GetWithOperativesAsync(teamAName);
+        var fullTeamB = await killTeamRepo.GetWithOperativesAsync(teamBName);
         var allOps = (fullTeamA?.Operatives ?? []).Concat(fullTeamB?.Operatives ?? []).ToList();
 
         foreach (var op in allOps)
@@ -85,11 +85,10 @@ public class NewGameTests
     public async Task SingleKillTeamImported_ReturnsLessThanTwoTeams()
     {
         var playerId = Guid.NewGuid();
-        var teamId = Guid.NewGuid();
 
         using var db = TestDbBuilder.Create()
             .WithPlayer(playerId, "Michael")
-            .WithKillTeam(teamId, "Angels of Death", "Adeptus Astartes");
+            .WithKillTeam("Angels of Death", "Adeptus Astartes");
 
         var killTeamRepo = new SqliteKillTeamRepository(db.Connection);
         var teams = (await killTeamRepo.GetAllAsync()).ToList();

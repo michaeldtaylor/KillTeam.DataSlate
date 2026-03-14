@@ -18,15 +18,15 @@ public class SqliteTurningPointRepository : ITurningPointRepository
         await _db.ExecuteAsync(
             """
             INSERT INTO turning_points
-            (id, game_id, number, team_with_initiative_id, cp_team_a, cp_team_b, is_strategy_phase_complete)
-            VALUES (@id, @gameId, @number, @teamWithInitiativeId, @cpTeamA, @cpTeamB, @isStrategyPhaseComplete)
+            (id, game_id, number, team_with_initiative_name, cp_team_a, cp_team_b, is_strategy_phase_complete)
+            VALUES (@id, @gameId, @number, @teamWithInitiativeName, @cpTeamA, @cpTeamB, @isStrategyPhaseComplete)
             """,
             new()
             {
                 ["@id"] = tp.Id.ToString(),
                 ["@gameId"] = tp.GameId.ToString(),
                 ["@number"] = tp.Number,
-                ["@teamWithInitiativeId"] = tp.TeamWithInitiativeId?.ToString(),
+                ["@teamWithInitiativeName"] = tp.TeamWithInitiativeName,
                 ["@cpTeamA"] = tp.CpTeamA,
                 ["@cpTeamB"] = tp.CpTeamB,
                 ["@isStrategyPhaseComplete"] = tp.IsStrategyPhaseComplete ? 1 : 0
@@ -38,7 +38,7 @@ public class SqliteTurningPointRepository : ITurningPointRepository
     {
         return await _db.QuerySingleAsync(
             """
-            SELECT tp.id, tp.game_id, tp.number, tp.team_with_initiative_id,
+            SELECT tp.id, tp.game_id, tp.number, tp.team_with_initiative_name,
                    tp.cp_team_a, tp.cp_team_b, tp.is_strategy_phase_complete
             FROM turning_points tp
             JOIN games g ON g.id = tp.game_id
@@ -70,7 +70,7 @@ public class SqliteTurningPointRepository : ITurningPointRepository
         Id = Guid.Parse(r.GetString(0)),
         GameId = Guid.Parse(r.GetString(1)),
         Number = r.GetInt32(2),
-        TeamWithInitiativeId = r.IsDBNull(3) ? null : Guid.Parse(r.GetString(3)),
+        TeamWithInitiativeName = r.IsDBNull(3) ? null : r.GetString(3),
         CpTeamA = r.GetInt32(4),
         CpTeamB = r.GetInt32(5),
         IsStrategyPhaseComplete = r.GetInt32(6) != 0

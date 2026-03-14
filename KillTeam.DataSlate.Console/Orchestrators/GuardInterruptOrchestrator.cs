@@ -27,10 +27,10 @@ public class GuardInterruptOrchestrator(
         int seqCounter)
     {
         // Determine which team is "friendly" (the guard team = NOT the acting enemy's team)
-        Guid enemyTeamId = actingEnemy.KillTeamId;
+        string enemyTeamName = actingEnemy.KillTeamName;
 
         var friendlyStates = allOperativeStates
-            .Where(s => allOperatives.TryGetValue(s.OperativeId, out var o) && o.KillTeamId != enemyTeamId)
+            .Where(s => allOperatives.TryGetValue(s.OperativeId, out var o) && o.KillTeamName != enemyTeamName)
             .ToList();
 
         var eligibleGuards = guardResolutionService.GetEligibleGuards(friendlyStates);
@@ -84,7 +84,7 @@ public class GuardInterruptOrchestrator(
                 TurningPointId = tp.Id,
                 SequenceNumber = seqCounter,
                 OperativeId = guardOp.Id,
-                TeamId = guardOp.KillTeamId,
+                TeamName = guardOp.KillTeamName,
                 OrderSelected = guardState.Order,
                 IsGuardInterrupt = true
             };

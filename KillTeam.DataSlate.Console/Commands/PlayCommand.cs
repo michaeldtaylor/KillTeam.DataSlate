@@ -44,8 +44,8 @@ public class PlayCommand(
             return 0;
         }
 
-        var teamA = await killTeamRepository.GetWithOperativesAsync(game.TeamAId);
-        var teamB = await killTeamRepository.GetWithOperativesAsync(game.TeamBId);
+        var teamA = await killTeamRepository.GetWithOperativesAsync(game.TeamAName);
+        var teamB = await killTeamRepository.GetWithOperativesAsync(game.TeamBName);
         string teamAName = teamA?.Name ?? "Team A";
         string teamBName = teamB?.Name ?? "Team B";
 
@@ -92,9 +92,9 @@ public class PlayCommand(
         if (game.Status == GameStatus.Completed)
         {
             console.Write(new Rule("[bold green]Game Complete![/]"));
-            string winner = game.WinnerTeamId is null
+            string winner = game.WinnerTeamName is null
                 ? "Draw"
-                : game.WinnerTeamId == game.TeamAId
+                : game.WinnerTeamName == game.TeamAName
                     ? $"{teamAName} wins"
                     : $"{teamBName} wins";
             console.MarkupLine($"Result: [bold]{Markup.Escape(winner)}[/]  |  {Markup.Escape(teamAName)}: {game.VictoryPointsTeamA} VP  |  {Markup.Escape(teamBName)}: {game.VictoryPointsTeamB} VP");

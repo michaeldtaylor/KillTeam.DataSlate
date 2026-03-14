@@ -47,7 +47,7 @@ public class SimulateSessionOrchestrator(
                 .UseConverter(t => $"{Markup.Escape(t.Name)} [dim]({Markup.Escape(t.Faction)})[/]")
                 .AddChoices(allTeams));
 
-        var playerTeam = (await killTeamRepository.GetWithOperativesAsync(playerTeamStub.Id))!;
+        var playerTeam = (await killTeamRepository.GetWithOperativesAsync(playerTeamStub.Name))!;
 
         // Step 2 - your operative
         var playerOp = console.Prompt(
@@ -63,9 +63,9 @@ public class SimulateSessionOrchestrator(
                 .UseConverter(t => $"{Markup.Escape(t.Name)} [dim]({Markup.Escape(t.Faction)})[/]")
                 .AddChoices(allTeams));
 
-        var aiTeam = aiTeamStub.Id == playerTeam.Id
+        var aiTeam = aiTeamStub.Name == playerTeam.Name
             ? playerTeam
-            : (await killTeamRepository.GetWithOperativesAsync(aiTeamStub.Id))!;
+            : (await killTeamRepository.GetWithOperativesAsync(aiTeamStub.Name))!;
 
         // Step 4 - AI's operative
         var aiOp = console.Prompt(
@@ -130,8 +130,8 @@ public class SimulateSessionOrchestrator(
         var game = new Models.Game
         {
             Id = Guid.NewGuid(),
-            TeamAId = playerTeam.Id,
-            TeamBId = aiTeam.Id,
+            TeamAName = playerTeam.Name,
+            TeamBName = aiTeam.Name,
             PlayerAId = Guid.Empty,
             PlayerBId = Guid.Empty,
             CpTeamA = 0,   // suppresses CP re-roll prompts (RerollOrchestrator skips when game not in DB)
@@ -151,7 +151,7 @@ public class SimulateSessionOrchestrator(
             Id = Guid.NewGuid(),
             TurningPointId = tp.Id,
             OperativeId = playerOp.Id,
-            TeamId = playerTeam.Id,
+            TeamName = playerTeam.Name,
             OrderSelected = Models.Order.Engage,
             SequenceNumber = 1
         };

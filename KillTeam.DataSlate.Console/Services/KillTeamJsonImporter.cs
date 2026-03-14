@@ -7,6 +7,35 @@ namespace KillTeam.DataSlate.Console.Services;
 
 public class KillTeamJsonImporter
 {
+    private static readonly Guid OperativeNs = new("6ba7b810-9dad-11d1-80b4-00c04fd430c8");
+
+    /// <summary>Creates a deterministic UUID v5 from a namespace GUID and a name string.</summary>
+    private static Guid CreateVersion5(Guid namespaceId, string name)
+    {
+        var nsBytes = namespaceId.ToByteArray();
+        // Guid.ToByteArray() is mixed-endian; convert to network byte order for RFC 4122
+        Array.Reverse(nsBytes, 0, 4);
+        Array.Reverse(nsBytes, 4, 2);
+        Array.Reverse(nsBytes, 6, 2);
+
+        var nameBytes = System.Text.Encoding.UTF8.GetBytes(name);
+        var input = new byte[nsBytes.Length + nameBytes.Length];
+        Buffer.BlockCopy(nsBytes, 0, input, 0, nsBytes.Length);
+        Buffer.BlockCopy(nameBytes, 0, input, nsBytes.Length, nameBytes.Length);
+
+        var hash = System.Security.Cryptography.SHA1.HashData(input);
+
+        hash[6] = (byte)((hash[6] & 0x0F) | 0x50); // version 5
+        hash[8] = (byte)((hash[8] & 0x3F) | 0x80); // variant RFC 4122
+
+        // Convert first 16 bytes back from network byte order to Windows mixed-endian
+        Array.Reverse(hash, 0, 4);
+        Array.Reverse(hash, 4, 2);
+        Array.Reverse(hash, 6, 2);
+
+        return new Guid(hash[..16]);
+    }
+
     public KillTeam.DataSlate.Domain.Models.KillTeam Import(string json)
     {
         JsonKillTeam? killTeam;
@@ -31,7 +60,6 @@ public class KillTeamJsonImporter
 
         var team = new KillTeam.DataSlate.Domain.Models.KillTeam
         {
-            Id = Guid.NewGuid(),
             Name = killTeam.Name.Trim(),
             Faction = killTeam.Faction?.Trim() ?? string.Empty,
             Operatives = []
@@ -59,12 +87,13 @@ public class KillTeamJsonImporter
                 ? jo.Stats.Save.Value.GetInt32().ToString()
                 : jo.Stats.Save.Value.GetString() ?? "0";
 
+            var operativeType = jo.OperativeType?.Trim() ?? jo.Name.Trim();
             var operative = new Operative
             {
-                Id = Guid.NewGuid(),
-                KillTeamId = team.Id,
+                Id = CreateVersion5(OperativeNs, $"{team.Name}/{operativeType}"),
+                KillTeamName = team.Name,
                 Name = jo.Name.Trim(),
-                OperativeType = jo.OperativeType?.Trim() ?? jo.Name.Trim(),
+                OperativeType = operativeType,
                 Move = jo.Stats.Move!.Value,
                 Apl = jo.Stats.Apl!.Value,
                 Wounds = jo.Stats.Wounds!.Value,

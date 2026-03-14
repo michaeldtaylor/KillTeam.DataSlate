@@ -32,22 +32,22 @@ public sealed class TestDbBuilder : IDisposable
         return this;
     }
 
-    public TestDbBuilder WithKillTeam(Guid id, string name, string faction)
+    public TestDbBuilder WithKillTeam(string name, string faction)
     {
-        Exec("INSERT INTO kill_teams (id, name, faction) VALUES (@id, @name, @faction)",
-            ("@id", id.ToString()), ("@name", name), ("@faction", faction));
+        Exec("INSERT INTO kill_teams (name, faction) VALUES (@name, @faction)",
+            ("@name", name), ("@faction", faction));
         return this;
     }
 
-    public TestDbBuilder WithOperative(Guid id, Guid teamId, string name,
+    public TestDbBuilder WithOperative(Guid id, string teamName, string name,
         int wounds, int save, int apl, int move)
     {
         Exec("""
             INSERT INTO operatives
-                (id, kill_team_id, name, operative_type, move, apl, wounds, save)
-            VALUES (@id, @teamId, @name, @name, @move, @apl, @wounds, @save)
+                (id, kill_team_name, name, operative_type, move, apl, wounds, save)
+            VALUES (@id, @teamName, @name, @name, @move, @apl, @wounds, @save)
             """,
-            ("@id", id.ToString()), ("@teamId", teamId.ToString()), ("@name", name),
+            ("@id", id.ToString()), ("@teamName", teamName), ("@name", name),
             ("@move", move), ("@apl", apl), ("@wounds", wounds), ("@save", save));
         return this;
     }
@@ -66,16 +66,16 @@ public sealed class TestDbBuilder : IDisposable
         return this;
     }
 
-    public TestDbBuilder WithGame(Guid id, Guid teamAId, Guid teamBId,
+    public TestDbBuilder WithGame(Guid id, string teamAName, string teamBName,
         Guid playerAId, Guid playerBId, string status = "InProgress")
     {
         Exec("""
             INSERT INTO games
-                (id, played_at, team_a_id, team_b_id, player_a_id, player_b_id, status)
+                (id, played_at, team_a_name, team_b_name, player_a_id, player_b_id, status)
             VALUES (@id, @at, @ta, @tb, @pa, @pb, @st)
             """,
             ("@id", id.ToString()), ("@at", DateTime.UtcNow.ToString("o")),
-            ("@ta", teamAId.ToString()), ("@tb", teamBId.ToString()),
+            ("@ta", teamAName), ("@tb", teamBName),
             ("@pa", playerAId.ToString()), ("@pb", playerBId.ToString()),
             ("@st", status));
         return this;
@@ -86,8 +86,8 @@ public sealed class TestDbBuilder : IDisposable
     {
         Exec("""
             INSERT INTO turning_points
-                (id, game_id, number, team_with_initiative_id, is_strategy_phase_complete)
-            SELECT @id, @gid, @num, team_a_id, @spc FROM games WHERE id = @gid
+                (id, game_id, number, team_with_initiative_name, is_strategy_phase_complete)
+            SELECT @id, @gid, @num, team_a_name, @spc FROM games WHERE id = @gid
             """,
             ("@id", id.ToString()), ("@gid", gameId.ToString()), ("@num", number),
             ("@spc", strategyPhaseComplete ? 1 : 0));
@@ -95,15 +95,15 @@ public sealed class TestDbBuilder : IDisposable
     }
 
     public TestDbBuilder WithActivation(Guid id, Guid turningPointId, int seq,
-        Guid operativeId, Guid teamId, string order = "Engage")
+        Guid operativeId, string teamName, string order = "Engage")
     {
         Exec("""
             INSERT INTO activations
-                (id, turning_point_id, sequence_number, operative_id, team_id, order_selected)
-            VALUES (@id, @tpid, @seq, @opid, @tid, @ord)
+                (id, turning_point_id, sequence_number, operative_id, team_name, order_selected)
+            VALUES (@id, @tpid, @seq, @opid, @tname, @ord)
             """,
             ("@id", id.ToString()), ("@tpid", turningPointId.ToString()), ("@seq", seq),
-            ("@opid", operativeId.ToString()), ("@tid", teamId.ToString()), ("@ord", order));
+            ("@opid", operativeId.ToString()), ("@tname", teamName), ("@ord", order));
         return this;
     }
 

@@ -66,13 +66,12 @@ public class PlayerCommandTests
         // This test verifies the guard query used by PlayerDeleteCommand returns > 0 when
         // the player has games — the command reads this value before calling DeleteAsync.
         var playerId = Guid.NewGuid();
-        var teamId = Guid.NewGuid();
         var gameId = Guid.NewGuid();
 
         using var db = TestDbBuilder.Create()
             .WithPlayer(playerId, "Veteran")
-            .WithKillTeam(teamId, "Angels of Death", "Adeptus Astartes")
-            .WithGame(gameId, teamId, teamId, playerId, playerId);
+            .WithKillTeam("Angels of Death", "Adeptus Astartes")
+            .WithGame(gameId, "Angels of Death", "Angels of Death", playerId, playerId);
 
         using var cmd = db.Connection.CreateCommand();
         cmd.CommandText = "SELECT COUNT(*) FROM games WHERE player_a_id=@id OR player_b_id=@id";

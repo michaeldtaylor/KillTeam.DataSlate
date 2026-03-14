@@ -20,7 +20,7 @@ public class StrategyPhaseOrchestrator(
         AnsiConsole.Write(new Rule($"[bold]Turning Point {tpNumber} — Strategy Phase[/]"));
 
         // ─── 1. Initiative prompt ─────────────────────────────────────────────
-        Guid initiativeTeamId;
+        string initiativeTeamName;
         while (true)
         {
             var winner = AnsiConsole.Prompt(
@@ -34,7 +34,7 @@ public class StrategyPhaseOrchestrator(
                 continue;
             }
 
-            initiativeTeamId = winner == teamAName ? game.TeamAId : game.TeamBId;
+            initiativeTeamName = winner == teamAName ? game.TeamAName : game.TeamBName;
             break;
         }
 
@@ -44,7 +44,7 @@ public class StrategyPhaseOrchestrator(
             Id = Guid.NewGuid(),
             GameId = game.Id,
             Number = tpNumber,
-            TeamWithInitiativeId = initiativeTeamId
+            TeamWithInitiativeName = initiativeTeamName
         };
         tp = await turningPointRepository.CreateAsync(tp);
 
@@ -60,7 +60,7 @@ public class StrategyPhaseOrchestrator(
         else
         {
             // Initiative team +1CP, other team +2CP
-            if (initiativeTeamId == game.TeamAId) { cpA += 1; cpB += 2; }
+            if (initiativeTeamName == game.TeamAName) { cpA += 1; cpB += 2; }
             else { cpA += 2; cpB += 1; }
         }
 
@@ -71,15 +71,14 @@ public class StrategyPhaseOrchestrator(
         AnsiConsole.MarkupLine(FormatCp(teamAName, cpA) + "  " + FormatCp(teamBName, cpB));
 
         // ─── 5. Ploy recording — non-initiative player first ─────────────────
-        var nonInitTeamId = initiativeTeamId == game.TeamAId ? game.TeamBId : game.TeamAId;
-        var nonInitTeamName = nonInitTeamId == game.TeamAId ? teamAName : teamBName;
-        var initTeamName = initiativeTeamId == game.TeamAId ? teamAName : teamBName;
+        var nonInitTeamName = initiativeTeamName == game.TeamAName ? teamBName : teamAName;
+        var initTeamName = initiativeTeamName == game.TeamAName ? teamAName : teamBName;
 
-        (cpA, cpB) = await RunPloyLoopAsync(tp, game.TeamAId, game.TeamBId,
-            nonInitTeamId, nonInitTeamName, cpA, cpB, game.Id);
+        (cpA, cpB) = await RunPloyLoopAsync(tp, game.TeamAName, game.TeamBName,
+            nonInitTeamName, cpA, cpB, game.Id);
 
-        (cpA, cpB) = await RunPloyLoopAsync(tp, game.TeamAId, game.TeamBId,
-            initiativeTeamId, initTeamName, cpA, cpB, game.Id);
+        (cpA, cpB) = await RunPloyLoopAsync(tp, game.TeamAName, game.TeamBName,
+            initTeamName, cpA, cpB, game.Id);
 
         // ─── 6. Mark strategy phase complete ──────────────────────────────────
         await turningPointRepository.CompleteStrategyPhaseAsync(tp.Id);
@@ -89,13 +88,13 @@ public class StrategyPhaseOrchestrator(
     }
 
     private async Task<(int cpA, int cpB)> RunPloyLoopAsync(
-        TurningPoint tp, Guid teamAId, Guid teamBId,
-        Guid activeTeamId, string activeTeamName,
+        TurningPoint tp, string teamAName, string teamBName,
+        string activeTeamName,
         int cpA, int cpB, Guid gameId)
     {
         while (true)
         {
-            if (!AnsiConsole.Confirm($"[bold]{Markup.Escape(activeTeamName)}[/] — record a ploy? (current CP: {(activeTeamId == teamAId ? cpA : cpB)})",
+            if (!AnsiConsole.Confirm($"[bold]{Markup.Escape(activeTeamName)}[/] — record a ploy? (current CP: {(activeTeamName == teamAName ? cpA : cpB)})",
                 defaultValue: false))
                 break;
 
@@ -109,7 +108,7 @@ public class StrategyPhaseOrchestrator(
                 new TextPrompt<int>("CP cost:")
                     .Validate(c => c >= 0 && c <= 10));
 
-            var currentCp = activeTeamId == teamAId ? cpA : cpB;
+            var currentCp = activeTeamName == teamAName ? cpA : cpB;
             if (cpCost > currentCp)
             {
                 AnsiConsole.MarkupLine($"[red]Not enough CP (have {currentCp}, need {cpCost}).[/]");
@@ -120,17 +119,17 @@ public class StrategyPhaseOrchestrator(
             {
                 Id = Guid.NewGuid(),
                 TurningPointId = tp.Id,
-                TeamId = activeTeamId,
+                TeamName = activeTeamName,
                 PloyName = ployName,
                 Description = string.IsNullOrWhiteSpace(description) ? null : description,
                 CpCost = cpCost
             });
 
-            if (activeTeamId == teamAId) cpA -= cpCost;
+            if (activeTeamName == teamAName) cpA -= cpCost;
             else cpB -= cpCost;
 
             await gameRepository.UpdateCpAsync(gameId, cpA, cpB);
-            AnsiConsole.MarkupLine(FormatCp(activeTeamName, activeTeamId == teamAId ? cpA : cpB));
+            AnsiConsole.MarkupLine(FormatCp(activeTeamName, activeTeamName == teamAName ? cpA : cpB));
         }
 
         return (cpA, cpB);

@@ -21,24 +21,23 @@ public class SqliteKillTeamRepository : IKillTeamRepository
         {
             using var cmd = conn.CreateCommand();
             cmd.Transaction = tx;
-            cmd.CommandText = "INSERT OR REPLACE INTO kill_teams (id, name, faction) VALUES (@id, @name, @faction)";
-            cmd.Parameters.AddWithValue("@id", team.Id.ToString());
+            cmd.CommandText = "INSERT OR REPLACE INTO kill_teams (name, faction) VALUES (@name, @faction)";
             cmd.Parameters.AddWithValue("@name", team.Name);
             cmd.Parameters.AddWithValue("@faction", team.Faction);
             await cmd.ExecuteNonQueryAsync();
 
             foreach (var operative in team.Operatives)
             {
-                operative.KillTeamId = team.Id;
+                operative.KillTeamName = team.Name;
                 using var opCmd = conn.CreateCommand();
                 opCmd.Transaction = tx;
                 opCmd.CommandText = """
                     INSERT OR REPLACE INTO operatives
-                    (id, kill_team_id, name, operative_type, move, apl, wounds, save, equipment_json)
-                    VALUES (@id, @killTeamId, @name, @operativeType, @move, @apl, @wounds, @save, @equipmentJson)
+                    (id, kill_team_name, name, operative_type, move, apl, wounds, save, equipment_json)
+                    VALUES (@id, @killTeamName, @name, @operativeType, @move, @apl, @wounds, @save, @equipmentJson)
                     """;
                 opCmd.Parameters.AddWithValue("@id", operative.Id.ToString());
-                opCmd.Parameters.AddWithValue("@killTeamId", operative.KillTeamId.ToString());
+                opCmd.Parameters.AddWithValue("@killTeamName", operative.KillTeamName);
                 opCmd.Parameters.AddWithValue("@name", operative.Name);
                 opCmd.Parameters.AddWithValue("@operativeType", operative.OperativeType);
                 opCmd.Parameters.AddWithValue("@move", operative.Move);
@@ -76,52 +75,49 @@ public class SqliteKillTeamRepository : IKillTeamRepository
     public async Task<IEnumerable<Models.KillTeam>> GetAllAsync()
     {
         return await _db.QueryAsync(
-            "SELECT id, name, faction FROM kill_teams",
+            "SELECT name, faction FROM kill_teams",
             r => new Models.KillTeam
             {
-                Id = Guid.Parse(r.GetString(0)),
-                Name = r.GetString(1),
-                Faction = r.GetString(2)
+                Name = r.GetString(0),
+                Faction = r.GetString(1)
             });
     }
 
-    public async Task<Models.KillTeam?> FindByNameAsync(string name)
+    public async Task<Models.KillTeam?> GetByNameAsync(string name)
     {
         return await _db.QuerySingleAsync(
-            "SELECT id, name, faction FROM kill_teams WHERE name = @name COLLATE NOCASE LIMIT 1",
+            "SELECT name, faction FROM kill_teams WHERE name = @name COLLATE NOCASE LIMIT 1",
             r => new Models.KillTeam
             {
-                Id = Guid.Parse(r.GetString(0)),
-                Name = r.GetString(1),
-                Faction = r.GetString(2)
+                Name = r.GetString(0),
+                Faction = r.GetString(1)
             },
             new() { ["@name"] = name });
     }
 
-    public async Task<Models.KillTeam?> GetWithOperativesAsync(Guid id)
+    public async Task<Models.KillTeam?> GetWithOperativesAsync(string name)
     {
         var team = await _db.QuerySingleAsync(
-            "SELECT id, name, faction FROM kill_teams WHERE id = @id",
+            "SELECT name, faction FROM kill_teams WHERE name = @name COLLATE NOCASE",
             r => new Models.KillTeam
             {
-                Id = Guid.Parse(r.GetString(0)),
-                Name = r.GetString(1),
-                Faction = r.GetString(2),
+                Name = r.GetString(0),
+                Faction = r.GetString(1),
                 Operatives = []
             },
-            new() { ["@id"] = id.ToString() });
+            new() { ["@name"] = name });
 
         if (team is null) return null;
 
         var operatives = await _db.QueryAsync(
             """
             SELECT id, name, operative_type, move, apl, wounds, save, equipment_json
-            FROM operatives WHERE kill_team_id = @teamId
+            FROM operatives WHERE kill_team_name = @teamName
             """,
             r => new Operative
             {
                 Id = Guid.Parse(r.GetString(0)),
-                KillTeamId = team.Id,
+                KillTeamName = team.Name,
                 Name = r.GetString(1),
                 OperativeType = r.GetString(2),
                 Move = r.GetInt32(3),
@@ -130,7 +126,7 @@ public class SqliteKillTeamRepository : IKillTeamRepository
                 Save = r.GetInt32(6),
                 Equipment = JsonSerializer.Deserialize<string[]>(r.GetString(7)) ?? []
             },
-            new() { ["@teamId"] = id.ToString() });
+            new() { ["@teamName"] = team.Name });
 
         foreach (var op in operatives)
         {
