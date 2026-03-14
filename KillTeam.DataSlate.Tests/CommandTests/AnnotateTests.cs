@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using KillTeam.DataSlate.Console.Infrastructure.Repositories;
 using KillTeam.DataSlate.Domain.Models;
 using Xunit;
@@ -18,7 +18,7 @@ public class AnnotateTests
 
         using var db = TestDbBuilder.Create()
             .WithPlayer(playerId, "Michael")
-            .WithKillTeam("Angels of Death", "Adeptus Astartes")
+            .WithTeam("Angels of Death", "Adeptus Astartes")
             .WithOperative(opId, "Angels of Death", "Sergeant", wounds: 13, save: 3, apl: 3, move: 3)
             .WithGame(gameId, "Angels of Death", "Angels of Death", playerId, playerId)
             .WithTurningPoint(tpId, gameId, 1)
@@ -44,7 +44,7 @@ public class AnnotateTests
 
         using var db = TestDbBuilder.Create()
             .WithPlayer(playerId, "Michael")
-            .WithKillTeam("Angels of Death", "Adeptus Astartes")
+            .WithTeam("Angels of Death", "Adeptus Astartes")
             .WithOperative(opId, "Angels of Death", "Sergeant", wounds: 13, save: 3, apl: 3, move: 3)
             .WithGame(gameId, "Angels of Death", "Angels of Death", playerId, playerId)
             .WithTurningPoint(tpId, gameId, 1)
@@ -71,7 +71,7 @@ public class AnnotateTests
 
         using var db = TestDbBuilder.Create()
             .WithPlayer(playerId, "Michael")
-            .WithKillTeam("Angels of Death", "Adeptus Astartes")
+            .WithTeam("Angels of Death", "Adeptus Astartes")
             .WithOperative(opId, "Angels of Death", "Sergeant", wounds: 13, save: 3, apl: 3, move: 3)
             .WithOperative(targetOpId, "Angels of Death", "Intercessor", wounds: 13, save: 3, apl: 2, move: 3)
             .WithGame(gameId, "Angels of Death", "Angels of Death", playerId, playerId)

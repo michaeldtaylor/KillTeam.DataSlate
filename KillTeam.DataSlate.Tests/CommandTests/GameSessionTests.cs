@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using KillTeam.DataSlate.Console.Infrastructure.Repositories;
 using KillTeam.DataSlate.Domain.Models;
 using KillTeam.DataSlate.Domain.Services;
@@ -21,8 +21,8 @@ public class GameSessionTests
 
         using var db = TestDbBuilder.Create()
             .WithPlayer(playerId, "Player1")
-            .WithKillTeam("Team A", "Faction A")
-            .WithKillTeam("Team B", "Faction B")
+            .WithTeam("Team A", "Faction A")
+            .WithTeam("Team B", "Faction B")
             .WithGame(gameId, "Team A", "Team B", playerId, playerId);
 
         var gameRepo = new SqliteGameRepository(db.Connection);
@@ -48,8 +48,8 @@ public class GameSessionTests
 
         using var db = TestDbBuilder.Create()
             .WithPlayer(playerId, "Player1")
-            .WithKillTeam("Team A", "Faction A")
-            .WithKillTeam("Team B", "Faction B")
+            .WithTeam("Team A", "Faction A")
+            .WithTeam("Team B", "Faction B")
             .WithGame(gameId, "Team A", "Team B", playerId, playerId);
 
         var gameRepo = new SqliteGameRepository(db.Connection);
@@ -81,8 +81,8 @@ public class GameSessionTests
 
         using var db = TestDbBuilder.Create()
             .WithPlayer(playerId, "Player1")
-            .WithKillTeam("Team A", "Faction")
-            .WithKillTeam("Team B", "Faction")
+            .WithTeam("Team A", "Faction")
+            .WithTeam("Team B", "Faction")
             .WithOperative(opId, "Team A", "Sergeant", wounds: 12, save: 3, apl: 3, move: 3)
             .WithGame(gameId, "Team A", "Team B", playerId, playerId)
             .WithGameOperativeState(stateId, gameId, opId, currentWounds: 12);
@@ -135,8 +135,8 @@ public class GameSessionTests
 
         using var db = TestDbBuilder.Create()
             .WithPlayer(playerId, "Player1")
-            .WithKillTeam("Team A", "Faction")
-            .WithKillTeam("Team B", "Faction")
+            .WithTeam("Team A", "Faction")
+            .WithTeam("Team B", "Faction")
             .WithOperative(opId, "Team A", "Warrior", wounds: 10, save: 4, apl: 2, move: 3)
             .WithGame(gameId, "Team A", "Team B", playerId, playerId)
             .WithGameOperativeState(stateId, gameId, opId, currentWounds: 10);
@@ -193,8 +193,8 @@ public class GameSessionTests
 
         using var db = TestDbBuilder.Create()
             .WithPlayer(playerId, "Player1")
-            .WithKillTeam("Team A", "Faction")
-            .WithKillTeam("Team B", "Faction")
+            .WithTeam("Team A", "Faction")
+            .WithTeam("Team B", "Faction")
             .WithOperative(opId, "Team A", "Grenadier", wounds: 13, save: 3, apl: 2, move: 3)
             .WithGame(gameId, "Team A", "Team B", playerId, playerId)
             .WithGameOperativeState(stateId, gameId, opId, currentWounds: 13, order: "Engage");

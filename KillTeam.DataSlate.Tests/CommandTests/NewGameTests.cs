@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using KillTeam.DataSlate.Console.Infrastructure.Repositories;
 using KillTeam.DataSlate.Domain.Models;
 using Xunit;
@@ -23,8 +23,8 @@ public class NewGameTests
         using var db = TestDbBuilder.Create()
             .WithPlayer(playerId1, "Michael")
             .WithPlayer(playerId2, "Solomon")
-            .WithKillTeam(teamAName, "Adeptus Astartes")
-            .WithKillTeam(teamBName, "Heretic Astartes")
+            .WithTeam(teamAName, "Adeptus Astartes")
+            .WithTeam(teamBName, "Heretic Astartes")
             .WithOperative(op1Id, teamAName, "Sergeant", wounds: 13, save: 3, apl: 3, move: 3)
             .WithOperative(op2Id, teamAName, "Intercessor", wounds: 13, save: 3, apl: 2, move: 3)
             .WithOperative(op3Id, teamBName, "Champion", wounds: 14, save: 3, apl: 3, move: 3)
@@ -88,7 +88,7 @@ public class NewGameTests
 
         using var db = TestDbBuilder.Create()
             .WithPlayer(playerId, "Michael")
-            .WithKillTeam("Angels of Death", "Adeptus Astartes");
+            .WithTeam("Angels of Death", "Adeptus Astartes");
 
         var teamRepo = new SqliteTeamRepository(db.Connection);
         var teams = (await teamRepo.GetAllAsync()).ToList();

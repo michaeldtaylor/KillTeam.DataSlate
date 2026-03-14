@@ -32,7 +32,7 @@ public sealed class TestDbBuilder : IDisposable
         return this;
     }
 
-    public TestDbBuilder WithKillTeam(string name, string faction)
+    public TestDbBuilder WithTeam(string name, string faction)
     {
         Exec("INSERT INTO teams (name, faction) VALUES (@name, @faction)",
             ("@name", name), ("@faction", faction));

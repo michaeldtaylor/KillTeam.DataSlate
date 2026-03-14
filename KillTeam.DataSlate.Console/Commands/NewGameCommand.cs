@@ -26,7 +26,7 @@ public class NewGameCommand(
         var allTeams = (await teams.GetAllAsync()).ToList();
         if (allTeams.Count < 2)
         {
-            AnsiConsole.MarkupLine("[red]Not enough teams imported — run `import-kill-teams` first.[/]");
+            AnsiConsole.MarkupLine("[red]Not enough teams imported — run `import-teams` first.[/]");
             return 1;
         }
 

@@ -39,7 +39,7 @@ public class SimulateSessionOrchestrator(
         var allTeams = (await teamRepository.GetAllAsync()).ToList();
         if (allTeams.Count == 0)
         {
-            console.MarkupLine("[red]No teams imported. Run [bold]import-kill-teams[/] first.[/]");
+            console.MarkupLine("[red]No teams imported. Run [bold]import-teams[/] first.[/]");
             return (null, null, null, null);
         }
 

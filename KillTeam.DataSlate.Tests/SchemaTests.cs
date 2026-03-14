@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using Microsoft.Data.Sqlite;
 using KillTeam.DataSlate.Console.Infrastructure;
 using KillTeam.DataSlate.Console.Infrastructure.Repositories;
@@ -112,8 +112,8 @@ public class SchemaTests
         using var db = TestDbBuilder.Create()
             .WithPlayer(playerId1, "Michael")
             .WithPlayer(playerId2, "Solomon")
-            .WithKillTeam("Angels of Death", "Adeptus Astartes")
-            .WithKillTeam("Plague Marines", "Heretic Astartes");
+            .WithTeam("Angels of Death", "Adeptus Astartes")
+            .WithTeam("Plague Marines", "Heretic Astartes");
 
         var repo = new SqliteGameRepository(db.Connection);
         var game = new Game
@@ -161,7 +161,7 @@ public class SchemaTests
 
         using var db = TestDbBuilder.Create()
             .WithPlayer(playerId, "Michael")
-            .WithKillTeam("Angels of Death", "Adeptus Astartes")
+            .WithTeam("Angels of Death", "Adeptus Astartes")
             .WithGame(gameId, "Angels of Death", "Angels of Death", playerId, playerId)
             .WithTurningPoint(tpId, gameId, 1, false);
 

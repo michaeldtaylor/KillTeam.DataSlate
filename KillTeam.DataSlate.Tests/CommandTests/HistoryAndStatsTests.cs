@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using Microsoft.Data.Sqlite;
 using Xunit;
 
@@ -15,8 +15,8 @@ public class HistoryTests
 
         using var db = TestDbBuilder.Create()
             .WithPlayer(pid1, "Alpha").WithPlayer(pid2, "Beta")
-            .WithKillTeam("Team A", "Faction A")
-            .WithKillTeam("Team B", "Faction B")
+            .WithTeam("Team A", "Faction A")
+            .WithTeam("Team B", "Faction B")
             .WithGame(gid1, "Team A", "Team B", pid1, pid2, "Completed")
             .WithGame(gid2, "Team B", "Team A", pid2, pid1, "Completed");
 
@@ -35,7 +35,7 @@ public class HistoryTests
 
         using var db = TestDbBuilder.Create()
             .WithPlayer(pid1, "Michael").WithPlayer(pid2, "Solomon").WithPlayer(pid3, "David")
-            .WithKillTeam("Angels", "AS").WithKillTeam("Plague", "HA")
+            .WithTeam("Angels", "AS").WithTeam("Plague", "HA")
             .WithGame(gid1, "Angels", "Plague", pid1, pid2, "Completed") // Michael + Solomon
             .WithGame(gid2, "Angels", "Plague", pid2, pid3, "Completed"); // Solomon + David
 
@@ -70,7 +70,7 @@ public class StatsTests
 
         using var db = TestDbBuilder.Create()
             .WithPlayer(pid1, "Alpha").WithPlayer(pid2, "Beta")
-            .WithKillTeam("Team A", "FA").WithKillTeam("Team B", "FB");
+            .WithTeam("Team A", "FA").WithTeam("Team B", "FB");
 
         // 2 completed games, both won by Team A (player Alpha is player_a)
         for (int i = 0; i < 2; i++)
@@ -117,7 +117,7 @@ public class StatsTests
 
         using var db = TestDbBuilder.Create()
             .WithPlayer(pid, "Alpha")
-            .WithKillTeam("Team A", "FA").WithKillTeam("Team B", "FB")
+            .WithTeam("Team A", "FA").WithTeam("Team B", "FB")
             .WithOperative(opId, "Team A", "Shooter", wounds: 13, save: 3, apl: 3, move: 3)
             .WithOperative(targetId, "Team B", "Target", wounds: 13, save: 3, apl: 2, move: 3)
             .WithGame(gameId, "Team A", "Team B", pid, pid)

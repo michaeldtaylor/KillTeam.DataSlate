@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using KillTeam.DataSlate.Console.Infrastructure.Repositories;
 using KillTeam.DataSlate.Domain.Models;
 using Xunit;
@@ -70,7 +70,7 @@ public class PlayerCommandTests
 
         using var db = TestDbBuilder.Create()
             .WithPlayer(playerId, "Veteran")
-            .WithKillTeam("Angels of Death", "Adeptus Astartes")
+            .WithTeam("Angels of Death", "Adeptus Astartes")
             .WithGame(gameId, "Angels of Death", "Angels of Death", playerId, playerId);
 
         using var cmd = db.Connection.CreateCommand();
