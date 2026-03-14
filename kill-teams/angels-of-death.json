@@ -1,5 +1,5 @@
 {
-  "$schema": "./kill-team.schema.json",
+  "$schema": "../schema/kill-team.schema.json",
   "name": "Angels of Death",
   "faction": "Adeptus Astartes",
   "operatives": [
