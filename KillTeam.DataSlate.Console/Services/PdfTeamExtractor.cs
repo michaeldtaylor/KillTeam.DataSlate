@@ -91,7 +91,7 @@ public partial class PdfTeamExtractor
 
         while (i < count)
         {
-            if (false == StatsHeaderRegex().IsMatch(lines[i]))
+            if (!StatsHeaderRegex().IsMatch(lines[i]))
             {
                 i++;
                 continue;
@@ -107,7 +107,7 @@ public partial class PdfTeamExtractor
 
             var nameRaw = lines[i].Trim();
 
-            if (false == AllCapsNameRegex().IsMatch(nameRaw))
+            if (!AllCapsNameRegex().IsMatch(nameRaw))
             {
                 i++;
                 continue;
@@ -160,7 +160,7 @@ public partial class PdfTeamExtractor
                 i++;
             }
 
-            if (false == foundTable)
+            if (foundTable == false)
             {
                 continue;
             }
@@ -214,7 +214,7 @@ public partial class PdfTeamExtractor
                     {
                         var next = lines[i + 1];
 
-                        if (next.Length >= 15 && next[..15].All(c => c == ' ') && false == ContinuationExcludeRegex().IsMatch(next))
+                        if (next.Length >= 15 && next[..15].All(c => c == ' ') && !ContinuationExcludeRegex().IsMatch(next))
                         {
                             wRules = (wRules + " " + next.Trim()).Trim();
                             i++;
@@ -289,7 +289,7 @@ public partial class PdfTeamExtractor
                     continue;
                 }
 
-                if (false == AllCapsEquipmentRegex().IsMatch(trimmed))
+                if (!AllCapsEquipmentRegex().IsMatch(trimmed))
                 {
                     continue;
                 }

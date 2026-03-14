@@ -32,13 +32,13 @@ public class ExtractTeamCommand(PdfTeamExtractor extractor, IConfiguration confi
         var referencesBase = Path.Combine(projectRoot, "references", "kill-teams");
         var teamsOut = Path.Combine(projectRoot, "teams");
 
-        if (false == Directory.Exists(referencesBase))
+            if (!Directory.Exists(referencesBase))
         {
             AnsiConsole.MarkupLine($"[red]References folder not found: {Markup.Escape(referencesBase)}[/]");
             return 1;
         }
 
-        if (false == Directory.Exists(teamsOut))
+        if (!Directory.Exists(teamsOut))
         {
             Directory.CreateDirectory(teamsOut);
         }
@@ -51,7 +51,7 @@ public class ExtractTeamCommand(PdfTeamExtractor extractor, IConfiguration confi
             {
                 var name = Path.GetFileName(dir);
 
-                if (false == ExtractOne(name, dir, teamsOut, settings.Force))
+                if (!ExtractOne(name, dir, teamsOut, settings.Force))
                 {
                     errors++;
                 }
@@ -68,7 +68,7 @@ public class ExtractTeamCommand(PdfTeamExtractor extractor, IConfiguration confi
 
         var teamFolder = Path.Combine(referencesBase, settings.TeamName);
 
-        if (false == Directory.Exists(teamFolder))
+        if (!Directory.Exists(teamFolder))
         {
             AnsiConsole.MarkupLine($"[red]Team folder not found: {Markup.Escape(teamFolder)}[/]");
             return 1;
@@ -82,7 +82,7 @@ public class ExtractTeamCommand(PdfTeamExtractor extractor, IConfiguration confi
         var slug = PdfTeamExtractor.Slugify(teamName);
         var outFile = Path.Combine(teamsOut, $"{slug}.json");
 
-        if (File.Exists(outFile) && false == force)
+        if (File.Exists(outFile) && force == false)
         {
             AnsiConsole.MarkupLine($"[yellow]Skipping '{Markup.Escape(teamName)}' — {Markup.Escape(outFile)} already exists (use --force to overwrite).[/]");
             return true;
@@ -117,7 +117,7 @@ public class ExtractTeamCommand(PdfTeamExtractor extractor, IConfiguration confi
     {
         var configured = config["DataSlate:ProjectRoot"];
 
-        if (false == string.IsNullOrWhiteSpace(configured) && Directory.Exists(configured))
+        if (!string.IsNullOrWhiteSpace(configured) && Directory.Exists(configured))
         {
             return configured;
         }

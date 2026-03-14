@@ -41,7 +41,7 @@ public class PdfWeaponTypeDetector
 
             var hasWeaponTable = wordTexts.Contains("ATK") && wordTexts.Contains("HIT");
 
-            if (false == hasWeaponTable)
+            if (hasWeaponTable == false)
             {
                 continue;
             }
