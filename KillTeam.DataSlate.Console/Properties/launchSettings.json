@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json.schemastore.org/launchsettings.json",
+  "profiles": {
+    "simulate": {
+      "commandName": "Project",
+      "commandLineArgs": "simulate",
+      "workingDirectory": "$(ProjectDir)"
+    },
+    "import-roster": {
+      "commandName": "Project",
+      "commandLineArgs": "import-roster",
+      "workingDirectory": "$(ProjectDir)"
+    },
+    "new-game": {
+      "commandName": "Project",
+      "commandLineArgs": "new-game",
+      "workingDirectory": "$(ProjectDir)"
+    },
+    "player-add": {
+      "commandName": "Project",
+      "commandLineArgs": "player add",
+      "workingDirectory": "$(ProjectDir)"
+    }
+  }
+}
