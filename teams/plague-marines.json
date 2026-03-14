@@ -1,6 +1,6 @@
 {
   "$schema": "../schema/team.schema.json",
-  "id": "plague_marines",
+  "id": "plague-marines",
   "name": "Plague Marines",
   "faction": "Heretic Astartes",
   "operatives": [
@@ -11,32 +11,32 @@
         "move": 5,
         "apl": 3,
         "wounds": 15,
-        "save": "3+"
+        "save": "3\u002B"
       },
       "weapons": [
         {
           "name": "Plasma pistol (standard)",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "3/5",
-          "specialRules": "Range 8\", Piercing 1"
+          "specialRules": "\u0007Range 8\u0022, Piercing 1"
         },
         {
           "name": "Plasma pistol (supercharge)",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "4/5",
-          "specialRules": "Range 8\", Hot, Lethal 5+, Piercing 1"
+          "specialRules": "\u0007Range 8\u0022, Hot, Lethal 5\u002B, Piercing 1"
         },
         {
           "name": "Plague sword",
           "type": "Melee",
           "atk": 5,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "4/5",
-          "specialRules": "Severe, Poison, Toxic"
+          "specialRules": "\u0007Severe, \u0007Poison*, Toxic*"
         }
       ],
       "equipment": [
@@ -64,24 +64,24 @@
         "move": 5,
         "apl": 3,
         "wounds": 14,
-        "save": "3+"
+        "save": "3\u002B"
       },
       "weapons": [
         {
           "name": "Boltgun",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "3/4",
-          "specialRules": ""
+          "specialRules": "\u0007-"
         },
         {
           "name": "Fists",
           "type": "Melee",
           "atk": 4,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "3/4",
-          "specialRules": ""
+          "specialRules": "\u0007-"
         }
       ],
       "equipment": [
@@ -109,16 +109,16 @@
         "move": 5,
         "apl": 3,
         "wounds": 14,
-        "save": "3+"
+        "save": "3\u002B"
       },
       "weapons": [
         {
           "name": "Flail of Corruption",
           "type": "Melee",
           "atk": 5,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "4/5",
-          "specialRules": "Brutal, Severe, Shock, Poison"
+          "specialRules": "\u0007Brutal, Severe, Shock, Poison*"
         }
       ],
       "equipment": [
@@ -146,24 +146,24 @@
         "move": 5,
         "apl": 3,
         "wounds": 14,
-        "save": "3+"
+        "save": "3\u002B"
       },
       "weapons": [
         {
           "name": "Plague spewer",
           "type": "Ranged",
           "atk": 5,
-          "hit": "2+",
+          "hit": "2\u002B",
           "dmg": "3/3",
-          "specialRules": "Range 7\", Saturate, Severe, Torrent 2\", Poison"
+          "specialRules": "\u0007Range 7\u0022, Saturate, Severe, Torrent 2\u0022, Poison*"
         },
         {
           "name": "Fists",
           "type": "Melee",
           "atk": 4,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "3/4",
-          "specialRules": ""
+          "specialRules": "\u0007-"
         }
       ],
       "equipment": [
@@ -191,24 +191,24 @@
         "move": 5,
         "apl": 3,
         "wounds": 14,
-        "save": "3+"
+        "save": "3\u002B"
       },
       "weapons": [
         {
           "name": "Bolt pistol",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "3/4",
-          "specialRules": "Range 8\""
+          "specialRules": "\u0007Range 8\u0022"
         },
         {
           "name": "Plague knife",
           "type": "Melee",
           "atk": 5,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "3/4",
-          "specialRules": "Severe, Poison"
+          "specialRules": "\u0007Severe, Poison*"
         }
       ],
       "equipment": [
@@ -236,32 +236,32 @@
         "move": 5,
         "apl": 3,
         "wounds": 14,
-        "save": "3+"
+        "save": "3\u002B"
       },
       "weapons": [
         {
           "name": "Entropy",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "3/7",
-          "specialRules": "PSYCHIC, Range 7\", Saturate, Severe, Poison"
+          "specialRules": "\u0007PSYCHIC, Range 7\u0022, Saturate, Severe, Poison*"
         },
         {
           "name": "Plague wind",
           "type": "Ranged",
           "atk": 6,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "2/3",
-          "specialRules": "PSYCHIC, Saturate, Severe, Torrent 1\", Poison"
+          "specialRules": "PSYCHIC, Saturate, Severe, Torrent 1\u0022, Poison*"
         },
         {
           "name": "Corrupted staff",
           "type": "Melee",
           "atk": 4,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "3/4",
-          "specialRules": "PSYCHIC, Severe, Shock, Stun, Poison"
+          "specialRules": "\u0007PSYCHIC, Severe, Shock, Stun, Poison*"
         }
       ],
       "equipment": [
@@ -289,24 +289,24 @@
         "move": 5,
         "apl": 3,
         "wounds": 14,
-        "save": "3+"
+        "save": "3\u002B"
       },
       "weapons": [
         {
           "name": "Boltgun",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "3/4",
-          "specialRules": "Toxic"
+          "specialRules": "\u0007Toxic*"
         },
         {
           "name": "Plague knife",
           "type": "Melee",
           "atk": 4,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "3/4",
-          "specialRules": "Severe, Poison"
+          "specialRules": "\u0007Severe, Poison*"
         }
       ],
       "equipment": [

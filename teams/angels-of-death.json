@@ -1,6 +1,6 @@
 {
   "$schema": "../schema/team.schema.json",
-  "id": "angels_of_death",
+  "id": "angels-of-death",
   "name": "Angels of Death",
   "faction": "Adeptus Astartes",
   "operatives": [
@@ -11,32 +11,32 @@
         "move": 6,
         "apl": 3,
         "wounds": 15,
-        "save": "3+"
+        "save": "3\u002B"
       },
       "weapons": [
         {
           "name": "Plasma pistol (standard)",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "3/5",
-          "specialRules": "Range 8\", Piercing 1"
+          "specialRules": "\u0007Range 8\u0022, Piercing 1"
         },
         {
           "name": "Plasma pistol (supercharge)",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "4/5",
-          "specialRules": "Range 8\", Hot, Lethal 5+, Piercing 1"
+          "specialRules": "\u0007Range 8\u0022, Hot, Lethal 5\u002B, Piercing 1"
         },
         {
           "name": "Power fist",
           "type": "Melee",
           "atk": 5,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "5/7",
-          "specialRules": "Brutal"
+          "specialRules": "\u0007Brutal"
         }
       ],
       "equipment": [
@@ -64,72 +64,72 @@
         "move": 6,
         "apl": 3,
         "wounds": 15,
-        "save": "3+"
+        "save": "3\u002B"
       },
       "weapons": [
         {
           "name": "Hand flamer",
           "type": "Ranged",
           "atk": 4,
-          "hit": "2+",
+          "hit": "2\u002B",
           "dmg": "3/3",
-          "specialRules": "Range 6\", Saturate, Torrent 1\""
+          "specialRules": "\u0007Range 6\u0022, Saturate, Torrent 1\u0022"
         },
         {
           "name": "Heavy bolt pistol",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "3/4",
-          "specialRules": "Range 8\", Piercing Crits 1"
+          "specialRules": "\u0007Range 8\u0022, Piercing Crits 1"
         },
         {
           "name": "Plasma pistol (standard)",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "3/5",
-          "specialRules": "Range 8\", Piercing 1"
+          "specialRules": "\u0007Range 8\u0022, Piercing 1"
         },
         {
           "name": "Plasma pistol (supercharge)",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "4/5",
-          "specialRules": "Range 8\", Hot, Lethal 5+, Piercing 1"
+          "specialRules": "\u0007Range 8\u0022, Hot, Lethal 5\u002B, Piercing 1"
         },
         {
           "name": "Chainsword",
           "type": "Melee",
           "atk": 5,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "4/5",
-          "specialRules": ""
+          "specialRules": "\u0007-"
         },
         {
           "name": "Power fist",
           "type": "Melee",
           "atk": 5,
-          "hit": "4+",
+          "hit": "4\u002B",
           "dmg": "5/7",
-          "specialRules": "Brutal"
+          "specialRules": "\u0007Brutal"
         },
         {
           "name": "Power weapon",
           "type": "Melee",
           "atk": 5,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "4/6",
-          "specialRules": "Lethal 5+"
+          "specialRules": "\u0007Lethal 5\u002B"
         },
         {
           "name": "Thunder hammer",
           "type": "Melee",
           "atk": 5,
-          "hit": "4+",
+          "hit": "4\u002B",
           "dmg": "5/6",
-          "specialRules": "Shock, Stun"
+          "specialRules": "\u0007Shock, Stun"
         }
       ],
       "equipment": [
@@ -157,38 +157,38 @@
         "move": 6,
         "apl": 3,
         "wounds": 15,
-        "save": "3+"
+        "save": "3\u002B"
       },
       "weapons": [
         {
           "name": "Auto bolt rifle",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "3/4",
-          "specialRules": "Torrent 1\""
+          "specialRules": "\u0007Torrent 1\u0022"
         },
         {
           "name": "Bolt rifle",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "3/4",
-          "specialRules": "Piercing Crits 1"
+          "specialRules": "\u0007Piercing Crits 1"
         },
         {
           "name": "Stalker bolt rifle (heavy)",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "3/5",
-          "specialRules": "Heavy (Dash only), Lethal 5+, Piercing Crits 1"
+          "specialRules": "\u0007Heavy (Dash only), Lethal 5\u002B, Piercing Crits 1"
         },
         {
           "name": "Stalker bolt rifle (mobile)",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "3/4",
           "specialRules": ""
         },
@@ -196,41 +196,41 @@
           "name": "Chainsword",
           "type": "Melee",
           "atk": 4,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "4/5",
-          "specialRules": ""
+          "specialRules": "\u0007-"
         },
         {
           "name": "Fists",
           "type": "Melee",
           "atk": 4,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "3/4",
-          "specialRules": ""
+          "specialRules": "\u0007-"
         },
         {
           "name": "Power fist",
           "type": "Melee",
           "atk": 4,
-          "hit": "4+",
+          "hit": "4\u002B",
           "dmg": "5/7",
-          "specialRules": "Brutal"
+          "specialRules": "\u0007Brutal"
         },
         {
           "name": "Power weapon",
           "type": "Melee",
           "atk": 4,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "4/6",
-          "specialRules": "Lethal 5+"
+          "specialRules": "\u0007Lethal 5\u002B"
         },
         {
           "name": "Thunder hammer",
           "type": "Melee",
           "atk": 4,
-          "hit": "4+",
+          "hit": "4\u002B",
           "dmg": "5/6",
-          "specialRules": "Shock, Stun"
+          "specialRules": "\u0007Shock, Stun"
         }
       ],
       "equipment": [
@@ -258,24 +258,24 @@
         "move": 6,
         "apl": 3,
         "wounds": 14,
-        "save": "3+"
+        "save": "3\u002B"
       },
       "weapons": [
         {
           "name": "Heavy bolt pistol",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "3/4",
-          "specialRules": "Range 8\", Piercing Crits 1"
+          "specialRules": "\u0007Range 8\u0022, Piercing Crits 1"
         },
         {
           "name": "Chainsword",
           "type": "Melee",
           "atk": 5,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "4/5",
-          "specialRules": ""
+          "specialRules": "\u0007-"
         }
       ],
       "equipment": [
@@ -303,93 +303,24 @@
         "move": 6,
         "apl": 3,
         "wounds": 14,
-        "save": "3+"
+        "save": "3\u002B"
       },
       "weapons": [
         {
           "name": "Heavy bolt pistol",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "3/4",
-          "specialRules": "Range 8\", Piercing Crits 1"
+          "specialRules": "\u0007Range 8\u0022, Piercing Crits 1"
         },
         {
           "name": "Chainsword",
           "type": "Melee",
           "atk": 5,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "4/5",
-          "specialRules": ""
-        }
-      ],
-      "equipment": [
-        "Purity Seals",
-        "Chapter Reliquaries",
-        "Tilting Shields",
-        "Auspex",
-        "Portable Barricade",
-        "Utility Grenades",
-        "Ammo Cache",
-        "Razor Wire",
-        "Comms Device",
-        "Mines",
-        "Light Barricades",
-        "Heavy Barricade",
-        "Ladders",
-        "Explosive Grenades",
-        "Breaching Charge"
-      ]
-    },
-    {
-      "name": "Eliminator Sniper",
-      "operativeType": "Eliminator Sniper",
-      "stats": {
-        "move": 7,
-        "apl": 3,
-        "wounds": 12,
-        "save": "3+"
-      },
-      "weapons": [
-        {
-          "name": "Bolt pistol",
-          "type": "Ranged",
-          "atk": 4,
-          "hit": "3+",
-          "dmg": "3/4",
-          "specialRules": "Range 8\""
-        },
-        {
-          "name": "Bolt sniper rifle (executioner)",
-          "type": "Ranged",
-          "atk": 4,
-          "hit": "2+",
-          "dmg": "3/4",
-          "specialRules": "Heavy (Dash only), Saturate, Seek Light, Silent"
-        },
-        {
-          "name": "Bolt sniper rifle (hyperfrag)",
-          "type": "Ranged",
-          "atk": 4,
-          "hit": "2+",
-          "dmg": "2/4",
-          "specialRules": "Blast 1\", Heavy (Dash only), Silent"
-        },
-        {
-          "name": "Bolt sniper rifle (mortis)",
-          "type": "Ranged",
-          "atk": 4,
-          "hit": "2+",
-          "dmg": "3/3",
-          "specialRules": "Devastating 3, Heavy (Dash only), Piercing 1, Silent"
-        },
-        {
-          "name": "Fists",
-          "type": "Melee",
-          "atk": 4,
-          "hit": "3+",
-          "dmg": "3/4",
-          "specialRules": ""
+          "specialRules": "\u0007-"
         }
       ],
       "equipment": [
@@ -417,40 +348,40 @@
         "move": 5,
         "apl": 3,
         "wounds": 18,
-        "save": "3+"
+        "save": "3\u002B"
       },
       "weapons": [
         {
           "name": "Bolt pistol",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "3/4",
-          "specialRules": "Range 8\""
+          "specialRules": "\u0007Range 8\u0022"
         },
         {
           "name": "Heavy bolter (focused)",
           "type": "Ranged",
           "atk": 5,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "4/5",
-          "specialRules": "Piercing Crits 1"
+          "specialRules": "\u0007Piercing Crits 1"
         },
         {
           "name": "Heavy bolter (sweeping)",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "4/5",
-          "specialRules": "Piercing Crits 1, Torrent 1\""
+          "specialRules": "\u0007Piercing Crits 1, Torrent 1\u0022"
         },
         {
           "name": "Fists",
           "type": "Melee",
           "atk": 4,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "3/4",
-          "specialRules": ""
+          "specialRules": "\u0007-"
         }
       ],
       "equipment": [
@@ -478,54 +409,54 @@
         "move": 6,
         "apl": 3,
         "wounds": 14,
-        "save": "3+"
+        "save": "3\u002B"
       },
       "weapons": [
         {
           "name": "Auto bolt rifle",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "3/4",
-          "specialRules": "Torrent 1\""
+          "specialRules": "\u0007Torrent 1\u0022"
         },
         {
           "name": "Auxiliary grenade launcher (frag)",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "2/4",
-          "specialRules": "Blast 2\""
+          "specialRules": "\u0007Blast 2\u0022"
         },
         {
           "name": "Auxiliary grenade launcher (krak)",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "4/5",
-          "specialRules": "Piercing 1"
+          "specialRules": "\u0007Piercing 1"
         },
         {
           "name": "Bolt rifle",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "3/4",
-          "specialRules": "Piercing Crits 1"
+          "specialRules": "\u0007Piercing Crits 1"
         },
         {
           "name": "Stalker bolt rifle (heavy)",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "3/5",
-          "specialRules": "Heavy (Dash only), Lethal 5+, Piercing Crits 1"
+          "specialRules": "\u0007Heavy (Dash only), Lethal 5\u002B, Piercing Crits 1"
         },
         {
           "name": "Stalker bolt rifle (mobile)",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "3/4",
           "specialRules": ""
         },
@@ -533,9 +464,9 @@
           "name": "Fists",
           "type": "Melee",
           "atk": 4,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "3/4",
-          "specialRules": ""
+          "specialRules": "\u0007-"
         }
       ],
       "equipment": [
@@ -563,38 +494,38 @@
         "move": 6,
         "apl": 3,
         "wounds": 14,
-        "save": "3+"
+        "save": "3\u002B"
       },
       "weapons": [
         {
           "name": "Auto bolt rifle",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "3/4",
-          "specialRules": "Torrent 1\""
+          "specialRules": "\u0007Torrent 1\u0022"
         },
         {
           "name": "Bolt rifle",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "3/4",
-          "specialRules": "Piercing Crits 1"
+          "specialRules": "\u0007Piercing Crits 1"
         },
         {
           "name": "Stalker bolt rifle (heavy)",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "3/5",
-          "specialRules": "Heavy (Dash only), Lethal 5+, Piercing Crits 1"
+          "specialRules": "\u0007Heavy (Dash only), Lethal 5\u002B, Piercing Crits 1"
         },
         {
           "name": "Stalker bolt rifle (mobile)",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "3/4",
           "specialRules": ""
         },
@@ -602,9 +533,78 @@
           "name": "Fists",
           "type": "Melee",
           "atk": 4,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "3/4",
-          "specialRules": ""
+          "specialRules": "\u0007-"
+        }
+      ],
+      "equipment": [
+        "Purity Seals",
+        "Chapter Reliquaries",
+        "Tilting Shields",
+        "Auspex",
+        "Portable Barricade",
+        "Utility Grenades",
+        "Ammo Cache",
+        "Razor Wire",
+        "Comms Device",
+        "Mines",
+        "Light Barricades",
+        "Heavy Barricade",
+        "Ladders",
+        "Explosive Grenades",
+        "Breaching Charge"
+      ]
+    },
+    {
+      "name": "Eliminator Sniper",
+      "operativeType": "Eliminator Sniper",
+      "stats": {
+        "move": 7,
+        "apl": 3,
+        "wounds": 12,
+        "save": "3\u002B"
+      },
+      "weapons": [
+        {
+          "name": "Bolt pistol",
+          "type": "Ranged",
+          "atk": 4,
+          "hit": "3\u002B",
+          "dmg": "3/4",
+          "specialRules": "\u0007Range 8\u0022"
+        },
+        {
+          "name": "Bolt sniper rifle (executioner)",
+          "type": "Ranged",
+          "atk": 4,
+          "hit": "2\u002B",
+          "dmg": "3/4",
+          "specialRules": "\u0007Heavy (Dash only), Saturate, Seek Light, Silent"
+        },
+        {
+          "name": "Bolt sniper rifle (hyperfrag)",
+          "type": "Ranged",
+          "atk": 4,
+          "hit": "2\u002B",
+          "dmg": "2/4",
+          "specialRules": "\u0007Blast 1\u0022, Heavy (Dash only), Silent"
+        },
+        {
+          "name": "Bolt sniper rifle (mortis)",
+          "type": "Ranged",
+          "atk": 4,
+          "hit": "2\u002B",
+          "dmg": "3/3",
+          "specialRules": "\u0007Devastating 3, Heavy (Dash only), Piercing 1, Silent"
+        },
+        {
+          "name": "Fists",
+          "type": "Melee",
+          "atk": 4,
+          "hit": "3\u002B",
+          "dmg": "3/4",
+          "specialRules": "\u0007-"
         }
       ],
       "equipment": [

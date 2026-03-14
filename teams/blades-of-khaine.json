@@ -1,6 +1,6 @@
 {
   "$schema": "../schema/team.schema.json",
-  "id": "blades_of_khaine",
+  "id": "blades-of-khaine",
   "name": "Blades of Khaine",
   "faction": "Asuryani",
   "operatives": [
@@ -11,64 +11,64 @@
         "move": 7,
         "apl": 3,
         "wounds": 9,
-        "save": "3+"
+        "save": "3\u002B"
       },
       "weapons": [
         {
-          "dmg": "3/4",
+          "name": "Shuriken catapult",
           "type": "Ranged",
-          "hit": "3+",
-          "specialRules": "\u0007Rending",
-          "name": "\u0007\t    Shuriken catapult",
-          "atk": 4
+          "atk": 4,
+          "hit": "3\u002B",
+          "dmg": "3/4",
+          "specialRules": "\u0007Rending"
         },
         {
-          "dmg": "3/4",
+          "name": "Shuriken pistol",
           "type": "Ranged",
-          "hit": "3+",
-          "specialRules": "\u0007Range 8\", Rending",
-          "name": "\u0007\t Shuriken pistol",
-          "atk": 4
+          "atk": 4,
+          "hit": "3\u002B",
+          "dmg": "3/4",
+          "specialRules": "\u0007Range 8\u0022, Rending"
         },
         {
-          "dmg": "3/4",
+          "name": "Twin shuriken catapult",
           "type": "Ranged",
-          "hit": "3+",
-          "specialRules": "\u0007Ceaseless, Rending",
-          "name": "\u0007\t Twin shuriken catapult",
-          "atk": 4
+          "atk": 4,
+          "hit": "3\u002B",
+          "dmg": "3/4",
+          "specialRules": "\u0007Ceaseless, Rending"
         },
         {
+          "name": "Diresword",
+          "type": "Melee",
+          "atk": 5,
+          "hit": "3\u002B",
           "dmg": "4/5",
-          "type": "Melee",
-          "hit": "3+",
-          "specialRules": "\u0007Lethal 5+, Rending",
-          "name": "\u0007\t Diresword",
-          "atk": 5
+          "specialRules": "\u0007Lethal 5\u002B, Rending"
         },
         {
+          "name": "Fists",
+          "type": "Melee",
+          "atk": 4,
+          "hit": "3\u002B",
           "dmg": "2/4",
-          "type": "Melee",
-          "hit": "3+",
-          "specialRules": "",
-          "name": "\u0007\t Fists",
-          "atk": 4
+          "specialRules": "\u0007-"
         },
         {
+          "name": "Gun butts",
+          "type": "Melee",
+          "atk": 3,
+          "hit": "4\u002B",
           "dmg": "2/3",
-          "type": "Melee",
-          "hit": "4+",
-          "specialRules": "",
-          "name": "\u0007\t Gun butts",
-          "atk": 3
+          "specialRules": "\u0007-"
         },
         {
-          "dmg": "4/6",
+          "name": "Power weapon",
           "type": "Melee",
-          "hit": "3+",
-          "specialRules": "\u0007Lethal 5+",
-          "name": "\u0007\t Power weapon",
-          "atk": 5
+          "atk": 5,
+          "hit": "3\u002B",
+          "dmg": "4/6",
+          "specialRules": "\u0007Lethal 5\u002B"
         }
       ],
       "equipment": [
@@ -95,24 +95,24 @@
         "move": 7,
         "apl": 3,
         "wounds": 8,
-        "save": "4+"
+        "save": "4\u002B"
       },
       "weapons": [
         {
-          "dmg": "3/4",
+          "name": "Shuriken catapult",
           "type": "Ranged",
-          "hit": "3+",
-          "specialRules": "\u0007Rending",
-          "name": "\u0007\t    Shuriken catapult",
-          "atk": 4
+          "atk": 4,
+          "hit": "3\u002B",
+          "dmg": "3/4",
+          "specialRules": "\u0007Rending"
         },
         {
-          "dmg": "2/4",
+          "name": "Fists",
           "type": "Melee",
-          "hit": "3+",
-          "specialRules": "",
-          "name": "\u0007\t Fists",
-          "atk": 4
+          "atk": 4,
+          "hit": "3\u002B",
+          "dmg": "2/4",
+          "specialRules": "\u0007-"
         }
       ],
       "equipment": [
@@ -139,56 +139,56 @@
         "move": 7,
         "apl": 3,
         "wounds": 9,
-        "save": "3+"
+        "save": "3\u002B"
       },
       "weapons": [
         {
+          "name": "Shuriken pistol",
+          "type": "Ranged",
+          "atk": 4,
+          "hit": "3\u002B",
           "dmg": "3/4",
-          "type": "Ranged",
-          "hit": "3+",
-          "specialRules": "\u0007Range 8\", Rending",
-          "name": "\u0007\t Shuriken pistol",
-          "atk": 4
+          "specialRules": "\u0007Range 8\u0022, Rending"
         },
         {
+          "name": "Triskele (throw)",
+          "type": "Ranged",
+          "atk": 4,
+          "hit": "3\u002B",
           "dmg": "2/3",
-          "type": "Ranged",
-          "hit": "3+",
-          "specialRules": "\u0007Range 8\", Rending, Torrent 2\"",
-          "name": "\u0007\t Triskele (throw)",
-          "atk": 4
+          "specialRules": "\u0007Range 8\u0022, Rending, Torrent 2\u0022"
         },
         {
+          "name": "Executioner",
+          "type": "Melee",
+          "atk": 5,
+          "hit": "3\u002B",
           "dmg": "3/7",
-          "type": "Melee",
-          "hit": "3+",
-          "specialRules": "\u0007Lethal 5+",
-          "name": "\u0007\t Executioner",
-          "atk": 5
+          "specialRules": "\u0007Lethal 5\u002B"
         },
         {
+          "name": "Mirrorswords",
+          "type": "Melee",
+          "atk": 5,
+          "hit": "3\u002B",
           "dmg": "4/6",
-          "type": "Melee",
-          "hit": "3+",
-          "specialRules": "\u0007Ceaseless, Lethal 5+",
-          "name": "\u0007\t Mirrorswords",
-          "atk": 5
+          "specialRules": "\u0007Ceaseless, Lethal 5\u002B"
         },
         {
+          "name": "Power weapon",
+          "type": "Melee",
+          "atk": 5,
+          "hit": "3\u002B",
           "dmg": "4/6",
-          "type": "Melee",
-          "hit": "3+",
-          "specialRules": "\u0007Lethal 5+",
-          "name": "\u0007\t Power weapon",
-          "atk": 5
+          "specialRules": "\u0007Lethal 5\u002B"
         },
         {
+          "name": "Triskele (slice)",
+          "type": "Melee",
+          "atk": 5,
+          "hit": "3\u002B",
           "dmg": "4/5",
-          "type": "Melee",
-          "hit": "3+",
-          "specialRules": "\u0007Rending",
-          "name": "\u0007\t Triskele (slice)",
-          "atk": 5
+          "specialRules": "\u0007Rending"
         }
       ],
       "equipment": [
@@ -215,24 +215,24 @@
         "move": 7,
         "apl": 3,
         "wounds": 8,
-        "save": "4+"
+        "save": "4\u002B"
       },
       "weapons": [
         {
-          "dmg": "3/4",
+          "name": "Shuriken pistol",
           "type": "Ranged",
-          "hit": "3+",
-          "specialRules": "\u0007Range 8\", Rending",
-          "name": "\u0007\t Shuriken pistol",
-          "atk": 4
+          "atk": 4,
+          "hit": "3\u002B",
+          "dmg": "3/4",
+          "specialRules": "\u0007Range 8\u0022, Rending"
         },
         {
-          "dmg": "4/6",
+          "name": "Power weapon",
           "type": "Melee",
-          "hit": "3+",
-          "specialRules": "\u0007Lethal 5+",
-          "name": "\u0007\t Power weapon",
-          "atk": 4
+          "atk": 4,
+          "hit": "3\u002B",
+          "dmg": "4/6",
+          "specialRules": "\u0007Lethal 5\u002B"
         }
       ],
       "equipment": [
@@ -259,48 +259,48 @@
         "move": 7,
         "apl": 3,
         "wounds": 9,
-        "save": "3+"
+        "save": "3\u002B"
       },
       "weapons": [
         {
-          "dmg": "3/4",
+          "name": "Shuriken pistol",
           "type": "Ranged",
-          "hit": "3+",
-          "specialRules": "\u0007Range 8\", Rending",
-          "name": "\u0007\t Shuriken pistol",
-          "atk": 4
+          "atk": 4,
+          "hit": "3\u002B",
+          "dmg": "3/4",
+          "specialRules": "\u0007Range 8\u0022, Rending"
         },
         {
-          "dmg": "3/4",
+          "name": "Twin shuriken pistols",
           "type": "Ranged",
-          "hit": "4+",
-          "specialRules": "\u0007Range 8\", Ceaseless, Rending",
-          "name": "\u0007\t Twin shuriken pistols",
-          "atk": 4
+          "atk": 4,
+          "hit": "4\u002B",
+          "dmg": "3/4",
+          "specialRules": "\u0007Range 8\u0022, Ceaseless, Rending"
         },
         {
+          "name": "Biting blade",
+          "type": "Melee",
+          "atk": 5,
+          "hit": "3\u002B",
           "dmg": "5/6",
-          "type": "Melee",
-          "hit": "3+",
-          "specialRules": "\u0007Rending",
-          "name": "\u0007\t Biting blade",
-          "atk": 5
+          "specialRules": "\u0007Rending"
         },
         {
+          "name": "Scorpion\u2019s claw and chainsword",
+          "type": "Melee",
+          "atk": 5,
+          "hit": "3\u002B",
           "dmg": "4/6",
-          "type": "Melee",
-          "hit": "3+",
-          "specialRules": "\u0007Brutal, Lethal 5+",
-          "name": "\u0007\t ScorpionΓÇÖs claw and chainsword",
-          "atk": 5
+          "specialRules": "\u0007Brutal, Lethal 5\u002B"
         },
         {
-          "dmg": "4/5",
+          "name": "Twin chainswords",
           "type": "Melee",
-          "hit": "3+",
-          "specialRules": "\u0007Ceaseless, Rending",
-          "name": "\u0007\t Twin chainswords",
-          "atk": 5
+          "atk": 5,
+          "hit": "3\u002B",
+          "dmg": "4/5",
+          "specialRules": "\u0007Ceaseless, Rending"
         }
       ],
       "equipment": [
@@ -327,24 +327,24 @@
         "move": 7,
         "apl": 3,
         "wounds": 8,
-        "save": "4+"
+        "save": "4\u002B"
       },
       "weapons": [
         {
-          "dmg": "3/4",
+          "name": "Shuriken pistol",
           "type": "Ranged",
-          "hit": "3+",
-          "specialRules": "\u0007Range 8\", Rending",
-          "name": "\u0007\t Shuriken pistol",
-          "atk": 4
+          "atk": 4,
+          "hit": "3\u002B",
+          "dmg": "3/4",
+          "specialRules": "\u0007Range 8\u0022, Rending"
         },
         {
-          "dmg": "4/5",
+          "name": "Chainsword",
           "type": "Melee",
-          "hit": "3+",
-          "specialRules": "\u0007Rending",
-          "name": "\u0007\t Chainsword",
-          "atk": 4
+          "atk": 4,
+          "hit": "3\u002B",
+          "dmg": "4/5",
+          "specialRules": "\u0007Rending"
         }
       ],
       "equipment": [

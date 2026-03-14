@@ -1,19 +1,20 @@
 #Requires -Version 7.0
 <#
 .SYNOPSIS
-    Extracts Kill Team operative data from official GW PDF sources and writes validated JSON.
+    DEPRECATED — use the C# command instead:
 
-.DESCRIPTION
-    Reads 'Datacards.pdf' (operatives, stats and weapons) and equipment PDFs from
-    references/kill-teams/<TeamName>/ and writes a schema-valid JSON file to teams/<slug>.json.
+        kt extract-team --team "Team Name"
+        kt extract-team --all
+        kt extract-team --team "Team Name" --force
 
-    Requires Poppler's pdftotext to be installed:
+    The C# command uses PdfPig vector path counting for 100% accurate weapon type
+    detection (6 paths = Ranged, 1 path = Melee) instead of keyword heuristics.
+    Requires Poppler's pdftotext to be on the PATH:
         winget install oschwartz10612.Poppler
 
-.EXAMPLE
-    .\Extract-KillTeam.ps1 -TeamName "Blades of Khaine"
-    .\Extract-KillTeam.ps1 -All
-    .\Extract-KillTeam.ps1 -TeamName "Angels of Death" -Force
+.DESCRIPTION
+    Legacy PS7 extraction script. Kept for reference only.
+    Use 'kt extract-team' in KillTeam.DataSlate.Console instead.
 #>
 
 [CmdletBinding(DefaultParameterSetName = 'Single')]

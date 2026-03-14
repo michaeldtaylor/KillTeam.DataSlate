@@ -1,8 +1,8 @@
 {
   "$schema": "../schema/team.schema.json",
-  "id": "void_dancer_troupe",
+  "id": "void-dancer-troupe",
   "name": "Void-Dancer Troupe",
-  "faction": "Harlequins",
+  "faction": "Harlequin",
   "operatives": [
     {
       "name": "Lead Player",
@@ -11,38 +11,38 @@
         "move": 7,
         "apl": 3,
         "wounds": 9,
-        "save": "4+"
+        "save": "4\u002B"
       },
       "weapons": [
         {
           "name": "Fusion pistol",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "5/3",
-          "specialRules": "Range 3\", Devastating 3, Piercing 2"
+          "specialRules": "\u0007Range 3\u0022, Devastating 3, Piercing 2"
         },
         {
           "name": "Neuro disruptor",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "4/5",
-          "specialRules": "Range 8\", Piercing 1, Stun"
+          "specialRules": "\u0007Range 8\u0022, Piercing 1, Stun"
         },
         {
           "name": "Shuriken pistol",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "3/4",
-          "specialRules": "Range 8\", Rending"
+          "specialRules": "\u0007Range 8\u0022, Rending"
         },
         {
           "name": "Blade",
           "type": "Melee",
           "atk": 5,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "4/6",
           "specialRules": ""
         },
@@ -50,40 +50,39 @@
           "name": "Caress",
           "type": "Melee",
           "atk": 5,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "4/5",
-          "specialRules": "Rending"
+          "specialRules": "\u0007Rending"
         },
         {
           "name": "Embrace",
           "type": "Melee",
           "atk": 5,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "4/5",
-          "specialRules": "Brutal"
+          "specialRules": "\u0007Brutal"
         },
         {
           "name": "Kiss",
           "type": "Melee",
           "atk": 5,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "3/7",
-          "specialRules": ""
+          "specialRules": "\u0007-"
         },
         {
           "name": "Power weapon",
           "type": "Melee",
           "atk": 5,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "4/6",
-          "specialRules": "Lethal 5+"
+          "specialRules": "\u0007Lethal 5\u002B"
         }
       ],
       "equipment": [
         "Wraithbone Talisman",
         "Shrieker Toxin Rounds",
         "Death Mask",
-        "Understudy's Mask",
         "Portable Barricade",
         "Utility Grenades",
         "Ammo Cache",
@@ -93,8 +92,7 @@
         "Light Barricades",
         "Heavy Barricade",
         "Ladders",
-        "Explosive Grenades",
-        "Breaching Charge"
+        "Explosive Grenades"
       ]
     },
     {
@@ -104,39 +102,38 @@
         "move": 7,
         "apl": 3,
         "wounds": 9,
-        "save": "4+"
+        "save": "4\u002B"
       },
       "weapons": [
         {
           "name": "Shrieker cannon (focused)",
           "type": "Ranged",
           "atk": 5,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "4/5",
-          "specialRules": "Rending, Heavy (Reposition only), Humbling Cruelty"
+          "specialRules": "\u0007Rending, Heavy (Reposition only), Humbling Cruelty*"
         },
         {
           "name": "Shrieker cannon (sweeping)",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "4/5",
-          "specialRules": "Rending, Heavy (Dash only), Torrent 2\", Humbling Cruelty"
+          "specialRules": "\u0007Rending, Heavy (Dash only), Torrent 2\u0022, Humbling Cruelty*"
         },
         {
           "name": "Shrieker blade",
           "type": "Melee",
           "atk": 4,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "3/4",
-          "specialRules": "Rending"
+          "specialRules": "\u0007Rending"
         }
       ],
       "equipment": [
         "Wraithbone Talisman",
         "Shrieker Toxin Rounds",
         "Death Mask",
-        "Understudy's Mask",
         "Portable Barricade",
         "Utility Grenades",
         "Ammo Cache",
@@ -146,8 +143,7 @@
         "Light Barricades",
         "Heavy Barricade",
         "Ladders",
-        "Explosive Grenades",
-        "Breaching Charge"
+        "Explosive Grenades"
       ]
     },
     {
@@ -157,38 +153,38 @@
         "move": 7,
         "apl": 3,
         "wounds": 8,
-        "save": "4+"
+        "save": "4\u002B"
       },
       "weapons": [
         {
           "name": "Fusion pistol",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "5/3",
-          "specialRules": "Range 3\", Devastating 3, Piercing 2"
+          "specialRules": "\u0007Range 3\u0022, Devastating 3, Piercing 2"
         },
         {
           "name": "Neuro disruptor",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "4/5",
-          "specialRules": "Range 8\", Piercing 1, Stun"
+          "specialRules": "\u0007Range 8\u0022, Piercing 1, Stun"
         },
         {
           "name": "Shuriken pistol",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "3/4",
-          "specialRules": "Range 8\", Rending"
+          "specialRules": "\u0007Range 8\u0022, Rending"
         },
         {
           "name": "Blade",
           "type": "Melee",
           "atk": 5,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "4/6",
           "specialRules": ""
         },
@@ -196,32 +192,31 @@
           "name": "Caress",
           "type": "Melee",
           "atk": 5,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "4/5",
-          "specialRules": "Rending"
+          "specialRules": "\u0007Rending"
         },
         {
           "name": "Embrace",
           "type": "Melee",
           "atk": 5,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "4/5",
-          "specialRules": "Brutal"
+          "specialRules": "\u0007Brutal"
         },
         {
           "name": "Kiss",
           "type": "Melee",
           "atk": 5,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "3/7",
-          "specialRules": ""
+          "specialRules": "\u0007-"
         }
       ],
       "equipment": [
         "Wraithbone Talisman",
         "Shrieker Toxin Rounds",
         "Death Mask",
-        "Understudy's Mask",
         "Portable Barricade",
         "Utility Grenades",
         "Ammo Cache",
@@ -231,8 +226,7 @@
         "Light Barricades",
         "Heavy Barricade",
         "Ladders",
-        "Explosive Grenades",
-        "Breaching Charge"
+        "Explosive Grenades"
       ]
     },
     {
@@ -242,47 +236,46 @@
         "move": 7,
         "apl": 3,
         "wounds": 9,
-        "save": "4+"
+        "save": "4\u002B"
       },
       "weapons": [
         {
           "name": "Hallucinogen grenade",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "1/1",
-          "specialRules": "Range 6\", Blast 2\", Lethal 5+, Seek Light, Silent, Stun"
+          "specialRules": "\u0007Range 6\u0022, Blast 2\u0022, Lethal 5\u002B, Seek Light, Silent, Stun"
         },
         {
           "name": "Neuro disruptor",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "4/5",
-          "specialRules": "Range 8\", Piercing 1, Stun"
+          "specialRules": "\u0007Range 8\u0022, Piercing 1, Stun"
         },
         {
           "name": "Shuriken pistol",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "3/4",
-          "specialRules": "Range 8\", Rending"
+          "specialRules": "\u0007Range 8\u0022, Rending"
         },
         {
           "name": "Miststave",
           "type": "Melee",
           "atk": 4,
-          "hit": "3+",
+          "hit": "3\u002B",
           "dmg": "4/4",
-          "specialRules": "Shock"
+          "specialRules": "\u0007Shock"
         }
       ],
       "equipment": [
         "Wraithbone Talisman",
         "Shrieker Toxin Rounds",
         "Death Mask",
-        "Understudy's Mask",
         "Portable Barricade",
         "Utility Grenades",
         "Ammo Cache",
@@ -292,8 +285,7 @@
         "Light Barricades",
         "Heavy Barricade",
         "Ladders",
-        "Explosive Grenades",
-        "Breaching Charge"
+        "Explosive Grenades"
       ]
     }
   ]

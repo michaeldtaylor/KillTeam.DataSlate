@@ -1,6 +1,6 @@
 {
   "$schema": "../schema/team.schema.json",
-  "id": "nemesis_claw",
+  "id": "nemesis-claw",
   "name": "Nemesis Claw",
   "faction": "Heretic Astartes",
   "operatives": [
@@ -11,64 +11,64 @@
         "move": 6,
         "apl": 3,
         "wounds": 15,
-        "save": "3+"
+        "save": "3\u002B"
       },
       "weapons": [
         {
+          "name": "Bolt pistol",
           "type": "Ranged",
-          "specialRules": "\u0007Range 8\"",
-          "hit": "3+",
           "atk": 4,
+          "hit": "3\u002B",
           "dmg": "3/4",
-          "name": "Bolt pistol"
+          "specialRules": "\u0007Range 8\u0022"
         },
         {
+          "name": "Plasma pistol (standard)",
           "type": "Ranged",
-          "specialRules": "\u0007Range 8\", Piercing 1",
-          "hit": "3+",
           "atk": 4,
+          "hit": "3\u002B",
           "dmg": "3/5",
-          "name": "Plasma pistol (standard)"
+          "specialRules": "\u0007Range 8\u0022, Piercing 1"
         },
         {
+          "name": "Plasma pistol (supercharge)",
           "type": "Ranged",
-          "specialRules": "\u0007Range 8\", Hot, Lethal 5+, Piercing 1",
-          "hit": "3+",
           "atk": 4,
+          "hit": "3\u002B",
           "dmg": "4/5",
-          "name": "Plasma pistol (supercharge)"
+          "specialRules": "\u0007Range 8\u0022, Hot, Lethal 5\u002B, Piercing 1"
         },
         {
+          "name": "Nostraman chainblade",
           "type": "Melee",
-          "specialRules": "\u0007Rending",
-          "hit": "3+",
           "atk": 5,
+          "hit": "3\u002B",
           "dmg": "4/5",
-          "name": "Nostraman chainblade"
+          "specialRules": "\u0007Rending"
         },
         {
+          "name": "Power fist",
           "type": "Melee",
-          "specialRules": "\u0007Brutal",
-          "hit": "4+",
           "atk": 5,
+          "hit": "4\u002B",
           "dmg": "5/7",
-          "name": "Power fist"
+          "specialRules": "\u0007Brutal"
         },
         {
+          "name": "Power maul",
           "type": "Melee",
-          "specialRules": "\u0007Shock",
-          "hit": "3+",
           "atk": 5,
+          "hit": "3\u002B",
           "dmg": "4/6",
-          "name": "Power maul"
+          "specialRules": "\u0007Shock"
         },
         {
+          "name": "Power weapon",
           "type": "Melee",
-          "specialRules": "\u0007Lethal 5+",
-          "hit": "3+",
           "atk": 5,
+          "hit": "3\u002B",
           "dmg": "4/6",
-          "name": "Power weapon"
+          "specialRules": "\u0007Lethal 5\u002B"
         }
       ],
       "equipment": [
@@ -96,32 +96,32 @@
         "move": 6,
         "apl": 3,
         "wounds": 14,
-        "save": "3+"
+        "save": "3\u002B"
       },
       "weapons": [
         {
+          "name": "Scoped bolt pistol (long range)",
           "type": "Ranged",
-          "specialRules": "",
-          "hit": "3+",
           "atk": 4,
+          "hit": "3\u002B",
           "dmg": "3/4",
-          "name": "Scoped bolt pistol (long range)"
+          "specialRules": "\u0007-"
         },
         {
+          "name": "Terrorchem vial",
           "type": "Ranged",
-          "specialRules": "\u0007Range 6\", Blast 2\", Devastating 3, Limited 1, Saturate, Terrorchem*",
-          "hit": "3+",
           "atk": 5,
+          "hit": "3\u002B",
           "dmg": "2/0",
-          "name": "Terrorchem vial"
+          "specialRules": "\u0007Range 6\u0022, Blast 2\u0022, Devastating 3, Limited 1, Saturate, Terrorchem*"
         },
         {
+          "name": "Tainted blade",
           "type": "Melee",
-          "specialRules": "\u0007Terrorchem*",
-          "hit": "3+",
           "atk": 5,
+          "hit": "3\u002B",
           "dmg": "3/5",
-          "name": "Tainted blade"
+          "specialRules": "\u0007Terrorchem*"
         }
       ],
       "equipment": [
@@ -149,56 +149,56 @@
         "move": 6,
         "apl": 3,
         "wounds": 14,
-        "save": "3+"
+        "save": "3\u002B"
       },
       "weapons": [
         {
+          "name": "Bolt pistol",
           "type": "Ranged",
-          "specialRules": "\u0007Range 8\"",
-          "hit": "3+",
           "atk": 4,
+          "hit": "3\u002B",
           "dmg": "3/4",
-          "name": "\u0007\t Bolt pistol"
+          "specialRules": "\u0007Range 8\u0022"
         },
         {
+          "name": "Flamer",
           "type": "Ranged",
-          "specialRules": "\u0007Range 8\", Saturate, Torrent 2\"",
-          "hit": "2+",
           "atk": 4,
+          "hit": "2\u002B",
           "dmg": "3/3",
-          "name": "\u0007\t Flamer"
+          "specialRules": "\u0007Range 8\u0022, Saturate, Torrent 2\u0022"
         },
         {
+          "name": "Meltagun",
           "type": "Ranged",
-          "specialRules": "\u0007Range 6\", Devastating 4, Piercing 2",
-          "hit": "3+",
           "atk": 4,
+          "hit": "3\u002B",
           "dmg": "6/3",
-          "name": "\u0007\t Meltagun"
+          "specialRules": "\u0007Range 6\u0022, Devastating 4, Piercing 2"
         },
         {
+          "name": "Plasma gun (standard)",
           "type": "Ranged",
-          "specialRules": "\u0007Piercing 1",
-          "hit": "3+",
           "atk": 4,
+          "hit": "3\u002B",
           "dmg": "4/6",
-          "name": "\u0007\t Plasma gun (standard)"
+          "specialRules": "\u0007Piercing 1"
         },
         {
-          "type": "Ranged",
-          "specialRules": "\u0007Hot, Lethal 5+, Piercing 1",
-          "hit": "3+",
-          "atk": 4,
-          "dmg": "5/6",
-          "name": "\u0007\t Plasma gun (supercharge)"
-        },
-        {
+          "name": "Plasma gun (supercharge)",
           "type": "Melee",
-          "specialRules": "",
-          "hit": "3+",
           "atk": 4,
+          "hit": "3\u002B",
+          "dmg": "5/6",
+          "specialRules": "\u0007Hot, Lethal 5\u002B, Piercing 1"
+        },
+        {
+          "name": "Fists",
+          "type": "Melee",
+          "atk": 4,
+          "hit": "3\u002B",
           "dmg": "3/4",
-          "name": "\u0007\t Fists"
+          "specialRules": "\u0007-"
         }
       ],
       "equipment": [
@@ -226,56 +226,56 @@
         "move": 6,
         "apl": 3,
         "wounds": 14,
-        "save": "3+"
+        "save": "3\u002B"
       },
       "weapons": [
         {
+          "name": "Bolt pistol",
           "type": "Ranged",
-          "specialRules": "\u0007Range 8\"",
-          "hit": "3+",
           "atk": 4,
+          "hit": "3\u002B",
           "dmg": "3/4",
-          "name": "\u0007\t Bolt pistol"
+          "specialRules": "\u0007Range 8\u0022"
         },
         {
+          "name": "Heavy bolter (focused)",
           "type": "Ranged",
-          "specialRules": "\u0007Heavy (Reposition only), Piercing Crits 1",
-          "hit": "3+",
           "atk": 5,
+          "hit": "3\u002B",
           "dmg": "4/5",
-          "name": "\u0007\t Heavy bolter (focused)"
+          "specialRules": "\u0007Heavy (Reposition only), Piercing Crits 1"
         },
         {
+          "name": "Heavy bolter (sweeping)",
           "type": "Ranged",
-          "specialRules": "\u0007Heavy (Reposition only), Piercing Crits 1, Torrent 1\"",
-          "hit": "3+",
           "atk": 4,
+          "hit": "3\u002B",
           "dmg": "4/5",
-          "name": "\u0007\t Heavy bolter (sweeping)"
+          "specialRules": "\u0007Heavy (Reposition only), Piercing Crits 1, Torrent 1\u0022"
         },
         {
+          "name": "Missile launcher (frag)",
           "type": "Ranged",
-          "specialRules": "\u0007Blast 2\", Heavy (Reposition only)",
-          "hit": "3+",
           "atk": 4,
+          "hit": "3\u002B",
           "dmg": "3/5",
-          "name": "\u0007\t Missile launcher (frag)"
+          "specialRules": "\u0007Blast 2\u0022, Heavy (Reposition only)"
         },
         {
+          "name": "Missile launcher (krak)",
           "type": "Ranged",
-          "specialRules": "\u0007Heavy (Reposition only), Piercing 1",
-          "hit": "3+",
           "atk": 4,
+          "hit": "3\u002B",
           "dmg": "5/7",
-          "name": "\u0007\t Missile launcher (krak)"
+          "specialRules": "\u0007Heavy (Reposition only), Piercing 1"
         },
         {
+          "name": "Fists",
           "type": "Melee",
-          "specialRules": "",
-          "hit": "3+",
           "atk": 4,
+          "hit": "3\u002B",
           "dmg": "3/4",
-          "name": "\u0007\t Fists"
+          "specialRules": "\u0007-"
         }
       ],
       "equipment": [
@@ -303,16 +303,16 @@
         "move": 6,
         "apl": 3,
         "wounds": 14,
-        "save": "3+"
+        "save": "3\u002B"
       },
       "weapons": [
         {
+          "name": "Lightning claws",
           "type": "Melee",
-          "specialRules": "\u0007Ceaseless, Lethal 5+",
-          "hit": "3+",
           "atk": 5,
+          "hit": "3\u002B",
           "dmg": "4/5",
-          "name": "\u0007\t Lightning claws"
+          "specialRules": "\u0007Ceaseless, Lethal 5\u002B"
         }
       ],
       "equipment": [
@@ -340,24 +340,24 @@
         "move": 6,
         "apl": 3,
         "wounds": 14,
-        "save": "3+"
+        "save": "3\u002B"
       },
       "weapons": [
         {
+          "name": "Bolt pistol",
           "type": "Ranged",
-          "specialRules": "\u0007Range 8\"",
-          "hit": "3+",
           "atk": 4,
+          "hit": "3\u002B",
           "dmg": "3/4",
-          "name": "\u0007\t Bolt pistol"
+          "specialRules": "\u0007Range 8\u0022"
         },
         {
+          "name": "Nostraman chainglaive",
           "type": "Melee",
-          "specialRules": "\u0007Rending",
-          "hit": "3+",
           "atk": 5,
+          "hit": "3\u002B",
           "dmg": "4/6",
-          "name": "\u0007\t Nostraman chainglaive"
+          "specialRules": "\u0007Rending"
         }
       ],
       "equipment": [
@@ -385,24 +385,24 @@
         "move": 6,
         "apl": 3,
         "wounds": 14,
-        "save": "3+"
+        "save": "3\u002B"
       },
       "weapons": [
         {
+          "name": "Bolt pistol",
           "type": "Ranged",
-          "specialRules": "\u0007Range 8\"",
-          "hit": "3+",
           "atk": 4,
+          "hit": "3\u002B",
           "dmg": "3/4",
-          "name": "\u0007\t Bolt pistol"
+          "specialRules": "\u0007Range 8\u0022"
         },
         {
+          "name": "Chainsword",
           "type": "Melee",
-          "specialRules": "",
-          "hit": "3+",
           "atk": 5,
+          "hit": "3\u002B",
           "dmg": "4/5",
-          "name": "\u0007\t Chainsword"
+          "specialRules": "\u0007-"
         }
       ],
       "equipment": [
@@ -430,40 +430,40 @@
         "move": 6,
         "apl": 3,
         "wounds": 14,
-        "save": "3+"
+        "save": "3\u002B"
       },
       "weapons": [
         {
+          "name": "Bolt pistol",
           "type": "Ranged",
-          "specialRules": "\u0007Range 8\"",
-          "hit": "3+",
           "atk": 4,
+          "hit": "3\u002B",
           "dmg": "3/4",
-          "name": "\u0007\t Bolt pistol"
+          "specialRules": "\u0007Range 8\u0022"
         },
         {
+          "name": "Boltgun",
           "type": "Ranged",
-          "specialRules": "",
-          "hit": "3+",
           "atk": 4,
+          "hit": "3\u002B",
           "dmg": "3/4",
-          "name": "\u0007\t    Boltgun"
+          "specialRules": "\u0007-"
         },
         {
+          "name": "Chainsword",
           "type": "Melee",
-          "specialRules": "",
-          "hit": "3+",
           "atk": 5,
+          "hit": "3\u002B",
           "dmg": "4/5",
-          "name": "\u0007\t Chainsword"
+          "specialRules": "\u0007-"
         },
         {
+          "name": "Fists",
           "type": "Melee",
-          "specialRules": "",
-          "hit": "3+",
           "atk": 4,
+          "hit": "3\u002B",
           "dmg": "3/4",
-          "name": "\u0007\t Fists"
+          "specialRules": "\u0007-"
         }
       ],
       "equipment": [
