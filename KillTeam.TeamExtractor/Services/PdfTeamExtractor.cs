@@ -1679,6 +1679,12 @@ public partial class PdfTeamExtractor
             }
         }
 
+        // Section headings that appear as standalone ALL-CAPS lines and should be rendered as Markdown headings.
+        var sectionHeadings = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            "OPERATIVES", "ARCHETYPES",
+        };
+
         foreach (var rawLine in lines)
         {
             // Normalise each line individually before processing (smart quotes, AP concat, etc.)
@@ -1693,17 +1699,23 @@ public partial class PdfTeamExtractor
                 continue;
             }
 
-            // Skip "OPERATIVES" header and empty lines
-            if (string.IsNullOrEmpty(stripped)
-                || stripped.Equals("OPERATIVES", StringComparison.OrdinalIgnoreCase))
+            // Section headings (OPERATIVES, ARCHETYPES) → Markdown # heading
+            if (sectionHeadings.Contains(stripped))
             {
-                if (string.IsNullOrEmpty(stripped))
-                {
-                    FlushItem();
-                    output.AppendLine(); // blank line → paragraph break
-                    parentDepth = 0;
-                }
+                FlushItem();
+                output.AppendLine();
+                output.AppendLine($"# {TextHelpers.ToTitleCase(stripped)}");
+                output.AppendLine();
+                parentDepth = 0;
+                continue;
+            }
 
+            // Skip empty lines
+            if (string.IsNullOrEmpty(stripped))
+            {
+                FlushItem();
+                output.AppendLine(); // blank line → paragraph break
+                parentDepth = 0;
                 continue;
             }
 

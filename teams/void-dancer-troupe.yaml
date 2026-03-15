@@ -361,6 +361,8 @@ firefightPloys:
 operativeSelection:
   archetype: Infiltration, Recon
   text: |-
+    # Operatives
+    
     1 **VOID-DANCER TROUPE LEAD PLAYER** operative with one option from each of the following:
       - Fusion pistol, neuro disruptor or shuriken pistol
       - Blade, caress, embrace, kiss or power weapon

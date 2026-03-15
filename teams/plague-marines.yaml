@@ -364,6 +364,8 @@ firefightPloys:
 operativeSelection:
   archetype: Security, Seek & Destroy
   text: |-
+    # Operatives
+    
     1 **PLAGUE MARINE CHAMPION** operative
     5 **PLAGUE MARINE** operatives selected from the following list:
       - **BOMBARDIER**

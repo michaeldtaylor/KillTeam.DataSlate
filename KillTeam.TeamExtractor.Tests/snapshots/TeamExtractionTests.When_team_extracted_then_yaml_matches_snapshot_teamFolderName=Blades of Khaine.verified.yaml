@@ -499,6 +499,8 @@ firefightPloys:
 operativeSelection:
   archetype: ''
   text: |-
+    # Operatives
+    
     1 **BLADES OF KHAINE** operative selected from the following list:
       - **DIRE AVENGER EXARCH with one of the following options:**
         - Shuriken catapult; fists
@@ -523,7 +525,7 @@ operativeSelection:
       - **HOWLING BANSHEE WARRIOR**
       - **STRIKING SCORPION WARRIOR**
     
-    **ARCHETYPES**
+    # Archetypes
     
     Seek & Destroy, or the associated archetype of the most common Aspect keyword in your kill team (if two keywords are equally most common, you can choose one of those keywords). Aspect keywords and their associated archetypes are as follows:
       - **DIRE AVENGER**: Security

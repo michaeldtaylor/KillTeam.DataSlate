@@ -521,6 +521,8 @@ firefightPloys:
 operativeSelection:
   archetype: Infiltration, Seek & Destroy
   text: |-
+    # Operatives
+    
     1 **NEMESIS CLAW VISIONARY** operative with one of the following options:
       - Bolt pistol; power fist
       - Bolt pistol; power maul

@@ -663,6 +663,8 @@ firefightPloys:
 operativeSelection:
   archetype: Security, Seek & Destroy
   text: |-
+    # Operatives
+    
     1 **ANGEL OF DEATH** operative selected from the following list:
       - **ASSAULT INTERCESSOR SERGEANT with one option from each of the following:**
         - Hand flamer or heavy bolt pistol

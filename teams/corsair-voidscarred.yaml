@@ -653,6 +653,8 @@ firefightPloys:
 operativeSelection:
   archetype: Infiltration, Recon
   text: |-
+    # Operatives
+    
     1 **CORSAIR VOIDSCARRED FELARCH** operative with one of the following options:
       - Shuriken rifle; shuriken pistol; power weapon
       - Neuro disruptor; power weapon
