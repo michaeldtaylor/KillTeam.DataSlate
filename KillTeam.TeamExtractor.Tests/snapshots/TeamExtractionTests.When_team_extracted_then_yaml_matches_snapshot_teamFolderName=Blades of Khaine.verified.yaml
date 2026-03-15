@@ -407,10 +407,12 @@ factionRules:
       Those Howling Banshees who have learned how to focus their vocal chords correctly can emit a shriek so piercing and deafening that it can not only stun a foe, but liquefy their brain.
       
       Use this **ASPECT TECHNIQUE** when a friendly **HOWLING BANSHEE** operative is performing the Shoot action. Until the end of that action, that operative can use the following ranged weapon:
-  - name: Name Atk Hit Dmg
-    text: Shriek-that-kills 5 3+ 1/2
-  - name: Wr
-    text: Range 6", Saturate, Seek Light, Stun, Torrent 1"
+      
+      | NAME | ATK | HIT | DMG |
+      |------|-----|-----|-----|
+      | Shriek-that-kills | 5 | 3+ | 1/2 |
+      
+      **WR:** Range 6", Saturate, Seek Light, Stun, Torrent 1"
   - category: Dire Avenger Aspect Technique
     name: The Slicing Hurricane
     text: |-
@@ -741,4 +743,17 @@ universalEquipment:
       
       Once per action, whenever an operative is climbing the terrain feature a ladder is placed against, treat the vertical distance as 1" if the ladder is within that operative's control range during that entire climb.
   - name: Explosive Grenades
-    text: A variety of offensive grenades are employed by the forces of the 41st Millennium. These range from simple fragmentation grenades to plasma and gravitic concussion grenades, while even more exotic devices are used to crack open enemy armour. When you select this equipment, select two explosive grenades (2 frag, 2 krak, or 1 frag and 1 krak). Each selection is a ranged weapon your operatives can use, but your kill team can only use that weapon a total number of times during the battle equal to your selection. **NAME ATK HIT DMG** Frag grenade 4 4+ 2/4 WR Range 6", Blast 2", Saturate **NAME ATK HIT DMG** Krak grenade 4 4+ 4/5 WR Range 6", Piercing 1, Saturate
+    text: |-
+      A variety of offensive grenades are employed by the forces of the 41st Millennium. These range from simple fragmentation grenades to plasma and gravitic concussion grenades, while even more exotic devices are used to crack open enemy armour. When you select this equipment, select two explosive grenades (2 frag, 2 krak, or 1 frag and 1 krak). Each selection is a ranged weapon your operatives can use, but your kill team can only use that weapon a total number of times during the battle equal to your selection.
+      
+      | NAME | ATK | HIT | DMG |
+      |------|-----|-----|-----|
+      | Frag grenade | 4 | 4+ | 2/4 |
+      
+      **WR:** Range 6", Blast 2", Saturate
+      
+      | NAME | ATK | HIT | DMG |
+      |------|-----|-----|-----|
+      | Krak grenade | 4 | 4+ | 4/5 |
+      
+      **WR:** Range 6", Piercing 1, Saturate

@@ -1251,6 +1251,85 @@ public partial class PdfTeamExtractor
                         break;
                     }
 
+                    // Weapon sub-table: "NAME ATK HIT DMG" header inside the description.
+                    // Collect the data row(s), optional WR + weapon rule text, and emit a
+                    // Markdown table so it doesn't get appended as flat prose.
+                    if (WeaponTableHeaderRegex().IsMatch(descLine))
+                    {
+                        // Ensure a paragraph break before the table
+                        while (descSb.Length > 0 && descSb[descSb.Length - 1] == '\n')
+                        {
+                            descSb.Remove(descSb.Length - 1, 1);
+                        }
+
+                        if (descSb.Length > 0)
+                        {
+                            descSb.Append("\n\n");
+                        }
+
+                        var tableRows = new List<string>();
+                        var wrText = "";
+                        k++; // advance past the header
+
+                        while (k < total)
+                        {
+                            var tl = allLines[k].Trim();
+
+                            if (string.IsNullOrWhiteSpace(tl))
+                            {
+                                k++;
+                                continue;
+                            }
+
+                            // WR header — next non-blank line is the weapon rules list
+                            if (string.Equals(tl, "WR", StringComparison.OrdinalIgnoreCase))
+                            {
+                                k++; // advance past "WR"
+
+                                while (k < total)
+                                {
+                                    var wrl = allLines[k].Trim();
+
+                                    if (!string.IsNullOrWhiteSpace(wrl))
+                                    {
+                                        wrText = wrl;
+                                        break;
+                                    }
+
+                                    k++;
+                                }
+
+                                break; // table complete
+                            }
+
+                            // Another weapon table header — step back so outer loop handles it
+                            if (WeaponTableHeaderRegex().IsMatch(tl))
+                            {
+                                k--;
+                                break;
+                            }
+
+                            // Next equipment item — step back so outer loop handles it
+                            if (AllCapsEquipmentRegex().IsMatch(tl) && !IsEquipmentSkip(tl))
+                            {
+                                var stripped = QuantityPrefixRegex().Replace(tl, "");
+
+                                if (stripped.Length >= 4)
+                                {
+                                    k--;
+                                    break;
+                                }
+                            }
+
+                            tableRows.Add(tl);
+                            k++;
+                        }
+
+                        descSb.Append(BuildInlineWeaponTableMarkdown(string.Join("\n", tableRows), wrText));
+                        descSb.Append("\n\n");
+                        continue; // outer for k++ advances past the WR text line
+                    }
+
                     // Next ALL CAPS item name ends the description block
                     if (AllCapsEquipmentRegex().IsMatch(descLine) && !IsEquipmentSkip(descLine))
                     {
@@ -1445,7 +1524,77 @@ public partial class PdfTeamExtractor
             }
         }
 
+        // Post-process: fold inline weapon tables (NAME ATK HIT DMG + WR) into the preceding rule's text.
+        // pdftotext parses "NAME ATK HIT DMG" as an ALL-CAPS rule name.  The data row and "WR" header
+        // follow as separate rules.  Merge them back as a Markdown table appended to the rule that
+        // ended with "...can use the following ranged weapon:" (or similar).
+        for (var i = deduped.Count - 1; i >= 0; i--)
+        {
+            if (!string.Equals(deduped[i].Name, "Name Atk Hit Dmg", StringComparison.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+
+            var dataText = deduped[i].Text.Trim();
+            var wrText = "";
+
+            if (i + 1 < deduped.Count && string.Equals(deduped[i + 1].Name, "Wr", StringComparison.OrdinalIgnoreCase))
+            {
+                wrText = deduped[i + 1].Text.Trim();
+                deduped.RemoveAt(i + 1);
+            }
+
+            var tableMarkdown = BuildInlineWeaponTableMarkdown(dataText, wrText);
+
+            if (i > 0)
+            {
+                var preceding = deduped[i - 1];
+                deduped[i - 1] = new ExtractedRule
+                {
+                    Category = preceding.Category,
+                    Name = preceding.Name,
+                    Text = preceding.Text.TrimEnd() + "\n\n" + tableMarkdown,
+                };
+            }
+
+            deduped.RemoveAt(i);
+        }
+
         return deduped;
+    }
+
+    /// <summary>
+    /// Formats a weapon data row and optional weapon-rules text as a Markdown table.
+    /// </summary>
+    /// <param name="dataText">Space-delimited row(s): name tokens followed by ATK, HIT, DMG.</param>
+    /// <param name="wrText">Weapon rule list, e.g. "Range 6&quot;, Saturate, Stun".</param>
+    private static string BuildInlineWeaponTableMarkdown(string dataText, string wrText)
+    {
+        var sb = new StringBuilder();
+        sb.AppendLine("| NAME | ATK | HIT | DMG |");
+        sb.AppendLine("|------|-----|-----|-----|");
+
+        foreach (var row in dataText.Split('\n', StringSplitOptions.RemoveEmptyEntries))
+        {
+            var tokens = row.Trim().Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+            if (tokens.Length >= 4)
+            {
+                var dmg = tokens[^1];
+                var hit = tokens[^2];
+                var atk = tokens[^3];
+                var name = string.Join(" ", tokens[..^3]);
+                sb.AppendLine($"| {name} | {atk} | {hit} | {dmg} |");
+            }
+        }
+
+        if (!string.IsNullOrWhiteSpace(wrText))
+        {
+            sb.AppendLine();
+            sb.Append($"**WR:** {wrText}");
+        }
+
+        return sb.ToString().TrimEnd();
     }
 
     // ─── Operative selection parsing ─────────────────────────────────────────────
