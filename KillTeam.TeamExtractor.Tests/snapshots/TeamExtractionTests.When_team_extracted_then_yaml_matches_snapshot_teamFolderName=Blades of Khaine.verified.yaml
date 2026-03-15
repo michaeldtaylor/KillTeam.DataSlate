@@ -362,17 +362,20 @@ factionRules:
         - You cannot use more than one **ASPECT TECHNIQUE** per activation or counteraction.
         - You cannot use each **ASPECT TECHNIQUE** more than once per turning point.
         - If every friendly **BLADES OF KHAINE** operative selected for deployment has the same Aspect keyword (e.g. **STRIKING SCORPION**), you cannot use each **ASPECT TECHNIQUE** more than twice per turning point (instead of once).
-  - name: The Woe
+  - category: Howling Banshee
+    name: The Woe
     text: |-
       Howling Banshees are woe given form. Emitting sonic screeches from their helms, they hurl themselves into the stunned foe, the lightning speed of their swordplay cutting through the enemy before a blow can be landed in return.
       
       Use this **ASPECT TECHNIQUE** during a friendly **HOWLING BANSHEE** operative's activation, after it's performed the Charge action and incapacitated an enemy operative during the Fight action, and is no longer within control range of enemy operatives. That friendly operative can immediately perform a free Charge action using any remaining move distance it had from that first Charge action. That operative can perform two Charge actions during its activation to do so. The operative cannot have performed any other actions during this activation (but can do so after resolving this **ASPECT TECHNIQUE**).
-  - name: Rain of Tears
+  - category: Howling Banshee
+    name: Rain of Tears
     text: |-
       Howling Banshees dive in and out of combat with infuriating speed and agility, making it almost impossible for those few who survive their most brutal attacks to strike in return.
       
       Use this **ASPECT TECHNIQUE** when a friendly **HOWLING BANSHEE** operative is fighting, after you strike with a critical success, if the enemy operative isn't incapacitated. End that sequence (any remaining attack dice are discarded) and immediately perform a free Fall Back action up to 3" with that operative (then the Fight action ends). That operative can do so even if it's performed an action that prevents it from performing the Fall Back action.
-  - name: Acrobatic
+  - category: Howling Banshee
+    name: Acrobatic
     text: |-
       When Howling Banshees traverse the battlefield, little slows them down. With effortless grace they leap and flip over intervening obstacles, landing with peerless poise and balance to drive their blades into the foe.
       
@@ -380,12 +383,14 @@ factionRules:
         - Can ignore all vertical distances whenever it drops and climbs.
         - Can move through enemy operatives, move within control range of them, and during the Charge action can leave their control range (it must still end the move following all requirements for that move).
         - Cannot move more than its Move stat if it's the Charge action.
-  - name: Scream-That-Steals
+  - category: Howling Banshee
+    name: Scream-That-Steals
     text: |-
       Any hope the foe has of retaining the upper hand over a Howling Banshee is lost the moment the leaping Aspect Warrior activates their Banshee mask. Their senses overwhelmed, the enemy are all but helpless against the merciless melee attacks that follow.
       
       Use this **ASPECT TECHNIQUE** when a friendly **HOWLING BANSHEE** operative is fighting or retaliating, at the start of the Resolve Attack Dice step. You can resolve one of your successes before the normal order. If you do, that success must be used to block.
-  - name: Shriek-That-Kills
+  - category: Howling Banshee
+    name: Shriek-That-Kills
     text: |-
       Those Howling Banshees who have learned how to focus their vocal chords correctly can emit a shriek so piercing and deafening that it can not only stun a foe, but liquefy their brain.
       
@@ -394,17 +399,20 @@ factionRules:
     text: Shriek-that-kills 5 3+ 1/2
   - name: Wr
     text: Range 6", Saturate, Seek Light, Stun, Torrent 1"
-  - name: The Slicing Hurricane
+  - category: Dire Avenger
+    name: The Slicing Hurricane
     text: |-
       Trained to embrace supreme tactical flexibility, Dire Avengers are capable of unleashing clouds of razor-sharp shuriken while moving to secure ground or slipping out of reach of the foe.
       
       Use this **ASPECT TECHNIQUE** when a friendly **DIRE AVENGER** operative is performing the Reposition action. That operative can perform the Shoot action during that action (it must do so in a location it can be placed, and any remaining move distance it had from that Reposition action can be used after it does so). You must select its shuriken catapult, shuriken pistol or twin shuriken catapult for that Shoot action.
-  - name: Death of a Thousand Blades
+  - category: Dire Avenger
+    name: Death of a Thousand Blades
     text: |-
       Dire Avengers can unleash great deluges of monomolecular shuriken from their weapons. These lethal volleys echo the Death of a Thousand Blades – the punishment that Khaine meted out upon traitors, cheats and others he deemed unworthy of a clean kill.
       
       Use this **ASPECT TECHNIQUE** when a friendly **DIRE AVENGER** operative is performing the Shoot action and you select a shuriken catapult or twin shuriken catapult. Until the end of that action, that weapon has the Torrent 2" weapon rule, but you cannot select more than one secondary target.
-  - name: Vigilance of the Avenger
+  - category: Dire Avenger
+    name: Vigilance of the Avenger
     text: |-
       The noble warrior who is tasked with punishing the unjust and the criminal must be ever vigilant. Their eyes must be keen and their aim must be true.
       
@@ -422,22 +430,26 @@ factionRules:
       **SCORPION'S EYE**  A Striking Scorpion's shuriken pistol has a viewfinder psychically linked to its bearer. With it, the Aspect Warrior can see through multiple spectra as well as swiftly identify friend from foe.
       
       Use this **ASPECT TECHNIQUE** when a friendly **STRIKING SCORPION** operative is performing the Shoot action and you select a shuriken pistol. Until the end of that action, that weapon has the Seek Light weapon rule.
-  - name: Raging Heat of the Dying Flame
+  - category: Dire Avenger
+    name: Raging Heat of the Dying Flame
     text: |-
       The flames upon shrines of Asuryan possess a searing heat and never burn out, even if they dwindle. Thus does the Dire Avenger strive to imitate these flames, equally dangerous to the foe regardless of the injuries they sustain.
       
       Use this **ASPECT TECHNIQUE** during a friendly **DIRE AVENGER** operative's activation. Until the start of that operative's next activation, you can ignore any changes to its stats from being injured (including its weapons' stats).
-  - name: Strike and Fade
+  - category: Striking Scorpion
+    name: Strike and Fade
     text: |-
       Masters of the hit and run attack, Striking Scorpions withdraw from combat as suddenly as they strike, disappearing into shadow like murderous spirits.
       
       Use this **ASPECT TECHNIQUE** when a friendly **STRIKING SCORPION** operative incapacitates an enemy operative while fighting or retaliating, and is no longer within 3" of enemy operatives. Change that friendly operative's order to Conceal and it can immediately perform a free Dash action, even if it's performed an action that prevents it from performing the Dash action.
-  - name: Merciless Strikes
+  - category: Striking Scorpion
+    name: Merciless Strikes
     text: |-
       When Striking Scorpions launch their assault, they attack with relentless ferocity, landing blow after blow to grant the enemy no moment or reprieve.
       
       Use this **ASPECT TECHNIQUE** when a friendly **STRIKING SCORPION** operative is fighting, the first time you strike with a critical success during that sequence. Until the end of that sequence, that operative's melee weapon has the Shock weapon rule.
-  - name: One with the Gloom
+  - category: Striking Scorpion
+    name: One with the Gloom
     text: |-
       Years of strict training render Striking Scorpions capable of blending uncannily with the shadows, waiting for the perfect moment to attack their unsuspecting foes with terrifying accuracy.
       

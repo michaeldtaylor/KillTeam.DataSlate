@@ -65,6 +65,9 @@ $defs:
     required: [name, text]
     additionalProperties: false
     properties:
+      category:
+        type: string
+        description: "Optional category heading from the PDF (e.g. 'Howling Banshee', 'Dire Avenger')"
       name:
         type: string
       text:

@@ -141,7 +141,15 @@ public class ExtractedTeam
 
     private static void WriteNamedRule(StringBuilder sb, ExtractedRule rule)
     {
-        sb.AppendLine("  - name: " + YamlWriter.Scalar(T(N(rule.Name))));
+        if (rule.Category != null)
+        {
+            sb.AppendLine("  - category: " + YamlWriter.Scalar(T(N(rule.Category))));
+            sb.AppendLine("    name: " + YamlWriter.Scalar(T(N(rule.Name))));
+        }
+        else
+        {
+            sb.AppendLine("  - name: " + YamlWriter.Scalar(T(N(rule.Name))));
+        }
 
         var text = N(rule.Text);
 

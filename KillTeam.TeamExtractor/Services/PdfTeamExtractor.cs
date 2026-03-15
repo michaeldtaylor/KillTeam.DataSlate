@@ -72,9 +72,10 @@ public partial class PdfTeamExtractor
         var universalEquipment = universalEquipPath != null
             ? this.ParseEquipmentWithDescriptions([universalEquipPath])
             : [];
-        var factionRules = factionRulesPath != null ? this.ParseRulesDoc(factionRulesPath) : [];
-        var strategyPloys = strategyPloysPath != null ? this.ParseRulesDoc(strategyPloysPath) : [];
-        var firefightPloys = firefightPloysPath != null ? this.ParseRulesDoc(firefightPloysPath) : [];
+        var primaryKeyword = operatives.Count > 0 ? operatives[0].PrimaryKeyword : null;
+        var factionRules = factionRulesPath != null ? this.ParseRulesDoc(factionRulesPath, teamName, primaryKeyword) : [];
+        var strategyPloys = strategyPloysPath != null ? this.ParseRulesDoc(strategyPloysPath, teamName, primaryKeyword) : [];
+        var firefightPloys = firefightPloysPath != null ? this.ParseRulesDoc(firefightPloysPath, teamName, primaryKeyword) : [];
         var operativeSelection = operativeSelectionPath != null ? this.ParseOperativeSelection(operativeSelectionPath) : null;
         var supplementaryInfo = supplementaryInfoPath != null ? this.ParseSupplementaryInfo(supplementaryInfoPath) : "";
 
@@ -1290,13 +1291,16 @@ public partial class PdfTeamExtractor
     /// </code>
     /// "CONTINUES ON OTHER SIDE" causes the description to merge with the next page.
     /// </summary>
-    public List<ExtractedRule> ParseRulesDoc(string path)
+    public List<ExtractedRule> ParseRulesDoc(string path, string? teamName = null, string? primaryKeyword = null)
     {
         var lines = GetPdfLines(path, raw: true);
         var result = new List<ExtractedRule>();
         var currentName = "";
         var currentText = new StringBuilder();
         var pendingContinuation = false;
+        var emptyChain = new List<string>(); // consecutive empty-text ALL-CAPS names before the next rule
+        var teamNameTitleCase = teamName != null ? ToTitleCase(teamName) : null;
+        var primaryKeywordTitleCase = primaryKeyword != null ? ToTitleCase(primaryKeyword) : null;
 
         foreach (var line in lines)
         {
@@ -1349,7 +1353,8 @@ public partial class PdfTeamExtractor
                         // Different name — save current and start fresh
                         if (currentName.Length > 0)
                         {
-                            result.Add(new ExtractedRule { Name = currentName, Text = TextHelpers.StructureToMarkdown(currentText.ToString().Trim()) });
+                            result.Add(new ExtractedRule { Category = DetermineRuleCategory(emptyChain, teamNameTitleCase, primaryKeywordTitleCase), Name = currentName, Text = TextHelpers.StructureToMarkdown(currentText.ToString().Trim()) });
+                            emptyChain.Clear();
                         }
 
                         currentName = candidate;
@@ -1361,7 +1366,24 @@ public partial class PdfTeamExtractor
                     // Save the previous rule
                     if (currentName.Length > 0)
                     {
-                        result.Add(new ExtractedRule { Name = currentName, Text = TextHelpers.StructureToMarkdown(currentText.ToString().Trim()) });
+                        if (currentText.Length > 0)
+                        {
+                            // Rule has text — determine category from the empty-header chain
+                            result.Add(new ExtractedRule { Category = DetermineRuleCategory(emptyChain, teamNameTitleCase, primaryKeywordTitleCase), Name = currentName, Text = TextHelpers.StructureToMarkdown(currentText.ToString().Trim()) });
+                            emptyChain.Clear();
+                        }
+                        else
+                        {
+                            // Rule has no text — it's a category/type label.
+                            // Accumulate into the empty-header chain, but only after at
+                            // least one real rule has been saved (preamble headers like the
+                            // team name and rule-type watermark at the top of each PDF are
+                            // excluded so they don't corrupt the first technique's category).
+                            if (result.Count > 0)
+                            {
+                                emptyChain.Add(currentName);
+                            }
+                        }
                     }
 
                     currentName = ToTitleCase(trimmed);
@@ -1394,10 +1416,9 @@ public partial class PdfTeamExtractor
         // Flush the last rule
         if (currentName.Length > 0)
         {
-            result.Add(new ExtractedRule { Name = currentName, Text = TextHelpers.StructureToMarkdown(currentText.ToString().Trim()) });
+            result.Add(new ExtractedRule { Category = DetermineRuleCategory(emptyChain, teamNameTitleCase, primaryKeywordTitleCase), Name = currentName, Text = TextHelpers.StructureToMarkdown(currentText.ToString().Trim()) });
         }
 
-        // Filter out fragment entries (all-caps sentence fragments with no description text)
         // and deduplicate by name (concatenate text if the same rule name appears on multiple pages)
         var deduped = new List<ExtractedRule>();
         var seen = new Dictionary<string, ExtractedRule>(StringComparer.OrdinalIgnoreCase);
@@ -2111,6 +2132,48 @@ public partial class PdfTeamExtractor
     }
 
     private static string ToTitleCase(string text) => TextHelpers.ToTitleCase(text);
+
+    /// <summary>
+    /// Known type watermarks that appear as empty-text ALL-CAPS headers on every card/section.
+    /// These are excluded when scanning the empty-header chain for the meaningful category label.
+    /// </summary>
+    private static readonly HashSet<string> TypeWatermarks = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "Aspect Technique", "Faction Rule", "Strategy Ploy", "Firefight Ploy",
+    };
+
+    /// <summary>
+    /// Derives the category label from a chain of consecutive empty-text ALL-CAPS headers
+    /// that appeared before a rule with text. The chain may interleave page headers (team name),
+    /// type watermarks, and genuine category labels in any order.
+    /// Scans from the end, skipping all type watermarks and the team name (page header), and
+    /// returns the last remaining element as the category, or <c>null</c> if none found.
+    /// </summary>
+    private static string? DetermineRuleCategory(List<string> chain, string? teamNameTitleCase = null, string? primaryKeywordTitleCase = null)
+    {
+        for (var i = chain.Count - 1; i >= 0; i--)
+        {
+            var entry = chain[i];
+            if (TypeWatermarks.Contains(entry))
+            {
+                continue;
+            }
+
+            if (teamNameTitleCase != null && string.Equals(entry, teamNameTitleCase, StringComparison.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+
+            if (primaryKeywordTitleCase != null && string.Equals(entry, primaryKeywordTitleCase, StringComparison.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+
+            return ToTitleCase(entry);
+        }
+
+        return null;
+    }
 
     // ─── Generated regexes ────────────────────────────────────────────────────────
 
