@@ -362,127 +362,123 @@ strategyPloys:
   - name: Strategy Ploy
     text: '**CEGORACH''S JEST**  Attempts to engage the troupe in melee combat meet with little success. Luckless assailants find their well- aimed strikes meeting only thin air. Whenever a friendly **VOID-DANCER TROUPE** operative is fighting or retaliating and your opponent strikes with a normal success, you can roll one D6: if the result is less than the Hit stat of your opponent''s selected weapon, that strike is allocated to block one of your dice instead (ignore the Brutal weapon rule, if relevant) and you cannot use this rule for the rest of the sequence.'
 supplementaryInfo: |-
-  **VOID-DANCER TROUPE:** **UPDATE LOG**
-  Rules will be periodically updated to maintain fair balance and interact more smoothly with the game. Rules changes
-  will be updated directly into online documents and then listed below. Any minor changes to standardise wording that
-  don't have any practical impact on the rule will be updated directly into online documents but not be listed here.
-  **ERRATA**  OCTOBER '25
-  This section collects amendments to the rules. Amended text
-  for clarification and edits are shown in blue, while amended
-  text for balance updates are shown in magenta.
-  **SHADOWSEER**  OPERATIVE, **HALLUCINOGEN GRENADE WEAPON**
+  **VOID-DANCER TROUPE: UPDATE LOG**
+  
+  Rules will be periodically updated to maintain fair balance and interact more smoothly with the game. Rules changes will be updated directly into online documents and then listed below. Any minor changes to standardise wording that don't have any practical impact on the rule will be updated directly into online documents but not be listed here.
+  
+  **ERRATA OCTOBER '25**
+  
+  This section collects amendments to the rules. Amended text for clarification and edits are shown in blue, while amended text for balance updates are shown in magenta.
+  
+  **SHADOWSEER OPERATIVE, HALLUCINOGEN GRENADE WEAPON**
+  
   'Seek' weapon rule changed to 'Seek Light'.
-  **LEAD**  PLAYER & **PLAYER OPERATIVES**, **BLADE WEAPON**
-  Dmg stats changed to '4/6'
-  'Severe' weapon rule deleted.
-  **FACTION**  RULES, **HARLEQUIN'S PANOPLY**
-  First sentence changed to read:
-  'Whenever an operative is shooting a friendly **VOID-DANCER
-  TROUPE** operative, and no attack dice are retained as critical
-  successes, worsen the x of the Piercing weapon rule by 1 (if
-  any).
+  
+  **LEAD PLAYER & PLAYER OPERATIVES, BLADE WEAPON**
+  
+  Dmg stats changed to '4/6' 'Severe' weapon rule deleted.
+  
+  **FACTION RULES, HARLEQUIN'S PANOPLY**
+  
+  First sentence changed to read: 'Whenever an operative is shooting a friendly **VOID-DANCER TROUPE** operative, and no attack dice are retained as critical successes, worsen the x of the Piercing weapon rule by 1 (if any).
   
   Note that Piercing 1 would therefore be ignored.'
-  **FIREFIGHT**  PLOYS, **THE CURTAIN FALLS**
-  Relevant part changed to read:
-  '[...] after you strike with a critical success, if the enemy
-  operative isn't incapacitated. End that sequence (any
-  remaining attack dice are discarded) and immediately
-  perform a free Dash or Fall Back action up to 3" with that
-  operative (then the Fight action ends). That operative can
-  do so even if it's performed an action that prevents it from
-  performing the Dash or Fall Back action.'
-  **RULES COMMENTARY**  OCTOBER '25
-  This section provides clarification on ambiguous and complex
-  rules interactions.
-  Q: Does 'Once per turning point' in the PLAYER operative's
-  Luck of the Laughing God rule mean I can only use this rule
-  once during each turning point, no matter how many friendly
-  operatives have that rule?
-  A: Yes.
-  **PREVIOUS ERRATAS**
-  **FIREFIGHT**  PLOYS, **ELUSIVE TARGET**
-  Second sentence changed to read:
-  'Until the start of its next activation, while that operative has
-  a Conceal order and is in cover, it cannot be selected as a
-  valid target, taking precedence over all other rules (e.g. Seek,
-  Vantage terrain) except being within 2".'
-  **SHADOWSEER**  OPERATIVE, **MIRROR OF MINDS ACTION**
-  Second sentence of effect changed to read:
-  'Select one enemy operative that's a valid target for and within
-  8" of this operative.'
-  **FACTION**  RULES, **HARLEQUIN'S PANOPLY**
-  Relevant part of second paragraph changed to read:
-  'Whenever a friendly **VOID-DANCER TROUPE** operative is
-  climbing up, you can treat the vertical distance as 2" […]'
-  **FACTION**  RULES, SAEDATH, EPIC
-  Relevant part of Performance deleted:
-  'The operative incapacitates an enemy operative while
-  fighting or retaliating.'
-  Accolade changed to read:
-  'Whenever this operative is fighting, its melee weapons have
-  the Balanced weapon rule.
-  **VOID-DANCER TROUPE**
   
-  Even amongst the agile Aeldari, the Harlequins of the Void-dancer Troupes display an almost preternatural level of
-  dexterity and skill. Performance and war merge in their actions, precisely directed to shape the fate of their race.
+  **FIREFIGHT PLOYS, THE CURTAIN FALLS**
+  
+  Relevant part changed to read: '[...] after you strike with a critical success, if the enemy operative isn't incapacitated. End that sequence (any remaining attack dice are discarded) and immediately perform a free Dash or Fall Back action up to 3" with that operative (then the Fight action ends). That operative can do so even if it's performed an action that prevents it from performing the Dash or Fall Back action.'
+  
+  **RULES COMMENTARY OCTOBER '25**
+  
+  This section provides clarification on ambiguous and complex rules interactions. Q: Does 'Once per turning point' in the PLAYER operative's Luck of the Laughing God rule mean I can only use this rule once during each turning point, no matter how many friendly operatives have that rule? A: Yes.
+  
+  **PREVIOUS ERRATAS FIREFIGHT PLOYS, ELUSIVE TARGET**
+  
+  Second sentence changed to read: 'Until the start of its next activation, while that operative has a Conceal order and is in cover, it cannot be selected as a valid target, taking precedence over all other rules (e.g. Seek, Vantage terrain) except being within 2".'
+  
+  **SHADOWSEER OPERATIVE, MIRROR OF MINDS ACTION**
+  
+  Second sentence of effect changed to read: 'Select one enemy operative that's a valid target for and within 8" of this operative.'
+  
+  **FACTION RULES, HARLEQUIN'S PANOPLY**
+  
+  Relevant part of second paragraph changed to read: 'Whenever a friendly **VOID-DANCER TROUPE** operative is climbing up, you can treat the vertical distance as 2" […]'
+  
+  **FACTION RULES, SAEDATH, EPIC**
+  
+  Relevant part of Performance deleted: ~~'The operative incapacitates an enemy operative while fighting or retaliating.'~~ Accolade changed to read: 'Whenever this operative is fighting, its melee weapons have the Balanced weapon rule.
+  
+  **VOID-DANCER TROUPE OPERATIVES**
+  
+  Even amongst the agile Aeldari, the Harlequins of the Void-dancer Troupes display an almost preternatural level of dexterity and skill. Performance and war merge in their actions, precisely directed to shape the fate of their race.
+  
   **LEAD PLAYER**
-  Choreographers of conflict, Lead Players are experienced
-  Harlequins clad in extravagant garb. They direct their warriors'
-  reactions to the fates of battle and ensure their comrades'
-  performances in the theatre of war is as perfect as it can be.
-  **DEATH JESTER**
-  The arrival of a Death Jester in a killzone is announced by a
-  hissing storm of shrieker cannon fire. Enemy infantry are torn
-  apart as the weapon's gene-toxins cause them to combust
-  horrifically from within. Adding insult to injury, the Death
-  Jester ensures every demise is cruelly ironic.
-  **PLAYER**
-  Harlequin Players perform with breathtaking skill, whether
-  their stage is a wraithbone-and-glass amphitheatre bathed
-  in crystalline light or the firelit hell of the battlefield. They
-  tumble, sprint and leap, with every trigger squeeze and blade
-  slash bringing orchestrated death to the enemy.
-  **SHADOWSEER**
-  Shadowseers can blind foes and drive them mad with their
-  psychic powers. As they obscure their allies with illusions,
-  they fire hallucinogenic grenades that cause disorientation or
-  death. In close combat, Shadowseers' miststaves scramble
-  the perceptions of those they hit.
   
-  Below you will find a list of
-  the operatives that make up a
+  Choreographers of conflict, Lead Players are experienced Harlequins clad in extravagant garb. They direct their warriors' reactions to the fates of battle and ensure their comrades' performances in the theatre of war is as perfect as it can be.
+  
+  **DEATH JESTER**
+  
+  The arrival of a Death Jester in a killzone is announced by a hissing storm of shrieker cannon fire. Enemy infantry are torn apart as the weapon's gene-toxins cause them to combust horrifically from within. Adding insult to injury, the Death Jester ensures every demise is cruelly ironic.
+  
+  **PLAYER**
+  
+  Harlequin Players perform with breathtaking skill, whether their stage is a wraithbone-and-glass amphitheatre bathed in crystalline light or the firelit hell of the battlefield. They tumble, sprint and leap, with every trigger squeeze and blade slash bringing orchestrated death to the enemy.
+  
+  **SHADOWSEER**
+  
+  Shadowseers can blind foes and drive them mad with their psychic powers. As they obscure their allies with illusions, they fire hallucinogenic grenades that cause disorientation or death. In close combat, Shadowseers' miststaves scramble the perceptions of those they hit. 2 Below you will find a list of the operatives that make up a
+  
   **VOID-DANCER TROUPE**
-  kill team, including, where
-  relevant, any weapons
-  specified for that operative.
+  
+  kill team, including, where relevant, any weapons specified for that operative.
+  
+  **OPERATIVES**
   
   - 1 **VOID-DANCER TROUPE LEAD PLAYER** operative with one option from each of the following:
-    -  Fusion pistol, neuro disruptor or shuriken pistol
-    -  Blade, caress, embrace, kiss or power weapon
-  - 7 **VOID-DANCER TROUPE** operatives selected from the following list:
-    -  **DEATH**  JESTER
-    -  **PLAYER**  with one option from each of the following:
-      -  Fusion pistol, neuro disruptor or shuriken pistol
-      -  Blade, caress, embrace or kiss
-    -  **SHADOWSEER**  with hallucinogen grenade and one of the following options:
-      -  Neuro disruptor; miststave
-      -  Shuriken pistol; miststave Other than PLAYER operatives, your kill team can only include each operative on this list once.
+      - Fusion pistol, neuro disruptor or shuriken pistol
+      - Blade, caress, embrace, kiss or power weapon ↘ 7 **VOID-DANCER TROUPE** operatives selected from the following list: -
   
-  Your kill team can only include up to one fusion pistol and up to one neuro disruptor. **ARCHETYPES INFILTRATION RECON** Archetypes are used in certain mission packs, e.g. Approved Ops. The game sequence will specify how. **VOID-DANCER TROUPE KILL TEAM VOID-DANCER** TROUPE » **KILL TEAM SELECTION LEAD PLAYER DEATH**  JESTER '**STRIKE NOT WHERE YOUR ENEMY EXPECTS** **YOUR BLADE TO**  FALL, **NOR EVEN WHERE LOGIC DICTATES**. **STRIKE INSTEAD WHERE YOUR BLOW** **WILL HAVE THE GREATEST**  MEANING. LEAVE **YOUR LESSON WRIT LARGE IN BLOOD UPON THE FIELD OF**  BATTLE.'
-  - extract from the Teachings of Cegorach Kiss Shuriken pistol Shrieker cannon Shrieker blade
+  **DEATH JESTER**
   
-  **VOID-DANCER**
-  TROUPE
+  -
+  
+  **PLAYER with one option from each of**
+  
+  the following:
+      - Fusion pistol, neuro disruptor or shuriken pistol
+      - Blade, caress, embrace or kiss -
+  
+  **SHADOWSEER with hallucinogen grenade and**
+  
+  one of the following options:
+      - Neuro disruptor; miststave
+      - Shuriken pistol; miststave Other than PLAYER operatives, your kill team can only include each operative on this list once.
+  
+  Your kill team can only include up to one fusion pistol and up to one neuro disruptor.
+  
+  **ARCHETYPES INFILTRATION RECON**
+  
+  Archetypes are used in certain mission packs, e.g. Approved Ops. The game sequence will specify how.
+  
+  **VOID-DANCER TROUPE KILL TEAM VOID-DANCER TROUPE**
+  
   »
-  **KILL
-  TEAM**
-  SELECTION
-  '**THERE WERE SO FEW OF THEM**. **NO TANKS**, **NO ARTILLERY**, **JUST THIS**… HANDFUL… **OF XENOS**. WE
-  **EXPECTED AN EASY**  FIGHT. **THEN THE MADNESS STARTED TO SPREAD**; **MEN BEGAN TO SCREAM**, TO
-  **TURN UPON ONE**  ANOTHER. **THE THINGS** I SAW… **EVEN NOW** I **CANNOT TRUST MY OWN MIND**. **EXECUTE
-  ME**, I **BEG YOU**. **MAYBE THAT WILL FINALLY WIPE AWAY THE NIGHTMARES**.'
-  - tribunal testimony of Sergeant Gastor, Cadian 654th **PLAYER SHADOWSEER** Kiss Shuriken pistol Caress Shuriken pistol Blade Neuro disruptor Neuro disruptor Neuro disruptor Hallucinogen grenade Miststave
+  
+  **KILL TEAM SELECTION LEAD PLAYER DEATH JESTER 'STRIKE NOT WHERE YOUR ENEMY EXPECTS YOUR BLADE TO FALL, NOR EVEN WHERE LOGIC DICTATES. STRIKE INSTEAD WHERE YOUR BLOW WILL HAVE THE GREATEST MEANING. LEAVE YOUR LESSON WRIT LARGE IN BLOOD UPON THE FIELD OF BATTLE.'**
+  
+  - extract from the Teachings of Cegorach Kiss Shuriken pistol Shrieker cannon Shrieker blade 3
+  
+  **VOID-DANCER TROUPE**
+  
+  »
+  
+  **KILL TEAM SELECTION 'THERE WERE SO FEW OF THEM. NO TANKS, NO ARTILLERY, JUST THIS… HANDFUL… OF XENOS. WE EXPECTED AN EASY FIGHT. THEN THE MADNESS STARTED TO SPREAD; MEN BEGAN TO SCREAM, TO TURN UPON ONE ANOTHER. THE THINGS I SAW… EVEN NOW I CANNOT TRUST MY OWN MIND. EXECUTE ME, I BEG YOU. MAYBE THAT WILL FINALLY WIPE AWAY THE NIGHTMARES.'**
+  
+  - tribunal testimony of Sergeant Gastor, Cadian 654th
+  
+  **PLAYER SHADOWSEER**
+  
+  Kiss Shuriken pistol Caress Shuriken pistol Blade Neuro disruptor Neuro disruptor Neuro disruptor Hallucinogen grenade Miststave 4
 universalEquipment:
   - name: Portable Barricade
     text: 'Little more than a suppression shield with armoured feet, these barricades can be hefted and borne forwards to provide mobile cover. A portable barricade is Light, Protective and Portable terrain, except the feet which are Insignificant and Exposed. Before the battle, you can set it up wholly within your territory, on the killzone floor and more than 2" from other equipment terrain features, access points and Accessible terrain. Protective: While an operative is in cover from this terrain feature, improve its Save stat by 1 (to a maximum of 2+). RULE'

@@ -692,137 +692,212 @@ strategyPloys:
   - name: Indomitus
     text: This is the Era Indomitus. The Imperium wages galaxy-spanning crusades to drive back the horrors that plague it, and the battle-brothers of the Adeptus Astartes are spurred on by this righteous purpose. Whenever an operative is shooting a friendly **ANGEL OF DEATH** operative, if you roll two or more fails, you can discard one of them to retain another as a normal success instead.
 supplementaryInfo: |-
-  **ANGELS OF DEATH:** **UPDATE LOG**
-  Rules will be periodically updated to maintain fair balance and interact more smoothly with the game. Rules changes
-  will be updated directly into online documents and then listed below. Any minor changes to standardise wording that
-  don't have any practical impact on the rule will be updated directly into online documents but not be listed here.
-  **ERRATA**  JANUARY '26
-  This section collects amendments to the rules. Amended text
-  for clarification and edits are shown in blue, while amended
-  text for balance updates are shown in magenta.
-  **HEAVY INTERCESSOR GUNNER**  OPERATIVE, **WEAPONS LIST**
+  **ANGELS OF DEATH: UPDATE LOG**
+  
+  Rules will be periodically updated to maintain fair balance and interact more smoothly with the game. Rules changes will be updated directly into online documents and then listed below. Any minor changes to standardise wording that don't have any practical impact on the rule will be updated directly into online documents but not be listed here.
+  
+  **ERRATA JANUARY '26**
+  
+  This section collects amendments to the rules. Amended text for clarification and edits are shown in blue, while amended text for balance updates are shown in magenta.
+  
+  **HEAVY INTERCESSOR GUNNER OPERATIVE, WEAPONS LIST**
+  
   'Bolt pistol' weapon added.
+  
   **TEAM SELECTION**
-  Following sentence and asterisks on **ELIMINATOR SNIPER** and
-  **HEAVY INTERCESSOR GUNNER**  deleted:
-  'You cannot select more than one of these
-  operatives combined.'
-  **PREVIOUS ERRATAS**
-  **FACTION**  RULES, **CHAPTER TACTICS**
-  Dueller
-  Changed to read:
-  'Whenever this operative is fighting or retaliating, each of
-  your normal successes can block one unresolved critical
-  success (unless the enemy operative's weapon has the Brutal
-  weapon rule).'
-  Resolute
-  Changed to read:
-  'You can ignore any changes to this operative's APL stat and it
-  isn't affected by enemy operatives' Shock weapon rule.'
-  Hardy
-  Additional sentence added:
-  'Whenever this operative is retaliating, the first time an attack
-  dice inflicts Normal Dmg of 3 or more on this operative during
-  that sequence, that dice inflicts 1 less damage on it.'
-  Sharpshooter
-  Relevant parts changed to read:
-  '[…] its bolt weapons have the Accurate 1 and Severe
-  weapon rules.'
-  Siege Specialist
-  Additional sentence added:
-  'Whenever this operative is fighting or retaliating, enemy
-  operatives cannot assist.'
-  **INTERCESSOR SERGEANT**  OPERATIVE, DOCTRINE
-  **WARFARE RULE**
-  Changed to read:
-  'You can do each of the following once per battle:
-    -  When you would use the Combat Doctrine strategy ploy and then select Devastator, if this operative is in the killzone, it costs you 0CP.
-    -  When you would use the Combat Doctrine strategy ploy and then select Tactical, if this operative is in the killzone, it costs you 0CP.' **ASSAULT INTERCESSOR SERGEANT**  OPERATIVE, DOCTRINE **WARFARE RULE** Changed to read: 'You can do each of the following once per battle:
-    -  When you would use the Combat Doctrine strategy ploy and then select Assault, if this operative is in the killzone, it costs you 0CP.
-    -  When you would use the Combat Doctrine strategy ploy and then select Tactical, if this operative is in the killzone, it costs you 0CP.' **HEAVY INTERCESSOR GUNNER OPERATIVE** Move stat changed to '5'. **SPACE MARINE CAPTAIN**  OPERATIVE, **HEROIC LEADER RULE** Changed to read: 'Once per turning point, you can do one of the following:
+  
+  Following sentence and asterisks on **ELIMINATOR SNIPER** and **HEAVY INTERCESSOR GUNNER** deleted: ~~'You cannot select more than one of these operatives combined.'~~
+  
+  **PREVIOUS ERRATAS FACTION RULES, CHAPTER TACTICS**
+  
+  **Dueller**
+  
+  Changed to read: 'Whenever this operative is fighting or retaliating, each of your normal successes can block one unresolved critical success (unless the enemy operative's weapon has the Brutal weapon rule).'
+  
+  **Resolute**
+  
+  Changed to read: 'You can ignore any changes to this operative's APL stat and it isn't affected by enemy operatives' Shock weapon rule.'
+  
+  **Hardy**
+  
+  Additional sentence added: 'Whenever this operative is retaliating, the first time an attack dice inflicts Normal Dmg of 3 or more on this operative during that sequence, that dice inflicts 1 less damage on it.'
+  
+  **Sharpshooter**
+  
+  Relevant parts changed to read: '[…] its bolt weapons have the Accurate 1 and Severe weapon rules.'
+  
+  **Siege Specialist**
+  
+  Additional sentence added: 'Whenever this operative is fighting or retaliating, enemy operatives cannot assist.'
+  
+  **INTERCESSOR SERGEANT OPERATIVE, DOCTRINE WARFARE RULE**
+  
+  Changed to read: 'You can do each of the following once per battle:
+    - When you would use the Combat Doctrine strategy ploy and then select Devastator, if this operative is in the killzone, it costs you 0CP.
+    - When you would use the Combat Doctrine strategy ploy and then select Tactical, if this operative is in the killzone, it costs you 0CP.'
+  
+  **ASSAULT INTERCESSOR SERGEANT OPERATIVE, DOCTRINE WARFARE RULE**
+  
+  Changed to read: 'You can do each of the following once per battle:
+    - When you would use the Combat Doctrine strategy ploy and then select Assault, if this operative is in the killzone, it costs you 0CP.
+    - When you would use the Combat Doctrine strategy ploy and then select Tactical, if this operative is in the killzone, it costs you 0CP.'
+  
+  **HEAVY INTERCESSOR GUNNER OPERATIVE**
+  
+  Move stat changed to '5'.
+  
+  **SPACE MARINE CAPTAIN OPERATIVE, HEROIC LEADER RULE**
+  
+  Changed to read: 'Once per turning point, you can do one of the following:
     - Use a firefight ploy for 0CP if this is the specified **ANGEL OF DEATH** operative (excluding Command Re-roll).
-    -  Use the Combat Doctrine strategy ploy when you activate a friendly **ANGEL OF DEATH** operative if this operative is in the killzone and isn't within control range of enemy operatives (pay its CP cost as normal).
+    - Use the Combat Doctrine strategy ploy when you activate a friendly **ANGEL OF DEATH** operative if this operative is in the killzone and isn't within control range of enemy operatives (pay its CP cost as normal).
   
   Note that you cannot do so if you've already used that ploy during this turning point.
-    - Use the Adjust Doctrine firefight ploy for 0CP if this operative is in the killzone and isn't within control range of enemy operatives.' **FACTION**  EQUIPMENT, **TILTING SHIELDS** Relevant part of first sentence changed to read: '[…] after your opponent rolls their attack dice, but before re-rolls, you can use this rule.' **ANGELS OF DEATH**
+    - Use the Adjust Doctrine firefight ploy for 0CP if this operative is in the killzone and isn't within control range of enemy operatives.'
   
-  Genetically modified transhuman warriors, Space Marines are amongst Humanity's most elite fighting forces.
-  Angels of Death kill teams are composed of elite specialists trained in myriad forms of combat, who are capable of
-  overcoming almost any foe.
+  **FACTION EQUIPMENT, TILTING SHIELDS**
+  
+  Relevant part of first sentence changed to read: '[…] after your opponent rolls their attack dice, but before re-rolls, you can use this rule.'
+  
+  **ANGELS OF DEATH OPERATIVES**
+  
+  Genetically modified transhuman warriors, Space Marines are amongst Humanity's most elite fighting forces. Angels of Death kill teams are composed of elite specialists trained in myriad forms of combat, who are capable of overcoming almost any foe.
+  
   **SPACE MARINE CAPTAIN**
-  To reach the rank of Captain, a Space Marine must master
-  war. They are equally adept at conducting planet-spanning
-  military campaigns as they are at dispatching foes in expertly
-  fought duels.
+  
+  To reach the rank of Captain, a Space Marine must master war. They are equally adept at conducting planet-spanning military campaigns as they are at dispatching foes in expertly fought duels.
+  
   **ASSAULT INTERCESSOR SERGEANT**
-  These mission leaders understand the optimal moment to
-  unleash charges. They are exemplars in the press of melee,
-  rending foes in twain with their deadly close combat weapons.
+  
+  These mission leaders understand the optimal moment to unleash charges. They are exemplars in the press of melee, rending foes in twain with their deadly close combat weapons.
+  
   **INTERCESSOR SERGEANT**
-  Intercessor Sergeants lead their teams in levelling salvoes
-  of firepower against targets in ever-changing killzones. They
-  often carry specialist weaponry into the fray to support
-  their battle-brothers.
+  
+  Intercessor Sergeants lead their teams in levelling salvoes of firepower against targets in ever-changing killzones. They often carry specialist weaponry into the fray to support their battle-brothers.
+  
   **ASSAULT INTERCESSOR WARRIOR**
-  Protected by Mk X Tacticus armour, Assault Intercessor
-  Warriors charge into battle swinging large chainswords and
-  firing mass-reactive shells from their pistols.
+  
+  Protected by Mk X Tacticus armour, Assault Intercessor Warriors charge into battle swinging large chainswords and firing mass-reactive shells from their pistols.
+  
   **ASSAULT INTERCESSOR GRENADIER**
-  Equipped with an array of deadly grenades, these specialists
-  provide close-range support when facing swarms of lesser
-  foes or heavily armoured targets.
+  
+  Equipped with an array of deadly grenades, these specialists provide close-range support when facing swarms of lesser foes or heavily armoured targets.
+  
   **INTERCESSOR WARRIOR**
-  Intercessor Warriors lay down punishing volleys of fire from
-  their bolt rifles. Their tactics and wargear are adaptable
-  to countless situations, making them a core asset for any
-  Intercession Squad.
+  
+  Intercessor Warriors lay down punishing volleys of fire from their bolt rifles. Their tactics and wargear are adaptable to countless situations, making them a core asset for any Intercession Squad.
+  
   **INTERCESSOR GUNNER**
-  These specialists provide long-range supporting fire from
-  their rifle's underslung auxiliary grenade launcher. They
-  are capable of delivering explosive charges that inflict
-  maximum devastation on the most densely defended or
-  shielded positions.
+  
+  These specialists provide long-range supporting fire from their rifle's underslung auxiliary grenade launcher. They are capable of delivering explosive charges that inflict maximum devastation on the most densely defended or shielded positions.
+  
   **ELIMINATOR SNIPER**
-  Eliminators wield specialised sniper rifles with ammunition for
-  every enemy. These range from heavy-cored Mortis rounds
-  that make a mockery of armour, to explosive fragmentation
-  shells that devastate clustered targets.
+  
+  Eliminators wield specialised sniper rifles with ammunition for every enemy. These range from heavy-cored Mortis rounds that make a mockery of armour, to explosive fragmentation shells that devastate clustered targets.
+  
   **HEAVY INTERCESSOR GUNNER**
-  Heavy Intercessors are akin to walking gun emplacements.
-  Their heavy bolters allow them to shatter enemies with
-  punishing fusillades of explosive fire, either sweeping over
-  massed troops or in focused volleys.
   
-  Below you will find a list of the
-  operatives that make up an
-  **ANGEL OF DEATH**  kill team,
-  including, where relevant,
-  any weapons specified for
-  that operative.
+  Heavy Intercessors are akin to walking gun emplacements. Their heavy bolters allow them to shatter enemies with punishing fusillades of explosive fire, either sweeping over massed troops or in focused volleys. 2 Below you will find a list of the operatives that make up an **ANGEL OF DEATH** kill team, including, where relevant, any weapons specified for that operative.
   
-  - 1 **ANGEL OF DEATH** operative selected from the following list:
-    -  **ASSAULT INTERCESSOR SERGEANT**  with one option from each of the following:
-      -  Hand flamer or heavy bolt pistol
-      -  Chainsword, power fist, power weapon or thunder hammer
-    -  Or the following option:
-      -  Plasma pistol; chainsword
-    -  **INTERCESSOR SERGEANT**  with one option from each of the following:
-      -  Auto bolt rifle, bolt rifle or stalker bolt rifle
-      -  Chainsword, fists, power fist, power weapon or thunder hammer
-    -  **SPACE MARINE**  CAPTAIN
-  - 5 **ANGEL OF DEATH** operatives selected from the following list:
-    -  **ASSAULT INTERCESSOR**  GRENADIER
-    -  **ASSAULT INTERCESSOR**  WARRIOR
-    -  **ELIMINATOR**  SNIPER
-    -  **HEAVY INTERCESSOR**  GUNNER
-    -  **INTERCESSOR GUNNER**  with auxiliary grenade launcher and one of the following options:
-      -  Auto bolt rifle; fists
-      -  Bolt rifle; fists
-      -  Stalker bolt rifle; fists
-    -  **INTERCESSOR WARRIOR**  with one of the following options:
-      -  Auto bolt rifle; fists
-      -  Bolt rifle; fists
-      -  Stalker bolt rifle; fists Other than WARRIOR operatives, your kill team can only include each operative on this list once. **ARCHETYPES SECURITY** SEEK & **DESTROY** Archetypes are used in certain mission packs, e.g. Approved Ops. The game sequence will specify how. Some **ANGEL OF DEATH** rules refer to a 'bolt weapon'. This is a ranged weapon that includes 'bolt' in its name, e.g. stalker bolt rifle, heavy bolt pistol, etc. **ANGELS OF DEATH KILL TEAM ANGELS OF** DEATH » **KILL TEAM SELECTION ANGELS OF** DEATH » **KILL TEAM SELECTION** Heavy bolt pistol Plasma pistol Power fist **SPACE MARINE CAPTAIN ASSAULT INTERCESSOR GRENADIER INTERCESSOR SERGEANT** Chainsword Bolt rifle Chainsword **ASSAULT INTERCESSOR SERGEANT ASSAULT INTERCESSOR WARRIOR** Chainsword Heavy bolt pistol **ANGELS OF** DEATH » **KILL TEAM SELECTION ELIMINATOR SNIPER HEAVY INTERCESSOR GUNNER INTERCESSOR WARRIOR** Bolt sniper rifle Heavy bolter Auto bolt rifle **INTERCESSOR GUNNER** Auto bolt rifle / auxiliary grenade launcher Bolt pistol
+  **OPERATIVES**
+  
+  - 1 **ANGEL OF DEATH** operative selected from the following list: -
+  
+  **ASSAULT INTERCESSOR SERGEANT with one option**
+  
+  from each of the following:
+      - Hand flamer or heavy bolt pistol
+      - Chainsword, power fist, power weapon or thunder hammer
+    - Or the following option:
+      - Plasma pistol; chainsword -
+  
+  **INTERCESSOR SERGEANT with one option from each**
+  
+  of the following:
+      - Auto bolt rifle, bolt rifle or stalker bolt rifle
+      - Chainsword, fists, power fist, power weapon or thunder hammer -
+  
+  **SPACE MARINE CAPTAIN**
+  
+  - 5 **ANGEL OF DEATH** operatives selected from the following list: -
+  
+  **ASSAULT INTERCESSOR GRENADIER**
+  
+  -
+  
+  **ASSAULT INTERCESSOR WARRIOR**
+  
+  -
+  
+  **ELIMINATOR SNIPER**
+  
+  -
+  
+  **HEAVY INTERCESSOR GUNNER**
+  
+  -
+  
+  **INTERCESSOR GUNNER with auxiliary grenade**
+  
+  launcher and one of the following options:
+      - Auto bolt rifle; fists
+      - Bolt rifle; fists
+      - Stalker bolt rifle; fists -
+  
+  **INTERCESSOR WARRIOR with one of the**
+  
+  following options:
+      - Auto bolt rifle; fists
+      - Bolt rifle; fists
+      - Stalker bolt rifle; fists Other than WARRIOR operatives, your kill team can only include each operative on this list once.
+  
+  **ARCHETYPES SECURITY SEEK & DESTROY**
+  
+  Archetypes are used in certain mission packs, e.g. Approved Ops. The game sequence will specify how. Some **ANGEL OF DEATH** rules refer to a 'bolt weapon'. This is a ranged weapon that includes 'bolt' in its name, e.g. stalker bolt rifle, heavy bolt pistol, etc.
+  
+  **ANGELS OF DEATH KILL TEAM ANGELS**
+  
+  OF
+  
+  **DEATH**
+  
+  »
+  
+  **KILL TEAM SELECTION ANGELS**
+  
+  OF
+  
+  **DEATH**
+  
+  »
+  
+  **KILL TEAM SELECTION**
+  
+  Heavy bolt pistol Plasma pistol Power fist
+  
+  **SPACE MARINE CAPTAIN ASSAULT INTERCESSOR GRENADIER INTERCESSOR SERGEANT**
+  
+  Chainsword Bolt rifle Chainsword
+  
+  **ASSAULT INTERCESSOR SERGEANT ASSAULT INTERCESSOR WARRIOR**
+  
+  Chainsword Heavy bolt pistol
+  
+  **ANGELS**
+  
+  OF
+  
+  **DEATH**
+  
+  »
+  
+  **KILL TEAM SELECTION ELIMINATOR SNIPER HEAVY INTERCESSOR GUNNER INTERCESSOR WARRIOR**
+  
+  Bolt sniper rifle Heavy bolter Auto bolt rifle
+  
+  **INTERCESSOR GUNNER**
+  
+  Auto bolt rifle / auxiliary grenade launcher Bolt pistol
 universalEquipment:
   - name: Portable Barricade
     text: 'Little more than a suppression shield with armoured feet, these barricades can be hefted and borne forwards to provide mobile cover. A portable barricade is Light, Protective and Portable terrain, except the feet which are Insignificant and Exposed. Before the battle, you can set it up wholly within your territory, on the killzone floor and more than 2" from other equipment terrain features, access points and Accessible terrain. Protective: While an operative is in cover from this terrain feature, improve its Save stat by 1 (to a maximum of 2+). RULE'

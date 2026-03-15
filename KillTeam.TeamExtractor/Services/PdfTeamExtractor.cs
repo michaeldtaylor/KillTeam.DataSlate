@@ -1640,21 +1640,126 @@ public partial class PdfTeamExtractor
     // ─── Supplementary information parsing ───────────────────────────────────────
 
     /// <summary>
-    /// Parses a Supplementary Information PDF and returns all text content joined with newlines.
-    /// Applies text normalisation (Rule 1) and strips PDF chrome (Rule 4).
+    /// Parses a Supplementary Information PDF and returns formatted Markdown text.
+    /// Uses context-aware processing to detect section headers (all-caps lines),
+    /// ability name sub-headers (short mixed-case lines before action lines ending in ':'),
+    /// and prose text joined with proper word-wrap spacing.
     /// </summary>
     public string ParseSupplementaryInfo(string path)
     {
-        var lines = GetPdfLines(path, raw: true);
+        var rawLines = GetPdfLines(path, raw: true);
 
-        var raw = string.Join(
-            '\n',
-            lines
-                .Select(l => l.Trim())
-                .Where(l => l.Length > 0
-                    && !l.Equals("CONTINUES ON OTHER SIDE", StringComparison.OrdinalIgnoreCase)));
+        // Pre-process: strip control chars, normalise text, discard "CONTINUES ON OTHER SIDE"
+        var lines = rawLines
+            .Select(l => TextHelpers.NormaliseText(new string(l.Where(c => c >= 32).ToArray())))
+            .Where(l => l.Length > 0 && !l.Equals("CONTINUES ON OTHER SIDE", StringComparison.OrdinalIgnoreCase))
+            .ToList();
 
-        return TextHelpers.StructureToMarkdown(raw);
+        var output = new StringBuilder();
+        var prevWasHeader = false;
+        var pendingHeaderText = new StringBuilder(); // accumulates consecutive all-caps lines into one header
+
+        void FlushPendingHeader()
+        {
+            if (pendingHeaderText.Length == 0)
+            {
+                return;
+            }
+
+            // Blank line before header (not at start of document)
+            if (output.Length > 0)
+            {
+                while (output.Length > 0 && output[output.Length - 1] == '\n')
+                {
+                    output.Remove(output.Length - 1, 1);
+                }
+
+                output.Append("\n\n");
+            }
+
+            output.Append("**").Append(pendingHeaderText).Append("**\n\n");
+            pendingHeaderText.Clear();
+        }
+
+        for (var i = 0; i < lines.Count; i++)
+        {
+            var trimmed = lines[i];
+
+            if (trimmed.Length == 0)
+            {
+                continue;
+            }
+
+            var isAllCaps = !trimmed.Any(char.IsLower);
+
+            if (isAllCaps && trimmed.Length >= 3)
+            {
+                // If previous line was also all-caps, merge into the same header
+                if (prevWasHeader)
+                {
+                    pendingHeaderText.Append(' ').Append(trimmed);
+                }
+                else
+                {
+                    FlushPendingHeader();
+                    pendingHeaderText.Append(trimmed);
+                }
+
+                prevWasHeader = true;
+                continue;
+            }
+
+            // Flush any pending all-caps header before processing non-header content
+            if (prevWasHeader)
+            {
+                FlushPendingHeader();
+                prevWasHeader = false;
+            }
+
+            // Mixed-case ability name heuristic: a short capitalised line (< 50 chars)
+            // immediately followed by an action line ending in ':' (e.g. "Changed to read:").
+            // These are bold sub-headers within errata sections.
+            var isAbilitySubHeader = trimmed.Length < 50
+                && char.IsUpper(trimmed[0])
+                && trimmed.Any(char.IsLower)
+                && !trimmed.Contains(':')
+                && !trimmed.StartsWith('\'')
+                && i + 1 < lines.Count
+                && lines[i + 1].TrimEnd().EndsWith(':');
+
+            if (isAbilitySubHeader)
+            {
+                // Blank line before sub-header
+                if (output.Length > 0)
+                {
+                    while (output.Length > 0 && output[output.Length - 1] == '\n')
+                    {
+                        output.Remove(output.Length - 1, 1);
+                    }
+
+                    output.Append("\n\n");
+                }
+
+                output.Append("**").Append(trimmed).Append("**\n\n");
+                continue;
+            }
+
+            // Regular prose / quoted text: use AppendText for proper word-wrap joining
+            AppendText(output, trimmed);
+        }
+
+        FlushPendingHeader();
+
+        var text = TextHelpers.StructureToMarkdown(output.ToString().TrimStart());
+
+        // Strikethrough for deleted rule text: "deleted: 'quoted text'"
+        text = System.Text.RegularExpressions.Regex.Replace(
+            text,
+            @"deleted: '([^']+)'",
+            "deleted: ~~'$1'~~",
+            System.Text.RegularExpressions.RegexOptions.Singleline);
+
+        return text;
     }
 
     // ─── Shared helpers ───────────────────────────────────────────────────────────

@@ -155,10 +155,12 @@ internal static partial class TextHelpers
             text,
             m => m.Groups[1].Value + ". **" + m.Groups[2].Value.TrimEnd() + "**");
 
-        // Step 6a: ALL-CAPS phrase + colon (anywhere) → **ALLCAPS:** preserving capitalisation
+        // Step 6a: ALL-CAPS phrase + colon (anywhere) → **ALLCAPS:** preserving capitalisation.
+        // The leading \*\*[^*]+\*\* alternative skips already-bolded spans (from pre-processing),
+        // so group 1 only participates for plain ALL-CAPS text.
         text = AllCapsWithColonRegex().Replace(
             text,
-            m => "**" + m.Groups[1].Value.Trim() + ":**");
+            m => m.Groups[1].Success ? "**" + m.Groups[1].Value.Trim() + ":**" : m.Value);
 
         // Step 6b: ALL-CAPS phrase at start of line + space + body text → **ALLCAPS**
         text = AllCapsLineHeadingRegex().Replace(
@@ -338,8 +340,9 @@ internal static partial class TextHelpers
 
     /// <summary>
     /// An ALL-CAPS phrase (4+ chars) immediately followed by a colon — a sub-section label.
+    /// Leading alternative skips already-bolded spans so they are not double-processed.
     /// </summary>
-    [GeneratedRegex(@"([A-Z][A-Z'\-]{3,}(?:\s+[A-Z][A-Z'\-]+)*):")]
+    [GeneratedRegex(@"\*\*[^*]+\*\*|([A-Z][A-Z'\-]{3,}(?:\s+[A-Z][A-Z'\-]+)*):")] 
     private static partial Regex AllCapsWithColonRegex();
 
     /// <summary>
