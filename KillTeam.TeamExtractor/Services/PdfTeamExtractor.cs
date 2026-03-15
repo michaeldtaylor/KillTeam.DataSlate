@@ -1860,10 +1860,21 @@ public partial class PdfTeamExtractor
             .Where(l => l.Length > 0 && !l.Equals("CONTINUES ON OTHER SIDE", StringComparison.OrdinalIgnoreCase))
             .ToList();
 
+        // Remove Kill Team Selection page content — already captured in operativeSelection.
+        // The KTS page intro text "Below you will find..." is the first line of that section;
+        // everything from there to the end of the file is KTS page content.
+        var ktsIntroIdx = lines.FindIndex(l =>
+            l.StartsWith("Below you will find", StringComparison.OrdinalIgnoreCase));
+        if (ktsIntroIdx >= 0)
+        {
+            lines = lines.Take(ktsIntroIdx).ToList();
+        }
+
         var output = new StringBuilder();
         var prevWasHeader = false;
         var prevAllCapsQuoteMode = false; // true when inside a flavour-text / quote ALL-CAPS block
         var quoteBuffer = new StringBuilder(); // accumulates ALL-CAPS quote-block lines
+        var pendingAttribution = false; // true after a quote block is flushed, waiting for the attribution line
         var pendingHeaderText = new StringBuilder(); // accumulates consecutive all-caps lines into one header
 
         void FlushQuoteBuffer()
@@ -1883,8 +1894,9 @@ public partial class PdfTeamExtractor
                 output.Append("\n\n");
             }
 
-            output.Append("**").Append(quoteBuffer.ToString().Trim()).Append("**\n\n");
+            output.Append("> **").Append(quoteBuffer.ToString().Trim()).Append("**\n>\n");
             quoteBuffer.Clear();
+            pendingAttribution = true;
         }
 
         void FlushPendingHeader()
@@ -1925,6 +1937,12 @@ public partial class PdfTeamExtractor
                 lastLineWasBulletSymbol = false;
                 FlushQuoteBuffer();
                 prevAllCapsQuoteMode = false;
+                if (pendingAttribution)
+                {
+                    output.Append("\n\n");
+                    pendingAttribution = false;
+                }
+
                 continue;
             }
 
@@ -2131,6 +2149,27 @@ public partial class PdfTeamExtractor
 
                 quoteBuffer.Append(trimmed);
             }
+            else if (pendingAttribution)
+            {
+                // The line immediately after a quote block is the attribution.
+                // If it starts with '- ', include it inside the blockquote as '> — Name'.
+                // Either way, close the blockquote.
+                pendingAttribution = false;
+
+                if (trimmed.StartsWith("- ", StringComparison.Ordinal))
+                {
+                    var attribution = trimmed[2..].TrimStart();
+                    // Strip trailing page number (PDF artefact e.g. "Craftworld 3")
+                    attribution = System.Text.RegularExpressions.Regex.Replace(attribution, @"\s+\d+$", "");
+                    output.Append("> \u2014 ").Append(attribution).Append("\n\n");
+                }
+                else
+                {
+                    // Not an attribution line — close blockquote and process line normally
+                    output.Append("\n\n");
+                    AppendText(output, trimmed);
+                }
+            }
             else
             {
                 AppendText(output, trimmed);
@@ -2138,6 +2177,12 @@ public partial class PdfTeamExtractor
         }
 
         FlushQuoteBuffer();
+        if (pendingAttribution)
+        {
+            output.Append("\n\n");
+            pendingAttribution = false;
+        }
+
         FlushPendingHeader();
 
         var text = TextHelpers.StructureToMarkdown(output.ToString().TrimStart());

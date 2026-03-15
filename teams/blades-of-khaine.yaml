@@ -600,9 +600,9 @@ supplementaryInfo: |-
   
   With limitless patience, after stalking their prey for hours or waiting in position for days, Striking Scorpions burst from concealment. With chainswords whirring and mandiblasters spitting needles of white fire, the Aspect Warriors' emerald green armour is soon streaked red.
   
-  **'WHAT DISASTERS HAVE THEY AVERTED? HOW MANY AELDARI LIVES HAVE THEY SAVED? HOW MANY FOES OF OURS HAVE THEY DOOMED TO OBLIVION? ACROSS ALL THE CRAFTWORLDS WE CANNOT BE SURE. I KNOW THIS, HOWEVER, WITHOUT A SHADOW OF DOUBT. WERE IT NOT FOR THE BLADES OF KHAINE, THE ASURYANI WOULD BE NO MORE. THE WARRIORS THAT I HAVE COMMANDED ALONE HAVE PREVENTED MULTIPLE INCURSIONS INTO THE WEBWAY THAT WOULD HAVE SEVERED VITAL TIES TO EXODITE WORLDS AND HARLEQUIN TROUPES. I CAN ONLY IMAGINE WHAT OTHERS HAVE DONE FOR OUR PEOPLE.'**
-  
-  - Farseer Liurth, of Lugganath Craftworld 2
+  > **'WHAT DISASTERS HAVE THEY AVERTED? HOW MANY AELDARI LIVES HAVE THEY SAVED? HOW MANY FOES OF OURS HAVE THEY DOOMED TO OBLIVION? ACROSS ALL THE CRAFTWORLDS WE CANNOT BE SURE. I KNOW THIS, HOWEVER, WITHOUT A SHADOW OF DOUBT. WERE IT NOT FOR THE BLADES OF KHAINE, THE ASURYANI WOULD BE NO MORE. THE WARRIORS THAT I HAVE COMMANDED ALONE HAVE PREVENTED MULTIPLE INCURSIONS INTO THE WEBWAY THAT WOULD HAVE SEVERED VITAL TIES TO EXODITE WORLDS AND HARLEQUIN TROUPES. I CAN ONLY IMAGINE WHAT OTHERS HAVE DONE FOR OUR PEOPLE.'**
+  >
+  > — Farseer Liurth, of Lugganath Craftworld
   
   # Dire Avenger Exarch
   
@@ -620,67 +620,9 @@ supplementaryInfo: |-
   
   The piercing, psychosonic scream that precedes the assault of these bone-armoured operatives renders those who hear it all but helpless. These shock waves buy the Howling Banshees time enough to strike, each one taking a head with a sweep of their glittering power weapon.
   
-  **'IT HAS BEEN OUR WAY FOR MILLENNIA TO SACRIFICE OUR PRESENT SO THAT WE MAY HAVE A FUTURE. MY BANSHEE SISTERS AND I KNOW THAT OUR EVERY BATTLE MAY BE OUR LAST. WE FACE THAT TRUTH WITHOUT FEAR, FOR THROUGH OUR EFFORTS MAY MORE OF OUR PEOPLE LIVE AND SEE BRIGHTER TIMES FOR THE AELDARI. ONE DAY THE STARS WILL ONCE MORE BOW TO OUR RACE, AND THAT OUTCOME WILL BE ACHIEVED ONE BATTLE, ONE KILL AT A TIME.'**
-  
-  - Osinell Ciaradh, Howling Banshee of Biel-Tan Craftworld 3 Below you will find a list of the operatives that make up a **BLADES OF KHAINE** kill team, including, where relevant, any weapons specified for that operative.
-  
-  # Operatives
-  
-  - 1 **BLADES OF KHAINE** operative selected from the following list:
-    - **DIRE AVENGER EXARCH** with one of the following options:
-      - Shuriken catapult; fists
-      - Twin shuriken catapult; gun butts Or one option from each of the following:
-      - Diresword or power weapon
-      - Shuriken pistol or shimmershield
-    - **HOWLING BANSHEE EXARCH** with one of the following options:
-      - Mirrorswords
-      - Shuriken pistol; executioner
-      - Shuriken pistol; power weapon
-      - Shuriken pistol; triskele
-      - Triskele; power weapon
-    - **STRIKING SCORPION EXARCH** with one of the following options:
-      - Shuriken pistol; biting blade
-      - Shuriken pistol; scorpion's claw & chainsword
-      - Twin shuriken pistols; twin chainswords
-  
-  - 7 **BLADES OF KHAINE** operatives selected from the following list:
-    - **DIRE AVENGER WARRIOR**
-    - **HOWLING BANSHEE WARRIOR**
-    - **STRIKING SCORPION WARRIOR**
-  
-  **'WE AELDARI HAVE FALLEN FAR. THOSE NOT OF OUR RACE WHO HAVE HEARD OUR STORY MIGHT EVEN PITY US, IF THEY DON'T HOLD US IN CONTEMPT FOR OUR OWN FOLLY. I SPIT ON THEIR SCORN. OUR TIME IS FAR FROM OVER. WE HAVE BEEN MASTERS OF WAR SINCE OUR ENEMIES' FOREBEARS WERE BUT AMOEBAE DRIFTING AIMLESSLY IN BARREN SEAS. THE GALAXY ONCE SHOOK IN AWE UPON THE MENTION OF OUR NAME, AND IT SHALL DO SO AGAIN.'**
-  
-  - Maur Saim-Ingrelli, Striking Scorpions Exarch of the Onyx Claw Shrine, Biel-Tan Craftworld
-  
-  **BLADES OF KHAINE >> KILL TEAM SELECTION**
-  
-  # Archetypes
-  
-  Archetypes are used in certain mission packs, e.g. Approved Ops. The game sequence will specify how. Or the associated archetype of the most common Aspect keyword in your kill team (if two keywords are equally most common, you can choose one of those keywords). Aspect keywords and their associated archetypes are as follows: **DIRE AVENGER HOWLING**
-  
-  # Banshee
-  
-  # Striking
-  
-  # Scorpion
-  
-  # Seek & Destroy
-  
-  # Security Recon Infiltration
-  
-  # Dire Avenger Exarch
-  
-  Power weapon Shimmershield
-  
-  # Dire Avenger Warrior
-  
-  Shuriken catapult
-  
-  # Howling Banshee Exarch Howling Banshee Warrior
-  
-  # Striking Scorpion Exarch Striking Scorpion Warrior
-  
-  Mirrorswords Power weapon Shuriken pistol Scorpion's claw & chainsword Shuriken pistol Chainsword 5
+  > **'IT HAS BEEN OUR WAY FOR MILLENNIA TO SACRIFICE OUR PRESENT SO THAT WE MAY HAVE A FUTURE. MY BANSHEE SISTERS AND I KNOW THAT OUR EVERY BATTLE MAY BE OUR LAST. WE FACE THAT TRUTH WITHOUT FEAR, FOR THROUGH OUR EFFORTS MAY MORE OF OUR PEOPLE LIVE AND SEE BRIGHTER TIMES FOR THE AELDARI. ONE DAY THE STARS WILL ONCE MORE BOW TO OUR RACE, AND THAT OUTCOME WILL BE ACHIEVED ONE BATTLE, ONE KILL AT A TIME.'**
+  >
+  > — Osinell Ciaradh, Howling Banshee of Biel-Tan Craftworld
 universalEquipment:
   - name: Portable Barricade
     text: 'Little more than a suppression shield with armoured feet, these barricades can be hefted and borne forwards to provide mobile cover. A portable barricade is Light, Protective and Portable terrain, except the feet which are Insignificant and Exposed. Before the battle, you can set it up wholly within your territory, on the killzone floor and more than 2" from other equipment terrain features, access points and Accessible terrain. Protective: While an operative is in cover from this terrain feature, improve its Save stat by 1 (to a maximum of 2+). RULE'

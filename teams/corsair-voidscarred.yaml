@@ -795,67 +795,9 @@ supplementaryInfo: |-
   
   Spiritual mystics, Soul Weavers utilise the power and knowledge of the Aeldari souls in the spirit stones they carry. With this energy they can enhance warriors' abilities in combat or heal the wounded.
   
-  **'THE VOID IS WEALTH. THE VOID IS FREEDOM. I REJECT THE TIGHTLY BOUND CHORDS OF THE PATH. I REJECT THE PETTINESS OF COMMORRITE POLITICS. I REJECT THE PLAIN FRUGALITY OF THE EXODITES. I REJECT THE MASKS OF THE CLOWN AND THE MIME. I MOST CERTAINLY REJECT DEATH. THE STARS BELONGED TO MY ANCESTORS. THUS THEY BELONG TO ME. THUS I GO WHERE I WILL, TAKE WHAT I WILL AND KILL WHOM I WILL.'**
-  
-  - Lady Hale'drithea of the Black Suns 3 Below you will find a list of the operatives that make up a **CORSAIR VOIDSCARRED** kill team, including, where relevant, any weapons specified for that operative.
-  
-  # Operatives
-  
-  - 1 **CORSAIR VOIDSCARRED FELARCH** operative with one of the following options:
-    - Shuriken rifle; shuriken pistol; power weapon
-    - Neuro disruptor; power weapon
-  
-  - 8 **CORSAIR VOIDSCARRED** operatives selected from the following list:
-    - **FATE DEALER**
-    - GUNNER with one of the following options:
-      - Blaster ; shuriken pistol; fists
-      - Shredder; shuriken pistol; fists
-    - **HEAVY GUNNER** with one of the following options:
-      - Shuriken cannon; shuriken pistol; fists
-      - Shuriken pistol; wraithcannon ; fists
-    - KURNATHI
-    - **KURNITE HUNTER**
-    - **SHADE RUNNER**
-    - **SOUL WEAVER**
-    - **STARSTORM DUELLIST**
-    - WARRIOR with one of the following options:
-      - Shuriken pistol; power weapon
-      - Shuriken rifle; fists
-    - **WAY SEEKER**
-  
-  Other than WARRIOR operatives, your kill team can only include each operative on this list once.
-  
-  Your kill team cannot include both a blaster and a wraithcannon.
-  
-  # Archetypes
-  
-  # Infiltration Recon
-  
-  Archetypes are used in certain mission packs, e.g. Approved Ops. The game sequence will specify how.
-  
-  **CORSAIR VOIDSCARRED >> KILL TEAM SELECTION**
-  
-  # Felarch
-  
-  # Fate Dealer
-  
-  # Shade Runner
-  
-  Neuro disruptor Power weapon Shuriken pistol Ranger long rifle Shuriken pistol Throwing blades Hekatarii blades 4
-  
-  # Gunner
-  
-  # Kurnite Hunter
-  
-  # Starstorm Duellist Heavy Gunner
-  
-  # Warrior
-  
-  # Kurnathi Soul Weaver
-  
-  # Way Seeker
-  
-  Shuriken pistol Power weapon Shredder Blaster Shuriken cannon Faolchú Shuriken pistol Power weapon Shuriken rifle Shuriken pistol Fusion pistol Dual power weapons Shuriken pistol Power weapon Shuriken pistol Witch staff 5
+  > **'THE VOID IS WEALTH. THE VOID IS FREEDOM. I REJECT THE TIGHTLY BOUND CHORDS OF THE PATH. I REJECT THE PETTINESS OF COMMORRITE POLITICS. I REJECT THE PLAIN FRUGALITY OF THE EXODITES. I REJECT THE MASKS OF THE CLOWN AND THE MIME. I MOST CERTAINLY REJECT DEATH. THE STARS BELONGED TO MY ANCESTORS. THUS THEY BELONG TO ME. THUS I GO WHERE I WILL, TAKE WHAT I WILL AND KILL WHOM I WILL.'**
+  >
+  > — Lady Hale'drithea of the Black Suns
 universalEquipment:
   - name: Portable Barricade
     text: 'Little more than a suppression shield with armoured feet, these barricades can be hefted and borne forwards to provide mobile cover. A portable barricade is Light, Protective and Portable terrain, except the feet which are Insignificant and Exposed. Before the battle, you can set it up wholly within your territory, on the killzone floor and more than 2" from other equipment terrain features, access points and Accessible terrain. Protective: While an operative is in cover from this terrain feature, improve its Save stat by 1 (to a maximum of 2+). RULE'

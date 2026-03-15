@@ -463,56 +463,7 @@ supplementaryInfo: |-
   
   # Shadowseer
   
-  Shadowseers can blind foes and drive them mad with their psychic powers. As they obscure their allies with illusions, they fire hallucinogenic grenades that cause disorientation or death. In close combat, Shadowseers' miststaves scramble the perceptions of those they hit. 2 Below you will find a list of the operatives that make up a
-  
-  # Void-Dancer Troupe
-  
-  kill team, including, where relevant, any weapons specified for that operative.
-  
-  # Operatives
-  
-  - 1 **VOID-DANCER TROUPE LEAD PLAYER** operative with one option from each of the following:
-      - Fusion pistol, neuro disruptor or shuriken pistol
-      - Blade, caress, embrace, kiss or power weapon
-  
-  - 7 **VOID-DANCER TROUPE** operatives selected from the following list:
-    - **DEATH JESTER**
-    - PLAYER with one option from each of the following:
-      - Fusion pistol, neuro disruptor or shuriken pistol
-      - Blade, caress, embrace or kiss
-    - SHADOWSEER with hallucinogen grenade and one of the following options:
-      - Neuro disruptor; miststave
-      - Shuriken pistol; miststave
-  
-  Other than PLAYER operatives, your kill team can only include each operative on this list once.
-  
-  Your kill team can only include up to one fusion pistol and up to one neuro disruptor.
-  
-  # Archetypes
-  
-  # Infiltration Recon
-  
-  Archetypes are used in certain mission packs, e.g. Approved Ops. The game sequence will specify how.
-  
-  **VOID-DANCER TROUPE >> KILL TEAM SELECTION**
-  
-  # Lead Player
-  
-  # Death Jester
-  
-  **'STRIKE NOT WHERE YOUR ENEMY EXPECTS YOUR BLADE TO FALL, NOR EVEN WHERE LOGIC DICTATES. STRIKE INSTEAD WHERE YOUR BLOW WILL HAVE THE GREATEST MEANING. LEAVE YOUR LESSON WRIT LARGE IN BLOOD UPON THE FIELD OF BATTLE.'**
-  
-  - extract from the Teachings of Cegorach Kiss Shuriken pistol Shrieker cannon Shrieker blade 3
-  
-  **'THERE WERE SO FEW OF THEM. NO TANKS, NO ARTILLERY, JUST THIS… HANDFUL… OF XENOS. WE EXPECTED AN EASY FIGHT. THEN THE MADNESS STARTED TO SPREAD; MEN BEGAN TO SCREAM, TO TURN UPON ONE ANOTHER. THE THINGS I SAW… EVEN NOW I CANNOT TRUST MY OWN MIND. EXECUTE ME, I BEG YOU. MAYBE THAT WILL FINALLY WIPE AWAY THE NIGHTMARES.'**
-  
-  - tribunal testimony of Sergeant Gastor, Cadian 654th
-  
-  # Player
-  
-  # Shadowseer
-  
-  Kiss Shuriken pistol Caress Shuriken pistol Blade Neuro disruptor Neuro disruptor Neuro disruptor Hallucinogen grenade Miststave 4
+  Shadowseers can blind foes and drive them mad with their psychic powers. As they obscure their allies with illusions, they fire hallucinogenic grenades that cause disorientation or death. In close combat, Shadowseers' miststaves scramble the perceptions of those they hit. 2
 universalEquipment:
   - name: Portable Barricade
     text: 'Little more than a suppression shield with armoured feet, these barricades can be hefted and borne forwards to provide mobile cover. A portable barricade is Light, Protective and Portable terrain, except the feet which are Insignificant and Exposed. Before the battle, you can set it up wholly within your territory, on the killzone floor and more than 2" from other equipment terrain features, access points and Accessible terrain. Protective: While an operative is in cover from this terrain feature, improve its Save stat by 1 (to a maximum of 2+). RULE'

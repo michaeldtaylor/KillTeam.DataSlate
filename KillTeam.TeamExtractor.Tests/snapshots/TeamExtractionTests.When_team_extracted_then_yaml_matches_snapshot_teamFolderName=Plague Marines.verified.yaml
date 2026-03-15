@@ -489,55 +489,7 @@ supplementaryInfo: |-
   
   # Plague Marine Warrior
   
-  Almost nothing can stop a Plague Marine on the march. Shielded by power armour and Nurgle's vile blessings, these warriors march through storms of enemy fire in pursuit of their objective. 2 Below you will find a list of the operatives that make up a **PLAGUE MARINE** kill team, including, where relevant, any weapons specified for that operative.
-  
-  # Operatives
-  
-  - 1 **PLAGUE MARINE CHAMPION** operative
-  
-  - 5 **PLAGUE MARINE** operatives selected from the following list:
-    - BOMBARDIER
-    - FIGHTER
-    - **HEAVY GUNNER**
-    - **ICON BEARER**
-    - **MALIGNANT PLAGUECASTER**
-    - WARRIOR Your kill team can only include each operative on this list once. Nurgle's number is 7 and his sigil shows 3. From these numbers does his corruption flow.
-  
-  # Archetypes
-  
-  # Security
-  
-  # Seek & Destroy
-  
-  Archetypes are used in certain mission packs, e.g. Approved Ops. The game sequence will specify how.
-  
-  **PLAGUE MARINES >> KILL TEAM SELECTION**
-  
-  Plague sword Boltgun
-  
-  # Bombardier
-  
-  Plasma pistol
-  
-  # Champion
-  
-  # Fighter
-  
-  Flail of Corruption Plague spewer Plague knife Bolt pistol
-  
-  # Icon Bearer
-  
-  # Heavy Gunner
-  
-  Boltgun
-  
-  # Warrior
-  
-  Corrupted staff
-  
-  # Malginant Plaguecaster
-  
-  Icon of Contagion 4
+  Almost nothing can stop a Plague Marine on the march. Shielded by power armour and Nurgle's vile blessings, these warriors march through storms of enemy fire in pursuit of their objective. 2
 universalEquipment:
   - name: Portable Barricade
     text: 'Little more than a suppression shield with armoured feet, these barricades can be hefted and borne forwards to provide mobile cover. A portable barricade is Light, Protective and Portable terrain, except the feet which are Insignificant and Exposed. Before the battle, you can set it up wholly within your territory, on the killzone floor and more than 2" from other equipment terrain features, access points and Accessible terrain. Protective: While an operative is in cover from this terrain feature, improve its Save stat by 1 (to a maximum of 2+). RULE'
