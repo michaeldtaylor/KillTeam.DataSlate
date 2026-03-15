@@ -2134,45 +2134,44 @@ public partial class PdfTeamExtractor
     private static string ToTitleCase(string text) => TextHelpers.ToTitleCase(text);
 
     /// <summary>
-    /// Known type watermarks that appear as empty-text ALL-CAPS headers on every card/section.
-    /// These are excluded when scanning the empty-header chain for the meaningful category label.
+    /// Pure document-level type labels that appear on every card as a structural header.
+    /// These carry no sub-category meaning and are excluded from the category label.
+    /// Note: "Aspect Technique" is intentionally NOT here — it is a meaningful type suffix
+    /// that combines with the preceding category (e.g. "Howling Banshee Aspect Technique").
     /// </summary>
-    private static readonly HashSet<string> TypeWatermarks = new(StringComparer.OrdinalIgnoreCase)
+    private static readonly HashSet<string> PureTypeLabels = new(StringComparer.OrdinalIgnoreCase)
     {
-        "Aspect Technique", "Faction Rule", "Strategy Ploy", "Firefight Ploy",
+        "Faction Rule", "Strategy Ploy", "Firefight Ploy",
     };
 
     /// <summary>
     /// Derives the category label from a chain of consecutive empty-text ALL-CAPS headers
     /// that appeared before a rule with text. The chain may interleave page headers (team name),
-    /// type watermarks, and genuine category labels in any order.
-    /// Scans from the end, skipping all type watermarks and the team name (page header), and
-    /// returns the last remaining element as the category, or <c>null</c> if none found.
+    /// doc-level type labels, and genuine category / type-specific labels in any order.
+    ///
+    /// Filters out <see cref="PureTypeLabels"/>, the team name, and the primary keyword, then
+    /// takes the last two remaining elements and joins them (e.g. "Howling Banshee" +
+    /// "Aspect Technique" → "Howling Banshee Aspect Technique"). The two-element ceiling
+    /// prevents spurious preamble text earlier in the chain from leaking into the output.
     /// </summary>
     private static string? DetermineRuleCategory(List<string> chain, string? teamNameTitleCase = null, string? primaryKeywordTitleCase = null)
     {
-        for (var i = chain.Count - 1; i >= 0; i--)
+        var meaningful = chain
+            .Where(e =>
+                !PureTypeLabels.Contains(e)
+                && (teamNameTitleCase == null || !string.Equals(e, teamNameTitleCase, StringComparison.OrdinalIgnoreCase))
+                && (primaryKeywordTitleCase == null || !string.Equals(e, primaryKeywordTitleCase, StringComparison.OrdinalIgnoreCase)))
+            .ToList();
+
+        if (meaningful.Count == 0)
         {
-            var entry = chain[i];
-            if (TypeWatermarks.Contains(entry))
-            {
-                continue;
-            }
-
-            if (teamNameTitleCase != null && string.Equals(entry, teamNameTitleCase, StringComparison.OrdinalIgnoreCase))
-            {
-                continue;
-            }
-
-            if (primaryKeywordTitleCase != null && string.Equals(entry, primaryKeywordTitleCase, StringComparison.OrdinalIgnoreCase))
-            {
-                continue;
-            }
-
-            return ToTitleCase(entry);
+            return null;
         }
 
-        return null;
+        // Take at most the last 2 elements to exclude any spurious preamble lines
+        // that may have been captured early in the chain.
+        var elements = meaningful.Count > 2 ? meaningful.Skip(meaningful.Count - 2) : meaningful;
+        return string.Join(" ", elements.Select(ToTitleCase));
     }
 
     // ─── Generated regexes ────────────────────────────────────────────────────────
