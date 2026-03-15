@@ -1862,6 +1862,7 @@ public partial class PdfTeamExtractor
 
         var output = new StringBuilder();
         var prevWasHeader = false;
+        var prevAllCapsQuoteMode = false; // true when inside a flavour-text / quote ALL-CAPS block
         var pendingHeaderText = new StringBuilder(); // accumulates consecutive all-caps lines into one header
 
         void FlushPendingHeader()
@@ -1900,6 +1901,7 @@ public partial class PdfTeamExtractor
             if (trimmed.Length == 0)
             {
                 lastLineWasBulletSymbol = false;
+                prevAllCapsQuoteMode = false;
                 continue;
             }
 
@@ -1911,6 +1913,7 @@ public partial class PdfTeamExtractor
                 lastLineWasBulletSymbol = true;
                 AppendText(output, trimmed);
                 prevWasHeader = false;
+                prevAllCapsQuoteMode = false;
                 continue;
             }
 
@@ -1962,6 +1965,14 @@ public partial class PdfTeamExtractor
 
                 if (isAllCaps && trimmed.Length >= 3)
                 {
+                    // ALL-CAPS lines containing '?' or '!' are sentence terminators — they appear
+                    // in flavour-text quote blocks, not as section headings. Once we detect one,
+                    // stay in quote mode for all subsequent all-caps lines until a non-all-caps
+                    // line resets the mode.
+                    var hasStrongTerminator = trimmed.Contains('?') || trimmed.Contains('!');
+
+                    if (!hasStrongTerminator && !prevAllCapsQuoteMode)
+                    {
                     // KTS: detect "[TEAM NAME] KILL TEAM" — the Kill Team Selection page heading.
                     // Emit the section title once and skip repeated header fragments.
                     if (trimmed.EndsWith(" KILL TEAM", StringComparison.OrdinalIgnoreCase)
@@ -2011,7 +2022,23 @@ public partial class PdfTeamExtractor
                     }
 
                     prevWasHeader = true;
-                    continue;
+                        continue;
+                    }
+
+                    // Quote/flavour-text mode: flush any pending heading and treat as body text.
+                    if (prevWasHeader)
+                    {
+                        FlushPendingHeader();
+                        prevWasHeader = false;
+                    }
+
+                    prevAllCapsQuoteMode = true;
+                    // Fall through to body text processing (no 'continue')
+                }
+                else
+                {
+                    // Non-all-caps content — exit quote mode
+                    prevAllCapsQuoteMode = false;
                 }
 
                 // Flush any pending all-caps header before processing non-header content
@@ -2054,6 +2081,7 @@ public partial class PdfTeamExtractor
                 // Bare-bullet content terminates any pending header
                 FlushPendingHeader();
                 prevWasHeader = false;
+                prevAllCapsQuoteMode = false;
             }
 
             // Fix 3: paragraph break before specific sentence starters that follow inline
