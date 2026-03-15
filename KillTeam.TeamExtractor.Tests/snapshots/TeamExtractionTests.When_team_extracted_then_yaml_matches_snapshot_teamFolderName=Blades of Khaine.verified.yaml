@@ -348,13 +348,25 @@ datacards:
         text: Whenever this operative performs the Fight action, at the start of the Roll Attack Dice step, you can use this rule. If you do, inflict 2 damage on the enemy operative in that sequence.
 factionEquipment:
   - name: Rune of Prophecy
-    text: Affixed to an Aspect Warrior's armour by a powerful seer, this warp-charged rune provides the bearer with a sliver of its creator's prophetic vision. Once per battle, after rolling off to decide initiative, you can add D3 to, or subtract D3 from, your result.
+    text: |-
+      Affixed to an Aspect Warrior's armour by a powerful seer, this warp-charged rune provides the bearer with a sliver of its creator's prophetic vision.
+      
+      Once per battle, after rolling off to decide initiative, you can add D3 to, or subtract D3 from, your result.
   - name: Rune of Shielding
-    text: Shimmering with empyric energy, this rune flares brightly when it suffers impact from an enemy weapon, turning aside bullet, bolt or blade. Once per battle, when an attack dice inflicts Normal Dmg on a friendly **BLADES OF KHAINE** operative, you can ignore that inflicted damage.
+    text: |-
+      Shimmering with empyric energy, this rune flares brightly when it suffers impact from an enemy weapon, turning aside bullet, bolt or blade.
+      
+      Once per battle, when an attack dice inflicts Normal Dmg on a friendly **BLADES OF KHAINE** operative, you can ignore that inflicted damage.
   - name: Rune of Foresight
-    text: The bearer foresees the battle to come, anticipating the movements of the foe and positioning their warriors with uncanny guile. When this equipment is revealed, roll one D3. In the Strategy phase of the turning point equal to the result, you gain 1 additional CP.
+    text: |-
+      The bearer foresees the battle to come, anticipating the movements of the foe and positioning their warriors with uncanny guile.
+      
+      When this equipment is revealed, roll one D3. In the Strategy phase of the turning point equal to the result, you gain 1 additional CP.
   - name: Wraithbone Talisman
-    text: Grown from living wraithbone material, this talisman lends the bearer strength and determination in the midst of battle. Once per turning point, when a friendly **BLADES OF KHAINE** operative is shooting, fighting or retaliating, if you roll two or more fails, you can discard one of them to retain another as a normal success instead.
+    text: |-
+      Grown from living wraithbone material, this talisman lends the bearer strength and determination in the midst of battle.
+      
+      Once per turning point, when a friendly **BLADES OF KHAINE** operative is shooting, fighting or retaliating, if you roll two or more fails, you can discard one of them to retain another as a normal success instead.
 factionRules:
   - name: Aspect Techniques
     text: |-
@@ -482,11 +494,20 @@ operativeSelection:
   text: ''
 strategyPloys:
   - name: Forewarned
-    text: Aspect Warriors go to battle armed with the foresight of their Craftworld's seers. Whenever an operative is shooting a ready friendly **BLADES OF KHAINE** operative, you can re-roll any of your defence dice results of one result (e.g. results of 2).
+    text: |-
+      Aspect Warriors go to battle armed with the foresight of their Craftworld's seers.
+      
+      Whenever an operative is shooting a ready friendly **BLADES OF KHAINE** operative, you can re-roll any of your defence dice results of one result (e.g. results of 2).
   - name: Ruthless Poise
-    text: Centuries of combat experience coupled with lightning reactions and exceptional grace render Aspect Warriors utterly lethal. Whenever a friendly **BLADES OF KHAINE** operative is fighting a ready enemy operative, that friendly operative's melee weapons have the Ceaseless weapon rule.
+    text: |-
+      Centuries of combat experience coupled with lightning reactions and exceptional grace render Aspect Warriors utterly lethal.
+      
+      Whenever a friendly **BLADES OF KHAINE** operative is fighting a ready enemy operative, that friendly operative's melee weapons have the Ceaseless weapon rule.
   - name: Strategy Ploy
-    text: '**KHAINE''S VENGEANCE**  The Aspect Warriors draw upon the Bloody-Handed God''s merciless example to dispatch their foes. Whenever a friendly **BLADES OF KHAINE** operative is shooting an expended enemy operative, that friendly operative''s ranged weapons have the Ceaseless weapon rule.'
+    text: |-
+      **KHAINE'S VENGEANCE**  The Aspect Warriors draw upon the Bloody-Handed God's merciless example to dispatch their foes.
+      
+      Whenever a friendly **BLADES OF KHAINE** operative is shooting an expended enemy operative, that friendly operative's ranged weapons have the Ceaseless weapon rule.
   - name: Dance of Death
     text: Lithe, acrobatic and utterly deadly, Aeldari Aspect Warriors exchange tactical positions with flawless grace. Select two friendly **BLADES OF KHAINE** operatives visible to and within 6" of each other. Remove them both from the killzone and set them back up in each other's previous locations (in other words, swap their positions).
 supplementaryInfo: |-
@@ -716,6 +737,8 @@ universalEquipment:
         -  Wholly within your territory.
         -  Upright against terrain that's at least 2" tall.
         -  More than 2" from other equipment terrain features.
-        -  More than 1" from doors and access points. Once per action, whenever an operative is climbing the terrain feature a ladder is placed against, treat the vertical distance as 1" if the ladder is within that operative's control range during that entire climb.
+        -  More than 1" from doors and access points.
+      
+      Once per action, whenever an operative is climbing the terrain feature a ladder is placed against, treat the vertical distance as 1" if the ladder is within that operative's control range during that entire climb.
   - name: Explosive Grenades
     text: A variety of offensive grenades are employed by the forces of the 41st Millennium. These range from simple fragmentation grenades to plasma and gravitic concussion grenades, while even more exotic devices are used to crack open enemy armour. When you select this equipment, select two explosive grenades (2 frag, 2 krak, or 1 frag and 1 krak). Each selection is a ranged weapon your operatives can use, but your kill team can only use that weapon a total number of times during the battle equal to your selection. **NAME ATK HIT DMG** Frag grenade 4 4+ 2/4 WR Range 6", Blast 2", Saturate **NAME ATK HIT DMG** Krak grenade 4 4+ 4/5 WR Range 6", Piercing 1, Saturate

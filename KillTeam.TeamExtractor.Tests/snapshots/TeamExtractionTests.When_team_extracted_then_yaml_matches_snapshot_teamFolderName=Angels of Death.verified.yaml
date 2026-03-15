@@ -298,7 +298,10 @@ datacards:
           crit: 5
     abilities:
       - name: Grenadier
-        text: This operative can use frag and krak grenades (see universal equipment). Doing so doesn't count towards any limited uses you have (i.e. if you also select those grenades from equipment for other operatives). Whenever it's doing so, improve the Hit stat of that weapon by 1.
+        text: |-
+          This operative can use frag and krak grenades (see universal equipment). Doing so doesn't count towards any limited uses you have (i.e. if you also select those grenades from equipment for other operatives).
+          
+          Whenever it's doing so, improve the Hit stat of that weapon by 1.
   - name: Assault Intercessor Warrior
     operativeType: Assault Intercessor Warrior
     primaryKeyword: Angel of Death
@@ -593,13 +596,22 @@ datacards:
         apCost: 1
 factionEquipment:
   - name: Purity Seals
-    text: Awarded by the Chapter's Chaplains, purity seals are inscribed with blessings and inspire the bearer to fight with increased vigour. Once per turning point, when a friendly **ANGEL OF DEATH** operative is shooting, fighting or retaliating, if you roll two or more fails, you can discard one of them to retain another as a normal success instead.
+    text: |-
+      Awarded by the Chapter's Chaplains, purity seals are inscribed with blessings and inspire the bearer to fight with increased vigour.
+      
+      Once per turning point, when a friendly **ANGEL OF DEATH** operative is shooting, fighting or retaliating, if you roll two or more fails, you can discard one of them to retain another as a normal success instead.
   - name: Chapter Reliquaries
     text: Many Space Marines bear macabre relics taken from the bodies of their fallen. Those who bear these inspirational items fight all the harder to honour the sacrifice of their battle-brothers. You can use the Wrath of Vengeance firefight ploy for 0CP if the specified friendly operative has an Engage order.
   - name: Tilting Shields
-    text: As well as displaying company colours and personal heraldry, a Space Marine's tilting plate serves to protect the bearer in the press of melee combat. Once per turning point, when a friendly **ANGEL OF DEATH** operative is fighting or retaliating, after your opponent rolls their attack dice, but before re-rolls, you can use this rule. If you do, your opponent cannot retain attack dice results of less than 6 as critical successes during that sequence (e.g. as a result of the Lethal, Rending or Severe weapon rules).
+    text: |-
+      As well as displaying company colours and personal heraldry, a Space Marine's tilting plate serves to protect the bearer in the press of melee combat.
+      
+      Once per turning point, when a friendly **ANGEL OF DEATH** operative is fighting or retaliating, after your opponent rolls their attack dice, but before re-rolls, you can use this rule. If you do, your opponent cannot retain attack dice results of less than 6 as critical successes during that sequence (e.g. as a result of the Lethal, Rending or Severe weapon rules).
   - name: Auspex
-    text: Auspexes come in many forms. These scanning devices can detect motion, analyse atmospheric conditions and reveal heat signatures. Once per turning point, when a friendly **ANGEL OF DEATH** operative performs the Shoot action and you're selecting a valid target, you can use this rule. If you do, until the end of the activation/ counteraction, enemy operatives within 8" of that friendly operative cannot be obscured.
+    text: |-
+      Auspexes come in many forms. These scanning devices can detect motion, analyse atmospheric conditions and reveal heat signatures.
+      
+      Once per turning point, when a friendly **ANGEL OF DEATH** operative performs the Shoot action and you're selecting a valid target, you can use this rule. If you do, until the end of the activation/ counteraction, enemy operatives within 8" of that friendly operative cannot be obscured.
 factionRules:
   - name: Chapter Tactics
     text: |-
@@ -616,9 +628,13 @@ factionRules:
       5. **MOBILE**
         - This operative can perform the Fall Back action for 1 less AP.
         - This operative can perform the Charge action while within control range of an enemy operative, and can leave that operative's control range to do so (but then normal requirements for that move apply).
-      6. **HARDY** Whenever an operative is shooting this operative, defence dice results of 5+ are critical successes. Whenever this operative is retaliating, the first time an attack dice inflicts Normal Dmg of 3 or more on this operative during that sequence, that dice inflicts 1 less damage on it.
+      6. **HARDY** Whenever an operative is shooting this operative, defence dice results of 5+ are critical successes.
+      
+      Whenever this operative is retaliating, the first time an attack dice inflicts Normal Dmg of 3 or more on this operative during that sequence, that dice inflicts 1 less damage on it.
       7. **SHARPSHOOTER** Whenever this operative is shooting during an activation in which it hasn't performed the Charge, Fall Back or Reposition action, its bolt weapons have the Accurate 1 and Severe weapon rules.
-      8. **SIEGE SPECIALIST** This operative's ranged weapons have the Saturate weapon rule. Whenever this operative is fighting or retaliating, enemy operatives cannot assist.
+      8. **SIEGE SPECIALIST** This operative's ranged weapons have the Saturate weapon rule.
+      
+      Whenever this operative is fighting or retaliating, enemy operatives cannot assist.
   - name: Astartes
     text: 'These genetically modified superhumans are made for one purpose: war. During each friendly **ANGEL OF DEATH** operative''s activation, it can perform either two Shoot actions or two Fight actions. If it''s two Shoot actions, a bolt weapon must be selected for at least one of them, and if it''s a bolt sniper rifle or heavy bolter, 1 additional AP must be spent for the second action if both actions are using that weapon. Each friendly **ANGEL OF DEATH** operative can counteract regardless of its order.'
 firefightPloys:
@@ -679,7 +695,9 @@ operativeSelection:
 strategyPloys:
   - name: Combat Doctrine
     text: |-
-      Space Marines hold the teachings of the Codex Astartes in highest esteem, employing its flexible combat doctrines to annihilate their enemies. Select one **COMBAT DOCTRINE** from those presented below. Whenever a friendly **ANGEL OF DEATH** operative is x, its weapons have the Balanced weapon rule. X is the **COMBAT DOCTRINE** you selected.
+      Space Marines hold the teachings of the Codex Astartes in highest esteem, employing its flexible combat doctrines to annihilate their enemies. Select one **COMBAT DOCTRINE** from those presented below.
+      
+      Whenever a friendly **ANGEL OF DEATH** operative is x, its weapons have the Balanced weapon rule. X is the **COMBAT DOCTRINE** you selected.
         - Devastator Doctrine: Shooting an operative more than 6" from it.
         - Tactical Doctrine: Shooting an operative within 6" of it.
         - Assault Doctrine: Fighting or retaliating.
@@ -691,7 +709,10 @@ strategyPloys:
       
       Note this ploy only lasts until the end of the turning point, at which point your original secondary **CHAPTER TACTIC** returns.
   - name: Indomitus
-    text: This is the Era Indomitus. The Imperium wages galaxy-spanning crusades to drive back the horrors that plague it, and the battle-brothers of the Adeptus Astartes are spurred on by this righteous purpose. Whenever an operative is shooting a friendly **ANGEL OF DEATH** operative, if you roll two or more fails, you can discard one of them to retain another as a normal success instead.
+    text: |-
+      This is the Era Indomitus. The Imperium wages galaxy-spanning crusades to drive back the horrors that plague it, and the battle-brothers of the Adeptus Astartes are spurred on by this righteous purpose.
+      
+      Whenever an operative is shooting a friendly **ANGEL OF DEATH** operative, if you roll two or more fails, you can discard one of them to retain another as a normal success instead.
 supplementaryInfo: |-
   **ANGELS OF DEATH: UPDATE LOG**
   
@@ -903,8 +924,13 @@ universalEquipment:
         -  Wholly within your territory.
         -  Upright against terrain that's at least 2" tall.
         -  More than 2" from other equipment terrain features.
-        -  More than 1" from doors and access points. Once per action, whenever an operative is climbing the terrain feature a ladder is placed against, treat the vertical distance as 1" if the ladder is within that operative's control range during that entire climb.
+        -  More than 1" from doors and access points.
+      
+      Once per action, whenever an operative is climbing the terrain feature a ladder is placed against, treat the vertical distance as 1" if the ladder is within that operative's control range during that entire climb.
   - name: Explosive Grenades
     text: A variety of offensive grenades are employed by the forces of the 41st Millennium. These range from simple fragmentation grenades to plasma and gravitic concussion grenades, while even more exotic devices are used to crack open enemy armour. When you select this equipment, select two explosive grenades (2 frag, 2 krak, or 1 frag and 1 krak). Each selection is a ranged weapon your operatives can use, but your kill team can only use that weapon a total number of times during the battle equal to your selection. **NAME ATK HIT DMG** Frag grenade 4 4+ 2/4 WR Range 6", Blast 2", Saturate **NAME ATK HIT DMG** Krak grenade 4 4+ 4/5 WR Range 6", Piercing 1, Saturate
   - name: Breaching Charge
-    text: This explosive device can blast a tactical insertion point through even the most formidable bulkhead or bunker wall. Once per battle, when a friendly operative performs the Breach action, you can use this rule. If you do, that operative can perform that action for 1 less AP (to a minimum of 1AP) as though it had the word 'breach marker' on its datacard.
+    text: |-
+      This explosive device can blast a tactical insertion point through even the most formidable bulkhead or bunker wall.
+      
+      Once per battle, when a friendly operative performs the Breach action, you can use this rule. If you do, that operative can perform that action for 1 less AP (to a minimum of 1AP) as though it had the word 'breach marker' on its datacard.

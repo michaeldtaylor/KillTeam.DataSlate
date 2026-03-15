@@ -190,6 +190,10 @@ internal static partial class TextHelpers
         text = text.Replace(". Use this ", ".\n\nUse this ");
         text = text.Replace(". When selecting ", ".\n\nWhen selecting ");
         text = text.Replace(". Designer's Note:", ".\n\nDesigner's Note:");
+        // Equipment: lore paragraph → rule trigger (no blank line in PDF, must be inserted)
+        text = text.Replace(". Once per ", ".\n\nOnce per ");
+        text = text.Replace(". Whenever ", ".\n\nWhenever ");
+        text = text.Replace(". When this equipment ", ".\n\nWhen this equipment ");
 
         // Collapse 3+ consecutive newlines to a single paragraph break
         text = MultipleBlankLinesRegex().Replace(text, "\n\n");

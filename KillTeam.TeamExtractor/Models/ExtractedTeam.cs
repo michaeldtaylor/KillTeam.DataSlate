@@ -239,7 +239,7 @@ public class ExtractedTeam
             foreach (var sr in op.SpecialRules)
             {
                 sb.AppendLine("      - name: " + YamlWriter.Scalar(T(N(sr.Name))));
-                sb.AppendLine("        text: " + YamlWriter.Scalar(N(sr.Text)));
+                YamlWriter.WriteTextField(sb, 8, "text", N(sr.Text));
             }
         }
     }

@@ -595,15 +595,22 @@ datacards:
         apCost: 1
 factionEquipment:
   - name: Diuturnal Mantles
-    text: The cloaks worn by Corsair Voidscarred operatives are woven from psychoactive material that hardens in response to explosions and fluctuations in temperature. Whenever an operative is shooting a friendly **CORSAIR VOIDSCARRED** operative, if the ranged weapon in that sequence has the Blast or Torrent weapon rule, you can re-roll one of your defence dice. In addition, friendly **CORSAIR VOIDSCARRED** operatives aren't affected by the x" Devastating x weapon rule (i.e. Devastating with a distance) unless they are the target during that sequence.
+    text: |-
+      The cloaks worn by Corsair Voidscarred operatives are woven from psychoactive material that hardens in response to explosions and fluctuations in temperature.
+      
+      Whenever an operative is shooting a friendly **CORSAIR VOIDSCARRED** operative, if the ranged weapon in that sequence has the Blast or Torrent weapon rule, you can re-roll one of your defence dice. In addition, friendly **CORSAIR VOIDSCARRED** operatives aren't affected by the x" Devastating x weapon rule (i.e. Devastating with a distance) unless they are the target during that sequence.
   - name: Mistfield
     text: |-
-      A mistfield projects a field of thick moisture around the bearer that not only obscures their form, but also slows bullets, reducing their lethality. Once per turning point, when an operative is shooting a friendly **CORSAIR VOIDSCARRED** operative more than 3" from it, at the start of the Roll Defence Dice step, you can use this rule. If you do, worsen the x of the Piercing weapon rule by 1 (if any) until the end of that sequence.
+      A mistfield projects a field of thick moisture around the bearer that not only obscures their form, but also slows bullets, reducing their lethality.
+      
+      Once per turning point, when an operative is shooting a friendly **CORSAIR VOIDSCARRED** operative more than 3" from it, at the start of the Roll Defence Dice step, you can use this rule. If you do, worsen the x of the Piercing weapon rule by 1 (if any) until the end of that sequence.
       
       Note that Piercing 1 would therefore be ignored.
   - name: Runes of Guidance
     text: |-
-      Corsair psykers wield warp powers with consummate precision, lending their foresight to distant allies. Once per turning point, when a friendly **CORSAIR VOIDSCARRED WAY SEEKER** or **CORSAIR VOIDSCARRED SOUL WEAVER** operative is performing a PSYCHIC unique action (excluding Warp Fold), you can use this rule. If you do, until the end of that action, add 3" to its distance requirement.
+      Corsair psykers wield warp powers with consummate precision, lending their foresight to distant allies.
+      
+      Once per turning point, when a friendly **CORSAIR VOIDSCARRED WAY SEEKER** or **CORSAIR VOIDSCARRED SOUL WEAVER** operative is performing a PSYCHIC unique action (excluding Warp Fold), you can use this rule. If you do, until the end of that action, add 3" to its distance requirement.
       
       Note this has no effect on PSYCHIC weapons (e.g. the Devastating distance requirement of lightning strike).
   - name: Star Charts
@@ -611,7 +618,9 @@ factionEquipment:
 factionRules:
   - name: Rifles
     text: |-
-      Whilst not all Aeldari outcasts have walked the Path of the Warrior, all are skilled in the use of rifles. Whenever a friendly **CORSAIR VOIDSCARRED** operative is shooting with a shuriken rifle or ranger long rifle during an activation in which it hasn't performed the Charge, Fall Back or Reposition action, that weapon has the Accurate 1 weapon rule.
+      Whilst not all Aeldari outcasts have walked the Path of the Warrior, all are skilled in the use of rifles.
+      
+      Whenever a friendly **CORSAIR VOIDSCARRED** operative is shooting with a shuriken rifle or ranger long rifle during an activation in which it hasn't performed the Charge, Fall Back or Reposition action, that weapon has the Accurate 1 weapon rule.
       
       Note that operative isn't restricted from performing those actions after shooting.
   - name: Aeldari Raiders
@@ -648,11 +657,20 @@ strategyPloys:
   - name: Plunderers
     text: Aeldari Corsairs prioritise profit over glory, moving swiftly towards their objective in the hope of seizing their prize before the foe can react. Up to D3 friendly **CORSAIR VOIDSCARRED** operatives can immediately perform a free Dash action in an order of your choice. This turning point, each that does so cannot perform the Dash action during their activation. You cannot use this ploy during the first turning point.
   - name: Piratical Profiteers
-    text: Any foolish enough to attempt to contest a prize claimed by the Corsair Voidscarred will soon find themselves caught in a blizzard of shuriken fire and sword thrusts. Whenever a friendly **CORSAIR VOIDSCARRED** operative is shooting, fighting or retaliating, if it or the enemy operative in that sequence contests an objective marker or one of your mission markers, that friendly operative's weapons have the Balanced weapon rule.
+    text: |-
+      Any foolish enough to attempt to contest a prize claimed by the Corsair Voidscarred will soon find themselves caught in a blizzard of shuriken fire and sword thrusts.
+      
+      Whenever a friendly **CORSAIR VOIDSCARRED** operative is shooting, fighting or retaliating, if it or the enemy operative in that sequence contests an objective marker or one of your mission markers, that friendly operative's weapons have the Balanced weapon rule.
   - name: Mobile Engagement
-    text: Aeldari Corsairs rely upon blistering speed to avoid heavy fire. Whenever an operative is shooting a friendly **CORSAIR VOIDSCARRED** operative that performed an action in which it moved during this turning point, you can re-roll one of your defence dice.
+    text: |-
+      Aeldari Corsairs rely upon blistering speed to avoid heavy fire.
+      
+      Whenever an operative is shooting a friendly **CORSAIR VOIDSCARRED** operative that performed an action in which it moved during this turning point, you can re-roll one of your defence dice.
   - name: Outcasts
-    text: Those who walk the Path of the Outcast are no strangers to solitude. Some even fight better alone. Whenever a friendly **CORSAIR VOIDSCARRED** operative is more than 5" from other friendly operatives, its weapons have the Punishing weapon rule.
+    text: |-
+      Those who walk the Path of the Outcast are no strangers to solitude. Some even fight better alone.
+      
+      Whenever a friendly **CORSAIR VOIDSCARRED** operative is more than 5" from other friendly operatives, its weapons have the Punishing weapon rule.
 supplementaryInfo: |-
   **CORSAIR VOIDSCARRED: UPDATE LOG**
   
@@ -860,8 +878,13 @@ universalEquipment:
         -  Wholly within your territory.
         -  Upright against terrain that's at least 2" tall.
         -  More than 2" from other equipment terrain features.
-        -  More than 1" from doors and access points. Once per action, whenever an operative is climbing the terrain feature a ladder is placed against, treat the vertical distance as 1" if the ladder is within that operative's control range during that entire climb.
+        -  More than 1" from doors and access points.
+      
+      Once per action, whenever an operative is climbing the terrain feature a ladder is placed against, treat the vertical distance as 1" if the ladder is within that operative's control range during that entire climb.
   - name: Explosive Grenades
     text: A variety of offensive grenades are employed by the forces of the 41st Millennium. These range from simple fragmentation grenades to plasma and gravitic concussion grenades, while even more exotic devices are used to crack open enemy armour. When you select this equipment, select two explosive grenades (2 frag, 2 krak, or 1 frag and 1 krak). Each selection is a ranged weapon your operatives can use, but your kill team can only use that weapon a total number of times during the battle equal to your selection. **NAME ATK HIT DMG** Frag grenade 4 4+ 2/4 WR Range 6", Blast 2", Saturate **NAME ATK HIT DMG** Krak grenade 4 4+ 4/5 WR Range 6", Piercing 1, Saturate
   - name: Breaching Charge
-    text: This explosive device can blast a tactical insertion point through even the most formidable bulkhead or bunker wall. Once per battle, when a friendly operative performs the Breach action, you can use this rule. If you do, that operative can perform that action for 1 less AP (to a minimum of 1AP) as though it had the word 'breach marker' on its datacard.
+    text: |-
+      This explosive device can blast a tactical insertion point through even the most formidable bulkhead or bunker wall.
+      
+      Once per battle, when a friendly operative performs the Breach action, you can use this rule. If you do, that operative can perform that action for 1 less AP (to a minimum of 1AP) as though it had the word 'breach marker' on its datacard.

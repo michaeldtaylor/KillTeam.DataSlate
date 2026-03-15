@@ -145,7 +145,10 @@ datacards:
           - Rending
     specialRules:
       - name: Humbling Cruelty
-        text: If the target of this weapon isn't incapacitated but any of your attack dice inflict damage, the target gains one of your Humbling Cruelty tokens (if it doesn't already have one). Whenever an enemy operative has one of your Humbling Cruelty tokens, worsen the Hit stat of its weapons by 1 and subtract 2" from its Move stat. This isn't cumulative with being injured. At the end of that enemy operative's next activation, remove its Humbling Cruelty token.
+        text: |-
+          If the target of this weapon isn't incapacitated but any of your attack dice inflict damage, the target gains one of your Humbling Cruelty tokens (if it doesn't already have one).
+          
+          Whenever an enemy operative has one of your Humbling Cruelty tokens, worsen the Hit stat of its weapons by 1 and subtract 2" from its Move stat. This isn't cumulative with being injured. At the end of that enemy operative's next activation, remove its Humbling Cruelty token.
   - name: Player
     operativeType: Player
     primaryKeyword: Void-Dancer Troupe
@@ -301,19 +304,37 @@ datacards:
         apCost: 1
 factionEquipment:
   - name: Wraithbone Talisman
-    text: Charged with psychic power, this item provides fleeting insight to the bearer, enabling them to strike their opponents with unerring accuracy. Once per turning point, when a friendly **VOID-DANCER TROUPE** operative is shooting, fighting or retaliating, if you roll two or more fails, you can discard one of them to retain another as a normal success instead.
+    text: |-
+      Charged with psychic power, this item provides fleeting insight to the bearer, enabling them to strike their opponents with unerring accuracy.
+      
+      Once per turning point, when a friendly **VOID-DANCER TROUPE** operative is shooting, fighting or retaliating, if you roll two or more fails, you can discard one of them to retain another as a normal success instead.
   - name: Shrieker Toxin Rounds
-    text: Coated with virulent genetic toxins, these rounds cause the flesh of the target to twist, distort and rupture to devastating effect. Once per turning point, when a friendly **VOID-DANCER TROUPE** operative is performing the Shoot action and you select a shuriken pistol or shrieker cannon (focused), you can use this rule. If you do, until the end of that action, that weapon has the Devastating 1 weapon rule.
+    text: |-
+      Coated with virulent genetic toxins, these rounds cause the flesh of the target to twist, distort and rupture to devastating effect.
+      
+      Once per turning point, when a friendly **VOID-DANCER TROUPE** operative is performing the Shoot action and you select a shuriken pistol or shrieker cannon (focused), you can use this rule. If you do, until the end of that action, that weapon has the Devastating 1 weapon rule.
   - name: Death Mask
-    text: On occasion, a Harlequin must perish in order to fulfil their role in the saedath. Such dedication emboldens those in their troupe that survive. Keep a Tragedy tally. Whenever a friendly **VOID-DANCER TROUPE** operative that has an ACCOLADE rule is incapacitated, add 1 to your Tragedy tally. When your Tragedy tally reaches 3, you gain 1CP and stop that tally.
+    text: |-
+      On occasion, a Harlequin must perish in order to fulfil their role in the saedath. Such dedication emboldens those in their troupe that survive. Keep a Tragedy tally.
+      
+      Whenever a friendly **VOID-DANCER TROUPE** operative that has an ACCOLADE rule is incapacitated, add 1 to your Tragedy tally. When your Tragedy tally reaches 3, you gain 1CP and stop that tally.
 factionRules:
   - name: Saedath
-    text: 'Void-dancer Troupes put on a performance as they attack from the Webway. A single player begins in the pivotal role, then the rest of the troupe progressively join in. As a **STRATEGIC GAMBIT** in the first turning point, you must select an ALLEGORY (Epic or Melodrama below) for your kill team for the battle, and one friendly **VOID-DANCER TROUPE** operative to have the **PIVOTAL ROLE** for the battle. Whenever a friendly operative has the **PIVOTAL ROLE**, it has the ACCOLADE rule of your ALLEGORY for the battle. As a **STRATEGIC GAMBIT** in each subsequent turning point, you can select one friendly **VOID-DANCER TROUPE** operative to gain the ACCOLADE rule of your ALLEGORY for the battle. Once per turning point, when a friendly operative that has the **PIVOTAL ROLE** completes the performance of your ALLEGORY, you can select one friendly **VOID-DANCER TROUPE** operative to gain the ACCOLADE rule of your ALLEGORY for the battle. Epic Performance: The operative incapacitates an enemy operative while fighting. Accolade: Whenever this operative is fighting, its melee weapons have the Balanced weapon rule. Melodrama Performance: The operative incapacitates an enemy operative while shooting. Accolade: The operative''s ranged weapons have the Balanced weapon rule.'
+    text: |-
+      Void-dancer Troupes put on a performance as they attack from the Webway. A single player begins in the pivotal role, then the rest of the troupe progressively join in. As a **STRATEGIC GAMBIT** in the first turning point, you must select an ALLEGORY (Epic or Melodrama below) for your kill team for the battle, and one friendly **VOID-DANCER TROUPE** operative to have the **PIVOTAL ROLE** for the battle.
+      
+      Whenever a friendly operative has the **PIVOTAL ROLE**, it has the ACCOLADE rule of your ALLEGORY for the battle. As a **STRATEGIC GAMBIT** in each subsequent turning point, you can select one friendly **VOID-DANCER TROUPE** operative to gain the ACCOLADE rule of your ALLEGORY for the battle.
+      
+      Once per turning point, when a friendly operative that has the **PIVOTAL ROLE** completes the performance of your ALLEGORY, you can select one friendly **VOID-DANCER TROUPE** operative to gain the ACCOLADE rule of your ALLEGORY for the battle. Epic Performance: The operative incapacitates an enemy operative while fighting. Accolade: Whenever this operative is fighting, its melee weapons have the Balanced weapon rule. Melodrama Performance: The operative incapacitates an enemy operative while shooting. Accolade: The operative's ranged weapons have the Balanced weapon rule.
   - name: Faction Rule
     text: |-
-      **HARLEQUIN'S PANOPLY**  The tools of the Harlequins' trade afford them additional mobility and make them highly difficult to target, enabling them to dodge away from piercing shots of plasma and melta fire. Whenever an operative is shooting a friendly **VOID-DANCER TROUPE** operative, and no attack dice are retained as critical successes, worsen the x of the Piercing weapon rule by 1 (if any).
+      **HARLEQUIN'S PANOPLY**  The tools of the Harlequins' trade afford them additional mobility and make them highly difficult to target, enabling them to dodge away from piercing shots of plasma and melta fire.
       
-      Note that Piercing 1 would therefore be ignored. Whenever a friendly **VOID-DANCER TROUPE** operative is climbing up, you can treat the vertical distance as 2" (regardless of how far the operative actually moves vertically). Friendly **VOID-DANCER TROUPE** operatives can move within control range of enemy operatives (they must still start and end the move following all requirements for that move).
+      Whenever an operative is shooting a friendly **VOID-DANCER TROUPE** operative, and no attack dice are retained as critical successes, worsen the x of the Piercing weapon rule by 1 (if any).
+      
+      Note that Piercing 1 would therefore be ignored.
+      
+      Whenever a friendly **VOID-DANCER TROUPE** operative is climbing up, you can treat the vertical distance as 2" (regardless of how far the operative actually moves vertically). Friendly **VOID-DANCER TROUPE** operatives can move within control range of enemy operatives (they must still start and end the move following all requirements for that move).
 firefightPloys:
   - name: Murderous Entrance
     text: |-
@@ -355,13 +376,22 @@ operativeSelection:
     Your kill team can only include up to one fusion pistol and up to one neuro disruptor.
 strategyPloys:
   - name: Darting Salvo
-    text: Advancing in a dazzling blurr of vibrant colour, Harlequins fire on the move, leaping away before their opponents can return fire. Whenever a friendly **VOID-DANCER TROUPE** operative performs the Reposition action during its activation, it can perform the Shoot action during that action (it must do so in a location it can be placed, and any remaining move distance it had from that Reposition action can be used after it does so).
+    text: |-
+      Advancing in a dazzling blurr of vibrant colour, Harlequins fire on the move, leaping away before their opponents can return fire.
+      
+      Whenever a friendly **VOID-DANCER TROUPE** operative performs the Reposition action during its activation, it can perform the Shoot action during that action (it must do so in a location it can be placed, and any remaining move distance it had from that Reposition action can be used after it does so).
   - name: Rising Crescendo
     text: With each darting advance and lethal flourish, the tempo of the troupe's performance increases, building towards a violent crescendo. Friendly **VOID-DANCER TROUPE** operatives can perform the Dash action during the same activation in which they performed the Charge action, but not vice versa (i.e. not Dash then Charge).
   - name: Prismatic Blur
-    text: So swift and dazzling are the Harlequins that even veteran marksmen struggle to draw a bead upon their lithe forms. Whenever an operative is shooting a friendly **VOID-DANCER TROUPE** operative that performed an action in which it moved during this turning point, you can re-roll one of your defence dice.
+    text: |-
+      So swift and dazzling are the Harlequins that even veteran marksmen struggle to draw a bead upon their lithe forms.
+      
+      Whenever an operative is shooting a friendly **VOID-DANCER TROUPE** operative that performed an action in which it moved during this turning point, you can re-roll one of your defence dice.
   - name: Strategy Ploy
-    text: '**CEGORACH''S JEST**  Attempts to engage the troupe in melee combat meet with little success. Luckless assailants find their well- aimed strikes meeting only thin air. Whenever a friendly **VOID-DANCER TROUPE** operative is fighting or retaliating and your opponent strikes with a normal success, you can roll one D6: if the result is less than the Hit stat of your opponent''s selected weapon, that strike is allocated to block one of your dice instead (ignore the Brutal weapon rule, if relevant) and you cannot use this rule for the rest of the sequence.'
+    text: |-
+      **CEGORACH'S JEST**  Attempts to engage the troupe in melee combat meet with little success. Luckless assailants find their well- aimed strikes meeting only thin air.
+      
+      Whenever a friendly **VOID-DANCER TROUPE** operative is fighting or retaliating and your opponent strikes with a normal success, you can roll one D6: if the result is less than the Hit stat of your opponent's selected weapon, that strike is allocated to block one of your dice instead (ignore the Brutal weapon rule, if relevant) and you cannot use this rule for the rest of the sequence.
 supplementaryInfo: |-
   **VOID-DANCER TROUPE: UPDATE LOG**
   
@@ -526,6 +556,8 @@ universalEquipment:
         -  Wholly within your territory.
         -  Upright against terrain that's at least 2" tall.
         -  More than 2" from other equipment terrain features.
-        -  More than 1" from doors and access points. Once per action, whenever an operative is climbing the terrain feature a ladder is placed against, treat the vertical distance as 1" if the ladder is within that operative's control range during that entire climb.
+        -  More than 1" from doors and access points.
+      
+      Once per action, whenever an operative is climbing the terrain feature a ladder is placed against, treat the vertical distance as 1" if the ladder is within that operative's control range during that entire climb.
   - name: Explosive Grenades
     text: A variety of offensive grenades are employed by the forces of the 41st Millennium. These range from simple fragmentation grenades to plasma and gravitic concussion grenades, while even more exotic devices are used to crack open enemy armour. When you select this equipment, select two explosive grenades (2 frag, 2 krak, or 1 frag and 1 krak). Each selection is a ranged weapon your operatives can use, but your kill team can only use that weapon a total number of times during the battle equal to your selection. **NAME ATK HIT DMG** Frag grenade 4 4+ 2/4 WR Range 6", Blast 2", Saturate **NAME ATK HIT DMG** Krak grenade 4 4+ 4/5 WR Range 6", Piercing 1, Saturate
