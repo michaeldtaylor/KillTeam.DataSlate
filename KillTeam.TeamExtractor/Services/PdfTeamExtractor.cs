@@ -1995,10 +1995,12 @@ public partial class PdfTeamExtractor
                     // Non-fragment content in KTS section: exit skip mode, process normally
                     inKtsFragSkip = false;
 
-                    // Fix 4: only merge into the pending header when it ends with '&' or ','
-                    // (mid-phrase word-wrap). Otherwise each all-caps line gets its own heading.
+                    // Merge into pending header when:
+                    // - pending ends with '&' or ',' (mid-phrase word-wrap on current line), OR
+                    // - incoming line contains ',' (rule reference continuation, e.g.
+                    //   "DIRE AVENGER EXARCH & DIRE AVENGER WARRIOR" + "OPERATIVES, DEFENCE TACTICS RULE")
                     var pendingTrimmed = pendingHeaderText.ToString().TrimEnd();
-                    if (prevWasHeader && (pendingTrimmed.EndsWith('&') || pendingTrimmed.EndsWith(',')))
+                    if (prevWasHeader && (pendingTrimmed.EndsWith('&') || pendingTrimmed.EndsWith(',') || trimmed.Contains(',')))
                     {
                         pendingHeaderText.Append(' ').Append(trimmed);
                     }
