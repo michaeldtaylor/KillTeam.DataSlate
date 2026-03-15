@@ -1697,6 +1697,11 @@ public partial class PdfTeamExtractor
 
         var lastLineWasBulletSymbol = false; // set when prev line was a bare • or ○ symbol
 
+        // Kill Team Selection section state
+        var ktsTeamName = string.Empty; // e.g. "ANGELS OF DEATH"
+        var ktsNameWords = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        var inKtsFragSkip = false; // true = skipping heading fragment lines
+
         for (var i = 0; i < lines.Count; i++)
         {
             var trimmed = lines[i];
@@ -1715,6 +1720,22 @@ public partial class PdfTeamExtractor
                 lastLineWasBulletSymbol = true;
                 AppendText(output, trimmed);
                 prevWasHeader = false;
+                continue;
+            }
+
+            // KTS: the » (U+00BB) character is a decorative separator in the Kill Team Selection
+            // page header. Each page repeats the title fragments — skip them.
+            if (trimmed == "\u00BB")
+            {
+                inKtsFragSkip = true;
+                continue;
+            }
+
+            // KTS: once the Kill Team Selection heading is emitted, team name words
+            // (e.g. "ANGELS", "OF", "DEATH") are ALWAYS page header fragments and must
+            // be skipped everywhere in the section — not just immediately after the title.
+            if (ktsTeamName.Length > 0 && ktsNameWords.Contains(trimmed))
+            {
                 continue;
             }
 
@@ -1750,6 +1771,39 @@ public partial class PdfTeamExtractor
 
                 if (isAllCaps && trimmed.Length >= 3)
                 {
+                    // KTS: detect "[TEAM NAME] KILL TEAM" — the Kill Team Selection page heading.
+                    // Emit the section title once and skip repeated header fragments.
+                    if (trimmed.EndsWith(" KILL TEAM", StringComparison.OrdinalIgnoreCase)
+                        && ktsTeamName.Length == 0)
+                    {
+                        ktsTeamName = trimmed[..^" KILL TEAM".Length];
+                        foreach (var word in ktsTeamName.Split(' ', StringSplitOptions.RemoveEmptyEntries))
+                        {
+                            ktsNameWords.Add(word);
+                        }
+
+                        FlushPendingHeader();
+                        while (output.Length > 0 && output[output.Length - 1] == '\n')
+                        {
+                            output.Remove(output.Length - 1, 1);
+                        }
+
+                        output.Append($"\n\n**{ktsTeamName} >> KILL TEAM SELECTION**\n\n");
+                        inKtsFragSkip = true;
+                        prevWasHeader = false;
+                        continue;
+                    }
+
+                    // KTS: skip repeated heading fragments (team name words + KILL/TEAM/SELECTION)
+                    if (ktsTeamName.Length > 0 && (ktsNameWords.Contains(trimmed)
+                        || trimmed is "KILL" or "TEAM" or "SELECTION"))
+                    {
+                        continue;
+                    }
+
+                    // Non-fragment content in KTS section: exit skip mode, process normally
+                    inKtsFragSkip = false;
+
                     // Fix 4: only merge into the pending header when it ends with '&'
                     // (mid-phrase word-wrap). Otherwise each all-caps line gets its own heading.
                     if (prevWasHeader && pendingHeaderText.ToString().TrimEnd().EndsWith('&'))
