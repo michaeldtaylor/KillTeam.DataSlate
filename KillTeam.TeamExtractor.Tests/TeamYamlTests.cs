@@ -199,7 +199,7 @@ public class TeamYamlTests
 
         var chapterVeteran = abilities.Single(a => a.GetProperty("name").GetString() == "Chapter Veteran");
         chapterVeteran.GetProperty("text").GetString().Should()
-            .Contain("**Chapter Tactic**", because: "Chapter Veteran text describes selecting an extra CHAPTER TACTIC, which StructureToMarkdown converts to bold");
+            .Contain("**CHAPTER TACTIC**", because: "Chapter Veteran text describes selecting an extra CHAPTER TACTIC, which StructureToMarkdown converts to bold preserving original capitalisation");
     }
 
     [Fact]
@@ -322,12 +322,12 @@ public class TeamYamlTests
 
         var text = chapterTactics.GetProperty("text").GetString()!;
 
-        text.Should().Contain("1. **Aggressive**",
-            because: "Chapter Tactics numbered list item 1 should be Markdown bold");
-        text.Should().Contain("2. **Dueller**",
-            because: "Chapter Tactics numbered list item 2 should be Markdown bold");
-        text.Should().Contain("3. **Resolute**",
-            because: "Chapter Tactics numbered list item 3 should be Markdown bold");
+        text.Should().Contain("1. **AGGRESSIVE**",
+            because: "Chapter Tactics numbered list item 1 should be Markdown bold preserving ALL-CAPS");
+        text.Should().Contain("2. **DUELLER**",
+            because: "Chapter Tactics numbered list item 2 should be Markdown bold preserving ALL-CAPS");
+        text.Should().Contain("3. **RESOLUTE**",
+            because: "Chapter Tactics numbered list item 3 should be Markdown bold preserving ALL-CAPS");
     }
 
     [Fact]

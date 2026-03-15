@@ -1,4 +1,4 @@
-id: angels-of-death
+﻿id: angels-of-death
 name: Angels of Death
 faction: Adeptus Astartes
 datacards:
@@ -52,8 +52,10 @@ datacards:
       - name: Heroic Leader
         text: |-
           Once per turning point, you can do one of the following:
-            - Use a firefight ploy for 0CP if this is the specified **Angel of Death** operative (excluding Command Re-roll).
-            - Use the Combat Doctrine strategy ploy when you activate a friendly **Angel of Death** operative if this operative is in the killzone and isn't within control range of enemy operatives (pay its CP cost as normal). Note that you cannot do so if you've already used that ploy during this turning point.
+            - Use a firefight ploy for 0CP if this is the specified **ANGEL OF DEATH** operative (excluding Command Re-roll).
+            - Use the Combat Doctrine strategy ploy when you activate a friendly **ANGEL OF DEATH** operative if this operative is in the killzone and isn't within control range of enemy operatives (pay its CP cost as normal).
+          
+          Note that you cannot do so if you've already used that ploy during this turning point.
             - Use the Adjust Doctrine firefight ploy for 0CP if this operative is in the killzone and isn't within control range of enemy operatives.
       - name: Iron Halo
         text: Once per battle, when an attack dice inflicts Normal Dmg on this operative, you can ignore that inflicted damage.
@@ -158,7 +160,7 @@ datacards:
             - Whenever you would use the Combat Doctrine strategy ploy and then select Assault, if this operative is in the killzone, it costs you 0CP.
             - Whenever you would use the Combat Doctrine strategy ploy and then select Tactical, if this operative is in the killzone, it costs you 0CP.
       - name: Chapter Veteran
-        text: At the end of the Select Operatives step, if this operative is selected for deployment, select one additional **Chapter Tactic** for it to have for the battle. Unlike primary and secondary **Chapter Tactics**, you don't have to select the same one for each battle in a campaign or tournament.
+        text: At the end of the Select Operatives step, if this operative is selected for deployment, select one additional **CHAPTER TACTIC** for it to have for the battle. Unlike primary and secondary **CHAPTER TACTICS**, you don't have to select the same one for each battle in a campaign or tournament.
   - name: Intercessor Sergeant
     operativeType: Intercessor Sergeant
     primaryKeyword: Angel of Death
@@ -260,7 +262,7 @@ datacards:
             - Whenever you would use the Combat Doctrine strategy ploy and then select Devastator, if this operative is in the killzone, it costs you 0CP.
             - Whenever you would use the Combat Doctrine strategy ploy and then select Tactical, if this operative is in the killzone, it costs you 0CP.
       - name: Chapter Veteran
-        text: At the end of the Select Operatives step, if this operative is selected for deployment, select one additional **Chapter Tactic** for it to have for the battle. Unlike primary and secondary **Chapter Tactics**, you don't have to select the same one for each battle in a campaign or tournament.
+        text: At the end of the Select Operatives step, if this operative is selected for deployment, select one additional **CHAPTER TACTIC** for it to have for the battle. Unlike primary and secondary **CHAPTER TACTICS**, you don't have to select the same one for each battle in a campaign or tournament.
   - name: Assault Intercessor Grenadier
     operativeType: Assault Intercessor Grenadier
     primaryKeyword: Angel of Death
@@ -580,7 +582,7 @@ datacards:
           crit: 4
     abilities:
       - name: Camo Cloak
-        text: Whenever an operative is shooting this operative, ignore the Saturate weapon rule. This operative has the Stealthy **Chapter Tactic**. If you selected that **Chapter Tactic**, you can do both of its options (i.e. retain two cover saves – one normal and one critical success).
+        text: Whenever an operative is shooting this operative, ignore the Saturate weapon rule. This operative has the Stealthy **CHAPTER TACTIC**. If you selected that **CHAPTER TACTIC**, you can do both of its options (i.e. retain two cover saves – one normal and one critical success).
     specialActions:
       - name: Optics
         text: |-
@@ -590,101 +592,148 @@ datacards:
         apCost: 1
 factionEquipment:
   - name: Purity Seals
-    text: Awarded by the Chapter's Chaplains, purity seals are inscribed with blessings and inspire the bearer to fight with increased vigour. Once per turning point, when a friendly **Angel of Death** operative is shooting, fighting or retaliating, if you roll two or more fails, you can discard one of them to retain another as a normal success instead.
+    text: Awarded by the Chapter's Chaplains, purity seals are inscribed with blessings and inspire the bearer to fight with increased vigour. Once per turning point, when a friendly **ANGEL OF DEATH** operative is shooting, fighting or retaliating, if you roll two or more fails, you can discard one of them to retain another as a normal success instead.
   - name: Chapter Reliquaries
     text: Many Space Marines bear macabre relics taken from the bodies of their fallen. Those who bear these inspirational items fight all the harder to honour the sacrifice of their battle-brothers. You can use the Wrath of Vengeance firefight ploy for 0CP if the specified friendly operative has an Engage order.
   - name: Tilting Shields
-    text: As well as displaying company colours and personal heraldry, a Space Marine's tilting plate serves to protect the bearer in the press of melee combat. Once per turning point, when a friendly **Angel of Death** operative is fighting or retaliating, after your opponent rolls their attack dice, but before re-rolls, you can use this rule. If you do, your opponent cannot retain attack dice results of less than 6 as critical successes during that sequence (e.g. as a result of the Lethal, Rending or Severe weapon rules).
+    text: As well as displaying company colours and personal heraldry, a Space Marine's tilting plate serves to protect the bearer in the press of melee combat. Once per turning point, when a friendly **ANGEL OF DEATH** operative is fighting or retaliating, after your opponent rolls their attack dice, but before re-rolls, you can use this rule. If you do, your opponent cannot retain attack dice results of less than 6 as critical successes during that sequence (e.g. as a result of the Lethal, Rending or Severe weapon rules).
   - name: Auspex
-    text: Auspexes come in many forms. These scanning devices can detect motion, analyse atmospheric conditions and reveal heat signatures. Once per turning point, when a friendly **Angel of Death** operative performs the Shoot action and you're selecting a valid target, you can use this rule. If you do, until the end of the activation/ counteraction, enemy operatives within 8" of that friendly operative cannot be obscured.
+    text: Auspexes come in many forms. These scanning devices can detect motion, analyse atmospheric conditions and reveal heat signatures. Once per turning point, when a friendly **ANGEL OF DEATH** operative performs the Shoot action and you're selecting a valid target, you can use this rule. If you do, until the end of the activation/ counteraction, enemy operatives within 8" of that friendly operative cannot be obscured.
 factionRules:
   - name: Chapter Tactics
     text: |-
-      Each Space Marine Chapter is a martial brotherhood with its own combat philosophies, suited to the unique skills and temperaments of its battle-brothers. These tenets of war may be clothed in esoteric rituals built up over thousands of years, but remain as brutally effective as when they were first laid down. When selecting your kill team, select a primary and secondary **Chapter Tactic** for friendly **Angel of Death** operatives to gain for the battle. Multiple instances of the same **Chapter Tactic** aren't cumulative. Designer's Note: If you're playing a series of games, i.e. a campaign or tournament, you must select the same primary and secondary **Chapter Tactic** for every battle (you can still change the secondary with the Adaptive Tactics strategy ploy).
+      Each Space Marine Chapter is a martial brotherhood with its own combat philosophies, suited to the unique skills and temperaments of its battle-brothers. These tenets of war may be clothed in esoteric rituals built up over thousands of years, but remain as brutally effective as when they were first laid down. When selecting your kill team, select a primary and secondary **CHAPTER TACTIC** for friendly **ANGEL OF DEATH** operatives to gain for the battle. Multiple instances of the same **CHAPTER TACTIC** aren't cumulative. Designer's Note: If you're playing a series of games, i.e. a campaign or tournament, you must select the same primary and secondary **CHAPTER TACTIC** for every battle (you can still change the secondary with the Adaptive Tactics strategy ploy).
       
-      1. **Aggressive** This operative's melee weapons have the Rending weapon rule.
-      2. **Dueller** Whenever this operative is fighting or retaliating, each of your normal successes can block one unresolved critical success (unless the enemy operative's weapon has the Brutal weapon rule).
-      3. **Resolute** You can ignore any changes to this operative's APL stat and it isn't affected by enemy operatives' Shock weapon rule.
-      4. **Stealthy** Whenever an operative is shooting this operative, if you can retain any cover saves, you can retain one additional cover save, or you can retain one cover save as a critical success instead. This isn't cumulative with improved cover saves from Vantage terrain.
-      5. **Mobile**
+      1. **AGGRESSIVE** This operative's melee weapons have the Rending weapon rule.
+      2. **DUELLER** Whenever this operative is fighting or retaliating, each of your normal successes can block one unresolved critical success (unless the enemy operative's weapon has the Brutal weapon rule).
+      3. **RESOLUTE** You can ignore any changes to this operative's APL stat and it isn't affected by enemy operatives' Shock weapon rule.
+      4. **STEALTHY** Whenever an operative is shooting this operative, if you can retain any cover saves, you can retain one additional cover save, or you can retain one cover save as a critical success instead. This isn't cumulative with improved cover saves from Vantage terrain.
+      5. **MOBILE**
         -  This operative can perform the Fall Back action for 1 less AP.
         -  This operative can perform the Charge action while within control range of an enemy operative, and can leave that operative's control range to do so (but then normal requirements for that move apply).
-      6. **Hardy** Whenever an operative is shooting this operative, defence dice results of 5+ are critical successes. Whenever this operative is retaliating, the first time an attack dice inflicts Normal Dmg of 3 or more on this operative during that sequence, that dice inflicts 1 less damage on it.
-      7. **Sharpshooter** Whenever this operative is shooting during an activation in which it hasn't performed the Charge, Fall Back or Reposition action, its bolt weapons have the Accurate 1 and Severe weapon rules.
-      8. **Siege Specialist** This operative's ranged weapons have the Saturate weapon rule. Whenever this operative is fighting or retaliating, enemy operatives cannot assist.
+      6. **HARDY** Whenever an operative is shooting this operative, defence dice results of 5+ are critical successes. Whenever this operative is retaliating, the first time an attack dice inflicts Normal Dmg of 3 or more on this operative during that sequence, that dice inflicts 1 less damage on it.
+      7. **SHARPSHOOTER** Whenever this operative is shooting during an activation in which it hasn't performed the Charge, Fall Back or Reposition action, its bolt weapons have the Accurate 1 and Severe weapon rules.
+      8. **SIEGE SPECIALIST** This operative's ranged weapons have the Saturate weapon rule. Whenever this operative is fighting or retaliating, enemy operatives cannot assist.
   - name: Astartes
-    text: 'These genetically modified superhumans are made for one purpose: war. During each friendly **Angel of Death** operative''s activation, it can perform either two Shoot actions or two Fight actions. If it''s two Shoot actions, a bolt weapon must be selected for at least one of them, and if it''s a bolt sniper rifle or heavy bolter, 1 additional AP must be spent for the second action if both actions are using that weapon. Each friendly **Angel of Death** operative can counteract regardless of its order.'
+    text: 'These genetically modified superhumans are made for one purpose: war. During each friendly **ANGEL OF DEATH** operative''s activation, it can perform either two Shoot actions or two Fight actions. If it''s two Shoot actions, a bolt weapon must be selected for at least one of them, and if it''s a bolt sniper rifle or heavy bolter, 1 additional AP must be spent for the second action if both actions are using that weapon. Each friendly **ANGEL OF DEATH** operative can counteract regardless of its order.'
 firefightPloys:
   - name: Adjust Doctrine
-    text: Adeptus Astartes kill teams adapt their strategies on the fly to overcome the foe. Swiftly traded hand signals and abrupt vox exchanges herald a shift in doctrine. Use this firefight ploy during a friendly **Angel of Death** operative's activation, before or after it performs an action. If you've used the Combat Doctrine strategy ploy during this turning point, change the **Combat Doctrine** you selected.
+    text: Adeptus Astartes kill teams adapt their strategies on the fly to overcome the foe. Swiftly traded hand signals and abrupt vox exchanges herald a shift in doctrine. Use this firefight ploy during a friendly **ANGEL OF DEATH** operative's activation, before or after it performs an action. If you've used the Combat Doctrine strategy ploy during this turning point, change the **COMBAT DOCTRINE** you selected.
   - name: Transhuman Physiology
-    text: The genetically modified physiology of a Space Marine is capable of resisting wounds that would kill a lesser being. Use this firefight ploy when an operative is shooting a friendly **Angel of Death** operative, in the Roll Defence Dice step. You can retain one of your normal successes as a critical success instead.
+    text: The genetically modified physiology of a Space Marine is capable of resisting wounds that would kill a lesser being. Use this firefight ploy when an operative is shooting a friendly **ANGEL OF DEATH** operative, in the Roll Defence Dice step. You can retain one of your normal successes as a critical success instead.
   - name: Shock Assault
     text: |-
-      The Adeptus Astartes strike with exceptional speed and strength, the roar of chainswords and brutal assaults spelling death for their foes. Use this firefight ploy when a friendly **Angel of Death** operative is performing the Fight action during an activation in which it performed the Charge action, at the start of the Resolve Attack Dice step. Until the end of that action:
+      The Adeptus Astartes strike with exceptional speed and strength, the roar of chainswords and brutal assaults spelling death for their foes. Use this firefight ploy when a friendly **ANGEL OF DEATH** operative is performing the Fight action during an activation in which it performed the Charge action, at the start of the Resolve Attack Dice step. Until the end of that action:
         -  Its melee weapon has the Shock weapon rule.
         -  The first time you strike during that sequence, inflict 1 additional damage (to a maximum of 7).
   - name: Wrath of Vengeance
-    text: When roused to anger, a battle-brother of the Adeptus Astartes may be spurred to acts of extraordinary strength and athleticism. Use this firefight ploy when a friendly **Angel of Death** operative is counteracting. It can perform an additional 1AP action for free during that counteraction, but both actions must be different.
+    text: When roused to anger, a battle-brother of the Adeptus Astartes may be spurred to acts of extraordinary strength and athleticism. Use this firefight ploy when a friendly **ANGEL OF DEATH** operative is counteracting. It can perform an additional 1AP action for free during that counteraction, but both actions must be different.
 operativeSelection:
   archetype: SECURITY, SEEK & DESTROY
   text: |-
-    - 1 **Angel of Death** operative selected from the following list:
-      -  **Assault Intercessor Sergeant** with one option from each of the following:
-        -  Hand flamer or heavy bolt pistol
-        -  Chainsword, power fist, power weapon or thunder hammer
+    - 1 **ANGEL OF DEATH** operative selected from the following list:
+      -
+    
+    **ASSAULT INTERCESSOR SERGEANT** with one option from each of the following:
+      -
+    
+    Hand flamer or heavy bolt pistol
+      -
+    
+    Chainsword, power fist, power weapon or thunder hammer
     
     Or the following option:
-      -  Plasma pistol; chainsword
-      -  **Intercessor Sergeant** with one option from each of the following:
-        -  Auto bolt rifle, bolt rifle or stalker bolt rifle
-        -  Chainsword, fists, power fist, power weapon or thunder hammer
-      -  **Space Marine Captain**
+      -
     
-    - 5 **Angel of Death** operatives selected from the following list:
-      -  **Assault Intercessor Grenadier**
-      -  **Assault Intercessor Warrior**
-      -  **Eliminator Sniper**
-      -  **Heavy Intercessor Gunner**
-      -  **Intercessor Gunner** with auxiliary grenade launcher and one of the following options:
-        -  Auto bolt rifle; fists
-        -  Bolt rifle; fists
-        -  Stalker bolt rifle; fists
-      -  **Intercessor Warrior** with one of the following options:
-        -  Auto bolt rifle; fists
-        -  Bolt rifle; fists
-        -  Stalker bolt rifle; fists Other than **Warrior** operatives, your kill team can only include each operative on this list once. Some **Angel of Death** rules refer to a 'bolt weapon'. This is a ranged weapon that includes 'bolt' in its name, e.g. stalker bolt rifle, heavy bolt pistol, etc.
+    Plasma pistol; chainsword
+      -
+    
+    **INTERCESSOR SERGEANT** with one option from each of the following:
+      -
+    
+    Auto bolt rifle, bolt rifle or stalker bolt rifle
+      -
+    
+    Chainsword, fists, power fist, power weapon or thunder hammer
+      -
+    
+    **SPACE MARINE CAPTAIN**
+    
+    - 5 **ANGEL OF DEATH** operatives selected from the following list:
+      -
+    
+    **ASSAULT INTERCESSOR GRENADIER**
+      -
+    
+    **ASSAULT INTERCESSOR WARRIOR**
+      -
+    
+    **ELIMINATOR SNIPER**
+      -
+    
+    **HEAVY INTERCESSOR GUNNER**
+      -
+    
+    **INTERCESSOR GUNNER** with auxiliary grenade launcher and one of the following options:
+      -
+    
+    Auto bolt rifle; fists
+      -
+    
+    Bolt rifle; fists
+      -
+    
+    Stalker bolt rifle; fists
+      -
+    
+    **INTERCESSOR WARRIOR** with one of the following options:
+      -
+    
+    Auto bolt rifle; fists
+      -
+    
+    Bolt rifle; fists
+      -
+    
+    Stalker bolt rifle; fists
+    
+    Other than **WARRIOR** operatives, your kill team can only include each operative on this list once.
+    
+    > Some **ANGEL OF DEATH** rules refer to a 'bolt weapon'. This is a ranged weapon that includes 'bolt' in its name, e.g. stalker bolt rifle, heavy bolt pistol, etc.
 strategyPloys:
   - name: Combat Doctrine
     text: |-
-      Space Marines hold the teachings of the Codex Astartes in highest esteem, employing its flexible combat doctrines to annihilate their enemies. Select one **Combat Doctrine** from those presented below. Whenever a friendly **Angel of Death** operative is x, its weapons have the Balanced weapon rule. X is the **Combat Doctrine** you selected.
+      Space Marines hold the teachings of the Codex Astartes in highest esteem, employing its flexible combat doctrines to annihilate their enemies. Select one **COMBAT DOCTRINE** from those presented below. Whenever a friendly **ANGEL OF DEATH** operative is x, its weapons have the Balanced weapon rule. X is the **COMBAT DOCTRINE** you selected.
         - Devastator Doctrine: Shooting an operative more than 6" from it.
         - Tactical Doctrine: Shooting an operative within 6" of it.
         - Assault Doctrine: Fighting or retaliating.
   - name: And They Shall Know No Fear
-    text: Space Marines possess extraordinary courage and are utterly unflinching in the face of terrifying horrors and overwhelming odds. You can ignore any changes to the stats of friendly **Angel of Death** operatives from being injured (including their weapons' stats).
+    text: Space Marines possess extraordinary courage and are utterly unflinching in the face of terrifying horrors and overwhelming odds. You can ignore any changes to the stats of friendly **ANGEL OF DEATH** operatives from being injured (including their weapons' stats).
   - name: Adaptive Tactics
-    text: There are few more tactically flexible warriors than the Adeptus Astartes. Supplementing the teachings of the Codex Astartes with their own experience, Space Marines may adjust their strategies at a moment's notice. Change your secondary **Chapter Tactic**. Note this ploy only lasts until the end of the turning point, at which point your original secondary **Chapter Tactic** returns.
+    text: |-
+      There are few more tactically flexible warriors than the Adeptus Astartes. Supplementing the teachings of the Codex Astartes with their own experience, Space Marines may adjust their strategies at a moment's notice. Change your secondary **CHAPTER TACTIC**.
+      
+      Note this ploy only lasts until the end of the turning point, at which point your original secondary **CHAPTER TACTIC** returns.
   - name: Indomitus
-    text: This is the Era Indomitus. The Imperium wages galaxy-spanning crusades to drive back the horrors that plague it, and the battle-brothers of the Adeptus Astartes are spurred on by this righteous purpose. Whenever an operative is shooting a friendly **Angel of Death** operative, if you roll two or more fails, you can discard one of them to retain another as a normal success instead.
+    text: This is the Era Indomitus. The Imperium wages galaxy-spanning crusades to drive back the horrors that plague it, and the battle-brothers of the Adeptus Astartes are spurred on by this righteous purpose. Whenever an operative is shooting a friendly **ANGEL OF DEATH** operative, if you roll two or more fails, you can discard one of them to retain another as a normal success instead.
 supplementaryInfo: |-
-  **Angels of Death:** **Update Log**
+  **ANGELS OF DEATH:** **UPDATE LOG**
   Rules will be periodically updated to maintain fair balance and interact more smoothly with the game. Rules changes
   will be updated directly into online documents and then listed below. Any minor changes to standardise wording that
   don't have any practical impact on the rule will be updated directly into online documents but not be listed here.
-  **Errata**  JANUARY '26
+  **ERRATA**  JANUARY '26
   This section collects amendments to the rules. Amended text
   for clarification and edits are shown in blue, while amended
   text for balance updates are shown in magenta.
-  **Heavy Intercessor Gunner**  OPERATIVE, **Weapons List**
+  **HEAVY INTERCESSOR GUNNER**  OPERATIVE, **WEAPONS LIST**
   'Bolt pistol' weapon added.
-  **Team Selection**
-  Following sentence and asterisks on **Eliminator Sniper** and
-  **Heavy Intercessor Gunner**  deleted:
+  **TEAM SELECTION**
+  Following sentence and asterisks on **ELIMINATOR SNIPER** and
+  **HEAVY INTERCESSOR GUNNER**  deleted:
   'You cannot select more than one of these
   operatives combined.'
-   **Previous Erratas**
-  **Faction**  RULES, **Chapter Tactics**
+   **PREVIOUS ERRATAS**
+  **FACTION**  RULES, **CHAPTER TACTICS**
   Dueller
   Changed to read:
   'Whenever this operative is fighting or retaliating, each of
@@ -708,60 +757,62 @@ supplementaryInfo: |-
   Additional sentence added:
   'Whenever this operative is fighting or retaliating, enemy
   operatives cannot assist.'
-  **Intercessor Sergeant**  OPERATIVE, DOCTRINE
-  **Warfare Rule**
+  **INTERCESSOR SERGEANT**  OPERATIVE, DOCTRINE
+  **WARFARE RULE**
   Changed to read:
   'You can do each of the following once per battle:
     -  When you would use the Combat Doctrine strategy ploy and then select Devastator, if this operative is in the killzone, it costs you 0CP.
-    -  When you would use the Combat Doctrine strategy ploy and then select Tactical, if this operative is in the killzone, it costs you 0CP.' **Assault Intercessor Sergeant**  OPERATIVE, DOCTRINE **Warfare Rule** Changed to read: 'You can do each of the following once per battle:
+    -  When you would use the Combat Doctrine strategy ploy and then select Tactical, if this operative is in the killzone, it costs you 0CP.' **ASSAULT INTERCESSOR SERGEANT**  OPERATIVE, DOCTRINE **WARFARE RULE** Changed to read: 'You can do each of the following once per battle:
     -  When you would use the Combat Doctrine strategy ploy and then select Assault, if this operative is in the killzone, it costs you 0CP.
-    -  When you would use the Combat Doctrine strategy ploy and then select Tactical, if this operative is in the killzone, it costs you 0CP.' **Heavy Intercessor Gunner Operative** Move stat changed to '5'. **Space Marine Captain**  OPERATIVE, **Heroic Leader Rule** Changed to read: 'Once per turning point, you can do one of the following:
-    - Use a firefight ploy for 0CP if this is the specified **Angel Of death** operative (excluding Command Re-roll).
-    -  Use the Combat Doctrine strategy ploy when you activate a friendly **Angel of Death** operative if this operative is in the killzone and isn't within control range of enemy operatives (pay its CP cost as normal). Note that you cannot do so if you've already used that ploy during this turning point.
-    - Use the Adjust Doctrine firefight ploy for 0CP if this operative is in the killzone and isn't within control range of enemy operatives.' **Faction**  EQUIPMENT, **Tilting Shields** Relevant part of first sentence changed to read: '[…] after your opponent rolls their attack dice, but before re-rolls, you can use this rule.' **Angels of Death**
+    -  When you would use the Combat Doctrine strategy ploy and then select Tactical, if this operative is in the killzone, it costs you 0CP.' **HEAVY INTERCESSOR GUNNER OPERATIVE** Move stat changed to '5'. **SPACE MARINE CAPTAIN**  OPERATIVE, **HEROIC LEADER RULE** Changed to read: 'Once per turning point, you can do one of the following:
+    - Use a firefight ploy for 0CP if this is the specified **ANGEL OF DEATH** operative (excluding Command Re-roll).
+    -  Use the Combat Doctrine strategy ploy when you activate a friendly **ANGEL OF DEATH** operative if this operative is in the killzone and isn't within control range of enemy operatives (pay its CP cost as normal).
+  
+  Note that you cannot do so if you've already used that ploy during this turning point.
+    - Use the Adjust Doctrine firefight ploy for 0CP if this operative is in the killzone and isn't within control range of enemy operatives.' **FACTION**  EQUIPMENT, **TILTING SHIELDS** Relevant part of first sentence changed to read: '[…] after your opponent rolls their attack dice, but before re-rolls, you can use this rule.' **ANGELS OF DEATH**
   
   Genetically modified transhuman warriors, Space Marines are amongst Humanity's most elite fighting forces.
   Angels of Death kill teams are composed of elite specialists trained in myriad forms of combat, who are capable of
   overcoming almost any foe.
-  **Space Marine Captain**
+  **SPACE MARINE CAPTAIN**
   To reach the rank of Captain, a Space Marine must master
   war. They are equally adept at conducting planet-spanning
   military campaigns as they are at dispatching foes in expertly
   fought duels.
-  **Assault Intercessor Sergeant**
+  **ASSAULT INTERCESSOR SERGEANT**
   These mission leaders understand the optimal moment to
   unleash charges. They are exemplars in the press of melee,
   rending foes in twain with their deadly close combat weapons.
-  **Intercessor Sergeant**
+  **INTERCESSOR SERGEANT**
   Intercessor Sergeants lead their teams in levelling salvoes
   of firepower against targets in ever-changing killzones. They
   often carry specialist weaponry into the fray to support
   their battle-brothers.
-  **Assault Intercessor Warrior**
+  **ASSAULT INTERCESSOR WARRIOR**
   Protected by Mk X Tacticus armour, Assault Intercessor
   Warriors charge into battle swinging large chainswords and
   firing mass-reactive shells from their pistols.
-  **Assault Intercessor Grenadier**
+  **ASSAULT INTERCESSOR GRENADIER**
   Equipped with an array of deadly grenades, these specialists
   provide close-range support when facing swarms of lesser
   foes or heavily armoured targets.
-  **Intercessor Warrior**
+  **INTERCESSOR WARRIOR**
   Intercessor Warriors lay down punishing volleys of fire from
   their bolt rifles. Their tactics and wargear are adaptable
   to countless situations, making them a core asset for any
   Intercession Squad.
-  **Intercessor Gunner**
+  **INTERCESSOR GUNNER**
   These specialists provide long-range supporting fire from
   their rifle's underslung auxiliary grenade launcher. They
   are capable of delivering explosive charges that inflict
   maximum devastation on the most densely defended or
   shielded positions.
-  **Eliminator Sniper**
+  **ELIMINATOR SNIPER**
   Eliminators wield specialised sniper rifles with ammunition for
   every enemy. These range from heavy-cored Mortis rounds
   that make a mockery of armour, to explosive fragmentation
   shells that devastate clustered targets.
-  **Heavy Intercessor Gunner**
+  **HEAVY INTERCESSOR GUNNER**
   Heavy Intercessors are akin to walking gun emplacements.
   Their heavy bolters allow them to shatter enemies with
   punishing fusillades of explosive fire, either sweeping over
@@ -769,34 +820,34 @@ supplementaryInfo: |-
   
   Below you will find a list of the
   operatives that make up an
-  **Angel of Death**  kill team,
+  **ANGEL OF DEATH**  kill team,
   including, where relevant,
   any weapons specified for
   that operative.
   
-  - 1 **Angel of Death** operative selected from the following list:
-    -  **Assault Intercessor Sergeant**  with one option from each of the following:
+  - 1 **ANGEL OF DEATH** operative selected from the following list:
+    -  **ASSAULT INTERCESSOR SERGEANT**  with one option from each of the following:
       -  Hand flamer or heavy bolt pistol
       -  Chainsword, power fist, power weapon or thunder hammer
     -  Or the following option:
       -  Plasma pistol; chainsword
-    -  **Intercessor Sergeant**  with one option from each of the following:
+    -  **INTERCESSOR SERGEANT**  with one option from each of the following:
       -  Auto bolt rifle, bolt rifle or stalker bolt rifle
       -  Chainsword, fists, power fist, power weapon or thunder hammer
-    -  **Space Marine**  CAPTAIN
-  - 5 **Angel of Death** operatives selected from the following list:
-    -  **Assault Intercessor**  GRENADIER
-    -  **Assault Intercessor**  WARRIOR
-    -  **Eliminator**  SNIPER
-    -  **Heavy Intercessor**  GUNNER
-    -  **Intercessor Gunner**  with auxiliary grenade launcher and one of the following options:
+    -  **SPACE MARINE**  CAPTAIN
+  - 5 **ANGEL OF DEATH** operatives selected from the following list:
+    -  **ASSAULT INTERCESSOR**  GRENADIER
+    -  **ASSAULT INTERCESSOR**  WARRIOR
+    -  **ELIMINATOR**  SNIPER
+    -  **HEAVY INTERCESSOR**  GUNNER
+    -  **INTERCESSOR GUNNER**  with auxiliary grenade launcher and one of the following options:
       -  Auto bolt rifle; fists
       -  Bolt rifle; fists
       -  Stalker bolt rifle; fists
-    -  **Intercessor Warrior**  with one of the following options:
+    -  **INTERCESSOR WARRIOR**  with one of the following options:
       -  Auto bolt rifle; fists
       -  Bolt rifle; fists
-      -  Stalker bolt rifle; fists Other than WARRIOR operatives, your kill team can only include each operative on this list once. **Archetypes security** SEEK & **Destroy** Archetypes are used in certain mission packs, e.g. Approved Ops. The game sequence will specify how. Some **Angel of Death** rules refer to a 'bolt weapon'. This is a ranged weapon that includes 'bolt' in its name, e.g. stalker bolt rifle, heavy bolt pistol, etc. **Angels of Death Kill Team angels of** DEATH » **Kill team selection angels of** DEATH » **Kill team selection** Heavy bolt pistol Plasma pistol Power fist **Space Marine Captain assault Intercessor Grenadier intercessor Sergeant** Chainsword Bolt rifle Chainsword **Assault Intercessor Sergeant assault Intercessor Warrior** Chainsword Heavy bolt pistol **Angels of** DEATH » **Kill team selection eliminator Sniper Heavy Intercessor Gunner intercessor Warrior** Bolt sniper rifle Heavy bolter Auto bolt rifle **Intercessor Gunner** Auto bolt rifle / auxiliary grenade launcher Bolt pistol
+      -  Stalker bolt rifle; fists Other than WARRIOR operatives, your kill team can only include each operative on this list once. **ARCHETYPES SECURITY** SEEK & **DESTROY** Archetypes are used in certain mission packs, e.g. Approved Ops. The game sequence will specify how. Some **ANGEL OF DEATH** rules refer to a 'bolt weapon'. This is a ranged weapon that includes 'bolt' in its name, e.g. stalker bolt rifle, heavy bolt pistol, etc. **ANGELS OF DEATH KILL TEAM ANGELS OF** DEATH » **KILL TEAM SELECTION ANGELS OF** DEATH » **KILL TEAM SELECTION** Heavy bolt pistol Plasma pistol Power fist **SPACE MARINE CAPTAIN ASSAULT INTERCESSOR GRENADIER INTERCESSOR SERGEANT** Chainsword Bolt rifle Chainsword **ASSAULT INTERCESSOR SERGEANT ASSAULT INTERCESSOR WARRIOR** Chainsword Heavy bolt pistol **ANGELS OF** DEATH » **KILL TEAM SELECTION ELIMINATOR SNIPER HEAVY INTERCESSOR GUNNER INTERCESSOR WARRIOR** Bolt sniper rifle Heavy bolter Auto bolt rifle **INTERCESSOR GUNNER** Auto bolt rifle / auxiliary grenade launcher Bolt pistol
 universalEquipment:
   - name: Portable Barricade
     text: 'Little more than a suppression shield with armoured feet, these barricades can be hefted and borne forwards to provide mobile cover. A portable barricade is Light, Protective and Portable terrain, except the feet which are Insignificant and Exposed. Before the battle, you can set it up wholly within your territory, on the killzone floor and more than 2" from other equipment terrain features, access points and Accessible terrain. Protective: While an operative is in cover from this terrain feature, improve its Save stat by 1 (to a maximum of 2+). RULE'
@@ -804,13 +855,16 @@ universalEquipment:
     text: From neuro‑suppressant psybombs to smoke‑belching chemical charges, grenades of this sort can suppress the enemy and be the difference between life and death. When you select this equipment, select two utility grenades (2 smoke, 2 stun, or 1 smoke and 1 stun). Each selection is a unique action your operatives can perform, but your kill team can only perform that action a total number of times during the battle equal to your selection. RULE
   - name: Ammo Cache
     text: |-
-      Whether stockpiles deliberately set out for warriors to access quickly, or the abandoned munitions of the slain, these caches can prove vital for a swift reload in the heat of battle. Before the battle, you can set up one of your Ammo Cache markers wholly within your territory. Friendly operatives can perform the following mission action during the battle. **Ammo Resupply** 0AP  One of your Ammo Cache markers the active operative controls is used during this turning point.  Until the start of the next turning point, whenever this operative is shooting with a weapon from its datacard, you can re‑roll one of your attack dice.
+      Whether stockpiles deliberately set out for warriors to access quickly, or the abandoned munitions of the slain, these caches can prove vital for a swift reload in the heat of battle. Before the battle, you can set up one of your Ammo Cache markers wholly within your territory. Friendly operatives can perform the following mission action during the battle. **AMMO RESUPPLY** 0AP  One of your Ammo Cache markers the active operative controls is used during this turning point.  Until the start of the next turning point, whenever this operative is shooting with a weapon from its datacard, you can re‑roll one of your attack dice.
       
       An operative cannot perform this action while within control range of an enemy operative, if that marker isn't yours, or if that marker has been used this turning point.
   - name: Razor Wire
     text: 'Spooled rapidly out and affixed to jutting posts, razor wire acts as an easily deployed barrier and a painful deterrent to enemy operatives seeking to attack along particular routes. Razor wire is Exposed and Obstructing terrain. Before the battle, you can set it up wholly within your territory, on the killzone floor and more than 2" from other equipment terrain features, access points and Accessible terrain. Obstructing: Whenever an operative would cross over this terrain feature within 1" of it, treat the distance as an additional 1".'
   - name: Comms Device
-    text: Communications devices can be swiftly hijacked and employed to coordinate operations or call in support during a firefight. Before the battle, you can set up one of your Comms Device markers wholly within your territory. While a friendly operative controls this marker, add 3" to the distance requirements of its SUPPORT rules that refer to friendly operatives (e.g. 'select one friendly operative within 6"' would be 9" instead). Note that you cannot benefit from your opponent's Comms Device markers.
+    text: |-
+      Communications devices can be swiftly hijacked and employed to coordinate operations or call in support during a firefight. Before the battle, you can set up one of your Comms Device markers wholly within your territory. While a friendly operative controls this marker, add 3" to the distance requirements of its SUPPORT rules that refer to friendly operatives (e.g. 'select one friendly operative within 6"' would be 9" instead).
+      
+      Note that you cannot benefit from your opponent's Comms Device markers.
   - name: Mines
     text: The battlefields of the 41st Millennium are plagued by myriad types of mine, from simple frag charges to monofilament web‑snares and microplasma charges. Ultimately, all serve a similar, horrible purpose. Before the battle, you can set up one of your Mines markers wholly within your territory and more than 2" from other markers, access points and Accessible terrain. The first time that marker is within an operative's control range, remove that marker and inflict D3+3 damage on that operative.
   - name: Light Barricades
@@ -825,6 +879,6 @@ universalEquipment:
         -  More than 2" from other equipment terrain features.
         -  More than 1" from doors and access points. Once per action, whenever an operative is climbing the terrain feature a ladder is placed against, treat the vertical distance as 1" if the ladder is within that operative's control range during that entire climb.
   - name: Explosive Grenades
-    text: A variety of offensive grenades are employed by the forces of the 41st Millennium. These range from simple fragmentation grenades to plasma and gravitic concussion grenades, while even more exotic devices are used to crack open enemy armour. When you select this equipment, select two explosive grenades (2 frag, 2 krak, or 1 frag and 1 krak). Each selection is a ranged weapon your operatives can use, but your kill team can only use that weapon a total number of times during the battle equal to your selection. **Name Atk Hit Dmg** Frag grenade 4 4+ 2/4 WR Range 6", Blast 2", Saturate **Name Atk Hit Dmg** Krak grenade 4 4+ 4/5 WR Range 6", Piercing 1, Saturate
+    text: A variety of offensive grenades are employed by the forces of the 41st Millennium. These range from simple fragmentation grenades to plasma and gravitic concussion grenades, while even more exotic devices are used to crack open enemy armour. When you select this equipment, select two explosive grenades (2 frag, 2 krak, or 1 frag and 1 krak). Each selection is a ranged weapon your operatives can use, but your kill team can only use that weapon a total number of times during the battle equal to your selection. **NAME ATK HIT DMG** Frag grenade 4 4+ 2/4 WR Range 6", Blast 2", Saturate **NAME ATK HIT DMG** Krak grenade 4 4+ 4/5 WR Range 6", Piercing 1, Saturate
   - name: Breaching Charge
     text: This explosive device can blast a tactical insertion point through even the most formidable bulkhead or bunker wall. Once per battle, when a friendly operative performs the Breach action, you can use this rule. If you do, that operative can perform that action for 1 less AP (to a minimum of 1AP) as though it had the word 'breach marker' on its datacard.

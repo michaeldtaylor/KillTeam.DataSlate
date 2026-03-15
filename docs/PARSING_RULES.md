@@ -66,13 +66,13 @@ Every team folder contains exactly 8 PDFs. All produce required output:
 | PDF filename pattern | YAML field | Notes |
 |---------------------|------------|-------|
 | `*Datacards*` | `datacards[]` | Operative stats, weapons, abilities, special rules |
-| `*Faction Equipment*` | `factionEquipment[]` | Equipment with names and descriptions |
+| `*Faction Equipment*` | `factionEquipment[]` | Equipment items with `name` and `text` fields |
 | `*Faction Rules*` | `factionRules[]` | Named rules with text |
 | `*Firefight Ploys*` | `firefightPloys[]` | Named ploys with text |
 | `*Operative Selection*` | `operativeSelection{}` | Archetype + Markdown composition rules |
 | `*Strategy Ploys*` | `strategyPloys[]` | Named ploys with text |
 | `*Supplementary Information*` | `supplementaryInfo` | Raw Markdown text (errata, FAQs) |
-| `*Universal Equipment*` | `universalEquipment[]` | Equipment with names and descriptions |
+| `*Universal Equipment*` | `universalEquipment[]` | Equipment items with `name` and `text` fields |
 
 ## Rule 6 — YAML Field Order
 
@@ -92,16 +92,29 @@ universalEquipment         (Universal Equipment)
 
 ---
 
-## Rule 7 — pdftotext Mode: `-raw` for Prose, `-layout` for Weapon Parsing
+## Rule 7 — pdftotext Mode: Dual Pass for Datacards, Raw for Prose
 
-pdftotext is run in two modes depending on what is being parsed:
+pdftotext is run in two modes. Datacards require **both** modes in parallel:
 
 | Mode | Flag | Used for |
 |------|------|----------|
-| Layout | `-layout` | `ParseDatacards` — weapon stats rows require fixed column positions |
-| Raw | `-raw` | `ParseRulesDoc`, `ParseEquipmentWithDescriptions`, `ParseSupplementaryInfo`, `ParseOperativeSelection` — natural reading order avoids two-column interleaving |
+| Layout | `-layout` | `ParseDatacards` — weapon stats rows require spatially-fixed column positions for the stats-header regex |
+| Raw | `-raw` | Back-card prose (abilities, 1AP actions, footnote rules) in `ParseDatacards`; `ParseRulesDoc`; `ParseEquipmentWithDescriptions`; `ParseSupplementaryInfo`; `ParseOperativeSelection` |
 
-**Why:** pdftotext `-raw` outputs text in PDF content stream order, which naturally reads left-column then right-column for two-column layouts. `-layout` preserves spatial positions and is required for the weapon-stats regex.
+**Why raw mode for back-card prose:** Two-column card layouts in pdftotext `-layout` interleave text from left and right columns line-by-line (e.g. a single operative's ability text is interleaved with a neighbouring operative's ability text). Raw mode outputs content in PDF stream order — left column fully, then right column — which unambiguously separates one operative's abilities from another's.
+
+### Datacard Dual-Pass Strategy
+
+`ParseDatacards` calls `BuildRawBackCardSections` which scans the raw-mode lines and returns **two** separate lookups (operative name → raw ability lines):
+
+| Dictionary | Trigger | Consumer |
+|------------|---------|----------|
+| `FrontOnlySections` | Weapon-table header `NAME ATK HIT DMG WR` (single-page operatives, Plague Marines pattern) | First layout-mode occurrence of the operative |
+| `BackCardSections` | `RULES CONTINUE ON OTHER SIDE` (two-page operatives, Angels of Death pattern) | `ParseBackOfCard` (second layout-mode occurrence) |
+
+In both variants the ALL-CAPS operative name is the **end** of the raw block (not the start). Sections that contain no parseable ability, 1AP action, or footnote rule (`ContainsParsableContent` = false) are discarded; those operatives fall back to layout-mode parsing.
+
+Faction keyword lines (all-caps, comma-separated, e.g. `PLAGUE MARINE , CHAOS, HERETIC ASTARTES, FIGHTER`) appear between the last ability and the operative name in raw mode — they are skipped during block collection.
 
 ---
 
@@ -140,6 +153,10 @@ Each ALL-CAPS name word must have at least 2 uppercase chars (avoids capturing t
 **6b** — ALL-CAPS phrase (4+ chars) at the start of a line, followed by sentence text, NOT followed by `operative`/`friendly`/`enemy`:
 - `HARLEQUIN'S PANOPLY The tools of…` → `**Harlequin's Panoply** The tools of…`
 
+**6c** — Two or more contiguous ALL-CAPS words (each 2+ chars) appearing inline in prose (not already at the start of a line / already handled by 6a or 6b):
+- `…activate a friendly ANGEL OF DEATH operative…` → `…activate a friendly **Angel of Death** operative…`
+- Requires at least two words to avoid bolding single-letter initials or abbreviations already captured by the stats-column regex.
+
 ### Step 7: Bullet Symbol Hierarchy → Markdown
 Process line by line, tracking list depth:
 
@@ -161,7 +178,7 @@ Insert `\n\n` before:
 
 Multiple blank lines (3+) are collapsed to `\n\n`. Result is trimmed.
 
-**Applied to:** ability.text, ploy.text, rule.text, equipment.description, operativeSelection.text, supplementaryInfo.
+**Applied to:** ability.text, ploy.text, rule.text, equipment.text, operativeSelection.text, supplementaryInfo.
 
 ---
 
@@ -179,6 +196,7 @@ Both arrays are optional (omitted when empty). Routing happens at parse time in 
 Two-column 1AP back-of-card header (`NAME 1AP   NAME 1AP`) → both actions go to `specialActions`.
 Two-column passive back-of-card → both abilities go to `abilities`.
 Front-of-card ability lines → always passive → `abilities`.
+Single-column 1AP lines (matching `^[A-Z][A-Z0-9'\-]+(?:\s+[A-Z][A-Z0-9'\-]+)*\s+1AP$` after normalisation) → routed to `specialActions` regardless of column layout.
 
 ---
 
@@ -194,18 +212,3 @@ The following type prefix labels are PDF formatting artefacts and must be stripp
 | `ONCE PER TURNING POINT.` | Frequency constraint (before main text) |
 
 These are stripped by `StructureToMarkdown` Step 3 (see Rule 8).
-
-
-Metadata first, then PDF-sourced fields in alphabetical PDF filename order:
-
-```
-id, name, faction          (metadata header)
-datacards                  (Datacards)
-factionEquipment           (Faction Equipment)
-factionRules               (Faction Rules)
-firefightPloys             (Firefight Ploys)
-operativeSelection         (Operative Selection)
-strategyPloys              (Strategy Ploys)
-supplementaryInfo          (Supplementary Information)
-universalEquipment         (Universal Equipment)
-```

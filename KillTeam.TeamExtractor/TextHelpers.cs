@@ -14,7 +14,7 @@ internal static partial class TextHelpers
         "at", "to", "by", "in", "up", "as", "via", "with",
     };
 
-    private static readonly string[] ConstraintSentencePatterns =
+    internal static readonly string[] ConstraintSentencePatterns =
     [
         "This operative cannot perform this action",
         "An operative cannot perform this action",
@@ -149,28 +149,28 @@ internal static partial class TextHelpers
             text,
             m => "\n" + m.Groups[1].Value + ". ");
 
-        // Step 5: Format numbered list items — ALL-CAPS name → bold title case
-        // "1. AGGRESSIVE This…" → "1. **Aggressive** This…"
+        // Step 5: Format numbered list items — ALL-CAPS name → bold, preserving capitalisation
+        // "1. AGGRESSIVE This…" → "1. **AGGRESSIVE** This…"
         text = NumberedListItemRegex().Replace(
             text,
-            m => m.Groups[1].Value + ". **" + ToTitleCase(m.Groups[2].Value.TrimEnd()) + "**");
+            m => m.Groups[1].Value + ". **" + m.Groups[2].Value.TrimEnd() + "**");
 
-        // Step 6a: ALL-CAPS phrase + colon (anywhere) → **Title Case:**
+        // Step 6a: ALL-CAPS phrase + colon (anywhere) → **ALLCAPS:** preserving capitalisation
         text = AllCapsWithColonRegex().Replace(
             text,
-            m => "**" + ToTitleCase(m.Groups[1].Value.Trim()) + ":**");
+            m => "**" + m.Groups[1].Value.Trim() + ":**");
 
-        // Step 6b: ALL-CAPS phrase at start of line + space + body text → **Title Case**
+        // Step 6b: ALL-CAPS phrase at start of line + space + body text → **ALLCAPS**
         text = AllCapsLineHeadingRegex().Replace(
             text,
-            m => "**" + ToTitleCase(m.Groups[1].Value.Trim()) + "** ");
+            m => "**" + m.Groups[1].Value.Trim() + "** ");
 
-        // Step 6c: Inline ALL-CAPS multi-word sequences → **Title Case** bold
-        // Matches 2+ contiguous ALL-CAPS words (possibly hyphenated or with apostrophes).
-        // Runs after 6a/6b so already-bolded headings (now title-cased) are not re-matched.
+        // Step 6c: Inline ALL-CAPS multi-word sequences → **ALLCAPS** bold, preserving capitalisation.
+        // Matches 2+ contiguous ALL-CAPS words. The leading \*\*[^*]+\*\* alternative skips
+        // already-bolded spans (from Steps 6a/6b), so group 1 only participates for plain ALL-CAPS.
         text = AllCapsMultiWordRegex().Replace(
             text,
-            m => "**" + ToTitleCase(m.Value) + "**");
+            m => m.Groups[1].Success ? "**" + m.Groups[1].Value + "**" : m.Value);
 
         // Step 7: Unicode bullet symbols → Markdown hierarchy
         text = FormatBulletSymbols(text);
@@ -180,6 +180,11 @@ internal static partial class TextHelpers
         {
             text = text.Replace(pattern, "\n\n" + pattern, StringComparison.OrdinalIgnoreCase);
         }
+
+        // Sentence-start paragraph breaks: specific Kill Team phrasings that begin a new
+        // paragraph in the PDF but arrive joined to the preceding sentence by a space.
+        text = text.Replace(". Note ", ".\n\nNote ");
+        text = text.Replace(". Your kill team", ".\n\nYour kill team");
 
         // Collapse 3+ consecutive newlines to a single paragraph break
         text = MultipleBlankLinesRegex().Replace(text, "\n\n");
@@ -349,9 +354,11 @@ internal static partial class TextHelpers
 
     /// <summary>
     /// Two or more contiguous ALL-CAPS words (possibly hyphenated or with apostrophes)
-    /// appearing inline in prose. Used by Step 6c to convert them to bold title case.
+    /// appearing inline in prose. Used by Step 6c to convert them to bold, preserving capitalisation.
     /// Single-word abbreviations (APL, CP, etc.) never match because the pattern requires 2+ words.
+    /// The leading alternative <c>\*\*[^*]+\*\*</c> matches already-bolded spans first so they are
+    /// skipped (returned as-is), preventing double-bolding of text processed by Steps 6a/6b.
     /// </summary>
-    [GeneratedRegex(@"[A-Z][A-Z'\-]+(?:\s+[A-Z][A-Z'\-]+)+")]
+    [GeneratedRegex(@"\*\*[^*]+\*\*|([A-Z][A-Z'\-]+(?:\s+[A-Z][A-Z'\-]+)+)")]
     private static partial Regex AllCapsMultiWordRegex();
 }

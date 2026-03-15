@@ -110,7 +110,7 @@ public partial class PdfTeamExtractor
         var lines = GetPdfLines(pdfPath);
         // Raw mode is used for back-card prose content — avoids two-column interleaving.
         var rawLines = GetPdfLines(pdfPath, raw: true);
-        var rawBackSections = BuildRawBackCardSections(rawLines);
+        var (rawBackSections, rawFrontOnlySections) = BuildRawBackCardSections(rawLines);
 
         var count = lines.Count;
         var operatives = new List<ExtractedOperative>();
@@ -301,9 +301,27 @@ public partial class PdfTeamExtractor
                 i++;
             }
 
-            // Parse front-of-card weapon rules (*Name: text) and abilities from lines after the last weapon row
-            var frontWeaponRules = ExtractFrontWeaponRules(afterWeaponLines);
-            var frontAbilities = ParseFrontAbilityLines(afterWeaponLines);
+            // Parse front-of-card weapon rules (*Name: text) and abilities from lines after the last weapon row.
+            // Prefer raw-mode content when available to avoid two-column layout interleaving.
+            List<ExtractedAbility> frontAbilities;
+            List<ExtractedWeaponRule> frontWeaponRules;
+            List<ExtractedAbility> frontSpecialActions;
+
+            if (rawFrontOnlySections.TryGetValue(operativeName, out var rawAbilityLines))
+            {
+                // Parse abilities, special actions, and weapon rules from the clean raw-mode lines.
+                var tempOp = new ExtractedOperative { Name = operativeName, Save = "" };
+                ParseBackContent(rawAbilityLines, tempOp);
+                frontAbilities = tempOp.Abilities;
+                frontWeaponRules = tempOp.SpecialRules;
+                frontSpecialActions = tempOp.SpecialActions;
+            }
+            else
+            {
+                frontWeaponRules = ExtractFrontWeaponRules(afterWeaponLines);
+                frontAbilities = ParseFrontAbilityLines(afterWeaponLines);
+                frontSpecialActions = [];
+            }
 
             // Parse keywords from the faction keyword line (currently at position i)
             var keywords = new List<string>();
@@ -351,6 +369,11 @@ public partial class PdfTeamExtractor
                     Abilities = frontAbilities,
                     SpecialRules = frontWeaponRules,
                 };
+
+                foreach (var sa in frontSpecialActions)
+                {
+                    operative.SpecialActions.Add(sa);
+                }
 
                 operatives.Add(operative);
                 operativeMap[operativeName] = operative;
@@ -450,67 +473,151 @@ public partial class PdfTeamExtractor
     }
 
     /// <summary>
-    /// Scans raw-mode pdftotext lines and builds a lookup of operative name →
-    /// back-card body lines.
-    ///
-    /// In these Kill Team PDFs the back-card block in raw mode has the following structure:
-    /// <list type="number">
-    ///   <item>"RULES CONTINUE ON OTHER SIDE" — end-of-front-card marker (start of block)</item>
-    ///   <item>Ability / action text lines</item>
-    ///   <item>ALL-CAPS operative name — appears AFTER the content (end of block / key)</item>
+    /// Scans raw-mode pdftotext lines and builds two lookups of operative name →
+    /// back-card body lines, distinguished by PDF structure variant:
+    /// <list type="bullet">
+    ///   <item>
+    ///     <b>backCardSections</b> — content from "RULES CONTINUE ON OTHER SIDE" blocks
+    ///     (two-page operatives, e.g. Angels of Death, Nemesis Claw).  These should be
+    ///     used in <see cref="ParseBackOfCard"/> (second layout-mode occurrence).
+    ///   </item>
+    ///   <item>
+    ///     <b>frontOnlySections</b> — content from weapon-table-header blocks
+    ///     (single-page operatives, e.g. Plague Marines).  These should be used when
+    ///     building an operative on its first (and only) layout-mode occurrence, to avoid
+    ///     two-column layout interleaving.
+    ///   </item>
     /// </list>
-    /// We therefore use "RULES CONTINUE ON OTHER SIDE" as the start boundary and the first
-    /// standalone ALL-CAPS name (letters + spaces only, no digits, no commas, not a known
-    /// stats keyword) as both the end boundary and the dictionary key.
+    ///
+    /// In both variants the ALL-CAPS operative name is the <em>end</em> of the block.
+    /// Only sections that contain at least one parseable ability, 1AP action, or footnote
+    /// weapon rule are stored; pure weapon-row blocks are discarded so those operatives
+    /// fall back to layout-mode parsing.
     /// </summary>
-    private static Dictionary<string, List<string>> BuildRawBackCardSections(List<string> rawLines)
+    private static (
+        Dictionary<string, List<string>> BackCardSections,
+        Dictionary<string, List<string>> FrontOnlySections)
+    BuildRawBackCardSections(List<string> rawLines)
     {
-        var result = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
+        var backCard = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
+        var frontOnly = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
         var i = 0;
         var count = rawLines.Count;
 
         while (i < count)
         {
-            // "RULES CONTINUE ON OTHER SIDE" marks the end of a front card.
-            // Everything that follows — up to the ALL-CAPS operative name — is back-card content.
-            if (!rawLines[i].Trim().Contains("CONTINUE ON OTHER SIDE", StringComparison.OrdinalIgnoreCase))
+            var line = rawLines[i];
+            var trimmed = line.Trim();
+
+            // Trigger 1: "RULES CONTINUE ON OTHER SIDE" — end of front card (two-page operative).
+            // Trigger 2: Weapon-table header ("NAME ATK HIT DMG WR") — start of a
+            //            combined-card content block (single-page operative, Plague Marines pattern).
+            var isRulesContinue = trimmed.Contains("CONTINUE ON OTHER SIDE", StringComparison.OrdinalIgnoreCase);
+            var isWeaponTableHeader = !isRulesContinue && WeaponTableHeaderRegex().IsMatch(line);
+
+            if (!isRulesContinue && !isWeaponTableHeader)
             {
                 i++;
                 continue;
             }
 
-            i++; // past the marker line
+            i++; // past the trigger line
 
-            var backLines = new List<string>();
+            var blockLines = new List<string>();
             string? operativeName = null;
 
             while (i < count)
             {
-                var line = rawLines[i];
-                var lineTrimmed = line.Trim();
+                var contentLine = rawLines[i];
+                var contentTrimmed = contentLine.Trim();
 
-                // A standalone ALL-CAPS name (letters/spaces/hyphens only, no digits or commas,
-                // not a known stats label) marks the end of the back-card block and IS the key.
-                if (AllCapsNameRegex().IsMatch(lineTrimmed)
-                    && !lineTrimmed.Contains(',')
-                    && !RawModeStatsKeywords.Contains(lineTrimmed))
+                // A standalone ALL-CAPS name (letters/spaces/hyphens only, no digits or
+                // commas, not a known stats label) is the end marker and becomes the key.
+                if (AllCapsNameRegex().IsMatch(contentTrimmed)
+                    && !contentTrimmed.Contains(',')
+                    && !RawModeStatsKeywords.Contains(contentTrimmed))
                 {
-                    operativeName = ToTitleCase(lineTrimmed);
+                    operativeName = ToTitleCase(contentTrimmed);
                     i++; // past the name line
                     break;
                 }
 
-                backLines.Add(line);
+                // Faction keyword lines (all-caps, comma-separated, e.g.
+                // "PLAGUE MARINE , CHAOS, HERETIC ASTARTES, FIGHTER") precede the
+                // operative name but are not ability content — skip them.
+                if (contentTrimmed.Contains(',') && FactionKeywordLineRegex().IsMatch(contentTrimmed))
+                {
+                    i++;
+                    continue;
+                }
+
+                blockLines.Add(contentLine);
                 i++;
             }
 
-            if (operativeName != null)
+            // Only store sections that contain at least one parseable ability.
+            if (operativeName == null || !ContainsParsableContent(blockLines))
             {
-                result[operativeName] = backLines;
+                continue;
+            }
+
+            if (isRulesContinue)
+            {
+                // Back-card section for a two-page operative — use in ParseBackOfCard.
+                backCard[operativeName] = blockLines;
+            }
+            else
+            {
+                // Combined-card section for a single-page operative — use on first occurrence.
+                // Don't overwrite an already-stored back-card section (RULES CONTINUE wins).
+                if (!backCard.ContainsKey(operativeName))
+                {
+                    frontOnly[operativeName] = blockLines;
+                }
             }
         }
 
-        return result;
+        return (backCard, frontOnly);
+    }
+
+    /// <summary>
+    /// Returns <c>true</c> when <paramref name="lines"/> contains at least one line
+    /// that <see cref="ParseBackContent"/> would consume as a passive ability,
+    /// single-column 1AP action, or footnote weapon rule.
+    /// </summary>
+    private static bool ContainsParsableContent(List<string> lines)
+    {
+        foreach (var line in lines)
+        {
+            var stripped = line.TrimStart('\x07').TrimStart();
+
+            if (stripped.Length == 0)
+            {
+                continue;
+            }
+
+            // Footnote weapon rule: *Name: …
+            if (stripped.StartsWith('*') && stripped.Contains(':'))
+            {
+                return true;
+            }
+
+            // Single-column 1AP action
+            if (SingleColumnApRegex().IsMatch(TextHelpers.NormaliseText(stripped)))
+            {
+                return true;
+            }
+
+            // Passive ability: Name: …
+            var colonIdx = stripped.IndexOf(':');
+
+            if (colonIdx > 0 && IsAbilityName(stripped[..colonIdx].Trim()))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /// <summary>
@@ -1351,13 +1458,16 @@ public partial class PdfTeamExtractor
         return new ExtractedOperativeSelection
         {
             Archetype = archetype,
-            Text = TextHelpers.StructureToMarkdown(text),
+            Text = text,
         };
     }
 
     /// <summary>
     /// Converts raw pdftotext lines from the operative selection into Markdown.
     /// Tracks bullet depth and joins word-wrapped continuation lines.
+    /// Applies text normalisation, bold conversion, and paragraph-break logic inline —
+    /// the result must NOT be passed through <see cref="TextHelpers.StructureToMarkdown"/>
+    /// again, to avoid double-bolding already-processed content.
     /// </summary>
     private static string BuildOperativeSelectionMarkdown(List<string> lines)
     {
@@ -1376,7 +1486,8 @@ public partial class PdfTeamExtractor
 
         foreach (var rawLine in lines)
         {
-            var stripped = rawLine.TrimStart('\x07').Trim();
+            // Normalise each line individually before processing (smart quotes, AP concat, etc.)
+            var stripped = TextHelpers.NormaliseText(rawLine.TrimStart('\x07').Trim());
 
             // "CONTINUES ON OTHER SIDE" is a page-boundary marker — flush and treat as paragraph break
             if (stripped.Contains("CONTINUES ON OTHER SIDE", StringComparison.OrdinalIgnoreCase))
@@ -1433,33 +1544,68 @@ public partial class PdfTeamExtractor
             }
             else
             {
-                // Continuation line or new paragraph line
-                if (currentItem.Length > 0)
+                var boldedStripped = ApplyBold(stripped);
+
+                // Uppercase-first heuristic: if we already have item content AND this plain
+                // line starts with an uppercase letter, it is a new paragraph — not a word-wrap
+                // continuation. Genuine word-wrap always starts lowercase
+                // ("and one of the following:", "grenade launcher", etc.).
+                var isNewParagraph = currentItem.Length > 0 && char.IsUpper(stripped[0]);
+
+                if (isNewParagraph)
                 {
-                    currentItem.Append(' ').Append(ApplyBold(stripped));
+                    FlushItem();
+                    output.AppendLine(); // blank line before new paragraph
+                    parentDepth = 0;
+
+                    // Lines starting with "Some " are rules callout boxes in the PDF — format
+                    // as a Markdown blockquote.
+                    if (stripped.StartsWith("Some ", StringComparison.OrdinalIgnoreCase))
+                    {
+                        currentItem.Append("> ").Append(boldedStripped);
+                    }
+                    else
+                    {
+                        currentItem.Append(boldedStripped);
+                    }
+                }
+                else if (currentItem.Length > 0)
+                {
+                    currentItem.Append(' ').Append(boldedStripped);
                 }
                 else
                 {
-                    currentItem.Append(ApplyBold(stripped));
+                    currentItem.Append(boldedStripped);
                 }
             }
         }
 
         FlushItem();
 
+        // Apply sentence-break patterns (same as StructureToMarkdown Step 8)
+        var result = output.ToString();
+
+        foreach (var pattern in TextHelpers.ConstraintSentencePatterns)
+        {
+            result = result.Replace(pattern, "\n\n" + pattern, StringComparison.OrdinalIgnoreCase);
+        }
+
+        result = result.Replace(". Note ", ".\n\nNote ");
+        result = result.Replace(". Your kill team", ".\n\nYour kill team");
+
         // Trim trailing blank lines
-        var result = output.ToString().TrimEnd();
-        return result;
+        return result.TrimEnd();
     }
 
     /// <summary>
-    /// Converts ALL-CAPS sequences in <paramref name="text"/> to bold Markdown with title case.
-    /// E.g. "DEATH JESTER" → "**Death Jester**", "VOID-DANCER TROUPE" → "**Void-Dancer Troupe**".
+    /// Converts ALL-CAPS sequences in <paramref name="text"/> to bold Markdown,
+    /// preserving the original capitalisation.
+    /// E.g. "DEATH JESTER" → "**DEATH JESTER**", "VOID-DANCER TROUPE" → "**VOID-DANCER TROUPE**".
     /// Single ALL-CAPS words of ≥2 letters are also converted.
     /// </summary>
     private static string ApplyBold(string text)
     {
-        return AllCapsSequenceRegex().Replace(text, m => $"**{TextHelpers.ToTitleCase(m.Value)}**");
+        return AllCapsSequenceRegex().Replace(text, m => $"**{m.Value}**");
     }
 
     // ─── Supplementary information parsing ───────────────────────────────────────
