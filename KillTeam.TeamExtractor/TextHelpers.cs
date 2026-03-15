@@ -31,10 +31,11 @@ internal static partial class TextHelpers
         s = new string(s.Where(c => c >= 32 || c == '\n').ToArray());
 
         s = s
-            .Replace('\u2019', '\'')   // right single quotation mark → apostrophe
-            .Replace('\u2018', '\'')   // left single quotation mark → apostrophe
-            .Replace('\u201C', '"')    // left double quotation mark
-            .Replace('\u201D', '"')    // right double quotation mark
+            .Replace('\u2019', '\'')               // right single quotation mark → apostrophe
+            .Replace('\u2018', '\'')               // left single quotation mark → apostrophe
+            .Replace('\u201C', '"')                // left double quotation mark
+            .Replace('\u201D', '"')                // right double quotation mark
+            .Replace("\u0393\u00C7\u00D6", "'")   // pdftotext mojibake of right single quote (ΓÇÖ → ')
             .Replace("CONTINUES ON OTHER SIDE", "", StringComparison.OrdinalIgnoreCase)
             .Replace("\u00AE", "")     // ®
             .Replace("\u2122", "");    // ™

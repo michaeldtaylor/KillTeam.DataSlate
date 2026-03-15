@@ -1385,7 +1385,9 @@ public partial class PdfTeamExtractor
         {
             // Strip control characters (BEL and others that pdftotext appends in raw mode)
             // before Trim(), so lines containing only \x07 are treated as empty.
-            var trimmed = new string(line.Where(c => c >= 32).ToArray()).Trim();
+            // Also apply text normalisation (smart quotes, mojibake apostrophes) so that
+            // rule names containing apostrophes (e.g. SCORPION'S EYE) match the regex.
+            var trimmed = TextHelpers.NormaliseText(new string(line.Where(c => c >= 32).ToArray()));
 
             if (string.IsNullOrWhiteSpace(trimmed))
             {

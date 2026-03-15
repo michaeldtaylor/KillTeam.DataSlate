@@ -325,10 +325,12 @@ factionRules:
       
       Whenever a friendly operative has the **PIVOTAL ROLE**, it has the ACCOLADE rule of your ALLEGORY for the battle. As a **STRATEGIC GAMBIT** in each subsequent turning point, you can select one friendly **VOID-DANCER TROUPE** operative to gain the ACCOLADE rule of your ALLEGORY for the battle.
       
-      Once per turning point, when a friendly operative that has the **PIVOTAL ROLE** completes the performance of your ALLEGORY, you can select one friendly **VOID-DANCER TROUPE** operative to gain the ACCOLADE rule of your ALLEGORY for the battle. Epic Performance: The operative incapacitates an enemy operative while fighting. Accolade: Whenever this operative is fighting, its melee weapons have the Balanced weapon rule. Melodrama Performance: The operative incapacitates an enemy operative while shooting. Accolade: The operative's ranged weapons have the Balanced weapon rule.
-  - name: Faction Rule
+      Once per turning point, when a friendly operative that has the **PIVOTAL ROLE** completes the performance of your ALLEGORY, you can select one friendly **VOID-DANCER TROUPE** operative to gain the ACCOLADE rule of your ALLEGORY for the battle.
+      
+      Epic Performance: The operative incapacitates an enemy operative while fighting. Accolade: Whenever this operative is fighting, its melee weapons have the Balanced weapon rule. Melodrama Performance: The operative incapacitates an enemy operative while shooting. Accolade: The operative's ranged weapons have the Balanced weapon rule.
+  - name: Harlequin's Panoply
     text: |-
-      **HARLEQUIN'S PANOPLY**  The tools of the Harlequins' trade afford them additional mobility and make them highly difficult to target, enabling them to dodge away from piercing shots of plasma and melta fire.
+      The tools of the Harlequins' trade afford them additional mobility and make them highly difficult to target, enabling them to dodge away from piercing shots of plasma and melta fire.
       
       Whenever an operative is shooting a friendly **VOID-DANCER TROUPE** operative, and no attack dice are retained as critical successes, worsen the x of the Piercing weapon rule by 1 (if any).
       
@@ -387,9 +389,9 @@ strategyPloys:
       So swift and dazzling are the Harlequins that even veteran marksmen struggle to draw a bead upon their lithe forms.
       
       Whenever an operative is shooting a friendly **VOID-DANCER TROUPE** operative that performed an action in which it moved during this turning point, you can re-roll one of your defence dice.
-  - name: Strategy Ploy
+  - name: Cegorach's Jest
     text: |-
-      **CEGORACH'S JEST**  Attempts to engage the troupe in melee combat meet with little success. Luckless assailants find their well- aimed strikes meeting only thin air.
+      Attempts to engage the troupe in melee combat meet with little success. Luckless assailants find their well- aimed strikes meeting only thin air.
       
       Whenever a friendly **VOID-DANCER TROUPE** operative is fighting or retaliating and your opponent strikes with a normal success, you can roll one D6: if the result is less than the Hit stat of your opponent's selected weapon, that strike is allocated to block one of your dice instead (ignore the Brutal weapon rule, if relevant) and you cannot use this rule for the rest of the sequence.
 supplementaryInfo: |-
