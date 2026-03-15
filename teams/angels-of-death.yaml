@@ -661,7 +661,7 @@ firefightPloys:
       
       Use this firefight ploy when a friendly **ANGEL OF DEATH** operative is counteracting. It can perform an additional 1AP action for free during that counteraction, but both actions must be different.
 operativeSelection:
-  archetype: SECURITY, SEEK & DESTROY
+  archetype: Security, Seek & Destroy
   text: |-
     1 **ANGEL OF DEATH** operative selected from the following list:
       - **ASSAULT INTERCESSOR SERGEANT with one option from each of the following:**

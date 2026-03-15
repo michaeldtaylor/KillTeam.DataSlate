@@ -519,8 +519,31 @@ firefightPloys:
       
       Use this firefight ploy when a friendly **NEMESIS CLAW** operative is retaliating, at the start of the Resolve Attack Dice step. You can resolve one of your successes before the normal order. If you do, you cannot resolve any other successes during that sequence.
 operativeSelection:
-  archetype: ''
-  text: ''
+  archetype: Infiltration, Seek & Destroy
+  text: |-
+    1 **NEMESIS CLAW VISIONARY** operative with one of the following options:
+      - Bolt pistol; power fist
+      - Bolt pistol; power maul
+      - Bolt pistol; power weapon
+      - Plasma pistol; Nostraman chainblade
+    5 **NEMESIS CLAW** operatives selected from the following list:
+      - **FEARMONGER**
+      - **GUNNER with one of the following options:**
+        - Bolt pistol; flamer; fists
+        - Bolt pistol; meltagun; fists
+        - Bolt pistol; plasma gun; fists
+      - **HEAVY GUNNER with one of the following options:**
+        - Bolt pistol; heavy bolter; fists
+        - Bolt pistol; missile launcher; fists
+    
+      - **SCREECHER**
+      - **SKINTHIEF**
+      - **VENTRILOKAR**
+      - **WARRIOR with one of the following options:**
+        - Bolt pistol; chainsword
+        - Boltgun; fists
+    
+    Other than **WARRIOR** operatives, your kill team can only include each operative on this list once.
 strategyPloys:
   - name: We Have Come for You
     text: |-

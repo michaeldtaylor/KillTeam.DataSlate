@@ -1624,7 +1624,14 @@ public partial class PdfTeamExtractor
 
                 if (m.Success)
                 {
-                    archetype = m.Groups[1].Value.Trim();
+                    var val = m.Groups[1].Value.Trim();
+
+                    // "SEE REVERSE" means the archetype rules are complex and printed on the back
+                    // of the card. Don't use this as the archetype label — leave it empty so the
+                    // archetype content in the body text describes it.
+                    archetype = string.Equals(val, "SEE REVERSE", StringComparison.OrdinalIgnoreCase)
+                        ? ""
+                        : TextHelpers.ToTitleCase(val);
                     foundArchetype = true;
                 }
             }
@@ -2367,7 +2374,7 @@ public partial class PdfTeamExtractor
     [GeneratedRegex(@"\d+\s*$")]
     private static partial Regex StatsLineSplitRegex();
 
-    [GeneratedRegex(@"ARCHETYPE:\s*(.+)", RegexOptions.IgnoreCase)]
+    [GeneratedRegex(@"ARCHETYPES?:\s*(.+)", RegexOptions.IgnoreCase)]
     private static partial Regex ArchetypeRegex();
 
     /// <summary>Matches contiguous ALL-CAPS sequences (possibly hyphenated, multi-word) for bold conversion.</summary>

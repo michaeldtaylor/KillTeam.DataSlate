@@ -359,7 +359,7 @@ firefightPloys:
       
       Use this firefight ploy when an operative is shooting a friendly **VOID-DANCER TROUPE** operative, during the Resolve Defence Dice step. You can allocate one of your rolled successful dice to block all of your opponent's attack dice with matching results (e.g. one of your successful defence dice results of 5 can be used to block all successful attack dice results of 5).
 operativeSelection:
-  archetype: INFILTRATION, RECON
+  archetype: Infiltration, Recon
   text: |-
     1 **VOID-DANCER TROUPE LEAD PLAYER** operative with one option from each of the following:
       - Fusion pistol, neuro disruptor or shuriken pistol

@@ -362,7 +362,7 @@ firefightPloys:
       
       Use this firefight ploy when a friendly **PLAGUE MARINE** operative is shooting against or fighting against an enemy operative within 3" of it (or within 7" of it if that enemy operative has one of your Poison tokens), after your opponent rolls their attack or defence dice. For each result of 3 they roll, inflict 1 damage on that enemy operative, that result cannot be retained as a success and they cannot re-roll it.
 operativeSelection:
-  archetype: SECURITY, SEEK & DESTROY
+  archetype: Security, Seek & Destroy
   text: |-
     1 **PLAGUE MARINE CHAMPION** operative
     5 **PLAGUE MARINE** operatives selected from the following list:

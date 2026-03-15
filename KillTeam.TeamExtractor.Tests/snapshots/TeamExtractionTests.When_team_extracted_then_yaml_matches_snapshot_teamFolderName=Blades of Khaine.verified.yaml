@@ -498,7 +498,37 @@ firefightPloys:
       Use this firefight ploy when a friendly **BLADES OF KHAINE** operative is retaliating or an enemy operative is shooting it, after your opponent rolls their attack dice, but before re-rolls. Until the end of the sequence, your opponent cannot re-roll their attack dice (if your opponent declared the use of any firefight ploys during that sequence that would allow them to re-roll, that ploy is cancelled and the CP spent on it is refunded).
 operativeSelection:
   archetype: ''
-  text: ''
+  text: |-
+    1 **BLADES OF KHAINE** operative selected from the following list:
+      - **DIRE AVENGER EXARCH with one of the following options:**
+        - Shuriken catapult; fists
+        - Twin shuriken catapult; gun butts
+    
+    Or one option from each of the following:
+      - Diresword or power weapon
+      - Shuriken pistol or shimmershield
+      - **HOWLING BANSHEE EXARCH with one of the following options:**
+        - Mirrorswords
+        - Shuriken pistol; executioner
+        - Shuriken pistol; power weapon
+        - Shuriken pistol; triskele
+        - Triskele; power weapon
+    
+      - **STRIKING SCORPION EXARCH with one of the following options:**
+        - Shuriken pistol; biting blade
+        - Shuriken pistol; scorpion's claw and chainsword
+        - Twin shuriken pistols; twin chainswords
+    7 **BLADES OF KHAINE** operatives selected from the following list:
+      - **DIRE AVENGER WARRIOR**
+      - **HOWLING BANSHEE WARRIOR**
+      - **STRIKING SCORPION WARRIOR**
+    
+    **ARCHETYPES**
+    
+    Seek & Destroy, or the associated archetype of the most common Aspect keyword in your kill team (if two keywords are equally most common, you can choose one of those keywords). Aspect keywords and their associated archetypes are as follows:
+      - **DIRE AVENGER**: Security
+      - **HOWLING BANSHEE**: Recon
+      - **STRIKING SCORPION**: Infiltration
 strategyPloys:
   - name: Forewarned
     text: |-

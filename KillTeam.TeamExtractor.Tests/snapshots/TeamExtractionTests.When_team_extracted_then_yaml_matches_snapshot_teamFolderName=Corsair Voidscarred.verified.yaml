@@ -651,8 +651,33 @@ firefightPloys:
       
       Note this ploy cannot come into effect more than once per activation (you cannot use it during both the Shoot and Fight action in the same activation).
 operativeSelection:
-  archetype: ''
-  text: ''
+  archetype: Infiltration, Recon
+  text: |-
+    1 **CORSAIR VOIDSCARRED FELARCH** operative with one of the following options:
+      - Shuriken rifle; shuriken pistol; power weapon
+      - Neuro disruptor; power weapon
+    8 **CORSAIR VOIDSCARRED** operatives selected from the following list:
+      - **FATE DEALER**
+      - **GUNNER with one of the following options:**
+        - Blaster ; shuriken pistol; fists
+        - Shredder; shuriken pistol; fists
+      - **HEAVY GUNNER with one of the following options:**
+        - Shuriken cannon; shuriken pistol; fists
+        - Shuriken pistol; wraithcannon ; fists
+      - **KURNATHI**
+      - **KURNITE HUNTER**
+      - **SHADE RUNNER**
+      - **SOUL WEAVER**
+    
+      - **STARSTORM DUELLIST**
+      - **WARRIOR with one of the following options:**
+        - Shuriken pistol; power weapon
+        - Shuriken rifle; fists
+      - **WAY SEEKER**
+    
+    Other than **WARRIOR** operatives, your kill team can only include each operative on this list once.
+    
+    Your kill team cannot include both a blaster and a wraithcannon.
 strategyPloys:
   - name: Plunderers
     text: Aeldari Corsairs prioritise profit over glory, moving swiftly towards their objective in the hope of seizing their prize before the foe can react. Up to D3 friendly **CORSAIR VOIDSCARRED** operatives can immediately perform a free Dash action in an order of your choice. This turning point, each that does so cannot perform the Dash action during their activation. You cannot use this ploy during the first turning point.
