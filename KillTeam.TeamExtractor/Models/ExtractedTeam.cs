@@ -11,7 +11,10 @@ public class ExtractedTeam
     /// <summary>The human-readable team name.</summary>
     public required string Name { get; init; }
 
-    /// <summary>The team faction name in title case.</summary>
+    /// <summary>The grand faction (e.g. Imperium, Chaos, Aeldari) from the second keyword.</summary>
+    public required string GrandFaction { get; init; }
+
+    /// <summary>The team faction name in title case (e.g. Adeptus Astartes).</summary>
     public required string Faction { get; init; }
 
     /// <summary>Operatives extracted from the datacards PDF.</summary>
@@ -51,6 +54,7 @@ public class ExtractedTeam
         // ── Metadata header ────────────────────────────────────────────────────
         YamlWriter.WriteKeyValue(sb, 0, "id", N(this.Id));
         YamlWriter.WriteKeyValue(sb, 0, "name", N(this.Name));
+        YamlWriter.WriteKeyValue(sb, 0, "grandFaction", N(this.GrandFaction));
         YamlWriter.WriteKeyValue(sb, 0, "faction", N(this.Faction));
 
         // ── datacards ──────────────────────────────────────────────────────────
@@ -188,10 +192,10 @@ public class ExtractedTeam
         }
 
         sb.AppendLine("    stats:");
-        YamlWriter.WriteKeyInt(sb, 6, "move", op.Move);
         YamlWriter.WriteKeyInt(sb, 6, "apl", op.Apl);
-        YamlWriter.WriteKeyInt(sb, 6, "wounds", op.Wounds);
+        YamlWriter.WriteKeyInt(sb, 6, "move", op.Move);
         sb.AppendLine("      save: " + YamlWriter.Scalar(N(op.Save)));
+        YamlWriter.WriteKeyInt(sb, 6, "wounds", op.Wounds);
 
         sb.AppendLine("    weapons:");
 

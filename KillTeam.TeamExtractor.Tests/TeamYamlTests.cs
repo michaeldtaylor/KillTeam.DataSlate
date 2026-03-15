@@ -60,6 +60,7 @@ public class TeamYamlTests
 
         root.TryGetProperty("id", out _).Should().BeTrue($"{slug}.yaml must have 'id'");
         root.TryGetProperty("name", out _).Should().BeTrue($"{slug}.yaml must have 'name'");
+        root.TryGetProperty("grandFaction", out _).Should().BeTrue($"{slug}.yaml must have 'grandFaction'");
         root.TryGetProperty("faction", out _).Should().BeTrue($"{slug}.yaml must have 'faction'");
         root.TryGetProperty("datacards", out var datacards).Should().BeTrue($"{slug}.yaml must have 'datacards'");
         datacards.GetArrayLength().Should().BeGreaterThan(0, $"{slug} should have at least one datacard");

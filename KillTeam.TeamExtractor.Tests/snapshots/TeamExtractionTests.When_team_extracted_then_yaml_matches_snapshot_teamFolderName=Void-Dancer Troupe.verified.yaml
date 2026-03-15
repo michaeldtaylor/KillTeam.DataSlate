@@ -1,5 +1,6 @@
 ﻿id: void-dancer-troupe
 name: Void-Dancer Troupe
+grandFaction: Aeldari
 faction: Harlequin
 datacards:
   - name: Lead Player
@@ -12,10 +13,10 @@ datacards:
       - Leader
       - Lead Player
     stats:
-      move: 7
       apl: 3
-      wounds: 9
+      move: 7
       save: '4+'
+      wounds: 9
     weapons:
       - name: Fusion pistol
         type: Ranged
@@ -105,10 +106,10 @@ datacards:
       - Harlequin
       - Death Jester
     stats:
-      move: 7
       apl: 3
-      wounds: 9
+      move: 7
       save: '4+'
+      wounds: 9
     weapons:
       - name: Shrieker cannon (focused)
         type: Ranged
@@ -154,10 +155,10 @@ datacards:
       - Harlequin
       - Player
     stats:
-      move: 7
       apl: 3
-      wounds: 8
+      move: 7
       save: '4+'
+      wounds: 8
     weapons:
       - name: Fusion pistol
         type: Ranged
@@ -236,10 +237,10 @@ datacards:
       - Psyker
       - Shadowseer
     stats:
-      move: 7
       apl: 3
-      wounds: 9
+      move: 7
       save: '4+'
+      wounds: 9
     weapons:
       - name: Hallucinogen grenade
         type: Ranged

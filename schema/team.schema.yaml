@@ -3,7 +3,7 @@ $id: 'urn:killteam:team.schema.yaml'
 title: Kill Team - Team Schema
 description: Schema for a Kill Team v3.0 team exported from official PDFs
 type: object
-required: [id, name, faction, datacards]
+required: [id, name, grandFaction, faction, datacards]
 additionalProperties: false
 properties:
   id:
@@ -12,6 +12,9 @@ properties:
     pattern: '^[a-z0-9-]+$'
   name:
     type: string
+  grandFaction:
+    type: string
+    description: "Grand faction (e.g. Imperium, Chaos, Aeldari) — keywords[1] from datacards"
   faction:
     type: string
   factionRules:
@@ -147,7 +150,7 @@ $defs:
           $ref: '#/$defs/weaponRule'
   stats:
     type: object
-    required: [move, apl, wounds, save]
+    required: [apl, move, save, wounds]
     additionalProperties: false
     properties:
       move:

@@ -1,5 +1,6 @@
 ﻿id: plague-marines
 name: Plague Marines
+grandFaction: Chaos
 faction: Heretic Astartes
 datacards:
   - name: Plague Marine Champion
@@ -12,10 +13,10 @@ datacards:
       - Leader
       - Champion
     stats:
-      move: 5
       apl: 3
-      wounds: 15
+      move: 5
       save: '3+'
+      wounds: 15
     weapons:
       - name: Plasma pistol (standard)
         type: Ranged
@@ -65,10 +66,10 @@ datacards:
       - Heretic Astartes
       - Bombardier
     stats:
-      move: 5
       apl: 3
-      wounds: 14
+      move: 5
       save: '3+'
+      wounds: 14
     weapons:
       - name: Boltgun
         type: Ranged
@@ -99,10 +100,10 @@ datacards:
       - Heretic Astartes
       - Fighter
     stats:
-      move: 5
       apl: 3
-      wounds: 14
+      move: 5
       save: '3+'
+      wounds: 14
     weapons:
       - name: Flail of Corruption
         type: Melee
@@ -132,10 +133,10 @@ datacards:
       - Heretic Astartes
       - Heavy Gunner
     stats:
-      move: 5
       apl: 3
-      wounds: 14
+      move: 5
       save: '3+'
+      wounds: 14
     weapons:
       - name: Plague spewer
         type: Ranged
@@ -166,10 +167,10 @@ datacards:
       - Heretic Astartes
       - Icon Bearer
     stats:
-      move: 5
       apl: 3
-      wounds: 14
+      move: 5
       save: '3+'
+      wounds: 14
     weapons:
       - name: Bolt pistol
         type: Ranged
@@ -208,10 +209,10 @@ datacards:
       - Psyker
       - Malignant Plaguecaster
     stats:
-      move: 5
       apl: 3
-      wounds: 14
+      move: 5
       save: '3+'
+      wounds: 14
     weapons:
       - name: Entropy
         type: Ranged
@@ -274,10 +275,10 @@ datacards:
       - Heretic Astartes
       - Warrior
     stats:
-      move: 5
       apl: 3
-      wounds: 14
+      move: 5
       save: '3+'
+      wounds: 14
     weapons:
       - name: Boltgun
         type: Ranged

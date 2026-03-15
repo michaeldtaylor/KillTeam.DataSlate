@@ -79,16 +79,32 @@ Every team folder contains exactly 8 PDFs. All produce required output:
 Metadata first, then PDF-sourced fields in alphabetical PDF filename order:
 
 ```
-id, name, faction          (metadata header)
-datacards                  (Datacards)
-factionEquipment           (Faction Equipment)
-factionRules               (Faction Rules)
-firefightPloys             (Firefight Ploys)
-operativeSelection         (Operative Selection)
-strategyPloys              (Strategy Ploys)
-supplementaryInfo          (Supplementary Information)
-universalEquipment         (Universal Equipment)
+id, name, grandFaction, faction   (metadata header)
+datacards                          (Datacards)
+factionEquipment                   (Faction Equipment)
+factionRules                       (Faction Rules)
+firefightPloys                     (Firefight Ploys)
+operativeSelection                 (Operative Selection)
+strategyPloys                      (Strategy Ploys)
+supplementaryInfo                  (Supplementary Information)
+universalEquipment                 (Universal Equipment)
 ```
+
+### Faction and grandFaction derivation
+
+Both are extracted from the keyword line of the first operative on the Datacards PDF. The keyword line is all-caps, comma-separated, e.g.:
+
+```
+ANGEL OF DEATH, IMPERIUM, ADEPTUS ASTARTES, FIGHTER
+```
+
+| Index | Value | YAML field |
+|-------|-------|------------|
+| `[0]` | Operative type keyword | (used as `primaryKeyword`) |
+| `[1]` | Grand faction | `grandFaction` (e.g. `Imperium`, `Chaos`) |
+| `[2]` | Sub-faction / battle faction | `faction` (e.g. `Adeptus Astartes`) |
+
+If fewer than 3 keywords are found, the fallback value `"UNKNOWN — UPDATE ME"` is written.
 
 ---
 

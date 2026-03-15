@@ -1,5 +1,6 @@
 ﻿id: nemesis-claw
 name: Nemesis Claw
+grandFaction: Chaos
 faction: Heretic Astartes
 datacards:
   - name: Night Lord Visionary
@@ -13,10 +14,10 @@ datacards:
       - Leader
       - Visionary
     stats:
-      move: 6
       apl: 3
-      wounds: 15
+      move: 6
       save: '3+'
+      wounds: 15
     weapons:
       - name: Bolt pistol
         type: Ranged
@@ -107,10 +108,10 @@ datacards:
       - Heretic Astartes
       - Fearmonger
     stats:
-      move: 6
       apl: 3
-      wounds: 14
+      move: 6
       save: '3+'
+      wounds: 14
     weapons:
       - name: Scoped bolt pistol (long range)
         type: Ranged
@@ -161,10 +162,10 @@ datacards:
       - Heretic Astartes
       - Gunner
     stats:
-      move: 6
       apl: 3
-      wounds: 14
+      move: 6
       save: '3+'
+      wounds: 14
     weapons:
       - name: Bolt pistol
         type: Ranged
@@ -233,10 +234,10 @@ datacards:
       - Heretic Astartes
       - Heavy Gunner
     stats:
-      move: 6
       apl: 3
-      wounds: 14
+      move: 6
       save: '3+'
+      wounds: 14
     weapons:
       - name: Bolt pistol
         type: Ranged
@@ -304,10 +305,10 @@ datacards:
       - Heretic Astartes
       - Screecher
     stats:
-      move: 6
       apl: 3
-      wounds: 14
+      move: 6
       save: '3+'
+      wounds: 14
     weapons:
       - name: Lightning claws
         type: Melee
@@ -333,10 +334,10 @@ datacards:
       - Heretic Astartes
       - Skinthief
     stats:
-      move: 6
       apl: 3
-      wounds: 14
+      move: 6
       save: '3+'
+      wounds: 14
     weapons:
       - name: Bolt pistol
         type: Ranged
@@ -371,10 +372,10 @@ datacards:
       - Psyker
       - Ventrilokar
     stats:
-      move: 6
       apl: 3
-      wounds: 14
+      move: 6
       save: '3+'
+      wounds: 14
     weapons:
       - name: Bolt pistol
         type: Ranged
@@ -417,10 +418,10 @@ datacards:
       - Heretic Astartes
       - Warrior
     stats:
-      move: 6
       apl: 3
-      wounds: 14
+      move: 6
       save: '3+'
+      wounds: 14
     weapons:
       - name: Bolt pistol
         type: Ranged

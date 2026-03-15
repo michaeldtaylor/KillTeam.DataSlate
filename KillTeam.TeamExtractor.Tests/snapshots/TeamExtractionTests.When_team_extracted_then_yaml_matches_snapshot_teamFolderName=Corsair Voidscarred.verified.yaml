@@ -1,5 +1,6 @@
 ﻿id: corsair-voidscarred
 name: Corsair Voidscarred
+grandFaction: Aeldari
 faction: Anhrathe
 datacards:
   - name: Voidscarred Felarch
@@ -12,10 +13,10 @@ datacards:
       - Leader
       - Felarch
     stats:
-      move: 7
       apl: 2
-      wounds: 9
+      move: 7
       save: '4+'
+      wounds: 9
     weapons:
       - name: Neuro disruptor
         type: Ranged
@@ -70,10 +71,10 @@ datacards:
       - Anhrathe
       - Fate Dealer
     stats:
-      move: 7
       apl: 2
-      wounds: 8
+      move: 7
       save: '4+'
+      wounds: 8
     weapons:
       - name: Ranger long rifle (mobile)
         type: Ranged
@@ -125,10 +126,10 @@ datacards:
       - Anhrathe
       - Gunner
     stats:
-      move: 7
       apl: 2
-      wounds: 8
+      move: 7
       save: '4+'
+      wounds: 8
     weapons:
       - name: Blaster
         type: Ranged
@@ -175,10 +176,10 @@ datacards:
       - Anhrathe
       - Heavy Gunner
     stats:
-      move: 7
       apl: 2
-      wounds: 8
+      move: 7
       save: '4+'
+      wounds: 8
     weapons:
       - name: Shuriken cannon (focused)
         type: Ranged
@@ -238,10 +239,10 @@ datacards:
       - Anhrathe
       - Kurnathi
     stats:
-      move: 7
       apl: 2
-      wounds: 8
+      move: 7
       save: '4+'
+      wounds: 8
     weapons:
       - name: Shuriken pistol
         type: Ranged
@@ -277,10 +278,10 @@ datacards:
       - Anhrathe
       - Kurnite Hunter
     stats:
-      move: 7
       apl: 2
-      wounds: 8
+      move: 7
       save: '4+'
+      wounds: 8
     weapons:
       - name: Faolchú
         type: Ranged
@@ -327,10 +328,10 @@ datacards:
       - Anhrathe
       - Shade Runner
     stats:
-      move: 7
       apl: 2
-      wounds: 8
+      move: 7
       save: '4+'
+      wounds: 8
     weapons:
       - name: Shuriken pistol
         type: Ranged
@@ -381,10 +382,10 @@ datacards:
       - Medic
       - Soul Weaver
     stats:
-      move: 7
       apl: 2
-      wounds: 8
+      move: 7
       save: '4+'
+      wounds: 8
     weapons:
       - name: Shuriken pistol
         type: Ranged
@@ -427,10 +428,10 @@ datacards:
       - Anhrathe
       - Starstorm Duellist
     stats:
-      move: 7
       apl: 2
-      wounds: 8
+      move: 7
       save: '4+'
+      wounds: 8
     weapons:
       - name: Fusion pistol
         type: Ranged
@@ -479,10 +480,10 @@ datacards:
       - Anhrathe
       - Warrior
     stats:
-      move: 7
       apl: 2
-      wounds: 8
+      move: 7
       save: '4+'
+      wounds: 8
     weapons:
       - name: Shuriken pistol
         type: Ranged
@@ -532,10 +533,10 @@ datacards:
       - Psyker
       - Way Seeker
     stats:
-      move: 7
       apl: 2
-      wounds: 8
+      move: 7
       save: '4+'
+      wounds: 8
     weapons:
       - name: Freezing grasp
         type: Ranged

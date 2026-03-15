@@ -64,7 +64,7 @@ public partial class PdfTeamExtractor
         }
 
         var weaponTypes = this._weaponTypeDetector.Detect(datacardsPath);
-        var (operatives, faction) = this.ParseDatacards(datacardsPath, weaponTypes);
+        var (operatives, faction, grandFaction) = this.ParseDatacards(datacardsPath, weaponTypes);
 
         var factionEquipment = factionEquipPath != null
             ? this.ParseEquipmentWithDescriptions([factionEquipPath])
@@ -88,6 +88,7 @@ public partial class PdfTeamExtractor
         {
             Id = Slugify(teamName),
             Name = teamName,
+            GrandFaction = grandFaction ?? "UNKNOWN — UPDATE ME",
             Faction = faction ?? "UNKNOWN — UPDATE ME",
             Datacards = operatives,
             FactionEquipment = factionEquipment,
@@ -102,7 +103,7 @@ public partial class PdfTeamExtractor
 
     // ─── Datacard parsing ────────────────────────────────────────────────────────
 
-    private (List<ExtractedOperative> Operatives, string? Faction) ParseDatacards(
+    private (List<ExtractedOperative> Operatives, string? Faction, string? GrandFaction) ParseDatacards(
         string pdfPath,
         Dictionary<string, WeaponType> weaponTypes)
     {
@@ -119,6 +120,7 @@ public partial class PdfTeamExtractor
         var operativeMap = new Dictionary<string, ExtractedOperative>(StringComparer.OrdinalIgnoreCase);
         var processed = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         string? faction = null;
+        string? grandFaction = null;
         var i = 0;
 
         while (i < count)
@@ -345,9 +347,10 @@ public partial class PdfTeamExtractor
 
                 primaryKeyword = keywords.FirstOrDefault() ?? "";
 
-                // Third keyword (index 2) is the faction
+                // Third keyword (index 2) is the faction; second (index 1) is the grand faction
                 if (faction == null && keywords.Count >= 3)
                 {
+                    grandFaction = keywords[1];
                     faction = keywords[2];
                 }
             }
@@ -380,7 +383,7 @@ public partial class PdfTeamExtractor
             }
         }
 
-        return (operatives, faction);
+        return (operatives, faction, grandFaction);
     }
 
     /// <summary>

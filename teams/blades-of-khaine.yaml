@@ -1,5 +1,6 @@
 ﻿id: blades-of-khaine
 name: Blades of Khaine
+grandFaction: Aeldari
 faction: Asuryani
 datacards:
   - name: Dire Avenger Exarch
@@ -13,10 +14,10 @@ datacards:
       - Dire Avenger
       - Exarch
     stats:
-      move: 7
       apl: 3
-      wounds: 9
+      move: 7
       save: '3+'
+      wounds: 9
     weapons:
       - name: Shuriken catapult
         type: Ranged
@@ -97,10 +98,10 @@ datacards:
       - Dire Avenger
       - Warrior
     stats:
-      move: 7
       apl: 3
-      wounds: 8
+      move: 7
       save: '4+'
+      wounds: 8
     weapons:
       - name: Shuriken catapult
         type: Ranged
@@ -132,10 +133,10 @@ datacards:
       - Howling Banshee
       - Exarch
     stats:
-      move: 7
       apl: 3
-      wounds: 9
+      move: 7
       save: '3+'
+      wounds: 9
     weapons:
       - name: Shuriken pistol
         type: Ranged
@@ -210,10 +211,10 @@ datacards:
       - Howling Banshee
       - Warrior
     stats:
-      move: 7
       apl: 3
-      wounds: 8
+      move: 7
       save: '4+'
+      wounds: 8
     weapons:
       - name: Shuriken pistol
         type: Ranged
@@ -248,10 +249,10 @@ datacards:
       - Striking Scorpion
       - Exarch
     stats:
-      move: 7
       apl: 3
-      wounds: 9
+      move: 7
       save: '3+'
+      wounds: 9
     weapons:
       - name: Shuriken pistol
         type: Ranged
@@ -318,10 +319,10 @@ datacards:
       - Striking Scorpion
       - Warrior
     stats:
-      move: 7
       apl: 3
-      wounds: 8
+      move: 7
       save: '4+'
+      wounds: 8
     weapons:
       - name: Shuriken pistol
         type: Ranged
