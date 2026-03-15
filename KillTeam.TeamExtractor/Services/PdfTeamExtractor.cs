@@ -1485,7 +1485,14 @@ public partial class PdfTeamExtractor
         {
             if (currentItem.Length > 0)
             {
-                output.AppendLine(currentItem.ToString());
+                var itemStr = currentItem.ToString();
+                // If a • bullet begins with a bold ALL-CAPS span (operative name) immediately
+                // followed by qualifying text ("with one of the following options:" etc.),
+                // re-wrap the entire content in a single bold span for consistent formatting.
+                var m = OperativeBulletRewrapRegex().Match(itemStr);
+                output.AppendLine(m.Success
+                    ? $"  - **{m.Groups[1].Value} {m.Groups[2].Value}**"
+                    : itemStr);
                 currentItem.Clear();
             }
         }
@@ -1539,7 +1546,14 @@ public partial class PdfTeamExtractor
             else if (stripped[0] == '\u2022') // •
             {
                 FlushItem();
-                var rest = ApplyBold(stripped[1..].TrimStart());
+                var bulletContent = stripped[1..].TrimStart();
+                // If the bullet starts with an ALL-CAPS operative name (two consecutive uppercase
+                // chars), bold the entire label including any qualifying text such as
+                // "with auxiliary grenade launcher and one of the following options:".
+                // Otherwise (e.g. "Plasma pistol; chainsword") apply selective bolding only.
+                var rest = bulletContent.Length >= 2 && char.IsUpper(bulletContent[0]) && char.IsUpper(bulletContent[1])
+                    ? $"**{bulletContent}**"
+                    : ApplyBold(bulletContent);
                 currentItem.Append("  - ").Append(rest);
                 parentDepth = 2;
             }
@@ -2030,6 +2044,16 @@ public partial class PdfTeamExtractor
     /// <summary>Matches contiguous ALL-CAPS sequences (possibly hyphenated, multi-word) for bold conversion.</summary>
     [GeneratedRegex(@"[A-Z][A-Z\-]+(?:\s+[A-Z][A-Z\-]+)*")]
     private static partial Regex AllCapsSequenceRegex();
+
+    /// <summary>
+    /// Matches a • bullet item whose content begins with a bold ALL-CAPS operative-name span
+    /// followed by qualifying lowercase text (e.g. "with one of the following options:").
+    /// Used by FlushItem to re-wrap the entire content in a single bold span.
+    /// Group 1 = ALL-CAPS name (without the ** markers).
+    /// Group 2 = the remaining qualifier text (space-prefixed).
+    /// </summary>
+    [GeneratedRegex(@"^  - \*\*([A-Z][A-Z '\-]+(?:\s+[A-Z][A-Z '\-]+)*)\*\* (.+)$")]
+    private static partial Regex OperativeBulletRewrapRegex();
 
     /// <summary>
     /// Single-column 1AP action header: ALL-CAPS name followed by digit+AP.
