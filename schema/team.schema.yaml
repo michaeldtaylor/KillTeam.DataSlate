@@ -67,7 +67,7 @@ $defs:
     properties:
       category:
         type: string
-        description: "Optional category heading from the PDF (e.g. 'Howling Banshee', 'Dire Avenger')"
+        description: "Optional category heading from the PDF, combining the sub-group and type (e.g. 'Howling Banshee Aspect Technique', 'Dire Avenger Aspect Technique')"
       name:
         type: string
       text:
