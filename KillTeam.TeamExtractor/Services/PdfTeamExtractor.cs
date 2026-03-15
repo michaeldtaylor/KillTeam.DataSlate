@@ -1863,7 +1863,29 @@ public partial class PdfTeamExtractor
         var output = new StringBuilder();
         var prevWasHeader = false;
         var prevAllCapsQuoteMode = false; // true when inside a flavour-text / quote ALL-CAPS block
+        var quoteBuffer = new StringBuilder(); // accumulates ALL-CAPS quote-block lines
         var pendingHeaderText = new StringBuilder(); // accumulates consecutive all-caps lines into one header
+
+        void FlushQuoteBuffer()
+        {
+            if (quoteBuffer.Length == 0)
+            {
+                return;
+            }
+
+            if (output.Length > 0)
+            {
+                while (output.Length > 0 && output[output.Length - 1] == '\n')
+                {
+                    output.Remove(output.Length - 1, 1);
+                }
+
+                output.Append("\n\n");
+            }
+
+            output.Append("**").Append(quoteBuffer.ToString().Trim()).Append("**\n\n");
+            quoteBuffer.Clear();
+        }
 
         void FlushPendingHeader()
         {
@@ -1901,6 +1923,7 @@ public partial class PdfTeamExtractor
             if (trimmed.Length == 0)
             {
                 lastLineWasBulletSymbol = false;
+                FlushQuoteBuffer();
                 prevAllCapsQuoteMode = false;
                 continue;
             }
@@ -1913,6 +1936,7 @@ public partial class PdfTeamExtractor
                 lastLineWasBulletSymbol = true;
                 AppendText(output, trimmed);
                 prevWasHeader = false;
+                FlushQuoteBuffer();
                 prevAllCapsQuoteMode = false;
                 continue;
             }
@@ -1969,7 +1993,8 @@ public partial class PdfTeamExtractor
                     // in flavour-text quote blocks, not as section headings. Once we detect one,
                     // stay in quote mode for all subsequent all-caps lines until a non-all-caps
                     // line resets the mode.
-                    var hasStrongTerminator = trimmed.Contains('?') || trimmed.Contains('!');
+                    var hasStrongTerminator = trimmed.Contains('?') || trimmed.Contains('!')
+                        || trimmed.StartsWith('\''); // opening single-quote = callout/flavour-text box
 
                     if (!hasStrongTerminator && !prevAllCapsQuoteMode)
                     {
@@ -2038,6 +2063,7 @@ public partial class PdfTeamExtractor
                 else
                 {
                     // Non-all-caps content — exit quote mode
+                    FlushQuoteBuffer();
                     prevAllCapsQuoteMode = false;
                 }
 
@@ -2081,22 +2107,37 @@ public partial class PdfTeamExtractor
                 // Bare-bullet content terminates any pending header
                 FlushPendingHeader();
                 prevWasHeader = false;
+                FlushQuoteBuffer();
                 prevAllCapsQuoteMode = false;
             }
 
             // Fix 3: paragraph break before specific sentence starters that follow inline
             // content with no raw blank line in the PDF.
-            if (output.Length > 0 && output[output.Length - 1] != '\n'
+            if (!prevAllCapsQuoteMode
+                && output.Length > 0 && output[output.Length - 1] != '\n'
                 && (trimmed.StartsWith("Other than ", StringComparison.OrdinalIgnoreCase)
                     || trimmed.StartsWith("Some ", StringComparison.OrdinalIgnoreCase)))
             {
                 output.Append("\n\n");
             }
 
-            // Regular prose / quoted text: use AppendText for proper word-wrap joining
-            AppendText(output, trimmed);
+            // Accumulate ALL-CAPS quote blocks into quoteBuffer; regular prose via AppendText.
+            if (prevAllCapsQuoteMode)
+            {
+                if (quoteBuffer.Length > 0)
+                {
+                    quoteBuffer.Append(' ');
+                }
+
+                quoteBuffer.Append(trimmed);
+            }
+            else
+            {
+                AppendText(output, trimmed);
+            }
         }
 
+        FlushQuoteBuffer();
         FlushPendingHeader();
 
         var text = TextHelpers.StructureToMarkdown(output.ToString().TrimStart());
