@@ -397,81 +397,81 @@ strategyPloys:
       
       Whenever a friendly **VOID-DANCER TROUPE** operative is fighting or retaliating and your opponent strikes with a normal success, you can roll one D6: if the result is less than the Hit stat of your opponent's selected weapon, that strike is allocated to block one of your dice instead (ignore the Brutal weapon rule, if relevant) and you cannot use this rule for the rest of the sequence.
 supplementaryInfo: |-
-  **VOID-DANCER TROUPE: UPDATE LOG**
+  # Void-Dancer Troupe: Update Log
   
   Rules will be periodically updated to maintain fair balance and interact more smoothly with the game. Rules changes will be updated directly into online documents and then listed below. Any minor changes to standardise wording that don't have any practical impact on the rule will be updated directly into online documents but not be listed here.
   
-  **ERRATA OCTOBER '25**
+  # Errata October '25
   
   This section collects amendments to the rules. Amended text for clarification and edits are shown in blue, while amended text for balance updates are shown in magenta.
   
-  **SHADOWSEER OPERATIVE, HALLUCINOGEN GRENADE WEAPON**
+  # Shadowseer Operative, Hallucinogen Grenade Weapon
   
   'Seek' weapon rule changed to 'Seek Light'.
   
-  **LEAD PLAYER & PLAYER OPERATIVES, BLADE WEAPON**
+  # Lead Player & Player Operatives, Blade Weapon
   
   Dmg stats changed to '4/6' 'Severe' weapon rule deleted.
   
-  **FACTION RULES, HARLEQUIN'S PANOPLY**
+  # Faction Rules, Harlequin's Panoply
   
   First sentence changed to read: 'Whenever an operative is shooting a friendly **VOID-DANCER TROUPE** operative, and no attack dice are retained as critical successes, worsen the x of the Piercing weapon rule by 1 (if any).
   
   Note that Piercing 1 would therefore be ignored.'
   
-  **FIREFIGHT PLOYS, THE CURTAIN FALLS**
+  # Firefight Ploys, the Curtain Falls
   
   Relevant part changed to read: '[...] after you strike with a critical success, if the enemy operative isn't incapacitated. End that sequence (any remaining attack dice are discarded) and immediately perform a free Dash or Fall Back action up to 3" with that operative (then the Fight action ends). That operative can do so even if it's performed an action that prevents it from performing the Dash or Fall Back action.'
   
-  **RULES COMMENTARY OCTOBER '25**
+  # Rules Commentary October '25
   
   This section provides clarification on ambiguous and complex rules interactions. Q: Does 'Once per turning point' in the PLAYER operative's Luck of the Laughing God rule mean I can only use this rule once during each turning point, no matter how many friendly operatives have that rule? A: Yes.
   
-  **PREVIOUS ERRATAS**
+  # Previous Erratas
   
-  **FIREFIGHT PLOYS, ELUSIVE TARGET**
+  # Firefight Ploys, Elusive Target
   
   Second sentence changed to read: 'Until the start of its next activation, while that operative has a Conceal order and is in cover, it cannot be selected as a valid target, taking precedence over all other rules (e.g. Seek, Vantage terrain) except being within 2".'
   
-  **SHADOWSEER OPERATIVE, MIRROR OF MINDS ACTION**
+  # Shadowseer Operative, Mirror of Minds Action
   
   Second sentence of effect changed to read: 'Select one enemy operative that's a valid target for and within 8" of this operative.'
   
-  **FACTION RULES, HARLEQUIN'S PANOPLY**
+  # Faction Rules, Harlequin's Panoply
   
   Relevant part of second paragraph changed to read: 'Whenever a friendly **VOID-DANCER TROUPE** operative is climbing up, you can treat the vertical distance as 2" […]'
   
-  **FACTION RULES, SAEDATH, EPIC**
+  # Faction Rules, Saedath, Epic
   
   Relevant part of Performance deleted: ~~'The operative incapacitates an enemy operative while fighting or retaliating.'~~ Accolade changed to read: 'Whenever this operative is fighting, its melee weapons have the Balanced weapon rule.
   
-  **VOID-DANCER TROUPE**
+  # Void-Dancer Troupe
   
-  **OPERATIVES**
+  # Operatives
   
   Even amongst the agile Aeldari, the Harlequins of the Void-dancer Troupes display an almost preternatural level of dexterity and skill. Performance and war merge in their actions, precisely directed to shape the fate of their race.
   
-  **LEAD PLAYER**
+  # Lead Player
   
   Choreographers of conflict, Lead Players are experienced Harlequins clad in extravagant garb. They direct their warriors' reactions to the fates of battle and ensure their comrades' performances in the theatre of war is as perfect as it can be.
   
-  **DEATH JESTER**
+  # Death Jester
   
   The arrival of a Death Jester in a killzone is announced by a hissing storm of shrieker cannon fire. Enemy infantry are torn apart as the weapon's gene-toxins cause them to combust horrifically from within. Adding insult to injury, the Death Jester ensures every demise is cruelly ironic.
   
-  **PLAYER**
+  # Player
   
   Harlequin Players perform with breathtaking skill, whether their stage is a wraithbone-and-glass amphitheatre bathed in crystalline light or the firelit hell of the battlefield. They tumble, sprint and leap, with every trigger squeeze and blade slash bringing orchestrated death to the enemy.
   
-  **SHADOWSEER**
+  # Shadowseer
   
   Shadowseers can blind foes and drive them mad with their psychic powers. As they obscure their allies with illusions, they fire hallucinogenic grenades that cause disorientation or death. In close combat, Shadowseers' miststaves scramble the perceptions of those they hit. 2 Below you will find a list of the operatives that make up a
   
-  **VOID-DANCER TROUPE**
+  # Void-Dancer Troupe
   
   kill team, including, where relevant, any weapons specified for that operative.
   
-  **OPERATIVES**
+  # Operatives
   
   - 1 **VOID-DANCER TROUPE LEAD PLAYER** operative with one option from each of the following:
       - Fusion pistol, neuro disruptor or shuriken pistol
@@ -490,45 +490,45 @@ supplementaryInfo: |-
   
   Your kill team can only include up to one fusion pistol and up to one neuro disruptor.
   
-  **ARCHETYPES**
+  # Archetypes
   
-  **INFILTRATION RECON**
+  # Infiltration Recon
   
   Archetypes are used in certain mission packs, e.g. Approved Ops. The game sequence will specify how.
   
   **VOID-DANCER TROUPE >> KILL TEAM SELECTION**
   
-  **LEAD PLAYER**
+  # Lead Player
   
-  **DEATH JESTER**
+  # Death Jester
   
-  **'STRIKE NOT WHERE YOUR ENEMY EXPECTS**
+  # 'strike Not Where Your Enemy Expects
   
-  **YOUR BLADE TO FALL, NOR EVEN WHERE LOGIC**
+  # Your Blade to Fall, nor Even Where Logic
   
-  **DICTATES. STRIKE INSTEAD WHERE YOUR BLOW**
+  # Dictates. Strike Instead Where Your Blow
   
-  **WILL HAVE THE GREATEST MEANING. LEAVE**
+  # Will Have the Greatest Meaning. Leave
   
-  **YOUR LESSON WRIT LARGE IN BLOOD UPON THE**
+  # Your Lesson Writ Large in Blood Upon The
   
-  **FIELD OF BATTLE.'**
+  # Field of Battle.'
   
   - extract from the Teachings of Cegorach Kiss Shuriken pistol Shrieker cannon Shrieker blade 3
   
-  **'THERE WERE SO FEW OF THEM. NO TANKS, NO ARTILLERY, JUST THIS… HANDFUL… OF XENOS. WE**
+  # 'there Were So Few of Them. No Tanks, No Artillery, Just This… Handful… of Xenos. We
   
-  **EXPECTED AN EASY FIGHT. THEN THE MADNESS STARTED TO SPREAD; MEN BEGAN TO SCREAM, TO**
+  # Expected an Easy Fight. Then the Madness Started to Spread; Men Began to Scream, To
   
-  **TURN UPON ONE ANOTHER. THE THINGS I SAW… EVEN NOW I CANNOT TRUST MY OWN MIND. EXECUTE**
+  # Turn Upon One Another. the Things I Saw… Even Now I Cannot Trust My Own Mind. Execute
   
-  **ME, I BEG YOU. MAYBE THAT WILL FINALLY WIPE AWAY THE NIGHTMARES.'**
+  # Me, I Beg You. Maybe That Will Finally Wipe Away the Nightmares.'
   
   - tribunal testimony of Sergeant Gastor, Cadian 654th
   
-  **PLAYER**
+  # Player
   
-  **SHADOWSEER**
+  # Shadowseer
   
   Kiss Shuriken pistol Caress Shuriken pistol Blade Neuro disruptor Neuro disruptor Neuro disruptor Hallucinogen grenade Miststave 4
 universalEquipment:

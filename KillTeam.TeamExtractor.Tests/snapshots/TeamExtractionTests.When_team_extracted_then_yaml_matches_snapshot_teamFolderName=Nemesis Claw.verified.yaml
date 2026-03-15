@@ -565,95 +565,95 @@ strategyPloys:
   - name: Return to Darkness
     text: 'The Night Lords move from shadow to shadow with an agility and speed belied by their transhuman bulk. One friendly **NEMESIS CLAW** operative can immediately perform a free Fall Back or Reposition action, but it must end that move with Heavy terrain within its control range, or any part of its base underneath Vantage terrain. In addition, it cannot move more than 4" during that action and it cannot end that move closer to enemy operatives (in a killzone that uses the close quarters rules, e.g. Killzone: Tomb World, ignore Wall terrain when determining this).'
 supplementaryInfo: |-
-  **NEMESIS CLAW: UPDATE LOG**
+  # Nemesis Claw: Update Log
   
   Rules will be periodically updated to maintain fair balance and interact more smoothly with the game. Rules changes will be updated directly into online documents and then listed below. Any minor changes to standardise wording that don't have any practical impact on the rule will be updated directly into online documents but not be listed here.
   
-  **ERRATA JANUARY '26**
+  # Errata January '26
   
   This section collects amendments to the rules. Amended text for clarification and edits are shown in blue, while amended text for balance updates are shown in magenta.
   
-  **FACTION EQUIPMENT, CHAIN SNARE**
+  # Faction Equipment, Chain Snare
   
   Last sentence changed to read: 'If any result is a 4+, that enemy operative cannot perform that action during that activation/counteraction (no AP are spent on it), and you cannot use this rule again during this turning point.'
   
-  **PREVIOUS ERRATAS**
+  # Previous Erratas
   
-  **FACTION RULES, IN MIDNIGHT CLAD**
+  # Faction Rules, in Midnight Clad
   
   First bullet point changed to read: 'It's more than 8" from enemy operatives it's visible to.'
   
-  **FACTION EQUIPMENT, COMMS JAMMERS**
+  # Faction Equipment, Comms Jammers
   
   Relevant part of first sentence changed to read: 'Whenever an enemy operative is within 3" of a friendly **NEMESIS CLAW** operative, […]'
   
-  **FIREFIGHT PLOYS, DEATH TO THE FALSE EMPEROR**
+  # Firefight Ploys, Death to the False Emperor
   
   First sentence changed to read: 'Use this firefight ploy after rolling your attack dice for a friendly **NEMESIS CLAW** operative, if it's shooting against, fighting against or retaliating against an enemy operative that has the IMPERIUM keyword.'
   
-  **FIREFIGHT PLOYS, VOX SCREAM**
+  # Firefight Ploys, Vox Scream
   
   Changed to read: 'Use this firefight ploy when your opponent would activate an enemy operative that's visible to a friendly **NEMESIS CLAW** operative. Roll one D6; if the result is higher than that enemy operative's APL stat, your opponent cannot activate it during this activation; if the result is less than or equal to that enemy operative's APL stat, this ploy isn't used, the CP spent on it is refunded and you cannot use this ploy again during this turning point. If there are no other enemy operatives eligible to be activated, this ploy has no effect. This ploy costs you 1 additional CP for each previous time you've used it during the battle (e.g. 1CP the first time you would use it, 2CP the second time, etc.).'
   
-  **STRATEGY PLOYS, RETURN TO DARKNESS**
+  # Strategy Ploys, Return to Darkness
   
   Last sentence changed to read: 'In addition, it cannot move more than 4" during that action and it cannot end that move closer to enemy operatives (in a killzone that uses the close quarters rules, e.g. Killzone: Gallowdark, ignore Wall terrain when determining this).'
   
-  **FEARMONGER OPERATIVE, TERRORCHEM POISON**
+  # Fearmonger Operative, Terrorchem Poison
   
   Changed to read: 'Whenever an operative that has one of your Terrorchem tokens is activated, inflict D3 damage on it.'
   
-  **VISIONARY OPERATIVE, PRESCIENCE RULE**
+  # Visionary Operative, Prescience Rule
   
   Additional text added between second and third sentence: 'At the end of each turning point, discard your Prescience points.'
   
-  **NEMESIS CLAW OPERATIVES**
+  # Nemesis Claw Operatives
   
   Savage and sadistic in the extreme, the Night Lords use fear itself as their most potent weapon. The cruellest of these inveterate murderers form kill teams known as Nemesis Claws, achieving their mission objectives through acts of obscene violence and the spreading of abject terror.
   
-  **NIGHT LORD VISIONARY**
+  # Night Lord Visionary
   
   It takes a singularly terrifying being to lead such a band of monsters to battle, yet the Visionary is equal to the task. Gifted with instinctual flickers of prescience, they foresee threats from within their Nemesis Claw and without, meeting them with shocking violence.
   
-  **NIGHT LORD FEARMONGER**
+  # Night Lord Fearmonger
   
   The Fearmonger is not only a master of toxins and poisons, he also relishes the slow cruelties of their effects. Whether dispensing his vile concoctions in battle or infiltrating enemy encampments to taint rations, he spreads horror, suffering and death wherever he goes.
   
-  **'IT IS MANY YEARS SINCE I TOOK PLEASURE IN**
+  # 'it Is Many Years Since I Took Pleasure In
   
-  **ANYTHING BUT THE TORMENT OF OTHERS. YET IN**
+  # Anything but the Torment of Others. Yet In
   
-  **THAT ONE REMAINING DIVERSION THERE ARE TO**
+  # That One Remaining Diversion There Are To
   
-  **BE FOUND SUCH DELIGHTS…'**
+  # Be Found Such Delights…'
   
   - Vaal K'Shand, Fearmonger 2
   
-  **NIGHT LORD GUNNER**
+  # Night Lord Gunner
   
   The effects of blazing promethium, hissing melta beams and searing bolts of plasma upon living beings are horrific in the extreme. Gunners embrace the power of these terror weapons and employ them to wreak maximum havoc among the foe.
   
-  **NIGHT LORD HEAVY GUNNER**
+  # Night Lord Heavy Gunner
   
   During every hunt there is a time for subterfuge, but there is also a time to hurl such subtlety aside in favour of mowing down screaming prey. Heavy Gunners do so with pummelling hails of bolt shells, or by blasting the foe to bloody tatters with tank-busting missiles.
   
-  **NIGHT LORD SCREECHER**
+  # Night Lord Screecher
   
   Having long preyed on those weaker than themselves, Screechers have degenerated into vicious and bestial beings. Amplified by the malevolent technologies of the Vox Noctis, Screechers' screams paralyse their victims with terror, an effect their fellow Night Lords are quick to exploit.
   
-  **NIGHT LORD SKINTHIEF**
+  # Night Lord Skinthief
   
   Brutal overseers of the Night Lords' hideous skinning pits, these callous killers employ their authority to act as enforcers and lieutenants to the Visionaries. Woe betide any foe that lingers too long within range of their howling Nostraman chainglaives.
   
-  **NIGHT LORD VENTRILOKAR**
+  # Night Lord Ventrilokar
   
   The voice eater carried by the Ventrilokar is fashioned from the carrion remains of a slain Space Marine, whose omophagea has been tainted by dark sorcery. This dead- alive puppet can mimic the voices of those whose flesh it consumes, as well as stealing – and muttering aloud – their deepest secrets.
   
-  **NIGHT LORD WARRIOR**
+  # Night Lord Warrior
   
   Those Night Lords who fight as part of the Nemesis Claws are amongst the most psychotic and savage of all their twisted kind. Whether picking their victims off from range or eviscerating and flensing them at close quarters, they are diabolical foes. 3 Below you will find a list of the operatives that make up a **NEMESIS CLAW** kill team, including, where relevant, any weapons specified for that operative.
   
-  **OPERATIVES**
+  # Operatives
   
   - 1 **NEMESIS CLAW VISIONARY** operative with one of the following options:
     - Bolt pistol; power fist
@@ -679,51 +679,49 @@ supplementaryInfo: |-
   
   Other than WARRIOR operatives, your kill team can only include each operative on this list once.
   
-  **ARCHETYPES**
+  # Archetypes
   
-  **INFILTRATION**
+  # Infiltration
   
-  **SEEK & DESTROY**
+  # Seek & Destroy
   
   Archetypes are used in certain mission packs, e.g. Approved Ops. The game sequence will specify how.
   
   **NEMESIS CLAW >> KILL TEAM SELECTION**
   
-  **VISIONARY**
+  # Visionary
   
-  **FEARMONGER**
+  # Fearmonger
   
-  **'RUN AND HIDE YOU GUTLESS LITTLE WORMS.**
+  # 'run and Hide You Gutless Little Worms.
   
-  **RUN AND HIDE! IT DOESN'T MATTER HOW FAR OR**
+  # Run and Hide! It Doesn't Matter How Far Or
   
-  **HOW FAST YOU FLEE, WE WILL STILL CATCH YOU,**
+  # How Fast You Flee, We Will Still Catch You, and When We Do We Will Peel the Skin From
   
-  **AND WHEN WE DO WE WILL PEEL THE SKIN FROM**
+  # Your Flimsy Bodies and Pluck the Eyes
   
-  **YOUR FLIMSY BODIES AND PLUCK THE EYES**
+  # From Your Screaming Heads. So Run If You
   
-  **FROM YOUR SCREAMING HEADS. SO RUN IF YOU**
+  # Want To, Vermin. the Chase Only Makes It
   
-  **WANT TO, VERMIN. THE CHASE ONLY MAKES IT**
-  
-  **MORE FUN.'**
+  # More Fun.'
   
   - Tzann the Ghoul, Skinthief Plasma pistol Nostraman chainblade Terrorchem vial Tainted blade Scoped bolt pistol 4
   
-  **VENTRILOKAR**
+  # Ventrilokar
   
   Chainsword Plasma gun
   
-  **GUNNER HEAVY GUNNER**
+  # Gunner Heavy Gunner
   
   Heavy bolter Meltagun Flamer
   
-  **SCREECHER WARRIOR**
+  # Screecher Warrior
   
   Missile launcher
   
-  **SKINTHIEF**
+  # Skinthief
   
   Bolt pistol Lightning claws Boltgun Chainsword Bolt pistol Nostraman chainglaive 5
 universalEquipment:

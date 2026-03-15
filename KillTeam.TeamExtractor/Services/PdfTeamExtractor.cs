@@ -1882,7 +1882,7 @@ public partial class PdfTeamExtractor
                 output.Append("\n\n");
             }
 
-            output.Append("**").Append(pendingHeaderText).Append("**\n\n");
+            output.Append("# ").Append(TextHelpers.ToTitleCase(pendingHeaderText.ToString())).Append("\n\n");
             pendingHeaderText.Clear();
         }
 
@@ -1995,9 +1995,10 @@ public partial class PdfTeamExtractor
                     // Non-fragment content in KTS section: exit skip mode, process normally
                     inKtsFragSkip = false;
 
-                    // Fix 4: only merge into the pending header when it ends with '&'
+                    // Fix 4: only merge into the pending header when it ends with '&' or ','
                     // (mid-phrase word-wrap). Otherwise each all-caps line gets its own heading.
-                    if (prevWasHeader && pendingHeaderText.ToString().TrimEnd().EndsWith('&'))
+                    var pendingTrimmed = pendingHeaderText.ToString().TrimEnd();
+                    if (prevWasHeader && (pendingTrimmed.EndsWith('&') || pendingTrimmed.EndsWith(',')))
                     {
                         pendingHeaderText.Append(' ').Append(trimmed);
                     }
@@ -2042,7 +2043,7 @@ public partial class PdfTeamExtractor
                         output.Append("\n\n");
                     }
 
-                    output.Append("**").Append(trimmed).Append("**\n\n");
+                    output.Append("## ").Append(trimmed).Append("\n\n");
                     continue;
                 }
             }
