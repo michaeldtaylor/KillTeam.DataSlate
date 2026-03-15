@@ -212,3 +212,70 @@ The following type prefix labels are PDF formatting artefacts and must be stripp
 | `ONCE PER TURNING POINT.` | Frequency constraint (before main text) |
 
 These are stripped by `StructureToMarkdown` Step 3 (see Rule 8).
+
+---
+
+## Rule 11 — YAML File Naming: Kebab-Case Slug
+
+Team YAML files in `teams/` are named using the `Slugify(teamName)` function:
+
+- Lowercase the full name
+- Replace spaces with `-`
+- Strip `'` apostrophes, `(` and `)` parentheses
+
+Examples:
+
+| Team name | File |
+|-----------|------|
+| Angels of Death | `teams/angels-of-death.yaml` |
+| Void-Dancer Troupe | `teams/void-dancer-troupe.yaml` |
+| Corsair Voidscarred | `teams/corsair-voidscarred.yaml` |
+
+The `id` field inside the YAML is the same slug value. `Program.cs` writes to `{team.Id}.yaml`. `TeamYamlTests` references files by this same slug.
+
+---
+
+## Rule 12 — Supplementary Info Parsing
+
+`ParseSupplementaryInfo` processes the Supplementary Information PDF in raw mode.
+
+### Bullet symbol lines
+
+In this PDF, `•` and `○` symbols appear on their **own line** (unlike Operative Selection where they are inline). The content follows on the **next line**.
+
+- A bare `•`/`○` line sets `lastLineWasBulletSymbol = true`
+- When `lastLineWasBulletSymbol` is true, the NEXT line skips ALL header and ability-subheader detection and is appended as bullet content directly
+
+### Arrow lines
+
+Lines starting with `↘`/`↙`/`↳` must start on their own line so `FormatBulletSymbols` can process them. A `\n\n` paragraph break is inserted before them.
+
+### Paragraph break triggers
+
+A `\n\n` is inserted before a line when:
+- The line starts with `"Other than "` (following inline content without a blank line)
+- The line starts with `"Some "` (same condition)
+
+### ALL-CAPS header merging
+
+Consecutive ALL-CAPS lines are only merged into one heading when the pending header ends with `&` (mid-phrase word-wrap). Each standalone ALL-CAPS line otherwise gets its own `**heading**`.
+
+Example: `SEEK &` followed by `DESTROY` → `**Seek & Destroy**` (merged).
+Example: `ARCHETYPES` followed by `SECURITY` → two separate headings (not merged).
+
+### Kill Team Selection section (end of PDF)
+
+The last pages of the supplementary PDF show a visual "Kill Team Selection" reference with operative images and weapon loadouts. pdftotext extracts the title in fragments across multiple lines, repeated for each page.
+
+**Detection:** An ALL-CAPS line ending with ` KILL TEAM` (e.g., `ANGELS OF DEATH KILL TEAM`).
+
+**Output:** Emit `**ANGELS OF DEATH >> KILL TEAM SELECTION**` once (the `»` U+00BB decorative arrow becomes `>>`).
+
+**Fragment suppression:** Once the heading is emitted, all subsequent occurrences of:
+- Team name words (e.g., `ANGELS`, `OF`, `DEATH`)
+- `»` (U+00BB) decorative arrow
+- `KILL`, `TEAM`, `SELECTION`
+
+…are suppressed for the remainder of the document. These are repeated page header fragments with no informational value.
+
+**Content:** Remaining lines (operative names, weapon names) are formatted naturally — operative names as `**Bold headings**`, weapon names as prose. The weapon-to-operative pairing is not guaranteed to be accurate due to PDF reading order of image-heavy pages.
