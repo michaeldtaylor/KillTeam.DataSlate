@@ -665,7 +665,9 @@ supplementaryInfo: |-
   
   Last sentence deleted: ~~'This operative cannot warp jump during the same activation in which it performed the Dash action (or vice versa).'~~
   
-  **PREVIOUS ERRATAS FIREFIGHT PLOYS, CAPRICIOUS FLIGHT**
+  **PREVIOUS ERRATAS**
+  
+  **FIREFIGHT PLOYS, CAPRICIOUS FLIGHT**
   
   First sentence changed to read: 'Use this firefight ploy during a friendly **CORSAIR VOIDSCARRED** operative's activation, before or after it performs an action.'
   
@@ -699,7 +701,9 @@ supplementaryInfo: |-
   
   This section provides clarification on ambiguous and complex rules interactions. Q: If a **STARSTORM DUELLIST** is on guard and I interrupt an activation to perform a Shoot action against an enemy operative within its control range, can I use its Quick on the Trigger rule to perform the Shoot action normally, or must it be a point-blank shot? A: The former – you can perform the Shoot action normally.
   
-  **CORSAIR VOIDSCARRED OPERATIVES**
+  **CORSAIR VOIDSCARRED**
+  
+  **OPERATIVES**
   
   Corsairs are avaricious raiders grouped together by charismatic commanders who draw their members from both craftworlds and the Dark City. The most experienced of Corsairs are the Voidscarred, each of whom possesses their own unique combat skills and have been hardened by several lifetimes of voidfaring and piracy.
   
@@ -747,7 +751,25 @@ supplementaryInfo: |-
   
   Spiritual mystics, Soul Weavers utilise the power and knowledge of the Aeldari souls in the spirit stones they carry. With this energy they can enhance warriors' abilities in combat or heal the wounded.
   
-  **'THE VOID IS WEALTH. THE VOID IS FREEDOM. I REJECT THE TIGHTLY BOUND CHORDS OF THE PATH. I REJECT THE PETTINESS OF COMMORRITE POLITICS. I REJECT THE PLAIN FRUGALITY OF THE EXODITES. I REJECT THE MASKS OF THE CLOWN AND THE MIME. I MOST CERTAINLY REJECT DEATH. THE STARS BELONGED TO MY ANCESTORS. THUS THEY BELONG TO ME. THUS I GO WHERE I WILL, TAKE WHAT I WILL AND KILL WHOM I WILL.'**
+  **'THE VOID IS WEALTH. THE VOID IS FREEDOM. I**
+  
+  **REJECT THE TIGHTLY BOUND CHORDS OF THE**
+  
+  **PATH. I REJECT THE PETTINESS OF COMMORRITE**
+  
+  **POLITICS. I REJECT THE PLAIN FRUGALITY OF**
+  
+  **THE EXODITES. I REJECT THE MASKS OF THE**
+  
+  **CLOWN AND THE MIME. I MOST CERTAINLY**
+  
+  **REJECT DEATH. THE STARS BELONGED TO MY**
+  
+  **ANCESTORS. THUS THEY BELONG TO ME. THUS I**
+  
+  **GO WHERE I WILL, TAKE WHAT I WILL AND KILL**
+  
+  **WHOM I WILL.'**
   
   - Lady Hale'drithea of the Black Suns 3 Below you will find a list of the operatives that make up a **CORSAIR VOIDSCARRED** kill team, including, where relevant, any weapons specified for that operative.
   
@@ -755,73 +777,81 @@ supplementaryInfo: |-
   
   - 1 **CORSAIR VOIDSCARRED FELARCH** operative with one of the following options:
     - Shuriken rifle; shuriken pistol; power weapon
-    - Neuro disruptor; power weapon ↘ 8 **CORSAIR VOIDSCARRED** operatives selected from the following list: -
+    - Neuro disruptor; power weapon
   
-  **FATE DEALER**
-  
-  -
-  
-  **GUNNER with one of the**
-  
-  following options:
+  - 8 **CORSAIR VOIDSCARRED** operatives selected from the following list:
+    - **FATE DEALER**
+    - GUNNER with one of the following options:
       - Blaster ; shuriken pistol; fists
-      - Shredder; shuriken pistol; fists -
-  
-  **HEAVY GUNNER with one**
-  
-  of the following options:
+      - Shredder; shuriken pistol; fists
+    - **HEAVY GUNNER** with one of the following options:
       - Shuriken cannon; shuriken pistol; fists
-      - Shuriken pistol; wraithcannon ; fists -
-  
-  **KURNATHI**
-  
-  -
-  
-  **KURNITE HUNTER**
-  
-  -
-  
-  **SHADE RUNNER**
-  
-  -
-  
-  **SOUL WEAVER**
-  
-  -
-  
-  **STARSTORM DUELLIST**
-  
-  -
-  
-  **WARRIOR with one of the**
-  
-  following options:
+      - Shuriken pistol; wraithcannon ; fists
+    - KURNATHI
+    - **KURNITE HUNTER**
+    - **SHADE RUNNER**
+    - **SOUL WEAVER**
+    - **STARSTORM DUELLIST**
+    - WARRIOR with one of the following options:
       - Shuriken pistol; power weapon
-      - Shuriken rifle; fists -
-  
-  **WAY SEEKER**
+      - Shuriken rifle; fists
+    - **WAY SEEKER**
   
   Other than WARRIOR operatives, your kill team can only include each operative on this list once.
   
   Your kill team cannot include both a blaster and a wraithcannon.
   
-  **ARCHETYPES INFILTRATION RECON**
+  **ARCHETYPES**
+  
+  **INFILTRATION RECON**
   
   Archetypes are used in certain mission packs, e.g. Approved Ops. The game sequence will specify how.
   
-  **CORSAIR VOIDSCARRED KILL TEAM CORSAIR VOIDSCARRED**
+  **CORSAIR VOIDSCARRED KILL TEAM**
+  
+  **CORSAIR**
+  
+  **VOIDSCARRED**
   
   »
   
-  **KILL TEAM SELECTION FELARCH FATE DEALER SHADE RUNNER**
+  **KILL**
+  
+  **TEAM**
+  
+  **SELECTION**
+  
+  **FELARCH**
+  
+  **FATE DEALER**
+  
+  **SHADE RUNNER**
   
   Neuro disruptor Power weapon Shuriken pistol Ranger long rifle Shuriken pistol Throwing blades Hekatarii blades 4
   
-  **CORSAIR VOIDSCARRED**
+  **CORSAIR**
+  
+  **VOIDSCARRED**
   
   »
   
-  **KILL TEAM SELECTION GUNNER KURNITE HUNTER STARSTORM DUELLIST HEAVY GUNNER WARRIOR KURNATHI SOUL WEAVER WAY SEEKER**
+  **KILL**
+  
+  **TEAM**
+  
+  **SELECTION**
+  
+  **GUNNER**
+  
+  **KURNITE HUNTER**
+  
+  **STARSTORM DUELLIST HEAVY GUNNER**
+  
+  **WARRIOR**
+  
+  **KURNATHI SOUL WEAVER**
+  
+  **WAY SEEKER**
   
   Shuriken pistol Power weapon Shredder Blaster Shuriken cannon Faolchú Shuriken pistol Power weapon Shuriken rifle Shuriken pistol Fusion pistol Dual power weapons Shuriken pistol Power weapon Shuriken pistol Witch staff 5
 universalEquipment:

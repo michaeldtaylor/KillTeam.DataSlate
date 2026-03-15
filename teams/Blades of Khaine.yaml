@@ -485,7 +485,9 @@ supplementaryInfo: |-
   
   This section collects amendments to the rules. Amended text for clarification and edits are shown in blue, while amended text for balance updates are shown in magenta.
   
-  **HOWLING BANSHEE ASPECT TECHNIQUES, SHRIEK-THAT-KILLS, WEAPON PROFILE**
+  **HOWLING BANSHEE ASPECT TECHNIQUES,**
+  
+  **SHRIEK-THAT-KILLS, WEAPON PROFILE**
   
   Atk stat changed to '5'.
   
@@ -493,15 +495,23 @@ supplementaryInfo: |-
   
   Relevant part changed to read: '[...] after you strike with a critical success, if the enemy operative isn't incapacitated. End that sequence (any remaining attack dice are discarded) and immediately perform a free Dash or Fall Back action up to 3" with that operative (then the Fight action ends). That operative can do so even if it's performed an action that prevents it from performing the Dash or Fall Back action.'
   
-  **PREVIOUS ERRATAS STRIKING SCORPION ASPECT TECHNIQUES, ONE WITH THE GLOOM**
+  **PREVIOUS ERRATAS**
+  
+  **STRIKING SCORPION ASPECT TECHNIQUES,**
+  
+  **ONE WITH THE GLOOM**
   
   Second sentence changed to read: 'Until the start of its next activation, while that operative has a Conceal order and is in cover, it cannot be selected as a valid target, taking precedence over all other rules (e.g. Seek, Vantage terrain) except being within 2".'
   
-  **STRIKING SCORPION ASPECT TECHNIQUES, STRIKE AND FADE**
+  **STRIKING SCORPION ASPECT TECHNIQUES,**
+  
+  **STRIKE AND FADE**
   
   First sentence changed to read: 'Use this **ASPECT TECHNIQUE** when a friendly **STRIKING SCORPION** operative incapacitates an enemy operative while fighting or retaliating, and is no longer within 3" of enemy operatives.'
   
-  **DIRE AVENGER EXARCH & DIRE AVENGER WARRIOR OPERATIVES, DEFENCE TACTICS RULE**
+  **DIRE AVENGER EXARCH & DIRE AVENGER WARRIOR**
+  
+  **OPERATIVES, DEFENCE TACTICS RULE**
   
   Relevant part changed to read: '[…] this operative's weapons have the Balanced weapon rule.'
   
@@ -513,7 +523,9 @@ supplementaryInfo: |-
   
   This section provides clarification on ambiguous and complex rules interactions. Q: If I use the Rain of Tears Howling Banshee **ASPECT TECHNIQUE** but am prevented from performing a free Fall Back action as a result of my opponent's rules (e.g. **NEMESIS CLAW** Chain Snare), what happens? A: The **ASPECT TECHNIQUE** is still used. The fight sequence ends, but that **BLADES OF KHAINE HOWLING BANSHEE** operative remains in its current location. Q: If I use the Strike and Fade Striking Scorpion **ASPECT TECHNIQUE**, could an opponent interrupt my activation (e.g. as a result of the Guard action) before I change that **BLADES OF KHAINE STRIKING SCORPION** operative's order to Conceal? A: No, but they can interrupt before that **STRIKING SCORPION** operative performs the free Dash action. Q: If an operative is able to perform two Shoot actions in an activation and uses the Slicing Hurricane Dire Avenger **ASPECT TECHNIQUE**, can it perform both Shoot actions during the same Reposition action? A: Yes.
   
-  **BLADES OF KHAINE OPERATIVES**
+  **BLADES OF KHAINE**
+  
+  **OPERATIVES**
   
   Athletic, graceful and utterly lethal, the Aeldari warriors that comprise Blades of Khaine kill teams come together to undertake missions of utmost importance on behalf of their craftworlds. They are dispatched to sever specific strands of fate, ensuring that terrible events they have foreseen never come to pass.
   
@@ -525,7 +537,35 @@ supplementaryInfo: |-
   
   With limitless patience, after stalking their prey for hours or waiting in position for days, Striking Scorpions burst from concealment. With chainswords whirring and mandiblasters spitting needles of white fire, the Aspect Warriors' emerald green armour is soon streaked red.
   
-  **'WHAT DISASTERS HAVE THEY AVERTED? HOW MANY AELDARI LIVES HAVE THEY SAVED? HOW MANY FOES OF OURS HAVE THEY DOOMED TO OBLIVION? ACROSS ALL THE CRAFTWORLDS WE CANNOT BE SURE. I KNOW THIS, HOWEVER, WITHOUT A SHADOW OF DOUBT. WERE IT NOT FOR THE BLADES OF KHAINE, THE ASURYANI WOULD BE NO MORE. THE WARRIORS THAT I HAVE COMMANDED ALONE HAVE PREVENTED MULTIPLE INCURSIONS INTO THE WEBWAY THAT WOULD HAVE SEVERED VITAL TIES TO EXODITE WORLDS AND HARLEQUIN TROUPES. I CAN ONLY IMAGINE WHAT OTHERS HAVE DONE FOR OUR PEOPLE.'**
+  **'WHAT DISASTERS HAVE THEY AVERTED?**
+  
+  **HOW MANY AELDARI LIVES HAVE THEY**
+  
+  **SAVED? HOW MANY FOES OF OURS HAVE**
+  
+  **THEY DOOMED TO OBLIVION? ACROSS**
+  
+  **ALL THE CRAFTWORLDS WE CANNOT BE**
+  
+  **SURE. I KNOW THIS, HOWEVER, WITHOUT A**
+  
+  **SHADOW OF DOUBT. WERE IT NOT FOR THE**
+  
+  **BLADES OF KHAINE, THE ASURYANI WOULD**
+  
+  **BE NO MORE. THE WARRIORS THAT I HAVE**
+  
+  **COMMANDED ALONE HAVE PREVENTED**
+  
+  **MULTIPLE INCURSIONS INTO THE WEBWAY**
+  
+  **THAT WOULD HAVE SEVERED VITAL TIES**
+  
+  **TO EXODITE WORLDS AND HARLEQUIN**
+  
+  **TROUPES. I CAN ONLY IMAGINE WHAT**
+  
+  **OTHERS HAVE DONE FOR OUR PEOPLE.'**
   
   - Farseer Liurth, of Lugganath Craftworld 2
   
@@ -545,54 +585,69 @@ supplementaryInfo: |-
   
   The piercing, psychosonic scream that precedes the assault of these bone-armoured operatives renders those who hear it all but helpless. These shock waves buy the Howling Banshees time enough to strike, each one taking a head with a sweep of their glittering power weapon.
   
-  **'IT HAS BEEN OUR WAY FOR MILLENNIA TO SACRIFICE OUR PRESENT SO THAT WE MAY HAVE A FUTURE. MY BANSHEE SISTERS AND I KNOW THAT OUR EVERY BATTLE MAY BE OUR LAST. WE FACE THAT TRUTH WITHOUT FEAR, FOR THROUGH OUR EFFORTS MAY MORE OF OUR PEOPLE LIVE AND SEE BRIGHTER TIMES FOR THE AELDARI. ONE DAY THE STARS WILL ONCE MORE BOW TO OUR RACE, AND THAT OUTCOME WILL BE ACHIEVED ONE BATTLE, ONE KILL AT A TIME.'**
+  **'IT HAS BEEN OUR WAY FOR MILLENNIA TO SACRIFICE OUR PRESENT SO THAT WE MAY HAVE A FUTURE.**
+  
+  **MY BANSHEE SISTERS AND I KNOW THAT OUR EVERY BATTLE MAY BE OUR LAST. WE FACE THAT TRUTH**
+  
+  **WITHOUT FEAR, FOR THROUGH OUR EFFORTS MAY MORE OF OUR PEOPLE LIVE AND SEE BRIGHTER**
+  
+  **TIMES FOR THE AELDARI. ONE DAY THE STARS WILL ONCE MORE BOW TO OUR RACE, AND THAT**
+  
+  **OUTCOME WILL BE ACHIEVED ONE BATTLE, ONE KILL AT A TIME.'**
   
   - Osinell Ciaradh, Howling Banshee of Biel-Tan Craftworld 3 Below you will find a list of the operatives that make up a **BLADES OF KHAINE** kill team, including, where relevant, any weapons specified for that operative.
   
   **OPERATIVES**
   
-  - 1 **BLADES OF KHAINE** operative selected from the following list: -
-  
-  **DIRE AVENGER EXARCH with one of the**
-  
-  following options:
-      - Shuriken catapult; fists -
-  
-  **Twin shuriken catapult; gun butts**
-  
-  Or one option from each of the following:
+  - 1 **BLADES OF KHAINE** operative selected from the following list:
+    - **DIRE AVENGER EXARCH** with one of the following options:
+      - Shuriken catapult; fists
+      - Twin shuriken catapult; gun butts Or one option from each of the following:
       - Diresword or power weapon
-      - Shuriken pistol or shimmershield -
-  
-  **HOWLING BANSHEE EXARCH with one of the**
-  
-  following options:
+      - Shuriken pistol or shimmershield
+    - **HOWLING BANSHEE EXARCH** with one of the following options:
       - Mirrorswords
       - Shuriken pistol; executioner
       - Shuriken pistol; power weapon
       - Shuriken pistol; triskele
-      - Triskele; power weapon -
-  
-  **STRIKING SCORPION EXARCH with one of the**
-  
-  following options:
+      - Triskele; power weapon
+    - **STRIKING SCORPION EXARCH** with one of the following options:
       - Shuriken pistol; biting blade
       - Shuriken pistol; scorpion's claw & chainsword
-      - Twin shuriken pistols; twin chainswords ↘ 7 **BLADES OF KHAINE** operatives selected from the following list: -
+      - Twin shuriken pistols; twin chainswords
   
-  **DIRE AVENGER WARRIOR**
+  - 7 **BLADES OF KHAINE** operatives selected from the following list:
+    - **DIRE AVENGER WARRIOR**
+    - **HOWLING BANSHEE WARRIOR**
+    - **STRIKING SCORPION WARRIOR**
   
-  -
+  **'WE AELDARI HAVE FALLEN FAR. THOSE NOT**
   
-  **HOWLING BANSHEE WARRIOR**
+  **OF OUR RACE WHO HAVE HEARD OUR STORY**
   
-  -
+  **MIGHT EVEN PITY US, IF THEY DON'T HOLD US**
   
-  **STRIKING SCORPION WARRIOR 'WE AELDARI HAVE FALLEN FAR. THOSE NOT OF OUR RACE WHO HAVE HEARD OUR STORY MIGHT EVEN PITY US, IF THEY DON'T HOLD US IN CONTEMPT FOR OUR OWN FOLLY. I SPIT ON THEIR SCORN. OUR TIME IS FAR FROM OVER. WE HAVE BEEN MASTERS OF WAR SINCE OUR ENEMIES' FOREBEARS WERE BUT AMOEBAE DRIFTING AIMLESSLY IN BARREN SEAS. THE GALAXY ONCE SHOOK IN AWE UPON THE MENTION OF OUR NAME, AND IT SHALL DO SO AGAIN.'**
+  **IN CONTEMPT FOR OUR OWN FOLLY. I SPIT ON**
+  
+  **THEIR SCORN. OUR TIME IS FAR FROM OVER.**
+  
+  **WE HAVE BEEN MASTERS OF WAR SINCE OUR**
+  
+  **ENEMIES' FOREBEARS WERE BUT AMOEBAE**
+  
+  **DRIFTING AIMLESSLY IN BARREN SEAS. THE**
+  
+  **GALAXY ONCE SHOOK IN AWE UPON THE**
+  
+  **MENTION OF OUR NAME, AND IT SHALL DO**
+  
+  **SO AGAIN.'**
   
   - Maur Saim-Ingrelli, Striking Scorpions Exarch of the Onyx Claw Shrine, Biel-Tan Craftworld
   
-  **BLADES OF KHAINE KILL TEAM BLADES**
+  **BLADES OF KHAINE KILL TEAM**
+  
+  **BLADES**
   
   OF
   
@@ -600,13 +655,27 @@ supplementaryInfo: |-
   
   »
   
-  **KILL TEAM SELECTION ARCHETYPES**
+  **KILL**
+  
+  **TEAM**
+  
+  **SELECTION**
+  
+  **ARCHETYPES**
   
   Archetypes are used in certain mission packs, e.g. Approved Ops. The game sequence will specify how. Or the associated archetype of the most common Aspect keyword in your kill team (if two keywords are equally most common, you can choose one of those keywords). Aspect keywords and their associated archetypes are as follows: **DIRE AVENGER HOWLING**
   
-  **BANSHEE STRIKING SCORPION**
+  **BANSHEE**
   
-  **SEEK & DESTROY SECURITY RECON INFILTRATION BLADES**
+  **STRIKING**
+  
+  **SCORPION**
+  
+  **SEEK & DESTROY**
+  
+  **SECURITY RECON INFILTRATION**
+  
+  **BLADES**
   
   OF
   
@@ -614,7 +683,13 @@ supplementaryInfo: |-
   
   »
   
-  **KILL TEAM SELECTION DIRE AVENGER EXARCH**
+  **KILL**
+  
+  **TEAM**
+  
+  **SELECTION**
+  
+  **DIRE AVENGER EXARCH**
   
   Power weapon Shimmershield
   
@@ -622,7 +697,9 @@ supplementaryInfo: |-
   
   Shuriken catapult
   
-  **HOWLING BANSHEE EXARCH HOWLING BANSHEE WARRIOR STRIKING SCORPION EXARCH STRIKING SCORPION WARRIOR**
+  **HOWLING BANSHEE EXARCH HOWLING BANSHEE WARRIOR**
+  
+  **STRIKING SCORPION EXARCH STRIKING SCORPION WARRIOR**
   
   Mirrorswords Power weapon Shuriken pistol Scorpion's claw & chainsword Shuriken pistol Chainsword 5
 universalEquipment:

@@ -387,11 +387,15 @@ supplementaryInfo: |-
     - One enemy operative within 3" of, or visible to and within 7" of, that operative gains one of your Poison tokens (if it doesn't already have one).
     - Roll 2D6: if the result is 7+, one enemy operative within 7" of that operative gains one of your Poison tokens (if it doesn't already have one).'
   
-  **PREVIOUS ERRATAS CHAMPION OPERATIVE, GRANDFATHER'S BLESSING RULE**
+  **PREVIOUS ERRATAS**
+  
+  **CHAMPION OPERATIVE, GRANDFATHER'S BLESSING RULE**
   
   Changed to read: 'Whenever an enemy operative that has one of your Poison tokens loses one or more wounds within 7" of this operative, this operative regains up to an equal number of lost wounds (to a maximum of 3 lost wounds per turning point, and only if this operative isn't incapacitated).'
   
-  **MALIGNANT PLAGUECASTER OPERATIVE, PUTRESCENT VITALITY ACTION**
+  **MALIGNANT PLAGUECASTER OPERATIVE, PUTRESCENT**
+  
+  **VITALITY ACTION**
   
   Condition changed to read: '
   
@@ -463,41 +467,37 @@ supplementaryInfo: |-
   
   **OPERATIVES**
   
-  - 1 **PLAGUE MARINE CHAMPION** operative ↘ 5 **PLAGUE MARINE** operatives selected from the following list: -
+  - 1 **PLAGUE MARINE CHAMPION** operative
   
-  **BOMBARDIER**
+  - 5 **PLAGUE MARINE** operatives selected from the following list:
+    - BOMBARDIER
+    - FIGHTER
+    - **HEAVY GUNNER**
+    - **ICON BEARER**
+    - **MALIGNANT PLAGUECASTER**
+    - WARRIOR Your kill team can only include each operative on this list once. Nurgle's number is 7 and his sigil shows 3. From these numbers does his corruption flow.
   
-  -
+  **ARCHETYPES**
   
-  **FIGHTER**
+  **SECURITY**
   
-  -
-  
-  **HEAVY GUNNER**
-  
-  -
-  
-  **ICON BEARER**
-  
-  -
-  
-  **MALIGNANT PLAGUECASTER**
-  
-  -
-  
-  **WARRIOR**
-  
-  Your kill team can only include each operative on this list once. Nurgle's number is 7 and his sigil shows 3. From these numbers does his corruption flow.
-  
-  **ARCHETYPES SECURITY SEEK & DESTROY**
+  **SEEK & DESTROY**
   
   Archetypes are used in certain mission packs, e.g. Approved Ops. The game sequence will specify how.
   
-  **PLAGUE MARINES KILL TEAM PLAGUE MARINES**
+  **PLAGUE MARINES KILL TEAM**
+  
+  **PLAGUE**
+  
+  **MARINES**
   
   »
   
-  **KILL TEAM SELECTION**
+  **KILL**
+  
+  **TEAM**
+  
+  **SELECTION**
   
   Plague sword Boltgun
   
@@ -507,15 +507,25 @@ supplementaryInfo: |-
   
   **CHAMPION**
   
-  **PLAGUE MARINES**
+  **PLAGUE**
+  
+  **MARINES**
   
   »
   
-  **KILL TEAM SELECTION FIGHTER**
+  **KILL**
+  
+  **TEAM**
+  
+  **SELECTION**
+  
+  **FIGHTER**
   
   Flail of Corruption Plague spewer Plague knife Bolt pistol
   
-  **ICON BEARER HEAVY GUNNER**
+  **ICON BEARER**
+  
+  **HEAVY GUNNER**
   
   Boltgun
   

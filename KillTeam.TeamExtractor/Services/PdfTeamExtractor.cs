@@ -1695,67 +1695,126 @@ public partial class PdfTeamExtractor
             pendingHeaderText.Clear();
         }
 
+        var lastLineWasBulletSymbol = false; // set when prev line was a bare • or ○ symbol
+
         for (var i = 0; i < lines.Count; i++)
         {
             var trimmed = lines[i];
 
             if (trimmed.Length == 0)
             {
+                lastLineWasBulletSymbol = false;
                 continue;
             }
 
-            var isAllCaps = !trimmed.Any(char.IsLower);
-
-            if (isAllCaps && trimmed.Length >= 3)
+            // Fix 1: bare bullet/circle lines on their own (content on next line)
+            // Track them so the next line is NOT treated as a header or ability sub-header.
+            var isBareSymbol = trimmed is "\u2022" or "\u25CB"; // • or ○
+            if (isBareSymbol)
             {
-                // If previous line was also all-caps, merge into the same header
+                lastLineWasBulletSymbol = true;
+                AppendText(output, trimmed);
+                prevWasHeader = false;
+                continue;
+            }
+
+            var wasBulletSymbol = lastLineWasBulletSymbol;
+            lastLineWasBulletSymbol = false;
+
+            // Fix 2: arrow group-header lines (↘ ↙ ↳) must start on their own line so
+            // FormatBulletSymbols can convert them. Ensure a paragraph break before them.
+            if (trimmed[0] is '\u2198' or '\u2199' or '\u21B3')
+            {
                 if (prevWasHeader)
                 {
-                    pendingHeaderText.Append(' ').Append(trimmed);
-                }
-                else
-                {
                     FlushPendingHeader();
-                    pendingHeaderText.Append(trimmed);
+                    prevWasHeader = false;
                 }
 
-                prevWasHeader = true;
-                continue;
+                while (output.Length > 0 && output[output.Length - 1] == '\n')
+                {
+                    output.Remove(output.Length - 1, 1);
+                }
+
+                if (output.Length > 0)
+                {
+                    output.Append("\n\n");
+                }
             }
 
-            // Flush any pending all-caps header before processing non-header content
-            if (prevWasHeader)
+            // If the previous line was a bare bullet symbol, skip header and sub-header
+            // detection — the content belongs inside that bullet item.
+            if (!wasBulletSymbol)
             {
+                var isAllCaps = !trimmed.Any(char.IsLower);
+
+                if (isAllCaps && trimmed.Length >= 3)
+                {
+                    // Fix 4: only merge into the pending header when it ends with '&'
+                    // (mid-phrase word-wrap). Otherwise each all-caps line gets its own heading.
+                    if (prevWasHeader && pendingHeaderText.ToString().TrimEnd().EndsWith('&'))
+                    {
+                        pendingHeaderText.Append(' ').Append(trimmed);
+                    }
+                    else
+                    {
+                        FlushPendingHeader();
+                        pendingHeaderText.Append(trimmed);
+                    }
+
+                    prevWasHeader = true;
+                    continue;
+                }
+
+                // Flush any pending all-caps header before processing non-header content
+                if (prevWasHeader)
+                {
+                    FlushPendingHeader();
+                    prevWasHeader = false;
+                }
+
+                // Mixed-case ability name heuristic: a short capitalised line (< 50 chars)
+                // immediately followed by an action line ending in ':' (e.g. "Changed to read:").
+                // These are bold sub-headers within errata sections.
+                var isAbilitySubHeader = trimmed.Length < 50
+                    && char.IsUpper(trimmed[0])
+                    && trimmed.Any(char.IsLower)
+                    && !trimmed.Contains(':')
+                    && !trimmed.StartsWith('\'')
+                    && i + 1 < lines.Count
+                    && lines[i + 1].TrimEnd().EndsWith(':');
+
+                if (isAbilitySubHeader)
+                {
+                    // Blank line before sub-header
+                    if (output.Length > 0)
+                    {
+                        while (output.Length > 0 && output[output.Length - 1] == '\n')
+                        {
+                            output.Remove(output.Length - 1, 1);
+                        }
+
+                        output.Append("\n\n");
+                    }
+
+                    output.Append("**").Append(trimmed).Append("**\n\n");
+                    continue;
+                }
+            }
+            else if (prevWasHeader)
+            {
+                // Bare-bullet content terminates any pending header
                 FlushPendingHeader();
                 prevWasHeader = false;
             }
 
-            // Mixed-case ability name heuristic: a short capitalised line (< 50 chars)
-            // immediately followed by an action line ending in ':' (e.g. "Changed to read:").
-            // These are bold sub-headers within errata sections.
-            var isAbilitySubHeader = trimmed.Length < 50
-                && char.IsUpper(trimmed[0])
-                && trimmed.Any(char.IsLower)
-                && !trimmed.Contains(':')
-                && !trimmed.StartsWith('\'')
-                && i + 1 < lines.Count
-                && lines[i + 1].TrimEnd().EndsWith(':');
-
-            if (isAbilitySubHeader)
+            // Fix 3: paragraph break before specific sentence starters that follow inline
+            // content with no raw blank line in the PDF.
+            if (output.Length > 0 && output[output.Length - 1] != '\n'
+                && (trimmed.StartsWith("Other than ", StringComparison.OrdinalIgnoreCase)
+                    || trimmed.StartsWith("Some ", StringComparison.OrdinalIgnoreCase)))
             {
-                // Blank line before sub-header
-                if (output.Length > 0)
-                {
-                    while (output.Length > 0 && output[output.Length - 1] == '\n')
-                    {
-                        output.Remove(output.Length - 1, 1);
-                    }
-
-                    output.Append("\n\n");
-                }
-
-                output.Append("**").Append(trimmed).Append("**\n\n");
-                continue;
+                output.Append("\n\n");
             }
 
             // Regular prose / quoted text: use AppendText for proper word-wrap joining

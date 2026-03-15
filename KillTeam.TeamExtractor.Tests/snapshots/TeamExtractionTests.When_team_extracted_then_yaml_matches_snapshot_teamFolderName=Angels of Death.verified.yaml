@@ -708,7 +708,9 @@ supplementaryInfo: |-
   
   Following sentence and asterisks on **ELIMINATOR SNIPER** and **HEAVY INTERCESSOR GUNNER** deleted: ~~'You cannot select more than one of these operatives combined.'~~
   
-  **PREVIOUS ERRATAS FACTION RULES, CHAPTER TACTICS**
+  **PREVIOUS ERRATAS**
+  
+  **FACTION RULES, CHAPTER TACTICS**
   
   **Dueller**
   
@@ -730,13 +732,17 @@ supplementaryInfo: |-
   
   Additional sentence added: 'Whenever this operative is fighting or retaliating, enemy operatives cannot assist.'
   
-  **INTERCESSOR SERGEANT OPERATIVE, DOCTRINE WARFARE RULE**
+  **INTERCESSOR SERGEANT OPERATIVE, DOCTRINE**
+  
+  **WARFARE RULE**
   
   Changed to read: 'You can do each of the following once per battle:
     - When you would use the Combat Doctrine strategy ploy and then select Devastator, if this operative is in the killzone, it costs you 0CP.
     - When you would use the Combat Doctrine strategy ploy and then select Tactical, if this operative is in the killzone, it costs you 0CP.'
   
-  **ASSAULT INTERCESSOR SERGEANT OPERATIVE, DOCTRINE WARFARE RULE**
+  **ASSAULT INTERCESSOR SERGEANT OPERATIVE, DOCTRINE**
+  
+  **WARFARE RULE**
   
   Changed to read: 'You can do each of the following once per battle:
     - When you would use the Combat Doctrine strategy ploy and then select Assault, if this operative is in the killzone, it costs you 0CP.
@@ -759,7 +765,9 @@ supplementaryInfo: |-
   
   Relevant part of first sentence changed to read: '[…] after your opponent rolls their attack dice, but before re-rolls, you can use this rule.'
   
-  **ANGELS OF DEATH OPERATIVES**
+  **ANGELS OF DEATH**
+  
+  **OPERATIVES**
   
   Genetically modified transhuman warriors, Space Marines are amongst Humanity's most elite fighting forces. Angels of Death kill teams are composed of elite specialists trained in myriad forms of combat, who are capable of overcoming almost any foe.
   
@@ -801,61 +809,46 @@ supplementaryInfo: |-
   
   **OPERATIVES**
   
-  - 1 **ANGEL OF DEATH** operative selected from the following list: -
-  
-  **ASSAULT INTERCESSOR SERGEANT with one option**
-  
-  from each of the following:
+  - 1 **ANGEL OF DEATH** operative selected from the following list:
+    - **ASSAULT INTERCESSOR SERGEANT** with one option from each of the following:
       - Hand flamer or heavy bolt pistol
       - Chainsword, power fist, power weapon or thunder hammer
     - Or the following option:
-      - Plasma pistol; chainsword -
-  
-  **INTERCESSOR SERGEANT with one option from each**
-  
-  of the following:
+      - Plasma pistol; chainsword
+    - **INTERCESSOR SERGEANT** with one option from each of the following:
       - Auto bolt rifle, bolt rifle or stalker bolt rifle
-      - Chainsword, fists, power fist, power weapon or thunder hammer -
+      - Chainsword, fists, power fist, power weapon or thunder hammer
+    - **SPACE MARINE CAPTAIN**
   
-  **SPACE MARINE CAPTAIN**
-  
-  - 5 **ANGEL OF DEATH** operatives selected from the following list: -
-  
-  **ASSAULT INTERCESSOR GRENADIER**
-  
-  -
-  
-  **ASSAULT INTERCESSOR WARRIOR**
-  
-  -
-  
-  **ELIMINATOR SNIPER**
-  
-  -
-  
-  **HEAVY INTERCESSOR GUNNER**
-  
-  -
-  
-  **INTERCESSOR GUNNER with auxiliary grenade**
-  
-  launcher and one of the following options:
+  - 5 **ANGEL OF DEATH** operatives selected from the following list:
+    - **ASSAULT INTERCESSOR GRENADIER**
+    - **ASSAULT INTERCESSOR WARRIOR**
+    - **ELIMINATOR SNIPER**
+    - **HEAVY INTERCESSOR GUNNER**
+    - **INTERCESSOR GUNNER** with auxiliary grenade launcher and one of the following options:
       - Auto bolt rifle; fists
       - Bolt rifle; fists
-      - Stalker bolt rifle; fists -
-  
-  **INTERCESSOR WARRIOR with one of the**
-  
-  following options:
+      - Stalker bolt rifle; fists
+    - **INTERCESSOR WARRIOR** with one of the following options:
       - Auto bolt rifle; fists
       - Bolt rifle; fists
-      - Stalker bolt rifle; fists Other than WARRIOR operatives, your kill team can only include each operative on this list once.
+      - Stalker bolt rifle; fists
   
-  **ARCHETYPES SECURITY SEEK & DESTROY**
+  Other than WARRIOR operatives, your kill team can only include each operative on this list once.
   
-  Archetypes are used in certain mission packs, e.g. Approved Ops. The game sequence will specify how. Some **ANGEL OF DEATH** rules refer to a 'bolt weapon'. This is a ranged weapon that includes 'bolt' in its name, e.g. stalker bolt rifle, heavy bolt pistol, etc.
+  **ARCHETYPES**
   
-  **ANGELS OF DEATH KILL TEAM ANGELS**
+  **SECURITY**
+  
+  **SEEK & DESTROY**
+  
+  Archetypes are used in certain mission packs, e.g. Approved Ops. The game sequence will specify how.
+  
+  Some **ANGEL OF DEATH** rules refer to a 'bolt weapon'. This is a ranged weapon that includes 'bolt' in its name, e.g. stalker bolt rifle, heavy bolt pistol, etc.
+  
+  **ANGELS OF DEATH KILL TEAM**
+  
+  **ANGELS**
   
   OF
   
@@ -863,7 +856,13 @@ supplementaryInfo: |-
   
   »
   
-  **KILL TEAM SELECTION ANGELS**
+  **KILL**
+  
+  **TEAM**
+  
+  **SELECTION**
+  
+  **ANGELS**
   
   OF
   
@@ -871,15 +870,25 @@ supplementaryInfo: |-
   
   »
   
-  **KILL TEAM SELECTION**
+  **KILL**
+  
+  **TEAM**
+  
+  **SELECTION**
   
   Heavy bolt pistol Plasma pistol Power fist
   
-  **SPACE MARINE CAPTAIN ASSAULT INTERCESSOR GRENADIER INTERCESSOR SERGEANT**
+  **SPACE MARINE CAPTAIN**
+  
+  **ASSAULT INTERCESSOR GRENADIER**
+  
+  **INTERCESSOR SERGEANT**
   
   Chainsword Bolt rifle Chainsword
   
-  **ASSAULT INTERCESSOR SERGEANT ASSAULT INTERCESSOR WARRIOR**
+  **ASSAULT INTERCESSOR SERGEANT**
+  
+  **ASSAULT INTERCESSOR WARRIOR**
   
   Chainsword Heavy bolt pistol
   
@@ -891,7 +900,15 @@ supplementaryInfo: |-
   
   »
   
-  **KILL TEAM SELECTION ELIMINATOR SNIPER HEAVY INTERCESSOR GUNNER INTERCESSOR WARRIOR**
+  **KILL**
+  
+  **TEAM**
+  
+  **SELECTION**
+  
+  **ELIMINATOR SNIPER HEAVY INTERCESSOR GUNNER**
+  
+  **INTERCESSOR WARRIOR**
   
   Bolt sniper rifle Heavy bolter Auto bolt rifle
   
