@@ -1297,16 +1297,22 @@ public partial class PdfTeamExtractor
 
         foreach (var line in lines)
         {
-            var trimmed = line.Trim();
+            // Strip control characters (BEL and others that pdftotext appends in raw mode)
+            // before Trim(), so lines containing only \x07 are treated as empty.
+            var trimmed = new string(line.Where(c => c >= 32).ToArray()).Trim();
 
             if (string.IsNullOrWhiteSpace(trimmed))
             {
-                // Preserve blank lines as paragraph breaks in accumulated rule text (FIX 4).
-                // Append \n so that the next AppendText's leading space creates a \n\n split.
-                if (currentName.Length > 0 && currentText.Length > 0
-                    && currentText[currentText.Length - 1] != '\n')
+                // Preserve blank lines as paragraph breaks in accumulated rule text.
+                // Strip any trailing \n already appended, then add exactly \n\n.
+                if (currentName.Length > 0 && currentText.Length > 0)
                 {
-                    currentText.Append('\n');
+                    while (currentText.Length > 0 && currentText[currentText.Length - 1] == '\n')
+                    {
+                        currentText.Remove(currentText.Length - 1, 1);
+                    }
+
+                    currentText.Append("\n\n");
                 }
 
                 continue;
@@ -1516,8 +1522,19 @@ public partial class PdfTeamExtractor
             {
                 FlushItem();
                 var rest = ApplyBold(stripped[1..].TrimStart());
-                currentItem.Append("- ").Append(rest);
-                parentDepth = 1;
+
+                // Digit-start after an arrow = group size header (e.g. "↘ 1 ANGEL OF DEATH operative...").
+                // These are section headings, not bulleted list items.
+                if (rest.Length > 0 && char.IsAsciiDigit(rest[0]))
+                {
+                    currentItem.Append(rest);
+                    parentDepth = 0;
+                }
+                else
+                {
+                    currentItem.Append("- ").Append(rest);
+                    parentDepth = 1;
+                }
             }
             else if (stripped[0] == '\u2022') // •
             {
@@ -1546,11 +1563,14 @@ public partial class PdfTeamExtractor
             {
                 var boldedStripped = ApplyBold(stripped);
 
-                // Uppercase-first heuristic: if we already have item content AND this plain
+                // Uppercase-first heuristic: if we already have REAL item content AND this plain
                 // line starts with an uppercase letter, it is a new paragraph — not a word-wrap
                 // continuation. Genuine word-wrap always starts lowercase
                 // ("and one of the following:", "grenade launcher", etc.).
-                var isNewParagraph = currentItem.Length > 0 && char.IsUpper(stripped[0]);
+                // Guard: a bare bullet prefix ("  - " with no text) has no real content,
+                // so we must NOT treat the following uppercase operative name as a new paragraph.
+                var hasRealContent = currentItem.ToString().Trim('-', ' ').Length > 0;
+                var isNewParagraph = hasRealContent && char.IsUpper(stripped[0]);
 
                 if (isNewParagraph)
                 {
@@ -1571,7 +1591,15 @@ public partial class PdfTeamExtractor
                 }
                 else if (currentItem.Length > 0)
                 {
-                    currentItem.Append(' ').Append(boldedStripped);
+                    // Avoid double-space when appending to a bare bullet prefix (ends with ' ')
+                    if (currentItem[currentItem.Length - 1] == ' ')
+                    {
+                        currentItem.Append(boldedStripped);
+                    }
+                    else
+                    {
+                        currentItem.Append(' ').Append(boldedStripped);
+                    }
                 }
                 else
                 {
@@ -1592,6 +1620,7 @@ public partial class PdfTeamExtractor
 
         result = result.Replace(". Note ", ".\n\nNote ");
         result = result.Replace(". Your kill team", ".\n\nYour kill team");
+        result = result.Replace(". Use this ", ".\n\nUse this ");
 
         // Trim trailing blank lines
         return result.TrimEnd();
@@ -1760,7 +1789,13 @@ public partial class PdfTeamExtractor
                 break;
 
             default:
-                sb.Append(' ');
+                // Don't add a leading space when sb already ends with a newline (paragraph break)
+                // or a space (e.g. bare bullet prefix "  - ") — avoids double-spacing.
+                if (sb.Length > 0 && sb[sb.Length - 1] != '\n' && sb[sb.Length - 1] != ' ')
+                {
+                    sb.Append(' ');
+                }
+
                 sb.Append(part);
                 break;
         }

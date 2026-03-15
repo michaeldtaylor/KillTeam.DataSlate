@@ -185,6 +185,9 @@ internal static partial class TextHelpers
         // paragraph in the PDF but arrive joined to the preceding sentence by a space.
         text = text.Replace(". Note ", ".\n\nNote ");
         text = text.Replace(". Your kill team", ".\n\nYour kill team");
+        text = text.Replace(". Use this ", ".\n\nUse this ");
+        text = text.Replace(". When selecting ", ".\n\nWhen selecting ");
+        text = text.Replace(". Designer's Note:", ".\n\nDesigner's Note:");
 
         // Collapse 3+ consecutive newlines to a single paragraph break
         text = MultipleBlankLinesRegex().Replace(text, "\n\n");
@@ -287,7 +290,7 @@ internal static partial class TextHelpers
                 {
                     // Regular prose line or new numbered item
                     FlushItem();
-                    currentItem.Append(line);
+                    currentItem.Append(trimmedLine);
                     currentDepth = 0;
                 }
             }
