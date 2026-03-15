@@ -97,8 +97,14 @@ public class ExtractedTeam
                             ["type"] = w.Type.ToString(),
                             ["atk"] = w.Atk,
                             ["hit"] = w.Hit,
-                            ["dmg"] = w.Dmg,
-                            ["specialRules"] = w.SpecialRules,
+                            ["dmg"] = new JsonObject
+                            {
+                                ["normal"] = w.DmgNormal,
+                                ["crit"] = w.DmgCrit,
+                            },
+                            ["specialRules"] = new JsonArray(w.SpecialRules
+                                .Select(r => (JsonNode)JsonValue.Create(r)!)
+                                .ToArray()),
                         })
                         .ToArray()),
                     ["abilities"] = new JsonArray(op.Abilities

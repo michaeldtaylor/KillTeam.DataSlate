@@ -135,24 +135,43 @@
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/5",
-          "specialRules": "Range 8\", Piercing 1"
+          "dmg": {
+            "normal": 3,
+            "crit": 5
+          },
+          "specialRules": [
+            "Range 8\"",
+            "Piercing 1"
+          ]
         },
         {
           "name": "Plasma pistol (supercharge)",
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "4/5",
-          "specialRules": "Range 8\", Hot, Lethal 5+, Piercing 1"
+          "dmg": {
+            "normal": 4,
+            "crit": 5
+          },
+          "specialRules": [
+            "Range 8\"",
+            "Hot",
+            "Lethal 5+",
+            "Piercing 1"
+          ]
         },
         {
           "name": "Power fist",
           "type": "Melee",
           "atk": 5,
           "hit": "3+",
-          "dmg": "5/7",
-          "specialRules": "Brutal"
+          "dmg": {
+            "normal": 5,
+            "crit": 7
+          },
+          "specialRules": [
+            "Brutal"
+          ]
         }
       ],
       "abilities": [
@@ -191,74 +210,122 @@
           "type": "Ranged",
           "atk": 4,
           "hit": "2+",
-          "dmg": "3/3",
-          "specialRules": "Range 6\", Saturate, Torrent 1\""
+          "dmg": {
+            "normal": 3,
+            "crit": 3
+          },
+          "specialRules": [
+            "Range 6\"",
+            "Saturate",
+            "Torrent 1\""
+          ]
         },
         {
           "name": "Heavy bolt pistol",
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/4",
-          "specialRules": "Range 8\", Piercing Crits 1"
+          "dmg": {
+            "normal": 3,
+            "crit": 4
+          },
+          "specialRules": [
+            "Range 8\"",
+            "Piercing Crits 1"
+          ]
         },
         {
           "name": "Plasma pistol (standard)",
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/5",
-          "specialRules": "Range 8\", Piercing 1"
+          "dmg": {
+            "normal": 3,
+            "crit": 5
+          },
+          "specialRules": [
+            "Range 8\"",
+            "Piercing 1"
+          ]
         },
         {
           "name": "Plasma pistol (supercharge)",
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "4/5",
-          "specialRules": "Range 8\", Hot, Lethal 5+, Piercing 1"
+          "dmg": {
+            "normal": 4,
+            "crit": 5
+          },
+          "specialRules": [
+            "Range 8\"",
+            "Hot",
+            "Lethal 5+",
+            "Piercing 1"
+          ]
         },
         {
           "name": "Chainsword",
           "type": "Melee",
           "atk": 5,
           "hit": "3+",
-          "dmg": "4/5",
-          "specialRules": "-"
+          "dmg": {
+            "normal": 4,
+            "crit": 5
+          },
+          "specialRules": [
+            "-"
+          ]
         },
         {
           "name": "Power fist",
           "type": "Melee",
           "atk": 5,
           "hit": "4+",
-          "dmg": "5/7",
-          "specialRules": "Brutal"
+          "dmg": {
+            "normal": 5,
+            "crit": 7
+          },
+          "specialRules": [
+            "Brutal"
+          ]
         },
         {
           "name": "Power weapon",
           "type": "Melee",
           "atk": 5,
           "hit": "3+",
-          "dmg": "4/6",
-          "specialRules": "Lethal 5+"
+          "dmg": {
+            "normal": 4,
+            "crit": 6
+          },
+          "specialRules": [
+            "Lethal 5+"
+          ]
         },
         {
           "name": "Thunder hammer",
           "type": "Melee",
           "atk": 5,
           "hit": "4+",
-          "dmg": "5/6",
-          "specialRules": "Shock, Stun"
+          "dmg": {
+            "normal": 5,
+            "crit": 6
+          },
+          "specialRules": [
+            "Shock",
+            "Stun"
+          ]
         }
       ],
       "abilities": [
         {
           "name": "Doctrine Warfare",
-          "text": "You can do each of the following once                 Chapter Veteran: At the end of the Select Operatives step, if"
+          "text": "You can do each of the following once per battle: • Whenever you would use the Combat Doctrine strategy ploy and then select Assault, if this operative is in the killzone, it costs you 0CP. • Whenever you would use the Combat Doctrine strategy ploy and then select Tactical, if this operative is in the killzone, it costs you 0CP."
         },
         {
-          "name": "per battle",
-          "text": "this operative is selected for deployment, select one additional CHAPTER TACTIC for it to have for the battle. Unlike primary • Whenever you would use the Combat Doctrine strategy ploy             and secondary CHAPTER TACTICS, you don’t have to select and then select Assault, if this operative is in the killzone, it    the same one for each battle in a campaign or tournament. costs you 0CP. • Whenever you would use the Combat Doctrine strategy ploy and then select Tactical, if this operative is in the killzone, it costs you 0CP."
+          "name": "Chapter Veteran",
+          "text": "At the end of the Select Operatives step, if this operative is selected for deployment, select one additional CHAPTER TACTIC for it to have for the battle. Unlike primary and secondary CHAPTER TACTICS, you don’t have to select the same one for each battle in a campaign or tournament."
         }
       ],
       "weaponRules": []
@@ -287,82 +354,128 @@
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/4",
-          "specialRules": "Torrent 1\""
+          "dmg": {
+            "normal": 3,
+            "crit": 4
+          },
+          "specialRules": [
+            "Torrent 1\""
+          ]
         },
         {
           "name": "Bolt rifle",
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/4",
-          "specialRules": "Piercing Crits 1"
+          "dmg": {
+            "normal": 3,
+            "crit": 4
+          },
+          "specialRules": [
+            "Piercing Crits 1"
+          ]
         },
         {
           "name": "Stalker bolt rifle (heavy)",
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/5",
-          "specialRules": "Heavy (Dash only), Lethal 5+, Piercing Crits 1"
+          "dmg": {
+            "normal": 3,
+            "crit": 5
+          },
+          "specialRules": [
+            "Heavy (Dash only)",
+            "Lethal 5+",
+            "Piercing Crits 1"
+          ]
         },
         {
           "name": "Stalker bolt rifle (mobile)",
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/4",
-          "specialRules": ""
+          "dmg": {
+            "normal": 3,
+            "crit": 4
+          },
+          "specialRules": []
         },
         {
           "name": "Chainsword",
           "type": "Melee",
           "atk": 4,
           "hit": "3+",
-          "dmg": "4/5",
-          "specialRules": "-"
+          "dmg": {
+            "normal": 4,
+            "crit": 5
+          },
+          "specialRules": [
+            "-"
+          ]
         },
         {
           "name": "Fists",
           "type": "Melee",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/4",
-          "specialRules": "-"
+          "dmg": {
+            "normal": 3,
+            "crit": 4
+          },
+          "specialRules": [
+            "-"
+          ]
         },
         {
           "name": "Power fist",
           "type": "Melee",
           "atk": 4,
           "hit": "4+",
-          "dmg": "5/7",
-          "specialRules": "Brutal"
+          "dmg": {
+            "normal": 5,
+            "crit": 7
+          },
+          "specialRules": [
+            "Brutal"
+          ]
         },
         {
           "name": "Power weapon",
           "type": "Melee",
           "atk": 4,
           "hit": "3+",
-          "dmg": "4/6",
-          "specialRules": "Lethal 5+"
+          "dmg": {
+            "normal": 4,
+            "crit": 6
+          },
+          "specialRules": [
+            "Lethal 5+"
+          ]
         },
         {
           "name": "Thunder hammer",
           "type": "Melee",
           "atk": 4,
           "hit": "4+",
-          "dmg": "5/6",
-          "specialRules": "Shock, Stun"
+          "dmg": {
+            "normal": 5,
+            "crit": 6
+          },
+          "specialRules": [
+            "Shock",
+            "Stun"
+          ]
         }
       ],
       "abilities": [
         {
           "name": "Doctrine Warfare",
-          "text": "You can do each of the following once                 Chapter Veteran: At the end of the Select Operatives step, if"
+          "text": "You can do each of the following once per battle: • Whenever you would use the Combat Doctrine strategy ploy and then select Devastator, if this operative is in the killzone, it costs you 0CP. • Whenever you would use the Combat Doctrine strategy ploy and then select Tactical, if this operative is in the killzone, it costs you 0CP."
         },
         {
-          "name": "per battle",
-          "text": "this operative is selected for deployment, select one additional CHAPTER TACTIC for it to have for the battle. Unlike primary • Whenever you would use the Combat Doctrine strategy ploy             and secondary CHAPTER TACTICS, you don’t have to select and then select Devastator, if this operative is in the killzone,    the same one for each battle in a campaign or tournament. it costs you 0CP. • Whenever you would use the Combat Doctrine strategy ploy and then select Tactical, if this operative is in the killzone, it costs you 0CP."
+          "name": "Chapter Veteran",
+          "text": "At the end of the Select Operatives step, if this operative is selected for deployment, select one additional CHAPTER TACTIC for it to have for the battle. Unlike primary and secondary CHAPTER TACTICS, you don’t have to select the same one for each battle in a campaign or tournament."
         }
       ],
       "weaponRules": []
@@ -390,16 +503,27 @@
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/4",
-          "specialRules": "Range 8\", Piercing Crits 1"
+          "dmg": {
+            "normal": 3,
+            "crit": 4
+          },
+          "specialRules": [
+            "Range 8\"",
+            "Piercing Crits 1"
+          ]
         },
         {
           "name": "Chainsword",
           "type": "Melee",
           "atk": 5,
           "hit": "3+",
-          "dmg": "4/5",
-          "specialRules": "-"
+          "dmg": {
+            "normal": 4,
+            "crit": 5
+          },
+          "specialRules": [
+            "-"
+          ]
         }
       ],
       "abilities": [
@@ -433,16 +557,27 @@
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/4",
-          "specialRules": "Range 8\", Piercing Crits 1"
+          "dmg": {
+            "normal": 3,
+            "crit": 4
+          },
+          "specialRules": [
+            "Range 8\"",
+            "Piercing Crits 1"
+          ]
         },
         {
           "name": "Chainsword",
           "type": "Melee",
           "atk": 5,
           "hit": "3+",
-          "dmg": "4/5",
-          "specialRules": "-"
+          "dmg": {
+            "normal": 4,
+            "crit": 5
+          },
+          "specialRules": [
+            "-"
+          ]
         }
       ],
       "abilities": [],
@@ -471,32 +606,53 @@
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/4",
-          "specialRules": "Range 8\""
+          "dmg": {
+            "normal": 3,
+            "crit": 4
+          },
+          "specialRules": [
+            "Range 8\""
+          ]
         },
         {
           "name": "Heavy bolter (focused)",
           "type": "Ranged",
           "atk": 5,
           "hit": "3+",
-          "dmg": "4/5",
-          "specialRules": "Piercing Crits 1"
+          "dmg": {
+            "normal": 4,
+            "crit": 5
+          },
+          "specialRules": [
+            "Piercing Crits 1"
+          ]
         },
         {
           "name": "Heavy bolter (sweeping)",
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "4/5",
-          "specialRules": "Piercing Crits 1, Torrent 1\""
+          "dmg": {
+            "normal": 4,
+            "crit": 5
+          },
+          "specialRules": [
+            "Piercing Crits 1",
+            "Torrent 1\""
+          ]
         },
         {
           "name": "Fists",
           "type": "Melee",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/4",
-          "specialRules": "-"
+          "dmg": {
+            "normal": 3,
+            "crit": 4
+          },
+          "specialRules": [
+            "-"
+          ]
         }
       ],
       "abilities": [],
@@ -525,56 +681,91 @@
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/4",
-          "specialRules": "Torrent 1\""
+          "dmg": {
+            "normal": 3,
+            "crit": 4
+          },
+          "specialRules": [
+            "Torrent 1\""
+          ]
         },
         {
           "name": "Auxiliary grenade launcher (frag)",
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "2/4",
-          "specialRules": "Blast 2\""
+          "dmg": {
+            "normal": 2,
+            "crit": 4
+          },
+          "specialRules": [
+            "Blast 2\""
+          ]
         },
         {
           "name": "Auxiliary grenade launcher (krak)",
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "4/5",
-          "specialRules": "Piercing 1"
+          "dmg": {
+            "normal": 4,
+            "crit": 5
+          },
+          "specialRules": [
+            "Piercing 1"
+          ]
         },
         {
           "name": "Bolt rifle",
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/4",
-          "specialRules": "Piercing Crits 1"
+          "dmg": {
+            "normal": 3,
+            "crit": 4
+          },
+          "specialRules": [
+            "Piercing Crits 1"
+          ]
         },
         {
           "name": "Stalker bolt rifle (heavy)",
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/5",
-          "specialRules": "Heavy (Dash only), Lethal 5+, Piercing Crits 1"
+          "dmg": {
+            "normal": 3,
+            "crit": 5
+          },
+          "specialRules": [
+            "Heavy (Dash only)",
+            "Lethal 5+",
+            "Piercing Crits 1"
+          ]
         },
         {
           "name": "Stalker bolt rifle (mobile)",
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/4",
-          "specialRules": ""
+          "dmg": {
+            "normal": 3,
+            "crit": 4
+          },
+          "specialRules": []
         },
         {
           "name": "Fists",
           "type": "Melee",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/4",
-          "specialRules": "-"
+          "dmg": {
+            "normal": 3,
+            "crit": 4
+          },
+          "specialRules": [
+            "-"
+          ]
         }
       ],
       "abilities": [],
@@ -603,40 +794,65 @@
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/4",
-          "specialRules": "Torrent 1\""
+          "dmg": {
+            "normal": 3,
+            "crit": 4
+          },
+          "specialRules": [
+            "Torrent 1\""
+          ]
         },
         {
           "name": "Bolt rifle",
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/4",
-          "specialRules": "Piercing Crits 1"
+          "dmg": {
+            "normal": 3,
+            "crit": 4
+          },
+          "specialRules": [
+            "Piercing Crits 1"
+          ]
         },
         {
           "name": "Stalker bolt rifle (heavy)",
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/5",
-          "specialRules": "Heavy (Dash only), Lethal 5+, Piercing Crits 1"
+          "dmg": {
+            "normal": 3,
+            "crit": 5
+          },
+          "specialRules": [
+            "Heavy (Dash only)",
+            "Lethal 5+",
+            "Piercing Crits 1"
+          ]
         },
         {
           "name": "Stalker bolt rifle (mobile)",
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/4",
-          "specialRules": ""
+          "dmg": {
+            "normal": 3,
+            "crit": 4
+          },
+          "specialRules": []
         },
         {
           "name": "Fists",
           "type": "Melee",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/4",
-          "specialRules": "-"
+          "dmg": {
+            "normal": 3,
+            "crit": 4
+          },
+          "specialRules": [
+            "-"
+          ]
         }
       ],
       "abilities": [],
@@ -665,40 +881,73 @@
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/4",
-          "specialRules": "Range 8\""
+          "dmg": {
+            "normal": 3,
+            "crit": 4
+          },
+          "specialRules": [
+            "Range 8\""
+          ]
         },
         {
           "name": "Bolt sniper rifle (executioner)",
           "type": "Ranged",
           "atk": 4,
           "hit": "2+",
-          "dmg": "3/4",
-          "specialRules": "Heavy (Dash only), Saturate, Seek Light, Silent"
+          "dmg": {
+            "normal": 3,
+            "crit": 4
+          },
+          "specialRules": [
+            "Heavy (Dash only)",
+            "Saturate",
+            "Seek Light",
+            "Silent"
+          ]
         },
         {
           "name": "Bolt sniper rifle (hyperfrag)",
           "type": "Ranged",
           "atk": 4,
           "hit": "2+",
-          "dmg": "2/4",
-          "specialRules": "Blast 1\", Heavy (Dash only), Silent"
+          "dmg": {
+            "normal": 2,
+            "crit": 4
+          },
+          "specialRules": [
+            "Blast 1\"",
+            "Heavy (Dash only)",
+            "Silent"
+          ]
         },
         {
           "name": "Bolt sniper rifle (mortis)",
           "type": "Ranged",
           "atk": 4,
           "hit": "2+",
-          "dmg": "3/3",
-          "specialRules": "Devastating 3, Heavy (Dash only), Piercing 1, Silent"
+          "dmg": {
+            "normal": 3,
+            "crit": 3
+          },
+          "specialRules": [
+            "Devastating 3",
+            "Heavy (Dash only)",
+            "Piercing 1",
+            "Silent"
+          ]
         },
         {
           "name": "Fists",
           "type": "Melee",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/4",
-          "specialRules": "-"
+          "dmg": {
+            "normal": 3,
+            "crit": 4
+          },
+          "specialRules": [
+            "-"
+          ]
         }
       ],
       "abilities": [

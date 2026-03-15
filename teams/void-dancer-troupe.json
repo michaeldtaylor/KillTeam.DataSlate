@@ -119,64 +119,107 @@
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "5/3",
-          "specialRules": "Range 3\", Devastating 3, Piercing 2"
+          "dmg": {
+            "normal": 5,
+            "crit": 3
+          },
+          "specialRules": [
+            "Range 3\"",
+            "Devastating 3",
+            "Piercing 2"
+          ]
         },
         {
           "name": "Neuro disruptor",
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "4/5",
-          "specialRules": "Range 8\", Piercing 1, Stun"
+          "dmg": {
+            "normal": 4,
+            "crit": 5
+          },
+          "specialRules": [
+            "Range 8\"",
+            "Piercing 1",
+            "Stun"
+          ]
         },
         {
           "name": "Shuriken pistol",
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/4",
-          "specialRules": "Range 8\", Rending"
+          "dmg": {
+            "normal": 3,
+            "crit": 4
+          },
+          "specialRules": [
+            "Range 8\"",
+            "Rending"
+          ]
         },
         {
           "name": "Blade",
           "type": "Melee",
           "atk": 5,
           "hit": "3+",
-          "dmg": "4/6",
-          "specialRules": ""
+          "dmg": {
+            "normal": 4,
+            "crit": 6
+          },
+          "specialRules": []
         },
         {
           "name": "Caress",
           "type": "Melee",
           "atk": 5,
           "hit": "3+",
-          "dmg": "4/5",
-          "specialRules": "Rending"
+          "dmg": {
+            "normal": 4,
+            "crit": 5
+          },
+          "specialRules": [
+            "Rending"
+          ]
         },
         {
           "name": "Embrace",
           "type": "Melee",
           "atk": 5,
           "hit": "3+",
-          "dmg": "4/5",
-          "specialRules": "Brutal"
+          "dmg": {
+            "normal": 4,
+            "crit": 5
+          },
+          "specialRules": [
+            "Brutal"
+          ]
         },
         {
           "name": "Kiss",
           "type": "Melee",
           "atk": 5,
           "hit": "3+",
-          "dmg": "3/7",
-          "specialRules": "-"
+          "dmg": {
+            "normal": 3,
+            "crit": 7
+          },
+          "specialRules": [
+            "-"
+          ]
         },
         {
           "name": "Power weapon",
           "type": "Melee",
           "atk": 5,
           "hit": "3+",
-          "dmg": "4/6",
-          "specialRules": "Lethal 5+"
+          "dmg": {
+            "normal": 4,
+            "crit": 6
+          },
+          "specialRules": [
+            "Lethal 5+"
+          ]
         }
       ],
       "abilities": [
@@ -209,24 +252,44 @@
           "type": "Ranged",
           "atk": 5,
           "hit": "3+",
-          "dmg": "4/5",
-          "specialRules": "Rending, Heavy (Reposition only), Humbling Cruelty*"
+          "dmg": {
+            "normal": 4,
+            "crit": 5
+          },
+          "specialRules": [
+            "Rending",
+            "Heavy (Reposition only)",
+            "Humbling Cruelty*"
+          ]
         },
         {
           "name": "Shrieker cannon (sweeping)",
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "4/5",
-          "specialRules": "Rending, Heavy (Dash only), Torrent 2\", Humbling Cruelty*"
+          "dmg": {
+            "normal": 4,
+            "crit": 5
+          },
+          "specialRules": [
+            "Rending",
+            "Heavy (Dash only)",
+            "Torrent 2\"",
+            "Humbling Cruelty*"
+          ]
         },
         {
           "name": "Shrieker blade",
           "type": "Melee",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/4",
-          "specialRules": "Rending"
+          "dmg": {
+            "normal": 3,
+            "crit": 4
+          },
+          "specialRules": [
+            "Rending"
+          ]
         }
       ],
       "abilities": [
@@ -264,56 +327,94 @@
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "5/3",
-          "specialRules": "Range 3\", Devastating 3, Piercing 2"
+          "dmg": {
+            "normal": 5,
+            "crit": 3
+          },
+          "specialRules": [
+            "Range 3\"",
+            "Devastating 3",
+            "Piercing 2"
+          ]
         },
         {
           "name": "Neuro disruptor",
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "4/5",
-          "specialRules": "Range 8\", Piercing 1, Stun"
+          "dmg": {
+            "normal": 4,
+            "crit": 5
+          },
+          "specialRules": [
+            "Range 8\"",
+            "Piercing 1",
+            "Stun"
+          ]
         },
         {
           "name": "Shuriken pistol",
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/4",
-          "specialRules": "Range 8\", Rending"
+          "dmg": {
+            "normal": 3,
+            "crit": 4
+          },
+          "specialRules": [
+            "Range 8\"",
+            "Rending"
+          ]
         },
         {
           "name": "Blade",
           "type": "Melee",
           "atk": 5,
           "hit": "3+",
-          "dmg": "4/6",
-          "specialRules": ""
+          "dmg": {
+            "normal": 4,
+            "crit": 6
+          },
+          "specialRules": []
         },
         {
           "name": "Caress",
           "type": "Melee",
           "atk": 5,
           "hit": "3+",
-          "dmg": "4/5",
-          "specialRules": "Rending"
+          "dmg": {
+            "normal": 4,
+            "crit": 5
+          },
+          "specialRules": [
+            "Rending"
+          ]
         },
         {
           "name": "Embrace",
           "type": "Melee",
           "atk": 5,
           "hit": "3+",
-          "dmg": "4/5",
-          "specialRules": "Brutal"
+          "dmg": {
+            "normal": 4,
+            "crit": 5
+          },
+          "specialRules": [
+            "Brutal"
+          ]
         },
         {
           "name": "Kiss",
           "type": "Melee",
           "atk": 5,
           "hit": "3+",
-          "dmg": "3/7",
-          "specialRules": "-"
+          "dmg": {
+            "normal": 3,
+            "crit": 7
+          },
+          "specialRules": [
+            "-"
+          ]
         }
       ],
       "abilities": [
@@ -347,32 +448,60 @@
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "1/1",
-          "specialRules": "Range 6\", Blast 2\", Lethal 5+, Seek Light, Silent, Stun"
+          "dmg": {
+            "normal": 1,
+            "crit": 1
+          },
+          "specialRules": [
+            "Range 6\"",
+            "Blast 2\"",
+            "Lethal 5+",
+            "Seek Light",
+            "Silent",
+            "Stun"
+          ]
         },
         {
           "name": "Neuro disruptor",
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "4/5",
-          "specialRules": "Range 8\", Piercing 1, Stun"
+          "dmg": {
+            "normal": 4,
+            "crit": 5
+          },
+          "specialRules": [
+            "Range 8\"",
+            "Piercing 1",
+            "Stun"
+          ]
         },
         {
           "name": "Shuriken pistol",
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/4",
-          "specialRules": "Range 8\", Rending"
+          "dmg": {
+            "normal": 3,
+            "crit": 4
+          },
+          "specialRules": [
+            "Range 8\"",
+            "Rending"
+          ]
         },
         {
           "name": "Miststave",
           "type": "Melee",
           "atk": 4,
           "hit": "3+",
-          "dmg": "4/4",
-          "specialRules": "Shock"
+          "dmg": {
+            "normal": 4,
+            "crit": 4
+          },
+          "specialRules": [
+            "Shock"
+          ]
         }
       ],
       "abilities": [

@@ -234,8 +234,9 @@ public partial class PdfTeamExtractor
                     var wName = wm.Groups[1].Value.Trim().TrimStart('\x07').Trim();
                     var wAtk = int.Parse(wm.Groups[2].Value, CultureInfo.InvariantCulture);
                     var wHit = wm.Groups[3].Value + "+";
-                    var wDmg = $"{wm.Groups[4].Value}/{wm.Groups[5].Value}";
-                    var wRules = wm.Groups[6].Value.Trim();
+                    var wDmgNormal = int.Parse(wm.Groups[4].Value, CultureInfo.InvariantCulture);
+                    var wDmgCrit = int.Parse(wm.Groups[5].Value, CultureInfo.InvariantCulture);
+                    var wRulesRaw = wm.Groups[6].Value.Trim();
 
                     while (i + 1 < count)
                     {
@@ -243,7 +244,7 @@ public partial class PdfTeamExtractor
 
                         if (next.Length >= 15 && next[..15].All(c => c == ' ') && !ContinuationExcludeRegex().IsMatch(next))
                         {
-                            wRules = (wRules + " " + next.Trim()).Trim();
+                            wRulesRaw = (wRulesRaw + " " + next.Trim()).Trim();
                             i++;
                         }
                         else
@@ -252,12 +253,18 @@ public partial class PdfTeamExtractor
                         }
                     }
 
-                    if (wRules == "-")
+                    if (wRulesRaw == "-")
                     {
-                        wRules = "";
+                        wRulesRaw = "";
                     }
 
-                    var weaponType = ResolveWeaponType(wName, wRules, weaponTypes);
+                    var wRules = wRulesRaw
+                        .Split(',')
+                        .Select(r => r.Trim())
+                        .Where(r => r.Length > 0)
+                        .ToList();
+
+                    var weaponType = ResolveWeaponType(wName, wRulesRaw, weaponTypes);
 
                     weapons.Add(new ExtractedWeapon
                     {
@@ -265,7 +272,8 @@ public partial class PdfTeamExtractor
                         Type = weaponType,
                         Atk = wAtk,
                         Hit = wHit,
-                        Dmg = wDmg,
+                        DmgNormal = wDmgNormal,
+                        DmgCrit = wDmgCrit,
                         SpecialRules = wRules,
                     });
                 }
@@ -588,7 +596,7 @@ public partial class PdfTeamExtractor
                 }
             }
 
-            // ── 3. Single-column passive rule: mixed-case Name: description ───
+            // ── 3. Passive rule: may be single-column or two-column layout ───
             var singleColonIdx = stripped.IndexOf(':');
 
             if (singleColonIdx > 0)
@@ -597,6 +605,106 @@ public partial class PdfTeamExtractor
 
                 if (IsAbilityName(possibleName))
                 {
+                    // Detect whether this line opens a two-column block (no 1AP marker).
+                    // Two-column layout is present when there is a gap of ≥5 spaces after
+                    // the primary colon followed by another ability-name-colon pattern.
+                    var rawColonInLine = rawLine.IndexOf(':');
+                    var rightColStart = rawColonInLine >= 0
+                        ? DetectRightColumnStart(rawLine, rawColonInLine)
+                        : -1;
+
+                    if (rightColStart > 0)
+                    {
+                        // ── Two-column passive abilities ──────────────────────────────
+                        // Extract the right-column ability name and its opening text from
+                        // this first line.
+                        var rightColContent = rawLine[rightColStart..].TrimStart('\x07').TrimStart();
+                        var rightColonIdx = rightColContent.IndexOf(':');
+                        var rightName = rightColonIdx > 0
+                            ? rightColContent[..rightColonIdx].Trim()
+                            : "";
+                        var rightOpenText = rightColonIdx > 0
+                            ? rightColContent[(rightColonIdx + 1)..].Trim()
+                            : rightColContent.Trim();
+
+                        // Left opening text: everything from the left colon to rightColStart.
+                        var leftOpenRaw = rawLine[..rightColStart].TrimStart('\x07').Trim();
+                        var leftAbsColon = leftOpenRaw.IndexOf(':');
+                        var leftOpenText = leftAbsColon >= 0
+                            ? leftOpenRaw[(leftAbsColon + 1)..].Trim()
+                            : leftOpenRaw;
+
+                        var leftTextSb = new StringBuilder(leftOpenText);
+                        var rightTextSb = new StringBuilder(rightOpenText);
+
+                        j++;
+
+                        while (j < count)
+                        {
+                            var contentLine = backLines[j];
+                            var contentStripped = contentLine.TrimStart('\x07').TrimStart();
+
+                            if (string.IsNullOrWhiteSpace(contentStripped))
+                            {
+                                j++;
+                                break;
+                            }
+
+                            if (contentStripped.StartsWith('*'))
+                            {
+                                break;
+                            }
+
+                            var safeLen = Math.Min(rightColStart, contentLine.Length);
+                            var leftPart = contentLine[..safeLen].TrimStart('\x07').Trim();
+                            var rightPart = contentLine.Length > rightColStart
+                                ? contentLine[rightColStart..].TrimStart('\x07').Trim()
+                                : "";
+
+                            if (leftPart.Length > 0)
+                            {
+                                if (leftTextSb.Length > 0)
+                                {
+                                    leftTextSb.Append(' ');
+                                }
+
+                                leftTextSb.Append(leftPart);
+                            }
+
+                            if (rightPart.Length > 0)
+                            {
+                                if (rightTextSb.Length > 0)
+                                {
+                                    rightTextSb.Append(' ');
+                                }
+
+                                rightTextSb.Append(rightPart);
+                            }
+
+                            j++;
+                        }
+
+                        operative.Abilities.Add(new ExtractedAbility
+                        {
+                            Name = possibleName,
+                            ApCost = null,
+                            Text = leftTextSb.ToString().Trim(),
+                        });
+
+                        if (rightName.Length > 0)
+                        {
+                            operative.Abilities.Add(new ExtractedAbility
+                            {
+                                Name = rightName,
+                                ApCost = null,
+                                Text = rightTextSb.ToString().Trim(),
+                            });
+                        }
+
+                        continue;
+                    }
+
+                    // ── Single-column passive rule ────────────────────────────────
                     var text = stripped[(singleColonIdx + 1)..].Trim();
 
                     j++;
@@ -1113,6 +1221,46 @@ public partial class PdfTeamExtractor
     private static bool IsAbilityName(string name)
     {
         return name.Length > 0 && name.Length < 60 && !AllCapsNameRegex().IsMatch(name);
+    }
+
+    /// <summary>
+    /// Scans <paramref name="rawLine"/> to the right of <paramref name="leftColonPos"/>
+    /// for a gap of five or more spaces followed by an ability-name-colon pattern.
+    /// Returns the absolute character position in <paramref name="rawLine"/> where the right
+    /// column starts, or <c>-1</c> if no right column is detected.
+    /// </summary>
+    private static int DetectRightColumnStart(string rawLine, int leftColonPos)
+    {
+        var i = leftColonPos + 1;
+
+        while (i < rawLine.Length)
+        {
+            if (rawLine[i] != ' ')
+            {
+                i++;
+                continue;
+            }
+
+            var spaceStart = i;
+
+            while (i < rawLine.Length && rawLine[i] == ' ')
+            {
+                i++;
+            }
+
+            if (i - spaceStart >= 5 && i < rawLine.Length)
+            {
+                var remainder = rawLine[i..].TrimStart('\x07').TrimStart();
+                var colonInRem = remainder.IndexOf(':');
+
+                if (colonInRem > 0 && IsAbilityName(remainder[..colonInRem].Trim()))
+                {
+                    return i;
+                }
+            }
+        }
+
+        return -1;
     }
 
     /// <summary>

@@ -135,32 +135,55 @@
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "4/5",
-          "specialRules": "Range 8\", Piercing 1, Stun"
+          "dmg": {
+            "normal": 4,
+            "crit": 5
+          },
+          "specialRules": [
+            "Range 8\"",
+            "Piercing 1",
+            "Stun"
+          ]
         },
         {
           "name": "Shuriken pistol",
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/4",
-          "specialRules": "Range 8\", Rending"
+          "dmg": {
+            "normal": 3,
+            "crit": 4
+          },
+          "specialRules": [
+            "Range 8\"",
+            "Rending"
+          ]
         },
         {
           "name": "Shuriken rifle",
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/4",
-          "specialRules": "Rending"
+          "dmg": {
+            "normal": 3,
+            "crit": 4
+          },
+          "specialRules": [
+            "Rending"
+          ]
         },
         {
           "name": "Power weapon",
           "type": "Melee",
           "atk": 4,
           "hit": "3+",
-          "dmg": "4/6",
-          "specialRules": "Lethal 5+"
+          "dmg": {
+            "normal": 4,
+            "crit": 6
+          },
+          "specialRules": [
+            "Lethal 5+"
+          ]
         }
       ],
       "abilities": [
@@ -193,32 +216,55 @@
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/4",
-          "specialRules": "-"
+          "dmg": {
+            "normal": 3,
+            "crit": 4
+          },
+          "specialRules": [
+            "-"
+          ]
         },
         {
           "name": "Ranger long rifle (stationary)",
           "type": "Ranged",
           "atk": 4,
           "hit": "2+",
-          "dmg": "3/3",
-          "specialRules": "Devastating 3, Heavy, Silent"
+          "dmg": {
+            "normal": 3,
+            "crit": 3
+          },
+          "specialRules": [
+            "Devastating 3",
+            "Heavy",
+            "Silent"
+          ]
         },
         {
           "name": "Shuriken pistol",
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/4",
-          "specialRules": "Range 8\", Rending"
+          "dmg": {
+            "normal": 3,
+            "crit": 4
+          },
+          "specialRules": [
+            "Range 8\"",
+            "Rending"
+          ]
         },
         {
           "name": "Fists",
           "type": "Melee",
           "atk": 3,
           "hit": "3+",
-          "dmg": "2/3",
-          "specialRules": "-"
+          "dmg": {
+            "normal": 2,
+            "crit": 3
+          },
+          "specialRules": [
+            "-"
+          ]
         }
       ],
       "abilities": [
@@ -251,32 +297,54 @@
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "4/5",
-          "specialRules": "Piercing 2"
+          "dmg": {
+            "normal": 4,
+            "crit": 5
+          },
+          "specialRules": [
+            "Piercing 2"
+          ]
         },
         {
           "name": "Shredder",
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "4/5",
-          "specialRules": "Rending, Torrent 2\""
+          "dmg": {
+            "normal": 4,
+            "crit": 5
+          },
+          "specialRules": [
+            "Rending",
+            "Torrent 2\""
+          ]
         },
         {
           "name": "Shuriken pistol",
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/4",
-          "specialRules": "Range 8\", Rending"
+          "dmg": {
+            "normal": 3,
+            "crit": 4
+          },
+          "specialRules": [
+            "Range 8\"",
+            "Rending"
+          ]
         },
         {
           "name": "Fists",
           "type": "Melee",
           "atk": 3,
           "hit": "3+",
-          "dmg": "2/3",
-          "specialRules": "-"
+          "dmg": {
+            "normal": 2,
+            "crit": 3
+          },
+          "specialRules": [
+            "-"
+          ]
         }
       ],
       "abilities": [],
@@ -304,40 +372,71 @@
           "type": "Ranged",
           "atk": 5,
           "hit": "3+",
-          "dmg": "4/5",
-          "specialRules": "Heavy (Dash only), Rending"
+          "dmg": {
+            "normal": 4,
+            "crit": 5
+          },
+          "specialRules": [
+            "Heavy (Dash only)",
+            "Rending"
+          ]
         },
         {
           "name": "Shuriken cannon (sweeping)",
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "4/5",
-          "specialRules": "Heavy (Dash only), Rending, Torrent 1\""
+          "dmg": {
+            "normal": 4,
+            "crit": 5
+          },
+          "specialRules": [
+            "Heavy (Dash only)",
+            "Rending",
+            "Torrent 1\""
+          ]
         },
         {
           "name": "Shuriken pistol",
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/4",
-          "specialRules": "Range 8\", Rending"
+          "dmg": {
+            "normal": 3,
+            "crit": 4
+          },
+          "specialRules": [
+            "Range 8\"",
+            "Rending"
+          ]
         },
         {
           "name": "Wraithcannon",
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "6/3",
-          "specialRules": "Devastating 4, Heavy (Dash only), Piercing 2"
+          "dmg": {
+            "normal": 6,
+            "crit": 3
+          },
+          "specialRules": [
+            "Devastating 4",
+            "Heavy (Dash only)",
+            "Piercing 2"
+          ]
         },
         {
           "name": "Fists",
           "type": "Melee",
           "atk": 3,
           "hit": "3+",
-          "dmg": "2/3",
-          "specialRules": "-"
+          "dmg": {
+            "normal": 2,
+            "crit": 3
+          },
+          "specialRules": [
+            "-"
+          ]
         }
       ],
       "abilities": [],
@@ -365,16 +464,28 @@
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/4",
-          "specialRules": "Range 8\", Rending"
+          "dmg": {
+            "normal": 3,
+            "crit": 4
+          },
+          "specialRules": [
+            "Range 8\"",
+            "Rending"
+          ]
         },
         {
           "name": "Dual power weapons",
           "type": "Melee",
           "atk": 4,
           "hit": "3+",
-          "dmg": "4/6",
-          "specialRules": "Ceaseless, Lethal 5+"
+          "dmg": {
+            "normal": 4,
+            "crit": 6
+          },
+          "specialRules": [
+            "Ceaseless",
+            "Lethal 5+"
+          ]
         }
       ],
       "abilities": [
@@ -407,24 +518,43 @@
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "1/2",
-          "specialRules": "Rending, Saturate, Seek Light, Silent"
+          "dmg": {
+            "normal": 1,
+            "crit": 2
+          },
+          "specialRules": [
+            "Rending",
+            "Saturate",
+            "Seek Light",
+            "Silent"
+          ]
         },
         {
           "name": "Shuriken pistol",
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/4",
-          "specialRules": "Range 8\", Rending"
+          "dmg": {
+            "normal": 3,
+            "crit": 4
+          },
+          "specialRules": [
+            "Range 8\"",
+            "Rending"
+          ]
         },
         {
           "name": "Power weapon",
           "type": "Melee",
           "atk": 4,
           "hit": "3+",
-          "dmg": "4/6",
-          "specialRules": "Lethal 5+"
+          "dmg": {
+            "normal": 4,
+            "crit": 6
+          },
+          "specialRules": [
+            "Lethal 5+"
+          ]
         }
       ],
       "abilities": [
@@ -465,24 +595,42 @@
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/4",
-          "specialRules": "Range 8\", Rending"
+          "dmg": {
+            "normal": 3,
+            "crit": 4
+          },
+          "specialRules": [
+            "Range 8\"",
+            "Rending"
+          ]
         },
         {
           "name": "Throwing blades",
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "2/4",
-          "specialRules": "Range 6\", Silent"
+          "dmg": {
+            "normal": 2,
+            "crit": 4
+          },
+          "specialRules": [
+            "Range 6\"",
+            "Silent"
+          ]
         },
         {
           "name": "Hekatarii blades",
           "type": "Melee",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/5",
-          "specialRules": "Ceaseless, Lethal 5+"
+          "dmg": {
+            "normal": 3,
+            "crit": 5
+          },
+          "specialRules": [
+            "Ceaseless",
+            "Lethal 5+"
+          ]
         }
       ],
       "abilities": [
@@ -525,16 +673,27 @@
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/4",
-          "specialRules": "Range 8\", Rending"
+          "dmg": {
+            "normal": 3,
+            "crit": 4
+          },
+          "specialRules": [
+            "Range 8\"",
+            "Rending"
+          ]
         },
         {
           "name": "Power weapon",
           "type": "Melee",
           "atk": 4,
           "hit": "3+",
-          "dmg": "4/6",
-          "specialRules": "Lethal 5+"
+          "dmg": {
+            "normal": 4,
+            "crit": 6
+          },
+          "specialRules": [
+            "Lethal 5+"
+          ]
         }
       ],
       "abilities": [],
@@ -562,24 +721,42 @@
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "5/3",
-          "specialRules": "Range 3\", Devastating 3, Piercing 2"
+          "dmg": {
+            "normal": 5,
+            "crit": 3
+          },
+          "specialRules": [
+            "Range 3\"",
+            "Devastating 3",
+            "Piercing 2"
+          ]
         },
         {
           "name": "Shuriken pistol",
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/4",
-          "specialRules": "Range 8\", Rending"
+          "dmg": {
+            "normal": 3,
+            "crit": 4
+          },
+          "specialRules": [
+            "Range 8\"",
+            "Rending"
+          ]
         },
         {
           "name": "Fists",
           "type": "Melee",
           "atk": 3,
           "hit": "3+",
-          "dmg": "2/3",
-          "specialRules": "-"
+          "dmg": {
+            "normal": 2,
+            "crit": 3
+          },
+          "specialRules": [
+            "-"
+          ]
         }
       ],
       "abilities": [
@@ -612,32 +789,53 @@
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/4",
-          "specialRules": "Range 8\", Rending"
+          "dmg": {
+            "normal": 3,
+            "crit": 4
+          },
+          "specialRules": [
+            "Range 8\"",
+            "Rending"
+          ]
         },
         {
           "name": "Shuriken rifle",
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/4",
-          "specialRules": "Rending"
+          "dmg": {
+            "normal": 3,
+            "crit": 4
+          },
+          "specialRules": [
+            "Rending"
+          ]
         },
         {
           "name": "Power weapon",
           "type": "Melee",
           "atk": 4,
           "hit": "3+",
-          "dmg": "4/6",
-          "specialRules": "Lethal 5+"
+          "dmg": {
+            "normal": 4,
+            "crit": 6
+          },
+          "specialRules": [
+            "Lethal 5+"
+          ]
         },
         {
           "name": "Fists",
           "type": "Melee",
           "atk": 3,
           "hit": "3+",
-          "dmg": "2/3",
-          "specialRules": "-"
+          "dmg": {
+            "normal": 2,
+            "crit": 3
+          },
+          "specialRules": [
+            "-"
+          ]
         }
       ],
       "abilities": [
@@ -671,32 +869,58 @@
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "1/2",
-          "specialRules": "P SYCHIC, Severe, Silent, Stun"
+          "dmg": {
+            "normal": 1,
+            "crit": 2
+          },
+          "specialRules": [
+            "P SYCHIC",
+            "Severe",
+            "Silent",
+            "Stun"
+          ]
         },
         {
           "name": "Lightning strike",
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "4/3",
-          "specialRules": "PSYCHIC, 2\" Devastating 2"
+          "dmg": {
+            "normal": 4,
+            "crit": 3
+          },
+          "specialRules": [
+            "PSYCHIC",
+            "2\" Devastating 2"
+          ]
         },
         {
           "name": "Shuriken pistol",
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/4",
-          "specialRules": "Range 8\", Rending"
+          "dmg": {
+            "normal": 3,
+            "crit": 4
+          },
+          "specialRules": [
+            "Range 8\"",
+            "Rending"
+          ]
         },
         {
           "name": "Witch staff",
           "type": "Melee",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/5",
-          "specialRules": "PSYCHIC, Shock"
+          "dmg": {
+            "normal": 3,
+            "crit": 5
+          },
+          "specialRules": [
+            "PSYCHIC",
+            "Shock"
+          ]
         }
       ],
       "abilities": [

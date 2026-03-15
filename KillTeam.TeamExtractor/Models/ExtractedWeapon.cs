@@ -15,9 +15,12 @@ public class ExtractedWeapon
     /// <summary>Hit value with trailing +, e.g. "3+".</summary>
     public required string Hit { get; init; }
 
-    /// <summary>Damage string in normal/critical format, e.g. "3/4".</summary>
-    public required string Dmg { get; init; }
+    /// <summary>Normal (non-critical) damage value.</summary>
+    public int DmgNormal { get; init; }
 
-    /// <summary>Comma-separated special rule names, or empty string if none.</summary>
-    public string SpecialRules { get; init; } = "";
+    /// <summary>Critical damage value.</summary>
+    public int DmgCrit { get; init; }
+
+    /// <summary>Individual special rule names (e.g. "Range 8\"", "Piercing 1").</summary>
+    public List<string> SpecialRules { get; init; } = [];
 }

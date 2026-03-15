@@ -150,8 +150,19 @@
         "type": { "type": "string", "enum": ["Ranged", "Melee"] },
         "atk": { "type": "integer", "minimum": 1 },
         "hit": { "type": "string", "pattern": "^[2-6]\\+$" },
-        "dmg": { "type": "string", "pattern": "^\\d+/\\d+$" },
-        "specialRules": { "type": "string" }
+        "dmg": {
+          "type": "object",
+          "required": ["normal", "crit"],
+          "additionalProperties": false,
+          "properties": {
+            "normal": { "type": "integer", "minimum": 0 },
+            "crit": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "specialRules": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
       }
     }
   }

@@ -154,6 +154,73 @@ public class TeamJsonTests
     }
 
     [Fact]
+    public void When_angels_of_death_loaded_then_assault_intercessor_sergeant_has_both_abilities()
+    {
+        using var doc = LoadTeam("angels-of-death");
+        var sergeant = doc.RootElement
+            .GetProperty("operatives")
+            .EnumerateArray()
+            .Single(o => o.GetProperty("name").GetString() == "Assault Intercessor Sergeant");
+
+        var abilities = sergeant.GetProperty("abilities").EnumerateArray().ToList();
+
+        abilities.Should().Contain(
+            a => a.GetProperty("name").GetString() == "Doctrine Warfare",
+            because: "Doctrine Warfare is a left-column ability on the Assault Intercessor Sergeant back card");
+
+        var doctrine = abilities.Single(a => a.GetProperty("name").GetString() == "Doctrine Warfare");
+        doctrine.GetProperty("text").GetString().Should()
+            .Contain("Combat Doctrine", because: "Doctrine Warfare text includes Combat Doctrine strategy ploy references");
+
+        abilities.Should().Contain(
+            a => a.GetProperty("name").GetString() == "Chapter Veteran",
+            because: "Chapter Veteran is a right-column ability on the Assault Intercessor Sergeant back card");
+
+        var chapterVeteran = abilities.Single(a => a.GetProperty("name").GetString() == "Chapter Veteran");
+        chapterVeteran.GetProperty("text").GetString().Should()
+            .Contain("CHAPTER TACTIC", because: "Chapter Veteran text describes selecting an extra CHAPTER TACTIC");
+    }
+
+    [Fact]
+    public void When_weapons_loaded_then_dmg_is_structured_object()
+    {
+        using var doc = LoadTeam("angels-of-death");
+        var firstWeapon = doc.RootElement
+            .GetProperty("operatives")
+            .EnumerateArray()
+            .First()
+            .GetProperty("weapons")
+            .EnumerateArray()
+            .First();
+
+        var dmg = firstWeapon.GetProperty("dmg");
+        dmg.TryGetProperty("normal", out var normal).Should().BeTrue(because: "dmg must have a 'normal' field");
+        dmg.TryGetProperty("crit", out var crit).Should().BeTrue(because: "dmg must have a 'crit' field");
+        normal.GetInt32().Should().BeGreaterThanOrEqualTo(0);
+        crit.GetInt32().Should().BeGreaterThanOrEqualTo(0);
+    }
+
+    [Fact]
+    public void When_weapons_loaded_then_special_rules_is_an_array()
+    {
+        using var doc = LoadTeam("angels-of-death");
+
+        var allWeapons = doc.RootElement
+            .GetProperty("operatives")
+            .EnumerateArray()
+            .SelectMany(op => op.GetProperty("weapons").EnumerateArray())
+            .ToList();
+
+        foreach (var weapon in allWeapons)
+        {
+            weapon.TryGetProperty("specialRules", out var rules).Should().BeTrue(
+                because: $"Weapon '{weapon.GetProperty("name").GetString()}' must have specialRules array");
+            rules.ValueKind.Should().Be(JsonValueKind.Array,
+                because: $"specialRules on '{weapon.GetProperty("name").GetString()}' must be a JSON array");
+        }
+    }
+
+    [Fact]
     public void When_void_dancer_troupe_loaded_then_shadowseer_has_one_ap_abilities()
     {
         using var doc = LoadTeam("void-dancer-troupe");

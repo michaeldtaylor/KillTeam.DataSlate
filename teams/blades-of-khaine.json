@@ -180,66 +180,104 @@
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/4",
-          "specialRules": "Rending"
+          "dmg": {
+            "normal": 3,
+            "crit": 4
+          },
+          "specialRules": [
+            "Rending"
+          ]
         },
         {
           "name": "Shuriken pistol",
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/4",
-          "specialRules": "Range 8\", Rending"
+          "dmg": {
+            "normal": 3,
+            "crit": 4
+          },
+          "specialRules": [
+            "Range 8\"",
+            "Rending"
+          ]
         },
         {
           "name": "Twin shuriken catapult",
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/4",
-          "specialRules": "Ceaseless, Rending"
+          "dmg": {
+            "normal": 3,
+            "crit": 4
+          },
+          "specialRules": [
+            "Ceaseless",
+            "Rending"
+          ]
         },
         {
           "name": "Diresword",
           "type": "Melee",
           "atk": 5,
           "hit": "3+",
-          "dmg": "4/5",
-          "specialRules": "Lethal 5+, Rending"
+          "dmg": {
+            "normal": 4,
+            "crit": 5
+          },
+          "specialRules": [
+            "Lethal 5+",
+            "Rending"
+          ]
         },
         {
           "name": "Fists",
           "type": "Melee",
           "atk": 4,
           "hit": "3+",
-          "dmg": "2/4",
-          "specialRules": "-"
+          "dmg": {
+            "normal": 2,
+            "crit": 4
+          },
+          "specialRules": [
+            "-"
+          ]
         },
         {
           "name": "Gun butts",
           "type": "Melee",
           "atk": 3,
           "hit": "4+",
-          "dmg": "2/3",
-          "specialRules": "-"
+          "dmg": {
+            "normal": 2,
+            "crit": 3
+          },
+          "specialRules": [
+            "-"
+          ]
         },
         {
           "name": "Power weapon",
           "type": "Melee",
           "atk": 5,
           "hit": "3+",
-          "dmg": "4/6",
-          "specialRules": "Lethal 5+"
+          "dmg": {
+            "normal": 4,
+            "crit": 6
+          },
+          "specialRules": [
+            "Lethal 5+"
+          ]
         }
       ],
       "abilities": [
         {
           "name": "Defence Tactics",
-          "text": "Whenever this operative contests an objective     Shimmershield: Whenever an operative is shooting a friendly marker or one of your mission markers, or whenever it’s shooting   BLADES OF KHAINE operative that’s visible to and within an enemy operative that does, this operative’s weapons have the    2\" of this operative, ignore the Piercing weapon rule. This Balanced weapon rule.                                              operative only has this rule if you select the shimmershield weapon option."
+          "text": "Whenever this operative contests an objective marker or one of your mission markers, or whenever it’s shooting an enemy operative that does, this operative’s weapons have the Balanced weapon rule. Exarch: This operative can perform two Shoot or two Fight actions during its activation."
         },
         {
-          "name": "Exarch",
-          "text": "This operative can perform two Shoot or two Fight actions during its activation."
+          "name": "Shimmershield",
+          "text": "Whenever an operative is shooting a friendly BLADES OF KHAINE operative that’s visible to and within 2\" of this operative, ignore the Piercing weapon rule. This operative only has this rule if you select the shimmershield weapon option."
         }
       ],
       "weaponRules": []
@@ -267,16 +305,26 @@
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/4",
-          "specialRules": "Rending"
+          "dmg": {
+            "normal": 3,
+            "crit": 4
+          },
+          "specialRules": [
+            "Rending"
+          ]
         },
         {
           "name": "Fists",
           "type": "Melee",
           "atk": 4,
           "hit": "3+",
-          "dmg": "2/4",
-          "specialRules": "-"
+          "dmg": {
+            "normal": 2,
+            "crit": 4
+          },
+          "specialRules": [
+            "-"
+          ]
         }
       ],
       "abilities": [
@@ -311,48 +359,82 @@
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/4",
-          "specialRules": "Range 8\", Rending"
+          "dmg": {
+            "normal": 3,
+            "crit": 4
+          },
+          "specialRules": [
+            "Range 8\"",
+            "Rending"
+          ]
         },
         {
           "name": "Triskele (throw)",
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "2/3",
-          "specialRules": "Range 8\", Rending, Torrent 2\""
+          "dmg": {
+            "normal": 2,
+            "crit": 3
+          },
+          "specialRules": [
+            "Range 8\"",
+            "Rending",
+            "Torrent 2\""
+          ]
         },
         {
           "name": "Executioner",
           "type": "Melee",
           "atk": 5,
           "hit": "3+",
-          "dmg": "3/7",
-          "specialRules": "Lethal 5+"
+          "dmg": {
+            "normal": 3,
+            "crit": 7
+          },
+          "specialRules": [
+            "Lethal 5+"
+          ]
         },
         {
           "name": "Mirrorswords",
           "type": "Melee",
           "atk": 5,
           "hit": "3+",
-          "dmg": "4/6",
-          "specialRules": "Ceaseless, Lethal 5+"
+          "dmg": {
+            "normal": 4,
+            "crit": 6
+          },
+          "specialRules": [
+            "Ceaseless",
+            "Lethal 5+"
+          ]
         },
         {
           "name": "Power weapon",
           "type": "Melee",
           "atk": 5,
           "hit": "3+",
-          "dmg": "4/6",
-          "specialRules": "Lethal 5+"
+          "dmg": {
+            "normal": 4,
+            "crit": 6
+          },
+          "specialRules": [
+            "Lethal 5+"
+          ]
         },
         {
           "name": "Triskele (slice)",
           "type": "Melee",
           "atk": 5,
           "hit": "3+",
-          "dmg": "4/5",
-          "specialRules": "Rending"
+          "dmg": {
+            "normal": 4,
+            "crit": 5
+          },
+          "specialRules": [
+            "Rending"
+          ]
         }
       ],
       "abilities": [
@@ -386,16 +468,27 @@
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/4",
-          "specialRules": "Range 8\", Rending"
+          "dmg": {
+            "normal": 3,
+            "crit": 4
+          },
+          "specialRules": [
+            "Range 8\"",
+            "Rending"
+          ]
         },
         {
           "name": "Power weapon",
           "type": "Melee",
           "atk": 4,
           "hit": "3+",
-          "dmg": "4/6",
-          "specialRules": "Lethal 5+"
+          "dmg": {
+            "normal": 4,
+            "crit": 6
+          },
+          "specialRules": [
+            "Lethal 5+"
+          ]
         }
       ],
       "abilities": [
@@ -430,40 +523,70 @@
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/4",
-          "specialRules": "Range 8\", Rending"
+          "dmg": {
+            "normal": 3,
+            "crit": 4
+          },
+          "specialRules": [
+            "Range 8\"",
+            "Rending"
+          ]
         },
         {
           "name": "Twin shuriken pistols",
           "type": "Ranged",
           "atk": 4,
           "hit": "4+",
-          "dmg": "3/4",
-          "specialRules": "Range 8\", Ceaseless, Rending"
+          "dmg": {
+            "normal": 3,
+            "crit": 4
+          },
+          "specialRules": [
+            "Range 8\"",
+            "Ceaseless",
+            "Rending"
+          ]
         },
         {
           "name": "Biting blade",
           "type": "Melee",
           "atk": 5,
           "hit": "3+",
-          "dmg": "5/6",
-          "specialRules": "Rending"
+          "dmg": {
+            "normal": 5,
+            "crit": 6
+          },
+          "specialRules": [
+            "Rending"
+          ]
         },
         {
           "name": "Scorpion’s claw and chainsword",
           "type": "Melee",
           "atk": 5,
           "hit": "3+",
-          "dmg": "4/6",
-          "specialRules": "Brutal, Lethal 5+"
+          "dmg": {
+            "normal": 4,
+            "crit": 6
+          },
+          "specialRules": [
+            "Brutal",
+            "Lethal 5+"
+          ]
         },
         {
           "name": "Twin chainswords",
           "type": "Melee",
           "atk": 5,
           "hit": "3+",
-          "dmg": "4/5",
-          "specialRules": "Ceaseless, Rending"
+          "dmg": {
+            "normal": 4,
+            "crit": 5
+          },
+          "specialRules": [
+            "Ceaseless",
+            "Rending"
+          ]
         }
       ],
       "abilities": [
@@ -497,16 +620,27 @@
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/4",
-          "specialRules": "Range 8\", Rending"
+          "dmg": {
+            "normal": 3,
+            "crit": 4
+          },
+          "specialRules": [
+            "Range 8\"",
+            "Rending"
+          ]
         },
         {
           "name": "Chainsword",
           "type": "Melee",
           "atk": 4,
           "hit": "3+",
-          "dmg": "4/5",
-          "specialRules": "Rending"
+          "dmg": {
+            "normal": 4,
+            "crit": 5
+          },
+          "specialRules": [
+            "Rending"
+          ]
         }
       ],
       "abilities": [

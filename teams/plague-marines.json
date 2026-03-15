@@ -139,24 +139,45 @@
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/5",
-          "specialRules": "Range 8\", Piercing 1"
+          "dmg": {
+            "normal": 3,
+            "crit": 5
+          },
+          "specialRules": [
+            "Range 8\"",
+            "Piercing 1"
+          ]
         },
         {
           "name": "Plasma pistol (supercharge)",
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "4/5",
-          "specialRules": "Range 8\", Hot, Lethal 5+, Piercing 1"
+          "dmg": {
+            "normal": 4,
+            "crit": 5
+          },
+          "specialRules": [
+            "Range 8\"",
+            "Hot",
+            "Lethal 5+",
+            "Piercing 1"
+          ]
         },
         {
           "name": "Plague sword",
           "type": "Melee",
           "atk": 5,
           "hit": "3+",
-          "dmg": "4/5",
-          "specialRules": "Severe, Poison*, Toxic*"
+          "dmg": {
+            "normal": 4,
+            "crit": 5
+          },
+          "specialRules": [
+            "Severe",
+            "Poison*",
+            "Toxic*"
+          ]
         }
       ],
       "abilities": [
@@ -189,16 +210,26 @@
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/4",
-          "specialRules": "-"
+          "dmg": {
+            "normal": 3,
+            "crit": 4
+          },
+          "specialRules": [
+            "-"
+          ]
         },
         {
           "name": "Fists",
           "type": "Melee",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/4",
-          "specialRules": "-"
+          "dmg": {
+            "normal": 3,
+            "crit": 4
+          },
+          "specialRules": [
+            "-"
+          ]
         }
       ],
       "abilities": [
@@ -231,8 +262,16 @@
           "type": "Melee",
           "atk": 5,
           "hit": "3+",
-          "dmg": "4/5",
-          "specialRules": "Brutal, Severe, Shock, Poison*"
+          "dmg": {
+            "normal": 4,
+            "crit": 5
+          },
+          "specialRules": [
+            "Brutal",
+            "Severe",
+            "Shock",
+            "Poison*"
+          ]
         }
       ],
       "abilities": [
@@ -265,16 +304,30 @@
           "type": "Ranged",
           "atk": 5,
           "hit": "2+",
-          "dmg": "3/3",
-          "specialRules": "Range 7\", Saturate, Severe, Torrent 2\", Poison*"
+          "dmg": {
+            "normal": 3,
+            "crit": 3
+          },
+          "specialRules": [
+            "Range 7\"",
+            "Saturate",
+            "Severe",
+            "Torrent 2\"",
+            "Poison*"
+          ]
         },
         {
           "name": "Fists",
           "type": "Melee",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/4",
-          "specialRules": "-"
+          "dmg": {
+            "normal": 3,
+            "crit": 4
+          },
+          "specialRules": [
+            "-"
+          ]
         }
       ],
       "abilities": [],
@@ -302,16 +355,27 @@
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/4",
-          "specialRules": "Range 8\""
+          "dmg": {
+            "normal": 3,
+            "crit": 4
+          },
+          "specialRules": [
+            "Range 8\""
+          ]
         },
         {
           "name": "Plague knife",
           "type": "Melee",
           "atk": 5,
           "hit": "3+",
-          "dmg": "3/4",
-          "specialRules": "Severe, Poison*"
+          "dmg": {
+            "normal": 3,
+            "crit": 4
+          },
+          "specialRules": [
+            "Severe",
+            "Poison*"
+          ]
         }
       ],
       "abilities": [
@@ -345,24 +409,51 @@
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/7",
-          "specialRules": "PSYCHIC, Range 7\", Saturate, Severe, Poison*"
+          "dmg": {
+            "normal": 3,
+            "crit": 7
+          },
+          "specialRules": [
+            "PSYCHIC",
+            "Range 7\"",
+            "Saturate",
+            "Severe",
+            "Poison*"
+          ]
         },
         {
           "name": "Plague wind",
           "type": "Ranged",
           "atk": 6,
           "hit": "3+",
-          "dmg": "2/3",
-          "specialRules": "PSYCHIC, Saturate, Severe, Torrent 1\", Poison*"
+          "dmg": {
+            "normal": 2,
+            "crit": 3
+          },
+          "specialRules": [
+            "PSYCHIC",
+            "Saturate",
+            "Severe",
+            "Torrent 1\"",
+            "Poison*"
+          ]
         },
         {
           "name": "Corrupted staff",
           "type": "Melee",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/4",
-          "specialRules": "PSYCHIC, Severe, Shock, Stun, Poison*"
+          "dmg": {
+            "normal": 3,
+            "crit": 4
+          },
+          "specialRules": [
+            "PSYCHIC",
+            "Severe",
+            "Shock",
+            "Stun",
+            "Poison*"
+          ]
         }
       ],
       "abilities": [
@@ -401,16 +492,27 @@
           "type": "Ranged",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/4",
-          "specialRules": "Toxic*"
+          "dmg": {
+            "normal": 3,
+            "crit": 4
+          },
+          "specialRules": [
+            "Toxic*"
+          ]
         },
         {
           "name": "Plague knife",
           "type": "Melee",
           "atk": 4,
           "hit": "3+",
-          "dmg": "3/4",
-          "specialRules": "Severe, Poison*"
+          "dmg": {
+            "normal": 3,
+            "crit": 4
+          },
+          "specialRules": [
+            "Severe",
+            "Poison*"
+          ]
         }
       ],
       "abilities": [
