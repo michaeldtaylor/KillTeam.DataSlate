@@ -497,7 +497,7 @@ firefightPloys:
       
       Use this firefight ploy when a friendly **BLADES OF KHAINE** operative is retaliating or an enemy operative is shooting it, after your opponent rolls their attack dice, but before re-rolls. Until the end of the sequence, your opponent cannot re-roll their attack dice (if your opponent declared the use of any firefight ploys during that sequence that would allow them to re-roll, that ploy is cancelled and the CP spent on it is refunded).
 operativeSelection:
-  archetype: ''
+  archetype: See Reverse
   text: |-
     # Operatives
     

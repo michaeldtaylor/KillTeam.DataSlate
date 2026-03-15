@@ -1627,11 +1627,8 @@ public partial class PdfTeamExtractor
                     var val = m.Groups[1].Value.Trim();
 
                     // "SEE REVERSE" means the archetype rules are complex and printed on the back
-                    // of the card. Don't use this as the archetype label — leave it empty so the
-                    // archetype content in the body text describes it.
-                    archetype = string.Equals(val, "SEE REVERSE", StringComparison.OrdinalIgnoreCase)
-                        ? ""
-                        : TextHelpers.ToTitleCase(val);
+                    // of the card — keep it as the archetype label in title case.
+                    archetype = TextHelpers.ToTitleCase(val);
                     foundArchetype = true;
                 }
             }
