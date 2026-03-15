@@ -2331,8 +2331,8 @@ public partial class PdfTeamExtractor
     [GeneratedRegex(@"^[A-Z][A-Z\s\-]+$")]
     private static partial Regex AllCapsNameRegex();
 
-    /// <summary>Variant of AllCapsNameRegex that also permits apostrophes and digits for rule names.</summary>
-    [GeneratedRegex(@"^[A-Z][A-Z0-9\s\-'']+$")]
+    /// <summary>Variant of AllCapsNameRegex that also permits apostrophes, digits, and commas for rule names (e.g. "UNSTINTING, IMMOVABLE").</summary>
+    [GeneratedRegex(@"^[A-Z][A-Z0-9\s\-'',]+$")]
     private static partial Regex AllCapsRuleNameRegex();
 
     [GeneratedRegex(@"\bNAME\b.*\bATK\b.*\bHIT\b.*\bDMG\b")]

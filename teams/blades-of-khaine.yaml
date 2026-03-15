@@ -431,19 +431,12 @@ factionRules:
       The noble warrior who is tasked with punishing the unjust and the criminal must be ever vigilant. Their eyes must be keen and their aim must be true.
       
       Use this **ASPECT TECHNIQUE** when a friendly **DIRE AVENGER** operative is performing the Shoot action and you select a shuriken catapult or twin shuriken catapult. Until the end of that action, that weapon has the Lethal 5+ weapon rule.
-  - name: Aspect Technique
+  - category: Dire Avenger Aspect Technique
+    name: Unstinting, Immovable
     text: |-
-      UNSTINTING, IMMOVABLE Dire Avengers wear armour fashioned from psycho-sensitive thermoplas scales that are reactive to impact. When suffering a blow, the armour stiffens to spread the energy across the wearer. On top of this flexible suit, these Aspect Warriors wear bone-like plates over the most vulnerable areas of their body.
+      Dire Avengers wear armour fashioned from psycho-sensitive thermoplas scales that are reactive to impact. When suffering a blow, the armour stiffens to spread the energy across the wearer. On top of this flexible suit, these Aspect Warriors wear bone-like plates over the most vulnerable areas of their body.
       
       Use this **ASPECT TECHNIQUE** when an operative is shooting a friendly **DIRE AVENGER** operative, and you've rolled two or more fails. You can discard one of them to retain the other as a normal success instead.
-      
-      **PATIENT**  STALK, **SUDDEN BLOW** Carefully concealed in cover or in shadows, Striking Scorpions stalk their oblivious prey, manoeuvring around their targets in complete silence to select the optimum position to launch their killing strike.
-      
-      Use this **ASPECT TECHNIQUE** when a friendly **STRIKING SCORPION** operative that has a Conceal order performs the Reposition action. During that action, that operative can move within control range of enemy operatives (it cannot end the move there), and you can inflict D3+2 damage on one enemy operative it moved within control range of after it's moved.
-      
-      **SCORPION'S EYE**  A Striking Scorpion's shuriken pistol has a viewfinder psychically linked to its bearer. With it, the Aspect Warrior can see through multiple spectra as well as swiftly identify friend from foe.
-      
-      Use this **ASPECT TECHNIQUE** when a friendly **STRIKING SCORPION** operative is performing the Shoot action and you select a shuriken pistol. Until the end of that action, that weapon has the Seek Light weapon rule.
   - category: Dire Avenger Aspect Technique
     name: Raging Heat of the Dying Flame
     text: |-
@@ -451,11 +444,23 @@ factionRules:
       
       Use this **ASPECT TECHNIQUE** during a friendly **DIRE AVENGER** operative's activation. Until the start of that operative's next activation, you can ignore any changes to its stats from being injured (including its weapons' stats).
   - category: Striking Scorpion Aspect Technique
+    name: Patient Stalk, Sudden Blow
+    text: |-
+      Carefully concealed in cover or in shadows, Striking Scorpions stalk their oblivious prey, manoeuvring around their targets in complete silence to select the optimum position to launch their killing strike.
+      
+      Use this **ASPECT TECHNIQUE** when a friendly **STRIKING SCORPION** operative that has a Conceal order performs the Reposition action. During that action, that operative can move within control range of enemy operatives (it cannot end the move there), and you can inflict D3+2 damage on one enemy operative it moved within control range of after it's moved.
+  - category: Striking Scorpion Aspect Technique
     name: Strike and Fade
     text: |-
       Masters of the hit and run attack, Striking Scorpions withdraw from combat as suddenly as they strike, disappearing into shadow like murderous spirits.
       
       Use this **ASPECT TECHNIQUE** when a friendly **STRIKING SCORPION** operative incapacitates an enemy operative while fighting or retaliating, and is no longer within 3" of enemy operatives. Change that friendly operative's order to Conceal and it can immediately perform a free Dash action, even if it's performed an action that prevents it from performing the Dash action.
+  - category: Striking Scorpion
+    name: Aspect Technique
+    text: |-
+      **SCORPION'S EYE**  A Striking Scorpion's shuriken pistol has a viewfinder psychically linked to its bearer. With it, the Aspect Warrior can see through multiple spectra as well as swiftly identify friend from foe.
+      
+      Use this **ASPECT TECHNIQUE** when a friendly **STRIKING SCORPION** operative is performing the Shoot action and you select a shuriken pistol. Until the end of that action, that weapon has the Seek Light weapon rule.
   - category: Striking Scorpion Aspect Technique
     name: Merciless Strikes
     text: |-
