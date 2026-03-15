@@ -28,14 +28,23 @@ public class ExtractedOperative
     public string PrimaryKeyword { get; init; } = "";
 
     /// <summary>
-    /// Abilities from front-of-card (passive) and back-of-card (1AP or passive) pages.
+    /// Abilities from front-of-card (passive) and back-of-card (passive) pages.
     /// Mutable so that back-of-card parsing can append to the same instance.
+    /// Contains only passive rules (no AP cost).
     /// </summary>
     public List<ExtractedAbility> Abilities { get; init; } = [];
 
     /// <summary>
+    /// Active 1AP actions from back-of-card pages (AP cost set).
+    /// Mutable so that back-of-card parsing can append to the same instance.
+    /// Emitted as "specialActions" in YAML; omitted when empty.
+    /// </summary>
+    public List<ExtractedAbility> SpecialActions { get; init; } = [];
+
+    /// <summary>
     /// Custom weapon rules defined as footnotes (* lines) on back-of-card pages.
     /// Mutable so that back-of-card parsing can append to the same instance.
+    /// Emitted as "specialRules" in JSON; omitted when empty.
     /// </summary>
-    public List<ExtractedWeaponRule> WeaponRules { get; init; } = [];
+    public List<ExtractedWeaponRule> SpecialRules { get; init; } = [];
 }

@@ -1,13 +1,11 @@
-using System.Text.Encodings.Web;
-using System.Text.Json;
-using System.Text.Json.Nodes;
+using System.Text;
 
 namespace KillTeam.TeamExtractor.Models;
 
-/// <summary>The result of extracting a team from PDFs, before writing to JSON.</summary>
+/// <summary>The result of extracting a team from PDFs, before writing to YAML.</summary>
 public class ExtractedTeam
 {
-    /// <summary>URL-safe slug derived from the team name, used as the JSON file name and id field.</summary>
+    /// <summary>URL-safe slug derived from the team name, used as the YAML file name and id field.</summary>
     public required string Id { get; init; }
 
     /// <summary>The human-readable team name.</summary>
@@ -17,10 +15,13 @@ public class ExtractedTeam
     public required string Faction { get; init; }
 
     /// <summary>Operatives extracted from the datacards PDF.</summary>
-    public required List<ExtractedOperative> Operatives { get; init; }
+    public required List<ExtractedOperative> Datacards { get; init; }
 
-    /// <summary>Equipment items with descriptions extracted from equipment PDFs.</summary>
-    public List<ExtractedEquipmentItem> Equipment { get; init; } = [];
+    /// <summary>Equipment items with descriptions extracted from the Faction Equipment PDF.</summary>
+    public List<ExtractedEquipmentItem> FactionEquipment { get; init; } = [];
+
+    /// <summary>Equipment items with descriptions extracted from the Universal Equipment PDF.</summary>
+    public List<ExtractedEquipmentItem> UniversalEquipment { get; init; } = [];
 
     /// <summary>Faction-specific rules extracted from the Faction Rules PDF.</summary>
     public List<ExtractedRule> FactionRules { get; init; } = [];
@@ -37,174 +38,267 @@ public class ExtractedTeam
     /// <summary>Supplementary information text, if a supplementary PDF was found.</summary>
     public string SupplementaryInfo { get; init; } = "";
 
-    /// <summary>Serialises the team to the JSON format used by the teams/ folder.</summary>
-    public string ToJson()
+    /// <summary>
+    /// Serialises the team to the YAML format used by the teams/ folder.
+    /// Field order follows PARSING_RULES.md Rule 6.
+    /// All string values are normalised via <see cref="TextHelpers.NormaliseText"/>.
+    /// Name fields use title case via <see cref="TextHelpers.ToTitleCase"/>.
+    /// </summary>
+    public string ToYaml()
     {
-        var root = new JsonObject
+        var sb = new StringBuilder();
+
+        // ── Metadata header ────────────────────────────────────────────────────
+        YamlWriter.WriteKeyValue(sb, 0, "id", N(this.Id));
+        YamlWriter.WriteKeyValue(sb, 0, "name", N(this.Name));
+        YamlWriter.WriteKeyValue(sb, 0, "faction", N(this.Faction));
+
+        // ── datacards ──────────────────────────────────────────────────────────
+        sb.AppendLine("datacards:");
+
+        foreach (var op in this.Datacards)
         {
-            ["$schema"] = "../schema/team.schema.json",
-            ["id"] = this.Id,
-            ["name"] = this.Name,
-            ["faction"] = this.Faction,
-            ["factionRules"] = new JsonArray(this.FactionRules
-                .Select(r => (JsonNode)new JsonObject
-                {
-                    ["name"] = r.Name,
-                    ["text"] = r.Text,
-                })
-                .ToArray()),
-            ["strategyPloys"] = new JsonArray(this.StrategyPloys
-                .Select(r => (JsonNode)new JsonObject
-                {
-                    ["name"] = r.Name,
-                    ["text"] = r.Text,
-                })
-                .ToArray()),
-            ["firefightPloys"] = new JsonArray(this.FirefightPloys
-                .Select(r => (JsonNode)new JsonObject
-                {
-                    ["name"] = r.Name,
-                    ["text"] = r.Text,
-                })
-                .ToArray()),
-            ["equipment"] = new JsonArray(this.Equipment
-                .Select(e => (JsonNode)new JsonObject
-                {
-                    ["name"] = e.Name,
-                    ["description"] = e.Description,
-                })
-                .ToArray()),
-            ["operatives"] = new JsonArray(this.Operatives
-                .Select(op => (JsonNode)new JsonObject
-                {
-                    ["name"] = op.Name,
-                    ["operativeType"] = op.Name,
-                    ["primaryKeyword"] = op.PrimaryKeyword,
-                    ["keywords"] = new JsonArray(op.Keywords
-                        .Select(k => (JsonNode)JsonValue.Create(k)!)
-                        .ToArray()),
-                    ["stats"] = new JsonObject
-                    {
-                        ["move"] = op.Move,
-                        ["apl"] = op.Apl,
-                        ["wounds"] = op.Wounds,
-                        ["save"] = op.Save,
-                    },
-                    ["weapons"] = new JsonArray(op.Weapons
-                        .Select(w => (JsonNode)new JsonObject
-                        {
-                            ["name"] = w.Name,
-                            ["type"] = w.Type.ToString(),
-                            ["atk"] = w.Atk,
-                            ["hit"] = w.Hit,
-                            ["dmg"] = new JsonObject
-                            {
-                                ["normal"] = w.DmgNormal,
-                                ["crit"] = w.DmgCrit,
-                            },
-                            ["specialRules"] = new JsonArray(w.SpecialRules
-                                .Select(r => (JsonNode)JsonValue.Create(r)!)
-                                .ToArray()),
-                        })
-                        .ToArray()),
-                    ["abilities"] = new JsonArray(op.Abilities
-                        .Select(a =>
-                        {
-                            var obj = new JsonObject
-                            {
-                                ["name"] = a.Name,
-                                ["text"] = a.Text,
-                            };
+            WriteDatacard(sb, op);
+        }
 
-                            if (a.ApCost.HasValue)
-                            {
-                                obj["apCost"] = a.ApCost.Value;
-                            }
+        // ── factionEquipment ───────────────────────────────────────────────────
+        if (this.FactionEquipment.Count > 0)
+        {
+            sb.AppendLine("factionEquipment:");
 
-                            return (JsonNode)obj;
-                        })
-                        .ToArray()),
-                    ["weaponRules"] = new JsonArray(op.WeaponRules
-                        .Select(wr => (JsonNode)new JsonObject
-                        {
-                            ["name"] = wr.Name,
-                            ["text"] = wr.Text,
-                        })
-                        .ToArray()),
-                })
-                .ToArray()),
-        };
+            foreach (var e in this.FactionEquipment)
+            {
+                WriteEquipmentItem(sb, e);
+            }
+        }
 
+        // ── factionRules ───────────────────────────────────────────────────────
+        if (this.FactionRules.Count > 0)
+        {
+            sb.AppendLine("factionRules:");
+
+            foreach (var r in this.FactionRules)
+            {
+                WriteNamedRule(sb, r);
+            }
+        }
+
+        // ── firefightPloys ─────────────────────────────────────────────────────
+        if (this.FirefightPloys.Count > 0)
+        {
+            sb.AppendLine("firefightPloys:");
+
+            foreach (var r in this.FirefightPloys)
+            {
+                WriteNamedRule(sb, r);
+            }
+        }
+
+        // ── operativeSelection ─────────────────────────────────────────────────
         if (this.OperativeSelection != null)
         {
-            root["operativeSelection"] = new JsonObject
-            {
-                ["archetype"] = this.OperativeSelection.Archetype,
-                ["text"] = this.OperativeSelection.Text,
-            };
+            sb.AppendLine("operativeSelection:");
+            YamlWriter.WriteKeyValue(sb, 2, "archetype", N(this.OperativeSelection.Archetype));
+            YamlWriter.WriteTextField(sb, 2, "text", N(this.OperativeSelection.Text));
         }
 
+        // ── strategyPloys ──────────────────────────────────────────────────────
+        if (this.StrategyPloys.Count > 0)
+        {
+            sb.AppendLine("strategyPloys:");
+
+            foreach (var r in this.StrategyPloys)
+            {
+                WriteNamedRule(sb, r);
+            }
+        }
+
+        // ── supplementaryInfo ──────────────────────────────────────────────────
         if (!string.IsNullOrEmpty(this.SupplementaryInfo))
         {
-            root["supplementaryInfo"] = this.SupplementaryInfo;
+            YamlWriter.WriteTextField(sb, 0, "supplementaryInfo", N(this.SupplementaryInfo));
         }
 
-        SanitizeStrings(root);
-
-        return root.ToJsonString(new JsonSerializerOptions
+        // ── universalEquipment ─────────────────────────────────────────────────
+        if (this.UniversalEquipment.Count > 0)
         {
-            WriteIndented = true,
-            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-        });
+            sb.AppendLine("universalEquipment:");
+
+            foreach (var e in this.UniversalEquipment)
+            {
+                WriteEquipmentItem(sb, e);
+            }
+        }
+
+        return sb.ToString();
     }
 
-    /// <summary>
-    /// Walks every JSON string node and strips ASCII control characters (code points 0–31).
-    /// pdftotext emits BEL (0x07) for icon markers and BS (0x08) as rendering artefacts;
-    /// these must not appear in the output JSON.
-    /// </summary>
-    private static void SanitizeStrings(JsonNode? node)
+    // ─── Section writers ──────────────────────────────────────────────────────
+
+    private static void WriteNamedRule(StringBuilder sb, ExtractedRule rule)
     {
-        switch (node)
+        sb.AppendLine("  - name: " + YamlWriter.Scalar(T(N(rule.Name))));
+
+        var text = N(rule.Text);
+
+        if (text.Contains('\n'))
         {
-            case JsonObject obj:
-            {
-                foreach (var key in obj.Select(p => p.Key).ToList())
-                {
-                    if (obj[key] is JsonValue val && val.TryGetValue<string>(out var s))
-                    {
-                        obj[key] = StripControlChars(s);
-                    }
-                    else
-                    {
-                        SanitizeStrings(obj[key]);
-                    }
-                }
+            YamlWriter.WriteLiteralBlock(sb, 4, "text", text);
+        }
+        else
+        {
+            sb.AppendLine("    text: " + YamlWriter.Scalar(text));
+        }
+    }
 
-                break;
+    private static void WriteEquipmentItem(StringBuilder sb, ExtractedEquipmentItem item)
+    {
+        sb.AppendLine("  - name: " + YamlWriter.Scalar(T(N(item.Name))));
+
+        var text = M(item.Text);
+
+        if (text.Length > 0)
+        {
+            if (text.Contains('\n'))
+            {
+                YamlWriter.WriteLiteralBlock(sb, 4, "text", text);
             }
-
-            case JsonArray arr:
+            else
             {
-                for (var i = 0; i < arr.Count; i++)
-                {
-                    if (arr[i] is JsonValue val && val.TryGetValue<string>(out var s))
-                    {
-                        arr[i] = StripControlChars(s);
-                    }
-                    else
-                    {
-                        SanitizeStrings(arr[i]);
-                    }
-                }
-
-                break;
+                sb.AppendLine("    text: " + YamlWriter.Scalar(text));
             }
         }
     }
 
-    private static string StripControlChars(string s)
+    private static void WriteDatacard(StringBuilder sb, ExtractedOperative op)
     {
-        return new string(s.Where(c => c >= 32).ToArray()).Trim();
+        // First item in the operative mapping uses "- " prefix
+        sb.AppendLine("  - name: " + YamlWriter.Scalar(T(N(op.Name))));
+        sb.AppendLine("    operativeType: " + YamlWriter.Scalar(T(N(op.Name))));
+        sb.AppendLine("    primaryKeyword: " + YamlWriter.Scalar(T(N(op.PrimaryKeyword))));
+
+        if (op.Keywords.Count > 0)
+        {
+            sb.AppendLine("    keywords:");
+
+            foreach (var kw in op.Keywords)
+            {
+                sb.AppendLine("      - " + YamlWriter.Scalar(T(N(kw))));
+            }
+        }
+
+        sb.AppendLine("    stats:");
+        YamlWriter.WriteKeyInt(sb, 6, "move", op.Move);
+        YamlWriter.WriteKeyInt(sb, 6, "apl", op.Apl);
+        YamlWriter.WriteKeyInt(sb, 6, "wounds", op.Wounds);
+        sb.AppendLine("      save: " + YamlWriter.Scalar(N(op.Save)));
+
+        sb.AppendLine("    weapons:");
+
+        foreach (var w in op.Weapons)
+        {
+            WriteWeapon(sb, w);
+        }
+
+        if (op.Abilities.Count > 0)
+        {
+            sb.AppendLine("    abilities:");
+
+            foreach (var a in op.Abilities)
+            {
+                WriteAbility(sb, a);
+            }
+        }
+
+        if (op.SpecialActions.Count > 0)
+        {
+            sb.AppendLine("    specialActions:");
+
+            foreach (var a in op.SpecialActions)
+            {
+                WriteSpecialAction(sb, a);
+            }
+        }
+
+        if (op.SpecialRules.Count > 0)
+        {
+            sb.AppendLine("    specialRules:");
+
+            foreach (var sr in op.SpecialRules)
+            {
+                sb.AppendLine("      - name: " + YamlWriter.Scalar(T(N(sr.Name))));
+                sb.AppendLine("        text: " + YamlWriter.Scalar(N(sr.Text)));
+            }
+        }
     }
+
+    private static void WriteWeapon(StringBuilder sb, ExtractedWeapon w)
+    {
+        sb.AppendLine("      - name: " + YamlWriter.Scalar(N(w.Name)));
+        sb.AppendLine("        type: " + YamlWriter.Scalar(w.Type.ToString()));
+        YamlWriter.WriteKeyInt(sb, 8, "atk", w.Atk);
+        sb.AppendLine("        hit: " + YamlWriter.Scalar(N(w.Hit)));
+        sb.AppendLine("        dmg:");
+        YamlWriter.WriteKeyInt(sb, 10, "normal", w.DmgNormal);
+        YamlWriter.WriteKeyInt(sb, 10, "crit", w.DmgCrit);
+
+        if (w.WeaponRules.Count > 0)
+        {
+            sb.AppendLine("        weaponRules:");
+
+            foreach (var rule in w.WeaponRules)
+            {
+                sb.AppendLine("          - " + YamlWriter.Scalar(N(rule)));
+            }
+        }
+    }
+
+    private static void WriteAbility(StringBuilder sb, ExtractedAbility a)
+    {
+        sb.AppendLine("      - name: " + YamlWriter.Scalar(T(N(a.Name))));
+
+        var text = N(a.Text);
+
+        if (text.Contains('\n'))
+        {
+            YamlWriter.WriteLiteralBlock(sb, 8, "text", text);
+        }
+        else
+        {
+            sb.AppendLine("        text: " + YamlWriter.Scalar(text));
+        }
+
+        // No apCost: abilities are passive rules only
+    }
+
+    /// <summary>Writes a single special action (active, has AP cost) as a YAML mapping item.</summary>
+    private static void WriteSpecialAction(StringBuilder sb, ExtractedAbility a)
+    {
+        sb.AppendLine("      - name: " + YamlWriter.Scalar(T(N(a.Name))));
+
+        var text = N(a.Text);
+
+        if (text.Contains('\n'))
+        {
+            YamlWriter.WriteLiteralBlock(sb, 8, "text", text);
+        }
+        else
+        {
+            sb.AppendLine("        text: " + YamlWriter.Scalar(text));
+        }
+
+        // apCost is required for specialActions
+        YamlWriter.WriteKeyInt(sb, 8, "apCost", a.ApCost ?? 1);
+    }
+
+    // ─── Helpers ──────────────────────────────────────────────────────────────
+
+    /// <summary>Applies <see cref="TextHelpers.NormaliseText"/> — short alias for readability.</summary>
+    private static string N(string s) => TextHelpers.NormaliseText(s);
+
+    /// <summary>Applies <see cref="TextHelpers.ToTitleCase"/> — short alias for readability.</summary>
+    private static string T(string s) => TextHelpers.ToTitleCase(s);
+
+    /// <summary>Applies <see cref="TextHelpers.StructureToMarkdown"/> — short alias for readability.</summary>
+    private static string M(string s) => TextHelpers.StructureToMarkdown(s);
 }

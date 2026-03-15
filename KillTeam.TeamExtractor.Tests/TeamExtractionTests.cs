@@ -71,7 +71,7 @@ public class TeamExtractionTests
     [InlineData("Nemesis Claw")]
     [InlineData("Plague Marines")]
     [InlineData("Void-Dancer Troupe")]
-    public Task When_team_extracted_then_json_matches_snapshot(string teamFolderName)
+    public Task When_team_extracted_then_yaml_matches_snapshot(string teamFolderName)
     {
         SkipIfPreconditionsMissing();
 
@@ -79,7 +79,7 @@ public class TeamExtractionTests
         var extractor = new PdfTeamExtractor(new PdfWeaponTypeDetector());
         var team = extractor.Extract(teamFolderName, teamFolder);
 
-        return Verify(team.ToJson(), extension: "json")
+        return Verify(team.ToYaml(), extension: "yaml")
             .UseDirectory("snapshots")
             .UseParameters(teamFolderName);
     }

@@ -46,13 +46,14 @@ foreach (var teamFolder in teamFolders)
         var outDir = ResolveTeamsOutputDir(teamFolder);
         Directory.CreateDirectory(outDir);
 
-        var outFile = Path.Combine(outDir, $"{team.Id}.json");
-        var json = team.ToJson();
-        File.WriteAllText(outFile, json);
+        var outFile = Path.Combine(outDir, $"{team.Id}.yaml");
+        var yaml = team.ToYaml();
+        File.WriteAllText(outFile, yaml);
 
-        AnsiConsole.MarkupLine($"[dim]  Operatives : {team.Operatives.Count}[/]");
+        AnsiConsole.MarkupLine($"[dim]  Datacards  : {team.Datacards.Count}[/]");
         AnsiConsole.MarkupLine($"[dim]  Faction    : {Markup.Escape(team.Faction)}[/]");
-        AnsiConsole.MarkupLine($"[dim]  Equipment  : {team.Equipment.Count} items[/]");
+        AnsiConsole.MarkupLine($"[dim]  Faction Eq : {team.FactionEquipment.Count} items[/]");
+        AnsiConsole.MarkupLine($"[dim]  Universal Eq: {team.UniversalEquipment.Count} items[/]");
         AnsiConsole.MarkupLine($"[dim]  Rules      : {team.FactionRules.Count} faction, {team.StrategyPloys.Count} strategy, {team.FirefightPloys.Count} firefight[/]");
         AnsiConsole.MarkupLine($"[green]  Written: {Markup.Escape(outFile)}[/]");
     }

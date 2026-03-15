@@ -1,0 +1,679 @@
+﻿id: nemesis-claw
+name: Nemesis Claw
+faction: Heretic Astartes
+datacards:
+  - name: Night Lord Visionary
+    operativeType: Night Lord Visionary
+    primaryKeyword: Nemesis Claw
+    keywords:
+      - Nemesis Claw
+      - Chaos
+      - Heretic Astartes
+      - Psyker
+      - Leader
+      - Visionary
+    stats:
+      move: 6
+      apl: 3
+      wounds: 15
+      save: '3+'
+    weapons:
+      - name: Bolt pistol
+        type: Ranged
+        atk: 4
+        hit: '3+'
+        dmg:
+          normal: 3
+          crit: 4
+        weaponRules:
+          - Range 8"
+      - name: Plasma pistol (standard)
+        type: Ranged
+        atk: 4
+        hit: '3+'
+        dmg:
+          normal: 3
+          crit: 5
+        weaponRules:
+          - Range 8"
+          - Piercing 1
+      - name: Plasma pistol (supercharge)
+        type: Ranged
+        atk: 4
+        hit: '3+'
+        dmg:
+          normal: 4
+          crit: 5
+        weaponRules:
+          - Range 8"
+          - Hot
+          - Lethal 5+
+          - Piercing 1
+      - name: Nostraman chainblade
+        type: Melee
+        atk: 5
+        hit: '3+'
+        dmg:
+          normal: 4
+          crit: 5
+        weaponRules:
+          - Rending
+      - name: Power fist
+        type: Melee
+        atk: 5
+        hit: '4+'
+        dmg:
+          normal: 5
+          crit: 7
+        weaponRules:
+          - Brutal
+      - name: Power maul
+        type: Melee
+        atk: 5
+        hit: '3+'
+        dmg:
+          normal: 4
+          crit: 6
+        weaponRules:
+          - Shock
+      - name: Power weapon
+        type: Melee
+        atk: 5
+        hit: '3+'
+        dmg:
+          normal: 4
+          crit: 6
+        weaponRules:
+          - Lethal 5+
+    abilities:
+      - name: Prescience
+        text: |-
+          In the Ready step of each Strategy phase, you gain D3 Prescience points. At the end of each turning point, discard your Prescience points. You can spend your Prescience points in the Firefight phase as follows (you cannot use each of the following rules more than once per turning point):
+            - Foreboding: PSYCHIC. Whenever it's your turn to activate a friendly operative, you can spend 1 of your Prescience points to skip that activation.
+            - Portent: PSYCHIC. Whenever an attack dice inflicts Normal Dmg on this operative, you can spend 1 of your Prescience points to ignore that inflicted damage. You cannot gain or spend your Prescience points if this operative is incapacitated.
+    specialActions:
+      - name: Premonition
+        text: |-
+          Spend 1 of your Prescience points to gain 1CP.
+          
+          This operative cannot perform this action while within control range of an enemy operative, or more than once per turning point.
+        apCost: 1
+  - name: Night Lord Fearmonger
+    operativeType: Night Lord Fearmonger
+    primaryKeyword: Nemesis Claw
+    keywords:
+      - Nemesis Claw
+      - Chaos
+      - Heretic Astartes
+      - Fearmonger
+    stats:
+      move: 6
+      apl: 3
+      wounds: 14
+      save: '3+'
+    weapons:
+      - name: Scoped bolt pistol (long range)
+        type: Ranged
+        atk: 4
+        hit: '3+'
+        dmg:
+          normal: 3
+          crit: 4
+      - name: Terrorchem vial
+        type: Ranged
+        atk: 5
+        hit: '3+'
+        dmg:
+          normal: 2
+          crit: 0
+        weaponRules:
+          - Range 6"
+          - Blast 2"
+          - Devastating 3
+          - Limited 1
+          - Saturate
+          - Terrorchem*
+      - name: Tainted blade
+        type: Melee
+        atk: 5
+        hit: '3+'
+        dmg:
+          normal: 3
+          crit: 5
+        weaponRules:
+          - Terrorchem*
+    specialActions:
+      - name: Poison Objective
+        text: |-
+          Select one objective marker this operative controls to gain one of your Terrorchem tokens. It cannot be an objective marker within control range of an enemy operative, or one that already has one of your Terrorchem tokens. The first time that objective marker is within control range of an enemy operative that doesn't have one of your Terrorchem tokens, that operative gains that Terrorchem token, then inflict 2D3 damage on it (if it's during an action, at the end of that action).
+          
+          This operative cannot perform this action while within control range of an enemy operative.
+        apCost: 1
+    specialRules:
+      - name: Terrorchem
+        text: 'In the Resolve Attack Dice step, if you inflict          Terrorchem Poison: Whenever an operative that has one of your damage with any critical successes, the operative this weapon         Terrorchem tokens is activated, inflict D3 damage on it. is being used against gains one of your Terrorchem tokens (if it doesn''t already have one).'
+  - name: Night Lord Gunner
+    operativeType: Night Lord Gunner
+    primaryKeyword: Nemesis Claw
+    keywords:
+      - Nemesis Claw
+      - Chaos
+      - Heretic Astartes
+      - Gunner
+    stats:
+      move: 6
+      apl: 3
+      wounds: 14
+      save: '3+'
+    weapons:
+      - name: Bolt pistol
+        type: Ranged
+        atk: 4
+        hit: '3+'
+        dmg:
+          normal: 3
+          crit: 4
+        weaponRules:
+          - Range 8"
+      - name: Flamer
+        type: Ranged
+        atk: 4
+        hit: '2+'
+        dmg:
+          normal: 3
+          crit: 3
+        weaponRules:
+          - Range 8"
+          - Saturate
+          - Torrent 2"
+      - name: Meltagun
+        type: Ranged
+        atk: 4
+        hit: '3+'
+        dmg:
+          normal: 6
+          crit: 3
+        weaponRules:
+          - Range 6"
+          - Devastating 4
+          - Piercing 2
+      - name: Plasma gun (standard)
+        type: Ranged
+        atk: 4
+        hit: '3+'
+        dmg:
+          normal: 4
+          crit: 6
+        weaponRules:
+          - Piercing 1
+      - name: Plasma gun (supercharge)
+        type: Melee
+        atk: 4
+        hit: '3+'
+        dmg:
+          normal: 5
+          crit: 6
+        weaponRules:
+          - Hot
+          - Lethal 5+
+          - Piercing 1
+      - name: Fists
+        type: Melee
+        atk: 4
+        hit: '3+'
+        dmg:
+          normal: 3
+          crit: 4
+  - name: Night Lord Heavy Gunner
+    operativeType: Night Lord Heavy Gunner
+    primaryKeyword: Nemesis Claw
+    keywords:
+      - Nemesis Claw
+      - Chaos
+      - Heretic Astartes
+      - Heavy Gunner
+    stats:
+      move: 6
+      apl: 3
+      wounds: 14
+      save: '3+'
+    weapons:
+      - name: Bolt pistol
+        type: Ranged
+        atk: 4
+        hit: '3+'
+        dmg:
+          normal: 3
+          crit: 4
+        weaponRules:
+          - Range 8"
+      - name: Heavy bolter (focused)
+        type: Ranged
+        atk: 5
+        hit: '3+'
+        dmg:
+          normal: 4
+          crit: 5
+        weaponRules:
+          - Heavy (Reposition only)
+          - Piercing Crits 1
+      - name: Heavy bolter (sweeping)
+        type: Ranged
+        atk: 4
+        hit: '3+'
+        dmg:
+          normal: 4
+          crit: 5
+        weaponRules:
+          - Heavy (Reposition only)
+          - Piercing Crits 1
+          - Torrent 1"
+      - name: Missile launcher (frag)
+        type: Ranged
+        atk: 4
+        hit: '3+'
+        dmg:
+          normal: 3
+          crit: 5
+        weaponRules:
+          - Blast 2"
+          - Heavy (Reposition only)
+      - name: Missile launcher (krak)
+        type: Ranged
+        atk: 4
+        hit: '3+'
+        dmg:
+          normal: 5
+          crit: 7
+        weaponRules:
+          - Heavy (Reposition only)
+          - Piercing 1
+      - name: Fists
+        type: Melee
+        atk: 4
+        hit: '3+'
+        dmg:
+          normal: 3
+          crit: 4
+  - name: Night Lord Screecher
+    operativeType: Night Lord Screecher
+    primaryKeyword: Nemesis Claw
+    keywords:
+      - Nemesis Claw
+      - Chaos
+      - Heretic Astartes
+      - Screecher
+    stats:
+      move: 6
+      apl: 3
+      wounds: 14
+      save: '3+'
+    weapons:
+      - name: Lightning claws
+        type: Melee
+        atk: 5
+        hit: '3+'
+        dmg:
+          normal: 4
+          crit: 5
+        weaponRules:
+          - Ceaseless
+          - Lethal 5+
+    abilities:
+      - name: Screecher
+        text: 'Whenever an enemy operative within 3" of this            Appetite for Cruelty: Whenever this operative is fighting against operative is shooting, fighting or retaliating, your opponent       a wounded enemy operative, this operative''s lightning claws have cannot re-roll their attack dice.                                   the Lethal 4+ weapon rule.'
+  - name: Night Lord Skinthief
+    operativeType: Night Lord Skinthief
+    primaryKeyword: Nemesis Claw
+    keywords:
+      - Nemesis Claw
+      - Chaos
+      - Heretic Astartes
+      - Skinthief
+    stats:
+      move: 6
+      apl: 3
+      wounds: 14
+      save: '3+'
+    weapons:
+      - name: Bolt pistol
+        type: Ranged
+        atk: 4
+        hit: '3+'
+        dmg:
+          normal: 3
+          crit: 4
+        weaponRules:
+          - Range 8"
+      - name: Nostraman chainglaive
+        type: Melee
+        atk: 5
+        hit: '3+'
+        dmg:
+          normal: 4
+          crit: 6
+        weaponRules:
+          - Rending
+    abilities:
+      - name: Flay Them Alive
+        text: 'Once per turning point, when this operative          Tyrant of the Skinning Pits: Whenever this operative is fighting incapacitates an enemy operative within its control range, you        or retaliating, Normal and Critical Dmg of 3 or more inflicts 1 less can select one other enemy operative visible to and within 6" of      damage on it. either this operative or the incapacitated enemy operative. Until the start of the next turning point, that other enemy operative cannot control markers or perform the Pick Up Marker or mission actions.'
+  - name: Night Lord Ventrilokar
+    operativeType: Night Lord Ventrilokar
+    primaryKeyword: Nemesis Claw
+    keywords:
+      - Nemesis Claw
+      - Chaos
+      - Heretic Astartes
+      - Psyker
+      - Ventrilokar
+    stats:
+      move: 6
+      apl: 3
+      wounds: 14
+      save: '3+'
+    weapons:
+      - name: Bolt pistol
+        type: Ranged
+        atk: 4
+        hit: '3+'
+        dmg:
+          normal: 3
+          crit: 4
+        weaponRules:
+          - Range 8"
+      - name: Chainsword
+        type: Melee
+        atk: 5
+        hit: '3+'
+        dmg:
+          normal: 4
+          crit: 5
+    abilities:
+      - name: Icon Bearer
+        text: |-
+          Whenever              **Disconcerting Mimicry**                                                                         1AP determining control of a PSYCHIC. Select one enemy operative within 6" of this operative, then select one of the marker, treat this operative's following for that enemy operative (you can only select each option once per battle): APL stat as 1 higher. Note this isn't a change to its APL stat,   • Until the end of its next activation, subtract 1 from its APL stat. so any changes are cumulative     • Change its order. with this.                        • Perform a free Dash action with it (specify the location for your opponent to move it to).
+          
+          This operative cannot perform this action while within control range of an enemy operative.
+  - name: Night Lord Warrior
+    operativeType: Night Lord Warrior
+    primaryKeyword: Nemesis Claw
+    keywords:
+      - Nemesis Claw
+      - Chaos
+      - Heretic Astartes
+      - Warrior
+    stats:
+      move: 6
+      apl: 3
+      wounds: 14
+      save: '3+'
+    weapons:
+      - name: Bolt pistol
+        type: Ranged
+        atk: 4
+        hit: '3+'
+        dmg:
+          normal: 3
+          crit: 4
+        weaponRules:
+          - Range 8"
+      - name: Boltgun
+        type: Ranged
+        atk: 4
+        hit: '3+'
+        dmg:
+          normal: 3
+          crit: 4
+      - name: Chainsword
+        type: Melee
+        atk: 5
+        hit: '3+'
+        dmg:
+          normal: 4
+          crit: 5
+      - name: Fists
+        type: Melee
+        atk: 4
+        hit: '3+'
+        dmg:
+          normal: 3
+          crit: 4
+    abilities:
+      - name: Cruel Tormenter
+        text: Whenever this operative is shooting against, fighting against or retaliating against an injured enemy operative, or an enemy operative that has a Wounds stat of 7 or less, this operative's weapons have the Lethal 5+ weapon rule.
+factionEquipment:
+  - name: Flayed Skin
+    text: Bedecked with the bloody hides of butchered victims, the Night Lords inspire abject terror and revulsion in their enemies. Whenever an enemy operative is shooting against, fighting against or retaliating against a friendly **Nemesis Claw** operative within 2" of it, your opponent cannot re-roll their attack dice results of 1.
+  - name: Chain Snare
+    text: Composed of hooked blades attached to a length of chain, this weapon bites into the flesh or armour of the wielder's target, preventing them from fleeing. Whenever an enemy operative would perform the Fall Back action while within control range of a friendly **Nemesis Claw** operative, if no other enemy operatives are within that friendly operative's control range, you can use this rule. If you do, roll two D6, or one D6 if that enemy operative has a higher Wounds stat than that friendly operative. If any result is a 4+, that enemy operative cannot perform that action during that activation/counteraction (no AP are spent on it), and you cannot use this rule again during this turning point.
+  - name: Grisly Trophy
+    text: Severed hands and limbs, eyeballs plucked from the skulls of screaming victims – these macabre trophies and more cause the Night Lords' foes to waver. Once per battle, when a friendly **Nemesis Claw** operative incapacitates an enemy operative within 2" of it, you can use this rule. If you do, that friendly operative gains one of your Grisly Trophy tokens (if it doesn't already have one). Whenever a friendly **Nemesis Claw** operative that has one of your Grisly Trophy tokens is visible to and within 2" of an enemy operative, subtract 1 from the Atk stat of that enemy operative's weapons.
+  - name: Comms Jammers
+    text: The Night Lords use jamming devices to sow chaos and confusion by preventing their panicked foes from communicating. Whenever an enemy operative is within 3" of a friendly **Nemesis Claw** operative, that enemy operative's APL stat cannot be added to. Note that this doesn't affect APL stats that have already been changed.
+factionRules:
+  - name: Astartes
+    text: 'These genetically modified superhumans are made for one purpose: war. During each friendly **Nemesis Claw** operative''s activation, it can perform either two Shoot actions or two Fight actions. If it''s two Shoot actions, a bolt pistol, boltgun or scoped bolt pistol must be selected for at least one of them. Each friendly **Nemesis Claw** operative can counteract regardless of its order.'
+  - name: In Midnight Clad
+    text: |-
+      Night Lords are one with the darkness, employing it as an ally and a weapon. Whenever an enemy operative is shooting a friendly **Nemesis Claw** operative, that friendly operative is obscured if both of the following are true:
+        -  It's more than 8" from enemy operatives it's visible to.
+        -  It has Heavy terrain within its control range, or any part of its base is underneath Vantage terrain. MARKER/**Token Guide** Portent token Terrorchem token Flay Them Alive token Disconcerting Mimicry token Poison Objective token Grisly Trophy token
+  - name: Nemesis Claw
+    text: Prescience points (Values 1 & 2)
+firefightPloys:
+  - name: Vox Scream
+    text: By modulating the frequency of their helm-mounted vox-units, Night Lord operatives can unleash a terrifying scream with the ability to stun an opponent. Use this firefight ploy when your opponent would activate an enemy operative that's visible to a friendly **Nemesis Claw** operative. Roll one D6; if the result is higher than that enemy operative's APL stat, your opponent cannot activate it during this activation; if the result is less than or equal to that enemy operative's APL stat, this ploy isn't used, the CP spent on it is refunded and you cannot use this ploy again during this turning point. If there are no other enemy operatives eligible to be activated, this ploy has no effect.
+  - name: Death to the False Emperor
+    text: The Night Lords, like all Heretic Astartes, bear a particular hatred for the corpse-worshipping soldiers of the Imperium. Use this firefight ploy after rolling your attack dice for a friendly **Nemesis Claw** operative, if it's shooting against, fighting against or retaliating against an enemy operative that has the IMPERIUM keyword. That friendly operative's weapons have the Ceaseless weapon rule until the end of that sequence; if that enemy operative also has the **Adeptus Astartes** keyword, that friendly operative's weapons have the Relentless weapon rule until the end of that sequence instead.
+  - name: Proclivity for Murder
+    text: Each brutal kill a Night Lord performs serves to feed their bloodlust and drives them to further acts of terrible violence. Use this firefight ploy after a friendly **Nemesis Claw** operative incapacitates an enemy operative within its control range. That friendly operative can immediately perform a free Charge or Dash action (for the former, it cannot move more than 3"), even if it's performed an action that prevents it from performing those actions.
+  - name: Dirty Fighter
+    text: The Night Lords have no respect for the concept of honour and will use whatever underhanded tactics they deem necessary. Use this firefight ploy when a friendly **Nemesis Claw** operative is retaliating, at the start of the Resolve Attack Dice step. You can resolve one of your successes before the normal order. If you do, you cannot resolve any other successes during that sequence.
+operativeSelection:
+  archetype: ''
+  text: ''
+strategyPloys:
+  - name: We Have Come for You
+    text: The Night Lords strike their foes swiftly, utilising shock, awe and terror to brutalise the enemy before they can lift a blade in response. Whenever a friendly **Nemesis Claw** operative is activated, if the first action it performs during that activation is the Charge action, when it ends its move during that action, you can inflict D3 damage on one enemy operative within its control range.
+  - name: The Black Hunt
+    text: A terrible malice burns within the twin hearts of each Night Lord, and they enjoy nothing more than toying with their wounded prey. Whenever a friendly **Nemesis Claw** operative is shooting against, fighting against or retaliating against a wounded enemy operative, you can re-roll one of your attack dice.
+  - name: Preysight
+    text: The Night Lords seem able to sense the fear of cowering prey, hunting down the craven with unerring precision. Whenever you're selecting a valid target for a friendly **Nemesis Claw** operative, enemy operatives within 6" of it cannot use Light terrain for cover. While this can allow such operatives to be targeted (assuming they're visible), it doesn't remove their cover save (if any).
+  - name: Return to Darkness
+    text: 'The Night Lords move from shadow to shadow with an agility and speed belied by their transhuman bulk. One friendly **Nemesis Claw** operative can immediately perform a free Fall Back or Reposition action, but it must end that move with Heavy terrain within its control range, or any part of its base underneath Vantage terrain. In addition, it cannot move more than 4" during that action and it cannot end that move closer to enemy operatives (in a killzone that uses the close quarters rules, e.g. Killzone: Tomb World, ignore Wall terrain when determining this).'
+supplementaryInfo: |-
+  **Nemesis Claw:** **Update Log**
+  Rules will be periodically updated to maintain fair balance and interact more smoothly with the game. Rules changes
+  will be updated directly into online documents and then listed below. Any minor changes to standardise wording that
+  don't have any practical impact on the rule will be updated directly into online documents but not be listed here.
+  **Errata**  JANUARY '26
+  This section collects amendments to the rules. Amended text
+  for clarification and edits are shown in blue, while amended
+  text for balance updates are shown in magenta.
+  **Faction**  EQUIPMENT, **Chain Snare**
+  Last sentence changed to read:
+  'If any result is a 4+, that enemy operative cannot perform
+  that action during that activation/counteraction (no AP are
+  spent on it), and you cannot use this rule again during this
+  turning point.'
+   **Previous Erratas**
+  **Faction**  RULES, **In Midnight Clad**
+  First bullet point changed to read:
+  'It's more than 8" from enemy operatives it's visible to.'
+  **Faction**  EQUIPMENT, **Comms Jammers**
+  Relevant part of first sentence changed to read:
+  'Whenever an enemy operative is within 3" of a friendly
+  **Nemesis**  CLAW operative, […]'
+  **Firefight**  PLOYS, **Death to the False Emperor**
+  First sentence changed to read:
+  'Use this firefight ploy after rolling your attack dice for a
+  friendly **Nemesis Claw** operative, if it's shooting against,
+  fighting against or retaliating against an enemy operative that
+  has the IMPERIUM keyword.'
+  **Firefight**  PLOYS, **Vox Scream**
+  Changed to read:
+  'Use this firefight ploy when your opponent would activate an
+  enemy operative that's visible to a friendly **Nemesis Claw**
+  operative. Roll one D6; if the result is higher than that enemy
+  operative's APL stat, your opponent cannot activate it during
+  this activation; if the result is less than or equal to that enemy
+  operative's APL stat, this ploy isn't used, the CP spent on it
+  is refunded and you cannot use this ploy again during this
+  turning point. If there are no other enemy operatives eligible
+  to be activated, this ploy has no effect. This ploy costs you 1
+  additional CP for each previous time you've used it during the
+  battle (e.g. 1CP the first time you would use it, 2CP the second
+  time, etc.).'
+  **Strategy**  PLOYS, **Return to Darkness**
+  Last sentence changed to read:
+  'In addition, it cannot move more than 4" during that action
+  and it cannot end that move closer to enemy operatives (in
+  a killzone that uses the close quarters rules, e.g. Killzone:
+  Gallowdark, ignore Wall terrain when determining this).'
+  **Fearmonger**  OPERATIVE, **Terrorchem Poison**
+  Changed to read:
+  'Whenever an operative that has one of your Terrorchem
+  tokens is activated, inflict D3 damage on it.'
+  **Visionary**  OPERATIVE, **Prescience Rule**
+  Additional text added between second and third sentence:
+  'At the end of each turning point, discard your
+  Prescience points.'
+  **Nemesis Claw Operatives**
+  Savage and sadistic in the extreme, the Night Lords use fear itself as their most potent weapon. The cruellest of
+  these inveterate murderers form kill teams known as Nemesis Claws, achieving their mission objectives through acts
+  of obscene violence and the spreading of abject terror.
+  **Night Lord Visionary**
+  It takes a singularly terrifying being to lead such a band of
+  monsters to battle, yet the Visionary is equal to the task.
+  Gifted with instinctual flickers of prescience, they foresee
+  threats from within their Nemesis Claw and without, meeting
+  them with shocking violence.
+  **Night Lord Fearmonger**
+  The Fearmonger is not only a master of toxins and poisons,
+  he also relishes the slow cruelties of their effects. Whether
+  dispensing his vile concoctions in battle or infiltrating enemy
+  encampments to taint rations, he spreads horror, suffering
+  and death wherever he goes.
+  '**It Is Many Years Since** I **Took Pleasure In**
+  **Anything but the Torment Of**  OTHERS. **Yet In**
+  **That One Remaining Diversion There Are To
+  be Found Such**  DELIGHTS…'
+  - Vaal K'Shand, Fearmonger
+  
+  **Night Lord Gunner**
+  The effects of blazing promethium, hissing melta beams and
+  searing bolts of plasma upon living beings are horrific in the
+  extreme. Gunners embrace the power of these terror weapons
+  and employ them to wreak maximum havoc among the foe.
+  **Night Lord Heavy Gunner**
+  During every hunt there is a time for subterfuge, but there is
+  also a time to hurl such subtlety aside in favour of mowing
+  down screaming prey. Heavy Gunners do so with pummelling
+  hails of bolt shells, or by blasting the foe to bloody tatters with
+  tank-busting missiles.
+  **Night Lord Screecher**
+  Having long preyed on those weaker than themselves,
+  Screechers have degenerated into vicious and bestial beings.
+  Amplified by the malevolent technologies of the Vox Noctis,
+  Screechers' screams paralyse their victims with terror, an
+  effect their fellow Night Lords are quick to exploit.
+  **Night Lord Skinthief**
+  Brutal overseers of the Night Lords' hideous skinning
+  pits, these callous killers employ their authority to act as
+  enforcers and lieutenants to the Visionaries. Woe betide
+  any foe that lingers too long within range of their howling
+  Nostraman chainglaives.
+  **Night Lord Ventrilokar**
+  The voice eater carried by the Ventrilokar is fashioned
+  from the carrion remains of a slain Space Marine, whose
+  omophagea has been tainted by dark sorcery. This dead-
+  alive puppet can mimic the voices of those whose flesh it
+  consumes, as well as stealing – and muttering aloud – their
+  deepest secrets.
+  **Night Lord Warrior**
+  Those Night Lords who fight as part of the Nemesis Claws
+  are amongst the most psychotic and savage of all their
+  twisted kind. Whether picking their victims off from range or
+  eviscerating and flensing them at close quarters, they are
+  diabolical foes.
+  
+  Below you will find a list of
+  the operatives that make up
+  a **Nemesis Claw** kill team,
+  including, where relevant,
+  any weapons specified for
+  that operative.
+  
+  - 1 **Nemesis Claw Visionary** operative with one of the following options:
+    -  Bolt pistol; power fist
+    -  Bolt pistol; power maul
+    -  Bolt pistol; power weapon
+    -  Plasma pistol; Nostraman chainblade
+  - 5 **Nemesis Claw** operatives selected from the following list:
+    -  FEARMONGER
+    -  **Gunner**  with one of the following options:
+      -  Bolt pistol; flamer; fists
+      -  Bolt pistol; meltagun; fists
+      -  Bolt pistol; plasma gun; fists
+    -  **Heavy Gunner**  with one of the following options:
+      -  Bolt pistol; heavy bolter; fists
+      -  Bolt pistol; missile launcher; fists
+    -  SCREECHER
+    -  SKINTHIEF
+    -  VENTRILOKAR
+    -  **Warrior**  with one of the following options:
+      -  Bolt pistol; chainsword
+      - Boltgun; fists Other than WARRIOR operatives, your kill team can only include each operative on this list once. **Archetypes infiltration** SEEK & **Destroy** Archetypes are used in certain mission packs, e.g. Approved Ops. The game sequence will specify how. **Nemesis Claw Kill Team nemesis** CLAW » **Kill team selection visionary** FEARMONGER '**Run and Hide You Gutless Little Worms**. **Run and Hide**! **It Doesn't Matter How Far Or how Fast You Flee**, **We Will Still Catch You**, **And When We Do We Will Peel the Skin From** **Your Flimsy Bodies and Pluck the Eyes from Your Screaming**  HEADS. **So Run If You** **Want**  TO, VERMIN. **The Chase Only Makes It** **More**  FUN.'
+  - Tzann the Ghoul, Skinthief Plasma pistol Nostraman chainblade Terrorchem vial Tainted blade Scoped bolt pistol
+  
+  **Nemesis**
+  CLAW
+  »
+  **Kill
+  team
+  selection
+  ventrilokar**
+  Chainsword
+  Plasma gun
+  **Gunner Heavy Gunner**
+  Heavy bolter
+  Meltagun
+  Flamer
+  **Screecher Warrior**
+  Missile launcher
+  **Skinthief**
+  Bolt pistol
+  Lightning claws Boltgun Chainsword
+  Bolt pistol
+  Nostraman chainglaive
+universalEquipment:
+  - name: Portable Barricade
+    text: 'Little more than a suppression shield with armoured feet, these barricades can be hefted and borne forwards to provide mobile cover. A portable barricade is Light, Protective and Portable terrain, except the feet which are Insignificant and Exposed. Before the battle, you can set it up wholly within your territory, on the killzone floor and more than 2" from other equipment terrain features, access points and Accessible terrain. Protective: While an operative is in cover from this terrain feature, improve its Save stat by 1 (to a maximum of 2+). RULE'
+  - name: Utility Grenades
+    text: From neuro‑suppressant psybombs to smoke‑belching chemical charges, grenades of this sort can suppress the enemy and be the difference between life and death. When you select this equipment, select two utility grenades (2 smoke, 2 stun, or 1 smoke and 1 stun). Each selection is a unique action your operatives can perform, but your kill team can only perform that action a total number of times during the battle equal to your selection. RULE
+  - name: Ammo Cache
+    text: |-
+      Whether stockpiles deliberately set out for warriors to access quickly, or the abandoned munitions of the slain, these caches can prove vital for a swift reload in the heat of battle. Before the battle, you can set up one of your Ammo Cache markers wholly within your territory. Friendly operatives can perform the following mission action during the battle. **Ammo Resupply** 0AP  One of your Ammo Cache markers the active operative controls is used during this turning point.  Until the start of the next turning point, whenever this operative is shooting with a weapon from its datacard, you can re‑roll one of your attack dice.
+      
+      An operative cannot perform this action while within control range of an enemy operative, if that marker isn't yours, or if that marker has been used this turning point.
+  - name: Razor Wire
+    text: 'Spooled rapidly out and affixed to jutting posts, razor wire acts as an easily deployed barrier and a painful deterrent to enemy operatives seeking to attack along particular routes. Razor wire is Exposed and Obstructing terrain. Before the battle, you can set it up wholly within your territory, on the killzone floor and more than 2" from other equipment terrain features, access points and Accessible terrain. Obstructing: Whenever an operative would cross over this terrain feature within 1" of it, treat the distance as an additional 1".'
+  - name: Comms Device
+    text: Communications devices can be swiftly hijacked and employed to coordinate operations or call in support during a firefight. Before the battle, you can set up one of your Comms Device markers wholly within your territory. While a friendly operative controls this marker, add 3" to the distance requirements of its SUPPORT rules that refer to friendly operatives (e.g. 'select one friendly operative within 6"' would be 9" instead). Note that you cannot benefit from your opponent's Comms Device markers.
+  - name: Mines
+    text: The battlefields of the 41st Millennium are plagued by myriad types of mine, from simple frag charges to monofilament web‑snares and microplasma charges. Ultimately, all serve a similar, horrible purpose. Before the battle, you can set up one of your Mines markers wholly within your territory and more than 2" from other markers, access points and Accessible terrain. The first time that marker is within an operative's control range, remove that marker and inflict D3+3 damage on that operative.
+  - name: Light Barricades
+    text: Designed to be lugged into place and then deployed by operatives and combat engineers, these barriers are proof against small arms fire. Light barricades are Light terrain, except the feet, which are Insignificant and Exposed. Before the battle, you can set up any of them wholly within your territory, on the killzone floor and more than 2" from other equipment terrain features, access points and Accessible terrain.
+  - name: Heavy Barricade
+    text: A redoubtable slab of plasteel and adamantine, this layered protective barrier provides shelter amidst the fiercest firefights. A heavy barricade is Heavy terrain. Before the battle, you can set it up wholly within 4" of your drop zone, on the killzone floor and more than 2" from other equipment terrain features, access points and Accessible terrain.
+  - name: Ladders
+    text: |-
+      Carried into battle in their compacted forms, these ladders provide a rapid route of ingress to strongholds, or access to vital vantage points. Ladders are Insignificant and Exposed terrain. Before the battle, you can set up any of them as follows:
+        -  Wholly within your territory.
+        -  Upright against terrain that's at least 2" tall.
+        -  More than 2" from other equipment terrain features.
+        -  More than 1" from doors and access points. Once per action, whenever an operative is climbing the terrain feature a ladder is placed against, treat the vertical distance as 1" if the ladder is within that operative's control range during that entire climb.
+  - name: Explosive Grenades
+    text: A variety of offensive grenades are employed by the forces of the 41st Millennium. These range from simple fragmentation grenades to plasma and gravitic concussion grenades, while even more exotic devices are used to crack open enemy armour. When you select this equipment, select two explosive grenades (2 frag, 2 krak, or 1 frag and 1 krak). Each selection is a ranged weapon your operatives can use, but your kill team can only use that weapon a total number of times during the battle equal to your selection. **Name Atk Hit Dmg** Frag grenade 4 4+ 2/4 WR Range 6", Blast 2", Saturate **Name Atk Hit Dmg** Krak grenade 4 4+ 4/5 WR Range 6", Piercing 1, Saturate
+  - name: Breaching Charge
+    text: This explosive device can blast a tactical insertion point through even the most formidable bulkhead or bunker wall. Once per battle, when a friendly operative performs the Breach action, you can use this rule. If you do, that operative can perform that action for 1 less AP (to a minimum of 1AP) as though it had the word 'breach marker' on its datacard.

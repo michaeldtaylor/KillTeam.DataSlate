@@ -1,5 +1,4 @@
 using System.Runtime.CompilerServices;
-using VerifyTests;
 
 namespace KillTeam.TeamExtractor.Tests;
 
@@ -11,6 +10,6 @@ public static class ModuleInitializer
     [ModuleInitializer]
     public static void Init()
     {
-        VerifierSettings.UseStrictJson();
+        // No strict JSON mode — snapshots are YAML format
     }
 }

@@ -12,7 +12,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution", "Solution", "{287777DC-098D-459C-8227-B12CA6630DC7}"
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
-		schema\team.schema.json = schema\team.schema.json
+		schema\team.schema.yaml = schema\team.schema.yaml
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KillTeam.TeamExtractor", "KillTeam.TeamExtractor\KillTeam.TeamExtractor.csproj", "{219F0181-5FD5-4F1F-A2CB-B5EC45797D65}"

@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
 using KillTeam.TeamExtractor.Models;
+using KillTeam.TeamExtractor;
 
 namespace KillTeam.TeamExtractor.Services;
 
@@ -16,6 +17,18 @@ public partial class PdfTeamExtractor
     {
         "FACTION EQUIPMENT",
         "UNIVERSAL EQUIPMENT",
+    };
+
+    /// <summary>
+    /// ALL-CAPS tokens that appear in raw-mode pdftotext output but are stats labels or
+    /// page markers, not operative names.  These must be excluded when scanning for
+    /// operative name boundaries in <see cref="BuildRawBackCardSections"/>.
+    /// </summary>
+    private static readonly HashSet<string> RawModeStatsKeywords = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "SAVE", "MOVE", "WOUNDS", "APL", "APL WOUNDS", "APL MOVE",
+        "MOVE SAVE", "WOUNDS SAVE", "APL MOVE SAVE WOUNDS",
+        "OPERATIVES",
     };
 
     private static readonly string[] EquipmentSkipPatterns =
@@ -53,19 +66,12 @@ public partial class PdfTeamExtractor
         var weaponTypes = this._weaponTypeDetector.Detect(datacardsPath);
         var (operatives, faction) = this.ParseDatacards(datacardsPath, weaponTypes);
 
-        var equipmentPaths = new List<string>();
-
-        if (factionEquipPath != null)
-        {
-            equipmentPaths.Add(factionEquipPath);
-        }
-
-        if (universalEquipPath != null)
-        {
-            equipmentPaths.Add(universalEquipPath);
-        }
-
-        var equipment = this.ParseEquipmentWithDescriptions(equipmentPaths);
+        var factionEquipment = factionEquipPath != null
+            ? this.ParseEquipmentWithDescriptions([factionEquipPath])
+            : [];
+        var universalEquipment = universalEquipPath != null
+            ? this.ParseEquipmentWithDescriptions([universalEquipPath])
+            : [];
         var factionRules = factionRulesPath != null ? this.ParseRulesDoc(factionRulesPath) : [];
         var strategyPloys = strategyPloysPath != null ? this.ParseRulesDoc(strategyPloysPath) : [];
         var firefightPloys = firefightPloysPath != null ? this.ParseRulesDoc(firefightPloysPath) : [];
@@ -83,8 +89,9 @@ public partial class PdfTeamExtractor
             Id = Slugify(teamName),
             Name = teamName,
             Faction = faction ?? "UNKNOWN — UPDATE ME",
-            Operatives = operatives,
-            Equipment = equipment,
+            Datacards = operatives,
+            FactionEquipment = factionEquipment,
+            UniversalEquipment = universalEquipment,
             FactionRules = factionRules,
             StrategyPloys = strategyPloys,
             FirefightPloys = firefightPloys,
@@ -99,7 +106,12 @@ public partial class PdfTeamExtractor
         string pdfPath,
         Dictionary<string, WeaponType> weaponTypes)
     {
+        // Layout mode is required for the weapon-stats regex (column-aligned positions).
         var lines = GetPdfLines(pdfPath);
+        // Raw mode is used for back-card prose content — avoids two-column interleaving.
+        var rawLines = GetPdfLines(pdfPath, raw: true);
+        var rawBackSections = BuildRawBackCardSections(rawLines);
+
         var count = lines.Count;
         var operatives = new List<ExtractedOperative>();
 
@@ -140,7 +152,7 @@ public partial class PdfTeamExtractor
             {
                 if (operativeMap.TryGetValue(operativeName, out var existingOp))
                 {
-                    i = this.ParseBackOfCard(lines, i, existingOp);
+                    i = this.ParseBackOfCard(lines, rawBackSections, i, existingOp);
                 }
                 else
                 {
@@ -236,7 +248,7 @@ public partial class PdfTeamExtractor
                     var wHit = wm.Groups[3].Value + "+";
                     var wDmgNormal = int.Parse(wm.Groups[4].Value, CultureInfo.InvariantCulture);
                     var wDmgCrit = int.Parse(wm.Groups[5].Value, CultureInfo.InvariantCulture);
-                    var wRulesRaw = wm.Groups[6].Value.Trim();
+                    var wRulesRaw = StripControlChars(wm.Groups[6].Value.Trim());
 
                     while (i + 1 < count)
                     {
@@ -261,7 +273,7 @@ public partial class PdfTeamExtractor
                     var wRules = wRulesRaw
                         .Split(',')
                         .Select(r => r.Trim())
-                        .Where(r => r.Length > 0)
+                        .Where(r => r.Length > 0 && r != "-")
                         .ToList();
 
                     var weaponType = ResolveWeaponType(wName, wRulesRaw, weaponTypes);
@@ -274,7 +286,7 @@ public partial class PdfTeamExtractor
                         Hit = wHit,
                         DmgNormal = wDmgNormal,
                         DmgCrit = wDmgCrit,
-                        SpecialRules = wRules,
+                        WeaponRules = wRules,
                     });
                 }
                 else
@@ -337,7 +349,7 @@ public partial class PdfTeamExtractor
                     Keywords = keywords,
                     PrimaryKeyword = primaryKeyword,
                     Abilities = frontAbilities,
-                    WeaponRules = frontWeaponRules,
+                    SpecialRules = frontWeaponRules,
                 };
 
                 operatives.Add(operative);
@@ -354,7 +366,11 @@ public partial class PdfTeamExtractor
     /// abilities and weapon rules to the existing operative instance.
     /// Returns the index of the next unprocessed line.
     /// </summary>
-    private int ParseBackOfCard(List<string> lines, int nameLineIdx, ExtractedOperative operative)
+    private int ParseBackOfCard(
+        List<string> lines,
+        IReadOnlyDictionary<string, List<string>> rawBackSections,
+        int nameLineIdx,
+        ExtractedOperative operative)
     {
         var count = lines.Count;
         var i = nameLineIdx + 1; // past the name line
@@ -422,9 +438,79 @@ public partial class PdfTeamExtractor
             i++;
         }
 
-        ParseBackContent(backLines, operative);
+        // Prefer raw-mode lines for back-card content to avoid two-column interleaving.
+        // Fall back to layout-mode lines when no raw section was found for this operative.
+        var contentLines = rawBackSections.TryGetValue(operative.Name, out var rawBackLines)
+            ? rawBackLines
+            : backLines;
+
+        ParseBackContent(contentLines, operative);
 
         return i;
+    }
+
+    /// <summary>
+    /// Scans raw-mode pdftotext lines and builds a lookup of operative name →
+    /// back-card body lines.
+    ///
+    /// In these Kill Team PDFs the back-card block in raw mode has the following structure:
+    /// <list type="number">
+    ///   <item>"RULES CONTINUE ON OTHER SIDE" — end-of-front-card marker (start of block)</item>
+    ///   <item>Ability / action text lines</item>
+    ///   <item>ALL-CAPS operative name — appears AFTER the content (end of block / key)</item>
+    /// </list>
+    /// We therefore use "RULES CONTINUE ON OTHER SIDE" as the start boundary and the first
+    /// standalone ALL-CAPS name (letters + spaces only, no digits, no commas, not a known
+    /// stats keyword) as both the end boundary and the dictionary key.
+    /// </summary>
+    private static Dictionary<string, List<string>> BuildRawBackCardSections(List<string> rawLines)
+    {
+        var result = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
+        var i = 0;
+        var count = rawLines.Count;
+
+        while (i < count)
+        {
+            // "RULES CONTINUE ON OTHER SIDE" marks the end of a front card.
+            // Everything that follows — up to the ALL-CAPS operative name — is back-card content.
+            if (!rawLines[i].Trim().Contains("CONTINUE ON OTHER SIDE", StringComparison.OrdinalIgnoreCase))
+            {
+                i++;
+                continue;
+            }
+
+            i++; // past the marker line
+
+            var backLines = new List<string>();
+            string? operativeName = null;
+
+            while (i < count)
+            {
+                var line = rawLines[i];
+                var lineTrimmed = line.Trim();
+
+                // A standalone ALL-CAPS name (letters/spaces/hyphens only, no digits or commas,
+                // not a known stats label) marks the end of the back-card block and IS the key.
+                if (AllCapsNameRegex().IsMatch(lineTrimmed)
+                    && !lineTrimmed.Contains(',')
+                    && !RawModeStatsKeywords.Contains(lineTrimmed))
+                {
+                    operativeName = ToTitleCase(lineTrimmed);
+                    i++; // past the name line
+                    break;
+                }
+
+                backLines.Add(line);
+                i++;
+            }
+
+            if (operativeName != null)
+            {
+                result[operativeName] = backLines;
+            }
+        }
+
+        return result;
     }
 
     /// <summary>
@@ -433,6 +519,7 @@ public partial class PdfTeamExtractor
     /// <list type="bullet">
     ///   <item>Footnote weapon rules: lines starting with <c>*</c></item>
     ///   <item>Two-column 1AP actions: a header line containing "1AP" twice</item>
+    ///   <item>Single-column 1AP actions: a line matching ALL-CAPS name + AP cost pattern</item>
     ///   <item>Single-column passive rules: <c>Name: description</c> blocks</item>
     /// </list>
     /// </summary>
@@ -461,7 +548,7 @@ public partial class PdfTeamExtractor
                 if (colonIdx > 0)
                 {
                     var ruleName = ruleContent[..colonIdx].Trim();
-                    var ruleDesc = ruleContent[(colonIdx + 1)..].Trim();
+                    var ruleDescSb = new StringBuilder(ruleContent[(colonIdx + 1)..].Trim());
 
                     j++;
 
@@ -474,14 +561,14 @@ public partial class PdfTeamExtractor
                             break;
                         }
 
-                        ruleDesc = (ruleDesc + " " + nextLine).Trim();
+                        AppendText(ruleDescSb, nextLine);
                         j++;
                     }
 
-                    operative.WeaponRules.Add(new ExtractedWeaponRule
+                    operative.SpecialRules.Add(new ExtractedWeaponRule
                     {
                         Name = ruleName,
-                        Text = ruleDesc,
+                        Text = TextHelpers.StructureToMarkdown(ruleDescSb.ToString().Trim()),
                     });
                 }
                 else
@@ -492,7 +579,66 @@ public partial class PdfTeamExtractor
                 continue;
             }
 
-            // ── 2. Two-column 1AP header: "1AP" appears at least twice ────────
+            // ── 2. Single-column 1AP action header ────────────────────────────
+            // NormaliseText is applied to repair AP concatenation (e.g. OPTIC1AP → OPTIC 1AP)
+            // before matching, so the raw line need not have a space before the AP cost.
+            var normStripped = TextHelpers.NormaliseText(stripped);
+            var singleApMatch = SingleColumnApRegex().Match(normStripped);
+
+            if (singleApMatch.Success)
+            {
+                var actionName = StripControlChars(ToTitleCase(singleApMatch.Groups[1].Value.Trim()));
+                var apCost = int.Parse(singleApMatch.Groups[2].Value, CultureInfo.InvariantCulture);
+                var actionTextSb = new StringBuilder(singleApMatch.Groups[3].Value.Trim());
+
+                j++;
+
+                while (j < count)
+                {
+                    var nextLine = backLines[j].TrimStart('\x07').TrimStart();
+
+                    if (string.IsNullOrWhiteSpace(nextLine))
+                    {
+                        j++;
+                        break;
+                    }
+
+                    if (nextLine.StartsWith('*'))
+                    {
+                        break;
+                    }
+
+                    // Another single-column AP header ends this block
+                    var nextNorm = TextHelpers.NormaliseText(nextLine);
+
+                    if (SingleColumnApRegex().IsMatch(nextNorm))
+                    {
+                        break;
+                    }
+
+                    // Two-column 1AP header ends this block
+                    var cFirst = nextLine.IndexOf("1AP", StringComparison.Ordinal);
+
+                    if (cFirst >= 0 && nextLine.IndexOf("1AP", cFirst + 3, StringComparison.Ordinal) >= 0)
+                    {
+                        break;
+                    }
+
+                    AppendText(actionTextSb, nextLine);
+                    j++;
+                }
+
+                operative.SpecialActions.Add(new ExtractedAbility
+                {
+                    Name = actionName,
+                    ApCost = apCost,
+                    Text = TextHelpers.StructureToMarkdown(actionTextSb.ToString().TrimStart()),
+                });
+
+                continue;
+            }
+
+            // ── 3. Two-column 1AP header: "1AP" appears at least twice ────────
             var firstApIdx = rawLine.IndexOf("1AP", StringComparison.Ordinal);
 
             if (firstApIdx >= 0)
@@ -501,10 +647,8 @@ public partial class PdfTeamExtractor
 
                 if (secondApIdx >= 0)
                 {
-                    // The column boundary is the start index of the first "1AP"
-                    var boundary = firstApIdx;
-
-                    var leftName = rawLine[..boundary].TrimStart('\x07').Trim();
+                    // Left name: everything before the first "1AP"
+                    var leftName = rawLine[..firstApIdx].TrimStart('\x07').Trim();
 
                     var rightPart = rawLine[(firstApIdx + 3)..];
                     var apInRight = rightPart.IndexOf("1AP", StringComparison.Ordinal);
@@ -512,6 +656,21 @@ public partial class PdfTeamExtractor
                     var rightName = apInRight >= 0
                         ? rightPart[..apInRight].Trim()
                         : rightPart.Trim();
+
+                    // Content boundary: where the right-column content begins in body lines.
+                    // Scan past "1AP" and the following space-gap to find the right column start.
+                    var contentBoundary = firstApIdx + 3;
+
+                    while (contentBoundary < rawLine.Length && rawLine[contentBoundary] == ' ')
+                    {
+                        contentBoundary++;
+                    }
+
+                    // If no gap was found (no spaces after first "1AP"), fall back to the left name length
+                    if (contentBoundary == firstApIdx + 3)
+                    {
+                        contentBoundary = firstApIdx;
+                    }
 
                     var leftText = new StringBuilder();
                     var rightText = new StringBuilder();
@@ -542,31 +701,21 @@ public partial class PdfTeamExtractor
                             break;
                         }
 
-                        // Distribute characters to left or right column based on boundary position
-                        var safeLen = Math.Min(boundary, contentLine.Length);
+                        // Distribute characters to left or right column based on content boundary position
+                        var safeLen = Math.Min(contentBoundary, contentLine.Length);
                         var leftPart = contentLine[..safeLen].TrimStart('\x07').Trim();
-                        var rightPartC = contentLine.Length > boundary
-                            ? contentLine[boundary..].Trim()
+                        var rightPartC = contentLine.Length > contentBoundary
+                            ? contentLine[contentBoundary..].Trim()
                             : "";
 
                         if (leftPart.Length > 0)
                         {
-                            if (leftText.Length > 0)
-                            {
-                                leftText.Append(' ');
-                            }
-
-                            leftText.Append(leftPart);
+                            AppendText(leftText, leftPart);
                         }
 
                         if (rightPartC.Length > 0)
                         {
-                            if (rightText.Length > 0)
-                            {
-                                rightText.Append(' ');
-                            }
-
-                            rightText.Append(rightPartC);
+                            AppendText(rightText, rightPartC);
                         }
 
                         j++;
@@ -574,21 +723,21 @@ public partial class PdfTeamExtractor
 
                     if (leftName.Length > 0)
                     {
-                        operative.Abilities.Add(new ExtractedAbility
+                        operative.SpecialActions.Add(new ExtractedAbility
                         {
                             Name = StripControlChars(ToTitleCase(leftName)),
                             ApCost = 1,
-                            Text = leftText.ToString().Trim(),
+                            Text = TextHelpers.StructureToMarkdown(leftText.ToString().TrimStart()),
                         });
                     }
 
                     if (rightName.Length > 0)
                     {
-                        operative.Abilities.Add(new ExtractedAbility
+                        operative.SpecialActions.Add(new ExtractedAbility
                         {
                             Name = StripControlChars(ToTitleCase(rightName)),
                             ApCost = 1,
-                            Text = rightText.ToString().Trim(),
+                            Text = TextHelpers.StructureToMarkdown(rightText.ToString().TrimStart()),
                         });
                     }
 
@@ -663,22 +812,12 @@ public partial class PdfTeamExtractor
 
                             if (leftPart.Length > 0)
                             {
-                                if (leftTextSb.Length > 0)
-                                {
-                                    leftTextSb.Append(' ');
-                                }
-
-                                leftTextSb.Append(leftPart);
+                                AppendText(leftTextSb, leftPart);
                             }
 
                             if (rightPart.Length > 0)
                             {
-                                if (rightTextSb.Length > 0)
-                                {
-                                    rightTextSb.Append(' ');
-                                }
-
-                                rightTextSb.Append(rightPart);
+                                AppendText(rightTextSb, rightPart);
                             }
 
                             j++;
@@ -688,7 +827,7 @@ public partial class PdfTeamExtractor
                         {
                             Name = possibleName,
                             ApCost = null,
-                            Text = leftTextSb.ToString().Trim(),
+                            Text = TextHelpers.StructureToMarkdown(leftTextSb.ToString().TrimStart()),
                         });
 
                         if (rightName.Length > 0)
@@ -697,7 +836,7 @@ public partial class PdfTeamExtractor
                             {
                                 Name = rightName,
                                 ApCost = null,
-                                Text = rightTextSb.ToString().Trim(),
+                                Text = TextHelpers.StructureToMarkdown(rightTextSb.ToString().TrimStart()),
                             });
                         }
 
@@ -705,7 +844,7 @@ public partial class PdfTeamExtractor
                     }
 
                     // ── Single-column passive rule ────────────────────────────────
-                    var text = stripped[(singleColonIdx + 1)..].Trim();
+                    var textSb = new StringBuilder(stripped[(singleColonIdx + 1)..].Trim());
 
                     j++;
 
@@ -715,11 +854,32 @@ public partial class PdfTeamExtractor
 
                         if (string.IsNullOrWhiteSpace(nextLine))
                         {
+                            // In raw mode, blank lines can occur within an ability's text block
+                            // (e.g. between a parenthetical sentence and a bullet list). Do NOT
+                            // break here — the next new ability name or AP action header ends the
+                            // block. Preserve as a paragraph break marker.
                             j++;
-                            break;
+                            continue;
                         }
 
                         if (nextLine.StartsWith('*'))
+                        {
+                            break;
+                        }
+
+                        // Bullet lines (•, ○, ↘, ↙, ↳) are always continuation list items —
+                        // they can never start a new ability even if they contain a colon.
+                        if (nextLine.Length > 0 && nextLine[0] is '\u2022' or '\u25CB' or '\u2198' or '\u2199' or '\u21B3')
+                        {
+                            AppendText(textSb, nextLine);
+                            j++;
+                            continue;
+                        }
+
+                        // A single-column 1AP action header ends this passive ability block.
+                        var nextNormLine = TextHelpers.NormaliseText(nextLine);
+
+                        if (SingleColumnApRegex().IsMatch(nextNormLine))
                         {
                             break;
                         }
@@ -731,7 +891,7 @@ public partial class PdfTeamExtractor
                             break;
                         }
 
-                        text = (text + " " + nextLine).Trim();
+                        AppendText(textSb, nextLine);
                         j++;
                     }
 
@@ -739,7 +899,7 @@ public partial class PdfTeamExtractor
                     {
                         Name = possibleName,
                         ApCost = null,
-                        Text = text,
+                        Text = TextHelpers.StructureToMarkdown(textSb.ToString().Trim()),
                     });
 
                     continue;
@@ -776,7 +936,7 @@ public partial class PdfTeamExtractor
             if (colonIdx > 0)
             {
                 var ruleName = ruleContent[..colonIdx].Trim();
-                var ruleDesc = ruleContent[(colonIdx + 1)..].Trim();
+                var ruleDescSb = new StringBuilder(ruleContent[(colonIdx + 1)..].Trim());
 
                 i++;
 
@@ -789,14 +949,14 @@ public partial class PdfTeamExtractor
                         break;
                     }
 
-                    ruleDesc = (ruleDesc + " " + next).Trim();
+                    AppendText(ruleDescSb, next);
                     i++;
                 }
 
                 result.Add(new ExtractedWeaponRule
                 {
                     Name = ruleName,
-                    Text = ruleDesc,
+                    Text = TextHelpers.StructureToMarkdown(ruleDescSb.ToString().Trim()),
                 });
             }
             else
@@ -835,7 +995,7 @@ public partial class PdfTeamExtractor
 
                 if (IsAbilityName(name))
                 {
-                    var text = line[(colonIdx + 1)..].Trim();
+                    var textSb = new StringBuilder(line[(colonIdx + 1)..].Trim());
 
                     j++;
 
@@ -849,6 +1009,14 @@ public partial class PdfTeamExtractor
                             break;
                         }
 
+                        // Bullet lines are always continuation of current ability text
+                        if (nextLine.Length > 0 && nextLine[0] is '\u2022' or '\u25CB' or '\u2198' or '\u2199' or '\u21B3')
+                        {
+                            AppendText(textSb, nextLine);
+                            j++;
+                            continue;
+                        }
+
                         var nextColon = nextLine.IndexOf(':');
 
                         if (nextColon > 0 && IsAbilityName(nextLine[..nextColon].Trim()))
@@ -856,7 +1024,7 @@ public partial class PdfTeamExtractor
                             break;
                         }
 
-                        text = (text + " " + nextLine).Trim();
+                        AppendText(textSb, nextLine);
                         j++;
                     }
 
@@ -864,7 +1032,7 @@ public partial class PdfTeamExtractor
                     {
                         Name = name,
                         ApCost = null,
-                        Text = text,
+                        Text = TextHelpers.StructureToMarkdown(textSb.ToString().Trim()),
                     });
 
                     continue;
@@ -890,7 +1058,7 @@ public partial class PdfTeamExtractor
 
         foreach (var pdfPath in pdfPaths)
         {
-            var allLines = GetPdfLines(pdfPath);
+            var allLines = GetPdfLines(pdfPath, raw: true);
             var total = allLines.Count;
 
             for (var j = 0; j < total; j++)
@@ -956,7 +1124,7 @@ public partial class PdfTeamExtractor
                 }
 
                 // Collect description lines until the next item name or section header
-                var descParts = new List<string>();
+                var descSb = new StringBuilder();
 
                 for (var k = j + 1; k < total; k++)
                 {
@@ -983,13 +1151,13 @@ public partial class PdfTeamExtractor
                         }
                     }
 
-                    descParts.Add(descLine);
+                    AppendText(descSb, descLine);
                 }
 
                 result.Add(new ExtractedEquipmentItem
                 {
                     Name = display,
-                    Description = string.Join(" ", descParts).Trim(),
+                    Text = TextHelpers.StructureToMarkdown(descSb.ToString().TrimStart()),
                 });
             }
         }
@@ -1014,7 +1182,7 @@ public partial class PdfTeamExtractor
     /// </summary>
     public List<ExtractedRule> ParseRulesDoc(string path)
     {
-        var lines = GetPdfLines(path);
+        var lines = GetPdfLines(path, raw: true);
         var result = new List<ExtractedRule>();
         var currentName = "";
         var currentText = new StringBuilder();
@@ -1026,6 +1194,14 @@ public partial class PdfTeamExtractor
 
             if (string.IsNullOrWhiteSpace(trimmed))
             {
+                // Preserve blank lines as paragraph breaks in accumulated rule text (FIX 4).
+                // Append \n so that the next AppendText's leading space creates a \n\n split.
+                if (currentName.Length > 0 && currentText.Length > 0
+                    && currentText[currentText.Length - 1] != '\n')
+                {
+                    currentText.Append('\n');
+                }
+
                 continue;
             }
 
@@ -1057,7 +1233,7 @@ public partial class PdfTeamExtractor
                         // Different name — save current and start fresh
                         if (currentName.Length > 0)
                         {
-                            result.Add(new ExtractedRule { Name = currentName, Text = currentText.ToString().Trim() });
+                            result.Add(new ExtractedRule { Name = currentName, Text = TextHelpers.StructureToMarkdown(currentText.ToString().Trim()) });
                         }
 
                         currentName = candidate;
@@ -1069,7 +1245,7 @@ public partial class PdfTeamExtractor
                     // Save the previous rule
                     if (currentName.Length > 0)
                     {
-                        result.Add(new ExtractedRule { Name = currentName, Text = currentText.ToString().Trim() });
+                        result.Add(new ExtractedRule { Name = currentName, Text = TextHelpers.StructureToMarkdown(currentText.ToString().Trim()) });
                     }
 
                     currentName = ToTitleCase(trimmed);
@@ -1081,12 +1257,20 @@ public partial class PdfTeamExtractor
                 // Description text for the current rule
                 if (currentName.Length > 0)
                 {
-                    if (currentText.Length > 0)
+                    // Numbered list items always start on their own line (FIX 5).
+                    if (NumberedListItemLineRegex().IsMatch(trimmed))
                     {
-                        currentText.Append(' ');
-                    }
+                        if (currentText.Length > 0 && currentText[currentText.Length - 1] != '\n')
+                        {
+                            currentText.Append('\n');
+                        }
 
-                    currentText.Append(trimmed);
+                        currentText.Append(trimmed);
+                    }
+                    else
+                    {
+                        AppendText(currentText, trimmed);
+                    }
                 }
             }
         }
@@ -1094,7 +1278,7 @@ public partial class PdfTeamExtractor
         // Flush the last rule
         if (currentName.Length > 0)
         {
-            result.Add(new ExtractedRule { Name = currentName, Text = currentText.ToString().Trim() });
+            result.Add(new ExtractedRule { Name = currentName, Text = TextHelpers.StructureToMarkdown(currentText.ToString().Trim()) });
         }
 
         // Filter out fragment entries (all-caps sentence fragments with no description text)
@@ -1106,10 +1290,12 @@ public partial class PdfTeamExtractor
         {
             if (seen.TryGetValue(rule.Name, out var existing))
             {
+                // Use a paragraph break when joining continuations so that content from
+                // subsequent pages (e.g. numbered list items) starts on its own line.
                 var merged = new ExtractedRule
                 {
                     Name = existing.Name,
-                    Text = (existing.Text + " " + rule.Text).Trim(),
+                    Text = (existing.Text + "\n\n" + rule.Text).Trim(),
                 };
 
                 seen[rule.Name] = merged;
@@ -1128,14 +1314,17 @@ public partial class PdfTeamExtractor
     // ─── Operative selection parsing ─────────────────────────────────────────────
 
     /// <summary>
-    /// Parses an Operative Selection PDF, extracting the archetype and the selection rules text.
+    /// Parses an Operative Selection PDF, extracting the archetype and the selection rules as Markdown text.
+    /// Arrows (↘/↙/↳) become level-1 list items, filled bullets (•) become level-2,
+    /// hollow circles (○) become level-3 (or level-2 when directly under an arrow).
+    /// ALL-CAPS operative-type names are converted to bold title case.
     /// </summary>
     public ExtractedOperativeSelection ParseOperativeSelection(string path)
     {
-        var lines = GetPdfLines(path);
+        var lines = GetPdfLines(path, raw: true);
         var archetype = "";
-        var textBuilder = new StringBuilder();
         var foundArchetype = false;
+        var contentLines = new List<string>();
 
         foreach (var line in lines)
         {
@@ -1153,36 +1342,144 @@ public partial class PdfTeamExtractor
             }
             else
             {
-                if (textBuilder.Length > 0)
-                {
-                    textBuilder.Append('\n');
-                }
-
-                textBuilder.Append(trimmed);
+                contentLines.Add(line);
             }
         }
+
+        var text = BuildOperativeSelectionMarkdown(contentLines);
 
         return new ExtractedOperativeSelection
         {
             Archetype = archetype,
-            Text = textBuilder.ToString().Trim(),
+            Text = TextHelpers.StructureToMarkdown(text),
         };
+    }
+
+    /// <summary>
+    /// Converts raw pdftotext lines from the operative selection into Markdown.
+    /// Tracks bullet depth and joins word-wrapped continuation lines.
+    /// </summary>
+    private static string BuildOperativeSelectionMarkdown(List<string> lines)
+    {
+        var output = new StringBuilder();
+        var currentItem = new StringBuilder(); // partially-built current Markdown line
+        var parentDepth = 0;                   // depth of most recent arrow or bullet (not circle)
+
+        void FlushItem()
+        {
+            if (currentItem.Length > 0)
+            {
+                output.AppendLine(currentItem.ToString());
+                currentItem.Clear();
+            }
+        }
+
+        foreach (var rawLine in lines)
+        {
+            var stripped = rawLine.TrimStart('\x07').Trim();
+
+            // "CONTINUES ON OTHER SIDE" is a page-boundary marker — flush and treat as paragraph break
+            if (stripped.Contains("CONTINUES ON OTHER SIDE", StringComparison.OrdinalIgnoreCase))
+            {
+                FlushItem();
+                output.AppendLine();
+                parentDepth = 0;
+                continue;
+            }
+
+            // Skip "OPERATIVES" header and empty lines
+            if (string.IsNullOrEmpty(stripped)
+                || stripped.Equals("OPERATIVES", StringComparison.OrdinalIgnoreCase))
+            {
+                if (string.IsNullOrEmpty(stripped))
+                {
+                    FlushItem();
+                    output.AppendLine(); // blank line → paragraph break
+                    parentDepth = 0;
+                }
+
+                continue;
+            }
+
+            if (stripped[0] is '\u2198' or '\u2199' or '\u21B3') // ↘ ↙ ↳
+            {
+                FlushItem();
+                var rest = ApplyBold(stripped[1..].TrimStart());
+                currentItem.Append("- ").Append(rest);
+                parentDepth = 1;
+            }
+            else if (stripped[0] == '\u2022') // •
+            {
+                FlushItem();
+                var rest = ApplyBold(stripped[1..].TrimStart());
+                currentItem.Append("  - ").Append(rest);
+                parentDepth = 2;
+            }
+            else if (stripped[0] == '\u25CB') // ○
+            {
+                FlushItem();
+                var rest = ApplyBold(stripped[1..].TrimStart());
+
+                // ○ nests under the most recent arrow (parentDepth≤1) or bullet (parentDepth==2)
+                // parentDepth is NOT updated by ○ so consecutive circles stay at the same indent
+                if (parentDepth >= 2)
+                {
+                    currentItem.Append("    - ").Append(rest);
+                }
+                else
+                {
+                    currentItem.Append("  - ").Append(rest);
+                }
+            }
+            else
+            {
+                // Continuation line or new paragraph line
+                if (currentItem.Length > 0)
+                {
+                    currentItem.Append(' ').Append(ApplyBold(stripped));
+                }
+                else
+                {
+                    currentItem.Append(ApplyBold(stripped));
+                }
+            }
+        }
+
+        FlushItem();
+
+        // Trim trailing blank lines
+        var result = output.ToString().TrimEnd();
+        return result;
+    }
+
+    /// <summary>
+    /// Converts ALL-CAPS sequences in <paramref name="text"/> to bold Markdown with title case.
+    /// E.g. "DEATH JESTER" → "**Death Jester**", "VOID-DANCER TROUPE" → "**Void-Dancer Troupe**".
+    /// Single ALL-CAPS words of ≥2 letters are also converted.
+    /// </summary>
+    private static string ApplyBold(string text)
+    {
+        return AllCapsSequenceRegex().Replace(text, m => $"**{TextHelpers.ToTitleCase(m.Value)}**");
     }
 
     // ─── Supplementary information parsing ───────────────────────────────────────
 
     /// <summary>
     /// Parses a Supplementary Information PDF and returns all text content joined with newlines.
+    /// Applies text normalisation (Rule 1) and strips PDF chrome (Rule 4).
     /// </summary>
     public string ParseSupplementaryInfo(string path)
     {
-        var lines = GetPdfLines(path);
+        var lines = GetPdfLines(path, raw: true);
 
-        return string.Join(
+        var raw = string.Join(
             '\n',
             lines
                 .Select(l => l.Trim())
-                .Where(l => l.Length > 0));
+                .Where(l => l.Length > 0
+                    && !l.Equals("CONTINUES ON OTHER SIDE", StringComparison.OrdinalIgnoreCase)));
+
+        return TextHelpers.StructureToMarkdown(raw);
     }
 
     // ─── Shared helpers ───────────────────────────────────────────────────────────
@@ -1220,7 +1517,21 @@ public partial class PdfTeamExtractor
     /// <summary>Returns true when the name is a plausible mixed-case ability name rather than an all-caps heading.</summary>
     private static bool IsAbilityName(string name)
     {
-        return name.Length > 0 && name.Length < 60 && !AllCapsNameRegex().IsMatch(name);
+        // Names must begin with an uppercase letter; lowercase starts indicate prose
+        // continuations (e.g. "per battle"), bullet symbols, or stat values — not ability names.
+        if (string.IsNullOrEmpty(name) || !char.IsUpper(name[0]))
+        {
+            return false;
+        }
+
+        // A closing parenthesis inside the name means this is a prose fragment
+        // (e.g. "following rules more than once per turning point)") not an ability name.
+        if (name.Contains(')'))
+        {
+            return false;
+        }
+
+        return name.Length < 60 && !AllCapsNameRegex().IsMatch(name);
     }
 
     /// <summary>
@@ -1273,22 +1584,69 @@ public partial class PdfTeamExtractor
         return new string(s.Where(c => c >= 32).ToArray()).Trim();
     }
 
+    /// <summary>
+    /// Appends <paramref name="part"/> to <paramref name="sb"/> with the appropriate leading separator.
+    /// <list type="bullet">
+    ///   <item><c>•</c> (U+2022) prepends a newline and level-2 Markdown bullet prefix <c>\n  - </c></item>
+    ///   <item><c>○</c> (U+25CB) prepends a newline and level-3 Markdown bullet prefix <c>\n    - </c></item>
+    ///   <item>All other text prepends a single space (word-wrap join).</item>
+    /// </list>
+    /// Call <c>sb.ToString().TrimStart()</c> on the final result to strip the leading separator
+    /// produced by the first append.
+    /// </summary>
+    private static void AppendText(StringBuilder sb, string part)
+    {
+        if (part.Length == 0)
+        {
+            return;
+        }
+
+        switch (part[0])
+        {
+            case '\u2022': // • level-2 bullet
+                sb.Append("\n  - ");
+                sb.Append(part[1..].TrimStart());
+                break;
+
+            case '\u25CB': // ○ level-3 bullet
+                sb.Append("\n    - ");
+                sb.Append(part[1..].TrimStart());
+                break;
+
+            default:
+                sb.Append(' ');
+                sb.Append(part);
+                break;
+        }
+    }
+
     private static bool IsEquipmentSkip(string text)
     {
         return EquipmentSkipPatterns.Any(p => Regex.IsMatch(text, p, RegexOptions.IgnoreCase));
     }
 
-    private static List<string> GetPdfLines(string pdfPath)
+    private static List<string> GetPdfLines(string pdfPath, bool raw = false)
     {
         var psi = new ProcessStartInfo
         {
             FileName = "pdftotext",
-            ArgumentList = { "-layout", pdfPath, "-" },
             RedirectStandardOutput = true,
             RedirectStandardError = true,
             UseShellExecute = false,
             StandardOutputEncoding = Encoding.UTF8,
         };
+
+        if (raw)
+        {
+            psi.ArgumentList.Add("-raw");
+        }
+        else
+        {
+            psi.ArgumentList.Add("-layout");
+        }
+
+        psi.ArgumentList.Add(pdfPath);
+        psi.ArgumentList.Add("-");
 
         using var process = Process.Start(psi)
             ?? throw new InvalidOperationException("Failed to start pdftotext. Is Poppler installed?");
@@ -1336,10 +1694,7 @@ public partial class PdfTeamExtractor
             .Replace(")", "");
     }
 
-    private static string ToTitleCase(string text)
-    {
-        return CultureInfo.InvariantCulture.TextInfo.ToTitleCase(text.ToLower());
-    }
+    private static string ToTitleCase(string text) => TextHelpers.ToTitleCase(text);
 
     // ─── Generated regexes ────────────────────────────────────────────────────────
 
@@ -1385,4 +1740,23 @@ public partial class PdfTeamExtractor
 
     [GeneratedRegex(@"ARCHETYPE:\s*(.+)", RegexOptions.IgnoreCase)]
     private static partial Regex ArchetypeRegex();
+
+    /// <summary>Matches contiguous ALL-CAPS sequences (possibly hyphenated, multi-word) for bold conversion.</summary>
+    [GeneratedRegex(@"[A-Z][A-Z\-]+(?:\s+[A-Z][A-Z\-]+)*")]
+    private static partial Regex AllCapsSequenceRegex();
+
+    /// <summary>
+    /// Single-column 1AP action header: ALL-CAPS name followed by digit+AP.
+    /// Group 1 = action name, Group 2 = AP digit(s), Group 3 = optional inline text.
+    /// Applied to NormaliseText-processed input so "OPTIC1AP" has already been repaired to "OPTIC 1AP".
+    /// </summary>
+    [GeneratedRegex(@"^([A-Z][A-Z0-9'\-]+(?:\s+[A-Z][A-Z0-9'\-]+)*)\s+(\d+)AP(?:\s+(.+))?$")]
+    private static partial Regex SingleColumnApRegex();
+
+    /// <summary>
+    /// A numbered list item at the start of a line: digit(s), period, space, uppercase letter.
+    /// Used in ParseRulesDoc to ensure numbered items always start on their own line.
+    /// </summary>
+    [GeneratedRegex(@"^\d+\.\s+[A-Z]")]
+    private static partial Regex NumberedListItemLineRegex();
 }

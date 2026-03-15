@@ -1,0 +1,634 @@
+﻿id: blades-of-khaine
+name: Blades of Khaine
+faction: Asuryani
+datacards:
+  - name: Dire Avenger Exarch
+    operativeType: Dire Avenger Exarch
+    primaryKeyword: Blades of Khaine
+    keywords:
+      - Blades of Khaine
+      - Aeldari
+      - Asuryani
+      - Leader
+      - Dire Avenger
+      - Exarch
+    stats:
+      move: 7
+      apl: 3
+      wounds: 9
+      save: '3+'
+    weapons:
+      - name: Shuriken catapult
+        type: Ranged
+        atk: 4
+        hit: '3+'
+        dmg:
+          normal: 3
+          crit: 4
+        weaponRules:
+          - Rending
+      - name: Shuriken pistol
+        type: Ranged
+        atk: 4
+        hit: '3+'
+        dmg:
+          normal: 3
+          crit: 4
+        weaponRules:
+          - Range 8"
+          - Rending
+      - name: Twin shuriken catapult
+        type: Ranged
+        atk: 4
+        hit: '3+'
+        dmg:
+          normal: 3
+          crit: 4
+        weaponRules:
+          - Ceaseless
+          - Rending
+      - name: Diresword
+        type: Melee
+        atk: 5
+        hit: '3+'
+        dmg:
+          normal: 4
+          crit: 5
+        weaponRules:
+          - Lethal 5+
+          - Rending
+      - name: Fists
+        type: Melee
+        atk: 4
+        hit: '3+'
+        dmg:
+          normal: 2
+          crit: 4
+      - name: Gun butts
+        type: Melee
+        atk: 3
+        hit: '4+'
+        dmg:
+          normal: 2
+          crit: 3
+      - name: Power weapon
+        type: Melee
+        atk: 5
+        hit: '3+'
+        dmg:
+          normal: 4
+          crit: 6
+        weaponRules:
+          - Lethal 5+
+    abilities:
+      - name: Defence Tactics
+        text: Whenever this operative contests an objective marker or one of your mission markers, or whenever it's shooting an enemy operative that does, this operative's weapons have the Balanced weapon rule.
+      - name: Exarch
+        text: This operative can perform two Shoot or two Fight actions during its activation.
+      - name: Shimmershield
+        text: Whenever an operative is shooting a friendly **Blades of Khaine** operative that's visible to and within 2" of this operative, ignore the Piercing weapon rule. This operative only has this rule if you select the shimmershield weapon option.
+  - name: Dire Avenger Warrior
+    operativeType: Dire Avenger Warrior
+    primaryKeyword: Blades of Khaine
+    keywords:
+      - Blades of Khaine
+      - Aeldari
+      - Asuryani
+      - Dire Avenger
+      - Warrior
+    stats:
+      move: 7
+      apl: 3
+      wounds: 8
+      save: '4+'
+    weapons:
+      - name: Shuriken catapult
+        type: Ranged
+        atk: 4
+        hit: '3+'
+        dmg:
+          normal: 3
+          crit: 4
+        weaponRules:
+          - Rending
+      - name: Fists
+        type: Melee
+        atk: 4
+        hit: '3+'
+        dmg:
+          normal: 2
+          crit: 4
+    abilities:
+      - name: Defence Tactics
+        text: Whenever this operative contests an objective marker or one of your mission markers, or whenever it's shooting an enemy operative that does, this operative's weapons have the Balanced weapon rule.
+  - name: Howling Banshee Exarch
+    operativeType: Howling Banshee Exarch
+    primaryKeyword: Blades of Khaine
+    keywords:
+      - Blades of Khaine
+      - Aeldari
+      - Asuryani
+      - Leader
+      - Howling Banshee
+      - Exarch
+    stats:
+      move: 7
+      apl: 3
+      wounds: 9
+      save: '3+'
+    weapons:
+      - name: Shuriken pistol
+        type: Ranged
+        atk: 4
+        hit: '3+'
+        dmg:
+          normal: 3
+          crit: 4
+        weaponRules:
+          - Range 8"
+          - Rending
+      - name: Triskele (throw)
+        type: Ranged
+        atk: 4
+        hit: '3+'
+        dmg:
+          normal: 2
+          crit: 3
+        weaponRules:
+          - Range 8"
+          - Rending
+          - Torrent 2"
+      - name: Executioner
+        type: Melee
+        atk: 5
+        hit: '3+'
+        dmg:
+          normal: 3
+          crit: 7
+        weaponRules:
+          - Lethal 5+
+      - name: Mirrorswords
+        type: Melee
+        atk: 5
+        hit: '3+'
+        dmg:
+          normal: 4
+          crit: 6
+        weaponRules:
+          - Ceaseless
+          - Lethal 5+
+      - name: Power weapon
+        type: Melee
+        atk: 5
+        hit: '3+'
+        dmg:
+          normal: 4
+          crit: 6
+        weaponRules:
+          - Lethal 5+
+      - name: Triskele (slice)
+        type: Melee
+        atk: 5
+        hit: '3+'
+        dmg:
+          normal: 4
+          crit: 5
+        weaponRules:
+          - Rending
+    abilities:
+      - name: Banshee Mask
+        text: 'Whenever this operative is fighting, worsen the         Exarch: This operative can perform two Shoot or two Fight Hit stat of the enemy operative''s melee weapons by 1. This isn''t      actions during its activation. cumulative with being injured.'
+  - name: Howling Banshee Warrior
+    operativeType: Howling Banshee Warrior
+    primaryKeyword: Blades of Khaine
+    keywords:
+      - Blades of Khaine
+      - Aeldari
+      - Asuryani
+      - Howling Banshee
+      - Warrior
+    stats:
+      move: 7
+      apl: 3
+      wounds: 8
+      save: '4+'
+    weapons:
+      - name: Shuriken pistol
+        type: Ranged
+        atk: 4
+        hit: '3+'
+        dmg:
+          normal: 3
+          crit: 4
+        weaponRules:
+          - Range 8"
+          - Rending
+      - name: Power weapon
+        type: Melee
+        atk: 4
+        hit: '3+'
+        dmg:
+          normal: 4
+          crit: 6
+        weaponRules:
+          - Lethal 5+
+    abilities:
+      - name: Banshee Mask
+        text: Whenever this operative is fighting, worsen the Hit stat of the enemy operative's melee weapons by 1. This isn't cumulative with being injured.
+  - name: Striking Scorpion Exarch
+    operativeType: Striking Scorpion Exarch
+    primaryKeyword: Blades of Khaine
+    keywords:
+      - Blades of Khaine
+      - Aeldari
+      - Asuryani
+      - Leader
+      - Striking Scorpion
+      - Exarch
+    stats:
+      move: 7
+      apl: 3
+      wounds: 9
+      save: '3+'
+    weapons:
+      - name: Shuriken pistol
+        type: Ranged
+        atk: 4
+        hit: '3+'
+        dmg:
+          normal: 3
+          crit: 4
+        weaponRules:
+          - Range 8"
+          - Rending
+      - name: Twin shuriken pistols
+        type: Ranged
+        atk: 4
+        hit: '4+'
+        dmg:
+          normal: 3
+          crit: 4
+        weaponRules:
+          - Range 8"
+          - Ceaseless
+          - Rending
+      - name: Biting blade
+        type: Melee
+        atk: 5
+        hit: '3+'
+        dmg:
+          normal: 5
+          crit: 6
+        weaponRules:
+          - Rending
+      - name: Scorpion's claw and chainsword
+        type: Melee
+        atk: 5
+        hit: '3+'
+        dmg:
+          normal: 4
+          crit: 6
+        weaponRules:
+          - Brutal
+          - Lethal 5+
+      - name: Twin chainswords
+        type: Melee
+        atk: 5
+        hit: '3+'
+        dmg:
+          normal: 4
+          crit: 5
+        weaponRules:
+          - Ceaseless
+          - Rending
+    abilities:
+      - name: Mandiblasters
+        text: 'Whenever this operative performs the Fight             Exarch: This operative can perform two Shoot or two Fight action, at the start of the Roll Attack Dice step, you can use        actions during its activation. this rule. If you do, inflict 2 damage on the enemy operative in that sequence.'
+  - name: Striking Scorpion Warrior
+    operativeType: Striking Scorpion Warrior
+    primaryKeyword: Blades of Khaine
+    keywords:
+      - Blades of Khaine
+      - Aeldari
+      - Asuryani
+      - Striking Scorpion
+      - Warrior
+    stats:
+      move: 7
+      apl: 3
+      wounds: 8
+      save: '4+'
+    weapons:
+      - name: Shuriken pistol
+        type: Ranged
+        atk: 4
+        hit: '3+'
+        dmg:
+          normal: 3
+          crit: 4
+        weaponRules:
+          - Range 8"
+          - Rending
+      - name: Chainsword
+        type: Melee
+        atk: 4
+        hit: '3+'
+        dmg:
+          normal: 4
+          crit: 5
+        weaponRules:
+          - Rending
+    abilities:
+      - name: Mandiblasters
+        text: Whenever this operative performs the Fight action, at the start of the Roll Attack Dice step, you can use this rule. If you do, inflict 2 damage on the enemy operative in that sequence.
+factionEquipment:
+  - name: Rune of Prophecy
+    text: Affixed to an Aspect Warrior's armour by a powerful seer, this warp-charged rune provides the bearer with a sliver of its creator's prophetic vision. Once per battle, after rolling off to decide initiative, you can add D3 to, or subtract D3 from, your result.
+  - name: Rune of Shielding
+    text: Shimmering with empyric energy, this rune flares brightly when it suffers impact from an enemy weapon, turning aside bullet, bolt or blade. Once per battle, when an attack dice inflicts Normal Dmg on a friendly **Blades of Khaine** operative, you can ignore that inflicted damage.
+  - name: Rune of Foresight
+    text: The bearer foresees the battle to come, anticipating the movements of the foe and positioning their warriors with uncanny guile. When this equipment is revealed, roll one D3. In the Strategy phase of the turning point equal to the result, you gain 1 additional CP.
+  - name: Wraithbone Talisman
+    text: Grown from living wraithbone material, this talisman lends the bearer strength and determination in the midst of battle. Once per turning point, when a friendly **Blades of Khaine** operative is shooting, fighting or retaliating, if you roll two or more fails, you can discard one of them to retain another as a normal success instead.
+factionRules:
+  - name: Aspect Techniques
+    text: |-
+      Aspect Warriors are trained in myriad killing techniques, parrying blows and acrobatic movements. These are as breathtaking to behold as they are lethal to their foes. Each **Aspect Technique** is in a category: Dire Avenger, Howling Banshee and Striking Scorpion. Each **Aspect Technique** can only be used with a friendly operative that has the matching Aspect keyword, and each will specify when it can be used and what its effects are. In addition:
+        -  You cannot use more than one **Aspect Technique** per activation or counteraction.
+        -  You cannot use each **Aspect Technique** more than once per turning point.
+        -  If every friendly **Blades of Khaine** operative selected for deployment has the same Aspect keyword (e.g. **Striking Scorpion**), you cannot use each **Aspect Technique** more than twice per turning point (instead of once).
+  - name: The Woe
+    text: Howling Banshees are woe given form. Emitting sonic screeches from their helms, they hurl themselves into the stunned foe, the lightning speed of their swordplay cutting through the enemy before a blow can be landed in return. Use this **Aspect Technique** during a friendly **Howling Banshee** operative's activation, after it's performed the Charge action and incapacitated an enemy operative during the Fight action, and is no longer within control range of enemy operatives. That friendly operative can immediately perform a free Charge action using any remaining move distance it had from that first Charge action. That operative can perform two Charge actions during its activation to do so. The operative cannot have performed any other actions during this activation (but can do so after resolving this **Aspect Technique**).
+  - name: Rain of Tears
+    text: Howling Banshees dive in and out of combat with infuriating speed and agility, making it almost impossible for those few who survive their most brutal attacks to strike in return. Use this **Aspect Technique** when a friendly **Howling Banshee** operative is fighting, after you strike with a critical success, if the enemy operative isn't incapacitated. End that sequence (any remaining attack dice are discarded) and immediately perform a free Fall Back action up to 3" with that operative (then the Fight action ends). That operative can do so even if it's performed an action that prevents it from performing the Fall Back action.
+  - name: Acrobatic
+    text: |-
+      When Howling Banshees traverse the battlefield, little slows them down. With effortless grace they leap and flip over intervening obstacles, landing with peerless poise and balance to drive their blades into the foe. Use this **Aspect Technique** when a friendly **Howling Banshee** operative performs an action in which it moves. Until the end of the action, that operative:
+        -  Can ignore all vertical distances whenever it drops and climbs.
+        -  Can move through enemy operatives, move within control range of them, and during the Charge action can leave their control range (it must still end the move following all requirements for that move).
+        -  Cannot move more than its Move stat if it's the Charge action.
+  - name: Scream-That-Steals
+    text: Any hope the foe has of retaining the upper hand over a Howling Banshee is lost the moment the leaping Aspect Warrior activates their Banshee mask. Their senses overwhelmed, the enemy are all but helpless against the merciless melee attacks that follow. Use this **Aspect Technique** when a friendly **Howling Banshee** operative is fighting or retaliating, at the start of the Resolve Attack Dice step. You can resolve one of your successes before the normal order. If you do, that success must be used to block.
+  - name: Shriek-That-Kills
+    text: 'Those Howling Banshees who have learned how to focus their vocal chords correctly can emit a shriek so piercing and deafening that it can not only stun a foe, but liquefy their brain. Use this **Aspect Technique** when a friendly **Howling Banshee** operative is performing the Shoot action. Until the end of that action, that operative can use the following ranged weapon:'
+  - name: Name Atk Hit Dmg
+    text: Shriek-that-kills 5 3+ 1/2
+  - name: Wr
+    text: Range 6", Saturate, Seek Light, Stun, Torrent 1"
+  - name: The Slicing Hurricane
+    text: Trained to embrace supreme tactical flexibility, Dire Avengers are capable of unleashing clouds of razor-sharp shuriken while moving to secure ground or slipping out of reach of the foe. Use this **Aspect Technique** when a friendly **Dire Avenger** operative is performing the Reposition action. That operative can perform the Shoot action during that action (it must do so in a location it can be placed, and any remaining move distance it had from that Reposition action can be used after it does so). You must select its shuriken catapult, shuriken pistol or twin shuriken catapult for that Shoot action.
+  - name: Death of a Thousand Blades
+    text: Dire Avengers can unleash great deluges of monomolecular shuriken from their weapons. These lethal volleys echo the Death of a Thousand Blades – the punishment that Khaine meted out upon traitors, cheats and others he deemed unworthy of a clean kill. Use this **Aspect Technique** when a friendly **Dire Avenger** operative is performing the Shoot action and you select a shuriken catapult or twin shuriken catapult. Until the end of that action, that weapon has the Torrent 2" weapon rule, but you cannot select more than one secondary target.
+  - name: Vigilance of the Avenger
+    text: The noble warrior who is tasked with punishing the unjust and the criminal must be ever vigilant. Their eyes must be keen and their aim must be true. Use this **Aspect Technique** when a friendly **Dire Avenger** operative is performing the Shoot action and you select a shuriken catapult or twin shuriken catapult. Until the end of that action, that weapon has the Lethal 5+ weapon rule.
+  - name: Aspect Technique
+    text: |-
+      UNSTINTING, IMMOVABLE Dire Avengers wear armour fashioned from psycho-sensitive thermoplas scales that are reactive to impact. When suffering a blow, the armour stiffens to spread the energy across the wearer. On top of this flexible suit, these Aspect Warriors wear bone-like plates over the most vulnerable areas of their body. Use this **Aspect Technique** when an operative is shooting a friendly **Dire Avenger** operative, and you've rolled two or more fails. You can discard one of them to retain the other as a normal success instead.
+      
+      **Patient**  STALK, **Sudden Blow** Carefully concealed in cover or in shadows, Striking Scorpions stalk their oblivious prey, manoeuvring around their targets in complete silence to select the optimum position to launch their killing strike. Use this **Aspect Technique** when a friendly **Striking Scorpion** operative that has a Conceal order performs the Reposition action. During that action, that operative can move within control range of enemy operatives (it cannot end the move there), and you can inflict D3+2 damage on one enemy operative it moved within control range of after it's moved.
+      
+      **Scorpion's Eye**  A Striking Scorpion's shuriken pistol has a viewfinder psychically linked to its bearer. With it, the Aspect Warrior can see through multiple spectra as well as swiftly identify friend from foe. Use this **Aspect Technique** when a friendly **Striking Scorpion** operative is performing the Shoot action and you select a shuriken pistol. Until the end of that action, that weapon has the Seek Light weapon rule.
+  - name: Raging Heat of the Dying Flame
+    text: The flames upon shrines of Asuryan possess a searing heat and never burn out, even if they dwindle. Thus does the Dire Avenger strive to imitate these flames, equally dangerous to the foe regardless of the injuries they sustain. Use this **Aspect Technique** during a friendly **Dire Avenger** operative's activation. Until the start of that operative's next activation, you can ignore any changes to its stats from being injured (including its weapons' stats).
+  - name: Strike and Fade
+    text: Masters of the hit and run attack, Striking Scorpions withdraw from combat as suddenly as they strike, disappearing into shadow like murderous spirits. Use this **Aspect Technique** when a friendly **Striking Scorpion** operative incapacitates an enemy operative while fighting or retaliating, and is no longer within 3" of enemy operatives. Change that friendly operative's order to Conceal and it can immediately perform a free Dash action, even if it's performed an action that prevents it from performing the Dash action.
+  - name: Merciless Strikes
+    text: When Striking Scorpions launch their assault, they attack with relentless ferocity, landing blow after blow to grant the enemy no moment or reprieve. Use this **Aspect Technique** when a friendly **Striking Scorpion** operative is fighting, the first time you strike with a critical success during that sequence. Until the end of that sequence, that operative's melee weapon has the Shock weapon rule.
+  - name: One with the Gloom
+    text: Years of strict training render Striking Scorpions capable of blending uncannily with the shadows, waiting for the perfect moment to attack their unsuspecting foes with terrifying accuracy. Use this **Aspect Technique** during a friendly **Striking Scorpion** operative's activation. Until the start of its next activation, while that operative has a Conceal order and is in cover, it cannot be selected as a valid target, taking precedence over all other rules (e.g. Seek, Vantage terrain) except being within 2". MARKER/**Token Guide**
+  - name: Blades of Khaine
+    text: Wraithbone Talisman token Rune of Shielding token Rune of Prophecy token
+firefightPloys:
+  - name: Bladewind
+    text: Aspect Warriors strike with speed and precision, their shining blades scything through the foe in a storm of steel. Use this firefight ploy during a friendly **Blades of Khaine** operative's activation. During that activation, that operative can perform two Fight actions.
+  - name: Starfall
+    text: With punishing fusillades of accurate shuriken fire do the Aspect Warriors fell their enemies. Use this firefight ploy during a friendly **Blades of Khaine** operative's activation. During that activation, that operative can perform two Shoot actions.
+  - name: Fading Light
+    text: The Aspect Warrior slips away into darkness, leaving their foe striking at nothing but shadow. Use this firefight ploy during a friendly **Blades of Khaine** operative's activation, before or after it performs an action. During that activation, that operative can perform the Fall Back action for 1 less AP.
+  - name: Contempt
+    text: The martial superiority of the Aeldari species is expressed by their Aspect Warriors, who dance through incoming fire and heavy strikes with contemptuous ease. Use this firefight ploy when a friendly **Blades of Khaine** operative is retaliating or an enemy operative is shooting it, after your opponent rolls their attack dice, but before re-rolls. Until the end of the sequence, your opponent cannot re-roll their attack dice (if your opponent declared the use of any firefight ploys during that sequence that would allow them to re-roll, that ploy is cancelled and the CP spent on it is refunded).
+operativeSelection:
+  archetype: ''
+  text: ''
+strategyPloys:
+  - name: Forewarned
+    text: Aspect Warriors go to battle armed with the foresight of their Craftworld's seers. Whenever an operative is shooting a ready friendly **Blades of Khaine** operative, you can re-roll any of your defence dice results of one result (e.g. results of 2).
+  - name: Ruthless Poise
+    text: Centuries of combat experience coupled with lightning reactions and exceptional grace render Aspect Warriors utterly lethal. Whenever a friendly **Blades of Khaine** operative is fighting a ready enemy operative, that friendly operative's melee weapons have the Ceaseless weapon rule.
+  - name: Strategy Ploy
+    text: '**Khaine''s Vengeance**  The Aspect Warriors draw upon the Bloody-Handed God''s merciless example to dispatch their foes. Whenever a friendly **Blades of Khaine** operative is shooting an expended enemy operative, that friendly operative''s ranged weapons have the Ceaseless weapon rule.'
+  - name: Dance of Death
+    text: Lithe, acrobatic and utterly deadly, Aeldari Aspect Warriors exchange tactical positions with flawless grace. Select two friendly **Blades of Khaine** operatives visible to and within 6" of each other. Remove them both from the killzone and set them back up in each other's previous locations (in other words, swap their positions).
+supplementaryInfo: |-
+  **Blades of Khaine:** **Update Log**
+  Rules will be periodically updated to maintain fair balance and interact more smoothly with the game. Rules changes
+  will be updated directly into online documents and then listed below. Any minor changes to standardise wording that
+  don't have any practical impact on the rule will be updated directly into online documents but not be listed here.
+  **Errata**  OCTOBER '25
+  This section collects amendments to the rules. Amended text
+  for clarification and edits are shown in blue, while amended
+  text for balance updates are shown in magenta.
+  **Howling Banshee Aspect**  TECHNIQUES,
+  SHRIEK-THAT-KILLS, **Weapon Profile**
+  Atk stat changed to '5'.
+  **Howling Banshee Aspect**  TECHNIQUES, **Rain of Tears**
+  Relevant part changed to read:
+  '[...] after you strike with a critical success, if the enemy
+  operative isn't incapacitated. End that sequence (any
+  remaining attack dice are discarded) and immediately
+  perform a free Dash or Fall Back action up to 3" with that
+  operative (then the Fight action ends). That operative can
+  do so even if it's performed an action that prevents it from
+  performing the Dash or Fall Back action.'
+   **Previous Erratas**
+  **Striking Scorpion Aspect**  TECHNIQUES,
+  **One with the Gloom**
+  Second sentence changed to read:
+  'Until the start of its next activation, while that operative has
+  a Conceal order and is in cover, it cannot be selected as a
+  valid target, taking precedence over all other rules (e.g. Seek,
+  Vantage terrain) except being within 2".'
+  **Striking Scorpion Aspect**  TECHNIQUES,
+  **Strike and Fade**
+  First sentence changed to read:
+  'Use this **Aspect Technique** when a friendly **Striking
+  scorpion** operative incapacitates an enemy operative
+  while fighting or retaliating, and is no longer within 3" of
+  enemy operatives.'
+  **Dire Avenger**  EXARCH & **Dire Avenger Warrior
+  operatives**, **Defence Tactics Rule**
+  Relevant part changed to read:
+  '[…] this operative's weapons have the Balanced
+  weapon rule.'
+  **Firefight**  PLOYS, **Fading Light**
+  First sentence changed to read:
+  'Use this firefight ploy during a friendly **Blades of Khaine**
+  operative's activation, before or after it performs an action.'
+   **Previous Rules Commentaries**
+  This section provides clarification on ambiguous and complex
+  rules interactions.
+  Q: If I use the Rain of Tears Howling Banshee ASPECT
+  **Technique**  but am prevented from performing a free Fall
+  Back action as a result of my opponent's rules (e.g. NEMESIS
+  **Claw**  Chain Snare), what happens?
+  A: The **Aspect Technique** is still used. The fight sequence
+  ends, but that **Blades of Khaine Howling Banshee**
+  operative remains in its current location.
+  Q: If I use the Strike and Fade Striking Scorpion **Aspect
+  technique**, could an opponent interrupt my activation
+  (e.g. as a result of the Guard action) before I change that
+  **Blades of Khaine Striking**  SCORPION operative's order
+  to Conceal?
+  A: No, but they can interrupt before that **Striking
+  scorpion** operative performs the free Dash action.
+  Q: If an operative is able to perform two Shoot actions in
+  an activation and uses the Slicing Hurricane Dire Avenger
+  **Aspect**  TECHNIQUE, can it perform both Shoot actions during
+  the same Reposition action?
+  A: Yes.
+  **Blades of Khaine**
+  
+  Athletic, graceful and utterly lethal, the Aeldari warriors that comprise Blades of Khaine kill teams come together to
+  undertake missions of utmost importance on behalf of their craftworlds. They are dispatched to sever specific strands
+  of fate, ensuring that terrible events they have foreseen never come to pass.
+  **Striking Scorpion Exarch**
+  These sinister figures are even more skilled than the Aspect
+  Warriors they lead. With the gigantic chainsword known as the
+  biting blade, a Striking Scorpion Exarch can cleave their foes
+  in two with a single swing, and use their scorpion's claw to
+  tear open Space Marine power armour with ease.
+  **Striking Scorpion Warrior**
+  With limitless patience, after stalking their prey for hours or
+  waiting in position for days, Striking Scorpions burst from
+  concealment. With chainswords whirring and mandiblasters
+  spitting needles of white fire, the Aspect Warriors' emerald
+  green armour is soon streaked red.
+  '**What Disasters Have They Averted**?
+  **How Many Aeldari Lives Have They
+  saved**? **How Many Foes of Ours Have**
+  **They Doomed To**  OBLIVION? **Across
+  all the Craftworlds We Cannot Be
+  sure**. I **Know This**, HOWEVER, WITHOUT A
+  **Shadow Of**  DOUBT. **Were It Not for The**
+  **Blades Of**  KHAINE, **The Asuryani Would
+  be No More**. **The Warriors That** I HAVE
+  **Commanded Alone Have Prevented
+  multiple Incursions Into the Webway
+  that Would Have Severed Vital Ties
+  to Exodite Worlds and Harlequin**
+  TROUPES. I **Can Only Imagine What**
+  **Others Have Done for Our**  PEOPLE.'
+  - Farseer Liurth, of Lugganath Craftworld
+  
+  **Dire Avenger Exarch**
+  These warriors are masters of their Aspect and devoted to
+  their craftworld. In keeping with the tactical flexibility of their
+  Aspect, all are master marksmen and bladesmen, as at ease
+  shredding foes with volleys of razor-sharp shuriken as they are
+  duelling enemy heroes in single combat.
+  **Dire Avenger Warrior**
+  These operatives are famed for being as deadly on the attack
+  as they are immovable in the defence, and are regarded as
+  being the most tactically flexible of all the Aspects. They use
+  their shuriken catapults to create an impenetrable storm of
+  monomolecular blades.
+  **Howling Banshee Exarch**
+  Not only do the skills in elegant swordplay displayed by a
+  Howling Banshee Exarch exceed those of the warriors she
+  leads, but so harrowing and biting are her cries that their
+  echoing reverberations haunt those who hear them long after
+  the screams have died away.
+  **Howling Banshee Warrior**
+  The piercing, psychosonic scream that precedes the assault
+  of these bone-armoured operatives renders those who hear it
+  all but helpless. These shock waves buy the Howling Banshees
+  time enough to strike, each one taking a head with a sweep of
+  their glittering power weapon.
+  '**It Has Been Our Way for Millennia to Sacrifice Our Present So That We May Have** A FUTURE.
+  **My Banshee Sisters And** I **Know That Our Every Battle May Be Our Last**. **We Face That Truth**
+  **Without**  FEAR, **For Through Our Efforts May More of Our People Live and See Brighter**
+  **Times for The**  AELDARI. **One Day the Stars Will Once More Bow to Our Race**, **And That**
+  **Outcome Will Be Achieved One**  BATTLE, **One Kill At** A TIME.'
+  - Osinell Ciaradh, Howling Banshee of Biel-Tan Craftworld
+  
+  Below you will find a list of the operatives that make up a **Blades of Khaine** kill team,
+  including, where relevant, any weapons specified for that operative.
+  
+  - 1 **Blades of Khaine** operative selected from the following list:
+    -  **Dire Avenger Exarch**  with one of the following options:
+      -  Shuriken catapult; fists
+      -  Twin shuriken catapult; gun butts
+  
+  Or one option from each of the following:
+    -
+  Diresword or power weapon
+    -
+  Shuriken pistol or shimmershield
+    -  **Howling Banshee Exarch**  with one of the following options:
+      - Mirrorswords
+      -  Shuriken pistol; executioner
+      -  Shuriken pistol; power weapon
+      -  Shuriken pistol; triskele
+      -  Triskele; power weapon
+    -  **Striking Scorpion Exarch**  with one of the following options:
+      -  Shuriken pistol; biting blade
+      -  Shuriken pistol; scorpion's claw & chainsword
+      -  Twin shuriken pistols; twin chainswords
+  - 7 **Blades of Khaine** operatives selected from the following list:
+    -  **Dire Avenger**  WARRIOR
+    -  **Howling Banshee**  WARRIOR
+    -  **Striking Scorpion**  WARRIOR '**We Aeldari Have Fallen Far**. **Those Not of Our Race Who Have Heard Our Story** **Might Even Pity**  US, **If They Don't Hold Us in Contempt for Our Own Folly**. I **Spit On** **Their**  SCORN. **Our Time Is Far From Over**. **We Have Been Masters of War Since Our** **Enemies' Forebears Were but Amoebae drifting Aimlessly in Barren**  SEAS. THE **Galaxy Once Shook in Awe Upon The mention of Our**  NAME, **And It Shall Do so Again**.'
+  - Maur Saim-Ingrelli, Striking Scorpions Exarch of the Onyx Claw Shrine, Biel-Tan Craftworld **Blades of Khaine Kill Team blades of** KHAINE » **Kill team selection archetypes** Archetypes are used in certain mission packs, e.g. Approved Ops. The game sequence will specify how. Or the associated archetype of the most common Aspect keyword in your kill team (if two keywords are equally most common, you can choose one of those keywords). Aspect keywords and their associated archetypes are as follows: **Dire Avenger Howling** **Banshee striking scorpion**
+  
+  SEEK &
+  **Destroy
+  security Recon Infiltration
+  blades
+  of**
+  KHAINE
+  »
+  **Kill
+  team
+  selection
+  dire Avenger Exarch**
+  Power weapon Shimmershield
+  **Dire Avenger Warrior**
+  Shuriken catapult
+  **Howling Banshee Exarch Howling Banshee Warrior
+  striking Scorpion Exarch Striking Scorpion Warrior**
+  Mirrorswords
+  Power weapon
+  Shuriken pistol
+  Scorpion's claw
+  & chainsword
+  Shuriken pistol
+  Chainsword
+universalEquipment:
+  - name: Portable Barricade
+    text: 'Little more than a suppression shield with armoured feet, these barricades can be hefted and borne forwards to provide mobile cover. A portable barricade is Light, Protective and Portable terrain, except the feet which are Insignificant and Exposed. Before the battle, you can set it up wholly within your territory, on the killzone floor and more than 2" from other equipment terrain features, access points and Accessible terrain. Protective: While an operative is in cover from this terrain feature, improve its Save stat by 1 (to a maximum of 2+). RULE'
+  - name: Utility Grenades
+    text: From neuro‑suppressant psybombs to smoke‑belching chemical charges, grenades of this sort can suppress the enemy and be the difference between life and death. When you select this equipment, select two utility grenades (2 smoke, 2 stun, or 1 smoke and 1 stun). Each selection is a unique action your operatives can perform, but your kill team can only perform that action a total number of times during the battle equal to your selection. RULE
+  - name: Ammo Cache
+    text: |-
+      Whether stockpiles deliberately set out for warriors to access quickly, or the abandoned munitions of the slain, these caches can prove vital for a swift reload in the heat of battle. Before the battle, you can set up one of your Ammo Cache markers wholly within your territory. Friendly operatives can perform the following mission action during the battle. **Ammo Resupply** 0AP  One of your Ammo Cache markers the active operative controls is used during this turning point.  Until the start of the next turning point, whenever this operative is shooting with a weapon from its datacard, you can re‑roll one of your attack dice.
+      
+      An operative cannot perform this action while within control range of an enemy operative, if that marker isn't yours, or if that marker has been used this turning point.
+  - name: Razor Wire
+    text: 'Spooled rapidly out and affixed to jutting posts, razor wire acts as an easily deployed barrier and a painful deterrent to enemy operatives seeking to attack along particular routes. Razor wire is Exposed and Obstructing terrain. Before the battle, you can set it up wholly within your territory, on the killzone floor and more than 2" from other equipment terrain features, access points and Accessible terrain. Obstructing: Whenever an operative would cross over this terrain feature within 1" of it, treat the distance as an additional 1".'
+  - name: Comms Device
+    text: Communications devices can be swiftly hijacked and employed to coordinate operations or call in support during a firefight. Before the battle, you can set up one of your Comms Device markers wholly within your territory. While a friendly operative controls this marker, add 3" to the distance requirements of its SUPPORT rules that refer to friendly operatives (e.g. 'select one friendly operative within 6"' would be 9" instead). Note that you cannot benefit from your opponent's Comms Device markers.
+  - name: Mines
+    text: The battlefields of the 41st Millennium are plagued by myriad types of mine, from simple frag charges to monofilament web‑snares and microplasma charges. Ultimately, all serve a similar, horrible purpose. Before the battle, you can set up one of your Mines markers wholly within your territory and more than 2" from other markers, access points and Accessible terrain. The first time that marker is within an operative's control range, remove that marker and inflict D3+3 damage on that operative.
+  - name: Light Barricades
+    text: Designed to be lugged into place and then deployed by operatives and combat engineers, these barriers are proof against small arms fire. Light barricades are Light terrain, except the feet, which are Insignificant and Exposed. Before the battle, you can set up any of them wholly within your territory, on the killzone floor and more than 2" from other equipment terrain features, access points and Accessible terrain.
+  - name: Heavy Barricade
+    text: A redoubtable slab of plasteel and adamantine, this layered protective barrier provides shelter amidst the fiercest firefights. A heavy barricade is Heavy terrain. Before the battle, you can set it up wholly within 4" of your drop zone, on the killzone floor and more than 2" from other equipment terrain features, access points and Accessible terrain.
+  - name: Ladders
+    text: |-
+      Carried into battle in their compacted forms, these ladders provide a rapid route of ingress to strongholds, or access to vital vantage points. Ladders are Insignificant and Exposed terrain. Before the battle, you can set up any of them as follows:
+        -  Wholly within your territory.
+        -  Upright against terrain that's at least 2" tall.
+        -  More than 2" from other equipment terrain features.
+        -  More than 1" from doors and access points. Once per action, whenever an operative is climbing the terrain feature a ladder is placed against, treat the vertical distance as 1" if the ladder is within that operative's control range during that entire climb.
+  - name: Explosive Grenades
+    text: A variety of offensive grenades are employed by the forces of the 41st Millennium. These range from simple fragmentation grenades to plasma and gravitic concussion grenades, while even more exotic devices are used to crack open enemy armour. When you select this equipment, select two explosive grenades (2 frag, 2 krak, or 1 frag and 1 krak). Each selection is a ranged weapon your operatives can use, but your kill team can only use that weapon a total number of times during the battle equal to your selection. **Name Atk Hit Dmg** Frag grenade 4 4+ 2/4 WR Range 6", Blast 2", Saturate **Name Atk Hit Dmg** Krak grenade 4 4+ 4/5 WR Range 6", Piercing 1, Saturate

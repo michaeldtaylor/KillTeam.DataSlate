@@ -21,6 +21,6 @@ public class ExtractedWeapon
     /// <summary>Critical damage value.</summary>
     public int DmgCrit { get; init; }
 
-    /// <summary>Individual special rule names (e.g. "Range 8\"", "Piercing 1").</summary>
-    public List<string> SpecialRules { get; init; } = [];
+    /// <summary>Individual weapon rule names (e.g. "Range 8\"", "Piercing 1"). Omitted from JSON when empty.</summary>
+    public List<string> WeaponRules { get; init; } = [];
 }
