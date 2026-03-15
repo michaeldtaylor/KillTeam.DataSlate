@@ -6,11 +6,11 @@
   "factionRules": [
     {
       "name": "Astartes",
-      "text": "These genetically modified superhumans are made for one purpose: war. During each friendly NEMESIS CLAW operative\u2019s activation, it can perform either two Shoot actions or two Fight actions. If it\u2019s two Shoot actions, a bolt pistol, boltgun or scoped bolt pistol must be selected for at least one of them. Each friendly NEMESIS CLAW operative can counteract regardless of its order."
+      "text": "These genetically modified superhumans are made for one purpose: war. During each friendly NEMESIS CLAW operative’s activation, it can perform either two Shoot actions or two Fight actions. If it’s two Shoot actions, a bolt pistol, boltgun or scoped bolt pistol must be selected for at least one of them. Each friendly NEMESIS CLAW operative can counteract regardless of its order."
     },
     {
       "name": "In Midnight Clad",
-      "text": "Night Lords are one with the darkness, employing it as an ally and a weapon. Whenever an enemy operative is shooting a friendly NEMESIS CLAW operative, that friendly operative is obscured if both of the following are true: \u2022 \u0007It\u2019s more than 8\u0022 from enemy operatives it\u2019s visible to. \u2022 \u0007It has Heavy terrain within its control range, or any part of its base is underneath Vantage terrain. Flay Them Alive token     Disconcerting Mimicry Poison Objective token      Grisly Trophy token"
+      "text": "Night Lords are one with the darkness, employing it as an ally and a weapon. Whenever an enemy operative is shooting a friendly NEMESIS CLAW operative, that friendly operative is obscured if both of the following are true: • It’s more than 8\" from enemy operatives it’s visible to. • It has Heavy terrain within its control range, or any part of its base is underneath Vantage terrain. Flay Them Alive token     Disconcerting Mimicry Poison Objective token      Grisly Trophy token"
     }
   ],
   "strategyPloys": [
@@ -24,25 +24,25 @@
     },
     {
       "name": "Preysight",
-      "text": "The Night Lords seem able to sense the fear of cowering prey, hunting down the craven with unerring precision. Whenever you\u2019re selecting a valid target for a friendly NEMESIS CLAW operative, enemy operatives within 6\u0022 of it cannot use Light terrain for cover. While this can allow such operatives to be targeted (assuming they\u2019re visible), it doesn\u2019t remove their cover save (if any)."
+      "text": "The Night Lords seem able to sense the fear of cowering prey, hunting down the craven with unerring precision. Whenever you’re selecting a valid target for a friendly NEMESIS CLAW operative, enemy operatives within 6\" of it cannot use Light terrain for cover. While this can allow such operatives to be targeted (assuming they’re visible), it doesn’t remove their cover save (if any)."
     },
     {
       "name": "Return To Darkness",
-      "text": "The Night Lords move from shadow to shadow with an agility and speed belied by their transhuman bulk. One friendly NEMESIS CLAW operative can immediately perform a free Fall Back or Reposition action, but it must end that move with Heavy terrain within its control range, or any part of its base underneath Vantage terrain. In addition, it cannot move more than 4\u0022 during that action and it cannot end that move closer to enemy operatives (in a killzone that uses the close quarters rules, e.g. Killzone: Tomb World, ignore Wall terrain when determining this)."
+      "text": "The Night Lords move from shadow to shadow with an agility and speed belied by their transhuman bulk. One friendly NEMESIS CLAW operative can immediately perform a free Fall Back or Reposition action, but it must end that move with Heavy terrain within its control range, or any part of its base underneath Vantage terrain. In addition, it cannot move more than 4\" during that action and it cannot end that move closer to enemy operatives (in a killzone that uses the close quarters rules, e.g. Killzone: Tomb World, ignore Wall terrain when determining this)."
     }
   ],
   "firefightPloys": [
     {
       "name": "Vox Scream",
-      "text": "By modulating the frequency of their helm-mounted vox-units, Night Lord operatives can unleash a terrifying scream with the ability to stun an opponent. Use this firefight ploy when your opponent would activate an enemy operative that\u2019s visible to a friendly NEMESIS CLAW operative. Roll one D6; if the result is higher than that enemy operative\u2019s APL stat, your opponent cannot activate it during this activation; if the result is less than or equal to that enemy operative\u2019s APL stat, this ploy isn\u2019t used, the CP spent on it is refunded and you cannot use this ploy again during this turning point. If there are no other enemy operatives eligible to be activated, this ploy has no effect."
+      "text": "By modulating the frequency of their helm-mounted vox-units, Night Lord operatives can unleash a terrifying scream with the ability to stun an opponent. Use this firefight ploy when your opponent would activate an enemy operative that’s visible to a friendly NEMESIS CLAW operative. Roll one D6; if the result is higher than that enemy operative’s APL stat, your opponent cannot activate it during this activation; if the result is less than or equal to that enemy operative’s APL stat, this ploy isn’t used, the CP spent on it is refunded and you cannot use this ploy again during this turning point. If there are no other enemy operatives eligible to be activated, this ploy has no effect."
     },
     {
       "name": "Death To The False Emperor",
-      "text": "The Night Lords, like all Heretic Astartes, bear a particular hatred for the corpse-worshipping soldiers of the Imperium. Use this firefight ploy after rolling your attack dice for a friendly NEMESIS CLAW operative, if it\u2019s shooting against, fighting against or retaliating against an enemy operative that has the IMPERIUM keyword. That friendly operative\u2019s weapons have the Ceaseless weapon rule until the end of that sequence; if that enemy operative also has the ADEPTUS ASTARTES keyword, that friendly operative\u2019s weapons have the Relentless weapon rule until the end of that sequence instead."
+      "text": "The Night Lords, like all Heretic Astartes, bear a particular hatred for the corpse-worshipping soldiers of the Imperium. Use this firefight ploy after rolling your attack dice for a friendly NEMESIS CLAW operative, if it’s shooting against, fighting against or retaliating against an enemy operative that has the IMPERIUM keyword. That friendly operative’s weapons have the Ceaseless weapon rule until the end of that sequence; if that enemy operative also has the ADEPTUS ASTARTES keyword, that friendly operative’s weapons have the Relentless weapon rule until the end of that sequence instead."
     },
     {
       "name": "Proclivity For Murder",
-      "text": "Each brutal kill a Night Lord performs serves to feed their bloodlust and drives them to further acts of terrible violence. Use this firefight ploy after a friendly NEMESIS CLAW operative incapacitates an enemy operative within its control range. That friendly operative can immediately perform a free Charge or Dash action (for the former, it cannot move more than 3\u0022), even if it\u2019s performed an action that prevents it from performing those actions."
+      "text": "Each brutal kill a Night Lord performs serves to feed their bloodlust and drives them to further acts of terrible violence. Use this firefight ploy after a friendly NEMESIS CLAW operative incapacitates an enemy operative within its control range. That friendly operative can immediately perform a free Charge or Dash action (for the former, it cannot move more than 3\"), even if it’s performed an action that prevents it from performing those actions."
     },
     {
       "name": "Dirty Fighter",
@@ -52,63 +52,63 @@
   "equipment": [
     {
       "name": "Flayed Skin",
-      "description": "Bedecked with the bloody hides of butchered victims, the Night Lords inspire abject terror and revulsion in their enemies. Whenever an enemy operative is shooting against, fighting against or retaliating against a friendly NEMESIS CLAW operative within 2\u0022 of it, your opponent cannot re-roll their attack dice results of 1."
+      "description": "Bedecked with the bloody hides of butchered victims, the Night Lords inspire abject terror and revulsion in their enemies. Whenever an enemy operative is shooting against, fighting against or retaliating against a friendly NEMESIS CLAW operative within 2\" of it, your opponent cannot re-roll their attack dice results of 1."
     },
     {
       "name": "Chain Snare",
-      "description": "Composed of hooked blades attached to a length of chain, this weapon bites into the flesh or armour of the wielder\u2019s target, preventing them from fleeing. Whenever an enemy operative would perform the Fall Back action while within control range of a friendly NEMESIS CLAW operative, if no other enemy operatives are within that friendly operative\u2019s control range, you can use this rule. If you do, roll two D6, or one D6 if that enemy operative has a higher Wounds stat than that friendly operative. If any result is a 4\u002B, that enemy operative cannot perform that action during that activation/counteraction (no AP are spent on it), and you cannot use this rule again during this turning point."
+      "description": "Composed of hooked blades attached to a length of chain, this weapon bites into the flesh or armour of the wielder’s target, preventing them from fleeing. Whenever an enemy operative would perform the Fall Back action while within control range of a friendly NEMESIS CLAW operative, if no other enemy operatives are within that friendly operative’s control range, you can use this rule. If you do, roll two D6, or one D6 if that enemy operative has a higher Wounds stat than that friendly operative. If any result is a 4+, that enemy operative cannot perform that action during that activation/counteraction (no AP are spent on it), and you cannot use this rule again during this turning point."
     },
     {
       "name": "Grisly Trophy",
-      "description": "Severed hands and limbs, eyeballs plucked from the skulls of screaming victims \u2013 these macabre trophies and more cause the Night Lords\u2019 foes to waver. Once per battle, when a friendly NEMESIS CLAW operative incapacitates an enemy operative within 2\u0022 of it, you can use this rule. If you do, that friendly operative gains one of your Grisly Trophy tokens (if it doesn\u2019t already have one). Whenever a friendly NEMESIS CLAW operative that has one of your Grisly Trophy tokens is visible to and within 2\u0022 of an enemy operative, subtract 1 from the Atk stat of that enemy operative\u2019s weapons."
+      "description": "Severed hands and limbs, eyeballs plucked from the skulls of screaming victims – these macabre trophies and more cause the Night Lords’ foes to waver. Once per battle, when a friendly NEMESIS CLAW operative incapacitates an enemy operative within 2\" of it, you can use this rule. If you do, that friendly operative gains one of your Grisly Trophy tokens (if it doesn’t already have one). Whenever a friendly NEMESIS CLAW operative that has one of your Grisly Trophy tokens is visible to and within 2\" of an enemy operative, subtract 1 from the Atk stat of that enemy operative’s weapons."
     },
     {
       "name": "Comms Jammers",
-      "description": "The Night Lords use jamming devices to sow chaos and confusion by preventing their panicked foes from communicating. Whenever an enemy operative is within 3\u0022 of a friendly NEMESIS CLAW operative, that enemy operative\u2019s APL stat cannot be added to. Note that this doesn\u2019t affect APL stats that have already been changed."
+      "description": "The Night Lords use jamming devices to sow chaos and confusion by preventing their panicked foes from communicating. Whenever an enemy operative is within 3\" of a friendly NEMESIS CLAW operative, that enemy operative’s APL stat cannot be added to. Note that this doesn’t affect APL stats that have already been changed."
     },
     {
       "name": "Portable Barricade",
-      "description": "Little more than a suppression shield with armoured feet, these barricades can be hefted and borne forwards to provide mobile cover. A portable barricade is Light, Protective and Portable terrain, except the feet which are Insignificant and Exposed. Before the battle, you can set it up wholly within your territory, on the killzone floor and more than 2\u0022 from other equipment terrain features, access points and Accessible terrain. Protective: While an operative is in cover from this terrain feature, improve its Save stat by 1 (to a maximum of 2\u002B). RULE CONTINUES ON OTHER SIDE Portable: This terrain feature only provides cover while an operative is connected to it and if the shield is intervening (ignore its feet). Operatives connected to the inside of it can perform the following unique action during the battle. MOVE WITH BARRICADE                             1AP \u0007The same as the Reposition action, except the active operative can move no more than its Move stat minus 2\u0022 and cannot climb, drop, jump or use any kill team\u2019s rules that remove it and set it back up again (e.g. HEARTHKYN SALVAGER FLY, MANDRAKE SHADOW PASSAGE). \u0007Before this operative moves, remove the portable barricade it\u2019s connected to. After it moves, set up the portable barricade so it\u2019s connected again, but the portable barricade cannot be set up within 2\u0022 of other equipment terrain features, access points or Accessible terrain. If this is not possible, the portable barricade is not set up again. \u0007This action is treated as a Reposition action. An operative cannot perform this action while within control range of an enemy operative, or during the same activation in which it performed the Fall Back or Charge action."
+      "description": "Little more than a suppression shield with armoured feet, these barricades can be hefted and borne forwards to provide mobile cover. A portable barricade is Light, Protective and Portable terrain, except the feet which are Insignificant and Exposed. Before the battle, you can set it up wholly within your territory, on the killzone floor and more than 2\" from other equipment terrain features, access points and Accessible terrain. Protective: While an operative is in cover from this terrain feature, improve its Save stat by 1 (to a maximum of 2+). RULE CONTINUES ON OTHER SIDE Portable: This terrain feature only provides cover while an operative is connected to it and if the shield is intervening (ignore its feet). Operatives connected to the inside of it can perform the following unique action during the battle. MOVE WITH BARRICADE                             1AP The same as the Reposition action, except the active operative can move no more than its Move stat minus 2\" and cannot climb, drop, jump or use any kill team’s rules that remove it and set it back up again (e.g. HEARTHKYN SALVAGER FLY, MANDRAKE SHADOW PASSAGE). Before this operative moves, remove the portable barricade it’s connected to. After it moves, set up the portable barricade so it’s connected again, but the portable barricade cannot be set up within 2\" of other equipment terrain features, access points or Accessible terrain. If this is not possible, the portable barricade is not set up again. This action is treated as a Reposition action. An operative cannot perform this action while within control range of an enemy operative, or during the same activation in which it performed the Fall Back or Charge action."
     },
     {
       "name": "Utility Grenades",
-      "description": "From neuro\u2011suppressant psybombs to smoke\u2011belching chemical charges, grenades of this sort can suppress the enemy and be the difference between life and death. When you select this equipment, select two utility grenades (2 smoke, 2 stun, or 1 smoke and 1 stun). Each selection is a unique action your operatives can perform, but your kill team can only perform that action a total number of times during the battle equal to your selection. RULE CONTINUES ON OTHER SIDE SMOKE GRENADE                                  1AP \u0007Place one of your Smoke Grenade markers within 6\u0022 of this operative. It must be visible to this operative, or on Vantage terrain of a terrain feature that\u2019s visible to this operative. The marker creates an area of smoke 1\u0022 horizontally and unlimited height vertically from (but not below) it. \u0007While an operative is wholly within an area of smoke, it\u2019s obscured to operatives more than 2\u0022 from it, and vice versa. In addition, whenever an operative is shooting an enemy operative wholly within an area of smoke, weapons with the Piercing 2 or Piercing Crits 2 weapon rule have the Piercing 1 or Piercing Crits 1 weapon rule (respectively) instead, unless they\u2019re within 2\u0022 of each other. \u0007In the Ready step of the next Strategy phase, roll one D3. Remove that Smoke Grenade marker after a number of activations equal to the result have been completed or at the end of the turning point (whichever comes first). RULE CONTINUES ON OTHER SIDE \u0007An operative cannot perform this action while within control range of an enemy operative, or if you have reached the total number of times your kill team can perform it."
+      "description": "From neuro‑suppressant psybombs to smoke‑belching chemical charges, grenades of this sort can suppress the enemy and be the difference between life and death. When you select this equipment, select two utility grenades (2 smoke, 2 stun, or 1 smoke and 1 stun). Each selection is a unique action your operatives can perform, but your kill team can only perform that action a total number of times during the battle equal to your selection. RULE CONTINUES ON OTHER SIDE SMOKE GRENADE                                  1AP Place one of your Smoke Grenade markers within 6\" of this operative. It must be visible to this operative, or on Vantage terrain of a terrain feature that’s visible to this operative. The marker creates an area of smoke 1\" horizontally and unlimited height vertically from (but not below) it. While an operative is wholly within an area of smoke, it’s obscured to operatives more than 2\" from it, and vice versa. In addition, whenever an operative is shooting an enemy operative wholly within an area of smoke, weapons with the Piercing 2 or Piercing Crits 2 weapon rule have the Piercing 1 or Piercing Crits 1 weapon rule (respectively) instead, unless they’re within 2\" of each other. In the Ready step of the next Strategy phase, roll one D3. Remove that Smoke Grenade marker after a number of activations equal to the result have been completed or at the end of the turning point (whichever comes first). RULE CONTINUES ON OTHER SIDE An operative cannot perform this action while within control range of an enemy operative, or if you have reached the total number of times your kill team can perform it."
     },
     {
       "name": "Ammo Cache",
-      "description": "Whether stockpiles deliberately set out for warriors to access quickly, or the abandoned munitions of the slain, these caches can prove vital for a swift reload in the heat of battle. Before the battle, you can set up one of your Ammo Cache markers wholly within your territory. Friendly operatives can perform the following mission action during the battle. AMMO RESUPPLY                                    0AP \u0007One of your Ammo Cache markers the active operative controls is used during this turning point. \u0007Until the start of the next turning point, whenever this operative is shooting with a weapon from its datacard, you can re\u2011roll one of your attack dice. \u0007An operative cannot perform this action while within control range of an enemy operative, if that marker isn\u2019t yours, or if that marker has been used this turning point."
+      "description": "Whether stockpiles deliberately set out for warriors to access quickly, or the abandoned munitions of the slain, these caches can prove vital for a swift reload in the heat of battle. Before the battle, you can set up one of your Ammo Cache markers wholly within your territory. Friendly operatives can perform the following mission action during the battle. AMMO RESUPPLY                                    0AP One of your Ammo Cache markers the active operative controls is used during this turning point. Until the start of the next turning point, whenever this operative is shooting with a weapon from its datacard, you can re‑roll one of your attack dice. An operative cannot perform this action while within control range of an enemy operative, if that marker isn’t yours, or if that marker has been used this turning point."
     },
     {
       "name": "Razor Wire",
-      "description": "Spooled rapidly out and affixed to jutting posts, razor wire acts as an easily deployed barrier and a painful deterrent to enemy operatives seeking to attack along particular routes. Razor wire is Exposed and Obstructing terrain. Before the battle, you can set it up wholly within your territory, on the killzone floor and more than 2\u0022 from other equipment terrain features, access points and Accessible terrain. Obstructing: Whenever an operative would cross over this terrain feature within 1\u0022 of it, treat the distance as an additional 1\u0022."
+      "description": "Spooled rapidly out and affixed to jutting posts, razor wire acts as an easily deployed barrier and a painful deterrent to enemy operatives seeking to attack along particular routes. Razor wire is Exposed and Obstructing terrain. Before the battle, you can set it up wholly within your territory, on the killzone floor and more than 2\" from other equipment terrain features, access points and Accessible terrain. Obstructing: Whenever an operative would cross over this terrain feature within 1\" of it, treat the distance as an additional 1\"."
     },
     {
       "name": "Comms Device",
-      "description": "Communications devices can be swiftly hijacked and employed to coordinate operations or call in support during a firefight. Before the battle, you can set up one of your Comms Device markers wholly within your territory. While a friendly operative controls this marker, add 3\u0022 to the distance requirements of its SUPPORT rules that refer to friendly operatives (e.g. \u2018select one friendly operative within 6\u0022\u2019 would be 9\u0022 instead). Note that you cannot benefit from your opponent\u2019s Comms Device markers."
+      "description": "Communications devices can be swiftly hijacked and employed to coordinate operations or call in support during a firefight. Before the battle, you can set up one of your Comms Device markers wholly within your territory. While a friendly operative controls this marker, add 3\" to the distance requirements of its SUPPORT rules that refer to friendly operatives (e.g. ‘select one friendly operative within 6\"’ would be 9\" instead). Note that you cannot benefit from your opponent’s Comms Device markers."
     },
     {
       "name": "Mines",
-      "description": "The battlefields of the 41st Millennium are plagued by myriad types of mine, from simple frag charges to monofilament web\u2011snares and microplasma charges. Ultimately, all serve a similar, horrible purpose. Before the battle, you can set up one of your Mines markers wholly within your territory and more than 2\u0022 from other markers, access points and Accessible terrain. The first time that marker is within an operative\u2019s control range, remove that marker and inflict D3\u002B3 damage on that operative."
+      "description": "The battlefields of the 41st Millennium are plagued by myriad types of mine, from simple frag charges to monofilament web‑snares and microplasma charges. Ultimately, all serve a similar, horrible purpose. Before the battle, you can set up one of your Mines markers wholly within your territory and more than 2\" from other markers, access points and Accessible terrain. The first time that marker is within an operative’s control range, remove that marker and inflict D3+3 damage on that operative."
     },
     {
       "name": "Light Barricades",
-      "description": "Designed to be lugged into place and then deployed by operatives and combat engineers, these barriers are proof against small arms fire. Light barricades are Light terrain, except the feet, which are Insignificant and Exposed. Before the battle, you can set up any of them wholly within your territory, on the killzone floor and more than 2\u0022 from other equipment terrain features, access points and Accessible terrain."
+      "description": "Designed to be lugged into place and then deployed by operatives and combat engineers, these barriers are proof against small arms fire. Light barricades are Light terrain, except the feet, which are Insignificant and Exposed. Before the battle, you can set up any of them wholly within your territory, on the killzone floor and more than 2\" from other equipment terrain features, access points and Accessible terrain."
     },
     {
       "name": "Heavy Barricade",
-      "description": "A redoubtable slab of plasteel and adamantine, this layered protective barrier provides shelter amidst the fiercest firefights. A heavy barricade is Heavy terrain. Before the battle, you can set it up wholly within 4\u0022 of your drop zone, on the killzone floor and more than 2\u0022 from other equipment terrain features, access points and Accessible terrain."
+      "description": "A redoubtable slab of plasteel and adamantine, this layered protective barrier provides shelter amidst the fiercest firefights. A heavy barricade is Heavy terrain. Before the battle, you can set it up wholly within 4\" of your drop zone, on the killzone floor and more than 2\" from other equipment terrain features, access points and Accessible terrain."
     },
     {
       "name": "Ladders",
-      "description": "Carried into battle in their compacted forms, these ladders provide a rapid route of ingress to strongholds, or access to vital vantage points. Ladders are Insignificant and Exposed terrain. Before the battle, you can set up any of them as follows: \u2022 \u0007Wholly within your territory. \u2022 \u0007Upright against terrain that\u2019s at least 2\u0022 tall. \u2022 \u0007More than 2\u0022 from other equipment terrain features. \u2022 \u0007More than 1\u0022 from doors and access points. Once per action, whenever an operative is climbing the terrain feature a ladder is placed against, treat the vertical distance as 1\u0022 if the ladder is within that operative\u2019s control range during that entire climb."
+      "description": "Carried into battle in their compacted forms, these ladders provide a rapid route of ingress to strongholds, or access to vital vantage points. Ladders are Insignificant and Exposed terrain. Before the battle, you can set up any of them as follows: • Wholly within your territory. • Upright against terrain that’s at least 2\" tall. • More than 2\" from other equipment terrain features. • More than 1\" from doors and access points. Once per action, whenever an operative is climbing the terrain feature a ladder is placed against, treat the vertical distance as 1\" if the ladder is within that operative’s control range during that entire climb."
     },
     {
       "name": "Explosive Grenades",
-      "description": "A variety of offensive grenades are employed by the forces of the 41st Millennium. These range from simple fragmentation grenades to plasma and gravitic concussion grenades, while even more exotic devices are used to crack open enemy armour. When you select this equipment, select two explosive grenades (2 frag, 2 krak, or 1 frag and 1 krak). Each selection is a ranged weapon your operatives can use, but your kill team can only use that weapon a total number of times during the battle equal to your selection. NAME                               ATK HIT DMG Frag grenade                     4     4\u002B     2/4 WR Range 6\u0022, Blast 2\u0022, Saturate NAME                               ATK HIT DMG Krak grenade                     4     4\u002B     4/5 WR Range 6\u0022, Piercing 1, Saturate"
+      "description": "A variety of offensive grenades are employed by the forces of the 41st Millennium. These range from simple fragmentation grenades to plasma and gravitic concussion grenades, while even more exotic devices are used to crack open enemy armour. When you select this equipment, select two explosive grenades (2 frag, 2 krak, or 1 frag and 1 krak). Each selection is a ranged weapon your operatives can use, but your kill team can only use that weapon a total number of times during the battle equal to your selection. NAME                               ATK HIT DMG Frag grenade                     4     4+     2/4 WR Range 6\", Blast 2\", Saturate NAME                               ATK HIT DMG Krak grenade                     4     4+     4/5 WR Range 6\", Piercing 1, Saturate"
     },
     {
       "name": "Breaching Charge",
-      "description": "This explosive device can blast a tactical insertion point through even the most formidable bulkhead or bunker wall. Once per battle, when a friendly operative performs the Breach action, you can use this rule. If you do, that operative can perform that action for 1 less AP (to a minimum of 1AP) as though it had the word \u2018breach marker\u2019 on its datacard."
+      "description": "This explosive device can blast a tactical insertion point through even the most formidable bulkhead or bunker wall. Once per battle, when a friendly operative performs the Breach action, you can use this rule. If you do, that operative can perform that action for 1 less AP (to a minimum of 1AP) as though it had the word ‘breach marker’ on its datacard."
     }
   ],
   "operatives": [
@@ -128,64 +128,64 @@
         "move": 6,
         "apl": 3,
         "wounds": 15,
-        "save": "3\u002B"
+        "save": "3+"
       },
       "weapons": [
         {
           "name": "Bolt pistol",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "3/4",
-          "specialRules": "\u0007Range 8\u0022"
+          "specialRules": "Range 8\""
         },
         {
           "name": "Plasma pistol (standard)",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "3/5",
-          "specialRules": "\u0007Range 8\u0022, Piercing 1"
+          "specialRules": "Range 8\", Piercing 1"
         },
         {
           "name": "Plasma pistol (supercharge)",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "4/5",
-          "specialRules": "\u0007Range 8\u0022, Hot, Lethal 5\u002B, Piercing 1"
+          "specialRules": "Range 8\", Hot, Lethal 5+, Piercing 1"
         },
         {
           "name": "Nostraman chainblade",
           "type": "Melee",
           "atk": 5,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "4/5",
-          "specialRules": "\u0007Rending"
+          "specialRules": "Rending"
         },
         {
           "name": "Power fist",
           "type": "Melee",
           "atk": 5,
-          "hit": "4\u002B",
+          "hit": "4+",
           "dmg": "5/7",
-          "specialRules": "\u0007Brutal"
+          "specialRules": "Brutal"
         },
         {
           "name": "Power maul",
           "type": "Melee",
           "atk": 5,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "4/6",
-          "specialRules": "\u0007Shock"
+          "specialRules": "Shock"
         },
         {
           "name": "Power weapon",
           "type": "Melee",
           "atk": 5,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "4/6",
-          "specialRules": "\u0007Lethal 5\u002B"
+          "specialRules": "Lethal 5+"
         }
       ],
       "abilities": [
@@ -198,11 +198,11 @@
           "text": ""
         },
         {
-          "name": "\u2022 \u0007Foreboding",
-          "text": "PSYCHIC. Whenever it\u2019s your turn to activate a friendly operative, you can spend 1 of your Prescience points to skip that activation."
+          "name": "• Foreboding",
+          "text": "PSYCHIC. Whenever it’s your turn to activate a friendly operative, you can spend 1 of your Prescience points to skip that activation."
         },
         {
-          "name": "\u2022 \u0007Portent",
+          "name": "• Portent",
           "text": "PSYCHIC. Whenever an attack dice inflicts Normal Dmg on this operative, you can spend 1 of your Prescience points to ignore that inflicted damage."
         }
       ],
@@ -222,44 +222,44 @@
         "move": 6,
         "apl": 3,
         "wounds": 14,
-        "save": "3\u002B"
+        "save": "3+"
       },
       "weapons": [
         {
           "name": "Scoped bolt pistol (long range)",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "3/4",
-          "specialRules": "\u0007-"
+          "specialRules": "-"
         },
         {
           "name": "Terrorchem vial",
           "type": "Ranged",
           "atk": 5,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "2/0",
-          "specialRules": "\u0007Range 6\u0022, Blast 2\u0022, Devastating 3, Limited 1, Saturate, Terrorchem*"
+          "specialRules": "Range 6\", Blast 2\", Devastating 3, Limited 1, Saturate, Terrorchem*"
         },
         {
           "name": "Tainted blade",
           "type": "Melee",
           "atk": 5,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "3/5",
-          "specialRules": "\u0007Terrorchem*"
+          "specialRules": "Terrorchem*"
         }
       ],
       "abilities": [
         {
           "name": "*Terrorchem",
-          "text": "In the Resolve Attack Dice step, if you inflict          Terrorchem Poison: Whenever an operative that has one of your damage with any critical successes, the operative this weapon         Terrorchem tokens is activated, inflict D3 damage on it. is being used against gains one of your Terrorchem tokens (if it doesn\u2019t already have one)."
+          "text": "In the Resolve Attack Dice step, if you inflict          Terrorchem Poison: Whenever an operative that has one of your damage with any critical successes, the operative this weapon         Terrorchem tokens is activated, inflict D3 damage on it. is being used against gains one of your Terrorchem tokens (if it doesn’t already have one)."
         }
       ],
       "weaponRules": [
         {
           "name": "Terrorchem",
-          "text": "In the Resolve Attack Dice step, if you inflict          Terrorchem Poison: Whenever an operative that has one of your damage with any critical successes, the operative this weapon         Terrorchem tokens is activated, inflict D3 damage on it. is being used against gains one of your Terrorchem tokens (if it doesn\u2019t already have one)."
+          "text": "In the Resolve Attack Dice step, if you inflict          Terrorchem Poison: Whenever an operative that has one of your damage with any critical successes, the operative this weapon         Terrorchem tokens is activated, inflict D3 damage on it. is being used against gains one of your Terrorchem tokens (if it doesn’t already have one)."
         }
       ]
     },
@@ -277,56 +277,56 @@
         "move": 6,
         "apl": 3,
         "wounds": 14,
-        "save": "3\u002B"
+        "save": "3+"
       },
       "weapons": [
         {
           "name": "Bolt pistol",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "3/4",
-          "specialRules": "\u0007Range 8\u0022"
+          "specialRules": "Range 8\""
         },
         {
           "name": "Flamer",
           "type": "Ranged",
           "atk": 4,
-          "hit": "2\u002B",
+          "hit": "2+",
           "dmg": "3/3",
-          "specialRules": "\u0007Range 8\u0022, Saturate, Torrent 2\u0022"
+          "specialRules": "Range 8\", Saturate, Torrent 2\""
         },
         {
           "name": "Meltagun",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "6/3",
-          "specialRules": "\u0007Range 6\u0022, Devastating 4, Piercing 2"
+          "specialRules": "Range 6\", Devastating 4, Piercing 2"
         },
         {
           "name": "Plasma gun (standard)",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "4/6",
-          "specialRules": "\u0007Piercing 1"
+          "specialRules": "Piercing 1"
         },
         {
           "name": "Plasma gun (supercharge)",
           "type": "Melee",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "5/6",
-          "specialRules": "\u0007Hot, Lethal 5\u002B, Piercing 1"
+          "specialRules": "Hot, Lethal 5+, Piercing 1"
         },
         {
           "name": "Fists",
           "type": "Melee",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "3/4",
-          "specialRules": "\u0007-"
+          "specialRules": "-"
         }
       ],
       "abilities": [],
@@ -346,56 +346,56 @@
         "move": 6,
         "apl": 3,
         "wounds": 14,
-        "save": "3\u002B"
+        "save": "3+"
       },
       "weapons": [
         {
           "name": "Bolt pistol",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "3/4",
-          "specialRules": "\u0007Range 8\u0022"
+          "specialRules": "Range 8\""
         },
         {
           "name": "Heavy bolter (focused)",
           "type": "Ranged",
           "atk": 5,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "4/5",
-          "specialRules": "\u0007Heavy (Reposition only), Piercing Crits 1"
+          "specialRules": "Heavy (Reposition only), Piercing Crits 1"
         },
         {
           "name": "Heavy bolter (sweeping)",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "4/5",
-          "specialRules": "\u0007Heavy (Reposition only), Piercing Crits 1, Torrent 1\u0022"
+          "specialRules": "Heavy (Reposition only), Piercing Crits 1, Torrent 1\""
         },
         {
           "name": "Missile launcher (frag)",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "3/5",
-          "specialRules": "\u0007Blast 2\u0022, Heavy (Reposition only)"
+          "specialRules": "Blast 2\", Heavy (Reposition only)"
         },
         {
           "name": "Missile launcher (krak)",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "5/7",
-          "specialRules": "\u0007Heavy (Reposition only), Piercing 1"
+          "specialRules": "Heavy (Reposition only), Piercing 1"
         },
         {
           "name": "Fists",
           "type": "Melee",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "3/4",
-          "specialRules": "\u0007-"
+          "specialRules": "-"
         }
       ],
       "abilities": [],
@@ -415,22 +415,22 @@
         "move": 6,
         "apl": 3,
         "wounds": 14,
-        "save": "3\u002B"
+        "save": "3+"
       },
       "weapons": [
         {
           "name": "Lightning claws",
           "type": "Melee",
           "atk": 5,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "4/5",
-          "specialRules": "\u0007Ceaseless, Lethal 5\u002B"
+          "specialRules": "Ceaseless, Lethal 5+"
         }
       ],
       "abilities": [
         {
           "name": "Screecher",
-          "text": "Whenever an enemy operative within 3\u0022 of this            Appetite for Cruelty: Whenever this operative is fighting against operative is shooting, fighting or retaliating, your opponent       a wounded enemy operative, this operative\u2019s lightning claws have cannot re-roll their attack dice.                                   the Lethal 4\u002B weapon rule."
+          "text": "Whenever an enemy operative within 3\" of this            Appetite for Cruelty: Whenever this operative is fighting against operative is shooting, fighting or retaliating, your opponent       a wounded enemy operative, this operative’s lightning claws have cannot re-roll their attack dice.                                   the Lethal 4+ weapon rule."
         }
       ],
       "weaponRules": []
@@ -449,30 +449,30 @@
         "move": 6,
         "apl": 3,
         "wounds": 14,
-        "save": "3\u002B"
+        "save": "3+"
       },
       "weapons": [
         {
           "name": "Bolt pistol",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "3/4",
-          "specialRules": "\u0007Range 8\u0022"
+          "specialRules": "Range 8\""
         },
         {
           "name": "Nostraman chainglaive",
           "type": "Melee",
           "atk": 5,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "4/6",
-          "specialRules": "\u0007Rending"
+          "specialRules": "Rending"
         }
       ],
       "abilities": [
         {
           "name": "Flay Them Alive",
-          "text": "Once per turning point, when this operative          Tyrant of the Skinning Pits: Whenever this operative is fighting incapacitates an enemy operative within its control range, you        or retaliating, Normal and Critical Dmg of 3 or more inflicts 1 less can select one other enemy operative visible to and within 6\u0022 of      damage on it. either this operative or the incapacitated enemy operative. Until the start of the next turning point, that other enemy operative cannot control markers or perform the Pick Up Marker or mission actions."
+          "text": "Once per turning point, when this operative          Tyrant of the Skinning Pits: Whenever this operative is fighting incapacitates an enemy operative within its control range, you        or retaliating, Normal and Critical Dmg of 3 or more inflicts 1 less can select one other enemy operative visible to and within 6\" of      damage on it. either this operative or the incapacitated enemy operative. Until the start of the next turning point, that other enemy operative cannot control markers or perform the Pick Up Marker or mission actions."
         }
       ],
       "weaponRules": []
@@ -492,30 +492,30 @@
         "move": 6,
         "apl": 3,
         "wounds": 14,
-        "save": "3\u002B"
+        "save": "3+"
       },
       "weapons": [
         {
           "name": "Bolt pistol",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "3/4",
-          "specialRules": "\u0007Range 8\u0022"
+          "specialRules": "Range 8\""
         },
         {
           "name": "Chainsword",
           "type": "Melee",
           "atk": 5,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "4/5",
-          "specialRules": "\u0007-"
+          "specialRules": "-"
         }
       ],
       "abilities": [
         {
           "name": "Icon Bearer",
-          "text": "Whenever              DISCONCERTING MIMICRY\b                                                                         1AP determining control of a \u0007PSYCHIC. Select one enemy operative within 6\u0022 of this operative, then select one of the marker, treat this operative\u2019s following for that enemy operative (you can only select each option once per battle): APL stat as 1 higher. Note this isn\u2019t a change to its APL stat,   \u2022 \u0007Until the end of its next activation, subtract 1 from its APL stat. so any changes are cumulative     \u2022 \u0007Change its order. with this.                        \u2022 \u0007Perform a free Dash action with it (specify the location for your opponent to move it to). \u0007\u0007This operative cannot perform this action while within control range of an enemy operative."
+          "text": "Whenever              DISCONCERTING MIMICRY                                                                         1AP determining control of a PSYCHIC. Select one enemy operative within 6\" of this operative, then select one of the marker, treat this operative’s following for that enemy operative (you can only select each option once per battle): APL stat as 1 higher. Note this isn’t a change to its APL stat,   • Until the end of its next activation, subtract 1 from its APL stat. so any changes are cumulative     • Change its order. with this.                        • Perform a free Dash action with it (specify the location for your opponent to move it to). This operative cannot perform this action while within control range of an enemy operative."
         }
       ],
       "weaponRules": []
@@ -534,46 +534,46 @@
         "move": 6,
         "apl": 3,
         "wounds": 14,
-        "save": "3\u002B"
+        "save": "3+"
       },
       "weapons": [
         {
           "name": "Bolt pistol",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "3/4",
-          "specialRules": "\u0007Range 8\u0022"
+          "specialRules": "Range 8\""
         },
         {
           "name": "Boltgun",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "3/4",
-          "specialRules": "\u0007-"
+          "specialRules": "-"
         },
         {
           "name": "Chainsword",
           "type": "Melee",
           "atk": 5,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "4/5",
-          "specialRules": "\u0007-"
+          "specialRules": "-"
         },
         {
           "name": "Fists",
           "type": "Melee",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "3/4",
-          "specialRules": "\u0007-"
+          "specialRules": "-"
         }
       ],
       "abilities": [
         {
           "name": "Cruel Tormenter",
-          "text": "Whenever this operative is shooting against, fighting against or retaliating against an injured enemy operative, or an enemy operative that has a Wounds stat of 7 or less, this operative\u2019s weapons have the Lethal 5\u002B weapon rule."
+          "text": "Whenever this operative is shooting against, fighting against or retaliating against an injured enemy operative, or an enemy operative that has a Wounds stat of 7 or less, this operative’s weapons have the Lethal 5+ weapon rule."
         }
       ],
       "weaponRules": []
@@ -583,5 +583,5 @@
     "archetype": "",
     "text": ""
   },
-  "supplementaryInfo": "NEMESIS CLAW: UPDATE LOG\b\nRules will be periodically updated to maintain fair balance and interact more smoothly with the game. Rules changes\nwill be updated directly into online documents and then listed below. Any minor changes to standardise wording that\ndon\u2019t have any practical impact on the rule will be updated directly into online documents but not be listed here.\nERRATA\b                                                                                           JANUARY \u201926\nThis section collects amendments to the rules. Amended text\nfor clarification and edits are shown in blue, while amended\ntext for balance updates are shown in magenta.\nFACTION EQUIPMENT, CHAIN SNARE\nLast sentence changed to read:\n\u2018If any result is a 4\u002B, that enemy operative cannot perform\nthat action during that activation/counteraction (no AP are\nspent on it), and you cannot use this rule again during this\nturning point.\u2019\n\b                                                                                                       PREVIOUS ERRATAS\nFACTION RULES, IN MIDNIGHT CLAD                                      STRATEGY PLOYS, RETURN TO DARKNESS\nFirst bullet point changed to read:                                  Last sentence changed to read:\n\u2018It\u2019s more than 8\u0022 from enemy operatives it\u2019s visible to.\u2019           \u2018In addition, it cannot move more than 4\u0022 during that action\nand it cannot end that move closer to enemy operatives (in\nFACTION EQUIPMENT, COMMS JAMMERS                                     a killzone that uses the close quarters rules, e.g. Killzone:\nRelevant part of first sentence changed to read:                     Gallowdark, ignore Wall terrain when determining this).\u2019\n\u2018Whenever an enemy operative is within 3\u0022 of a friendly\nNEMESIS CLAW operative, [\u2026]\u2019                                         FEARMONGER OPERATIVE, TERRORCHEM POISON\nChanged to read:\nFIREFIGHT PLOYS, DEATH TO THE FALSE EMPEROR                          \u2018Whenever an operative that has one of your Terrorchem\nFirst sentence changed to read:                                      tokens is activated, inflict D3 damage on it.\u2019\n\u2018Use this firefight ploy after rolling your attack dice for a\nfriendly NEMESIS CLAW operative, if it\u2019s shooting against,           VISIONARY OPERATIVE, PRESCIENCE RULE\nfighting against or retaliating against an enemy operative that      Additional text added between second and third sentence:\nhas the IMPERIUM keyword.\u2019                                           \u2018At the end of each turning point, discard your\nPrescience points.\u2019\nFIREFIGHT PLOYS, VOX SCREAM\nChanged to read:\n\u2018Use this firefight ploy when your opponent would activate an\nenemy operative that\u2019s visible to a friendly NEMESIS CLAW\noperative. Roll one D6; if the result is higher than that enemy\noperative\u2019s APL stat, your opponent cannot activate it during\nthis activation; if the result is less than or equal to that enemy\noperative\u2019s APL stat, this ploy isn\u2019t used, the CP spent on it\nis refunded and you cannot use this ploy again during this\nturning point. If there are no other enemy operatives eligible\nto be activated, this ploy has no effect. This ploy costs you 1\nadditional CP for each previous time you\u2019ve used it during the\nbattle (e.g. 1CP the first time you would use it, 2CP the second\ntime, etc.).\u2019\nNEMESIS CLAW OPERATIVES\nSavage and sadistic in the extreme, the Night Lords use fear itself as their most potent weapon. The cruellest of\nthese inveterate murderers form kill teams known as Nemesis Claws, achieving their mission objectives through acts\nof obscene violence and the spreading of abject terror.\nNIGHT LORD VISIONARY\n2                                                             It takes a singularly terrifying being to lead such a band of\nmonsters to battle, yet the Visionary is equal to the task.\nGifted with instinctual flickers of prescience, they foresee\nthreats from within their Nemesis Claw and without, meeting\nthem with shocking violence.\nNIGHT LORD FEARMONGER\nThe Fearmonger is not only a master of toxins and poisons,\nhe also relishes the slow cruelties of their effects. Whether\ndispensing his vile concoctions in battle or infiltrating enemy\nencampments to taint rations, he spreads horror, suffering\nand death wherever he goes.\n\u2018\u0007I T IS MANY YEARS SINCE I TOOK PLEASURE IN\nANYTHING BUT THE TORMENT OF OTHERS. YET IN\nTHAT ONE REMAINING DIVERSION THERE ARE TO\nBE FOUND SUCH DELIGHTS\u2026\u2019\n- Vaal K\u2019Shand, Fearmonger\n3\nNIGHT LORD GUNNER                                                     NIGHT LORD SKINTHIEF\nThe effects of blazing promethium, hissing melta beams and            Brutal overseers of the Night Lords\u2019 hideous skinning\nsearing bolts of plasma upon living beings are horrific in the        pits, these callous killers employ their authority to act as\nextreme. Gunners embrace the power of these terror weapons            enforcers and lieutenants to the Visionaries. Woe betide\nand employ them to wreak maximum havoc among the foe.                 any foe that lingers too long within range of their howling\nNostraman chainglaives.\nNIGHT LORD HEAVY GUNNER\nDuring every hunt there is a time for subterfuge, but there is\nNIGHT LORD VENTRILOKAR\nalso a time to hurl such subtlety aside in favour of mowing           The voice eater carried by the Ventrilokar is fashioned\ndown screaming prey. Heavy Gunners do so with pummelling              from the carrion remains of a slain Space Marine, whose\nhails of bolt shells, or by blasting the foe to bloody tatters with   omophagea has been tainted by dark sorcery. This dead-\ntank-busting missiles.                                                alive puppet can mimic the voices of those whose flesh it\nconsumes, as well as stealing \u2013 and muttering aloud \u2013 their\ndeepest secrets.\nNIGHT LORD SCREECHER\nHaving long preyed on those weaker than themselves,\nScreechers have degenerated into vicious and bestial beings.\nNIGHT LORD WARRIOR\nAmplified by the malevolent technologies of the Vox Noctis,           Those Night Lords who fight as part of the Nemesis Claws\nScreechers\u2019 screams paralyse their victims with terror, an            are amongst the most psychotic and savage of all their\neffect their fellow Night Lords are quick to exploit.                 twisted kind. Whether picking their victims off from range or\neviscerating and flensing them at close quarters, they are\ndiabolical foes.\nNEMESIS CLAW KILL TEAM\n\u0007Below you will find a list of\nVISIONARY\nthe operatives that make up\nPlasma pistol                       Nostraman\na NEMESIS CLAW kill team,\nchainblade\nincluding, where relevant,\nany weapons specified for\n4                                                that operative.\nOPERATIVES\nNEMESIS CLAW \u00BB KILL TEAM SELECTION\n\u2198 \u00071 NEMESIS CLAW VISIONARY operative with one\nof the following options:\n\u2022 \u0007Bolt pistol; power fist\n\u2022 \u0007Bolt pistol; power maul\n\u2022 \u0007Bolt pistol; power weapon\n\u2022 \u0007Plasma pistol; Nostraman chainblade\n\u2198 \u00075 NEMESIS CLAW operatives selected from the\nfollowing list:\n\u2022 \u0007FEARMONGER                                       \u2018\u0007RUN AND HIDE YOU GUTLESS LITTLE WORMS.\n\u2022 \u0007GUNNER with one of the following options:\n\u25CB \u0007Bolt pistol; flamer; fists\nRUN AND HIDE! IT DOESN\u2019T MATTER HOW FAR OR\n\u25CB \u0007Bolt pistol; meltagun; fists                    HOW FAST YOU FLEE, WE WILL STILL CATCH YOU,\n\u25CB \u0007Bolt pistol; plasma gun; fists                  AND WHEN WE DO WE WILL PEEL THE SKIN FROM\n\u2022 \u0007HEAVY GUNNER with one of the                       YOUR FLIMSY BODIES AND PLUCK THE EYES\nfollowing options:\n\u25CB \u0007Bolt pistol; heavy bolter; fists\nFROM YOUR SCREAMING HEADS. SO RUN IF YOU\n\u25CB \u0007Bolt pistol; missile launcher; fists            WANT TO, VERMIN. THE CHASE ONLY MAKES IT\n\u2022 \u0007SCREECHER                                          MORE FUN.\u2019\n\u2022 \u0007SKINTHIEF                                                              - Tzann the Ghoul, Skinthief\n\u2022 \u0007VENTRILOKAR\n\u2022 \u0007WARRIOR with one of the following options:\n\u25CB \u0007Bolt pistol; chainsword\n\u25CB \u0007Boltgun; fists\nOther than WARRIOR operatives, your kill team can\nFEARMONGER\nonly include each operative on this list once.                                        Scoped bolt pistol\nARCHETYPES                                                                                      Tainted\nblade\nSEEK \u0026\nINFILTRATION                                           Terrorchem vial\nDESTROY\nArchetypes are used in certain mission packs, e.g.\nApproved Ops. The game sequence will specify how.\nVENTRILOKAR                 SKINTHIEF\nChainsword     Nostraman chainglaive\n5\nNEMESIS CLAW \u00BB KILL TEAM SELECTION\nBolt pistol\nGUNNER                                        HEAVY GUNNER\nPlasma gun          Meltagun                  Missile launcher\nFlamer                       Heavy bolter\nSCREECHER                    WARRIOR\nLightning claws                                      Boltgun         Chainsword\nBolt pistol"
+  "supplementaryInfo": "NEMESIS CLAW: UPDATE LOGRules will be periodically updated to maintain fair balance and interact more smoothly with the game. Rules changeswill be updated directly into online documents and then listed below. Any minor changes to standardise wording thatdon’t have any practical impact on the rule will be updated directly into online documents but not be listed here.ERRATA                                                                                           JANUARY ’26This section collects amendments to the rules. Amended textfor clarification and edits are shown in blue, while amendedtext for balance updates are shown in magenta.FACTION EQUIPMENT, CHAIN SNARELast sentence changed to read:‘If any result is a 4+, that enemy operative cannot performthat action during that activation/counteraction (no AP arespent on it), and you cannot use this rule again during thisturning point.’                                                                                                       PREVIOUS ERRATASFACTION RULES, IN MIDNIGHT CLAD                                      STRATEGY PLOYS, RETURN TO DARKNESSFirst bullet point changed to read:                                  Last sentence changed to read:‘It’s more than 8\" from enemy operatives it’s visible to.’           ‘In addition, it cannot move more than 4\" during that actionand it cannot end that move closer to enemy operatives (inFACTION EQUIPMENT, COMMS JAMMERS                                     a killzone that uses the close quarters rules, e.g. Killzone:Relevant part of first sentence changed to read:                     Gallowdark, ignore Wall terrain when determining this).’‘Whenever an enemy operative is within 3\" of a friendlyNEMESIS CLAW operative, […]’                                         FEARMONGER OPERATIVE, TERRORCHEM POISONChanged to read:FIREFIGHT PLOYS, DEATH TO THE FALSE EMPEROR                          ‘Whenever an operative that has one of your TerrorchemFirst sentence changed to read:                                      tokens is activated, inflict D3 damage on it.’‘Use this firefight ploy after rolling your attack dice for afriendly NEMESIS CLAW operative, if it’s shooting against,           VISIONARY OPERATIVE, PRESCIENCE RULEfighting against or retaliating against an enemy operative that      Additional text added between second and third sentence:has the IMPERIUM keyword.’                                           ‘At the end of each turning point, discard yourPrescience points.’FIREFIGHT PLOYS, VOX SCREAMChanged to read:‘Use this firefight ploy when your opponent would activate anenemy operative that’s visible to a friendly NEMESIS CLAWoperative. Roll one D6; if the result is higher than that enemyoperative’s APL stat, your opponent cannot activate it duringthis activation; if the result is less than or equal to that enemyoperative’s APL stat, this ploy isn’t used, the CP spent on itis refunded and you cannot use this ploy again during thisturning point. If there are no other enemy operatives eligibleto be activated, this ploy has no effect. This ploy costs you 1additional CP for each previous time you’ve used it during thebattle (e.g. 1CP the first time you would use it, 2CP the secondtime, etc.).’NEMESIS CLAW OPERATIVESSavage and sadistic in the extreme, the Night Lords use fear itself as their most potent weapon. The cruellest ofthese inveterate murderers form kill teams known as Nemesis Claws, achieving their mission objectives through actsof obscene violence and the spreading of abject terror.NIGHT LORD VISIONARY2                                                             It takes a singularly terrifying being to lead such a band ofmonsters to battle, yet the Visionary is equal to the task.Gifted with instinctual flickers of prescience, they foreseethreats from within their Nemesis Claw and without, meetingthem with shocking violence.NIGHT LORD FEARMONGERThe Fearmonger is not only a master of toxins and poisons,he also relishes the slow cruelties of their effects. Whetherdispensing his vile concoctions in battle or infiltrating enemyencampments to taint rations, he spreads horror, sufferingand death wherever he goes.‘I T IS MANY YEARS SINCE I TOOK PLEASURE INANYTHING BUT THE TORMENT OF OTHERS. YET INTHAT ONE REMAINING DIVERSION THERE ARE TOBE FOUND SUCH DELIGHTS…’- Vaal K’Shand, Fearmonger3NIGHT LORD GUNNER                                                     NIGHT LORD SKINTHIEFThe effects of blazing promethium, hissing melta beams and            Brutal overseers of the Night Lords’ hideous skinningsearing bolts of plasma upon living beings are horrific in the        pits, these callous killers employ their authority to act asextreme. Gunners embrace the power of these terror weapons            enforcers and lieutenants to the Visionaries. Woe betideand employ them to wreak maximum havoc among the foe.                 any foe that lingers too long within range of their howlingNostraman chainglaives.NIGHT LORD HEAVY GUNNERDuring every hunt there is a time for subterfuge, but there isNIGHT LORD VENTRILOKARalso a time to hurl such subtlety aside in favour of mowing           The voice eater carried by the Ventrilokar is fashioneddown screaming prey. Heavy Gunners do so with pummelling              from the carrion remains of a slain Space Marine, whosehails of bolt shells, or by blasting the foe to bloody tatters with   omophagea has been tainted by dark sorcery. This dead-tank-busting missiles.                                                alive puppet can mimic the voices of those whose flesh itconsumes, as well as stealing – and muttering aloud – theirdeepest secrets.NIGHT LORD SCREECHERHaving long preyed on those weaker than themselves,Screechers have degenerated into vicious and bestial beings.NIGHT LORD WARRIORAmplified by the malevolent technologies of the Vox Noctis,           Those Night Lords who fight as part of the Nemesis ClawsScreechers’ screams paralyse their victims with terror, an            are amongst the most psychotic and savage of all theireffect their fellow Night Lords are quick to exploit.                 twisted kind. Whether picking their victims off from range oreviscerating and flensing them at close quarters, they arediabolical foes.NEMESIS CLAW KILL TEAMBelow you will find a list ofVISIONARYthe operatives that make upPlasma pistol                       Nostramana NEMESIS CLAW kill team,chainbladeincluding, where relevant,any weapons specified for4                                                that operative.OPERATIVESNEMESIS CLAW » KILL TEAM SELECTION↘ 1 NEMESIS CLAW VISIONARY operative with oneof the following options:• Bolt pistol; power fist• Bolt pistol; power maul• Bolt pistol; power weapon• Plasma pistol; Nostraman chainblade↘ 5 NEMESIS CLAW operatives selected from thefollowing list:• FEARMONGER                                       ‘RUN AND HIDE YOU GUTLESS LITTLE WORMS.• GUNNER with one of the following options:○ Bolt pistol; flamer; fistsRUN AND HIDE! IT DOESN’T MATTER HOW FAR OR○ Bolt pistol; meltagun; fists                    HOW FAST YOU FLEE, WE WILL STILL CATCH YOU,○ Bolt pistol; plasma gun; fists                  AND WHEN WE DO WE WILL PEEL THE SKIN FROM• HEAVY GUNNER with one of the                       YOUR FLIMSY BODIES AND PLUCK THE EYESfollowing options:○ Bolt pistol; heavy bolter; fistsFROM YOUR SCREAMING HEADS. SO RUN IF YOU○ Bolt pistol; missile launcher; fists            WANT TO, VERMIN. THE CHASE ONLY MAKES IT• SCREECHER                                          MORE FUN.’• SKINTHIEF                                                              - Tzann the Ghoul, Skinthief• VENTRILOKAR• WARRIOR with one of the following options:○ Bolt pistol; chainsword○ Boltgun; fistsOther than WARRIOR operatives, your kill team canFEARMONGERonly include each operative on this list once.                                        Scoped bolt pistolARCHETYPES                                                                                      TaintedbladeSEEK &INFILTRATION                                           Terrorchem vialDESTROYArchetypes are used in certain mission packs, e.g.Approved Ops. The game sequence will specify how.VENTRILOKAR                 SKINTHIEFChainsword     Nostraman chainglaive5NEMESIS CLAW » KILL TEAM SELECTIONBolt pistolGUNNER                                        HEAVY GUNNERPlasma gun          Meltagun                  Missile launcherFlamer                       Heavy bolterSCREECHER                    WARRIORLightning claws                                      Boltgun         ChainswordBolt pistol"
 }

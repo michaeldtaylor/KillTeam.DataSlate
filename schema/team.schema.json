@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "team.schema.json",
+  "$id": "urn:killteam:team.schema.json",
   "title": "Kill Team - Team Schema",
   "description": "Schema for a Kill Team v3.0 team exported from official GW PDFs",
   "type": "object",

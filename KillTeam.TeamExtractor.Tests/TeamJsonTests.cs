@@ -1,5 +1,6 @@
 using System.Text.Json;
 using FluentAssertions;
+using Json.Schema;
 
 namespace KillTeam.TeamExtractor.Tests;
 
@@ -10,6 +11,7 @@ namespace KillTeam.TeamExtractor.Tests;
 public class TeamJsonTests
 {
     private static readonly string TeamsRoot = ResolveTeamsRoot();
+    private static readonly JsonSchema TeamSchema = LoadSchema();
 
     private static string ResolveTeamsRoot()
     {
@@ -185,5 +187,56 @@ public class TeamJsonTests
         weaponRules.Should().Contain(
             r => r.GetProperty("name").GetString() == "Humbling Cruelty",
             because: "Humbling Cruelty is a custom weapon rule on the Death Jester datacard");
+    }
+
+    // ─── Schema validation ────────────────────────────────────────────────────────
+
+    [Theory]
+    [InlineData("angels-of-death")]
+    [InlineData("blades-of-khaine")]
+    [InlineData("corsair-voidscarred")]
+    [InlineData("nemesis-claw")]
+    [InlineData("plague-marines")]
+    [InlineData("void-dancer-troupe")]
+    public void When_team_json_validated_against_schema_then_no_errors(string slug)
+    {
+        using var doc = LoadTeam(slug);
+
+        var result = TeamSchema.Evaluate(
+            doc.RootElement,
+            new EvaluationOptions { OutputFormat = OutputFormat.List });
+
+        var errors = (result.Details ?? [])
+            .Where(d => !d.IsValid)
+            .Select(d => $"  {d.InstanceLocation}: {string.Join("; ", d.Errors?.Select(e => $"{e.Key}={e.Value}") ?? [])}")
+            .ToList();
+
+        errors.Should().BeEmpty(because: $"{slug}.json should conform to team.schema.json");
+    }
+
+    private static string ResolveSchemaRoot()
+    {
+        var dir = AppContext.BaseDirectory;
+
+        while (dir != null)
+        {
+            var candidate = Path.Combine(dir, "schema");
+
+            if (Directory.Exists(candidate) && Directory.GetFiles(candidate, "*.json").Length > 0)
+            {
+                return candidate;
+            }
+
+            dir = Directory.GetParent(dir)?.FullName;
+        }
+
+        throw new DirectoryNotFoundException("Could not find schema/ directory.");
+    }
+
+    private static JsonSchema LoadSchema()
+    {
+        var schemaPath = Path.Combine(ResolveSchemaRoot(), "team.schema.json");
+
+        return JsonSchema.FromText(File.ReadAllText(schemaPath));
     }
 }

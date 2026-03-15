@@ -6,7 +6,7 @@
   "factionRules": [
     {
       "name": "Saedath",
-      "text": "Void-dancer Troupes put on a performance as they attack from the Webway. A single player begins in the pivotal role, then the rest of the troupe progressively join in. As a STRATEGIC GAMBIT in the first turning point, you must select an ALLEGORY (Epic or Melodrama below) for your kill team for the battle, and one friendly VOID-DANCER TROUPE operative to have the PIVOTAL ROLE for the battle. Whenever a friendly operative has the PIVOTAL ROLE, it has the ACCOLADE rule of your ALLEGORY for the battle. As a STRATEGIC GAMBIT in each subsequent turning point, you can select one friendly VOID-DANCER TROUPE operative to gain the ACCOLADE rule of your ALLEGORY for the battle. Once per turning point, when a friendly operative that has the PIVOTAL ROLE completes the performance of your ALLEGORY, you can select one friendly VOID-DANCER TROUPE operative to gain the ACCOLADE rule of your ALLEGORY for the battle. Epic Performance: The operative incapacitates an enemy operative while fighting. Accolade: Whenever this operative is fighting, its melee weapons have the Balanced weapon rule. Melodrama Performance: The operative incapacitates an enemy operative while shooting. Accolade: The operative\u2019s ranged weapons have the Balanced weapon rule. HARLEQUIN\u2019S PANOPLY The tools of the Harlequins\u0027 trade afford them additional mobility and make them highly difficult to target, enabling them to dodge away from piercing shots of plasma and melta fire. Whenever an operative is shooting a friendly VOID-DANCER TROUPE operative, and no attack dice are retained as critical successes, worsen the x of the Piercing weapon rule by 1 (if any). Note that Piercing 1 would therefore be ignored. Whenever a friendly VOID-DANCER TROUPE operative is climbing up, you can treat the vertical distance as 2\u0022 (regardless of how far the operative actually moves vertically). Friendly VOID-DANCER TROUPE operatives can move within control range of enemy operatives (they must still start and end the move following all requirements for that move)."
+      "text": "Void-dancer Troupes put on a performance as they attack from the Webway. A single player begins in the pivotal role, then the rest of the troupe progressively join in. As a STRATEGIC GAMBIT in the first turning point, you must select an ALLEGORY (Epic or Melodrama below) for your kill team for the battle, and one friendly VOID-DANCER TROUPE operative to have the PIVOTAL ROLE for the battle. Whenever a friendly operative has the PIVOTAL ROLE, it has the ACCOLADE rule of your ALLEGORY for the battle. As a STRATEGIC GAMBIT in each subsequent turning point, you can select one friendly VOID-DANCER TROUPE operative to gain the ACCOLADE rule of your ALLEGORY for the battle. Once per turning point, when a friendly operative that has the PIVOTAL ROLE completes the performance of your ALLEGORY, you can select one friendly VOID-DANCER TROUPE operative to gain the ACCOLADE rule of your ALLEGORY for the battle. Epic Performance: The operative incapacitates an enemy operative while fighting. Accolade: Whenever this operative is fighting, its melee weapons have the Balanced weapon rule. Melodrama Performance: The operative incapacitates an enemy operative while shooting. Accolade: The operative’s ranged weapons have the Balanced weapon rule. HARLEQUIN’S PANOPLY The tools of the Harlequins' trade afford them additional mobility and make them highly difficult to target, enabling them to dodge away from piercing shots of plasma and melta fire. Whenever an operative is shooting a friendly VOID-DANCER TROUPE operative, and no attack dice are retained as critical successes, worsen the x of the Piercing weapon rule by 1 (if any). Note that Piercing 1 would therefore be ignored. Whenever a friendly VOID-DANCER TROUPE operative is climbing up, you can treat the vertical distance as 2\" (regardless of how far the operative actually moves vertically). Friendly VOID-DANCER TROUPE operatives can move within control range of enemy operatives (they must still start and end the move following all requirements for that move)."
     }
   ],
   "strategyPloys": [
@@ -16,11 +16,11 @@
     },
     {
       "name": "Rising Crescendo",
-      "text": "With each darting advance and lethal flourish, the tempo of the troupe\u2019s performance increases, building towards a violent crescendo. Friendly VOID-DANCER TROUPE operatives can perform the Dash action during the same activation in which they performed the Charge action, but not vice versa (i.e. not Dash then Charge)."
+      "text": "With each darting advance and lethal flourish, the tempo of the troupe’s performance increases, building towards a violent crescendo. Friendly VOID-DANCER TROUPE operatives can perform the Dash action during the same activation in which they performed the Charge action, but not vice versa (i.e. not Dash then Charge)."
     },
     {
       "name": "Prismatic Blur",
-      "text": "So swift and dazzling are the Harlequins that even veteran marksmen struggle to draw a bead upon their lithe forms. Whenever an operative is shooting a friendly VOID-DANCER TROUPE operative that performed an action in which it moved during this turning point, you can re-roll one of your defence dice. CEGORACH\u2019S JEST Attempts to engage the troupe in melee combat meet with little success. Luckless assailants find their well- aimed strikes meeting only thin air. Whenever a friendly VOID-DANCER TROUPE operative is fighting or retaliating and your opponent strikes with a normal success, you can roll one D6: if the result is less than the Hit stat of your opponent\u2019s selected weapon, that strike is allocated to block one of your dice instead (ignore the Brutal weapon rule, if relevant) and you cannot use this rule for the rest of the sequence."
+      "text": "So swift and dazzling are the Harlequins that even veteran marksmen struggle to draw a bead upon their lithe forms. Whenever an operative is shooting a friendly VOID-DANCER TROUPE operative that performed an action in which it moved during this turning point, you can re-roll one of your defence dice. CEGORACH’S JEST Attempts to engage the troupe in melee combat meet with little success. Luckless assailants find their well- aimed strikes meeting only thin air. Whenever a friendly VOID-DANCER TROUPE operative is fighting or retaliating and your opponent strikes with a normal success, you can roll one D6: if the result is less than the Hit stat of your opponent’s selected weapon, that strike is allocated to block one of your dice instead (ignore the Brutal weapon rule, if relevant) and you cannot use this rule for the rest of the sequence."
     }
   ],
   "firefightPloys": [
@@ -30,15 +30,15 @@
     },
     {
       "name": "The Curtain Falls",
-      "text": "Upon landing a devastating blow, the Harlequin disengages, leaving their wounded opponent flailing desperately in response. Use this firefight ploy when a friendly VOID-DANCER TROUPE operative is fighting, after you strike with a critical success, if the enemy operative isn\u2019t incapacitated. End that sequence (any remaining attack dice are discarded) and immediately perform a free Fall Back action up to 3\u0022 with that operative (then the Fight action ends). That operative can do so even if it\u2019s performed an action that prevents it from performing the Fall Back action."
+      "text": "Upon landing a devastating blow, the Harlequin disengages, leaving their wounded opponent flailing desperately in response. Use this firefight ploy when a friendly VOID-DANCER TROUPE operative is fighting, after you strike with a critical success, if the enemy operative isn’t incapacitated. End that sequence (any remaining attack dice are discarded) and immediately perform a free Fall Back action up to 3\" with that operative (then the Fight action ends). That operative can do so even if it’s performed an action that prevents it from performing the Fall Back action."
     },
     {
       "name": "Elusive Target",
-      "text": "Swift, agile and graceful, Harlequins dart from cover to cover, evading their opponents with contemptuous ease. Use this firefight ploy during a friendly VOID-DANCER TROUPE operative\u2019s activation. Until the start of its next activation, while that operative has a Conceal order and is in cover, it cannot be selected as a valid target, taking precedence over all other rules (e.g. Seek, Vantage terrain) except being within 2\u0022."
+      "text": "Swift, agile and graceful, Harlequins dart from cover to cover, evading their opponents with contemptuous ease. Use this firefight ploy during a friendly VOID-DANCER TROUPE operative’s activation. Until the start of its next activation, while that operative has a Conceal order and is in cover, it cannot be selected as a valid target, taking precedence over all other rules (e.g. Seek, Vantage terrain) except being within 2\"."
     },
     {
       "name": "Domino Field",
-      "text": "Harlequins bear a variety of esoteric equipment, including the ubiquitous Domino Field, which breaks up their outline and renders them difficult to target. Use this firefight ploy when an operative is shooting a friendly VOID-DANCER TROUPE operative, during the Resolve Defence Dice step. You can allocate one of your rolled successful dice to block all of your opponent\u0027s attack dice with matching results (e.g. one of your successful defence dice results of 5 can be used to block all successful attack dice results of 5)."
+      "text": "Harlequins bear a variety of esoteric equipment, including the ubiquitous Domino Field, which breaks up their outline and renders them difficult to target. Use this firefight ploy when an operative is shooting a friendly VOID-DANCER TROUPE operative, during the Resolve Defence Dice step. You can allocate one of your rolled successful dice to block all of your opponent's attack dice with matching results (e.g. one of your successful defence dice results of 5 can be used to block all successful attack dice results of 5)."
     }
   ],
   "equipment": [
@@ -56,43 +56,43 @@
     },
     {
       "name": "Portable Barricade",
-      "description": "Little more than a suppression shield with armoured feet, these barricades can be hefted and borne forwards to provide mobile cover. A portable barricade is Light, Protective and Portable terrain, except the feet which are Insignificant and Exposed. Before the battle, you can set it up wholly within your territory, on the killzone floor and more than 2\u0022 from other equipment terrain features, access points and Accessible terrain. Protective: While an operative is in cover from this terrain feature, improve its Save stat by 1 (to a maximum of 2\u002B). RULE CONTINUES ON OTHER SIDE Portable: This terrain feature only provides cover while an operative is connected to it and if the shield is intervening (ignore its feet). Operatives connected to the inside of it can perform the following unique action during the battle. MOVE WITH BARRICADE                             1AP \u0007The same as the Reposition action, except the active operative can move no more than its Move stat minus 2\u0022 and cannot climb, drop, jump or use any kill team\u2019s rules that remove it and set it back up again (e.g. HEARTHKYN SALVAGER FLY, MANDRAKE SHADOW PASSAGE). \u0007Before this operative moves, remove the portable barricade it\u2019s connected to. After it moves, set up the portable barricade so it\u2019s connected again, but the portable barricade cannot be set up within 2\u0022 of other equipment terrain features, access points or Accessible terrain. If this is not possible, the portable barricade is not set up again. \u0007This action is treated as a Reposition action. An operative cannot perform this action while within control range of an enemy operative, or during the same activation in which it performed the Fall Back or Charge action."
+      "description": "Little more than a suppression shield with armoured feet, these barricades can be hefted and borne forwards to provide mobile cover. A portable barricade is Light, Protective and Portable terrain, except the feet which are Insignificant and Exposed. Before the battle, you can set it up wholly within your territory, on the killzone floor and more than 2\" from other equipment terrain features, access points and Accessible terrain. Protective: While an operative is in cover from this terrain feature, improve its Save stat by 1 (to a maximum of 2+). RULE CONTINUES ON OTHER SIDE Portable: This terrain feature only provides cover while an operative is connected to it and if the shield is intervening (ignore its feet). Operatives connected to the inside of it can perform the following unique action during the battle. MOVE WITH BARRICADE                             1AP The same as the Reposition action, except the active operative can move no more than its Move stat minus 2\" and cannot climb, drop, jump or use any kill team’s rules that remove it and set it back up again (e.g. HEARTHKYN SALVAGER FLY, MANDRAKE SHADOW PASSAGE). Before this operative moves, remove the portable barricade it’s connected to. After it moves, set up the portable barricade so it’s connected again, but the portable barricade cannot be set up within 2\" of other equipment terrain features, access points or Accessible terrain. If this is not possible, the portable barricade is not set up again. This action is treated as a Reposition action. An operative cannot perform this action while within control range of an enemy operative, or during the same activation in which it performed the Fall Back or Charge action."
     },
     {
       "name": "Utility Grenades",
-      "description": "From neuro\u2011suppressant psybombs to smoke\u2011belching chemical charges, grenades of this sort can suppress the enemy and be the difference between life and death. When you select this equipment, select two utility grenades (2 smoke, 2 stun, or 1 smoke and 1 stun). Each selection is a unique action your operatives can perform, but your kill team can only perform that action a total number of times during the battle equal to your selection. RULE CONTINUES ON OTHER SIDE SMOKE GRENADE                                  1AP \u0007Place one of your Smoke Grenade markers within 6\u0022 of this operative. It must be visible to this operative, or on Vantage terrain of a terrain feature that\u2019s visible to this operative. The marker creates an area of smoke 1\u0022 horizontally and unlimited height vertically from (but not below) it. \u0007While an operative is wholly within an area of smoke, it\u2019s obscured to operatives more than 2\u0022 from it, and vice versa. In addition, whenever an operative is shooting an enemy operative wholly within an area of smoke, weapons with the Piercing 2 or Piercing Crits 2 weapon rule have the Piercing 1 or Piercing Crits 1 weapon rule (respectively) instead, unless they\u2019re within 2\u0022 of each other. \u0007In the Ready step of the next Strategy phase, roll one D3. Remove that Smoke Grenade marker after a number of activations equal to the result have been completed or at the end of the turning point (whichever comes first). RULE CONTINUES ON OTHER SIDE \u0007An operative cannot perform this action while within control range of an enemy operative, or if you have reached the total number of times your kill team can perform it."
+      "description": "From neuro‑suppressant psybombs to smoke‑belching chemical charges, grenades of this sort can suppress the enemy and be the difference between life and death. When you select this equipment, select two utility grenades (2 smoke, 2 stun, or 1 smoke and 1 stun). Each selection is a unique action your operatives can perform, but your kill team can only perform that action a total number of times during the battle equal to your selection. RULE CONTINUES ON OTHER SIDE SMOKE GRENADE                                  1AP Place one of your Smoke Grenade markers within 6\" of this operative. It must be visible to this operative, or on Vantage terrain of a terrain feature that’s visible to this operative. The marker creates an area of smoke 1\" horizontally and unlimited height vertically from (but not below) it. While an operative is wholly within an area of smoke, it’s obscured to operatives more than 2\" from it, and vice versa. In addition, whenever an operative is shooting an enemy operative wholly within an area of smoke, weapons with the Piercing 2 or Piercing Crits 2 weapon rule have the Piercing 1 or Piercing Crits 1 weapon rule (respectively) instead, unless they’re within 2\" of each other. In the Ready step of the next Strategy phase, roll one D3. Remove that Smoke Grenade marker after a number of activations equal to the result have been completed or at the end of the turning point (whichever comes first). RULE CONTINUES ON OTHER SIDE An operative cannot perform this action while within control range of an enemy operative, or if you have reached the total number of times your kill team can perform it."
     },
     {
       "name": "Ammo Cache",
-      "description": "Whether stockpiles deliberately set out for warriors to access quickly, or the abandoned munitions of the slain, these caches can prove vital for a swift reload in the heat of battle. Before the battle, you can set up one of your Ammo Cache markers wholly within your territory. Friendly operatives can perform the following mission action during the battle. AMMO RESUPPLY                                    0AP \u0007One of your Ammo Cache markers the active operative controls is used during this turning point. \u0007Until the start of the next turning point, whenever this operative is shooting with a weapon from its datacard, you can re\u2011roll one of your attack dice. \u0007An operative cannot perform this action while within control range of an enemy operative, if that marker isn\u2019t yours, or if that marker has been used this turning point."
+      "description": "Whether stockpiles deliberately set out for warriors to access quickly, or the abandoned munitions of the slain, these caches can prove vital for a swift reload in the heat of battle. Before the battle, you can set up one of your Ammo Cache markers wholly within your territory. Friendly operatives can perform the following mission action during the battle. AMMO RESUPPLY                                    0AP One of your Ammo Cache markers the active operative controls is used during this turning point. Until the start of the next turning point, whenever this operative is shooting with a weapon from its datacard, you can re‑roll one of your attack dice. An operative cannot perform this action while within control range of an enemy operative, if that marker isn’t yours, or if that marker has been used this turning point."
     },
     {
       "name": "Razor Wire",
-      "description": "Spooled rapidly out and affixed to jutting posts, razor wire acts as an easily deployed barrier and a painful deterrent to enemy operatives seeking to attack along particular routes. Razor wire is Exposed and Obstructing terrain. Before the battle, you can set it up wholly within your territory, on the killzone floor and more than 2\u0022 from other equipment terrain features, access points and Accessible terrain. Obstructing: Whenever an operative would cross over this terrain feature within 1\u0022 of it, treat the distance as an additional 1\u0022."
+      "description": "Spooled rapidly out and affixed to jutting posts, razor wire acts as an easily deployed barrier and a painful deterrent to enemy operatives seeking to attack along particular routes. Razor wire is Exposed and Obstructing terrain. Before the battle, you can set it up wholly within your territory, on the killzone floor and more than 2\" from other equipment terrain features, access points and Accessible terrain. Obstructing: Whenever an operative would cross over this terrain feature within 1\" of it, treat the distance as an additional 1\"."
     },
     {
       "name": "Comms Device",
-      "description": "Communications devices can be swiftly hijacked and employed to coordinate operations or call in support during a firefight. Before the battle, you can set up one of your Comms Device markers wholly within your territory. While a friendly operative controls this marker, add 3\u0022 to the distance requirements of its SUPPORT rules that refer to friendly operatives (e.g. \u2018select one friendly operative within 6\u0022\u2019 would be 9\u0022 instead). Note that you cannot benefit from your opponent\u2019s Comms Device markers."
+      "description": "Communications devices can be swiftly hijacked and employed to coordinate operations or call in support during a firefight. Before the battle, you can set up one of your Comms Device markers wholly within your territory. While a friendly operative controls this marker, add 3\" to the distance requirements of its SUPPORT rules that refer to friendly operatives (e.g. ‘select one friendly operative within 6\"’ would be 9\" instead). Note that you cannot benefit from your opponent’s Comms Device markers."
     },
     {
       "name": "Mines",
-      "description": "The battlefields of the 41st Millennium are plagued by myriad types of mine, from simple frag charges to monofilament web\u2011snares and microplasma charges. Ultimately, all serve a similar, horrible purpose. Before the battle, you can set up one of your Mines markers wholly within your territory and more than 2\u0022 from other markers, access points and Accessible terrain. The first time that marker is within an operative\u2019s control range, remove that marker and inflict D3\u002B3 damage on that operative."
+      "description": "The battlefields of the 41st Millennium are plagued by myriad types of mine, from simple frag charges to monofilament web‑snares and microplasma charges. Ultimately, all serve a similar, horrible purpose. Before the battle, you can set up one of your Mines markers wholly within your territory and more than 2\" from other markers, access points and Accessible terrain. The first time that marker is within an operative’s control range, remove that marker and inflict D3+3 damage on that operative."
     },
     {
       "name": "Light Barricades",
-      "description": "Designed to be lugged into place and then deployed by operatives and combat engineers, these barriers are proof against small arms fire. Light barricades are Light terrain, except the feet, which are Insignificant and Exposed. Before the battle, you can set up any of them wholly within your territory, on the killzone floor and more than 2\u0022 from other equipment terrain features, access points and Accessible terrain."
+      "description": "Designed to be lugged into place and then deployed by operatives and combat engineers, these barriers are proof against small arms fire. Light barricades are Light terrain, except the feet, which are Insignificant and Exposed. Before the battle, you can set up any of them wholly within your territory, on the killzone floor and more than 2\" from other equipment terrain features, access points and Accessible terrain."
     },
     {
       "name": "Heavy Barricade",
-      "description": "A redoubtable slab of plasteel and adamantine, this layered protective barrier provides shelter amidst the fiercest firefights. A heavy barricade is Heavy terrain. Before the battle, you can set it up wholly within 4\u0022 of your drop zone, on the killzone floor and more than 2\u0022 from other equipment terrain features, access points and Accessible terrain."
+      "description": "A redoubtable slab of plasteel and adamantine, this layered protective barrier provides shelter amidst the fiercest firefights. A heavy barricade is Heavy terrain. Before the battle, you can set it up wholly within 4\" of your drop zone, on the killzone floor and more than 2\" from other equipment terrain features, access points and Accessible terrain."
     },
     {
       "name": "Ladders",
-      "description": "Carried into battle in their compacted forms, these ladders provide a rapid route of ingress to strongholds, or access to vital vantage points. Ladders are Insignificant and Exposed terrain. Before the battle, you can set up any of them as follows: \u2022 \u0007Wholly within your territory. \u2022 \u0007Upright against terrain that\u2019s at least 2\u0022 tall. \u2022 \u0007More than 2\u0022 from other equipment terrain features. \u2022 \u0007More than 1\u0022 from doors and access points. Once per action, whenever an operative is climbing the terrain feature a ladder is placed against, treat the vertical distance as 1\u0022 if the ladder is within that operative\u2019s control range during that entire climb."
+      "description": "Carried into battle in their compacted forms, these ladders provide a rapid route of ingress to strongholds, or access to vital vantage points. Ladders are Insignificant and Exposed terrain. Before the battle, you can set up any of them as follows: • Wholly within your territory. • Upright against terrain that’s at least 2\" tall. • More than 2\" from other equipment terrain features. • More than 1\" from doors and access points. Once per action, whenever an operative is climbing the terrain feature a ladder is placed against, treat the vertical distance as 1\" if the ladder is within that operative’s control range during that entire climb."
     },
     {
       "name": "Explosive Grenades",
-      "description": "A variety of offensive grenades are employed by the forces of the 41st Millennium. These range from simple fragmentation grenades to plasma and gravitic concussion grenades, while even more exotic devices are used to crack open enemy armour. When you select this equipment, select two explosive grenades (2 frag, 2 krak, or 1 frag and 1 krak). Each selection is a ranged weapon your operatives can use, but your kill team can only use that weapon a total number of times during the battle equal to your selection. NAME                               ATK HIT DMG Frag grenade                     4     4\u002B     2/4 WR Range 6\u0022, Blast 2\u0022, Saturate NAME                               ATK HIT DMG Krak grenade                     4     4\u002B     4/5 WR Range 6\u0022, Piercing 1, Saturate"
+      "description": "A variety of offensive grenades are employed by the forces of the 41st Millennium. These range from simple fragmentation grenades to plasma and gravitic concussion grenades, while even more exotic devices are used to crack open enemy armour. When you select this equipment, select two explosive grenades (2 frag, 2 krak, or 1 frag and 1 krak). Each selection is a ranged weapon your operatives can use, but your kill team can only use that weapon a total number of times during the battle equal to your selection. NAME                               ATK HIT DMG Frag grenade                     4     4+     2/4 WR Range 6\", Blast 2\", Saturate NAME                               ATK HIT DMG Krak grenade                     4     4+     4/5 WR Range 6\", Piercing 1, Saturate"
     }
   ],
   "operatives": [
@@ -111,38 +111,38 @@
         "move": 7,
         "apl": 3,
         "wounds": 9,
-        "save": "4\u002B"
+        "save": "4+"
       },
       "weapons": [
         {
           "name": "Fusion pistol",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "5/3",
-          "specialRules": "\u0007Range 3\u0022, Devastating 3, Piercing 2"
+          "specialRules": "Range 3\", Devastating 3, Piercing 2"
         },
         {
           "name": "Neuro disruptor",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "4/5",
-          "specialRules": "\u0007Range 8\u0022, Piercing 1, Stun"
+          "specialRules": "Range 8\", Piercing 1, Stun"
         },
         {
           "name": "Shuriken pistol",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "3/4",
-          "specialRules": "\u0007Range 8\u0022, Rending"
+          "specialRules": "Range 8\", Rending"
         },
         {
           "name": "Blade",
           "type": "Melee",
           "atk": 5,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "4/6",
           "specialRules": ""
         },
@@ -150,33 +150,33 @@
           "name": "Caress",
           "type": "Melee",
           "atk": 5,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "4/5",
-          "specialRules": "\u0007Rending"
+          "specialRules": "Rending"
         },
         {
           "name": "Embrace",
           "type": "Melee",
           "atk": 5,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "4/5",
-          "specialRules": "\u0007Brutal"
+          "specialRules": "Brutal"
         },
         {
           "name": "Kiss",
           "type": "Melee",
           "atk": 5,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "3/7",
-          "specialRules": "\u0007-"
+          "specialRules": "-"
         },
         {
           "name": "Power weapon",
           "type": "Melee",
           "atk": 5,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "4/6",
-          "specialRules": "\u0007Lethal 5\u002B"
+          "specialRules": "Lethal 5+"
         }
       ],
       "abilities": [
@@ -201,44 +201,44 @@
         "move": 7,
         "apl": 3,
         "wounds": 9,
-        "save": "4\u002B"
+        "save": "4+"
       },
       "weapons": [
         {
           "name": "Shrieker cannon (focused)",
           "type": "Ranged",
           "atk": 5,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "4/5",
-          "specialRules": "\u0007Rending, Heavy (Reposition only), Humbling Cruelty*"
+          "specialRules": "Rending, Heavy (Reposition only), Humbling Cruelty*"
         },
         {
           "name": "Shrieker cannon (sweeping)",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "4/5",
-          "specialRules": "\u0007Rending, Heavy (Dash only), Torrent 2\u0022, Humbling Cruelty*"
+          "specialRules": "Rending, Heavy (Dash only), Torrent 2\", Humbling Cruelty*"
         },
         {
           "name": "Shrieker blade",
           "type": "Melee",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "3/4",
-          "specialRules": "\u0007Rending"
+          "specialRules": "Rending"
         }
       ],
       "abilities": [
         {
           "name": "*Humbling Cruelty",
-          "text": "If the target of this weapon isn\u2019t incapacitated but any of your attack dice inflict damage, the target gains one of your Humbling Cruelty tokens (if it doesn\u2019t already have one). Whenever an enemy operative has one of your Humbling Cruelty tokens, worsen the Hit stat of its weapons by 1 and subtract 2\u0022 from its Move stat. This isn\u2019t cumulative with being injured. At the end of that enemy operative\u2019s next activation, remove its Humbling Cruelty token."
+          "text": "If the target of this weapon isn’t incapacitated but any of your attack dice inflict damage, the target gains one of your Humbling Cruelty tokens (if it doesn’t already have one). Whenever an enemy operative has one of your Humbling Cruelty tokens, worsen the Hit stat of its weapons by 1 and subtract 2\" from its Move stat. This isn’t cumulative with being injured. At the end of that enemy operative’s next activation, remove its Humbling Cruelty token."
         }
       ],
       "weaponRules": [
         {
           "name": "Humbling Cruelty",
-          "text": "If the target of this weapon isn\u2019t incapacitated but any of your attack dice inflict damage, the target gains one of your Humbling Cruelty tokens (if it doesn\u2019t already have one). Whenever an enemy operative has one of your Humbling Cruelty tokens, worsen the Hit stat of its weapons by 1 and subtract 2\u0022 from its Move stat. This isn\u2019t cumulative with being injured. At the end of that enemy operative\u2019s next activation, remove its Humbling Cruelty token."
+          "text": "If the target of this weapon isn’t incapacitated but any of your attack dice inflict damage, the target gains one of your Humbling Cruelty tokens (if it doesn’t already have one). Whenever an enemy operative has one of your Humbling Cruelty tokens, worsen the Hit stat of its weapons by 1 and subtract 2\" from its Move stat. This isn’t cumulative with being injured. At the end of that enemy operative’s next activation, remove its Humbling Cruelty token."
         }
       ]
     },
@@ -256,38 +256,38 @@
         "move": 7,
         "apl": 3,
         "wounds": 8,
-        "save": "4\u002B"
+        "save": "4+"
       },
       "weapons": [
         {
           "name": "Fusion pistol",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "5/3",
-          "specialRules": "\u0007Range 3\u0022, Devastating 3, Piercing 2"
+          "specialRules": "Range 3\", Devastating 3, Piercing 2"
         },
         {
           "name": "Neuro disruptor",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "4/5",
-          "specialRules": "\u0007Range 8\u0022, Piercing 1, Stun"
+          "specialRules": "Range 8\", Piercing 1, Stun"
         },
         {
           "name": "Shuriken pistol",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "3/4",
-          "specialRules": "\u0007Range 8\u0022, Rending"
+          "specialRules": "Range 8\", Rending"
         },
         {
           "name": "Blade",
           "type": "Melee",
           "atk": 5,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "4/6",
           "specialRules": ""
         },
@@ -295,25 +295,25 @@
           "name": "Caress",
           "type": "Melee",
           "atk": 5,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "4/5",
-          "specialRules": "\u0007Rending"
+          "specialRules": "Rending"
         },
         {
           "name": "Embrace",
           "type": "Melee",
           "atk": 5,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "4/5",
-          "specialRules": "\u0007Brutal"
+          "specialRules": "Brutal"
         },
         {
           "name": "Kiss",
           "type": "Melee",
           "atk": 5,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "3/7",
-          "specialRules": "\u0007-"
+          "specialRules": "-"
         }
       ],
       "abilities": [
@@ -339,51 +339,51 @@
         "move": 7,
         "apl": 3,
         "wounds": 9,
-        "save": "4\u002B"
+        "save": "4+"
       },
       "weapons": [
         {
           "name": "Hallucinogen grenade",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "1/1",
-          "specialRules": "\u0007Range 6\u0022, Blast 2\u0022, Lethal 5\u002B, Seek Light, Silent, Stun"
+          "specialRules": "Range 6\", Blast 2\", Lethal 5+, Seek Light, Silent, Stun"
         },
         {
           "name": "Neuro disruptor",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "4/5",
-          "specialRules": "\u0007Range 8\u0022, Piercing 1, Stun"
+          "specialRules": "Range 8\", Piercing 1, Stun"
         },
         {
           "name": "Shuriken pistol",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "3/4",
-          "specialRules": "\u0007Range 8\u0022, Rending"
+          "specialRules": "Range 8\", Rending"
         },
         {
           "name": "Miststave",
           "type": "Melee",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "4/4",
-          "specialRules": "\u0007Shock"
+          "specialRules": "Shock"
         }
       ],
       "abilities": [
         {
           "name": "Mirror Of Minds",
-          "text": "\u0007PSYCHIC. Select one enemy operative that\u2019s a valid target for and within 8\u0022 of this operative. Both players roll fiv Pair your dice with your opponent\u2019s dice based on matching results. For each matching pair, inflict D3 damage on that enemy operative (to a maximum of 8). For example, if you rolled 6, 5, 5, 2, 1 and your opponent rolled 6, 5, 4, 3, you would inflict 3D3 damage on that enemy operative. \u0007\u0007This operative cannot perform this action while within co range of an enemy operative.",
+          "text": "PSYCHIC. Select one enemy operative that’s a valid target for and within 8\" of this operative. Both players roll fiv Pair your dice with your opponent’s dice based on matching results. For each matching pair, inflict D3 damage on that enemy operative (to a maximum of 8). For example, if you rolled 6, 5, 5, 2, 1 and your opponent rolled 6, 5, 4, 3, you would inflict 3D3 damage on that enemy operative. This operative cannot perform this action while within co range of an enemy operative.",
           "apCost": 1
         },
         {
           "name": "Fog Of Dreams",
-          "text": "\u0007PSYCHIC. Select one ready enemy operative visible to this e D6.      operative and roll one D6. Until the end of the turning point, that enemy operative cannot be activated or perform actions until it\u2019s the last enemy operative to be activated, or until your opponent has activated a number of enemy operatives 1,         after this action equal to the result of the D6 (whichever comes first). ntrol     \u0007\u0007This operative cannot perform this action while within control range of an enemy operative.",
+          "text": "PSYCHIC. Select one ready enemy operative visible to this e D6.      operative and roll one D6. Until the end of the turning point, that enemy operative cannot be activated or perform actions until it’s the last enemy operative to be activated, or until your opponent has activated a number of enemy operatives 1,         after this action equal to the result of the D6 (whichever comes first). ntrol     This operative cannot perform this action while within control range of an enemy operative.",
           "apCost": 1
         }
       ],
@@ -392,7 +392,7 @@
   ],
   "operativeSelection": {
     "archetype": "INFILTRATION, RECON",
-    "text": "OPERATIVES\n\u2198 \u00071 VOID-DANCER TROUPE LEAD PLAYER\noperative with one option from each of\nthe following:\n\u25CB \u0007Fusion pistol, neuro disruptor or\nshuriken pistol\n\u25CB \u0007Blade, caress, embrace, kiss or\npower weapon\n\n\u2198 \u00077 VOID-DANCER TROUPE operatives selected\nfrom the following list:\n\u2022 \u0007DEATH JESTER\n\u2022 \u0007PLAYER with one option from each of\nthe following:\n\u25CB \u0007Fusion pistol, neuro disruptor or\nshuriken pistol\n\u25CB \u0007Blade, caress, embrace or kiss\n\u2022 \u0007SHADOWSEER with hallucinogen grenade\nand one of the following options:\n\u25CB \u0007Neuro disruptor; miststave\n\u25CB \u0007Shuriken pistol; miststave\nCONTINUES ON OTHER SIDE\nOther than PLAYER operatives, your kill team can\nonly include each operative on this list once. Your\nkill team can only include up to one fusion pistol\nand up to one neuro disruptor."
+    "text": "OPERATIVES↘ 1 VOID-DANCER TROUPE LEAD PLAYERoperative with one option from each ofthe following:○ Fusion pistol, neuro disruptor orshuriken pistol○ Blade, caress, embrace, kiss orpower weapon↘ 7 VOID-DANCER TROUPE operatives selectedfrom the following list:• DEATH JESTER• PLAYER with one option from each ofthe following:○ Fusion pistol, neuro disruptor orshuriken pistol○ Blade, caress, embrace or kiss• SHADOWSEER with hallucinogen grenadeand one of the following options:○ Neuro disruptor; miststave○ Shuriken pistol; miststaveCONTINUES ON OTHER SIDEOther than PLAYER operatives, your kill team canonly include each operative on this list once. Yourkill team can only include up to one fusion pistoland up to one neuro disruptor."
   },
-  "supplementaryInfo": "VOID-DANCER TROUPE: UPDATE LOG \b\nRules will be periodically updated to maintain fair balance and interact more smoothly with the game. Rules changes\nwill be updated directly into online documents and then listed below. Any minor changes to standardise wording that\ndon\u2019t have any practical impact on the rule will be updated directly into online documents but not be listed here.\nERRATA\b                                                                                                      OCTOBER \u201925\nThis section collects amendments to the rules. Amended text    FACTION RULES, HARLEQUIN\u2019S PANOPLY\nfor clarification and edits are shown in blue, while amended   First sentence changed to read:\ntext for balance updates are shown in magenta.                 \u2018Whenever an operative is shooting a friendly VOID-DANCER\nTROUPE operative, and no attack dice are retained as critical\nSHADOWSEER OPERATIVE, HALLUCINOGEN GRENADE WEAPON              successes, worsen the x of the Piercing weapon rule by 1 (if\n\u2018Seek\u2019 weapon rule changed to \u2018Seek Light\u2019.                    any). Note that Piercing 1 would therefore be ignored.\u2019\nLEAD PLAYER \u0026 PLAYER OPERATIVES, BLADE WEAPON                  FIREFIGHT PLOYS, THE CURTAIN FALLS\nDmg stats changed to \u20184/6\u2019                                     Relevant part changed to read:\n\u2018[...] after you strike with a critical success, if the enemy\n\u2018Severe\u2019 weapon rule deleted.                                  operative isn\u2019t incapacitated. End that sequence (any\nremaining attack dice are discarded) and immediately\nperform a free Dash or Fall Back action up to 3\u0022 with that\noperative (then the Fight action ends). That operative can\ndo so even if it\u2019s performed an action that prevents it from\nperforming the Dash or Fall Back action.\u2019\nRULES COMMENTARY\b                                                                                            OCTOBER \u201925\nThis section provides clarification on ambiguous and complex\nrules interactions.\nQ: Does \u2018Once per turning point\u2019 in the PLAYER operative\u2019s\nLuck of the Laughing God rule mean I can only use this rule\nonce during each turning point, no matter how many friendly\noperatives have that rule?\nA: Yes.\n\b                                                                                                    PREVIOUS ERRATAS\nFIREFIGHT PLOYS, ELUSIVE TARGET                                     FACTION RULES, SAEDATH, EPIC\nSecond sentence changed to read:                                    Relevant part of Performance deleted:\n\u2018Until the start of its next activation, while that operative has   \u2018The operative incapacitates an enemy operative while\na Conceal order and is in cover, it cannot be selected as a         fighting or retaliating.\u2019\nvalid target, taking precedence over all other rules (e.g. Seek,\nVantage terrain) except being within 2\u0022.\u2019                           Accolade changed to read:\n\u2018Whenever this operative is fighting, its melee weapons have\nSHADOWSEER OPERATIVE, MIRROR OF MINDS ACTION                        the Balanced weapon rule.\nSecond sentence of effect changed to read:\n\u2018Select one enemy operative that\u2019s a valid target for and within\n8\u0022 of this operative.\u2019\nFACTION RULES, HARLEQUIN\u2019S PANOPLY\nRelevant part of second paragraph changed to read:\n\u2018Whenever a friendly VOID-DANCER TROUPE operative is\nclimbing up, you can treat the vertical distance as 2\u0022 [\u2026]\u2019\nVOID-DANCER TROUPE\nOPERATIVES\nEven amongst the agile Aeldari, the Harlequins of the Void-dancer Troupes display an almost preternatural level of\ndexterity and skill. Performance and war merge in their actions, precisely directed to shape the fate of their race.\n2\nLEAD PLAYER                                                        PLAYER\nChoreographers of conflict, Lead Players are experienced           Harlequin Players perform with breathtaking skill, whether\nHarlequins clad in extravagant garb. They direct their warriors\u2019   their stage is a wraithbone-and-glass amphitheatre bathed\nreactions to the fates of battle and ensure their comrades\u2019        in crystalline light or the firelit hell of the battlefield. They\nperformances in the theatre of war is as perfect as it can be.     tumble, sprint and leap, with every trigger squeeze and blade\nslash bringing orchestrated death to the enemy.\nDEATH JESTER\nThe arrival of a Death Jester in a killzone is announced by a\nSHADOWSEER\nhissing storm of shrieker cannon fire. Enemy infantry are torn     Shadowseers can blind foes and drive them mad with their\napart as the weapon\u2019s gene-toxins cause them to combust            psychic powers. As they obscure their allies with illusions,\nhorrifically from within. Adding insult to injury, the Death       they fire hallucinogenic grenades that cause disorientation or\nJester ensures every demise is cruelly ironic.                     death. In close combat, Shadowseers\u2019 miststaves scramble\nthe perceptions of those they hit.\nVOID-DANCER TROUPE KILL TEAM\n\u0007Below you will find a list of\nLEAD PLAYER\nthe operatives that make up a\nVOID-DANCER TROUPE\nkill team, including, where\nrelevant, any weapons\n3                                                      specified for that operative.\nOPERATIVES\nVOID-DANCER TROUPE \u00BB KILL TEAM SELECTION\nShuriken pistol\n\u2198 \u00071 VOID-DANCER TROUPE LEAD PLAYER operative\nwith one option from each of the following:\n\u25CB \u0007Fusion pistol, neuro disruptor or\nKiss\nshuriken pistol\n\u25CB \u0007Blade, caress, embrace, kiss or\npower weapon\n\u2198 \u00077 VOID-DANCER TROUPE operatives selected\nfrom the following list:\n\u2022 \u0007DEATH JESTER\n\u2018\u0007S TRIKE NOT WHERE YOUR ENEMY EXPECTS\n\u2022 \u0007PLAYER with one option from each of                    YOUR BLADE TO FALL, NOR EVEN WHERE LOGIC\nthe following:                                         DICTATES. STRIKE INSTEAD WHERE YOUR BLOW\n\u25CB \u0007Fusion pistol, neuro disruptor or                   WILL HAVE THE GREATEST MEANING. LEAVE\nshuriken pistol\n\u25CB \u0007Blade, caress, embrace or kiss\nYOUR LESSON WRIT LARGE IN BLOOD UPON THE\n\u2022 \u0007SHADOWSEER with hallucinogen grenade and               FIELD OF BATTLE.\u2019\none of the following options:                                      - extract from the Teachings of Cegorach\n\u25CB \u0007Neuro disruptor; miststave\n\u25CB \u0007Shuriken pistol; miststave\nOther than PLAYER operatives, your kill team can only\nDEATH JESTER\ninclude each operative on this list once. Your kill team\ncan only include up to one fusion pistol and up to one\nShrieker cannon\nneuro disruptor.\nARCHETYPES                                                  Shrieker blade\nINFILTRATION    RECON\nArchetypes are used in certain mission packs, e.g.\nApproved Ops. The game sequence will specify how.\nPLAYER\nKiss                                          Neuro disruptor\nBlade                                                          4\nCaress\nVOID-DANCER TROUPE \u00BB KILL TEAM SELECTION\nShuriken pistol                     Shuriken pistol\n\u2018\u0007T HERE WERE SO FEW OF THEM. NO TANKS, NO ARTILLERY, JUST THIS\u2026 HANDFUL\u2026 OF XENOS. WE\nEXPECTED AN EASY FIGHT. THEN THE MADNESS STARTED TO SPREAD; MEN BEGAN TO SCREAM, TO\nTURN UPON ONE ANOTHER. THE THINGS I SAW\u2026 EVEN NOW I CANNOT TRUST MY OWN MIND. EXECUTE\nME, I BEG YOU. MAYBE THAT WILL FINALLY WIPE AWAY THE NIGHTMARES.\u2019\n- tribunal testimony of Sergeant Gastor, Cadian 654th\nSHADOWSEER\nHallucinogen\nNeuro disruptor                                 grenade\nMiststave"
+  "supplementaryInfo": "VOID-DANCER TROUPE: UPDATE LOG Rules will be periodically updated to maintain fair balance and interact more smoothly with the game. Rules changeswill be updated directly into online documents and then listed below. Any minor changes to standardise wording thatdon’t have any practical impact on the rule will be updated directly into online documents but not be listed here.ERRATA                                                                                                      OCTOBER ’25This section collects amendments to the rules. Amended text    FACTION RULES, HARLEQUIN’S PANOPLYfor clarification and edits are shown in blue, while amended   First sentence changed to read:text for balance updates are shown in magenta.                 ‘Whenever an operative is shooting a friendly VOID-DANCERTROUPE operative, and no attack dice are retained as criticalSHADOWSEER OPERATIVE, HALLUCINOGEN GRENADE WEAPON              successes, worsen the x of the Piercing weapon rule by 1 (if‘Seek’ weapon rule changed to ‘Seek Light’.                    any). Note that Piercing 1 would therefore be ignored.’LEAD PLAYER & PLAYER OPERATIVES, BLADE WEAPON                  FIREFIGHT PLOYS, THE CURTAIN FALLSDmg stats changed to ‘4/6’                                     Relevant part changed to read:‘[...] after you strike with a critical success, if the enemy‘Severe’ weapon rule deleted.                                  operative isn’t incapacitated. End that sequence (anyremaining attack dice are discarded) and immediatelyperform a free Dash or Fall Back action up to 3\" with thatoperative (then the Fight action ends). That operative cando so even if it’s performed an action that prevents it fromperforming the Dash or Fall Back action.’RULES COMMENTARY                                                                                            OCTOBER ’25This section provides clarification on ambiguous and complexrules interactions.Q: Does ‘Once per turning point’ in the PLAYER operative’sLuck of the Laughing God rule mean I can only use this ruleonce during each turning point, no matter how many friendlyoperatives have that rule?A: Yes.                                                                                                    PREVIOUS ERRATASFIREFIGHT PLOYS, ELUSIVE TARGET                                     FACTION RULES, SAEDATH, EPICSecond sentence changed to read:                                    Relevant part of Performance deleted:‘Until the start of its next activation, while that operative has   ‘The operative incapacitates an enemy operative whilea Conceal order and is in cover, it cannot be selected as a         fighting or retaliating.’valid target, taking precedence over all other rules (e.g. Seek,Vantage terrain) except being within 2\".’                           Accolade changed to read:‘Whenever this operative is fighting, its melee weapons haveSHADOWSEER OPERATIVE, MIRROR OF MINDS ACTION                        the Balanced weapon rule.Second sentence of effect changed to read:‘Select one enemy operative that’s a valid target for and within8\" of this operative.’FACTION RULES, HARLEQUIN’S PANOPLYRelevant part of second paragraph changed to read:‘Whenever a friendly VOID-DANCER TROUPE operative isclimbing up, you can treat the vertical distance as 2\" […]’VOID-DANCER TROUPEOPERATIVESEven amongst the agile Aeldari, the Harlequins of the Void-dancer Troupes display an almost preternatural level ofdexterity and skill. Performance and war merge in their actions, precisely directed to shape the fate of their race.2LEAD PLAYER                                                        PLAYERChoreographers of conflict, Lead Players are experienced           Harlequin Players perform with breathtaking skill, whetherHarlequins clad in extravagant garb. They direct their warriors’   their stage is a wraithbone-and-glass amphitheatre bathedreactions to the fates of battle and ensure their comrades’        in crystalline light or the firelit hell of the battlefield. Theyperformances in the theatre of war is as perfect as it can be.     tumble, sprint and leap, with every trigger squeeze and bladeslash bringing orchestrated death to the enemy.DEATH JESTERThe arrival of a Death Jester in a killzone is announced by aSHADOWSEERhissing storm of shrieker cannon fire. Enemy infantry are torn     Shadowseers can blind foes and drive them mad with theirapart as the weapon’s gene-toxins cause them to combust            psychic powers. As they obscure their allies with illusions,horrifically from within. Adding insult to injury, the Death       they fire hallucinogenic grenades that cause disorientation orJester ensures every demise is cruelly ironic.                     death. In close combat, Shadowseers’ miststaves scramblethe perceptions of those they hit.VOID-DANCER TROUPE KILL TEAMBelow you will find a list ofLEAD PLAYERthe operatives that make up aVOID-DANCER TROUPEkill team, including, whererelevant, any weapons3                                                      specified for that operative.OPERATIVESVOID-DANCER TROUPE » KILL TEAM SELECTIONShuriken pistol↘ 1 VOID-DANCER TROUPE LEAD PLAYER operativewith one option from each of the following:○ Fusion pistol, neuro disruptor orKissshuriken pistol○ Blade, caress, embrace, kiss orpower weapon↘ 7 VOID-DANCER TROUPE operatives selectedfrom the following list:• DEATH JESTER‘S TRIKE NOT WHERE YOUR ENEMY EXPECTS• PLAYER with one option from each of                    YOUR BLADE TO FALL, NOR EVEN WHERE LOGICthe following:                                         DICTATES. STRIKE INSTEAD WHERE YOUR BLOW○ Fusion pistol, neuro disruptor or                   WILL HAVE THE GREATEST MEANING. LEAVEshuriken pistol○ Blade, caress, embrace or kissYOUR LESSON WRIT LARGE IN BLOOD UPON THE• SHADOWSEER with hallucinogen grenade and               FIELD OF BATTLE.’one of the following options:                                      - extract from the Teachings of Cegorach○ Neuro disruptor; miststave○ Shuriken pistol; miststaveOther than PLAYER operatives, your kill team can onlyDEATH JESTERinclude each operative on this list once. Your kill teamcan only include up to one fusion pistol and up to oneShrieker cannonneuro disruptor.ARCHETYPES                                                  Shrieker bladeINFILTRATION    RECONArchetypes are used in certain mission packs, e.g.Approved Ops. The game sequence will specify how.PLAYERKiss                                          Neuro disruptorBlade                                                          4CaressVOID-DANCER TROUPE » KILL TEAM SELECTIONShuriken pistol                     Shuriken pistol‘T HERE WERE SO FEW OF THEM. NO TANKS, NO ARTILLERY, JUST THIS… HANDFUL… OF XENOS. WEEXPECTED AN EASY FIGHT. THEN THE MADNESS STARTED TO SPREAD; MEN BEGAN TO SCREAM, TOTURN UPON ONE ANOTHER. THE THINGS I SAW… EVEN NOW I CANNOT TRUST MY OWN MIND. EXECUTEME, I BEG YOU. MAYBE THAT WILL FINALLY WIPE AWAY THE NIGHTMARES.’- tribunal testimony of Sergeant Gastor, Cadian 654thSHADOWSEERHallucinogenNeuro disruptor                                 grenadeMiststave"
 }

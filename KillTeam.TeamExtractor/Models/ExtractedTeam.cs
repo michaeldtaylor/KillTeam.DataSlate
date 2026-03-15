@@ -1,3 +1,4 @@
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 
@@ -142,6 +143,62 @@ public class ExtractedTeam
             root["supplementaryInfo"] = this.SupplementaryInfo;
         }
 
-        return root.ToJsonString(new JsonSerializerOptions { WriteIndented = true });
+        SanitizeStrings(root);
+
+        return root.ToJsonString(new JsonSerializerOptions
+        {
+            WriteIndented = true,
+            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+        });
+    }
+
+    /// <summary>
+    /// Walks every JSON string node and strips ASCII control characters (code points 0–31).
+    /// pdftotext emits BEL (0x07) for icon markers and BS (0x08) as rendering artefacts;
+    /// these must not appear in the output JSON.
+    /// </summary>
+    private static void SanitizeStrings(JsonNode? node)
+    {
+        switch (node)
+        {
+            case JsonObject obj:
+            {
+                foreach (var key in obj.Select(p => p.Key).ToList())
+                {
+                    if (obj[key] is JsonValue val && val.TryGetValue<string>(out var s))
+                    {
+                        obj[key] = StripControlChars(s);
+                    }
+                    else
+                    {
+                        SanitizeStrings(obj[key]);
+                    }
+                }
+
+                break;
+            }
+
+            case JsonArray arr:
+            {
+                for (var i = 0; i < arr.Count; i++)
+                {
+                    if (arr[i] is JsonValue val && val.TryGetValue<string>(out var s))
+                    {
+                        arr[i] = StripControlChars(s);
+                    }
+                    else
+                    {
+                        SanitizeStrings(arr[i]);
+                    }
+                }
+
+                break;
+            }
+        }
+    }
+
+    private static string StripControlChars(string s)
+    {
+        return new string(s.Where(c => c >= 32).ToArray()).Trim();
     }
 }

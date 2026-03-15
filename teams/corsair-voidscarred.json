@@ -6,11 +6,11 @@
   "factionRules": [
     {
       "name": "Rifles",
-      "text": "Whilst not all Aeldari outcasts have walked the Path of the Warrior, all are skilled in the use of rifles. Whenever a friendly CORSAIR VOIDSCARRED operative is shooting with a shuriken rifle or ranger long rifle during an activation in which it hasn\u2019t performed the Charge, Fall Back or Reposition action, that weapon has the Accurate 1 weapon rule. Note that operative isn\u2019t restricted from performing those actions after shooting."
+      "text": "Whilst not all Aeldari outcasts have walked the Path of the Warrior, all are skilled in the use of rifles. Whenever a friendly CORSAIR VOIDSCARRED operative is shooting with a shuriken rifle or ranger long rifle during an activation in which it hasn’t performed the Charge, Fall Back or Reposition action, that weapon has the Accurate 1 weapon rule. Note that operative isn’t restricted from performing those actions after shooting."
     },
     {
       "name": "Aeldari Raiders",
-      "text": "Aeldari are lithe, graceful and swift \u2013 qualities the Corsair Voidscarred utilise to outmanoeuvre their enemies. Each friendly CORSAIR VOIDSCARRED operative can perform a free Dash action during their activation. Erudite Hunter token   Faolch\u00FA\u2019s Bond token Warding Shield token   One Step Ahead token Mistfield token           Runes of"
+      "text": "Aeldari are lithe, graceful and swift – qualities the Corsair Voidscarred utilise to outmanoeuvre their enemies. Each friendly CORSAIR VOIDSCARRED operative can perform a free Dash action during their activation. Erudite Hunter token   Faolchú’s Bond token Warding Shield token   One Step Ahead token Mistfield token           Runes of"
     }
   ],
   "strategyPloys": [
@@ -20,7 +20,7 @@
     },
     {
       "name": "Piratical Profiteers",
-      "text": "Any foolish enough to attempt to contest a prize claimed by the Corsair Voidscarred will soon find themselves caught in a blizzard of shuriken fire and sword thrusts. Whenever a friendly CORSAIR VOIDSCARRED operative is shooting, fighting or retaliating, if it or the enemy operative in that sequence contests an objective marker or one of your mission markers, that friendly operative\u2019s weapons have the Balanced weapon rule."
+      "text": "Any foolish enough to attempt to contest a prize claimed by the Corsair Voidscarred will soon find themselves caught in a blizzard of shuriken fire and sword thrusts. Whenever a friendly CORSAIR VOIDSCARRED operative is shooting, fighting or retaliating, if it or the enemy operative in that sequence contests an objective marker or one of your mission markers, that friendly operative’s weapons have the Balanced weapon rule."
     },
     {
       "name": "Mobile Engagement",
@@ -28,7 +28,7 @@
     },
     {
       "name": "Outcasts",
-      "text": "Those who walk the Path of the Outcast are no strangers to solitude. Some even fight better alone. Whenever a friendly CORSAIR VOIDSCARRED operative is more than 5\u0022 from other friendly operatives, its weapons have the Punishing weapon rule."
+      "text": "Those who walk the Path of the Outcast are no strangers to solitude. Some even fight better alone. Whenever a friendly CORSAIR VOIDSCARRED operative is more than 5\" from other friendly operatives, its weapons have the Punishing weapon rule."
     }
   ],
   "firefightPloys": [
@@ -38,29 +38,29 @@
     },
     {
       "name": "Light Fingers",
-      "text": "The pursuit of riches drives all Corsairs. These lithe raiders may pluck a prize from under the nose of a foe and disappear before a blow can be landed in return. Use this firefight ploy during a friendly CORSAIR VOIDSCARRED operative\u2019s activation. Until the end of that activation, having an enemy operative within its control range doesn\u2019t prevent that friendly operative from performing the Pick Up Marker or mission actions."
+      "text": "The pursuit of riches drives all Corsairs. These lithe raiders may pluck a prize from under the nose of a foe and disappear before a blow can be landed in return. Use this firefight ploy during a friendly CORSAIR VOIDSCARRED operative’s activation. Until the end of that activation, having an enemy operative within its control range doesn’t prevent that friendly operative from performing the Pick Up Marker or mission actions."
     },
     {
       "name": "Capricious Flight",
-      "text": "Always outnumbered and often outgunned, the Corsair Voidscarred utilise feints and trickery to strike before melting away into shadow. Use this firefight ploy during a friendly CORSAIR VOIDSCARRED operative\u2019s activation, before or after it performs an action. During that activation, that operative can perform the Fall Back action for 1 less AP."
+      "text": "Always outnumbered and often outgunned, the Corsair Voidscarred utilise feints and trickery to strike before melting away into shadow. Use this firefight ploy during a friendly CORSAIR VOIDSCARRED operative’s activation, before or after it performs an action. During that activation, that operative can perform the Fall Back action for 1 less AP."
     },
     {
       "name": "Contemptuous Adventurer",
-      "text": "The Corsair Voidscarred possess a fearless arrogance that is often justified by their superior skill at arms. Use this firefight ploy when the first friendly CORSAIR VOIDSCARRED operative is activated during the turning point, if it\u2019s more than 5\u0022 from other friendly operatives. The first time that operative performs either the Shoot or Fight action during that activation, its weapons have the Relentless weapon rule. Note this ploy cannot come into effect more than once per activation (you cannot use it during both the Shoot and Fight action in the same activation)."
+      "text": "The Corsair Voidscarred possess a fearless arrogance that is often justified by their superior skill at arms. Use this firefight ploy when the first friendly CORSAIR VOIDSCARRED operative is activated during the turning point, if it’s more than 5\" from other friendly operatives. The first time that operative performs either the Shoot or Fight action during that activation, its weapons have the Relentless weapon rule. Note this ploy cannot come into effect more than once per activation (you cannot use it during both the Shoot and Fight action in the same activation)."
     }
   ],
   "equipment": [
     {
       "name": "Diuturnal Mantles",
-      "description": "The cloaks worn by Corsair Voidscarred operatives are woven from psychoactive material that hardens in response to explosions and fluctuations in temperature. Whenever an operative is shooting a friendly CORSAIR VOIDSCARRED operative, if the ranged weapon in that sequence has the Blast or Torrent weapon rule, you can re-roll one of your defence dice. In addition, friendly CORSAIR VOIDSCARRED operatives aren\u2019t affected by the x\u0022 Devastating x weapon rule (i.e. Devastating with a distance) unless they are the target during that sequence."
+      "description": "The cloaks worn by Corsair Voidscarred operatives are woven from psychoactive material that hardens in response to explosions and fluctuations in temperature. Whenever an operative is shooting a friendly CORSAIR VOIDSCARRED operative, if the ranged weapon in that sequence has the Blast or Torrent weapon rule, you can re-roll one of your defence dice. In addition, friendly CORSAIR VOIDSCARRED operatives aren’t affected by the x\" Devastating x weapon rule (i.e. Devastating with a distance) unless they are the target during that sequence."
     },
     {
       "name": "Mistfield",
-      "description": "A mistfield projects a field of thick moisture around the bearer that not only obscures their form, but also slows bullets, reducing their lethality. Once per turning point, when an operative is shooting a friendly CORSAIR VOIDSCARRED operative more than 3\u0022 from it, at the start of the Roll Defence Dice step, you can use this rule. If you do, worsen the x of the Piercing weapon rule by 1 (if any) until the end of that sequence. Note that Piercing 1 would therefore be ignored."
+      "description": "A mistfield projects a field of thick moisture around the bearer that not only obscures their form, but also slows bullets, reducing their lethality. Once per turning point, when an operative is shooting a friendly CORSAIR VOIDSCARRED operative more than 3\" from it, at the start of the Roll Defence Dice step, you can use this rule. If you do, worsen the x of the Piercing weapon rule by 1 (if any) until the end of that sequence. Note that Piercing 1 would therefore be ignored."
     },
     {
       "name": "Runes Of Guidance",
-      "description": "Corsair psykers wield warp powers with consummate precision, lending their foresight to distant allies. Once per turning point, when a friendly CORSAIR VOIDSCARRED WAY SEEKER or CORSAIR VOIDSCARRED SOUL WEAVER operative is performing a PSYCHIC unique action (excluding Warp Fold), you can use this rule. If you do, until the end of that action, add 3\u0022 to its distance requirement. Note this has no effect on PSYCHIC weapons (e.g. the Devastating distance requirement of lightning strike)."
+      "description": "Corsair psykers wield warp powers with consummate precision, lending their foresight to distant allies. Once per turning point, when a friendly CORSAIR VOIDSCARRED WAY SEEKER or CORSAIR VOIDSCARRED SOUL WEAVER operative is performing a PSYCHIC unique action (excluding Warp Fold), you can use this rule. If you do, until the end of that action, add 3\" to its distance requirement. Note this has no effect on PSYCHIC weapons (e.g. the Devastating distance requirement of lightning strike)."
     },
     {
       "name": "Star Charts",
@@ -68,47 +68,47 @@
     },
     {
       "name": "Portable Barricade",
-      "description": "Little more than a suppression shield with armoured feet, these barricades can be hefted and borne forwards to provide mobile cover. A portable barricade is Light, Protective and Portable terrain, except the feet which are Insignificant and Exposed. Before the battle, you can set it up wholly within your territory, on the killzone floor and more than 2\u0022 from other equipment terrain features, access points and Accessible terrain. Protective: While an operative is in cover from this terrain feature, improve its Save stat by 1 (to a maximum of 2\u002B). RULE CONTINUES ON OTHER SIDE Portable: This terrain feature only provides cover while an operative is connected to it and if the shield is intervening (ignore its feet). Operatives connected to the inside of it can perform the following unique action during the battle. MOVE WITH BARRICADE                             1AP \u0007The same as the Reposition action, except the active operative can move no more than its Move stat minus 2\u0022 and cannot climb, drop, jump or use any kill team\u2019s rules that remove it and set it back up again (e.g. HEARTHKYN SALVAGER FLY, MANDRAKE SHADOW PASSAGE). \u0007Before this operative moves, remove the portable barricade it\u2019s connected to. After it moves, set up the portable barricade so it\u2019s connected again, but the portable barricade cannot be set up within 2\u0022 of other equipment terrain features, access points or Accessible terrain. If this is not possible, the portable barricade is not set up again. \u0007This action is treated as a Reposition action. An operative cannot perform this action while within control range of an enemy operative, or during the same activation in which it performed the Fall Back or Charge action."
+      "description": "Little more than a suppression shield with armoured feet, these barricades can be hefted and borne forwards to provide mobile cover. A portable barricade is Light, Protective and Portable terrain, except the feet which are Insignificant and Exposed. Before the battle, you can set it up wholly within your territory, on the killzone floor and more than 2\" from other equipment terrain features, access points and Accessible terrain. Protective: While an operative is in cover from this terrain feature, improve its Save stat by 1 (to a maximum of 2+). RULE CONTINUES ON OTHER SIDE Portable: This terrain feature only provides cover while an operative is connected to it and if the shield is intervening (ignore its feet). Operatives connected to the inside of it can perform the following unique action during the battle. MOVE WITH BARRICADE                             1AP The same as the Reposition action, except the active operative can move no more than its Move stat minus 2\" and cannot climb, drop, jump or use any kill team’s rules that remove it and set it back up again (e.g. HEARTHKYN SALVAGER FLY, MANDRAKE SHADOW PASSAGE). Before this operative moves, remove the portable barricade it’s connected to. After it moves, set up the portable barricade so it’s connected again, but the portable barricade cannot be set up within 2\" of other equipment terrain features, access points or Accessible terrain. If this is not possible, the portable barricade is not set up again. This action is treated as a Reposition action. An operative cannot perform this action while within control range of an enemy operative, or during the same activation in which it performed the Fall Back or Charge action."
     },
     {
       "name": "Utility Grenades",
-      "description": "From neuro\u2011suppressant psybombs to smoke\u2011belching chemical charges, grenades of this sort can suppress the enemy and be the difference between life and death. When you select this equipment, select two utility grenades (2 smoke, 2 stun, or 1 smoke and 1 stun). Each selection is a unique action your operatives can perform, but your kill team can only perform that action a total number of times during the battle equal to your selection. RULE CONTINUES ON OTHER SIDE SMOKE GRENADE                                  1AP \u0007Place one of your Smoke Grenade markers within 6\u0022 of this operative. It must be visible to this operative, or on Vantage terrain of a terrain feature that\u2019s visible to this operative. The marker creates an area of smoke 1\u0022 horizontally and unlimited height vertically from (but not below) it. \u0007While an operative is wholly within an area of smoke, it\u2019s obscured to operatives more than 2\u0022 from it, and vice versa. In addition, whenever an operative is shooting an enemy operative wholly within an area of smoke, weapons with the Piercing 2 or Piercing Crits 2 weapon rule have the Piercing 1 or Piercing Crits 1 weapon rule (respectively) instead, unless they\u2019re within 2\u0022 of each other. \u0007In the Ready step of the next Strategy phase, roll one D3. Remove that Smoke Grenade marker after a number of activations equal to the result have been completed or at the end of the turning point (whichever comes first). RULE CONTINUES ON OTHER SIDE \u0007An operative cannot perform this action while within control range of an enemy operative, or if you have reached the total number of times your kill team can perform it."
+      "description": "From neuro‑suppressant psybombs to smoke‑belching chemical charges, grenades of this sort can suppress the enemy and be the difference between life and death. When you select this equipment, select two utility grenades (2 smoke, 2 stun, or 1 smoke and 1 stun). Each selection is a unique action your operatives can perform, but your kill team can only perform that action a total number of times during the battle equal to your selection. RULE CONTINUES ON OTHER SIDE SMOKE GRENADE                                  1AP Place one of your Smoke Grenade markers within 6\" of this operative. It must be visible to this operative, or on Vantage terrain of a terrain feature that’s visible to this operative. The marker creates an area of smoke 1\" horizontally and unlimited height vertically from (but not below) it. While an operative is wholly within an area of smoke, it’s obscured to operatives more than 2\" from it, and vice versa. In addition, whenever an operative is shooting an enemy operative wholly within an area of smoke, weapons with the Piercing 2 or Piercing Crits 2 weapon rule have the Piercing 1 or Piercing Crits 1 weapon rule (respectively) instead, unless they’re within 2\" of each other. In the Ready step of the next Strategy phase, roll one D3. Remove that Smoke Grenade marker after a number of activations equal to the result have been completed or at the end of the turning point (whichever comes first). RULE CONTINUES ON OTHER SIDE An operative cannot perform this action while within control range of an enemy operative, or if you have reached the total number of times your kill team can perform it."
     },
     {
       "name": "Ammo Cache",
-      "description": "Whether stockpiles deliberately set out for warriors to access quickly, or the abandoned munitions of the slain, these caches can prove vital for a swift reload in the heat of battle. Before the battle, you can set up one of your Ammo Cache markers wholly within your territory. Friendly operatives can perform the following mission action during the battle. AMMO RESUPPLY                                    0AP \u0007One of your Ammo Cache markers the active operative controls is used during this turning point. \u0007Until the start of the next turning point, whenever this operative is shooting with a weapon from its datacard, you can re\u2011roll one of your attack dice. \u0007An operative cannot perform this action while within control range of an enemy operative, if that marker isn\u2019t yours, or if that marker has been used this turning point."
+      "description": "Whether stockpiles deliberately set out for warriors to access quickly, or the abandoned munitions of the slain, these caches can prove vital for a swift reload in the heat of battle. Before the battle, you can set up one of your Ammo Cache markers wholly within your territory. Friendly operatives can perform the following mission action during the battle. AMMO RESUPPLY                                    0AP One of your Ammo Cache markers the active operative controls is used during this turning point. Until the start of the next turning point, whenever this operative is shooting with a weapon from its datacard, you can re‑roll one of your attack dice. An operative cannot perform this action while within control range of an enemy operative, if that marker isn’t yours, or if that marker has been used this turning point."
     },
     {
       "name": "Razor Wire",
-      "description": "Spooled rapidly out and affixed to jutting posts, razor wire acts as an easily deployed barrier and a painful deterrent to enemy operatives seeking to attack along particular routes. Razor wire is Exposed and Obstructing terrain. Before the battle, you can set it up wholly within your territory, on the killzone floor and more than 2\u0022 from other equipment terrain features, access points and Accessible terrain. Obstructing: Whenever an operative would cross over this terrain feature within 1\u0022 of it, treat the distance as an additional 1\u0022."
+      "description": "Spooled rapidly out and affixed to jutting posts, razor wire acts as an easily deployed barrier and a painful deterrent to enemy operatives seeking to attack along particular routes. Razor wire is Exposed and Obstructing terrain. Before the battle, you can set it up wholly within your territory, on the killzone floor and more than 2\" from other equipment terrain features, access points and Accessible terrain. Obstructing: Whenever an operative would cross over this terrain feature within 1\" of it, treat the distance as an additional 1\"."
     },
     {
       "name": "Comms Device",
-      "description": "Communications devices can be swiftly hijacked and employed to coordinate operations or call in support during a firefight. Before the battle, you can set up one of your Comms Device markers wholly within your territory. While a friendly operative controls this marker, add 3\u0022 to the distance requirements of its SUPPORT rules that refer to friendly operatives (e.g. \u2018select one friendly operative within 6\u0022\u2019 would be 9\u0022 instead). Note that you cannot benefit from your opponent\u2019s Comms Device markers."
+      "description": "Communications devices can be swiftly hijacked and employed to coordinate operations or call in support during a firefight. Before the battle, you can set up one of your Comms Device markers wholly within your territory. While a friendly operative controls this marker, add 3\" to the distance requirements of its SUPPORT rules that refer to friendly operatives (e.g. ‘select one friendly operative within 6\"’ would be 9\" instead). Note that you cannot benefit from your opponent’s Comms Device markers."
     },
     {
       "name": "Mines",
-      "description": "The battlefields of the 41st Millennium are plagued by myriad types of mine, from simple frag charges to monofilament web\u2011snares and microplasma charges. Ultimately, all serve a similar, horrible purpose. Before the battle, you can set up one of your Mines markers wholly within your territory and more than 2\u0022 from other markers, access points and Accessible terrain. The first time that marker is within an operative\u2019s control range, remove that marker and inflict D3\u002B3 damage on that operative."
+      "description": "The battlefields of the 41st Millennium are plagued by myriad types of mine, from simple frag charges to monofilament web‑snares and microplasma charges. Ultimately, all serve a similar, horrible purpose. Before the battle, you can set up one of your Mines markers wholly within your territory and more than 2\" from other markers, access points and Accessible terrain. The first time that marker is within an operative’s control range, remove that marker and inflict D3+3 damage on that operative."
     },
     {
       "name": "Light Barricades",
-      "description": "Designed to be lugged into place and then deployed by operatives and combat engineers, these barriers are proof against small arms fire. Light barricades are Light terrain, except the feet, which are Insignificant and Exposed. Before the battle, you can set up any of them wholly within your territory, on the killzone floor and more than 2\u0022 from other equipment terrain features, access points and Accessible terrain."
+      "description": "Designed to be lugged into place and then deployed by operatives and combat engineers, these barriers are proof against small arms fire. Light barricades are Light terrain, except the feet, which are Insignificant and Exposed. Before the battle, you can set up any of them wholly within your territory, on the killzone floor and more than 2\" from other equipment terrain features, access points and Accessible terrain."
     },
     {
       "name": "Heavy Barricade",
-      "description": "A redoubtable slab of plasteel and adamantine, this layered protective barrier provides shelter amidst the fiercest firefights. A heavy barricade is Heavy terrain. Before the battle, you can set it up wholly within 4\u0022 of your drop zone, on the killzone floor and more than 2\u0022 from other equipment terrain features, access points and Accessible terrain."
+      "description": "A redoubtable slab of plasteel and adamantine, this layered protective barrier provides shelter amidst the fiercest firefights. A heavy barricade is Heavy terrain. Before the battle, you can set it up wholly within 4\" of your drop zone, on the killzone floor and more than 2\" from other equipment terrain features, access points and Accessible terrain."
     },
     {
       "name": "Ladders",
-      "description": "Carried into battle in their compacted forms, these ladders provide a rapid route of ingress to strongholds, or access to vital vantage points. Ladders are Insignificant and Exposed terrain. Before the battle, you can set up any of them as follows: \u2022 \u0007Wholly within your territory. \u2022 \u0007Upright against terrain that\u2019s at least 2\u0022 tall. \u2022 \u0007More than 2\u0022 from other equipment terrain features. \u2022 \u0007More than 1\u0022 from doors and access points. Once per action, whenever an operative is climbing the terrain feature a ladder is placed against, treat the vertical distance as 1\u0022 if the ladder is within that operative\u2019s control range during that entire climb."
+      "description": "Carried into battle in their compacted forms, these ladders provide a rapid route of ingress to strongholds, or access to vital vantage points. Ladders are Insignificant and Exposed terrain. Before the battle, you can set up any of them as follows: • Wholly within your territory. • Upright against terrain that’s at least 2\" tall. • More than 2\" from other equipment terrain features. • More than 1\" from doors and access points. Once per action, whenever an operative is climbing the terrain feature a ladder is placed against, treat the vertical distance as 1\" if the ladder is within that operative’s control range during that entire climb."
     },
     {
       "name": "Explosive Grenades",
-      "description": "A variety of offensive grenades are employed by the forces of the 41st Millennium. These range from simple fragmentation grenades to plasma and gravitic concussion grenades, while even more exotic devices are used to crack open enemy armour. When you select this equipment, select two explosive grenades (2 frag, 2 krak, or 1 frag and 1 krak). Each selection is a ranged weapon your operatives can use, but your kill team can only use that weapon a total number of times during the battle equal to your selection. NAME                               ATK HIT DMG Frag grenade                     4     4\u002B     2/4 WR Range 6\u0022, Blast 2\u0022, Saturate NAME                               ATK HIT DMG Krak grenade                     4     4\u002B     4/5 WR Range 6\u0022, Piercing 1, Saturate"
+      "description": "A variety of offensive grenades are employed by the forces of the 41st Millennium. These range from simple fragmentation grenades to plasma and gravitic concussion grenades, while even more exotic devices are used to crack open enemy armour. When you select this equipment, select two explosive grenades (2 frag, 2 krak, or 1 frag and 1 krak). Each selection is a ranged weapon your operatives can use, but your kill team can only use that weapon a total number of times during the battle equal to your selection. NAME                               ATK HIT DMG Frag grenade                     4     4+     2/4 WR Range 6\", Blast 2\", Saturate NAME                               ATK HIT DMG Krak grenade                     4     4+     4/5 WR Range 6\", Piercing 1, Saturate"
     },
     {
       "name": "Breaching Charge",
-      "description": "This explosive device can blast a tactical insertion point through even the most formidable bulkhead or bunker wall. Once per battle, when a friendly operative performs the Breach action, you can use this rule. If you do, that operative can perform that action for 1 less AP (to a minimum of 1AP) as though it had the word \u2018breach marker\u2019 on its datacard."
+      "description": "This explosive device can blast a tactical insertion point through even the most formidable bulkhead or bunker wall. Once per battle, when a friendly operative performs the Breach action, you can use this rule. If you do, that operative can perform that action for 1 less AP (to a minimum of 1AP) as though it had the word ‘breach marker’ on its datacard."
     }
   ],
   "operatives": [
@@ -127,46 +127,46 @@
         "move": 7,
         "apl": 2,
         "wounds": 9,
-        "save": "4\u002B"
+        "save": "4+"
       },
       "weapons": [
         {
           "name": "Neuro disruptor",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "4/5",
-          "specialRules": "\u0007Range 8\u0022, Piercing 1, Stun"
+          "specialRules": "Range 8\", Piercing 1, Stun"
         },
         {
           "name": "Shuriken pistol",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "3/4",
-          "specialRules": "\u0007Range 8\u0022, Rending"
+          "specialRules": "Range 8\", Rending"
         },
         {
           "name": "Shuriken rifle",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "3/4",
-          "specialRules": "\u0007Rending"
+          "specialRules": "Rending"
         },
         {
           "name": "Power weapon",
           "type": "Melee",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "4/6",
-          "specialRules": "\u0007Lethal 5\u002B"
+          "specialRules": "Lethal 5+"
         }
       ],
       "abilities": [
         {
           "name": "Veteran Raider",
-          "text": "This operative   One Step Ahead: Once per battle, after an enemy operative performs an action, if this operative is can perform a 1AP action for     ready, you can use this rule. If you do, roll one D6: if the result is higher than that enemy operative\u2019s free during their activation     APL stat, you can interrupt and immediately perform either a free Shoot or a free Fight action with as a result of the Aeldari       this operative, but you cannot select any other enemy operative as a valid target or to fight against Raiders rule (instead of the     during that action (note that secondary targets from the Blast weapon rule can still be targeted). After Dash action).                    you perform that action, subtract 1 from this operative\u2019s APL stat until the end of its next activation."
+          "text": "This operative   One Step Ahead: Once per battle, after an enemy operative performs an action, if this operative is can perform a 1AP action for     ready, you can use this rule. If you do, roll one D6: if the result is higher than that enemy operative’s free during their activation     APL stat, you can interrupt and immediately perform either a free Shoot or a free Fight action with as a result of the Aeldari       this operative, but you cannot select any other enemy operative as a valid target or to fight against Raiders rule (instead of the     during that action (note that secondary targets from the Blast weapon rule can still be targeted). After Dash action).                    you perform that action, subtract 1 from this operative’s APL stat until the end of its next activation."
         }
       ],
       "weaponRules": []
@@ -185,46 +185,46 @@
         "move": 7,
         "apl": 2,
         "wounds": 8,
-        "save": "4\u002B"
+        "save": "4+"
       },
       "weapons": [
         {
           "name": "Ranger long rifle (mobile)",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "3/4",
-          "specialRules": "\u0007-"
+          "specialRules": "-"
         },
         {
           "name": "Ranger long rifle (stationary)",
           "type": "Ranged",
           "atk": 4,
-          "hit": "2\u002B",
+          "hit": "2+",
           "dmg": "3/3",
-          "specialRules": "\u0007Devastating 3, Heavy, Silent"
+          "specialRules": "Devastating 3, Heavy, Silent"
         },
         {
           "name": "Shuriken pistol",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "3/4",
-          "specialRules": "\u0007Range 8\u0022, Rending"
+          "specialRules": "Range 8\", Rending"
         },
         {
           "name": "Fists",
           "type": "Melee",
           "atk": 3,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "2/3",
-          "specialRules": "\u0007-"
+          "specialRules": "-"
         }
       ],
       "abilities": [
         {
           "name": "Camo Cloak",
-          "text": "Whenever an operative is shooting this operative: \u2022 \u0007Ignore the Saturate weapon rule. \u2022 \u0007If you can retain any cover saves, you can retain one additional cover save, or you can retain one cover save as a critical success instead. This isn\u2019t cumulative with improved cover saves from Vantage terrain."
+          "text": "Whenever an operative is shooting this operative: • Ignore the Saturate weapon rule. • If you can retain any cover saves, you can retain one additional cover save, or you can retain one cover save as a critical success instead. This isn’t cumulative with improved cover saves from Vantage terrain."
         }
       ],
       "weaponRules": []
@@ -243,40 +243,40 @@
         "move": 7,
         "apl": 2,
         "wounds": 8,
-        "save": "4\u002B"
+        "save": "4+"
       },
       "weapons": [
         {
           "name": "Blaster",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "4/5",
-          "specialRules": "\u0007Piercing 2"
+          "specialRules": "Piercing 2"
         },
         {
           "name": "Shredder",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "4/5",
-          "specialRules": "\u0007Rending, Torrent 2\u0022"
+          "specialRules": "Rending, Torrent 2\""
         },
         {
           "name": "Shuriken pistol",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "3/4",
-          "specialRules": "\u0007Range 8\u0022, Rending"
+          "specialRules": "Range 8\", Rending"
         },
         {
           "name": "Fists",
           "type": "Melee",
           "atk": 3,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "2/3",
-          "specialRules": "\u0007-"
+          "specialRules": "-"
         }
       ],
       "abilities": [],
@@ -296,48 +296,48 @@
         "move": 7,
         "apl": 2,
         "wounds": 8,
-        "save": "4\u002B"
+        "save": "4+"
       },
       "weapons": [
         {
           "name": "Shuriken cannon (focused)",
           "type": "Ranged",
           "atk": 5,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "4/5",
-          "specialRules": "\u0007Heavy (Dash only), Rending"
+          "specialRules": "Heavy (Dash only), Rending"
         },
         {
           "name": "Shuriken cannon (sweeping)",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "4/5",
-          "specialRules": "\u0007Heavy (Dash only), Rending, Torrent 1\u0022"
+          "specialRules": "Heavy (Dash only), Rending, Torrent 1\""
         },
         {
           "name": "Shuriken pistol",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "3/4",
-          "specialRules": "\u0007Range 8\u0022, Rending"
+          "specialRules": "Range 8\", Rending"
         },
         {
           "name": "Wraithcannon",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "6/3",
-          "specialRules": "\u0007Devastating 4, Heavy (Dash only), Piercing 2"
+          "specialRules": "Devastating 4, Heavy (Dash only), Piercing 2"
         },
         {
           "name": "Fists",
           "type": "Melee",
           "atk": 3,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "2/3",
-          "specialRules": "\u0007-"
+          "specialRules": "-"
         }
       ],
       "abilities": [],
@@ -357,30 +357,30 @@
         "move": 7,
         "apl": 2,
         "wounds": 8,
-        "save": "4\u002B"
+        "save": "4+"
       },
       "weapons": [
         {
           "name": "Shuriken pistol",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "3/4",
-          "specialRules": "\u0007Range 8\u0022, Rending"
+          "specialRules": "Range 8\", Rending"
         },
         {
           "name": "Dual power weapons",
           "type": "Melee",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "4/6",
-          "specialRules": "Ceaseless, Lethal 5\u002B"
+          "specialRules": "Ceaseless, Lethal 5+"
         }
       ],
       "abilities": [
         {
           "name": "Blademaster",
-          "text": "This operative can perform the Dash action            Bladed Stance: Whenever this operative is fighting or retaliating, during an activation in which it performed the Charge action,      you can resolve one of your successes before the normal order. If but can only use any remaining move distance it had from that      you do, that success must be used to block. Charge action (to a maximum of 3\u0022)."
+          "text": "This operative can perform the Dash action            Bladed Stance: Whenever this operative is fighting or retaliating, during an activation in which it performed the Charge action,      you can resolve one of your successes before the normal order. If but can only use any remaining move distance it had from that      you do, that success must be used to block. Charge action (to a maximum of 3\")."
         }
       ],
       "weaponRules": []
@@ -399,42 +399,42 @@
         "move": 7,
         "apl": 2,
         "wounds": 8,
-        "save": "4\u002B"
+        "save": "4+"
       },
       "weapons": [
         {
-          "name": "Faolch\u00FA",
+          "name": "Faolchú",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "1/2",
-          "specialRules": "\u0007Rending, Saturate, Seek Light, Silent"
+          "specialRules": "Rending, Saturate, Seek Light, Silent"
         },
         {
           "name": "Shuriken pistol",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "3/4",
-          "specialRules": "\u0007Range 8\u0022, Rending"
+          "specialRules": "Range 8\", Rending"
         },
         {
           "name": "Power weapon",
           "type": "Melee",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "4/6",
-          "specialRules": "\u0007Lethal 5\u002B"
+          "specialRules": "Lethal 5+"
         }
       ],
       "abilities": [
         {
-          "name": "Faolch\u00FA\u2019s Bond",
-          "text": "The first time during each turning point that this operative is retaliating, if it\u2019s ready, in the Resolve Attack Dice step of that sequence, you resolve the first attack dice (i.e. defender instead of attacker)."
+          "name": "Faolchú’s Bond",
+          "text": "The first time during each turning point that this operative is retaliating, if it’s ready, in the Resolve Attack Dice step of that sequence, you resolve the first attack dice (i.e. defender instead of attacker)."
         },
         {
           "name": "Erudite Hunter",
-          "text": "STRATEGIC GAMBIT. Select one enemy operative within 9\u0022 of this operative. Once during this turning point, after that enemy operative performs an action in which it moves, you can interrupt to use this rule. If you do, this operative can immediately perform either a free Reposition action (it cannot end that move further away from that enemy operative), or a free Charge action (you can change its order to do so, and it must end that move within control range of that enemy operative). In a killzone that uses the"
+          "text": "STRATEGIC GAMBIT. Select one enemy operative within 9\" of this operative. Once during this turning point, after that enemy operative performs an action in which it moves, you can interrupt to use this rule. If you do, this operative can immediately perform either a free Reposition action (it cannot end that move further away from that enemy operative), or a free Charge action (you can change its order to do so, and it must end that move within control range of that enemy operative). In a killzone that uses the"
         },
         {
           "name": "close quarters rules (e.g. Killzone",
@@ -457,46 +457,46 @@
         "move": 7,
         "apl": 2,
         "wounds": 8,
-        "save": "4\u002B"
+        "save": "4+"
       },
       "weapons": [
         {
           "name": "Shuriken pistol",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "3/4",
-          "specialRules": "\u0007Range 8\u0022, Rending"
+          "specialRules": "Range 8\", Rending"
         },
         {
           "name": "Throwing blades",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "2/4",
-          "specialRules": "\u0007Range 6\u0022, Silent"
+          "specialRules": "Range 6\", Silent"
         },
         {
           "name": "Hekatarii blades",
           "type": "Melee",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "3/5",
-          "specialRules": "\u0007Ceaseless, Lethal 5\u002B"
+          "specialRules": "Ceaseless, Lethal 5+"
         }
       ],
       "abilities": [
         {
           "name": "Blink Pack",
-          "text": "Whenever this operative performs the Charge, Fall Back or Reposition action, it can warp jump. If it does, don\u2019t move it. Instead, remove it from the killzone and set it back up wholly within 7\u0022 horizontally of its original location (in a killzone that"
+          "text": "Whenever this operative performs the Charge, Fall Back or Reposition action, it can warp jump. If it does, don’t move it. Instead, remove it from the killzone and set it back up wholly within 7\" horizontally of its original location (in a killzone that"
         },
         {
           "name": "uses the close quarters rules, e.g. Killzone",
-          "text": "Tomb World, this distance can be measured through Wall terrain). It must be set up in a location it can be placed, and unless it\u2019s the Charge action, it cannot be set up within control range of an enemy operative."
+          "text": "Tomb World, this distance can be measured through Wall terrain). It must be set up in a location it can be placed, and unless it’s the Charge action, it cannot be set up within control range of an enemy operative."
         },
         {
           "name": "Slicing Attack",
-          "text": "Whenever this operative performs the Reposition action with a warp jump (see other side of card), Shade Runner                    Enemy operative you can use this rule. If you do, after it moves, draw an imaginary previous location line 1mm in diameter and up to 7\u0022 long between it and its previous location. Note this doesn\u2019t have to be a straight line.                                Up to 7\u0022 Inflict D3\u002B2 damage on one enemy operative that line crosses. You cannot inflict damage on an enemy operative that was not                                                     Shade Runner visible to this operative at the start of that action. A 28mm round marker can be temporarily placed underneath this operative before it moves to help determine this."
+          "text": "Whenever this operative performs the Reposition action with a warp jump (see other side of card), Shade Runner                    Enemy operative you can use this rule. If you do, after it moves, draw an imaginary previous location line 1mm in diameter and up to 7\" long between it and its previous location. Note this doesn’t have to be a straight line.                                Up to 7\" Inflict D3+2 damage on one enemy operative that line crosses. You cannot inflict damage on an enemy operative that was not                                                     Shade Runner visible to this operative at the start of that action. A 28mm round marker can be temporarily placed underneath this operative before it moves to help determine this."
         }
       ],
       "weaponRules": []
@@ -517,24 +517,24 @@
         "move": 7,
         "apl": 2,
         "wounds": 8,
-        "save": "4\u002B"
+        "save": "4+"
       },
       "weapons": [
         {
           "name": "Shuriken pistol",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "3/4",
-          "specialRules": "\u0007Range 8\u0022, Rending"
+          "specialRules": "Range 8\", Rending"
         },
         {
           "name": "Power weapon",
           "type": "Melee",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "4/6",
-          "specialRules": "\u0007Lethal 5\u002B"
+          "specialRules": "Lethal 5+"
         }
       ],
       "abilities": [],
@@ -554,38 +554,38 @@
         "move": 7,
         "apl": 2,
         "wounds": 8,
-        "save": "4\u002B"
+        "save": "4+"
       },
       "weapons": [
         {
           "name": "Fusion pistol",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "5/3",
-          "specialRules": "\u0007Range 3\u0022, Devastating 3, Piercing 2"
+          "specialRules": "Range 3\", Devastating 3, Piercing 2"
         },
         {
           "name": "Shuriken pistol",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "3/4",
-          "specialRules": "\u0007Range 8\u0022, Rending"
+          "specialRules": "Range 8\", Rending"
         },
         {
           "name": "Fists",
           "type": "Melee",
           "atk": 3,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "2/3",
-          "specialRules": "\u0007-"
+          "specialRules": "-"
         }
       ],
       "abilities": [
         {
           "name": "Quick on the Trigger",
-          "text": "This operative can perform the Shoot           PISTOL BARRAGE\b                                                1AP action while within control range of an enemy operative. If it \u0007Perform two free Shoot actions with this operative (this does, when selecting a valid target, you can only select an takes precedence over action restrictions). You must select enemy operative within this operative\u2019s control range, and can its fusion pistol for one action and its shuriken pistol for the do so even if other friendly operatives are within that enemy other (in any order). operative\u2019s control range. \u0007\u0007This operative cannot perform this action while it has a Conceal order, or during an activation in which it performed the Shoot action (or vice versa)."
+          "text": "This operative can perform the Shoot           PISTOL BARRAGE                                                1AP action while within control range of an enemy operative. If it Perform two free Shoot actions with this operative (this does, when selecting a valid target, you can only select an takes precedence over action restrictions). You must select enemy operative within this operative’s control range, and can its fusion pistol for one action and its shuriken pistol for the do so even if other friendly operatives are within that enemy other (in any order). operative’s control range. This operative cannot perform this action while it has a Conceal order, or during an activation in which it performed the Shoot action (or vice versa)."
         }
       ],
       "weaponRules": []
@@ -604,40 +604,40 @@
         "move": 7,
         "apl": 2,
         "wounds": 8,
-        "save": "4\u002B"
+        "save": "4+"
       },
       "weapons": [
         {
           "name": "Shuriken pistol",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "3/4",
-          "specialRules": "\u0007Range 8\u0022, Rending"
+          "specialRules": "Range 8\", Rending"
         },
         {
           "name": "Shuriken rifle",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "3/4",
-          "specialRules": "\u0007Rending"
+          "specialRules": "Rending"
         },
         {
           "name": "Power weapon",
           "type": "Melee",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "4/6",
-          "specialRules": "\u0007Lethal 5\u002B"
+          "specialRules": "Lethal 5+"
         },
         {
           "name": "Fists",
           "type": "Melee",
           "atk": 3,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "2/3",
-          "specialRules": "\u0007-"
+          "specialRules": "-"
         }
       ],
       "abilities": [
@@ -663,51 +663,51 @@
         "move": 7,
         "apl": 2,
         "wounds": 8,
-        "save": "4\u002B"
+        "save": "4+"
       },
       "weapons": [
         {
           "name": "Freezing grasp",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "1/2",
-          "specialRules": "\u0007P SYCHIC, Severe, Silent, Stun"
+          "specialRules": "P SYCHIC, Severe, Silent, Stun"
         },
         {
           "name": "Lightning strike",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "4/3",
-          "specialRules": "PSYCHIC, 2\u0022 Devastating 2"
+          "specialRules": "PSYCHIC, 2\" Devastating 2"
         },
         {
           "name": "Shuriken pistol",
           "type": "Ranged",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "3/4",
-          "specialRules": "\u0007Range 8\u0022, Rending"
+          "specialRules": "Range 8\", Rending"
         },
         {
           "name": "Witch staff",
           "type": "Melee",
           "atk": 4,
-          "hit": "3\u002B",
+          "hit": "3+",
           "dmg": "3/5",
-          "specialRules": "\u0007PSYCHIC, Shock"
+          "specialRules": "PSYCHIC, Shock"
         }
       ],
       "abilities": [
         {
           "name": "Warp Fold",
-          "text": "\u0007PSYCHIC. Select two friendly CORSAIR VOIDSCARRED operatives visible to and within 5\u0022 of this operative. Remove them both from the killzone and set them back up in each other\u2019s previous locations (in other words swap their positions). If one of them performed the Charge Fall Back or Reposition action during this turning point and the other is ready, the other cannot perform any of th actions in its activation during this turning point. \u0007\u0007This operative cannot perform this action while within c range of an enemy operative.",
+          "text": "PSYCHIC. Select two friendly CORSAIR VOIDSCARRED operatives visible to and within 5\" of this operative. Remove them both from the killzone and set them back up in each other’s previous locations (in other words swap their positions). If one of them performed the Charge Fall Back or Reposition action during this turning point and the other is ready, the other cannot perform any of th actions in its activation during this turning point. This operative cannot perform this action while within c range of an enemy operative.",
           "apCost": 1
         },
         {
           "name": "Warding Shield",
-          "text": "\u0007PSYCHIC. Select one friendly CORSAIR VOIDSCARRED operative visible to and within 6\u0022 of this operative. Until the start of this operative\u2019s next activation, ,          until it\u2019s incapacitated or until it performs this action ,          again (whichever comes first), the first time an attack dice inflicts Normal Dmg on that friendly operative, ignore that ose        inflicted damage. \u0007\u0007This operative cannot perform this action while within control ontrol     range of an enemy operative.",
+          "text": "PSYCHIC. Select one friendly CORSAIR VOIDSCARRED operative visible to and within 6\" of this operative. Until the start of this operative’s next activation, ,          until it’s incapacitated or until it performs this action ,          again (whichever comes first), the first time an attack dice inflicts Normal Dmg on that friendly operative, ignore that ose        inflicted damage. This operative cannot perform this action while within control ontrol     range of an enemy operative.",
           "apCost": 1
         }
       ],
@@ -718,5 +718,5 @@
     "archetype": "",
     "text": ""
   },
-  "supplementaryInfo": "CORSAIR VOIDSCARRED: UPDATE LOG\nRules will be periodically updated to maintain fair balance and interact more smoothly with the game. Rules changes\nwill be updated directly into online documents and then listed below. Any minor changes to standardise wording that\ndon\u2019t have any practical impact on the rule will be updated directly into online documents but not be listed here.\nERRATA\b                                                                                           JANUARY \u201926\nThis section collects amendments to the rules. Amended text\nfor clarification and edits are shown in blue, while amended\ntext for balance updates are shown in magenta.\nSHADE RUNNER OPERATIVE, BLINK PACK RULE\nLast sentence deleted:\n\u2018This operative cannot warp jump during the same activation\nin which it performed the Dash action (or vice versa).\u2019\n\b                                                                                                        PREVIOUS ERRATAS\nFIREFIGHT PLOYS, CAPRICIOUS FLIGHT                                     STARSTORM DUELLIST OPERATIVE, PISTOL BARRAGE ACTION\nFirst sentence changed to read:                                        Condition changed to read:\n\u2018Use this firefight ploy during a friendly CORSAIR                     \u2018This operative cannot perform this action while it has a\nVOIDSCARRED operative\u2019s activation, before or after it                 Conceal order, or during an activation in which it performed\nperforms an action.\u2019                                                   the Shoot action (or vice versa).\u2019\nFELARCH OPERATIVE, ONE STEP AHEAD RULE                                 SHADE RUNNER OPERATIVE, SLICING ATTACK RULE\nRelevant parts of first and second sentences deleted:                  Additional text added between fourth and fifth sentence:\n\u2018Once per battle, after an enemy operative performs an action          \u2018You cannot inflict damage on an enemy operative that was\nduring its activation, if this operative is ready, you can use         not visible to this operative at the start of that action.\u2019\nthis rule. If you do, roll one D6: if the result is higher than that\nenemy operative\u2019s APL stat, you can interrupt that activation          WAY SEEKER OPERATIVE, WARDING SHIELD ACTION\nand immediately [\u2026]\u2019                                                   Relevant part of last sentence of effect changed to read:\n\u2018[\u2026] the first time an attack dice inflicts Normal Dmg on that\nKURNITE HUNTER OPERATIVE, FAOLCH\u00DA\u2019S BOND RULE                          friendly operative, ignore that inflicted damage.\u2019\nRelevant part changed to read:\n\u2018The first time during each turning point that this operative\nis retaliating, if it\u2019s ready it hasn\u2019t used its Faolch\u00FA ranged\nweapon during this turning point, in the Resolve Attack Dice\nstep of that sequence, [\u2026]\u2019\nKURNITE HUNTER OPERATIVE, ERUDITE HUNTER RULE\nRelevant parts of third sentence deleted:\n\u2018Once during this turning point, after that enemy operative\nperforms an action in which it moves during its activation, you\ncan interrupt that activation to use this rule.\n\b                                                                                   PREVIOUS RULES COMMENTARIES\nThis section provides clarification on ambiguous and complex\nrules interactions.\nQ: If a STARSTORM DUELLIST is on guard and I interrupt\nan activation to perform a Shoot action against an enemy\noperative within its control range, can I use its Quick on the\nTrigger rule to perform the Shoot action normally, or must it\nbe a point-blank shot?\nA: The former \u2013 you can perform the Shoot action normally.\nCORSAIR VOIDSCARRED\nOPERATIVES\nCorsairs are avaricious raiders grouped together by charismatic commanders who draw their members from both\ncraftworlds and the Dark City. The most experienced of Corsairs are the Voidscarred, each of whom possesses their\n2   own unique combat skills and have been hardened by several lifetimes of voidfaring and piracy.\nVOIDSCARRED FELARCH                                               VOIDSCARRED HEAVY GUNNER\nFelarchs are veteran Corsairs, with centuries or even millennia   With rapid volleys of shuriken fire, Corsairs can shred enemy\nof experience reaving the stars. They have fought countless       infantry and provide cover for their coterie. Some Corsairs\ndifferent races and mastered numerous weapons, making             wield wraithcannons. These weapons tear rifts between warp\nthem deadly enemies for any who face them.                        and realspace, ripping apart targets caught in the vortex.\nVOIDSCARRED WARRIOR                                               VOIDSCARRED STARSTORM DUELLIST\nCorsairs are lithe and nimble warriors, skilled marksmen          Brash and arrogant, Starstorm Duellists are expert pistol\nand bladesmen both. Swift fighters, they make up for lack of      wielders who dive through the fray to deliver salvoes of\nphysical strength with sheer agility.                             pinpoint fire at close range.\nVOIDSCARRED GUNNER                                                VOIDSCARRED KURNITE HUNTER\nCorsairs utilise weapons hailing from every Aeldari society.      Those Corsairs known a Kurnite Hunters are followers of\nShredders unleash an expanding mesh of monofilament,              Kurnous, Aeldari god of the hunt. Their bond with creatures of\nentangling foes in a net and slicing them apart, while blasters   the hunt, such as the Faolch\u00FA, is often stronger than that with\nuse mysterious darklight technology, lethal even to the most      their fellow Corsairs.\narmoured foe.\nVOIDSCARRED SHADE RUNNER\nShade Runners are experts at the surprise attack. Utilising\ntheir blink packs \u2013 which function in a similar manner to the\nwarp jump generators used by Warp Spiders of the Asuryani \u2013\nthey flank their enemies, striking with the swift, savage blows\nof their Hekatarii blades.\n3\nVOIDSCARRED KURNATHI                                                 VOIDSCARRED SOUL WEAVER\nThe Kurnathi are true blademasters. Assassins all, they have         Spiritual mystics, Soul Weavers utilise the power and\nlearned their bloody trade in Asuryani Aspect Shrines, in the        knowledge of the Aeldari souls in the spirit stones they carry.\narenas of Commorragh or even alongside the Harlequins. Now           With this energy they can enhance warriors\u2019 abilities in\nthey put their skills to work however they see fit.                  combat or heal the wounded.\nVOIDSCARRED FATE DEALER                                              \u2018\u0007T HE VOID IS WEALTH. THE VOID IS FREEDOM. I\nOnce a Fate Dealer has an enemy in their sights, it is the mark\nREJECT THE TIGHTLY BOUND CHORDS OF THE\nof the unfortunate soul\u2019s death. Expert infiltrators, they hide in\npositions with greatest oversight of the whole battlefield, and\nPATH. I REJECT THE PETTINESS OF COMMORRITE\nare rendered all but invisible by camo cloaks.                         POLITICS. I REJECT THE PLAIN FRUGALITY OF\nTHE EXODITES. I REJECT THE MASKS OF THE\nVOIDSCARRED WAY SEEKER                                                 CLOWN AND THE MIME. I MOST CERTAINLY\nIt is the role of the Way Seekers to guide and steer smaller\nREJECT DEATH. THE STARS BELONGED TO MY\nCorsair ships on their travels. They are also powerful                 ANCESTORS. THUS THEY BELONG TO ME. THUS I\nbattlefield psykers who work closely with Fate Dealers and             GO WHERE I WILL, TAKE WHAT I WILL AND KILL\nKurnathi, identifying targets for these assassins as they would\nWHOM I WILL.\u2019\nidentify obstacles to their craft.\n- Lady Hale\u2019drithea of the Black Suns\nCORSAIR VOIDSCARRED KILL TEAM\n\u0007Below you will find a list of the operatives\nFELARCH\nthat make up a CORSAIR VOIDSCARRED\nkill team, including, where relevant, any\nNeuro\nweapons specified for that operative.\ndisruptor\n4\nOPERATIVES\nCORSAIR VOIDSCARRED \u00BB KILL TEAM SELECTION\n\u2198 \u00071 CORSAIR VOIDSCARRED FELARCH operative with one of the\nPower weapon\nfollowing options:\n\u2022 \u0007Shuriken rifle; shuriken pistol; power weapon\n\u2022 \u0007Neuro disruptor; power weapon\n\u2198 \u00078 CORSAIR VOIDSCARRED operatives selected from the\nfollowing list:\n\u2022 \u0007FATE DEALER\n\u2022 \u0007GUNNER with one of the\n\u2022 \u0007KURNATHI\n\u2022 \u0007KURNITE HUNTER\nFATE DEALER\nfollowing options:         \u2022 \u0007SHADE RUNNER\n\u25CB \u0007Blaster ; shuriken      \u2022 \u0007SOUL WEAVER\nShuriken       Ranger long rifle\npistol; fists          \u2022 \u0007STARSTORM DUELLIST\npistol\n\u25CB \u0007Shredder; shuriken      \u2022 \u0007WARRIOR with one of the\npistol; fists            following options:\n\u2022 \u0007HEAVY GUNNER with one        \u25CB \u0007Shuriken pistol;\nof the following options:        power weapon\n\u25CB \u0007Shuriken cannon;          \u25CB \u0007Shuriken rifle; fists\nshuriken pistol; fists \u2022 \u0007WAY SEEKER\n\u25CB \u0007Shuriken pistol;\nwraithcannon ; fists\nOther than WARRIOR operatives, your kill team can only include\neach operative on this list once.\n\u0007Your kill team cannot include both a blaster and a wraithcannon.\nSHADE RUNNER\nARCHETYPES\nHekatarii blades\nThrowing\nINFILTRATION   RECON                                                   Shuriken                blades\npistol\nArchetypes are used in certain mission packs, e.g. Approved Ops.\nThe game sequence will specify how.\nWARRIOR                                           GUNNER\nShuriken rifle    Shuriken         Power          Shredder           Blaster\npistol          weapon\n5\nCORSAIR VOIDSCARRED \u00BB KILL TEAM SELECTION\nKURNITE HUNTER               KURNATHI                        SOUL WEAVER\nFaolch\u00FA\nDual power weapons              Shuriken           Power\npistol            weapon\nShuriken\npistol\nPower weapon\nSTARSTORM DUELLIST           HEAVY GUNNER                    WAY SEEKER\nShuriken pistol              Shuriken cannon\nFusion pistol                                                Witch\nstaff\nShuriken\npistol"
+  "supplementaryInfo": "CORSAIR VOIDSCARRED: UPDATE LOGRules will be periodically updated to maintain fair balance and interact more smoothly with the game. Rules changeswill be updated directly into online documents and then listed below. Any minor changes to standardise wording thatdon’t have any practical impact on the rule will be updated directly into online documents but not be listed here.ERRATA                                                                                           JANUARY ’26This section collects amendments to the rules. Amended textfor clarification and edits are shown in blue, while amendedtext for balance updates are shown in magenta.SHADE RUNNER OPERATIVE, BLINK PACK RULELast sentence deleted:‘This operative cannot warp jump during the same activationin which it performed the Dash action (or vice versa).’                                                                                                        PREVIOUS ERRATASFIREFIGHT PLOYS, CAPRICIOUS FLIGHT                                     STARSTORM DUELLIST OPERATIVE, PISTOL BARRAGE ACTIONFirst sentence changed to read:                                        Condition changed to read:‘Use this firefight ploy during a friendly CORSAIR                     ‘This operative cannot perform this action while it has aVOIDSCARRED operative’s activation, before or after it                 Conceal order, or during an activation in which it performedperforms an action.’                                                   the Shoot action (or vice versa).’FELARCH OPERATIVE, ONE STEP AHEAD RULE                                 SHADE RUNNER OPERATIVE, SLICING ATTACK RULERelevant parts of first and second sentences deleted:                  Additional text added between fourth and fifth sentence:‘Once per battle, after an enemy operative performs an action          ‘You cannot inflict damage on an enemy operative that wasduring its activation, if this operative is ready, you can use         not visible to this operative at the start of that action.’this rule. If you do, roll one D6: if the result is higher than thatenemy operative’s APL stat, you can interrupt that activation          WAY SEEKER OPERATIVE, WARDING SHIELD ACTIONand immediately […]’                                                   Relevant part of last sentence of effect changed to read:‘[…] the first time an attack dice inflicts Normal Dmg on thatKURNITE HUNTER OPERATIVE, FAOLCHÚ’S BOND RULE                          friendly operative, ignore that inflicted damage.’Relevant part changed to read:‘The first time during each turning point that this operativeis retaliating, if it’s ready it hasn’t used its Faolchú rangedweapon during this turning point, in the Resolve Attack Dicestep of that sequence, […]’KURNITE HUNTER OPERATIVE, ERUDITE HUNTER RULERelevant parts of third sentence deleted:‘Once during this turning point, after that enemy operativeperforms an action in which it moves during its activation, youcan interrupt that activation to use this rule.                                                                                   PREVIOUS RULES COMMENTARIESThis section provides clarification on ambiguous and complexrules interactions.Q: If a STARSTORM DUELLIST is on guard and I interruptan activation to perform a Shoot action against an enemyoperative within its control range, can I use its Quick on theTrigger rule to perform the Shoot action normally, or must itbe a point-blank shot?A: The former – you can perform the Shoot action normally.CORSAIR VOIDSCARREDOPERATIVESCorsairs are avaricious raiders grouped together by charismatic commanders who draw their members from bothcraftworlds and the Dark City. The most experienced of Corsairs are the Voidscarred, each of whom possesses their2   own unique combat skills and have been hardened by several lifetimes of voidfaring and piracy.VOIDSCARRED FELARCH                                               VOIDSCARRED HEAVY GUNNERFelarchs are veteran Corsairs, with centuries or even millennia   With rapid volleys of shuriken fire, Corsairs can shred enemyof experience reaving the stars. They have fought countless       infantry and provide cover for their coterie. Some Corsairsdifferent races and mastered numerous weapons, making             wield wraithcannons. These weapons tear rifts between warpthem deadly enemies for any who face them.                        and realspace, ripping apart targets caught in the vortex.VOIDSCARRED WARRIOR                                               VOIDSCARRED STARSTORM DUELLISTCorsairs are lithe and nimble warriors, skilled marksmen          Brash and arrogant, Starstorm Duellists are expert pistoland bladesmen both. Swift fighters, they make up for lack of      wielders who dive through the fray to deliver salvoes ofphysical strength with sheer agility.                             pinpoint fire at close range.VOIDSCARRED GUNNER                                                VOIDSCARRED KURNITE HUNTERCorsairs utilise weapons hailing from every Aeldari society.      Those Corsairs known a Kurnite Hunters are followers ofShredders unleash an expanding mesh of monofilament,              Kurnous, Aeldari god of the hunt. Their bond with creatures ofentangling foes in a net and slicing them apart, while blasters   the hunt, such as the Faolchú, is often stronger than that withuse mysterious darklight technology, lethal even to the most      their fellow Corsairs.armoured foe.VOIDSCARRED SHADE RUNNERShade Runners are experts at the surprise attack. Utilisingtheir blink packs – which function in a similar manner to thewarp jump generators used by Warp Spiders of the Asuryani –they flank their enemies, striking with the swift, savage blowsof their Hekatarii blades.3VOIDSCARRED KURNATHI                                                 VOIDSCARRED SOUL WEAVERThe Kurnathi are true blademasters. Assassins all, they have         Spiritual mystics, Soul Weavers utilise the power andlearned their bloody trade in Asuryani Aspect Shrines, in the        knowledge of the Aeldari souls in the spirit stones they carry.arenas of Commorragh or even alongside the Harlequins. Now           With this energy they can enhance warriors’ abilities inthey put their skills to work however they see fit.                  combat or heal the wounded.VOIDSCARRED FATE DEALER                                              ‘T HE VOID IS WEALTH. THE VOID IS FREEDOM. IOnce a Fate Dealer has an enemy in their sights, it is the markREJECT THE TIGHTLY BOUND CHORDS OF THEof the unfortunate soul’s death. Expert infiltrators, they hide inpositions with greatest oversight of the whole battlefield, andPATH. I REJECT THE PETTINESS OF COMMORRITEare rendered all but invisible by camo cloaks.                         POLITICS. I REJECT THE PLAIN FRUGALITY OFTHE EXODITES. I REJECT THE MASKS OF THEVOIDSCARRED WAY SEEKER                                                 CLOWN AND THE MIME. I MOST CERTAINLYIt is the role of the Way Seekers to guide and steer smallerREJECT DEATH. THE STARS BELONGED TO MYCorsair ships on their travels. They are also powerful                 ANCESTORS. THUS THEY BELONG TO ME. THUS Ibattlefield psykers who work closely with Fate Dealers and             GO WHERE I WILL, TAKE WHAT I WILL AND KILLKurnathi, identifying targets for these assassins as they wouldWHOM I WILL.’identify obstacles to their craft.- Lady Hale’drithea of the Black SunsCORSAIR VOIDSCARRED KILL TEAMBelow you will find a list of the operativesFELARCHthat make up a CORSAIR VOIDSCARREDkill team, including, where relevant, anyNeuroweapons specified for that operative.disruptor4OPERATIVESCORSAIR VOIDSCARRED » KILL TEAM SELECTION↘ 1 CORSAIR VOIDSCARRED FELARCH operative with one of thePower weaponfollowing options:• Shuriken rifle; shuriken pistol; power weapon• Neuro disruptor; power weapon↘ 8 CORSAIR VOIDSCARRED operatives selected from thefollowing list:• FATE DEALER• GUNNER with one of the• KURNATHI• KURNITE HUNTERFATE DEALERfollowing options:         • SHADE RUNNER○ Blaster ; shuriken      • SOUL WEAVERShuriken       Ranger long riflepistol; fists          • STARSTORM DUELLISTpistol○ Shredder; shuriken      • WARRIOR with one of thepistol; fists            following options:• HEAVY GUNNER with one        ○ Shuriken pistol;of the following options:        power weapon○ Shuriken cannon;          ○ Shuriken rifle; fistsshuriken pistol; fists • WAY SEEKER○ Shuriken pistol;wraithcannon ; fistsOther than WARRIOR operatives, your kill team can only includeeach operative on this list once.Your kill team cannot include both a blaster and a wraithcannon.SHADE RUNNERARCHETYPESHekatarii bladesThrowingINFILTRATION   RECON                                                   Shuriken                bladespistolArchetypes are used in certain mission packs, e.g. Approved Ops.The game sequence will specify how.WARRIOR                                           GUNNERShuriken rifle    Shuriken         Power          Shredder           Blasterpistol          weapon5CORSAIR VOIDSCARRED » KILL TEAM SELECTIONKURNITE HUNTER               KURNATHI                        SOUL WEAVERFaolchúDual power weapons              Shuriken           Powerpistol            weaponShurikenpistolPower weaponSTARSTORM DUELLIST           HEAVY GUNNER                    WAY SEEKERShuriken pistol              Shuriken cannonFusion pistol                                                WitchstaffShurikenpistol"
 }
