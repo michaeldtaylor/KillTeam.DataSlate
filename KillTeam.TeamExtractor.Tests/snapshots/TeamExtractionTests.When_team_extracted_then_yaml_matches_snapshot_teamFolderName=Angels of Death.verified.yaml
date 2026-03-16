@@ -697,9 +697,7 @@ strategyPloys:
     text: |-
       Space Marines hold the teachings of the Codex Astartes in highest esteem, employing its flexible combat doctrines to annihilate their enemies.
       
-      Select one **COMBAT DOCTRINE** from those presented below.
-      
-      Whenever a friendly **ANGEL OF DEATH** operative is x, its weapons have the Balanced weapon rule. X is the **COMBAT DOCTRINE** you selected.
+      Select one **COMBAT DOCTRINE** from those presented below. Whenever a friendly **ANGEL OF DEATH** operative is x, its weapons have the Balanced weapon rule. X is the **COMBAT DOCTRINE** you selected.
         - Devastator Doctrine: Shooting an operative more than 6" from it.
         - Tactical Doctrine: Shooting an operative within 6" of it.
         - Assault Doctrine: Fighting or retaliating.

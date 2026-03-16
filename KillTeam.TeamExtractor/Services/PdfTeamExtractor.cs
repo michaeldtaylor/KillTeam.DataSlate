@@ -1406,7 +1406,17 @@ public partial class PdfTeamExtractor
         string FormatText(string raw)
         {
             var text = TextHelpers.StructureToMarkdown(raw.Trim());
-            return isPloy ? TextHelpers.ApplyPloyParagraphBreaks(text) : text;
+
+            if (isPloy)
+            {
+                text = TextHelpers.ApplyPloyParagraphBreaks(text);
+            }
+
+            // Suppress paragraph break between "...below." and prose continuation.
+            // "Presented below." always leads directly into its detail text; ploy
+            // paragraph-break patterns can fire between them and must be undone.
+            text = Regex.Replace(text, @"below\.\n\n(?=[A-Z])", "below. ");
+            return text;
         }
 
         foreach (var line in lines)
