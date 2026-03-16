@@ -1264,6 +1264,18 @@ public partial class PdfTeamExtractor
 
                     if (string.IsNullOrWhiteSpace(descLine))
                     {
+                        // Preserve blank lines as paragraph breaks (same as ParseRulesDoc).
+                        // The PDF has structural blank lines between lore and rules text.
+                        if (descSb.Length > 0)
+                        {
+                            while (descSb.Length > 0 && descSb[descSb.Length - 1] == '\n')
+                            {
+                                descSb.Remove(descSb.Length - 1, 1);
+                            }
+
+                            descSb.Append("\n\n");
+                        }
+
                         continue;
                     }
 
@@ -1610,9 +1622,19 @@ public partial class PdfTeamExtractor
     /// <param name="wrText">Weapon rule list, e.g. "Range 6&quot;, Saturate, Stun".</param>
     private static string BuildInlineWeaponTableMarkdown(string dataText, string wrText)
     {
+        var hasWr = !string.IsNullOrWhiteSpace(wrText);
         var sb = new StringBuilder();
-        sb.AppendLine("| NAME | ATK | HIT | DMG |");
-        sb.AppendLine("|------|-----|-----|-----|");
+
+        if (hasWr)
+        {
+            sb.AppendLine("| NAME | ATK | HIT | DMG | WR |");
+            sb.AppendLine("|------|-----|-----|-----|----|");
+        }
+        else
+        {
+            sb.AppendLine("| NAME | ATK | HIT | DMG |");
+            sb.AppendLine("|------|-----|-----|-----|");
+        }
 
         foreach (var row in dataText.Split('\n', StringSplitOptions.RemoveEmptyEntries))
         {
@@ -1624,14 +1646,16 @@ public partial class PdfTeamExtractor
                 var hit = tokens[^2];
                 var atk = tokens[^3];
                 var name = string.Join(" ", tokens[..^3]);
-                sb.AppendLine($"| {name} | {atk} | {hit} | {dmg} |");
-            }
-        }
 
-        if (!string.IsNullOrWhiteSpace(wrText))
-        {
-            sb.AppendLine();
-            sb.Append($"**WR:** {wrText}");
+                if (hasWr)
+                {
+                    sb.AppendLine($"| {name} | {atk} | {hit} | {dmg} | {wrText} |");
+                }
+                else
+                {
+                    sb.AppendLine($"| {name} | {atk} | {hit} | {dmg} |");
+                }
+            }
         }
 
         return sb.ToString().TrimEnd();

@@ -377,3 +377,24 @@ The last pages of the supplementary PDF show a visual "Kill Team Selection" refe
 …are suppressed for the remainder of the document. These are repeated page header fragments with no informational value.
 
 **Content:** Remaining lines (operative names, weapon names) are formatted naturally — operative names as `**Bold headings**`, weapon names as prose. The weapon-to-operative pairing is not guaranteed to be accurate due to PDF reading order of image-heavy pages.
+
+---
+
+## Rule 13 — Equipment Description: Preserve PDF Blank Lines
+
+`ParseEquipmentWithDescriptions` collects description text line-by-line from the raw PDF. Blank lines in the PDF represent structural paragraph breaks (e.g. lore text → rules text, prose → weapon table). These blank lines are preserved as `\n\n` paragraph breaks in the description `StringBuilder`, using the same pattern as `ParseRulesDoc`.
+
+This is a structural approach: paragraph breaks come from the PDF's own blank lines, not from string-pattern matching.
+
+---
+
+## Rule 14 — Inline Weapon Table: WR as Table Column
+
+`BuildInlineWeaponTableMarkdown` renders weapon stats found inside equipment descriptions as a Markdown table. When weapon rules (WR) text is present, it is included as a 5th column in the table rather than as a separate `**WR:** text` line below.
+
+| WR present | Header | Data row |
+|------------|--------|----------|
+| Yes | `\| NAME \| ATK \| HIT \| DMG \| WR \|` | `\| Frag grenade \| 4 \| 4+ \| 2/4 \| Range 6", Blast 2", Saturate \|` |
+| No | `\| NAME \| ATK \| HIT \| DMG \|` | `\| Frag grenade \| 4 \| 4+ \| 2/4 \|` |
+
+This matches the PDF's visual structure where WR is part of the same weapon stats block.

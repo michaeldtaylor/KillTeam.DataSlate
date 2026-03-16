@@ -848,17 +848,13 @@ universalEquipment:
     text: |-
       A variety of offensive grenades are employed by the forces of the 41st Millennium. These range from simple fragmentation grenades to plasma and gravitic concussion grenades, while even more exotic devices are used to crack open enemy armour. When you select this equipment, select two explosive grenades (2 frag, 2 krak, or 1 frag and 1 krak). Each selection is a ranged weapon your operatives can use, but your kill team can only use that weapon a total number of times during the battle equal to your selection.
       
-      | NAME | ATK | HIT | DMG |
-      |------|-----|-----|-----|
-      | Frag grenade | 4 | 4+ | 2/4 |
+      | NAME | ATK | HIT | DMG | WR |
+      |------|-----|-----|-----|----|
+      | Frag grenade | 4 | 4+ | 2/4 | Range 6", Blast 2", Saturate |
       
-      **WR:** Range 6", Blast 2", Saturate
-      
-      | NAME | ATK | HIT | DMG |
-      |------|-----|-----|-----|
-      | Krak grenade | 4 | 4+ | 4/5 |
-      
-      **WR:** Range 6", Piercing 1, Saturate
+      | NAME | ATK | HIT | DMG | WR |
+      |------|-----|-----|-----|----|
+      | Krak grenade | 4 | 4+ | 4/5 | Range 6", Piercing 1, Saturate |
   - name: Breaching Charge
     text: |-
       This explosive device can blast a tactical insertion point through even the most formidable bulkhead or bunker wall.
