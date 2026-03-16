@@ -44,14 +44,9 @@ public class ImportTeamsTests
         using var db = TestDbBuilder.Create();
         var importer = new TeamJsonImporter();
         var teamRepo = new SqliteTeamRepository(db.Connection);
-        var opRepo = new SqliteOperativeRepository(db.Connection);
-        var wpRepo = new SqliteWeaponRepository(db.Connection);
 
         var team = importer.Import(ValidKillTeamJson);
         await teamRepo.UpsertAsync(team);
-        await opRepo.UpsertByTeamAsync(team.Operatives, team.Id);
-        foreach (var op in team.Operatives)
-            await wpRepo.UpsertByOperativeAsync(op.Weapons, op.Id);
 
         // Verify via raw SQL
         using var cmd1 = db.Connection.CreateCommand();
@@ -73,17 +68,12 @@ public class ImportTeamsTests
         using var db = TestDbBuilder.Create();
         var importer = new TeamJsonImporter();
         var teamRepo = new SqliteTeamRepository(db.Connection);
-        var opRepo = new SqliteOperativeRepository(db.Connection);
-        var wpRepo = new SqliteWeaponRepository(db.Connection);
 
         async Task DoImport(string faction)
         {
             var json = ValidKillTeamJson.Replace("Adeptus Astartes", faction);
             var team = importer.Import(json);
             await teamRepo.UpsertAsync(team);
-            await opRepo.UpsertByTeamAsync(team.Operatives, team.Id);
-            foreach (var op in team.Operatives)
-                await wpRepo.UpsertByOperativeAsync(op.Weapons, op.Id);
         }
 
         await DoImport("Adeptus Astartes");

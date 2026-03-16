@@ -43,6 +43,7 @@ public static class Program
         services.AddSingleton<SqliteOperativeRepository>(new SqliteOperativeRepository(sqlExecutor));
         services.AddSingleton<SqliteWeaponRepository>(new SqliteWeaponRepository(sqlExecutor));
         services.AddSingleton<TeamJsonImporter>();
+        services.AddSingleton<TeamYamlImporter>();
         services.AddSingleton<RerollOrchestrator>();
         services.AddSingleton<StrategyPhaseOrchestrator>();
         services.AddSingleton<CombatResolutionService>();
@@ -73,7 +74,7 @@ public static class Program
                       .WithDescription("Remove a player (blocked if they have games).");
             });
             cfg.AddCommand<ImportTeamsCommand>("import-teams")
-               .WithDescription("Import a JSON team file (or scan the team folder).");
+               .WithDescription("Import team files (YAML or JSON) from a file or folder.");
             cfg.AddCommand<NewGameCommand>("new-game").WithDescription("Start a new team game.");
             cfg.AddCommand<HistoryCommand>("history")
                .WithDescription("View completed game history.");

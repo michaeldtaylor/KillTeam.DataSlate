@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using KillTeam.DataSlate.Console.Infrastructure.Repositories;
 using KillTeam.DataSlate.Console.Services;
 using KillTeam.DataSlate.Domain.Repositories;
 using KillTeam.DataSlate.Domain.Services;
@@ -9,18 +8,17 @@ using Spectre.Console.Cli;
 
 namespace KillTeam.DataSlate.Console.Commands;
 
-/// <summary>Imports a team team from a JSON file or scans a folder for all team files.</summary>
-[Description("Import a team team from a JSON file (or scan a folder).")]
+/// <summary>Imports team data from YAML or JSON files, or scans a folder for all team files.</summary>
+[Description("Import a team from a YAML/JSON file (or scan the team folder).")]
 public class ImportTeamsCommand(
-    TeamJsonImporter importer,
+    TeamYamlImporter yamlImporter,
+    TeamJsonImporter jsonImporter,
     ITeamRepository teams,
-    SqliteOperativeRepository operatives,
-    SqliteWeaponRepository weapons,
     IConfiguration config) : AsyncCommand<ImportTeamsCommand.Settings>
 {
     public class Settings : CommandSettings
     {
-        [Description("Path to a team JSON file, or a folder to scan. Defaults to the configured TeamFolder.")]
+        [Description("Path to a team YAML/JSON file, or a folder to scan. Defaults to the configured TeamFolder.")]
         [CommandArgument(0, "[filepath]")]
         public string? FilePath { get; set; }
     }
@@ -40,10 +38,14 @@ public class ImportTeamsCommand(
             return 1;
         }
 
-        var files = Directory.GetFiles(folder, "*.json");
+        var files = Directory.GetFiles(folder, "*.yaml")
+            .Concat(Directory.GetFiles(folder, "*.yml"))
+            .Concat(Directory.GetFiles(folder, "*.json"))
+            .ToArray();
+
         if (files.Length == 0)
         {
-            AnsiConsole.MarkupLine("[dim]No JSON files found in team folder.[/]");
+            AnsiConsole.MarkupLine("[dim]No team files found in team folder.[/]");
             return 0;
         }
 
@@ -92,16 +94,24 @@ public class ImportTeamsCommand(
 
     private async Task ImportFileAsync(string path)
     {
-        var json = await File.ReadAllTextAsync(path);
-        var team = importer.Import(json);
+        var content = await File.ReadAllTextAsync(path);
+        var ext = Path.GetExtension(path).ToLowerInvariant();
+
+        var team = ext switch
+        {
+            ".yaml" or ".yml" => yamlImporter.Import(content),
+            ".json" => jsonImporter.Import(content),
+            _ => throw new TeamValidationException($"Unsupported file extension: {ext}"),
+        };
 
         await teams.UpsertAsync(team);
-        await operatives.UpsertByTeamAsync(team.Operatives, team.Id);
-        foreach (var op in team.Operatives)
-            await weapons.UpsertByOperativeAsync(op.Weapons, op.Id);
 
         var opCount = team.Operatives.Count;
         var wCount = team.Operatives.Sum(o => o.Weapons.Count);
-        AnsiConsole.MarkupLine($"[green]Imported '{Markup.Escape(team.Name)}' — {opCount} operatives, {wCount} weapons.[/]");
+        var aCount = team.Operatives.Sum(o => o.Abilities.Count);
+        AnsiConsole.MarkupLine(
+            $"[green]Imported '{Markup.Escape(team.Name)}' — {opCount} operatives, {wCount} weapons, {aCount} abilities, " +
+            $"{team.FactionRules.Count} rules, {team.StrategyPloys.Count + team.FirefightPloys.Count} ploys, " +
+            $"{team.FactionEquipment.Count + team.UniversalEquipment.Count} equipment.[/]");
     }
 }

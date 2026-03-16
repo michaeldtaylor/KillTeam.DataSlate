@@ -93,9 +93,6 @@ internal static class Migrations
     internal static readonly IReadOnlyList<(int Version, string Sql)> All =
     [
         (1, Migration_001),
-        (2, Migration_002),
-        (3, Migration_003),
-        (4, Migration_004),
     ];
 
     private const string Migration_001 = """
@@ -110,21 +107,27 @@ internal static class Migrations
         );
 
         CREATE TABLE IF NOT EXISTS teams (
-            id      TEXT PRIMARY KEY,
-            name    TEXT NOT NULL UNIQUE COLLATE NOCASE,
-            faction TEXT NOT NULL
+            id                           TEXT PRIMARY KEY,
+            name                         TEXT NOT NULL UNIQUE COLLATE NOCASE,
+            faction                      TEXT NOT NULL,
+            grand_faction                TEXT NOT NULL DEFAULT '',
+            operative_selection_archetype TEXT NOT NULL DEFAULT '',
+            operative_selection_text      TEXT NOT NULL DEFAULT '',
+            supplementary_info           TEXT NOT NULL DEFAULT ''
         );
 
         CREATE TABLE IF NOT EXISTS operatives (
-            id          TEXT PRIMARY KEY,
-            team_id     TEXT NOT NULL REFERENCES teams (id) ON DELETE CASCADE,
-            name        TEXT NOT NULL,
-            operative_type TEXT NOT NULL,
-            move           INTEGER NOT NULL DEFAULT 0,
-            apl            INTEGER NOT NULL DEFAULT 0,
-            wounds         INTEGER NOT NULL DEFAULT 0,
-            save           INTEGER NOT NULL DEFAULT 0,
-            equipment_json TEXT NOT NULL DEFAULT '[]'
+            id              TEXT PRIMARY KEY,
+            team_id         TEXT NOT NULL REFERENCES teams (id) ON DELETE CASCADE,
+            name            TEXT NOT NULL,
+            operative_type  TEXT NOT NULL,
+            move            INTEGER NOT NULL DEFAULT 0,
+            apl             INTEGER NOT NULL DEFAULT 0,
+            wounds          INTEGER NOT NULL DEFAULT 0,
+            save            INTEGER NOT NULL DEFAULT 0,
+            equipment_json  TEXT NOT NULL DEFAULT '[]',
+            primary_keyword TEXT NOT NULL DEFAULT '',
+            keywords_json   TEXT NOT NULL DEFAULT '[]'
         );
 
         CREATE TABLE IF NOT EXISTS weapons (
@@ -222,17 +225,6 @@ internal static class Migrations
             CONSTRAINT uq_game_operative_states UNIQUE (game_id, operative_id)
         );
 
-        CREATE INDEX IF NOT EXISTS idx_activations_turning_point
-            ON activations (turning_point_id, sequence_number);
-
-        CREATE INDEX IF NOT EXISTS idx_actions_activation
-            ON actions (activation_id);
-
-        CREATE INDEX IF NOT EXISTS idx_game_operative_states_game
-            ON game_operative_states (game_id, operative_id);
-        """;
-
-    private const string Migration_002 = """
         CREATE TABLE IF NOT EXISTS ploy_uses (
             id               TEXT PRIMARY KEY,
             turning_point_id TEXT NOT NULL REFERENCES turning_points (id) ON DELETE CASCADE,
@@ -242,11 +234,6 @@ internal static class Migrations
             cp_cost          INTEGER NOT NULL DEFAULT 1
         );
 
-        CREATE INDEX IF NOT EXISTS idx_ploy_uses_turning_point
-            ON ploy_uses (turning_point_id, team_id);
-        """;
-
-    private const string Migration_003 = """
         CREATE TABLE IF NOT EXISTS action_blast_targets (
             id                    TEXT PRIMARY KEY,
             action_id             TEXT NOT NULL REFERENCES actions (id) ON DELETE CASCADE,
@@ -261,11 +248,112 @@ internal static class Migrations
             caused_incapacitation INTEGER NOT NULL DEFAULT 0
         );
 
+        -- Team reference data tables
+        CREATE TABLE IF NOT EXISTS faction_rules (
+            id         TEXT PRIMARY KEY,
+            team_id    TEXT NOT NULL REFERENCES teams (id) ON DELETE CASCADE,
+            name       TEXT NOT NULL,
+            category   TEXT,
+            text       TEXT NOT NULL DEFAULT '',
+            sort_order INTEGER NOT NULL DEFAULT 0
+        );
+
+        CREATE TABLE IF NOT EXISTS strategy_ploys (
+            id         TEXT PRIMARY KEY,
+            team_id    TEXT NOT NULL REFERENCES teams (id) ON DELETE CASCADE,
+            name       TEXT NOT NULL,
+            text       TEXT NOT NULL DEFAULT '',
+            sort_order INTEGER NOT NULL DEFAULT 0
+        );
+
+        CREATE TABLE IF NOT EXISTS firefight_ploys (
+            id         TEXT PRIMARY KEY,
+            team_id    TEXT NOT NULL REFERENCES teams (id) ON DELETE CASCADE,
+            name       TEXT NOT NULL,
+            text       TEXT NOT NULL DEFAULT '',
+            sort_order INTEGER NOT NULL DEFAULT 0
+        );
+
+        CREATE TABLE IF NOT EXISTS faction_equipment (
+            id         TEXT PRIMARY KEY,
+            team_id    TEXT NOT NULL REFERENCES teams (id) ON DELETE CASCADE,
+            name       TEXT NOT NULL,
+            text       TEXT NOT NULL DEFAULT '',
+            sort_order INTEGER NOT NULL DEFAULT 0
+        );
+
+        CREATE TABLE IF NOT EXISTS universal_equipment (
+            id         TEXT PRIMARY KEY,
+            team_id    TEXT NOT NULL REFERENCES teams (id) ON DELETE CASCADE,
+            name       TEXT NOT NULL,
+            text       TEXT NOT NULL DEFAULT '',
+            sort_order INTEGER NOT NULL DEFAULT 0
+        );
+
+        -- Operative reference data tables
+        CREATE TABLE IF NOT EXISTS operative_abilities (
+            id           TEXT PRIMARY KEY,
+            operative_id TEXT NOT NULL REFERENCES operatives (id) ON DELETE CASCADE,
+            name         TEXT NOT NULL,
+            text         TEXT NOT NULL DEFAULT '',
+            sort_order   INTEGER NOT NULL DEFAULT 0
+        );
+
+        CREATE TABLE IF NOT EXISTS operative_special_actions (
+            id           TEXT PRIMARY KEY,
+            operative_id TEXT NOT NULL REFERENCES operatives (id) ON DELETE CASCADE,
+            name         TEXT NOT NULL,
+            text         TEXT NOT NULL DEFAULT '',
+            ap_cost      INTEGER NOT NULL DEFAULT 1,
+            sort_order   INTEGER NOT NULL DEFAULT 0
+        );
+
+        CREATE TABLE IF NOT EXISTS operative_special_rules (
+            id           TEXT PRIMARY KEY,
+            operative_id TEXT NOT NULL REFERENCES operatives (id) ON DELETE CASCADE,
+            name         TEXT NOT NULL,
+            text         TEXT NOT NULL DEFAULT '',
+            sort_order   INTEGER NOT NULL DEFAULT 0
+        );
+
+        -- Indexes
+        CREATE INDEX IF NOT EXISTS idx_activations_turning_point
+            ON activations (turning_point_id, sequence_number);
+
+        CREATE INDEX IF NOT EXISTS idx_actions_activation
+            ON actions (activation_id);
+
+        CREATE INDEX IF NOT EXISTS idx_game_operative_states_game
+            ON game_operative_states (game_id, operative_id);
+
+        CREATE INDEX IF NOT EXISTS idx_ploy_uses_turning_point
+            ON ploy_uses (turning_point_id, team_id);
+
         CREATE INDEX IF NOT EXISTS idx_action_blast_targets_action
             ON action_blast_targets (action_id);
-        """;
 
-    private const string Migration_004 = """
-        SELECT 1;
+        CREATE INDEX IF NOT EXISTS idx_faction_rules_team
+            ON faction_rules (team_id, sort_order);
+
+        CREATE INDEX IF NOT EXISTS idx_strategy_ploys_team
+            ON strategy_ploys (team_id, sort_order);
+
+        CREATE INDEX IF NOT EXISTS idx_firefight_ploys_team
+            ON firefight_ploys (team_id, sort_order);
+
+        CREATE INDEX IF NOT EXISTS idx_faction_equipment_team
+            ON faction_equipment (team_id, sort_order);
+
+        CREATE INDEX IF NOT EXISTS idx_universal_equipment_team
+            ON universal_equipment (team_id, sort_order);
+
+        CREATE INDEX IF NOT EXISTS idx_operative_abilities_op
+            ON operative_abilities (operative_id, sort_order);
+
+        CREATE INDEX IF NOT EXISTS idx_operative_special_actions_op
+            ON operative_special_actions (operative_id, sort_order);
+
+        CREATE INDEX IF NOT EXISTS idx_operative_special_rules_op
+            ON operative_special_rules (operative_id, sort_order);
         """;
 }
