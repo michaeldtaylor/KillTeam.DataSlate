@@ -47,7 +47,7 @@ public class SimulateSessionOrchestrator(
         var playerTeamStub = console.Prompt(
             new SelectionPrompt<Models.Team>()
                 .Title("Select [bold]your[/] team:")
-                .UseConverter(t => $"{Markup.Escape(t.Name)} [dim]({Markup.Escape(t.Faction)})[/]")
+                .UseConverter(FormatTeam)
                 .AddChoices(allTeams));
 
         var playerTeam = (await teamRepository.GetWithOperativesAsync(playerTeamStub.Name))!;
@@ -59,16 +59,21 @@ public class SimulateSessionOrchestrator(
                 .UseConverter(FormatOperative)
                 .AddChoices(playerTeam.Operatives));
 
-        // Step 3 - AI's team (any team, including same as player)
+        // Step 3 - AI's team (exclude player's team)
+        var aiTeamChoices = allTeams.Where(t => t.Name != playerTeamStub.Name).ToList();
+        if (aiTeamChoices.Count == 0)
+        {
+            console.MarkupLine("[red]No other teams available for the AI. Import more teams first.[/]");
+            return (null, null, null, null);
+        }
+
         var aiTeamStub = console.Prompt(
             new SelectionPrompt<Models.Team>()
                 .Title("Select the [bold]AI[/] team:")
-                .UseConverter(t => $"{Markup.Escape(t.Name)} [dim]({Markup.Escape(t.Faction)})[/]")
-                .AddChoices(allTeams));
+                .UseConverter(FormatTeam)
+                .AddChoices(aiTeamChoices));
 
-        var aiTeam = aiTeamStub.Name == playerTeam.Name
-            ? playerTeam
-            : (await teamRepository.GetWithOperativesAsync(aiTeamStub.Name))!;
+        var aiTeam = (await teamRepository.GetWithOperativesAsync(aiTeamStub.Name))!;
 
         // Step 4 - AI's operative
         var aiOp = console.Prompt(
@@ -225,6 +230,16 @@ public class SimulateSessionOrchestrator(
     }
 
     // --- Display helpers -----------------------------------------------------
+
+    private static string FormatTeam(Models.Team t)
+    {
+        var display = Markup.Escape(t.Name);
+        if (!string.IsNullOrEmpty(t.GrandFaction))
+            display += $" [dim]({Markup.Escape(t.Faction)} — {Markup.Escape(t.GrandFaction)})[/]";
+        else if (!string.IsNullOrEmpty(t.Faction))
+            display += $" [dim]({Markup.Escape(t.Faction)})[/]";
+        return display;
+    }
 
     private static string FormatOperative(Models.Operative o) =>
         $"{Markup.Escape(o.Name)} [dim](M{o.Move}\" APL{o.Apl} W{o.Wounds} SV{o.Save}+)[/]";

@@ -34,7 +34,7 @@ public class NewGameCommand(
         var teamA = AnsiConsole.Prompt(
             new SelectionPrompt<KillTeam.DataSlate.Domain.Models.Team>()
                 .Title("Select [green]Team A[/]:")
-                .UseConverter(t => t.Name)
+                .UseConverter(FormatTeam)
                 .AddChoices(allTeams));
 
         var playerA = AnsiConsole.Prompt(
@@ -48,7 +48,7 @@ public class NewGameCommand(
         var teamB = AnsiConsole.Prompt(
             new SelectionPrompt<KillTeam.DataSlate.Domain.Models.Team>()
                 .Title("Select [blue]Team B[/]:")
-                .UseConverter(t => t.Name)
+                .UseConverter(FormatTeam)
                 .AddChoices(teamBChoices));
 
         var playerBChoices = allPlayers.Where(p => p.Id != playerA.Id).ToList();
@@ -129,5 +129,15 @@ public class NewGameCommand(
         AnsiConsole.MarkupLine($"  {allOperatives.Count} operative state(s) initialized.");
 
         return 0;
+    }
+
+    private static string FormatTeam(KillTeam.DataSlate.Domain.Models.Team t)
+    {
+        var display = Markup.Escape(t.Name);
+        if (!string.IsNullOrEmpty(t.GrandFaction))
+            display += $" [dim]({Markup.Escape(t.Faction)} — {Markup.Escape(t.GrandFaction)})[/]";
+        else if (!string.IsNullOrEmpty(t.Faction))
+            display += $" [dim]({Markup.Escape(t.Faction)})[/]";
+        return display;
     }
 }
