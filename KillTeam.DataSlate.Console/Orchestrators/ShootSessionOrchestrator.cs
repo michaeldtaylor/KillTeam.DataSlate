@@ -130,17 +130,10 @@ public class ShootSessionOrchestrator(
         var isObscured = coverChoice == "Obscured";
 
         // 4. Fight assist (reduces hit threshold)
-        int fightAssist;
-        if (allOperatives.Count <= 2)
-        {
-            fightAssist = 0;
-        }
-        else
-        {
-            fightAssist = console.Prompt(
-                new TextPrompt<int>("How many non-engaged friendly allies within 6\" of target? (0-2):")
-                    .Validate(v => v is >= 0 and <= 2));
-        }
+        var fightAssist = console.Prompt(
+            new TextPrompt<int>("How many non-engaged friendly allies within 6\" of target? (0-2):")
+                .DefaultValue(0)
+                .Validate(v => v is >= 0 and <= 2));
 
         // 5. Attacker dice entry
         int[] attackDice = await RollOrEnterDiceAsync(weapon.Atk, $"{Markup.Escape(attacker.Name)} attack dice (Attack: {weapon.Atk})");

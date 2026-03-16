@@ -129,17 +129,10 @@ public class FightSessionOrchestrator(
         }
 
         // 4. Fight assist
-        int fightAssist;
-        if (allOperatives.Count <= 2)
-        {
-            fightAssist = 0;
-        }
-        else
-        {
-            fightAssist = console.Prompt(
-                new TextPrompt<int>("How many non-engaged friendly allies within 6\" of target? (0-2):")
-                    .Validate(v => v is >= 0 and <= 2));
-        }
+        var fightAssist = console.Prompt(
+            new TextPrompt<int>("How many non-engaged friendly allies within 6\" of target? (0-2):")
+                .DefaultValue(0)
+                .Validate(v => v is >= 0 and <= 2));
         atkEffectiveHit = Math.Max(2, atkEffectiveHit - fightAssist);
 
         // 5. Attacker dice entry
