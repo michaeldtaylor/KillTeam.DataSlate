@@ -76,7 +76,7 @@ public class ShootSessionOrchestrator(
             var rulesText = weapon.ParsedRules.Count > 0
                 ? $" | {string.Join(", ", weapon.ParsedRules.Select(r => r.RawText))}"
                 : "";
-            console.MarkupLine($"[dim]Auto-selected ranged weapon:[/] {Markup.Escape(weapon.Name)}  (Attack: {weapon.Atk} | Hit: {weapon.Hit}+ | Normal: {weapon.NormalDmg} | Crit: {weapon.CriticalDmg}{Markup.Escape(rulesText)})");
+            console.MarkupLine($"[dim]Auto-selected ranged weapon:[/] {Markup.Escape(weapon.Name)}  (Attack: [green]{weapon.Atk}[/] | Hit: [green]{weapon.Hit}+[/] | Normal: [green]{weapon.NormalDmg}[/] | Crit: [green]{weapon.CriticalDmg}[/]{Markup.Escape(rulesText)})");
         }
         else
         {
@@ -91,7 +91,7 @@ public class ShootSessionOrchestrator(
                         var saturate = w.ParsedRules.Any(r => r.Kind == SpecialRuleKind.Saturate)
                             ? " [yellow]⚠ Saturate[/]"
                             : "";
-                        return $"{Markup.Escape(w.Name)}  (Attack: {w.Atk} | Hit: {w.Hit}+ | Normal: {w.NormalDmg} | Crit: {w.CriticalDmg}{Markup.Escape(rulesText)}){saturate}";
+                        return $"{Markup.Escape(w.Name)}  (Attack: [green]{w.Atk}[/] | Hit: [green]{w.Hit}+[/] | Normal: [green]{w.NormalDmg}[/] | Crit: [green]{w.CriticalDmg}[/]{Markup.Escape(rulesText)}){saturate}";
                     })
                     .AddChoices(rangedWeapons));
         }

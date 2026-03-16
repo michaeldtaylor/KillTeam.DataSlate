@@ -242,7 +242,13 @@ public class SimulateSessionOrchestrator(
     }
 
     private static string FormatOperative(Models.Operative o) =>
-        $"{Markup.Escape(o.Name)} [dim](APL {o.Apl} · Move {o.Move}\" · Save {o.Save}+ · Wounds {o.Wounds})[/]";
+        $"{Markup.Escape(o.Name)} [dim]({FormatOperativeStats(o)})[/]";
+
+    private static string FormatOperativeStats(Models.Operative o) =>
+        $"APL: [green]{o.Apl}[/] | Move: [green]{o.Move}\"[/] | Save: [green]{o.Save}+[/] | Wounds: [green]{o.Wounds}[/]";
+
+    private static string FormatWeaponStats(Models.Weapon w) =>
+        $"Attack: [green]{w.Atk}[/] | Hit: [green]{w.Hit}+[/] | Normal: [green]{w.NormalDmg}[/] | Crit: [green]{w.CriticalDmg}[/]";
 
     private void DisplayMatchup(
         Models.Operative playerOp, Models.Team playerTeam,
@@ -259,8 +265,8 @@ public class SimulateSessionOrchestrator(
             $"[bold]{Markup.Escape(aiOp.Name)}[/]\n[dim]{Markup.Escape(aiTeam.Name)}[/]");
 
         table.AddRow(
-            $"APL {playerOp.Apl}  Move {playerOp.Move}\"  Save {playerOp.Save}+  Wounds {playerOp.Wounds}",
-            $"APL {aiOp.Apl}  Move {aiOp.Move}\"  Save {aiOp.Save}+  Wounds {aiOp.Wounds}");
+            $"APL: [green]{playerOp.Apl}[/] | Move: [green]{playerOp.Move}\"[/] | Save: [green]{playerOp.Save}+[/] | Wounds: [green]{playerOp.Wounds}[/]",
+            $"APL: [green]{aiOp.Apl}[/] | Move: [green]{aiOp.Move}\"[/] | Save: [green]{aiOp.Save}+[/] | Wounds: [green]{aiOp.Wounds}[/]");
 
         console.Write(table);
         console.WriteLine();
