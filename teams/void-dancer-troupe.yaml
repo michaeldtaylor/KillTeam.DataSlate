@@ -411,7 +411,7 @@ supplementaryInfo: |-
   
   # Lead Player & Player Operatives, Blade Weapon
   
-  Dmg stats changed to '4/6' 'Severe' weapon rule deleted.
+  Dmg stats changed to '4/6' ~~'Severe' weapon rule deleted.~~
   
   # Faction Rules, Harlequin's Panoply
   
@@ -421,7 +421,7 @@ supplementaryInfo: |-
   
   # Firefight Ploys, the Curtain Falls
   
-  Relevant part changed to read: '[...] after you strike with a critical success, if the enemy operative isn't incapacitated. End that sequence (any remaining attack dice are discarded) and immediately perform a free Dash or Fall Back action up to 3" with that operative (then the Fight action ends). That operative can do so even if it's performed an action that prevents it from performing the Dash or Fall Back action.'
+  Relevant part changed to read: '[...] after you strike with a critical success, if the enemy operative isn't incapacitated. End that sequence (any remaining attack dice are discarded) and immediately perform a free ~~Dash or~~ Fall Back action up to 3" with that operative (then the Fight action ends). That operative can do so even if it's performed an action that prevents it from performing the ~~Dash or~~ Fall Back action.'
   
   # Rules Commentary October '25
   

@@ -591,7 +591,7 @@ supplementaryInfo: |-
   
   # Firefight Ploys, Vox Scream
   
-  Changed to read: 'Use this firefight ploy when your opponent would activate an enemy operative that's visible to a friendly **NEMESIS CLAW** operative. Roll one D6; if the result is higher than that enemy operative's APL stat, your opponent cannot activate it during this activation; if the result is less than or equal to that enemy operative's APL stat, this ploy isn't used, the CP spent on it is refunded and you cannot use this ploy again during this turning point. If there are no other enemy operatives eligible to be activated, this ploy has no effect. This ploy costs you 1 additional CP for each previous time you've used it during the battle (e.g. 1CP the first time you would use it, 2CP the second time, etc.).'
+  Changed to read: 'Use this firefight ploy when your opponent would activate an enemy operative that's visible to a friendly **NEMESIS CLAW** operative. Roll one D6; if the result is higher than that enemy operative's APL stat, your opponent cannot activate it during this activation; if the result is less than or equal to that enemy operative's APL stat, this ploy isn't used, the CP spent on it is refunded and you cannot use this ploy again during this turning point. If there are no other enemy operatives eligible ~~to be activated, this ploy has no effect. This ploy costs you 1~~ ~~additional CP for each previous time you've used it during the~~ ~~battle (e.g. 1CP the first time you would use it, 2CP the second~~ ~~time, etc.).'~~
   
   # Strategy Ploys, Return to Darkness
   

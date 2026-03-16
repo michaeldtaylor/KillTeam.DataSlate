@@ -411,9 +411,9 @@ supplementaryInfo: |-
   
   # Firefight Ploys, Virulent Poison
   
-  Changed to read: 'Use this firefight ploy during a friendly **PLAGUE MARINE** operative's activation or counteraction, before or after it performs an action. Select one of the following:
+  Changed to read: 'Use this firefight ploy during a friendly **PLAGUE MARINE** operative's activation or counteraction, before or after it ~~performs an action. Select one of the following:~~
     - One enemy operative within 3" of, or visible to and within 7" of, that operative gains one of your Poison tokens (if it doesn't already have one).
-    - Roll 2D6: if the result is 7+, one enemy operative within 7" of that operative gains one of your Poison tokens (if it doesn't already have one).'
+    - ~~Roll 2D6: if the result is 7+, one enemy operative within 7"~~ ~~of that operative gains one of your Poison tokens (if it doesn't~~ ~~already have one).'~~
   
   # Previous Erratas Champion Operative, Grandfather's Blessing Rule
   
@@ -429,7 +429,7 @@ supplementaryInfo: |-
   
   # Fighter Operative, Flail Action
   
-  Second sentence of effect changed to read: 'Roll separately for each: if it's an enemy operative, if the D3 result is a 3, that enemy operative also gains one of your Poison tokens (if it doesn't already have one).'
+  Second sentence of effect changed to read: 'Roll separately for each: if it's an enemy operative, if the D3 result is a 3, that enemy operative also gains one of your Poison tokens (if it doesn't ~~already have one).'~~
   
   # Icon Bearer Operative, Icon of Contagion
   
@@ -457,7 +457,7 @@ supplementaryInfo: |-
   
   # Strategy Ploys, Contagion
   
-  First bullet point deleted: ~~'It'~~s within control range of friendly **PLAGUE MARINE** operatives.'
+  First bullet point deleted: ~~'It's within control range of friendly **PLAGUE MARINE** operatives.'~~
   
   # Plague Marine Operatives
   

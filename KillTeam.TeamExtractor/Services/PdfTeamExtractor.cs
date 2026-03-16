@@ -1877,6 +1877,8 @@ public partial class PdfTeamExtractor
                 : lines.Take(ktsIntroIdx).ToList();
         }
 
+        var struckPhrases = GetStruckPhrases(path);
+
         var output = new StringBuilder();
         var prevWasHeader = false;
         var prevAllCapsQuoteMode = false; // true when inside a flavour-text / quote ALL-CAPS block
@@ -2232,14 +2234,142 @@ public partial class PdfTeamExtractor
 
         var text = TextHelpers.StructureToMarkdown(output.ToString().TrimStart());
 
-        // Strikethrough for deleted rule text: "deleted: 'quoted text'"
-        text = System.Text.RegularExpressions.Regex.Replace(
+        // Strikethrough for explicitly labelled deleted rule text: deleted: '...'
+        // Pattern: allow apostrophes inside contractions (e.g. "it's", "doesn't") by requiring
+        // them to be followed by a word character; stop at paragraph boundaries (newlines) to
+        // prevent the match from spanning across sections when a closing quote is absent.
+        text = Regex.Replace(
             text,
-            @"deleted: '([^']+)'",
-            "deleted: ~~'$1'~~",
-            System.Text.RegularExpressions.RegexOptions.Singleline);
+            @"deleted: '((?:[^'\n]|'(?=[a-z]))+)'",
+            "deleted: ~~'$1'~~");
+
+        // Strikethrough for visually struck text detected by the pdf.js operator-stream analysis.
+        // This runs AFTER the deleted: regex so we can skip regions already marked as struck.
+        if (struckPhrases.Count > 0)
+        {
+            text = ApplyVisualStrikethrough(text, struckPhrases);
+        }
 
         return text;
+    }
+
+    /// <summary>
+    /// Runs the Node.js strikethrough-detection script against the supplied PDF and returns
+    /// a deduplicated list of phrases that are visually struck through in the document.
+    /// Returns an empty list if Node.js is unavailable or the script cannot be found.
+    /// </summary>
+    private static IReadOnlyList<string> GetStruckPhrases(string pdfPath)
+    {
+        try
+        {
+            var scriptPath = Path.Combine(AppContext.BaseDirectory, "scripts", "find_strikethrough.mjs");
+            if (!File.Exists(scriptPath))
+            {
+                return [];
+            }
+
+            var psi = new ProcessStartInfo("node")
+            {
+                Arguments = $"\"{scriptPath}\" \"{pdfPath}\"",
+                WorkingDirectory = Path.GetDirectoryName(scriptPath)!,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                StandardOutputEncoding = Encoding.UTF8,
+            };
+
+            using var proc = Process.Start(psi)!;
+            var json = proc.StandardOutput.ReadToEnd();
+            proc.WaitForExit();
+
+            if (proc.ExitCode != 0 || string.IsNullOrWhiteSpace(json))
+            {
+                return [];
+            }
+
+            var raw = System.Text.Json.JsonSerializer.Deserialize<string[]>(json) ?? [];
+            return raw
+                .Select(TextHelpers.NormaliseText)
+                .Where(p => p.Length > 0)
+                .Distinct(StringComparer.Ordinal)
+                .ToList();
+        }
+        catch
+        {
+            return [];
+        }
+    }
+
+    /// <summary>
+    /// Applies Markdown strikethrough for visually struck phrases detected by pdf.js.
+    /// Bullet prefixes (• ○) are stripped from phrases before matching because
+    /// <see cref="AppendText"/> has already converted them to Markdown list syntax.
+    /// All occurrences of each phrase are struck. Positions already inside
+    /// <c>~~...~~</c> markers (from the <c>deleted:</c> regex) are skipped.
+    /// </summary>
+    private static string ApplyVisualStrikethrough(string text, IReadOnlyList<string> struckPhrases)
+    {
+        foreach (var rawPhrase in struckPhrases)
+        {
+            if (rawPhrase.Length == 0)
+            {
+                continue;
+            }
+
+            // Strip leading bullet characters — AppendText converts • / ○ to Markdown list syntax
+            var phrase = rawPhrase.TrimStart('\u2022', '\u25CB').TrimStart();
+            if (phrase.Length == 0)
+            {
+                continue;
+            }
+
+            // Apply to ALL occurrences in the text (a phrase can appear more than once)
+            var searchPos = 0;
+            while (searchPos < text.Length)
+            {
+                var idx = text.IndexOf(phrase, searchPos, StringComparison.Ordinal);
+                if (idx < 0)
+                {
+                    break;
+                }
+
+                // Don't double-wrap regions already struck by the deleted: regex
+                if (IsInsideStrikethrough(text, idx))
+                {
+                    searchPos = idx + phrase.Length;
+                    continue;
+                }
+
+                text = text[..idx] + "~~" + phrase + "~~" + text[(idx + phrase.Length)..];
+                searchPos = idx + phrase.Length + 4; // skip past the inserted ~~...~~
+            }
+        }
+
+        return text;
+    }
+
+    /// <summary>
+    /// Returns <c>true</c> when <paramref name="idx"/> falls inside an existing
+    /// <c>~~...~~</c> struck region, detected by counting <c>~~</c> occurrences before
+    /// <paramref name="idx"/> (odd count = inside a struck region).
+    /// </summary>
+    private static bool IsInsideStrikethrough(string text, int idx)
+    {
+        var count = 0;
+        var pos = 0;
+        while (pos < idx)
+        {
+            var found = text.IndexOf("~~", pos, StringComparison.Ordinal);
+            if (found < 0 || found >= idx)
+            {
+                break;
+            }
+
+            count++;
+            pos = found + 2;
+        }
+
+        return count % 2 == 1;
     }
 
     // ─── Shared helpers ───────────────────────────────────────────────────────────

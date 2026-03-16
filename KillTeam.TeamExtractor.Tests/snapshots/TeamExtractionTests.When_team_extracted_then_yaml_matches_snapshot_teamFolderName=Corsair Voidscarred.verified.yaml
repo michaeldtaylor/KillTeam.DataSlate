@@ -717,19 +717,19 @@ supplementaryInfo: |-
   
   # Felarch Operative, One Step Ahead Rule
   
-  Relevant parts of first and second sentences deleted: ~~'Once per battle, after an enemy operative performs an action during its activation, if this operative is ready, you can use this rule. If you do, roll one D6: if the result is higher than that enemy operative'~~s APL stat, you can interrupt that activation and immediately […]'
+  Relevant parts of first and second sentences deleted: ~~'Once per battle, after an enemy operative performs an action during its activation, if this operative is ready, you can use this rule. If you do, roll one D6: if the result is higher than that enemy operative's APL stat, you can interrupt that activation and immediately […]'~~
   
   # Kurnite Hunter Operative, Faolchú's Bond Rule
   
-  Relevant part changed to read: 'The first time during each turning point that this operative is retaliating, if it's ready it hasn't used its Faolchú ranged weapon during this turning point, in the Resolve Attack Dice step of that sequence, […]'
+  Relevant part changed to read: 'The first time during each turning point that this operative ~~is retaliating, if it's ready it hasn't used its Faolchú ranged~~ ~~weapon during this turning point, in the Resolve Attack Dice~~ step of that sequence, […]'
   
   # Kurnite Hunter Operative, Erudite Hunter Rule
   
-  Relevant parts of third sentence deleted: ~~'Once during this turning point, after that enemy operative performs an action in which it moves during its activation, you can interrupt that activation to use this rule.
+  Relevant parts of third sentence deleted: 'Once during this turning point, after that enemy operative ~~performs an action in which it moves during its activation, you~~ ~~can interrupt that activation to use this rule.~~
   
   # Starstorm Duellist Operative, Pistol Barrage Action
   
-  Condition changed to read: '~~
+  Condition changed to read: '
   
   This operative cannot perform this action while it has a Conceal order, or during an activation in which it performed the Shoot action (or vice versa).'
   

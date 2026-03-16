@@ -13,4 +13,9 @@
     <PackageReference Include="Spectre.Console" Version="0.50.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <!-- Copy the Node.js strikethrough-detection script and its dependencies to the output directory -->
+    <Content Include="scripts\**" CopyToOutputDirectory="Always" />
+  </ItemGroup>
+
 </Project>
