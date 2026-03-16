@@ -227,7 +227,13 @@ public class FightSessionOrchestrator(
             var useBrutal = brutalWeapon && activeOwner == DieOwner.Attacker;
             var actions = fightResolutionService.GetAvailableActions(activePool, opponentPool, useBrutal);
 
-            if (actions.Count == 0)
+            // Deduplicate: same action type + same die result + same target result are functionally identical
+            var uniqueActions = actions
+                .GroupBy(a => (a.Type, a.ActiveDie.Result, TargetResult: a.TargetDie?.Result))
+                .Select(g => g.First())
+                .ToList();
+
+            if (uniqueActions.Count == 0)
             {
                 break;
             }
@@ -237,7 +243,7 @@ public class FightSessionOrchestrator(
                 new SelectionPrompt<FightAction>()
                     .Title($"[bold]{Markup.Escape(activeOp.Name)}[/] — select an action:")
                     .UseConverter(a => FormatFightAction(a))
-                    .AddChoices(actions));
+                    .AddChoices(uniqueActions));
 
             if (actionChoice.Type == FightActionType.Strike)
             {
