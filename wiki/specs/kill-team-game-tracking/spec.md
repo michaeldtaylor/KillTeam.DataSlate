@@ -540,7 +540,7 @@ dotnet test --filter "FullyQualifiedName~Player"
 **Workstream:** `backend-dotnet`
 
 **Acceptance Criteria:**
-- [ ] Create `GameEvent` base record: `Timestamp`, `EncounterId` (Guid), `SequenceNumber`, `Participant` (string team ID)
+- [ ] Create `GameEvent` base record: `Timestamp`, `GameSessionId` (Guid), `SequenceNumber`, `Participant` (string team ID)
 - [ ] Define all event types listed in FR-2 (see below)
 - [ ] Events are immutable records — no mutable state
 - [ ] `GameEventStream` class: collects events, exposes `IReadOnlyList<GameEvent>`, supports synchronous `event Action<GameEvent>? OnEventEmitted` callback
@@ -558,9 +558,9 @@ dotnet test KillTeam.DataSlate.Tests --verbosity quiet
 
 ---
 
-### US-011: Refactor RerollOrchestrator to Inject IAnsiConsole (Prerequisite)
+### US-011: Refactor RerollOrchestrator (IAnsiConsole + Emit Events)
 
-**Description:** As a developer, `RerollOrchestrator` currently uses static `AnsiConsole` calls; it must be refactored to use injected `IAnsiConsole` before any event stream work can proceed.
+**Description:** As a developer, `RerollOrchestrator` currently uses static `AnsiConsole` calls; it must be refactored to use injected `IAnsiConsole` AND to emit events for all output MarkupLine calls so reroll output flows through the event stream.
 
 **Workstream:** `backend-dotnet`
 
@@ -569,6 +569,7 @@ dotnet test KillTeam.DataSlate.Tests --verbosity quiet
 - [ ] All 9 static `AnsiConsole.*` calls replaced with `console.*`
 - [ ] DI registration unchanged (Singleton, auto-resolved)
 - [ ] All existing tests pass unchanged
+- [ ] Every console.MarkupLine call in RerollOrchestrator replaced with event emission: BalancedRerollAppliedEvent, CeaselessRerollAppliedEvent, RelentlessRerollAppliedEvent, CpRerollAppliedEvent
 
 **Quality Gates:**
 ```
@@ -602,7 +603,7 @@ dotnet test
 ```
 
 **Technical Considerations:**
-- Fight loop stays synchronous. `FightPoolStateEvent` fires before the SelectionPrompt; callback renders it. `FightResolvedEvent` fires after loop.
+- Fight loop stays synchronous. `FightPoolsDisplayedEvent` fires before the SelectionPrompt; callback renders it. `FightResolvedEvent` fires after loop.
 
 ---
 
@@ -672,6 +673,9 @@ dotnet build
 dotnet test
 ```
 
+**Technical Considerations:**
+- StrategyPhaseOrchestrator currently uses static AnsiConsole (6 output calls, 5 prompt calls). Inject IAnsiConsole via constructor as a prerequisite step before adding GameEventStream parameter — same pattern as US-011 (RerollOrchestrator).
+
 ---
 
 ### US-016: Refactor FirefightPhaseOrchestrator to Emit Events
@@ -729,6 +733,7 @@ dotnet test
 
 **Acceptance Criteria:**
 - [ ] `GameEventRenderer` class consumes `GameEvent` objects and renders to `IAnsiConsole`
+- [ ] Constructor accepts IAnsiConsole console and IReadOnlyDictionary<string, string> participantLabels (teamName -> display label, e.g. "Angels of Death" -> "[You]")
 - [ ] Participant labels derived from team ID → display label mapping
 - [ ] Fight pool tables and shoot result tables render from events
 - [ ] Incremental rendering via `OnEventEmitted` callback registered before combat starts
@@ -756,7 +761,7 @@ dotnet test
 - [ ] `IGameEventRepository` with `SaveAsync` and `GetByGameAsync`
 - [ ] JSON serialisation with `[JsonDerivedType]` on `GameEvent` base type
 - [ ] Migration added to `DatabaseInitialiser`
-- [ ] Persistence is opt-in via `--save-events` flag
+- [ ] Persistence is opt-in: play command and simulate command both accept an optional --save-events flag; when absent, events are held in memory and discarded after the session
 - [ ] Roundtrip test: emit events → persist → load → verify identical
 - [ ] All existing tests pass unchanged
 
@@ -782,7 +787,8 @@ dotnet test
 - [ ] `SimulateSessionOrchestrator` creates the stream and registers the renderer callback
 - [ ] `PlayCommand` creates the stream for real games
 - [ ] `SimulateSessionOrchestrator`'s own output (matchup table, session headers) remains as direct console writes — only sub-orchestrator output moves to events
-- [ ] `DisplayEncounterSummary` renders from `FightResolvedEvent` / `ShootResolvedEvent`
+- [ ] `DisplayEncounterSummary` renders from `FightResolvedEvent` / `ShootResultDisplayedEvent`
+- [ ] PlayCommand emits GameSessionStartedEvent at game start and GameSessionCompletedEvent on game end (GameSessionResumedEvent when resuming an incomplete game; GameResultDisplayedEvent after final VP shown)
 - [ ] All existing tests pass; integration test verifies end-to-end event flow
 
 **Quality Gates:**
@@ -904,6 +910,7 @@ The following event types must be defined in `KillTeam.DataSlate.Domain/Events/`
 - `BlastTorrentWarningDisplayedEvent` — multi-target weapon alert
 - `FriendlyFireWarningEvent` — friendly operatives will be affected
 - `FriendlyFireConfirmedEvent` — player confirmed friendly fire
+- `FriendlyFireCancelledEvent` — player rejected the friendly fire confirmation; encounter aborted
 - `BlastTargetProcessingEvent` — processing individual target (per-target header)
 - `BlastTargetIncapacitatedEvent` — blast target knocked out
 - `BlastResultDisplayedEvent` — per-target results table
@@ -921,7 +928,7 @@ The following event types must be defined in `KillTeam.DataSlate.Domain/Events/`
 - `GameEventStream` also maintains `IReadOnlyList<GameEvent>` for persistence
 
 ### FR-4: Persistence is opt-in
-- `--save-events` flag or similar; not on by default
+- `--save-events` optional flag on both play and simulate commands; when absent, events are discarded after the session (in-memory only)
 - In-memory mode (no SQLite) is the default
 
 - FR-1: The app must be runnable as a single CLI executable with sub-commands (`import-teams`, `new-game`, `play`, `annotate`, `view-game`, `history`, `stats`, `player add`, `player list`, `player delete`, `simulate`)
@@ -1129,7 +1136,7 @@ Sergeant Intercessor expended.
 - **RerollOrchestrator DI prerequisite (US-011)**: Currently uses static `AnsiConsole` (9 calls). Must be refactored to `IAnsiConsole` constructor injection before any event stream work. Trivial change — ~10 lines, no tests affected.
 - **Testing**: Test event emission by running orchestrators with mock console for prompts, asserting on `GameEventStream.Events`.
 - **Orchestrator boundary**: Once `RunAsync()` is called on any orchestrator, output flows through events. The callers (`PlayCommand`, `SimulateSessionOrchestrator`) retain direct console writes for their own UI chrome (matchup tables, mode headers, session messages).
-- **Firefight integration**: `FirefightPhaseOrchestrator` creates the `GameEventStream` for each turning point and passes it to sub-orchestrators. `PlayCommand` registers the renderer before combat begins.
+- **GameEventStream ownership:** PlayCommand creates one GameEventStream per game session and passes it to FirefightPhaseOrchestrator. GameEventStream is NOT registered in DI — it is passed as a method parameter to RunAsync(). In simulate mode, SimulateSessionOrchestrator creates the stream per encounter. One stream per game/session, not one per turning point.
 - **SimulateSessionOrchestrator boundary**: Only sub-orchestrator output moves to events. `SimulateSessionOrchestrator`'s own output (matchup table, session headers, error messages) remains direct console writes.
 
 ---
