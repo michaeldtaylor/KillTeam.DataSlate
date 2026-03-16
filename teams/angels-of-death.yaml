@@ -828,6 +828,18 @@ supplementaryInfo: |-
   # Heavy Intercessor Gunner
   
   Heavy Intercessors are akin to walking gun emplacements. Their heavy bolters allow them to shatter enemies with punishing fusillades of explosive fire, either sweeping over massed troops or in focused volleys. 2
+  
+  # Archetypes
+  
+  # Security
+  
+  # Seek & Destroy
+  
+  Archetypes are used in certain mission packs, e.g. Approved Ops. The game sequence will specify how.
+  
+  Some **ANGEL OF DEATH** rules refer to a 'bolt weapon'. This is a ranged weapon that includes 'bolt' in its name, e.g. stalker bolt rifle, heavy bolt pistol, etc.
+  
+  # Angels of Death Kill Team
 universalEquipment:
   - name: Portable Barricade
     text: 'Little more than a suppression shield with armoured feet, these barricades can be hefted and borne forwards to provide mobile cover. A portable barricade is Light, Protective and Portable terrain, except the feet which are Insignificant and Exposed. Before the battle, you can set it up wholly within your territory, on the killzone floor and more than 2" from other equipment terrain features, access points and Accessible terrain. Protective: While an operative is in cover from this terrain feature, improve its Save stat by 1 (to a maximum of 2+). RULE'

@@ -1860,14 +1860,21 @@ public partial class PdfTeamExtractor
             .Where(l => l.Length > 0 && !l.Equals("CONTINUES ON OTHER SIDE", StringComparison.OrdinalIgnoreCase))
             .ToList();
 
-        // Remove Kill Team Selection page content — already captured in operativeSelection.
-        // The KTS page intro text "Below you will find..." is the first line of that section;
-        // everything from there to the end of the file is KTS page content.
+        // Remove the Kill Team Selection operative list — already captured in operativeSelection.
+        // The list starts at "Below you will find..." and runs until the first flavour-text quote
+        // (starts with ') or the ARCHETYPES heading, whichever comes first.
+        // Content from that re-entry point onward (ARCHETYPES explanation, KILL TEAM heading,
+        // extra rules) is kept; stat-card pages are excluded via ktsStatCardsMode below.
         var ktsIntroIdx = lines.FindIndex(l =>
             l.StartsWith("Below you will find", StringComparison.OrdinalIgnoreCase));
         if (ktsIntroIdx >= 0)
         {
-            lines = lines.Take(ktsIntroIdx).ToList();
+            var reentryIdx = lines.FindIndex(ktsIntroIdx, l =>
+                l.StartsWith("'", StringComparison.Ordinal) ||
+                l.Equals("ARCHETYPES", StringComparison.OrdinalIgnoreCase));
+            lines = reentryIdx > ktsIntroIdx
+                ? [.. lines.Take(ktsIntroIdx), .. lines.Skip(reentryIdx)]
+                : lines.Take(ktsIntroIdx).ToList();
         }
 
         var output = new StringBuilder();
@@ -1927,10 +1934,18 @@ public partial class PdfTeamExtractor
         var ktsTeamName = string.Empty; // e.g. "ANGELS OF DEATH"
         var ktsNameWords = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         var inKtsFragSkip = false; // true = skipping heading fragment lines
+        var ktsArchetypesProcessed = false; // true once the ARCHETYPES heading line has been seen
+        var ktsStatCardsMode = false; // true once stat-card pages begin (skip everything)
 
         for (var i = 0; i < lines.Count; i++)
         {
             var trimmed = lines[i];
+
+            // Once stat-card pages start, skip everything.
+            if (ktsStatCardsMode)
+            {
+                continue;
+            }
 
             if (trimmed.Length == 0)
             {
@@ -1961,9 +1976,16 @@ public partial class PdfTeamExtractor
 
             // KTS: the » (U+00BB) character is a decorative separator in the Kill Team Selection
             // page header. Each page repeats the title fragments — skip them.
+            // Once the ARCHETYPES section has been processed and the KILL TEAM heading has been
+            // emitted, a subsequent » marks the start of the stat-card pages; skip everything after.
             if (trimmed == "\u00BB")
             {
                 inKtsFragSkip = true;
+                if (ktsTeamName.Length > 0 && ktsArchetypesProcessed)
+                {
+                    ktsStatCardsMode = true;
+                }
+
                 continue;
             }
 
@@ -2033,10 +2055,16 @@ public partial class PdfTeamExtractor
                             output.Remove(output.Length - 1, 1);
                         }
 
-                        output.Append($"\n\n**{ktsTeamName} >> KILL TEAM SELECTION**\n\n");
+                        output.Append($"\n\n# {TextHelpers.ToTitleCase(trimmed)}\n\n");
                         inKtsFragSkip = true;
                         prevWasHeader = false;
                         continue;
+                    }
+
+                    // KTS: flag the ARCHETYPES heading so » can detect when stat-card pages begin.
+                    if (trimmed.Equals("ARCHETYPES", StringComparison.OrdinalIgnoreCase))
+                    {
+                        ktsArchetypesProcessed = true;
                     }
 
                     // KTS: skip repeated heading fragments (team name words + KILL/TEAM/SELECTION)

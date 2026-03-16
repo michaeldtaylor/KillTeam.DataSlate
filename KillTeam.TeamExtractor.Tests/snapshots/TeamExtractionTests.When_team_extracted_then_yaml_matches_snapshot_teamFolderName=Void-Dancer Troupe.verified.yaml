@@ -464,6 +464,14 @@ supplementaryInfo: |-
   # Shadowseer
   
   Shadowseers can blind foes and drive them mad with their psychic powers. As they obscure their allies with illusions, they fire hallucinogenic grenades that cause disorientation or death. In close combat, Shadowseers' miststaves scramble the perceptions of those they hit. 2
+  
+  # Archetypes
+  
+  # Infiltration Recon
+  
+  Archetypes are used in certain mission packs, e.g. Approved Ops. The game sequence will specify how.
+  
+  # Void-Dancer Troupe Kill Team
 universalEquipment:
   - name: Portable Barricade
     text: 'Little more than a suppression shield with armoured feet, these barricades can be hefted and borne forwards to provide mobile cover. A portable barricade is Light, Protective and Portable terrain, except the feet which are Insignificant and Exposed. Before the battle, you can set it up wholly within your territory, on the killzone floor and more than 2" from other equipment terrain features, access points and Accessible terrain. Protective: While an operative is in cover from this terrain feature, improve its Save stat by 1 (to a maximum of 2+). RULE'

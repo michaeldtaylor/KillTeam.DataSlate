@@ -644,6 +644,16 @@ supplementaryInfo: |-
   # Night Lord Warrior
   
   Those Night Lords who fight as part of the Nemesis Claws are amongst the most psychotic and savage of all their twisted kind. Whether picking their victims off from range or eviscerating and flensing them at close quarters, they are diabolical foes. 3
+  
+  # Archetypes
+  
+  # Infiltration
+  
+  # Seek & Destroy
+  
+  Archetypes are used in certain mission packs, e.g. Approved Ops. The game sequence will specify how.
+  
+  # Nemesis Claw Kill Team
 universalEquipment:
   - name: Portable Barricade
     text: 'Little more than a suppression shield with armoured feet, these barricades can be hefted and borne forwards to provide mobile cover. A portable barricade is Light, Protective and Portable terrain, except the feet which are Insignificant and Exposed. Before the battle, you can set it up wholly within your territory, on the killzone floor and more than 2" from other equipment terrain features, access points and Accessible terrain. Protective: While an operative is in cover from this terrain feature, improve its Save stat by 1 (to a maximum of 2+). RULE'

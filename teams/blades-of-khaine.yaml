@@ -623,6 +623,28 @@ supplementaryInfo: |-
   > **'IT HAS BEEN OUR WAY FOR MILLENNIA TO SACRIFICE OUR PRESENT SO THAT WE MAY HAVE A FUTURE. MY BANSHEE SISTERS AND I KNOW THAT OUR EVERY BATTLE MAY BE OUR LAST. WE FACE THAT TRUTH WITHOUT FEAR, FOR THROUGH OUR EFFORTS MAY MORE OF OUR PEOPLE LIVE AND SEE BRIGHTER TIMES FOR THE AELDARI. ONE DAY THE STARS WILL ONCE MORE BOW TO OUR RACE, AND THAT OUTCOME WILL BE ACHIEVED ONE BATTLE, ONE KILL AT A TIME.'**
   >
   > — Osinell Ciaradh, Howling Banshee of Biel-Tan Craftworld
+  
+  > **'WE AELDARI HAVE FALLEN FAR. THOSE NOT OF OUR RACE WHO HAVE HEARD OUR STORY MIGHT EVEN PITY US, IF THEY DON'T HOLD US IN CONTEMPT FOR OUR OWN FOLLY. I SPIT ON THEIR SCORN. OUR TIME IS FAR FROM OVER. WE HAVE BEEN MASTERS OF WAR SINCE OUR ENEMIES' FOREBEARS WERE BUT AMOEBAE DRIFTING AIMLESSLY IN BARREN SEAS. THE GALAXY ONCE SHOOK IN AWE UPON THE MENTION OF OUR NAME, AND IT SHALL DO SO AGAIN.'**
+  >
+  > — Maur Saim-Ingrelli, Striking Scorpions Exarch of
+  
+  the Onyx Claw Shrine, Biel-Tan Craftworld
+  
+  # Blades of Khaine Kill Team
+  
+  # Archetypes
+  
+  Archetypes are used in certain mission packs, e.g. Approved Ops. The game sequence will specify how. Or the associated archetype of the most common Aspect keyword in your kill team (if two keywords are equally most common, you can choose one of those keywords). Aspect keywords and their associated archetypes are as follows: **DIRE AVENGER HOWLING**
+  
+  # Banshee
+  
+  # Striking
+  
+  # Scorpion
+  
+  # Seek & Destroy
+  
+  # Security Recon Infiltration
 universalEquipment:
   - name: Portable Barricade
     text: 'Little more than a suppression shield with armoured feet, these barricades can be hefted and borne forwards to provide mobile cover. A portable barricade is Light, Protective and Portable terrain, except the feet which are Insignificant and Exposed. Before the battle, you can set it up wholly within your territory, on the killzone floor and more than 2" from other equipment terrain features, access points and Accessible terrain. Protective: While an operative is in cover from this terrain feature, improve its Save stat by 1 (to a maximum of 2+). RULE'
