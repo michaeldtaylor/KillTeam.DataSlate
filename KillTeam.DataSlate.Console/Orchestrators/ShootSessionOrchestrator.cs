@@ -43,13 +43,25 @@ public class ShootSessionOrchestrator(
             return new ShootSessionResult(false, 0, null);
         }
 
-        var targetState = console.Prompt(
-            new SelectionPrompt<GameOperativeState>()
-                .Title("Select a target to shoot:")
-                .UseConverter(s => allOperatives.TryGetValue(s.OperativeId, out var o)
-                    ? $"{Markup.Escape(o.Name)} (Wounds: {s.CurrentWounds}/{o.Wounds})"
-                    : s.OperativeId.ToString())
-                .AddChoices(enemyStates));
+        GameOperativeState targetState;
+        if (enemyStates.Count == 1)
+        {
+            targetState = enemyStates[0];
+            if (allOperatives.TryGetValue(targetState.OperativeId, out var autoTarget))
+            {
+                console.MarkupLine($"[dim]Target:[/] {Markup.Escape(autoTarget.Name)} (Wounds: [green]{targetState.CurrentWounds}/{autoTarget.Wounds}[/])");
+            }
+        }
+        else
+        {
+            targetState = console.Prompt(
+                new SelectionPrompt<GameOperativeState>()
+                    .Title("Select a target to shoot:")
+                    .UseConverter(s => allOperatives.TryGetValue(s.OperativeId, out var o)
+                        ? $"{Markup.Escape(o.Name)} (Wounds: {s.CurrentWounds}/{o.Wounds})"
+                        : s.OperativeId.ToString())
+                    .AddChoices(enemyStates));
+        }
 
         if (!allOperatives.TryGetValue(targetState.OperativeId, out var targetOp))
         {
