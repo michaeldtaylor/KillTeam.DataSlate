@@ -406,15 +406,13 @@ datacards:
     specialActions:
       - name: Soul Channel
         text: |-
-          Select one other friendly **CORSAIR VOIDSCARRED** operative visible to and within 6" of this operative. Until the end of that operative's next activation, add 1 to its APL stat.
-          
-          This operative cannot perform this action while within control range of an enemy operative.
+          - Select one other friendly **CORSAIR VOIDSCARRED** operative visible to and within 6" of this operative. Until the end of that operative's next activation, add 1 to its APL stat.
+          - This operative cannot perform this action while within control range of an enemy operative.
         apCost: 1
       - name: Soul Heal
         text: |-
-          Select one friendly **CORSAIR VOIDSCARRED** operative visible to and within 6" of this operative. That operative regains up to 2D3 lost wounds.
-          
-          This operative cannot perform this action while within control range of an enemy operative.
+          - Select one friendly **CORSAIR VOIDSCARRED** operative visible to and within 6" of this operative. That operative regains up to 2D3 lost wounds.
+          - This operative cannot perform this action while within control range of an enemy operative.
         apCost: 1
   - name: Voidscarred Starstorm Duellist
     operativeType: Voidscarred Starstorm Duellist
@@ -464,9 +462,8 @@ datacards:
     specialActions:
       - name: Pistol Barrage
         text: |-
-          Perform two free Shoot actions with this operative (this takes precedence over action restrictions). You must select its fusion pistol for one action and its shuriken pistol for the other (in any order).
-          
-          This operative cannot perform this action while it has a Conceal order, or during an activation in which it performed the Shoot action (or vice versa).
+          - Perform two free Shoot actions with this operative (this takes precedence over action restrictions). You must select its fusion pistol for one action and its shuriken pistol for the other (in any order).
+          - This operative cannot perform this action while it has a Conceal order, or during an activation in which it performed the Shoot action (or vice versa).
         apCost: 1
   - name: Voidscarred Warrior
     operativeType: Voidscarred Warrior
@@ -580,15 +577,13 @@ datacards:
     specialActions:
       - name: Warp Fold
         text: |-
-          Select two friendly **CORSAIR VOIDSCARRED** operatives visible to and within 5" of this operative. Remove them both from the killzone and set them back up in each other's previous locations (in other words, swap their positions). If one of them performed the Charge, Fall Back or Reposition action during this turning point and the other is ready, the other cannot perform any of those actions in its activation during this turning point.
-          
-          This operative cannot perform this action while within control range of an enemy operative.
+          - Select two friendly **CORSAIR VOIDSCARRED** operatives visible to and within 5" of this operative. Remove them both from the killzone and set them back up in each other's previous locations (in other words, swap their positions). If one of them performed the Charge, Fall Back or Reposition action during this turning point and the other is ready, the other cannot perform any of those actions in its activation during this turning point.
+          - This operative cannot perform this action while within control range of an enemy operative.
         apCost: 1
       - name: Warding Shield
         text: |-
-          Select one friendly **CORSAIR VOIDSCARRED** operative visible to and within 6" of this operative. Until the start of this operative's next activation, until it's incapacitated or until it performs this action again (whichever comes first), the first time an attack dice inflicts Normal Dmg on that friendly operative, ignore that inflicted damage.
-          
-          This operative cannot perform this action while within control range of an enemy operative.
+          - Select one friendly **CORSAIR VOIDSCARRED** operative visible to and within 6" of this operative. Until the start of this operative's next activation, until it's incapacitated or until it performs this action again (whichever comes first), the first time an attack dice inflicts Normal Dmg on that friendly operative, ignore that inflicted damage.
+          - This operative cannot perform this action while within control range of an enemy operative.
         apCost: 1
 factionEquipment:
   - name: Diuturnal Mantles
@@ -653,7 +648,6 @@ operativeSelection:
       - **KURNITE HUNTER**
       - **SHADE RUNNER**
       - **SOUL WEAVER**
-    
     
       - **STARSTORM DUELLIST**
       - **WARRIOR with one of the following options:**
@@ -814,9 +808,8 @@ universalEquipment:
     text: From neuro‑suppressant psybombs to smoke‑belching chemical charges, grenades of this sort can suppress the enemy and be the difference between life and death. When you select this equipment, select two utility grenades (2 smoke, 2 stun, or 1 smoke and 1 stun). Each selection is a unique action your operatives can perform, but your kill team can only perform that action a total number of times during the battle equal to your selection. RULE
   - name: Ammo Cache
     text: |-
-      Whether stockpiles deliberately set out for warriors to access quickly, or the abandoned munitions of the slain, these caches can prove vital for a swift reload in the heat of battle. Before the battle, you can set up one of your Ammo Cache markers wholly within your territory. Friendly operatives can perform the following mission action during the battle. **AMMO RESUPPLY** 0AP One of your Ammo Cache markers the active operative controls is used during this turning point. Until the start of the next turning point, whenever this operative is shooting with a weapon from its datacard, you can re‑roll one of your attack dice.
-      
-      An operative cannot perform this action while within control range of an enemy operative, if that marker isn't yours, or if that marker has been used this turning point.
+      - Whether stockpiles deliberately set out for warriors to access quickly, or the abandoned munitions of the slain, these caches can prove vital for a swift reload in the heat of battle. Before the battle, you can set up one of your Ammo Cache markers wholly within your territory. Friendly operatives can perform the following mission action during the battle. **AMMO RESUPPLY** 0AP One of your Ammo Cache markers the active operative controls is used during this turning point. Until the start of the next turning point, whenever this operative is shooting with a weapon from its datacard, you can re‑roll one of your attack dice.
+      - An operative cannot perform this action while within control range of an enemy operative, if that marker isn't yours, or if that marker has been used this turning point.
   - name: Razor Wire
     text: 'Spooled rapidly out and affixed to jutting posts, razor wire acts as an easily deployed barrier and a painful deterrent to enemy operatives seeking to attack along particular routes. Razor wire is Exposed and Obstructing terrain. Before the battle, you can set it up wholly within your territory, on the killzone floor and more than 2" from other equipment terrain features, access points and Accessible terrain. Obstructing: Whenever an operative would cross over this terrain feature within 1" of it, treat the distance as an additional 1".'
   - name: Comms Device

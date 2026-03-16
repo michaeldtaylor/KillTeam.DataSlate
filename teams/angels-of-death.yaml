@@ -585,9 +585,8 @@ datacards:
     specialActions:
       - name: Optics
         text: |-
-          Until the start of this operative's next activation, whenever it's shooting, enemy operatives cannot be obscured.
-          
-          This operative cannot perform this action while within control range of an enemy operative.
+          - Until the start of this operative's next activation, whenever it's shooting, enemy operatives cannot be obscured.
+          - This operative cannot perform this action while within control range of an enemy operative.
         apCost: 1
 factionEquipment:
   - name: Purity Seals
@@ -596,7 +595,10 @@ factionEquipment:
       
       Once per turning point, when a friendly **ANGEL OF DEATH** operative is shooting, fighting or retaliating, if you roll two or more fails, you can discard one of them to retain another as a normal success instead.
   - name: Chapter Reliquaries
-    text: Many Space Marines bear macabre relics taken from the bodies of their fallen. Those who bear these inspirational items fight all the harder to honour the sacrifice of their battle-brothers. You can use the Wrath of Vengeance firefight ploy for 0CP if the specified friendly operative has an Engage order.
+    text: |-
+      Many Space Marines bear macabre relics taken from the bodies of their fallen. Those who bear these inspirational items fight all the harder to honour the sacrifice of their battle-brothers.
+      
+      You can use the Wrath of Vengeance firefight ploy for 0CP if the specified friendly operative has an Engage order.
   - name: Tilting Shields
     text: |-
       As well as displaying company colours and personal heraldry, a Space Marine's tilting plate serves to protect the bearer in the press of melee combat.
@@ -667,7 +669,6 @@ operativeSelection:
         - Auto bolt rifle, bolt rifle or stalker bolt rifle
         - Chainsword, fists, power fist, power weapon or thunder hammer
       - **SPACE MARINE CAPTAIN**
-    
     
     5 **ANGEL OF DEATH** operatives selected from the following list:
       - **ASSAULT INTERCESSOR GRENADIER**
@@ -859,9 +860,8 @@ universalEquipment:
     text: From neuro‑suppressant psybombs to smoke‑belching chemical charges, grenades of this sort can suppress the enemy and be the difference between life and death. When you select this equipment, select two utility grenades (2 smoke, 2 stun, or 1 smoke and 1 stun). Each selection is a unique action your operatives can perform, but your kill team can only perform that action a total number of times during the battle equal to your selection. RULE
   - name: Ammo Cache
     text: |-
-      Whether stockpiles deliberately set out for warriors to access quickly, or the abandoned munitions of the slain, these caches can prove vital for a swift reload in the heat of battle. Before the battle, you can set up one of your Ammo Cache markers wholly within your territory. Friendly operatives can perform the following mission action during the battle. **AMMO RESUPPLY** 0AP One of your Ammo Cache markers the active operative controls is used during this turning point. Until the start of the next turning point, whenever this operative is shooting with a weapon from its datacard, you can re‑roll one of your attack dice.
-      
-      An operative cannot perform this action while within control range of an enemy operative, if that marker isn't yours, or if that marker has been used this turning point.
+      - Whether stockpiles deliberately set out for warriors to access quickly, or the abandoned munitions of the slain, these caches can prove vital for a swift reload in the heat of battle. Before the battle, you can set up one of your Ammo Cache markers wholly within your territory. Friendly operatives can perform the following mission action during the battle. **AMMO RESUPPLY** 0AP One of your Ammo Cache markers the active operative controls is used during this turning point. Until the start of the next turning point, whenever this operative is shooting with a weapon from its datacard, you can re‑roll one of your attack dice.
+      - An operative cannot perform this action while within control range of an enemy operative, if that marker isn't yours, or if that marker has been used this turning point.
   - name: Razor Wire
     text: 'Spooled rapidly out and affixed to jutting posts, razor wire acts as an easily deployed barrier and a painful deterrent to enemy operatives seeking to attack along particular routes. Razor wire is Exposed and Obstructing terrain. Before the battle, you can set it up wholly within your territory, on the killzone floor and more than 2" from other equipment terrain features, access points and Accessible terrain. Obstructing: Whenever an operative would cross over this terrain feature within 1" of it, treat the distance as an additional 1".'
   - name: Comms Device

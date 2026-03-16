@@ -95,9 +95,8 @@ datacards:
     specialActions:
       - name: Premonition
         text: |-
-          Spend 1 of your Prescience points to gain 1CP.
-          
-          This operative cannot perform this action while within control range of an enemy operative, or more than once per turning point.
+          - Spend 1 of your Prescience points to gain 1CP.
+          - This operative cannot perform this action while within control range of an enemy operative, or more than once per turning point.
         apCost: 1
   - name: Night Lord Fearmonger
     operativeType: Night Lord Fearmonger
@@ -156,9 +155,8 @@ datacards:
     specialActions:
       - name: Poison Objective
         text: |-
-          Select one objective marker this operative controls to gain one of your Terrorchem tokens. It cannot be an objective marker within control range of an enemy operative, or one that already has one of your Terrorchem tokens. The first time that objective marker is within control range of an enemy operative that doesn't have one of your Terrorchem tokens, that operative gains that Terrorchem token, then inflict 2D3 damage on it (if it's during an action, at the end of that action).
-          
-          This operative cannot perform this action while within control range of an enemy operative.
+          - Select one objective marker this operative controls to gain one of your Terrorchem tokens. It cannot be an objective marker within control range of an enemy operative, or one that already has one of your Terrorchem tokens. The first time that objective marker is within control range of an enemy operative that doesn't have one of your Terrorchem tokens, that operative gains that Terrorchem token, then inflict 2D3 damage on it (if it's during an action, at the end of that action).
+          - This operative cannot perform this action while within control range of an enemy operative.
         apCost: 1
     specialRules:
       - name: Terrorchem
@@ -409,12 +407,11 @@ datacards:
     specialActions:
       - name: Disconcerting Mimicry
         text: |-
-          Select one enemy operative within 6" of this operative, then select one of the following for that enemy operative (you can only select each option once per battle):
+          - Select one enemy operative within 6" of this operative, then select one of the following for that enemy operative (you can only select each option once per battle):
             - Until the end of its next activation, subtract 1 from its APL stat.
             - Change its order.
             - Perform a free Dash action with it (specify the location for your opponent to move it to).
-          
-          This operative cannot perform this action while within control range of an enemy operative.
+          - This operative cannot perform this action while within control range of an enemy operative.
         apCost: 1
   - name: Night Lord Warrior
     operativeType: Night Lord Warrior
@@ -527,7 +524,6 @@ operativeSelection:
       - **HEAVY GUNNER with one of the following options:**
         - Bolt pistol; heavy bolter; fists
         - Bolt pistol; missile launcher; fists
-    
     
       - **SCREECHER**
       - **SKINTHIEF**
@@ -671,9 +667,8 @@ universalEquipment:
     text: From neuro‑suppressant psybombs to smoke‑belching chemical charges, grenades of this sort can suppress the enemy and be the difference between life and death. When you select this equipment, select two utility grenades (2 smoke, 2 stun, or 1 smoke and 1 stun). Each selection is a unique action your operatives can perform, but your kill team can only perform that action a total number of times during the battle equal to your selection. RULE
   - name: Ammo Cache
     text: |-
-      Whether stockpiles deliberately set out for warriors to access quickly, or the abandoned munitions of the slain, these caches can prove vital for a swift reload in the heat of battle. Before the battle, you can set up one of your Ammo Cache markers wholly within your territory. Friendly operatives can perform the following mission action during the battle. **AMMO RESUPPLY** 0AP One of your Ammo Cache markers the active operative controls is used during this turning point. Until the start of the next turning point, whenever this operative is shooting with a weapon from its datacard, you can re‑roll one of your attack dice.
-      
-      An operative cannot perform this action while within control range of an enemy operative, if that marker isn't yours, or if that marker has been used this turning point.
+      - Whether stockpiles deliberately set out for warriors to access quickly, or the abandoned munitions of the slain, these caches can prove vital for a swift reload in the heat of battle. Before the battle, you can set up one of your Ammo Cache markers wholly within your territory. Friendly operatives can perform the following mission action during the battle. **AMMO RESUPPLY** 0AP One of your Ammo Cache markers the active operative controls is used during this turning point. Until the start of the next turning point, whenever this operative is shooting with a weapon from its datacard, you can re‑roll one of your attack dice.
+      - An operative cannot perform this action while within control range of an enemy operative, if that marker isn't yours, or if that marker has been used this turning point.
   - name: Razor Wire
     text: 'Spooled rapidly out and affixed to jutting posts, razor wire acts as an easily deployed barrier and a painful deterrent to enemy operatives seeking to attack along particular routes. Razor wire is Exposed and Obstructing terrain. Before the battle, you can set it up wholly within your territory, on the killzone floor and more than 2" from other equipment terrain features, access points and Accessible terrain. Obstructing: Whenever an operative would cross over this terrain feature within 1" of it, treat the distance as an additional 1".'
   - name: Comms Device

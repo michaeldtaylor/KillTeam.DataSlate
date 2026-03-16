@@ -179,11 +179,27 @@ internal static partial class TextHelpers
         // Step 7: Unicode bullet symbols → Markdown hierarchy
         text = FormatBulletSymbols(text);
 
-        // Step 8: Insert paragraph break before constraint sentences, but only after a period
-        // (not inside quoted text like "Changed to read: 'This operative cannot...'").
+        // Step 8: Convert constraint sentences to bullet list items.
+        // Abilities/actions with a constraint ("This operative cannot perform this action...")
+        // display as two icon-marked sections on the card (▶ effect, ◆ constraint).
+        // Represent these as a Markdown bullet list. Only fires after '.' to avoid
+        // breaking quoted text like "Changed to read: 'This operative cannot...'".
+        var hasConstraintBullet = false;
         foreach (var pattern in ConstraintSentencePatterns)
         {
-            text = text.Replace(". " + pattern, ".\n\n" + pattern, StringComparison.OrdinalIgnoreCase);
+            var before = text;
+            text = text.Replace(". " + pattern, ".\n- " + pattern, StringComparison.OrdinalIgnoreCase);
+            if (text != before)
+            {
+                hasConstraintBullet = true;
+            }
+        }
+
+        // If a constraint bullet was inserted, also prefix the first paragraph with "- "
+        // to create a consistent two-item bullet list (effect + constraint).
+        if (hasConstraintBullet)
+        {
+            text = "- " + text;
         }
 
         // Sentence-start paragraph breaks: specific Kill Team phrasings that begin a new
@@ -193,6 +209,7 @@ internal static partial class TextHelpers
         text = text.Replace(". When selecting ", ".\n\nWhen selecting ");
         text = text.Replace(". Designer's Note:", ".\n\nDesigner's Note:");
         // Equipment: lore paragraph → rule trigger (no blank line in PDF, must be inserted)
+        text = text.Replace(". You can use ", ".\n\nYou can use ");
         text = text.Replace(". Once per ", ".\n\nOnce per ");
         text = text.Replace(". When this equipment ", ".\n\nWhen this equipment ");
 

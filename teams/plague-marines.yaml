@@ -120,9 +120,8 @@ datacards:
     specialActions:
       - name: Flail
         text: |-
-          Inflict D3+2 damage on each other operative that's both visible to and within 2" of this operative. Roll separately for each: if it's an enemy operative, if the D3 result is a 3, that enemy operative also gains one of your Poison tokens (if it doesn't already have one). For the purposes of action restrictions and the Astartes faction rule, this action is treated as a Fight action.
-          
-          This operative cannot perform this action while it has a Conceal order.
+          - Inflict D3+2 damage on each other operative that's both visible to and within 2" of this operative. Roll separately for each: if it's an enemy operative, if the D3 result is a 3, that enemy operative also gains one of your Poison tokens (if it doesn't already have one). For the purposes of action restrictions and the Astartes faction rule, this action is treated as a Fight action.
+          - This operative cannot perform this action while it has a Conceal order.
         apCost: 1
   - name: Plague Marine Heavy Gunner
     operativeType: Plague Marine Heavy Gunner
@@ -253,15 +252,13 @@ datacards:
     specialActions:
       - name: Poisonous Miasma
         text: |-
-          Select one enemy operative visible to and within 7" of this operative, or one enemy operative that's a valid target for this operative. That enemy operative gains one of your Poison tokens (if it doesn't already have one). If it already has one, inflict 3 damage on that enemy operative instead.
-          
-          This operative cannot perform this action while within control range of an enemy operative.
+          - Select one enemy operative visible to and within 7" of this operative, or one enemy operative that's a valid target for this operative. That enemy operative gains one of your Poison tokens (if it doesn't already have one). If it already has one, inflict 3 damage on that enemy operative instead.
+          - This operative cannot perform this action while within control range of an enemy operative.
         apCost: 1
       - name: Putrescent Vitality
         text: |-
-          Select one friendly operative visible to and within 3" of this operative, then roll 2D6: if the result is 7, the selected operative regains 7 lost wounds; otherwise, the selected operative regains lost wounds equal to the highest D6.
-          
-          This operative cannot perform this action while within control range of an enemy operative, or more than once per turning point.
+          - Select one friendly operative visible to and within 3" of this operative, then roll 2D6: if the result is 7, the selected operative regains 7 lost wounds; otherwise, the selected operative regains lost wounds equal to the highest D6.
+          - This operative cannot perform this action while within control range of an enemy operative, or more than once per turning point.
         apCost: 1
   - name: Plague Marine Warrior
     operativeType: Plague Marine Warrior
@@ -512,9 +509,8 @@ universalEquipment:
     text: From neuro‑suppressant psybombs to smoke‑belching chemical charges, grenades of this sort can suppress the enemy and be the difference between life and death. When you select this equipment, select two utility grenades (2 smoke, 2 stun, or 1 smoke and 1 stun). Each selection is a unique action your operatives can perform, but your kill team can only perform that action a total number of times during the battle equal to your selection. RULE
   - name: Ammo Cache
     text: |-
-      Whether stockpiles deliberately set out for warriors to access quickly, or the abandoned munitions of the slain, these caches can prove vital for a swift reload in the heat of battle. Before the battle, you can set up one of your Ammo Cache markers wholly within your territory. Friendly operatives can perform the following mission action during the battle. **AMMO RESUPPLY** 0AP One of your Ammo Cache markers the active operative controls is used during this turning point. Until the start of the next turning point, whenever this operative is shooting with a weapon from its datacard, you can re‑roll one of your attack dice.
-      
-      An operative cannot perform this action while within control range of an enemy operative, if that marker isn't yours, or if that marker has been used this turning point.
+      - Whether stockpiles deliberately set out for warriors to access quickly, or the abandoned munitions of the slain, these caches can prove vital for a swift reload in the heat of battle. Before the battle, you can set up one of your Ammo Cache markers wholly within your territory. Friendly operatives can perform the following mission action during the battle. **AMMO RESUPPLY** 0AP One of your Ammo Cache markers the active operative controls is used during this turning point. Until the start of the next turning point, whenever this operative is shooting with a weapon from its datacard, you can re‑roll one of your attack dice.
+      - An operative cannot perform this action while within control range of an enemy operative, if that marker isn't yours, or if that marker has been used this turning point.
   - name: Razor Wire
     text: 'Spooled rapidly out and affixed to jutting posts, razor wire acts as an easily deployed barrier and a painful deterrent to enemy operatives seeking to attack along particular routes. Razor wire is Exposed and Obstructing terrain. Before the battle, you can set it up wholly within your territory, on the killzone floor and more than 2" from other equipment terrain features, access points and Accessible terrain. Obstructing: Whenever an operative would cross over this terrain feature within 1" of it, treat the distance as an additional 1".'
   - name: Comms Device

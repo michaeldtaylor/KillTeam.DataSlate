@@ -1728,11 +1728,20 @@ public partial class PdfTeamExtractor
                 continue;
             }
 
-            // Skip empty lines
+            // Skip empty lines — only emit one blank line for consecutive empties
             if (string.IsNullOrEmpty(stripped))
             {
                 FlushItem();
-                output.AppendLine(); // blank line → paragraph break
+                // Check if output already ends with a double newline (\n\n or \r\n\r\n)
+                var len = output.Length;
+                var endsNewline = len >= 1 && output[len - 1] == '\n';
+                var endsDoubleNewline = endsNewline && (
+                    (len >= 2 && output[len - 2] == '\n') ||
+                    (len >= 3 && output[len - 2] == '\r' && output[len - 3] == '\n'));
+                if (endsDoubleNewline == false)
+                {
+                    output.AppendLine();
+                }
                 parentDepth = 0;
                 continue;
             }
@@ -1841,9 +1850,11 @@ public partial class PdfTeamExtractor
             result = result.Replace(pattern, "\n\n" + pattern, StringComparison.OrdinalIgnoreCase);
         }
 
-        result = result.Replace(". Note ", ".\n\nNote ");
         result = result.Replace(". Your kill team", ".\n\nYour kill team");
         result = result.Replace(". Use this ", ".\n\nUse this ");
+
+        // Collapse 3+ consecutive newlines to a single paragraph break
+        result = Regex.Replace(result, @"\n{3,}", "\n\n");
 
         // Trim trailing blank lines
         return result.TrimEnd();
