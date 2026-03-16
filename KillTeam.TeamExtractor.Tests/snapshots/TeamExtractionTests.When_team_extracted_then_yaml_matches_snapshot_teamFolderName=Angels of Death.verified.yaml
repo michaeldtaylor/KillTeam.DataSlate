@@ -54,9 +54,7 @@ datacards:
         text: |-
           Once per turning point, you can do one of the following:
             - Use a firefight ploy for 0CP if this is the specified **ANGEL OF DEATH** operative (excluding Command Re-roll).
-            - Use the Combat Doctrine strategy ploy when you activate a friendly **ANGEL OF DEATH** operative if this operative is in the killzone and isn't within control range of enemy operatives (pay its CP cost as normal).
-          
-          Note that you cannot do so if you've already used that ploy during this turning point.
+            - Use the Combat Doctrine strategy ploy when you activate a friendly **ANGEL OF DEATH** operative if this operative is in the killzone and isn't within control range of enemy operatives (pay its CP cost as normal). Note that you cannot do so if you've already used that ploy during this turning point.
             - Use the Adjust Doctrine firefight ploy for 0CP if this operative is in the killzone and isn't within control range of enemy operatives.
       - name: Iron Halo
         text: Once per battle, when an attack dice inflicts Normal Dmg on this operative, you can ignore that inflicted damage.
@@ -298,10 +296,7 @@ datacards:
           crit: 5
     abilities:
       - name: Grenadier
-        text: |-
-          This operative can use frag and krak grenades (see universal equipment). Doing so doesn't count towards any limited uses you have (i.e. if you also select those grenades from equipment for other operatives).
-          
-          Whenever it's doing so, improve the Hit stat of that weapon by 1.
+        text: This operative can use frag and krak grenades (see universal equipment). Doing so doesn't count towards any limited uses you have (i.e. if you also select those grenades from equipment for other operatives). Whenever it's doing so, improve the Hit stat of that weapon by 1.
   - name: Assault Intercessor Warrior
     operativeType: Assault Intercessor Warrior
     primaryKeyword: Angel of Death
@@ -628,13 +623,9 @@ factionRules:
       5. **MOBILE**
         - This operative can perform the Fall Back action for 1 less AP.
         - This operative can perform the Charge action while within control range of an enemy operative, and can leave that operative's control range to do so (but then normal requirements for that move apply).
-      6. **HARDY** Whenever an operative is shooting this operative, defence dice results of 5+ are critical successes.
-      
-      Whenever this operative is retaliating, the first time an attack dice inflicts Normal Dmg of 3 or more on this operative during that sequence, that dice inflicts 1 less damage on it.
+      6. **HARDY** Whenever an operative is shooting this operative, defence dice results of 5+ are critical successes. Whenever this operative is retaliating, the first time an attack dice inflicts Normal Dmg of 3 or more on this operative during that sequence, that dice inflicts 1 less damage on it.
       7. **SHARPSHOOTER** Whenever this operative is shooting during an activation in which it hasn't performed the Charge, Fall Back or Reposition action, its bolt weapons have the Accurate 1 and Severe weapon rules.
-      8. **SIEGE SPECIALIST** This operative's ranged weapons have the Saturate weapon rule.
-      
-      Whenever this operative is fighting or retaliating, enemy operatives cannot assist.
+      8. **SIEGE SPECIALIST** This operative's ranged weapons have the Saturate weapon rule. Whenever this operative is fighting or retaliating, enemy operatives cannot assist.
   - name: Astartes
     text: 'These genetically modified superhumans are made for one purpose: war. During each friendly **ANGEL OF DEATH** operative''s activation, it can perform either two Shoot actions or two Fight actions. If it''s two Shoot actions, a bolt weapon must be selected for at least one of them, and if it''s a bolt sniper rifle or heavy bolter, 1 additional AP must be spent for the second action if both actions are using that weapon. Each friendly **ANGEL OF DEATH** operative can counteract regardless of its order.'
 firefightPloys:
@@ -698,24 +689,16 @@ operativeSelection:
 strategyPloys:
   - name: Combat Doctrine
     text: |-
-      Space Marines hold the teachings of the Codex Astartes in highest esteem, employing its flexible combat doctrines to annihilate their enemies. Select one **COMBAT DOCTRINE** from those presented below.
-      
-      Whenever a friendly **ANGEL OF DEATH** operative is x, its weapons have the Balanced weapon rule. X is the **COMBAT DOCTRINE** you selected.
+      Space Marines hold the teachings of the Codex Astartes in highest esteem, employing its flexible combat doctrines to annihilate their enemies. Select one **COMBAT DOCTRINE** from those presented below. Whenever a friendly **ANGEL OF DEATH** operative is x, its weapons have the Balanced weapon rule. X is the **COMBAT DOCTRINE** you selected.
         - Devastator Doctrine: Shooting an operative more than 6" from it.
         - Tactical Doctrine: Shooting an operative within 6" of it.
         - Assault Doctrine: Fighting or retaliating.
   - name: And They Shall Know No Fear
     text: Space Marines possess extraordinary courage and are utterly unflinching in the face of terrifying horrors and overwhelming odds. You can ignore any changes to the stats of friendly **ANGEL OF DEATH** operatives from being injured (including their weapons' stats).
   - name: Adaptive Tactics
-    text: |-
-      There are few more tactically flexible warriors than the Adeptus Astartes. Supplementing the teachings of the Codex Astartes with their own experience, Space Marines may adjust their strategies at a moment's notice. Change your secondary **CHAPTER TACTIC**.
-      
-      Note this ploy only lasts until the end of the turning point, at which point your original secondary **CHAPTER TACTIC** returns.
+    text: There are few more tactically flexible warriors than the Adeptus Astartes. Supplementing the teachings of the Codex Astartes with their own experience, Space Marines may adjust their strategies at a moment's notice. Change your secondary **CHAPTER TACTIC**. Note this ploy only lasts until the end of the turning point, at which point your original secondary **CHAPTER TACTIC** returns.
   - name: Indomitus
-    text: |-
-      This is the Era Indomitus. The Imperium wages galaxy-spanning crusades to drive back the horrors that plague it, and the battle-brothers of the Adeptus Astartes are spurred on by this righteous purpose.
-      
-      Whenever an operative is shooting a friendly **ANGEL OF DEATH** operative, if you roll two or more fails, you can discard one of them to retain another as a normal success instead.
+    text: This is the Era Indomitus. The Imperium wages galaxy-spanning crusades to drive back the horrors that plague it, and the battle-brothers of the Adeptus Astartes are spurred on by this righteous purpose. Whenever an operative is shooting a friendly **ANGEL OF DEATH** operative, if you roll two or more fails, you can discard one of them to retain another as a normal success instead.
 supplementaryInformation: |-
   # ANGELS OF DEATH: UPDATE LOG
   
@@ -777,9 +760,7 @@ supplementaryInformation: |-
   
   Changed to read: 'Once per turning point, you can do one of the following:
     - Use a firefight ploy for 0CP if this is the specified **ANGEL OF DEATH** operative (excluding Command Re-roll).
-    - Use the Combat Doctrine strategy ploy when you activate a friendly **ANGEL OF DEATH** operative if this operative is in the killzone and isn't within control range of enemy operatives (pay its CP cost as normal).
-  
-  Note that you cannot do so if you've already used that ploy during this turning point.
+    - Use the Combat Doctrine strategy ploy when you activate a friendly **ANGEL OF DEATH** operative if this operative is in the killzone and isn't within control range of enemy operatives (pay its CP cost as normal). Note that you cannot do so if you've already used that ploy during this turning point.
     - Use the Adjust Doctrine firefight ploy for 0CP if this operative is in the killzone and isn't within control range of enemy operatives.'
   
   ## FACTION EQUIPMENT, TILTING SHIELDS
@@ -884,10 +865,7 @@ universalEquipment:
   - name: Razor Wire
     text: 'Spooled rapidly out and affixed to jutting posts, razor wire acts as an easily deployed barrier and a painful deterrent to enemy operatives seeking to attack along particular routes. Razor wire is Exposed and Obstructing terrain. Before the battle, you can set it up wholly within your territory, on the killzone floor and more than 2" from other equipment terrain features, access points and Accessible terrain. Obstructing: Whenever an operative would cross over this terrain feature within 1" of it, treat the distance as an additional 1".'
   - name: Comms Device
-    text: |-
-      Communications devices can be swiftly hijacked and employed to coordinate operations or call in support during a firefight. Before the battle, you can set up one of your Comms Device markers wholly within your territory. While a friendly operative controls this marker, add 3" to the distance requirements of its SUPPORT rules that refer to friendly operatives (e.g. 'select one friendly operative within 6"' would be 9" instead).
-      
-      Note that you cannot benefit from your opponent's Comms Device markers.
+    text: Communications devices can be swiftly hijacked and employed to coordinate operations or call in support during a firefight. Before the battle, you can set up one of your Comms Device markers wholly within your territory. While a friendly operative controls this marker, add 3" to the distance requirements of its SUPPORT rules that refer to friendly operatives (e.g. 'select one friendly operative within 6"' would be 9" instead). Note that you cannot benefit from your opponent's Comms Device markers.
   - name: Mines
     text: The battlefields of the 41st Millennium are plagued by myriad types of mine, from simple frag charges to monofilament web‑snares and microplasma charges. Ultimately, all serve a similar, horrible purpose. Before the battle, you can set up one of your Mines markers wholly within your territory and more than 2" from other markers, access points and Accessible terrain. The first time that marker is within an operative's control range, remove that marker and inflict D3+3 damage on that operative.
   - name: Light Barricades

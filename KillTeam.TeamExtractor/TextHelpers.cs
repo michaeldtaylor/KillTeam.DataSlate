@@ -188,14 +188,12 @@ internal static partial class TextHelpers
 
         // Sentence-start paragraph breaks: specific Kill Team phrasings that begin a new
         // paragraph in the PDF but arrive joined to the preceding sentence by a space.
-        text = text.Replace(". Note ", ".\n\nNote ");
         text = text.Replace(". Your kill team", ".\n\nYour kill team");
         text = text.Replace(". Use this ", ".\n\nUse this ");
         text = text.Replace(". When selecting ", ".\n\nWhen selecting ");
         text = text.Replace(". Designer's Note:", ".\n\nDesigner's Note:");
         // Equipment: lore paragraph → rule trigger (no blank line in PDF, must be inserted)
         text = text.Replace(". Once per ", ".\n\nOnce per ");
-        text = text.Replace(". Whenever ", ".\n\nWhenever ");
         text = text.Replace(". When this equipment ", ".\n\nWhen this equipment ");
 
         // Collapse 3+ consecutive newlines to a single paragraph break

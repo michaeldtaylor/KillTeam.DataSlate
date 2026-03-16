@@ -536,20 +536,11 @@ operativeSelection:
       - **STRIKING SCORPION**: Infiltration
 strategyPloys:
   - name: Forewarned
-    text: |-
-      Aspect Warriors go to battle armed with the foresight of their Craftworld's seers.
-      
-      Whenever an operative is shooting a ready friendly **BLADES OF KHAINE** operative, you can re-roll any of your defence dice results of one result (e.g. results of 2).
+    text: Aspect Warriors go to battle armed with the foresight of their Craftworld's seers. Whenever an operative is shooting a ready friendly **BLADES OF KHAINE** operative, you can re-roll any of your defence dice results of one result (e.g. results of 2).
   - name: Ruthless Poise
-    text: |-
-      Centuries of combat experience coupled with lightning reactions and exceptional grace render Aspect Warriors utterly lethal.
-      
-      Whenever a friendly **BLADES OF KHAINE** operative is fighting a ready enemy operative, that friendly operative's melee weapons have the Ceaseless weapon rule.
+    text: Centuries of combat experience coupled with lightning reactions and exceptional grace render Aspect Warriors utterly lethal. Whenever a friendly **BLADES OF KHAINE** operative is fighting a ready enemy operative, that friendly operative's melee weapons have the Ceaseless weapon rule.
   - name: Khaine's Vengeance
-    text: |-
-      The Aspect Warriors draw upon the Bloody-Handed God's merciless example to dispatch their foes.
-      
-      Whenever a friendly **BLADES OF KHAINE** operative is shooting an expended enemy operative, that friendly operative's ranged weapons have the Ceaseless weapon rule.
+    text: The Aspect Warriors draw upon the Bloody-Handed God's merciless example to dispatch their foes. Whenever a friendly **BLADES OF KHAINE** operative is shooting an expended enemy operative, that friendly operative's ranged weapons have the Ceaseless weapon rule.
   - name: Dance of Death
     text: Lithe, acrobatic and utterly deadly, Aeldari Aspect Warriors exchange tactical positions with flawless grace. Select two friendly **BLADES OF KHAINE** operatives visible to and within 6" of each other. Remove them both from the killzone and set them back up in each other's previous locations (in other words, swap their positions).
 supplementaryInformation: |-
@@ -679,10 +670,7 @@ universalEquipment:
   - name: Razor Wire
     text: 'Spooled rapidly out and affixed to jutting posts, razor wire acts as an easily deployed barrier and a painful deterrent to enemy operatives seeking to attack along particular routes. Razor wire is Exposed and Obstructing terrain. Before the battle, you can set it up wholly within your territory, on the killzone floor and more than 2" from other equipment terrain features, access points and Accessible terrain. Obstructing: Whenever an operative would cross over this terrain feature within 1" of it, treat the distance as an additional 1".'
   - name: Comms Device
-    text: |-
-      Communications devices can be swiftly hijacked and employed to coordinate operations or call in support during a firefight. Before the battle, you can set up one of your Comms Device markers wholly within your territory. While a friendly operative controls this marker, add 3" to the distance requirements of its SUPPORT rules that refer to friendly operatives (e.g. 'select one friendly operative within 6"' would be 9" instead).
-      
-      Note that you cannot benefit from your opponent's Comms Device markers.
+    text: Communications devices can be swiftly hijacked and employed to coordinate operations or call in support during a firefight. Before the battle, you can set up one of your Comms Device markers wholly within your territory. While a friendly operative controls this marker, add 3" to the distance requirements of its SUPPORT rules that refer to friendly operatives (e.g. 'select one friendly operative within 6"' would be 9" instead). Note that you cannot benefit from your opponent's Comms Device markers.
   - name: Mines
     text: The battlefields of the 41st Millennium are plagued by myriad types of mine, from simple frag charges to monofilament web‑snares and microplasma charges. Ultimately, all serve a similar, horrible purpose. Before the battle, you can set up one of your Mines markers wholly within your territory and more than 2" from other markers, access points and Accessible terrain. The first time that marker is within an operative's control range, remove that marker and inflict D3+3 damage on that operative.
   - name: Light Barricades

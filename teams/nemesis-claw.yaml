@@ -90,12 +90,8 @@ datacards:
       - name: Prescience
         text: |-
           In the Ready step of each Strategy phase, you gain D3 Prescience points. At the end of each turning point, discard your Prescience points. You can spend your Prescience points in the Firefight phase as follows (you cannot use each of the following rules more than once per turning point):
-            - Foreboding: PSYCHIC.
-          
-          Whenever it's your turn to activate a friendly operative, you can spend 1 of your Prescience points to skip that activation.
-            - Portent: PSYCHIC.
-          
-          Whenever an attack dice inflicts Normal Dmg on this operative, you can spend 1 of your Prescience points to ignore that inflicted damage. You cannot gain or spend your Prescience points if this operative is incapacitated.
+            - Foreboding: PSYCHIC. Whenever it's your turn to activate a friendly operative, you can spend 1 of your Prescience points to skip that activation.
+            - Portent: PSYCHIC. Whenever an attack dice inflicts Normal Dmg on this operative, you can spend 1 of your Prescience points to ignore that inflicted damage. You cannot gain or spend your Prescience points if this operative is incapacitated.
     specialActions:
       - name: Premonition
         text: |-
@@ -409,10 +405,7 @@ datacards:
           crit: 5
     abilities:
       - name: Icon Bearer
-        text: |-
-          Whenever determining control of a marker, treat this operative's APL stat as 1 higher.
-          
-          Note this isn't a change to its APL stat, so any changes are cumulative with this.
+        text: Whenever determining control of a marker, treat this operative's APL stat as 1 higher. Note this isn't a change to its APL stat, so any changes are cumulative with this.
     specialActions:
       - name: Disconcerting Mimicry
         text: |-
@@ -472,37 +465,22 @@ datacards:
         text: Whenever this operative is shooting against, fighting against or retaliating against an injured enemy operative, or an enemy operative that has a Wounds stat of 7 or less, this operative's weapons have the Lethal 5+ weapon rule.
 factionEquipment:
   - name: Flayed Skin
-    text: |-
-      Bedecked with the bloody hides of butchered victims, the Night Lords inspire abject terror and revulsion in their enemies.
-      
-      Whenever an enemy operative is shooting against, fighting against or retaliating against a friendly **NEMESIS CLAW** operative within 2" of it, your opponent cannot re-roll their attack dice results of 1.
+    text: Bedecked with the bloody hides of butchered victims, the Night Lords inspire abject terror and revulsion in their enemies. Whenever an enemy operative is shooting against, fighting against or retaliating against a friendly **NEMESIS CLAW** operative within 2" of it, your opponent cannot re-roll their attack dice results of 1.
   - name: Chain Snare
-    text: |-
-      Composed of hooked blades attached to a length of chain, this weapon bites into the flesh or armour of the wielder's target, preventing them from fleeing.
-      
-      Whenever an enemy operative would perform the Fall Back action while within control range of a friendly **NEMESIS CLAW** operative, if no other enemy operatives are within that friendly operative's control range, you can use this rule. If you do, roll two D6, or one D6 if that enemy operative has a higher Wounds stat than that friendly operative. If any result is a 4+, that enemy operative cannot perform that action during that activation/counteraction (no AP are spent on it), and you cannot use this rule again during this turning point.
+    text: Composed of hooked blades attached to a length of chain, this weapon bites into the flesh or armour of the wielder's target, preventing them from fleeing. Whenever an enemy operative would perform the Fall Back action while within control range of a friendly **NEMESIS CLAW** operative, if no other enemy operatives are within that friendly operative's control range, you can use this rule. If you do, roll two D6, or one D6 if that enemy operative has a higher Wounds stat than that friendly operative. If any result is a 4+, that enemy operative cannot perform that action during that activation/counteraction (no AP are spent on it), and you cannot use this rule again during this turning point.
   - name: Grisly Trophy
     text: |-
       Severed hands and limbs, eyeballs plucked from the skulls of screaming victims – these macabre trophies and more cause the Night Lords' foes to waver.
       
-      Once per battle, when a friendly **NEMESIS CLAW** operative incapacitates an enemy operative within 2" of it, you can use this rule. If you do, that friendly operative gains one of your Grisly Trophy tokens (if it doesn't already have one).
-      
-      Whenever a friendly **NEMESIS CLAW** operative that has one of your Grisly Trophy tokens is visible to and within 2" of an enemy operative, subtract 1 from the Atk stat of that enemy operative's weapons.
+      Once per battle, when a friendly **NEMESIS CLAW** operative incapacitates an enemy operative within 2" of it, you can use this rule. If you do, that friendly operative gains one of your Grisly Trophy tokens (if it doesn't already have one). Whenever a friendly **NEMESIS CLAW** operative that has one of your Grisly Trophy tokens is visible to and within 2" of an enemy operative, subtract 1 from the Atk stat of that enemy operative's weapons.
   - name: Comms Jammers
-    text: |-
-      The Night Lords use jamming devices to sow chaos and confusion by preventing their panicked foes from communicating.
-      
-      Whenever an enemy operative is within 3" of a friendly **NEMESIS CLAW** operative, that enemy operative's APL stat cannot be added to.
-      
-      Note that this doesn't affect APL stats that have already been changed.
+    text: The Night Lords use jamming devices to sow chaos and confusion by preventing their panicked foes from communicating. Whenever an enemy operative is within 3" of a friendly **NEMESIS CLAW** operative, that enemy operative's APL stat cannot be added to. Note that this doesn't affect APL stats that have already been changed.
 factionRules:
   - name: Astartes
     text: 'These genetically modified superhumans are made for one purpose: war. During each friendly **NEMESIS CLAW** operative''s activation, it can perform either two Shoot actions or two Fight actions. If it''s two Shoot actions, a bolt pistol, boltgun or scoped bolt pistol must be selected for at least one of them. Each friendly **NEMESIS CLAW** operative can counteract regardless of its order.'
   - name: In Midnight Clad
     text: |-
-      Night Lords are one with the darkness, employing it as an ally and a weapon.
-      
-      Whenever an enemy operative is shooting a friendly **NEMESIS CLAW** operative, that friendly operative is obscured if both of the following are true:
+      Night Lords are one with the darkness, employing it as an ally and a weapon. Whenever an enemy operative is shooting a friendly **NEMESIS CLAW** operative, that friendly operative is obscured if both of the following are true:
         - It's more than 8" from enemy operatives it's visible to.
         - It has Heavy terrain within its control range, or any part of its base is underneath Vantage terrain.
       
@@ -561,20 +539,11 @@ operativeSelection:
     Other than **WARRIOR** operatives, your kill team can only include each operative on this list once.
 strategyPloys:
   - name: We Have Come for You
-    text: |-
-      The Night Lords strike their foes swiftly, utilising shock, awe and terror to brutalise the enemy before they can lift a blade in response.
-      
-      Whenever a friendly **NEMESIS CLAW** operative is activated, if the first action it performs during that activation is the Charge action, when it ends its move during that action, you can inflict D3 damage on one enemy operative within its control range.
+    text: The Night Lords strike their foes swiftly, utilising shock, awe and terror to brutalise the enemy before they can lift a blade in response. Whenever a friendly **NEMESIS CLAW** operative is activated, if the first action it performs during that activation is the Charge action, when it ends its move during that action, you can inflict D3 damage on one enemy operative within its control range.
   - name: The Black Hunt
-    text: |-
-      A terrible malice burns within the twin hearts of each Night Lord, and they enjoy nothing more than toying with their wounded prey.
-      
-      Whenever a friendly **NEMESIS CLAW** operative is shooting against, fighting against or retaliating against a wounded enemy operative, you can re-roll one of your attack dice.
+    text: A terrible malice burns within the twin hearts of each Night Lord, and they enjoy nothing more than toying with their wounded prey. Whenever a friendly **NEMESIS CLAW** operative is shooting against, fighting against or retaliating against a wounded enemy operative, you can re-roll one of your attack dice.
   - name: Preysight
-    text: |-
-      The Night Lords seem able to sense the fear of cowering prey, hunting down the craven with unerring precision.
-      
-      Whenever you're selecting a valid target for a friendly **NEMESIS CLAW** operative, enemy operatives within 6" of it cannot use Light terrain for cover. While this can allow such operatives to be targeted (assuming they're visible), it doesn't remove their cover save (if any).
+    text: The Night Lords seem able to sense the fear of cowering prey, hunting down the craven with unerring precision. Whenever you're selecting a valid target for a friendly **NEMESIS CLAW** operative, enemy operatives within 6" of it cannot use Light terrain for cover. While this can allow such operatives to be targeted (assuming they're visible), it doesn't remove their cover save (if any).
   - name: Return to Darkness
     text: 'The Night Lords move from shadow to shadow with an agility and speed belied by their transhuman bulk. One friendly **NEMESIS CLAW** operative can immediately perform a free Fall Back or Reposition action, but it must end that move with Heavy terrain within its control range, or any part of its base underneath Vantage terrain. In addition, it cannot move more than 4" during that action and it cannot end that move closer to enemy operatives (in a killzone that uses the close quarters rules, e.g. Killzone: Tomb World, ignore Wall terrain when determining this).'
 supplementaryInformation: |-
@@ -708,10 +677,7 @@ universalEquipment:
   - name: Razor Wire
     text: 'Spooled rapidly out and affixed to jutting posts, razor wire acts as an easily deployed barrier and a painful deterrent to enemy operatives seeking to attack along particular routes. Razor wire is Exposed and Obstructing terrain. Before the battle, you can set it up wholly within your territory, on the killzone floor and more than 2" from other equipment terrain features, access points and Accessible terrain. Obstructing: Whenever an operative would cross over this terrain feature within 1" of it, treat the distance as an additional 1".'
   - name: Comms Device
-    text: |-
-      Communications devices can be swiftly hijacked and employed to coordinate operations or call in support during a firefight. Before the battle, you can set up one of your Comms Device markers wholly within your territory. While a friendly operative controls this marker, add 3" to the distance requirements of its SUPPORT rules that refer to friendly operatives (e.g. 'select one friendly operative within 6"' would be 9" instead).
-      
-      Note that you cannot benefit from your opponent's Comms Device markers.
+    text: Communications devices can be swiftly hijacked and employed to coordinate operations or call in support during a firefight. Before the battle, you can set up one of your Comms Device markers wholly within your territory. While a friendly operative controls this marker, add 3" to the distance requirements of its SUPPORT rules that refer to friendly operatives (e.g. 'select one friendly operative within 6"' would be 9" instead). Note that you cannot benefit from your opponent's Comms Device markers.
   - name: Mines
     text: The battlefields of the 41st Millennium are plagued by myriad types of mine, from simple frag charges to monofilament web‑snares and microplasma charges. Ultimately, all serve a similar, horrible purpose. Before the battle, you can set up one of your Mines markers wholly within your territory and more than 2" from other markers, access points and Accessible terrain. The first time that marker is within an operative's control range, remove that marker and inflict D3+3 damage on that operative.
   - name: Light Barricades

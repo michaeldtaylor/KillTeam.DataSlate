@@ -367,10 +367,7 @@ datacards:
       - name: Blink Pack
         text: 'Whenever this operative performs the Charge, Fall Back or Reposition action, it can warp jump. If it does, don''t move it. Instead, remove it from the killzone and set it back up wholly within 7" horizontally of its original location (in a killzone that uses the close quarters rules, e.g. Killzone: Tomb World, this distance can be measured through Wall terrain). It must be set up in a location it can be placed, and unless it''s the Charge action, it cannot be set up within control range of an enemy operative.'
       - name: Slicing Attack
-        text: |-
-          Whenever this operative performs the Reposition action with a warp jump (see other side of card), you can use this rule. If you do, after it moves, draw an imaginary line 1mm in diameter and up to 7" long between it and its previous location.
-          
-          Note this doesn't have to be a straight line. Inflict D3+2 damage on one enemy operative that line crosses. You cannot inflict damage on an enemy operative that was not visible to this operative at the start of that action. A 28mm round marker can be temporarily placed underneath this operative before it moves to help determine this.
+        text: Whenever this operative performs the Reposition action with a warp jump (see other side of card), you can use this rule. If you do, after it moves, draw an imaginary line 1mm in diameter and up to 7" long between it and its previous location. Note this doesn't have to be a straight line. Inflict D3+2 damage on one enemy operative that line crosses. You cannot inflict damage on an enemy operative that was not visible to this operative at the start of that action. A 28mm round marker can be temporarily placed underneath this operative before it moves to help determine this.
   - name: Voidscarred Soul Weaver
     operativeType: Voidscarred Soul Weaver
     primaryKeyword: Corsair Voidscarred
@@ -595,34 +592,22 @@ datacards:
         apCost: 1
 factionEquipment:
   - name: Diuturnal Mantles
-    text: |-
-      The cloaks worn by Corsair Voidscarred operatives are woven from psychoactive material that hardens in response to explosions and fluctuations in temperature.
-      
-      Whenever an operative is shooting a friendly **CORSAIR VOIDSCARRED** operative, if the ranged weapon in that sequence has the Blast or Torrent weapon rule, you can re-roll one of your defence dice. In addition, friendly **CORSAIR VOIDSCARRED** operatives aren't affected by the x" Devastating x weapon rule (i.e. Devastating with a distance) unless they are the target during that sequence.
+    text: The cloaks worn by Corsair Voidscarred operatives are woven from psychoactive material that hardens in response to explosions and fluctuations in temperature. Whenever an operative is shooting a friendly **CORSAIR VOIDSCARRED** operative, if the ranged weapon in that sequence has the Blast or Torrent weapon rule, you can re-roll one of your defence dice. In addition, friendly **CORSAIR VOIDSCARRED** operatives aren't affected by the x" Devastating x weapon rule (i.e. Devastating with a distance) unless they are the target during that sequence.
   - name: Mistfield
     text: |-
       A mistfield projects a field of thick moisture around the bearer that not only obscures their form, but also slows bullets, reducing their lethality.
       
-      Once per turning point, when an operative is shooting a friendly **CORSAIR VOIDSCARRED** operative more than 3" from it, at the start of the Roll Defence Dice step, you can use this rule. If you do, worsen the x of the Piercing weapon rule by 1 (if any) until the end of that sequence.
-      
-      Note that Piercing 1 would therefore be ignored.
+      Once per turning point, when an operative is shooting a friendly **CORSAIR VOIDSCARRED** operative more than 3" from it, at the start of the Roll Defence Dice step, you can use this rule. If you do, worsen the x of the Piercing weapon rule by 1 (if any) until the end of that sequence. Note that Piercing 1 would therefore be ignored.
   - name: Runes of Guidance
     text: |-
       Corsair psykers wield warp powers with consummate precision, lending their foresight to distant allies.
       
-      Once per turning point, when a friendly **CORSAIR VOIDSCARRED WAY SEEKER** or **CORSAIR VOIDSCARRED SOUL WEAVER** operative is performing a PSYCHIC unique action (excluding Warp Fold), you can use this rule. If you do, until the end of that action, add 3" to its distance requirement.
-      
-      Note this has no effect on PSYCHIC weapons (e.g. the Devastating distance requirement of lightning strike).
+      Once per turning point, when a friendly **CORSAIR VOIDSCARRED WAY SEEKER** or **CORSAIR VOIDSCARRED SOUL WEAVER** operative is performing a PSYCHIC unique action (excluding Warp Fold), you can use this rule. If you do, until the end of that action, add 3" to its distance requirement. Note this has no effect on PSYCHIC weapons (e.g. the Devastating distance requirement of lightning strike).
   - name: Star Charts
     text: 'The Corsair Voidscarred utilise their peerless knowledge of the void to outmanoeuvre their foes. **STRATEGIC GAMBIT**. Roll one D3: if the result is higher than the number of the current turning point, you gain 1CP and cannot use this **STRATEGIC GAMBIT** for the rest of the battle.'
 factionRules:
   - name: Rifles
-    text: |-
-      Whilst not all Aeldari outcasts have walked the Path of the Warrior, all are skilled in the use of rifles.
-      
-      Whenever a friendly **CORSAIR VOIDSCARRED** operative is shooting with a shuriken rifle or ranger long rifle during an activation in which it hasn't performed the Charge, Fall Back or Reposition action, that weapon has the Accurate 1 weapon rule.
-      
-      Note that operative isn't restricted from performing those actions after shooting.
+    text: Whilst not all Aeldari outcasts have walked the Path of the Warrior, all are skilled in the use of rifles. Whenever a friendly **CORSAIR VOIDSCARRED** operative is shooting with a shuriken rifle or ranger long rifle during an activation in which it hasn't performed the Charge, Fall Back or Reposition action, that weapon has the Accurate 1 weapon rule. Note that operative isn't restricted from performing those actions after shooting.
   - name: Aeldari Raiders
     text: Aeldari are lithe, graceful and swift – qualities the Corsair Voidscarred utilise to outmanoeuvre their enemies. Each friendly **CORSAIR VOIDSCARRED** operative can perform a free Dash action during their activation.
   - name: Corsair Voidscarred
@@ -647,9 +632,7 @@ firefightPloys:
     text: |-
       The Corsair Voidscarred possess a fearless arrogance that is often justified by their superior skill at arms.
       
-      Use this firefight ploy when the first friendly **CORSAIR VOIDSCARRED** operative is activated during the turning point, if it's more than 5" from other friendly operatives. The first time that operative performs either the Shoot or Fight action during that activation, its weapons have the Relentless weapon rule.
-      
-      Note this ploy cannot come into effect more than once per activation (you cannot use it during both the Shoot and Fight action in the same activation).
+      Use this firefight ploy when the first friendly **CORSAIR VOIDSCARRED** operative is activated during the turning point, if it's more than 5" from other friendly operatives. The first time that operative performs either the Shoot or Fight action during that activation, its weapons have the Relentless weapon rule. Note this ploy cannot come into effect more than once per activation (you cannot use it during both the Shoot and Fight action in the same activation).
 operativeSelection:
   archetype: Infiltration, Recon
   text: |-
@@ -685,20 +668,11 @@ strategyPloys:
   - name: Plunderers
     text: Aeldari Corsairs prioritise profit over glory, moving swiftly towards their objective in the hope of seizing their prize before the foe can react. Up to D3 friendly **CORSAIR VOIDSCARRED** operatives can immediately perform a free Dash action in an order of your choice. This turning point, each that does so cannot perform the Dash action during their activation. You cannot use this ploy during the first turning point.
   - name: Piratical Profiteers
-    text: |-
-      Any foolish enough to attempt to contest a prize claimed by the Corsair Voidscarred will soon find themselves caught in a blizzard of shuriken fire and sword thrusts.
-      
-      Whenever a friendly **CORSAIR VOIDSCARRED** operative is shooting, fighting or retaliating, if it or the enemy operative in that sequence contests an objective marker or one of your mission markers, that friendly operative's weapons have the Balanced weapon rule.
+    text: Any foolish enough to attempt to contest a prize claimed by the Corsair Voidscarred will soon find themselves caught in a blizzard of shuriken fire and sword thrusts. Whenever a friendly **CORSAIR VOIDSCARRED** operative is shooting, fighting or retaliating, if it or the enemy operative in that sequence contests an objective marker or one of your mission markers, that friendly operative's weapons have the Balanced weapon rule.
   - name: Mobile Engagement
-    text: |-
-      Aeldari Corsairs rely upon blistering speed to avoid heavy fire.
-      
-      Whenever an operative is shooting a friendly **CORSAIR VOIDSCARRED** operative that performed an action in which it moved during this turning point, you can re-roll one of your defence dice.
+    text: Aeldari Corsairs rely upon blistering speed to avoid heavy fire. Whenever an operative is shooting a friendly **CORSAIR VOIDSCARRED** operative that performed an action in which it moved during this turning point, you can re-roll one of your defence dice.
   - name: Outcasts
-    text: |-
-      Those who walk the Path of the Outcast are no strangers to solitude. Some even fight better alone.
-      
-      Whenever a friendly **CORSAIR VOIDSCARRED** operative is more than 5" from other friendly operatives, its weapons have the Punishing weapon rule.
+    text: Those who walk the Path of the Outcast are no strangers to solitude. Some even fight better alone. Whenever a friendly **CORSAIR VOIDSCARRED** operative is more than 5" from other friendly operatives, its weapons have the Punishing weapon rule.
 supplementaryInformation: |-
   # CORSAIR VOIDSCARRED: UPDATE LOG
   
@@ -846,10 +820,7 @@ universalEquipment:
   - name: Razor Wire
     text: 'Spooled rapidly out and affixed to jutting posts, razor wire acts as an easily deployed barrier and a painful deterrent to enemy operatives seeking to attack along particular routes. Razor wire is Exposed and Obstructing terrain. Before the battle, you can set it up wholly within your territory, on the killzone floor and more than 2" from other equipment terrain features, access points and Accessible terrain. Obstructing: Whenever an operative would cross over this terrain feature within 1" of it, treat the distance as an additional 1".'
   - name: Comms Device
-    text: |-
-      Communications devices can be swiftly hijacked and employed to coordinate operations or call in support during a firefight. Before the battle, you can set up one of your Comms Device markers wholly within your territory. While a friendly operative controls this marker, add 3" to the distance requirements of its SUPPORT rules that refer to friendly operatives (e.g. 'select one friendly operative within 6"' would be 9" instead).
-      
-      Note that you cannot benefit from your opponent's Comms Device markers.
+    text: Communications devices can be swiftly hijacked and employed to coordinate operations or call in support during a firefight. Before the battle, you can set up one of your Comms Device markers wholly within your territory. While a friendly operative controls this marker, add 3" to the distance requirements of its SUPPORT rules that refer to friendly operatives (e.g. 'select one friendly operative within 6"' would be 9" instead). Note that you cannot benefit from your opponent's Comms Device markers.
   - name: Mines
     text: The battlefields of the 41st Millennium are plagued by myriad types of mine, from simple frag charges to monofilament web‑snares and microplasma charges. Ultimately, all serve a similar, horrible purpose. Before the battle, you can set up one of your Mines markers wholly within your territory and more than 2" from other markers, access points and Accessible terrain. The first time that marker is within an operative's control range, remove that marker and inflict D3+3 damage on that operative.
   - name: Light Barricades
