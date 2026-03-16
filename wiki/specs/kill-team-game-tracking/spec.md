@@ -10,6 +10,8 @@ recording every operative activation, action taken, weapon used, target, dice re
 dealt. All data is persisted to SQLite. After a game, players can annotate any recorded action
 with narrative fluff. Game history and win-rate statistics are available at any time.
 
+The current implementation phase focuses on the **fight/shoot vertical slice**: implementing the event architecture for US-010, US-011, US-012, US-013, US-018, and US-020. US-014 (Blast/Torrent), US-015 (Strategy Phase), US-016 (Firefight Phase), US-017 (Guard Interrupt), and US-019 (SQLite Persistence) are deferred to spikes and will be addressed in a later phase.
+
 ---
 
 ## Goals
@@ -630,7 +632,7 @@ dotnet test
 
 ---
 
-### US-014: Refactor BlastTorrentSessionOrchestrator to Emit Events
+### US-014: Refactor BlastTorrentSessionOrchestrator to Emit Events — *Deferred*
 
 **Description:** As a developer, I need the blast/torrent orchestrator to emit events so multi-target ranged combat flows through the event stream.
 
@@ -655,7 +657,7 @@ dotnet test
 
 ---
 
-### US-015: Refactor StrategyPhaseOrchestrator to Emit Events
+### US-015: Refactor StrategyPhaseOrchestrator to Emit Events — *Deferred*
 
 **Description:** As a developer, I need the strategy phase orchestrator to emit events for all non-prompt output.
 
@@ -678,7 +680,7 @@ dotnet test
 
 ---
 
-### US-016: Refactor FirefightPhaseOrchestrator to Emit Events
+### US-016: Refactor FirefightPhaseOrchestrator to Emit Events — *Deferred*
 
 **Description:** As a developer, I need the firefight phase orchestrator to emit events for all non-prompt output.
 
@@ -702,7 +704,7 @@ dotnet test
 
 ---
 
-### US-017: Refactor GuardInterruptOrchestrator to Emit Events
+### US-017: Refactor GuardInterruptOrchestrator to Emit Events — *Deferred*
 
 **Description:** As a developer, I need the guard interrupt orchestrator to emit events so guard interactions flow through the event stream.
 
@@ -750,7 +752,7 @@ dotnet test
 
 ---
 
-### US-019: Persist Game Events to SQLite
+### US-019: Persist Game Events to SQLite — *Deferred*
 
 **Description:** As a developer, I need game events persisted to SQLite so encounters can be reviewed or replayed later.
 
@@ -1130,6 +1132,7 @@ Sergeant Intercessor expended.
 - **Strategy Phase**: `StrategyPhaseOrchestrator` drives initiative roll (with tie re-roll), CP gain (TP1: both +1CP; TP2-4: initiative +1CP, non-initiative +2CP), ploy recording (`ploy_uses` table), and `is_strategy_phase_complete` flag for resume detection. CP displayed as `[NCP]` inline (≥3 white, 1–2 yellow, 0 red). Full design: `spike-strategy-phase.md`.
 - **Re-roll mechanics**: `RerollOrchestrator` handles weapon re-rolls (Balanced: pick 1; Ceaseless: re-roll all matching a chosen face; Relentless: checkbox-select any/all) then CP Re-roll for attacker and defender (1CP, 1 die, cannot re-roll a re-rolled die). In-memory `RollableDie(Index, Value, HasBeenRerolled)` record; only final int[] persisted. Full UX: `spike-reroll-mechanics.md`.
 - **Blast/Torrent multi-target**: Blast/Torrent weapons trigger a multi-target shoot flow. Primary target selected normally; additional targets selected via `MultiSelectionPrompt` (player declares from game state). Attack dice rolled **once** (shared). Each target rolls their own defence dice; damage resolved independently. Friendly fire supported (⚠ warning). Additional targets stored in new `action_blast_targets` table (Migration 003). Once-vs-per-target rule evaluation: Severe/Rending/Punishing fire on shared pool; Piercing Crits evaluated per target using shared crit count; Saturate negates cover for all targets. Full design: `spike-blast-torrent.md`.
+- **Domain as game engine:** `GameEvent` types and `GameEventStream` live in `KillTeam.DataSlate.Domain`. They are pure data/logic with no UI dependency. The Console project is a thin CLI adapter: orchestrators handle interactive prompts and emit events; `GameEventRenderer` renders events to `IAnsiConsole`. A future web or desktop front-end would reference `KillTeam.DataSlate.Domain` and implement its own renderer.
 - **GameEventStream**: Synchronous event emitter. `Emit()` fires `Action<GameEvent> OnEventEmitted` inline. No threading complexity; events render in the same call stack as the fight loop. Spectre.Console stays single-threaded.
 - **Event serialisation (FR-2 persistence)**: Use `System.Text.Json` with `[JsonDerivedType]` on `GameEvent` base type.
 - **No changes to resolution services**: `FightResolutionService` and `CombatResolutionService` stay pure.
