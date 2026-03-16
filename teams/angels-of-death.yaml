@@ -1,4 +1,4 @@
-id: angels-of-death
+﻿id: angels-of-death
 name: Angels of Death
 grandFaction: Imperium
 faction: Adeptus Astartes
@@ -677,6 +677,7 @@ operativeSelection:
         - Chainsword, fists, power fist, power weapon or thunder hammer
       - **SPACE MARINE CAPTAIN**
     
+    
     5 **ANGEL OF DEATH** operatives selected from the following list:
       - **ASSAULT INTERCESSOR GRENADIER**
       - **ASSAULT INTERCESSOR WARRIOR**
@@ -716,23 +717,23 @@ strategyPloys:
       
       Whenever an operative is shooting a friendly **ANGEL OF DEATH** operative, if you roll two or more fails, you can discard one of them to retain another as a normal success instead.
 supplementaryInformation: |-
-  # Angels of Death: Update Log
+  # ANGELS OF DEATH: UPDATE LOG
   
   Rules will be periodically updated to maintain fair balance and interact more smoothly with the game. Rules changes will be updated directly into online documents and then listed below. Any minor changes to standardise wording that don't have any practical impact on the rule will be updated directly into online documents but not be listed here.
   
-  # Errata January '26
+  # ERRATA JANUARY '26
   
   This section collects amendments to the rules. Amended text for clarification and edits are shown in blue, while amended text for balance updates are shown in magenta.
   
-  # Heavy Intercessor Gunner Operative, Weapons List
+  ## HEAVY INTERCESSOR GUNNER OPERATIVE, WEAPONS LIST
   
   'Bolt pistol' weapon added.
   
-  # Team Selection
+  # TEAM SELECTION
   
   Following sentence and asterisks on **ELIMINATOR SNIPER** and **HEAVY INTERCESSOR GUNNER** deleted: ~~'You cannot select more than one of these operatives combined.'~~
   
-  # Previous Erratas Faction Rules, Chapter Tactics
+  ## PREVIOUS ERRATAS FACTION RULES, CHAPTER TACTICS
   
   ## Dueller
   
@@ -754,27 +755,27 @@ supplementaryInformation: |-
   
   Additional sentence added: 'Whenever this operative is fighting or retaliating, enemy operatives cannot assist.'
   
-  # Intercessor Sergeant Operative, Doctrine
+  ## INTERCESSOR SERGEANT OPERATIVE, DOCTRINE
   
-  # Warfare Rule
+  # WARFARE RULE
   
   Changed to read: 'You can do each of the following once per battle:
     - When you would use the Combat Doctrine strategy ploy and then select Devastator, if this operative is in the killzone, it costs you 0CP.
     - When you would use the Combat Doctrine strategy ploy and then select Tactical, if this operative is in the killzone, it costs you 0CP.'
   
-  # Assault Intercessor Sergeant Operative, Doctrine
+  ## ASSAULT INTERCESSOR SERGEANT OPERATIVE, DOCTRINE
   
-  # Warfare Rule
+  # WARFARE RULE
   
   Changed to read: 'You can do each of the following once per battle:
     - When you would use the Combat Doctrine strategy ploy and then select Assault, if this operative is in the killzone, it costs you 0CP.
     - When you would use the Combat Doctrine strategy ploy and then select Tactical, if this operative is in the killzone, it costs you 0CP.'
   
-  # Heavy Intercessor Gunner Operative
+  # HEAVY INTERCESSOR GUNNER OPERATIVE
   
   Move stat changed to '5'.
   
-  # Space Marine Captain Operative, Heroic Leader Rule
+  ## SPACE MARINE CAPTAIN OPERATIVE, HEROIC LEADER RULE
   
   Changed to read: 'Once per turning point, you can do one of the following:
     - Use a firefight ploy for 0CP if this is the specified **ANGEL OF DEATH** operative (excluding Command Re-roll).
@@ -783,63 +784,95 @@ supplementaryInformation: |-
   Note that you cannot do so if you've already used that ploy during this turning point.
     - Use the Adjust Doctrine firefight ploy for 0CP if this operative is in the killzone and isn't within control range of enemy operatives.'
   
-  # Faction Equipment, Tilting Shields
+  ## FACTION EQUIPMENT, TILTING SHIELDS
   
   Relevant part of first sentence changed to read: '[…] after your opponent rolls their attack dice, but before re-rolls, you can use this rule.'
   
-  # Angels of Death
+  # ANGELS OF DEATH
   
-  # Operatives
+  # OPERATIVES
   
   Genetically modified transhuman warriors, Space Marines are amongst Humanity's most elite fighting forces. Angels of Death kill teams are composed of elite specialists trained in myriad forms of combat, who are capable of overcoming almost any foe.
   
-  # Space Marine Captain
+  # SPACE MARINE CAPTAIN
   
   To reach the rank of Captain, a Space Marine must master war. They are equally adept at conducting planet-spanning military campaigns as they are at dispatching foes in expertly fought duels.
   
-  # Assault Intercessor Sergeant
+  # ASSAULT INTERCESSOR SERGEANT
   
   These mission leaders understand the optimal moment to unleash charges. They are exemplars in the press of melee, rending foes in twain with their deadly close combat weapons.
   
-  # Intercessor Sergeant
+  # INTERCESSOR SERGEANT
   
   Intercessor Sergeants lead their teams in levelling salvoes of firepower against targets in ever-changing killzones. They often carry specialist weaponry into the fray to support their battle-brothers.
   
-  # Assault Intercessor Warrior
+  # ASSAULT INTERCESSOR WARRIOR
   
   Protected by Mk X Tacticus armour, Assault Intercessor Warriors charge into battle swinging large chainswords and firing mass-reactive shells from their pistols.
   
-  # Assault Intercessor Grenadier
+  # ASSAULT INTERCESSOR GRENADIER
   
   Equipped with an array of deadly grenades, these specialists provide close-range support when facing swarms of lesser foes or heavily armoured targets.
   
-  # Intercessor Warrior
+  # INTERCESSOR WARRIOR
   
   Intercessor Warriors lay down punishing volleys of fire from their bolt rifles. Their tactics and wargear are adaptable to countless situations, making them a core asset for any Intercession Squad.
   
-  # Intercessor Gunner
+  # INTERCESSOR GUNNER
   
   These specialists provide long-range supporting fire from their rifle's underslung auxiliary grenade launcher. They are capable of delivering explosive charges that inflict maximum devastation on the most densely defended or shielded positions.
   
-  # Eliminator Sniper
+  # ELIMINATOR SNIPER
   
   Eliminators wield specialised sniper rifles with ammunition for every enemy. These range from heavy-cored Mortis rounds that make a mockery of armour, to explosive fragmentation shells that devastate clustered targets.
   
-  # Heavy Intercessor Gunner
+  # HEAVY INTERCESSOR GUNNER
   
   Heavy Intercessors are akin to walking gun emplacements. Their heavy bolters allow them to shatter enemies with punishing fusillades of explosive fire, either sweeping over massed troops or in focused volleys. 2
   
-  # Archetypes
+  # ARCHETYPES
   
-  # Security
-  
-  # Seek & Destroy
+  # SECURITY SEEK & DESTROY
   
   Archetypes are used in certain mission packs, e.g. Approved Ops. The game sequence will specify how.
   
   Some **ANGEL OF DEATH** rules refer to a 'bolt weapon'. This is a ranged weapon that includes 'bolt' in its name, e.g. stalker bolt rifle, heavy bolt pistol, etc.
   
-  # Angels of Death Kill Team
+  # ANGELS OF DEATH KILL TEAM
+  
+  # ANGELS OF DEATH » KILL TEAM SELECTION
+  
+  # ANGELS OF DEATH KILL TEAM
+  
+  # ANGELS OF DEATH » KILL TEAM SELECTION
+  
+  Heavy bolt pistol Plasma pistol Power fist
+  
+  # SPACE MARINE CAPTAIN
+  
+  # ASSAULT INTERCESSOR GRENADIER
+  
+  # INTERCESSOR SERGEANT
+  
+  Chainsword Bolt rifle Chainsword
+  
+  # ASSAULT INTERCESSOR SERGEANT
+  
+  # ASSAULT INTERCESSOR WARRIOR
+  
+  Chainsword Heavy bolt pistol
+  
+  # ANGELS OF DEATH » KILL TEAM SELECTION
+  
+  # ELIMINATOR SNIPER HEAVY INTERCESSOR GUNNER
+  
+  # INTERCESSOR WARRIOR
+  
+  Bolt sniper rifle Heavy bolter Auto bolt rifle
+  
+  # INTERCESSOR GUNNER
+  
+  Auto bolt rifle / auxiliary grenade launcher Bolt pistol
 universalEquipment:
   - name: Portable Barricade
     text: 'Little more than a suppression shield with armoured feet, these barricades can be hefted and borne forwards to provide mobile cover. A portable barricade is Light, Protective and Portable terrain, except the feet which are Insignificant and Exposed. Before the battle, you can set it up wholly within your territory, on the killzone floor and more than 2" from other equipment terrain features, access points and Accessible terrain. Protective: While an operative is in cover from this terrain feature, improve its Save stat by 1 (to a maximum of 2+). RULE'
@@ -847,7 +880,7 @@ universalEquipment:
     text: From neuro‑suppressant psybombs to smoke‑belching chemical charges, grenades of this sort can suppress the enemy and be the difference between life and death. When you select this equipment, select two utility grenades (2 smoke, 2 stun, or 1 smoke and 1 stun). Each selection is a unique action your operatives can perform, but your kill team can only perform that action a total number of times during the battle equal to your selection. RULE
   - name: Ammo Cache
     text: |-
-      Whether stockpiles deliberately set out for warriors to access quickly, or the abandoned munitions of the slain, these caches can prove vital for a swift reload in the heat of battle. Before the battle, you can set up one of your Ammo Cache markers wholly within your territory. Friendly operatives can perform the following mission action during the battle. **AMMO RESUPPLY** 0AP  One of your Ammo Cache markers the active operative controls is used during this turning point.  Until the start of the next turning point, whenever this operative is shooting with a weapon from its datacard, you can re‑roll one of your attack dice.
+      Whether stockpiles deliberately set out for warriors to access quickly, or the abandoned munitions of the slain, these caches can prove vital for a swift reload in the heat of battle. Before the battle, you can set up one of your Ammo Cache markers wholly within your territory. Friendly operatives can perform the following mission action during the battle. **AMMO RESUPPLY** 0AP One of your Ammo Cache markers the active operative controls is used during this turning point. Until the start of the next turning point, whenever this operative is shooting with a weapon from its datacard, you can re‑roll one of your attack dice.
       
       An operative cannot perform this action while within control range of an enemy operative, if that marker isn't yours, or if that marker has been used this turning point.
   - name: Razor Wire
@@ -866,10 +899,10 @@ universalEquipment:
   - name: Ladders
     text: |-
       Carried into battle in their compacted forms, these ladders provide a rapid route of ingress to strongholds, or access to vital vantage points. Ladders are Insignificant and Exposed terrain. Before the battle, you can set up any of them as follows:
-        -  Wholly within your territory.
-        -  Upright against terrain that's at least 2" tall.
-        -  More than 2" from other equipment terrain features.
-        -  More than 1" from doors and access points.
+        - Wholly within your territory.
+        - Upright against terrain that's at least 2" tall.
+        - More than 2" from other equipment terrain features.
+        - More than 1" from doors and access points.
       
       Once per action, whenever an operative is climbing the terrain feature a ladder is placed against, treat the vertical distance as 1" if the ladder is within that operative's control range during that entire climb.
   - name: Explosive Grenades

@@ -1,4 +1,4 @@
-id: blades-of-khaine
+﻿id: blades-of-khaine
 name: Blades of Khaine
 grandFaction: Aeldari
 faction: Asuryani
@@ -472,7 +472,9 @@ factionRules:
     text: |-
       Years of strict training render Striking Scorpions capable of blending uncannily with the shadows, waiting for the perfect moment to attack their unsuspecting foes with terrifying accuracy.
       
-      Use this **ASPECT TECHNIQUE** during a friendly **STRIKING SCORPION** operative's activation. Until the start of its next activation, while that operative has a Conceal order and is in cover, it cannot be selected as a valid target, taking precedence over all other rules (e.g. Seek, Vantage terrain) except being within 2". MARKER/**TOKEN GUIDE**
+      Use this **ASPECT TECHNIQUE** during a friendly **STRIKING SCORPION** operative's activation. Until the start of its next activation, while that operative has a Conceal order and is in cover, it cannot be selected as a valid target, taking precedence over all other rules (e.g. Seek, Vantage terrain) except being within 2".
+      
+      MARKER/**TOKEN GUIDE**
   - name: Blades of Khaine
     text: Wraithbone Talisman token Rune of Shielding token Rune of Prophecy token
 firefightPloys:
@@ -516,6 +518,7 @@ operativeSelection:
         - Shuriken pistol; triskele
         - Triskele; power weapon
     
+    
       - **STRIKING SCORPION EXARCH with one of the following options:**
         - Shuriken pistol; biting blade
         - Shuriken pistol; scorpion's claw and chainsword
@@ -550,99 +553,115 @@ strategyPloys:
   - name: Dance of Death
     text: Lithe, acrobatic and utterly deadly, Aeldari Aspect Warriors exchange tactical positions with flawless grace. Select two friendly **BLADES OF KHAINE** operatives visible to and within 6" of each other. Remove them both from the killzone and set them back up in each other's previous locations (in other words, swap their positions).
 supplementaryInformation: |-
-  # Blades of Khaine: Update Log
+  # BLADES OF KHAINE: UPDATE LOG
   
   Rules will be periodically updated to maintain fair balance and interact more smoothly with the game. Rules changes will be updated directly into online documents and then listed below. Any minor changes to standardise wording that don't have any practical impact on the rule will be updated directly into online documents but not be listed here.
   
-  # Errata October '25
+  # ERRATA OCTOBER '25
   
   This section collects amendments to the rules. Amended text for clarification and edits are shown in blue, while amended text for balance updates are shown in magenta.
   
-  # Howling Banshee Aspect Techniques, Shriek-That-Kills, Weapon Profile
+  ## HOWLING BANSHEE ASPECT TECHNIQUES, SHRIEK-THAT-KILLS, WEAPON PROFILE
   
   Atk stat changed to '5'.
   
-  # Howling Banshee Aspect Techniques, Rain of Tears
+  ## HOWLING BANSHEE ASPECT TECHNIQUES, RAIN OF TEARS
   
-  Relevant part changed to read: '[...] after you strike with a critical success, if the enemy operative isn't incapacitated. End that sequence (any remaining attack dice are discarded) and immediately perform a free ~~Dash or~~ Fall Back action up to 3" with that operative (then the Fight action ends). That operative can do so even if it's performed an action that prevents it from performing the ~~Dash or~~ Fall Back action.'
+  Relevant part changed to read: '[...] after you strike with a critical success, if the enemy operative isn't incapacitated. End that sequence (any remaining attack dice are discarded) and immediately perform a free Dash or Fall Back action up to 3" with that operative (then the Fight action ends). That operative can do so even if it's performed an action that prevents it from performing the Dash or Fall Back action.'
   
-  # Previous Erratas Striking Scorpion Aspect Techniques, One with the Gloom
+  ## PREVIOUS ERRATAS STRIKING SCORPION ASPECT TECHNIQUES, ONE WITH THE GLOOM
   
   Second sentence changed to read: 'Until the start of its next activation, while that operative has a Conceal order and is in cover, it cannot be selected as a valid target, taking precedence over all other rules (e.g. Seek, Vantage terrain) except being within 2".'
   
-  # Striking Scorpion Aspect Techniques, Strike and Fade
+  ## STRIKING SCORPION ASPECT TECHNIQUES, STRIKE AND FADE
   
   First sentence changed to read: 'Use this **ASPECT TECHNIQUE** when a friendly **STRIKING SCORPION** operative incapacitates an enemy operative while fighting or retaliating, and is no longer within 3" of enemy operatives.'
   
-  # Dire Avenger Exarch & Dire Avenger Warrior Operatives, Defence Tactics Rule
+  ## DIRE AVENGER EXARCH & DIRE AVENGER WARRIOR OPERATIVES, DEFENCE TACTICS RULE
   
   Relevant part changed to read: '[…] this operative's weapons have the Balanced weapon rule.'
   
-  # Firefight Ploys, Fading Light
+  ## FIREFIGHT PLOYS, FADING LIGHT
   
   First sentence changed to read: 'Use this firefight ploy during a friendly **BLADES OF KHAINE** operative's activation, before or after it performs an action.'
   
-  # Previous Rules Commentaries
+  # PREVIOUS RULES COMMENTARIES
   
-  This section provides clarification on ambiguous and complex rules interactions. Q: If I use the Rain of Tears Howling Banshee **ASPECT TECHNIQUE** but am prevented from performing a free Fall Back action as a result of my opponent's rules (e.g. **NEMESIS CLAW** Chain Snare), what happens? A: The **ASPECT TECHNIQUE** is still used. The fight sequence ends, but that **BLADES OF KHAINE HOWLING BANSHEE** operative remains in its current location. Q: If I use the Strike and Fade Striking Scorpion **ASPECT TECHNIQUE**, could an opponent interrupt my activation (e.g. as a result of the Guard action) before I change that **BLADES OF KHAINE STRIKING SCORPION** operative's order to Conceal? A: No, but they can interrupt before that **STRIKING SCORPION** operative performs the free Dash action. Q: If an operative is able to perform two Shoot actions in an activation and uses the Slicing Hurricane Dire Avenger **ASPECT TECHNIQUE**, can it perform both Shoot actions during the same Reposition action? A: Yes.
+  This section provides clarification on ambiguous and complex rules interactions. Q:  If I use the Rain of Tears Howling Banshee **ASPECT TECHNIQUE** but am prevented from performing a free Fall Back action as a result of my opponent's rules (e.g. **NEMESIS CLAW** Chain Snare), what happens? A:  The **ASPECT TECHNIQUE** is still used. The fight sequence ends, but that **BLADES OF KHAINE HOWLING BANSHEE** operative remains in its current location. Q:  If I use the Strike and Fade Striking Scorpion **ASPECT TECHNIQUE**, could an opponent interrupt my activation (e.g. as a result of the Guard action) before I change that **BLADES OF KHAINE STRIKING SCORPION** operative's order to Conceal? A:  No, but they can interrupt before that **STRIKING SCORPION** operative performs the free Dash action. Q:  If an operative is able to perform two Shoot actions in an activation and uses the Slicing Hurricane Dire Avenger **ASPECT TECHNIQUE**, can it perform both Shoot actions during the same Reposition action? A:  Yes.
   
-  # Blades of Khaine
+  # BLADES OF KHAINE
   
-  # Operatives
+  # OPERATIVES
   
   Athletic, graceful and utterly lethal, the Aeldari warriors that comprise Blades of Khaine kill teams come together to undertake missions of utmost importance on behalf of their craftworlds. They are dispatched to sever specific strands of fate, ensuring that terrible events they have foreseen never come to pass.
   
-  # Striking Scorpion Exarch
+  # STRIKING SCORPION EXARCH
   
   These sinister figures are even more skilled than the Aspect Warriors they lead. With the gigantic chainsword known as the biting blade, a Striking Scorpion Exarch can cleave their foes in two with a single swing, and use their scorpion's claw to tear open Space Marine power armour with ease.
   
-  # Striking Scorpion Warrior
+  # STRIKING SCORPION WARRIOR
   
   With limitless patience, after stalking their prey for hours or waiting in position for days, Striking Scorpions burst from concealment. With chainswords whirring and mandiblasters spitting needles of white fire, the Aspect Warriors' emerald green armour is soon streaked red.
   
-  > **'WHAT DISASTERS HAVE THEY AVERTED? HOW MANY AELDARI LIVES HAVE THEY SAVED? HOW MANY FOES OF OURS HAVE THEY DOOMED TO OBLIVION? ACROSS ALL THE CRAFTWORLDS WE CANNOT BE SURE. I KNOW THIS, HOWEVER, WITHOUT A SHADOW OF DOUBT. WERE IT NOT FOR THE BLADES OF KHAINE, THE ASURYANI WOULD BE NO MORE. THE WARRIORS THAT I HAVE COMMANDED ALONE HAVE PREVENTED MULTIPLE INCURSIONS INTO THE WEBWAY THAT WOULD HAVE SEVERED VITAL TIES TO EXODITE WORLDS AND HARLEQUIN TROUPES. I CAN ONLY IMAGINE WHAT OTHERS HAVE DONE FOR OUR PEOPLE.'**
+  > **' WHAT DISASTERS HAVE THEY AVERTED? HOW MANY AELDARI LIVES HAVE THEY SAVED? HOW MANY FOES OF OURS HAVE THEY DOOMED TO OBLIVION? ACROSS ALL THE CRAFTWORLDS WE CANNOT BE SURE. I KNOW THIS, HOWEVER, WITHOUT A SHADOW OF DOUBT. WERE IT NOT FOR THE BLADES OF KHAINE, THE ASURYANI WOULD BE NO MORE. THE WARRIORS THAT I HAVE COMMANDED ALONE HAVE PREVENTED MULTIPLE INCURSIONS INTO THE WEBWAY THAT WOULD HAVE SEVERED VITAL TIES TO EXODITE WORLDS AND HARLEQUIN TROUPES. I CAN ONLY IMAGINE WHAT OTHERS HAVE DONE FOR OUR PEOPLE.'**
   >
   > — Farseer Liurth, of Lugganath Craftworld
   
-  # Dire Avenger Exarch
+  # DIRE AVENGER EXARCH
   
   These warriors are masters of their Aspect and devoted to their craftworld. In keeping with the tactical flexibility of their Aspect, all are master marksmen and bladesmen, as at ease shredding foes with volleys of razor-sharp shuriken as they are duelling enemy heroes in single combat.
   
-  # Dire Avenger Warrior
+  # DIRE AVENGER WARRIOR
   
   These operatives are famed for being as deadly on the attack as they are immovable in the defence, and are regarded as being the most tactically flexible of all the Aspects. They use their shuriken catapults to create an impenetrable storm of monomolecular blades.
   
-  # Howling Banshee Exarch
+  # HOWLING BANSHEE EXARCH
   
   Not only do the skills in elegant swordplay displayed by a Howling Banshee Exarch exceed those of the warriors she leads, but so harrowing and biting are her cries that their echoing reverberations haunt those who hear them long after the screams have died away.
   
-  # Howling Banshee Warrior
+  # HOWLING BANSHEE WARRIOR
   
   The piercing, psychosonic scream that precedes the assault of these bone-armoured operatives renders those who hear it all but helpless. These shock waves buy the Howling Banshees time enough to strike, each one taking a head with a sweep of their glittering power weapon.
   
-  > **'IT HAS BEEN OUR WAY FOR MILLENNIA TO SACRIFICE OUR PRESENT SO THAT WE MAY HAVE A FUTURE. MY BANSHEE SISTERS AND I KNOW THAT OUR EVERY BATTLE MAY BE OUR LAST. WE FACE THAT TRUTH WITHOUT FEAR, FOR THROUGH OUR EFFORTS MAY MORE OF OUR PEOPLE LIVE AND SEE BRIGHTER TIMES FOR THE AELDARI. ONE DAY THE STARS WILL ONCE MORE BOW TO OUR RACE, AND THAT OUTCOME WILL BE ACHIEVED ONE BATTLE, ONE KILL AT A TIME.'**
+  > **' IT HAS BEEN OUR WAY FOR MILLENNIA TO SACRIFICE OUR PRESENT SO THAT WE MAY HAVE A FUTURE. MY BANSHEE SISTERS AND I KNOW THAT OUR EVERY BATTLE MAY BE OUR LAST. WE FACE THAT TRUTH WITHOUT FEAR, FOR THROUGH OUR EFFORTS MAY MORE OF OUR PEOPLE LIVE AND SEE BRIGHTER TIMES FOR THE AELDARI. ONE DAY THE STARS WILL ONCE MORE BOW TO OUR RACE, AND THAT OUTCOME WILL BE ACHIEVED ONE BATTLE, ONE KILL AT A TIME.'**
   >
   > — Osinell Ciaradh, Howling Banshee of Biel-Tan Craftworld
   
-  > **'WE AELDARI HAVE FALLEN FAR. THOSE NOT OF OUR RACE WHO HAVE HEARD OUR STORY MIGHT EVEN PITY US, IF THEY DON'T HOLD US IN CONTEMPT FOR OUR OWN FOLLY. I SPIT ON THEIR SCORN. OUR TIME IS FAR FROM OVER. WE HAVE BEEN MASTERS OF WAR SINCE OUR ENEMIES' FOREBEARS WERE BUT AMOEBAE DRIFTING AIMLESSLY IN BARREN SEAS. THE GALAXY ONCE SHOOK IN AWE UPON THE MENTION OF OUR NAME, AND IT SHALL DO SO AGAIN.'**
+  > **' WE AELDARI HAVE FALLEN FAR. THOSE NOT OF OUR RACE WHO HAVE HEARD OUR STORY MIGHT EVEN PITY US, IF THEY DON'T HOLD US IN CONTEMPT FOR OUR OWN FOLLY. I SPIT ON THEIR SCORN. OUR TIME IS FAR FROM OVER. WE HAVE BEEN MASTERS OF WAR SINCE OUR ENEMIES' FOREBEARS WERE BUT AMOEBAE DRIFTING AIMLESSLY IN BARREN SEAS. THE GALAXY ONCE SHOOK IN AWE UPON THE MENTION OF OUR NAME, AND IT SHALL DO SO AGAIN.'**
   >
   > — Maur Saim-Ingrelli, Striking Scorpions Exarch of the Onyx Claw Shrine, Biel-Tan Craftworld
   
-  # Blades of Khaine Kill Team
+  # BLADES OF KHAINE KILL TEAM
   
-  # Archetypes
+  # BLADES OF KHAINE » KILL TEAM SELECTION
+  
+  # ARCHETYPES
   
   Archetypes are used in certain mission packs, e.g. Approved Ops. The game sequence will specify how. Or the associated archetype of the most common Aspect keyword in your kill team (if two keywords are equally most common, you can choose one of those keywords). Aspect keywords and their associated archetypes are as follows: **DIRE AVENGER HOWLING**
   
-  # Banshee
+  # BANSHEE
   
-  # Striking
+  # STRIKING
   
-  # Scorpion
+  # SCORPION
   
-  # Seek & Destroy
+  # SEEK & DESTROY SECURITY RECON INFILTRATION
   
-  # Security Recon Infiltration
+  # BLADES OF KHAINE » KILL TEAM SELECTION
+  
+  # DIRE AVENGER EXARCH
+  
+  Power weapon Shimmershield
+  
+  # DIRE AVENGER WARRIOR
+  
+  Shuriken catapult
+  
+  # HOWLING BANSHEE EXARCH HOWLING BANSHEE WARRIOR
+  
+  # STRIKING SCORPION EXARCH STRIKING SCORPION WARRIOR
+  
+  Mirrorswords Power weapon Shuriken pistol Scorpion's claw & chainsword Shuriken pistol Chainsword 5
 universalEquipment:
   - name: Portable Barricade
     text: 'Little more than a suppression shield with armoured feet, these barricades can be hefted and borne forwards to provide mobile cover. A portable barricade is Light, Protective and Portable terrain, except the feet which are Insignificant and Exposed. Before the battle, you can set it up wholly within your territory, on the killzone floor and more than 2" from other equipment terrain features, access points and Accessible terrain. Protective: While an operative is in cover from this terrain feature, improve its Save stat by 1 (to a maximum of 2+). RULE'
@@ -650,7 +669,7 @@ universalEquipment:
     text: From neuro‑suppressant psybombs to smoke‑belching chemical charges, grenades of this sort can suppress the enemy and be the difference between life and death. When you select this equipment, select two utility grenades (2 smoke, 2 stun, or 1 smoke and 1 stun). Each selection is a unique action your operatives can perform, but your kill team can only perform that action a total number of times during the battle equal to your selection. RULE
   - name: Ammo Cache
     text: |-
-      Whether stockpiles deliberately set out for warriors to access quickly, or the abandoned munitions of the slain, these caches can prove vital for a swift reload in the heat of battle. Before the battle, you can set up one of your Ammo Cache markers wholly within your territory. Friendly operatives can perform the following mission action during the battle. **AMMO RESUPPLY** 0AP  One of your Ammo Cache markers the active operative controls is used during this turning point.  Until the start of the next turning point, whenever this operative is shooting with a weapon from its datacard, you can re‑roll one of your attack dice.
+      Whether stockpiles deliberately set out for warriors to access quickly, or the abandoned munitions of the slain, these caches can prove vital for a swift reload in the heat of battle. Before the battle, you can set up one of your Ammo Cache markers wholly within your territory. Friendly operatives can perform the following mission action during the battle. **AMMO RESUPPLY** 0AP One of your Ammo Cache markers the active operative controls is used during this turning point. Until the start of the next turning point, whenever this operative is shooting with a weapon from its datacard, you can re‑roll one of your attack dice.
       
       An operative cannot perform this action while within control range of an enemy operative, if that marker isn't yours, or if that marker has been used this turning point.
   - name: Razor Wire
@@ -669,10 +688,10 @@ universalEquipment:
   - name: Ladders
     text: |-
       Carried into battle in their compacted forms, these ladders provide a rapid route of ingress to strongholds, or access to vital vantage points. Ladders are Insignificant and Exposed terrain. Before the battle, you can set up any of them as follows:
-        -  Wholly within your territory.
-        -  Upright against terrain that's at least 2" tall.
-        -  More than 2" from other equipment terrain features.
-        -  More than 1" from doors and access points.
+        - Wholly within your territory.
+        - Upright against terrain that's at least 2" tall.
+        - More than 2" from other equipment terrain features.
+        - More than 1" from doors and access points.
       
       Once per action, whenever an operative is climbing the terrain feature a ladder is placed against, treat the vertical distance as 1" if the ladder is within that operative's control range during that entire climb.
   - name: Explosive Grenades

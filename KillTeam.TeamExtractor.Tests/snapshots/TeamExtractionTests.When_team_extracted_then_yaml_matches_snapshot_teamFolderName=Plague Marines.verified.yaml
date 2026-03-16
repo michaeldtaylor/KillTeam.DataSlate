@@ -1,4 +1,4 @@
-id: plague-marines
+﻿id: plague-marines
 name: Plague Marines
 grandFaction: Chaos
 faction: Heretic Astartes
@@ -397,109 +397,137 @@ strategyPloys:
   - name: Nurglings
     text: The smallest of Nurgle's daemons, Nurglings are both malicious and playful, cackling wildly as they claw and harass the Plague Marines' foes with pestilent claws and teeth. Select one enemy operative within 3" of a friendly **PLAGUE MARINE** operative, or one enemy operative that has one of your Poison tokens and is within 7" of a friendly **PLAGUE MARINE** operative. Until the end of the selected operative's next activation, subtract 1 from its APL stat.
 supplementaryInformation: |-
-  # Plague Marines: Update Log
+  # PLAGUE MARINES: UPDATE LOG
   
   Rules will be periodically updated to maintain fair balance and interact more smoothly with the game. Rules changes will be updated directly into online documents and then listed below. Any minor changes to standardise wording that don't have any practical impact on the rule will be updated directly into online documents but not be listed here.
   
-  # Errata January '26
+  # ERRATA JANUARY '26
   
   This section collects amendments to the rules. Amended text for clarification and edits are shown in blue, while amended text for balance updates are shown in magenta.
   
-  # Faction Equipment, Poison Vents
+  ## FACTION EQUIPMENT, POISON VENTS
   
   Changed to read: 'Whenever an enemy operative that doesn't have one of your Poison tokens is activated within 3" of a friendly **PLAGUE MARINE** operative, roll one D3: on a 3, that operative gains one of your Poison tokens.'
   
-  # Firefight Ploys, Virulent Poison
+  ## FIREFIGHT PLOYS, VIRULENT POISON
   
-  Changed to read: 'Use this firefight ploy during a friendly **PLAGUE MARINE** operative's activation or counteraction, before or after it ~~performs an action. Select one of the following:~~
+  Changed to read: 'Use this firefight ploy during a friendly **PLAGUE MARINE** operative's activation or counteraction, before or after it performs an action. Select one of the following:
     - One enemy operative within 3" of, or visible to and within 7" of, that operative gains one of your Poison tokens (if it doesn't already have one).
-    - ~~Roll 2D6: if the result is 7+, one enemy operative within 7"~~ ~~of that operative gains one of your Poison tokens (if it doesn't~~ ~~already have one).'~~
+    - Roll 2D6: if the result is 7~~+~~, one enemy operative within 7" of that operative gains one of your Poison tokens (if it doesn't already have one).'
   
-  # Previous Erratas Champion Operative, Grandfather's Blessing Rule
+  ## PREVIOUS ERRATAS CHAMPION OPERATIVE, GRANDFATHER'S BLESSING RULE
   
   Changed to read: 'Whenever an enemy operative that has one of your Poison tokens loses one or more wounds within 7" of this operative, this operative regains up to an equal number of lost wounds (to a maximum of 3 lost wounds per turning point, and only if this operative isn't incapacitated).'
   
-  # Malignant Plaguecaster Operative, Putrescent
+  ## MALIGNANT PLAGUECASTER OPERATIVE, PUTRESCENT
   
-  # Vitality Action
+  # VITALITY ACTION
   
   Condition changed to read: '
   
   This operative cannot perform this action while within control range of an enemy operative, or more than once per turning point.'
   
-  # Fighter Operative, Flail Action
+  ## FIGHTER OPERATIVE, FLAIL ACTION
   
-  Second sentence of effect changed to read: 'Roll separately for each: if it's an enemy operative, if the D3 result is a 3, that enemy operative also gains one of your Poison tokens (if it doesn't ~~already have one).'~~
+  Second sentence of effect changed to read: 'Roll separately for each: if it's an enemy operative, if the D3 result is a 3, that enemy operative also gains one of your Poison tokens (if it doesn't already have one).'
   
-  # Icon Bearer Operative, Icon of Contagion
+  ## ICON BEARER OPERATIVE, ICON OF CONTAGION
   
   Changed to read: 'Whenever this operative is within your opponent's territory, the Contagion strategy ploy costs you 0CP.'
   
-  # Faction Rules, Astartes
+  ## FACTION RULES, ASTARTES
   
   Third sentence of first paragraph changed to read: 'You cannot select the same PSYCHIC ranged weapon more than once per activation.'
   
-  # Faction Rules, Poison
+  ## FACTION RULES, POISON
   
   Relevant part of first sentence of weapon rule changed to read: '[…] the operative this weapon is being used against (excluding friendly **PLAGUE MARINE** operatives) gains one of your Poison tokens […]'
   
-  # Firefight Ploys, Poisonous Demise
+  ## FIREFIGHT PLOYS, POISONOUS DEMISE
   
   Additional text added to end of first sentence: 'Use this firefight ploy when a friendly **PLAGUE MARINE** operative is incapacitated, before it's removed from the killzone.'
   
-  # Firefight Ploys, Curse of Rot
+  ## FIREFIGHT PLOYS, CURSE OF ROT
   
   Second sentence changed to read: 'For each result of 3 they roll, inflict 1 damage on that enemy operative, that result cannot be retained as a success and they cannot re-roll it.'
   
-  # Strategy Ploys, Cloud of Flies
+  ## STRATEGY PLOYS, CLOUD OF FLIES
   
   Relevant part of second sentence changed to read: '[…] if that friendly operative is wholly within 1" of that marker, that friendly operative is obscured.'
   
-  # Strategy Ploys, Contagion
+  ## STRATEGY PLOYS, CONTAGION
   
   First bullet point deleted: ~~'It's within control range of friendly **PLAGUE MARINE** operatives.'~~
   
-  # Plague Marine Operatives
+  # PLAGUE MARINE OPERATIVES
   
   Corrupted sons of Mortarion, Plague Marines are suffused and bloated with rot and disease. Though compact and slow moving, Plague Marines are horrifyingly resilient, trudging relentlessly towards their objectives while spreading contagion in their wake.
   
-  # Plague Marine Champion
+  # PLAGUE MARINE CHAMPION
   
   Armed with centuries of experience and warp-tainted weaponry, Champions are the rotten core of Plague Marine warbands. They lead from the front, setting a gory example for their troops to follow.
   
-  # Plague Marine Bombardier
+  # PLAGUE MARINE BOMBARDIER
   
   The Death Guard have long been terrifying trench fighters. Bombardiers specialise in breaking dug-in positions with hails of explosives, from armour-sundering krak grenades to hypertoxic blight grenades.
   
-  # Plague Marine Fighter
+  # PLAGUE MARINE FIGHTER
   
   Many Plague Marines prefer to fight their foes up close. They wade through the enemy ranks, with every swing of their plague-blessed weapons spreading new infections.
   
-  # Plague Marine Heavy Gunner
+  # PLAGUE MARINE HEAVY GUNNER
   
   The arsenals of the Death Guard are filled with deadly weaponry, from lethal arcana to forbidden chem-agents from bygone ages. Heavy Gunners wield these tools of war to horrific effect.
   
-  # Plague Marine Icon Bearer
+  # PLAGUE MARINE ICON BEARER
   
   Icon Bearers are honoured to bear the cursed standards of the Death Guard. Each is a locus for decay that saps the will of nearby foes and enhances the vigour of their fellow Plague Marines.
   
-  # Malignant Plaguecaster
+  # MALIGNANT PLAGUECASTER
   
   Malignant Plaguecasters channel the foetid energies of Nurgle's realm. The foul cycle of decay and rebirth is theirs to master, whether unleashing clouds of killing wind or revitalising their brethren.
   
-  # Plague Marine Warrior
+  # PLAGUE MARINE WARRIOR
   
   Almost nothing can stop a Plague Marine on the march. Shielded by power armour and Nurgle's vile blessings, these warriors march through storms of enemy fire in pursuit of their objective. 2
   
-  # Archetypes
+  # ARCHETYPES
   
-  # Security
-  
-  # Seek & Destroy
+  # SECURITY SEEK & DESTROY
   
   Archetypes are used in certain mission packs, e.g. Approved Ops. The game sequence will specify how.
   
-  # Plague Marines Kill Team
+  # PLAGUE MARINES KILL TEAM
+  
+  # PLAGUE MARINES » KILL TEAM SELECTION
+  
+  Plague sword Boltgun
+  
+  # BOMBARDIER
+  
+  Plasma pistol
+  
+  # CHAMPION
+  
+  # PLAGUE MARINES » KILL TEAM SELECTION
+  
+  # FIGHTER
+  
+  Flail of Corruption Plague spewer Plague knife Bolt pistol
+  
+  # ICON BEARER
+  
+  # HEAVY GUNNER
+  
+  Boltgun
+  
+  # WARRIOR
+  
+  Corrupted staff
+  
+  # MALGINANT PLAGUECASTER
+  
+  Icon of Contagion 4
 universalEquipment:
   - name: Portable Barricade
     text: 'Little more than a suppression shield with armoured feet, these barricades can be hefted and borne forwards to provide mobile cover. A portable barricade is Light, Protective and Portable terrain, except the feet which are Insignificant and Exposed. Before the battle, you can set it up wholly within your territory, on the killzone floor and more than 2" from other equipment terrain features, access points and Accessible terrain. Protective: While an operative is in cover from this terrain feature, improve its Save stat by 1 (to a maximum of 2+). RULE'
@@ -507,7 +535,7 @@ universalEquipment:
     text: From neuro‑suppressant psybombs to smoke‑belching chemical charges, grenades of this sort can suppress the enemy and be the difference between life and death. When you select this equipment, select two utility grenades (2 smoke, 2 stun, or 1 smoke and 1 stun). Each selection is a unique action your operatives can perform, but your kill team can only perform that action a total number of times during the battle equal to your selection. RULE
   - name: Ammo Cache
     text: |-
-      Whether stockpiles deliberately set out for warriors to access quickly, or the abandoned munitions of the slain, these caches can prove vital for a swift reload in the heat of battle. Before the battle, you can set up one of your Ammo Cache markers wholly within your territory. Friendly operatives can perform the following mission action during the battle. **AMMO RESUPPLY** 0AP  One of your Ammo Cache markers the active operative controls is used during this turning point.  Until the start of the next turning point, whenever this operative is shooting with a weapon from its datacard, you can re‑roll one of your attack dice.
+      Whether stockpiles deliberately set out for warriors to access quickly, or the abandoned munitions of the slain, these caches can prove vital for a swift reload in the heat of battle. Before the battle, you can set up one of your Ammo Cache markers wholly within your territory. Friendly operatives can perform the following mission action during the battle. **AMMO RESUPPLY** 0AP One of your Ammo Cache markers the active operative controls is used during this turning point. Until the start of the next turning point, whenever this operative is shooting with a weapon from its datacard, you can re‑roll one of your attack dice.
       
       An operative cannot perform this action while within control range of an enemy operative, if that marker isn't yours, or if that marker has been used this turning point.
   - name: Razor Wire
@@ -526,10 +554,10 @@ universalEquipment:
   - name: Ladders
     text: |-
       Carried into battle in their compacted forms, these ladders provide a rapid route of ingress to strongholds, or access to vital vantage points. Ladders are Insignificant and Exposed terrain. Before the battle, you can set up any of them as follows:
-        -  Wholly within your territory.
-        -  Upright against terrain that's at least 2" tall.
-        -  More than 2" from other equipment terrain features.
-        -  More than 1" from doors and access points.
+        - Wholly within your territory.
+        - Upright against terrain that's at least 2" tall.
+        - More than 2" from other equipment terrain features.
+        - More than 1" from doors and access points.
       
       Once per action, whenever an operative is climbing the terrain feature a ladder is placed against, treat the vertical distance as 1" if the ladder is within that operative's control range during that entire climb.
   - name: Explosive Grenades

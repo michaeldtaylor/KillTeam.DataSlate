@@ -108,16 +108,28 @@ If fewer than 3 keywords are found, the fallback value `"UNKNOWN — UPDATE ME"`
 
 ---
 
-## Rule 7 — pdftotext Mode: Dual Pass for Datacards, Raw for Prose
+## Rule 7 — PdfPig: Dual-Mode Extraction for Datacards, Content-Order for Prose
 
-pdftotext is run in two modes. Datacards require **both** modes in parallel:
+All PDF text extraction uses PdfPig (pure .NET, no external dependencies). Datacards require **two** extraction modes:
 
-| Mode | Flag | Used for |
-|------|------|----------|
-| Layout | `-layout` | `ParseDatacards` — weapon stats rows require spatially-fixed column positions for the stats-header regex |
-| Raw | `-raw` | Back-card prose (abilities, 1AP actions, footnote rules) in `ParseDatacards`; `ParseRulesDoc`; `ParseEquipmentWithDescriptions`; `ParsesupplementaryInformation`; `ParseOperativeSelection` |
+| Mode | PdfPig API | Used for |
+|------|------------|----------|
+| Layout | `page.GetWords()` spatial grouping | `ParseDatacards` — weapon stats rows require spatially-fixed column positions for the stats-header regex |
+| Raw (content order) | `ContentOrderTextExtractor.GetText(page)` | Back-card prose (abilities, 1AP actions, footnote rules) in `ParseDatacards`; `ParseRulesDoc`; `ParseEquipmentWithDescriptions`; `ParseSupplementaryInformation`; `ParseOperativeSelection` |
 
-**Why raw mode for back-card prose:** Two-column card layouts in pdftotext `-layout` interleave text from left and right columns line-by-line (e.g. a single operative's ability text is interleaved with a neighbouring operative's ability text). Raw mode outputs content in PDF stream order — left column fully, then right column — which unambiguously separates one operative's abilities from another's.
+**Why content-order mode for back-card prose:** Two-column card layouts in spatial grouping interleave text from left and right columns at the same Y position (e.g. a single operative's ability text is interleaved with a neighbouring operative's ability text). Content-order mode reads text in PDF content stream order — left column fully, then right column — which unambiguously separates one operative's abilities from another's.
+
+### Split-Word Merge (Layout Mode)
+
+Kill Team PDFs render the first letter of some words as separate text objects (different `TJ`/`Tj` operators). PdfPig's word extractor sees them as two words (e.g. `R` + `ange`, `P` + `SYCHIC`). `BuildLayoutLineText` merges a single letter closely followed by the rest of the word when the gap is less than 2× average character width.
+
+### Weapon Rule Continuation Detection
+
+When a weapon row's rules text ends with a trailing comma, the next non-blank line is treated as a continuation (appended to the rules). This handles cases where PdfPig places long rule lists across multiple lines (e.g. `Heavy (Dash only), Piercing 1,` followed by `Silent`).
+
+### Strikethrough Detection
+
+`GetStruckPhrases` uses PdfPig's `page.ExperimentalAccess.Paths` to find thin horizontal lines (height ≤ 1pt) drawn over text. Each letter on the page is checked against these strikethrough rectangles to determine which characters are struck through.
 
 ### Datacard Dual-Pass Strategy
 

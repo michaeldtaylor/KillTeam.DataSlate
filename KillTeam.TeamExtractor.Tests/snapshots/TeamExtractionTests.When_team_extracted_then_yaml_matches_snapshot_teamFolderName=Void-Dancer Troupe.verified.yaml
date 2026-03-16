@@ -1,4 +1,4 @@
-id: void-dancer-troupe
+﻿id: void-dancer-troupe
 name: Void-Dancer Troupe
 grandFaction: Aeldari
 faction: Harlequin
@@ -318,6 +318,11 @@ factionEquipment:
       On occasion, a Harlequin must perish in order to fulfil their role in the saedath. Such dedication emboldens those in their troupe that survive. Keep a Tragedy tally.
       
       Whenever a friendly **VOID-DANCER TROUPE** operative that has an ACCOLADE rule is incapacitated, add 1 to your Tragedy tally. When your Tragedy tally reaches 3, you gain 1CP and stop that tally.
+  - name: Understudy's Mask
+    text: |-
+      This item allows Harlequins to change roles during the saedath. Should one who holds a pivotal role be slain, another will swiftly take their place.
+      
+      Once per battle, when you activate a friendly **VOID-DANCER TROUPE** operative, if the friendly operative that has the **PIVOTAL ROLE** has been incapacitated, you can use this rule. If you do, that activated operative has the **PIVOTAL ROLE** for the battle.
 factionRules:
   - name: Saedath
     text: |-
@@ -375,6 +380,7 @@ operativeSelection:
         - Neuro disruptor; miststave
         - Shuriken pistol; miststave
     
+    
     Other than **PLAYER** operatives, your kill team can only include each operative on this list once.
     
     Your kill team can only include up to one fusion pistol and up to one neuro disruptor.
@@ -397,81 +403,103 @@ strategyPloys:
       
       Whenever a friendly **VOID-DANCER TROUPE** operative is fighting or retaliating and your opponent strikes with a normal success, you can roll one D6: if the result is less than the Hit stat of your opponent's selected weapon, that strike is allocated to block one of your dice instead (ignore the Brutal weapon rule, if relevant) and you cannot use this rule for the rest of the sequence.
 supplementaryInformation: |-
-  # Void-Dancer Troupe: Update Log
+  # VOID-DANCER TROUPE: UPDATE LOG
   
   Rules will be periodically updated to maintain fair balance and interact more smoothly with the game. Rules changes will be updated directly into online documents and then listed below. Any minor changes to standardise wording that don't have any practical impact on the rule will be updated directly into online documents but not be listed here.
   
-  # Errata October '25
+  # ERRATA OCTOBER '25
   
   This section collects amendments to the rules. Amended text for clarification and edits are shown in blue, while amended text for balance updates are shown in magenta.
   
-  # Shadowseer Operative, Hallucinogen Grenade Weapon
+  ## SHADOWSEER OPERATIVE, HALLUCINOGEN GRENADE WEAPON
   
   'Seek' weapon rule changed to 'Seek Light'.
   
-  # Lead Player & Player Operatives, Blade Weapon
+  ## LEAD PLAYER & PLAYER OPERATIVES, BLADE WEAPON
   
-  Dmg stats changed to '4/6' ~~'Severe' weapon rule deleted.~~
+  Dmg stats changed to '4/6' 'Severe' weapon rule deleted.
   
-  # Faction Rules, Harlequin's Panoply
+  ## FACTION RULES, HARLEQUIN'S PANOPLY
   
   First sentence changed to read: 'Whenever an operative is shooting a friendly **VOID-DANCER TROUPE** operative, and no attack dice are retained as critical successes, worsen the x of the Piercing weapon rule by 1 (if any).
   
   Note that Piercing 1 would therefore be ignored.'
   
-  # Firefight Ploys, the Curtain Falls
+  ## FIREFIGHT PLOYS, THE CURTAIN FALLS
   
-  Relevant part changed to read: '[...] after you strike with a critical success, if the enemy operative isn't incapacitated. End that sequence (any remaining attack dice are discarded) and immediately perform a free ~~Dash or~~ Fall Back action up to 3" with that operative (then the Fight action ends). That operative can do so even if it's performed an action that prevents it from performing the ~~Dash or~~ Fall Back action.'
+  Relevant part changed to read: '[...] after you strike with a critical success, if the enemy operative isn't incapacitated. End that sequence (any remaining attack dice are discarded) and immediately perform a free Dash or Fall Back action up to 3" with that operative (then the Fight action ends). That operative can do so even if it's performed an action that prevents it from performing the Dash or Fall Back action.'
   
-  # Rules Commentary October '25
+  # RULES COMMENTARY OCTOBER '25
   
-  This section provides clarification on ambiguous and complex rules interactions. Q: Does 'Once per turning point' in the PLAYER operative's Luck of the Laughing God rule mean I can only use this rule once during each turning point, no matter how many friendly operatives have that rule? A: Yes.
+  This section provides clarification on ambiguous and complex rules interactions. Q:  Does 'Once per turning point' in the PLAYER operative's Luck of the Laughing God rule mean I can only use this rule once during each turning point, no matter how many friendly operatives have that rule? A:  Yes.
   
-  # Previous Erratas Firefight Ploys, Elusive Target
+  ## PREVIOUS ERRATAS FIREFIGHT PLOYS, ELUSIVE TARGET
   
   Second sentence changed to read: 'Until the start of its next activation, while that operative has a Conceal order and is in cover, it cannot be selected as a valid target, taking precedence over all other rules (e.g. Seek, Vantage terrain) except being within 2".'
   
-  # Shadowseer Operative, Mirror of Minds Action
+  ## SHADOWSEER OPERATIVE, MIRROR OF MINDS ACTION
   
   Second sentence of effect changed to read: 'Select one enemy operative that's a valid target for and within 8" of this operative.'
   
-  # Faction Rules, Harlequin's Panoply
+  ## FACTION RULES, HARLEQUIN'S PANOPLY
   
   Relevant part of second paragraph changed to read: 'Whenever a friendly **VOID-DANCER TROUPE** operative is climbing up, you can treat the vertical distance as 2" […]'
   
-  # Faction Rules, Saedath, Epic
+  ## FACTION RULES, SAEDATH, EPIC
   
   Relevant part of Performance deleted: ~~'The operative incapacitates an enemy operative while fighting or retaliating.'~~ Accolade changed to read: 'Whenever this operative is fighting, its melee weapons have the Balanced weapon rule.
   
-  # Void-Dancer Troupe
+  # VOID-DANCER TROUPE
   
-  # Operatives
+  # OPERATIVES
   
   Even amongst the agile Aeldari, the Harlequins of the Void-dancer Troupes display an almost preternatural level of dexterity and skill. Performance and war merge in their actions, precisely directed to shape the fate of their race.
   
-  # Lead Player
+  # LEAD PLAYER
   
   Choreographers of conflict, Lead Players are experienced Harlequins clad in extravagant garb. They direct their warriors' reactions to the fates of battle and ensure their comrades' performances in the theatre of war is as perfect as it can be.
   
-  # Death Jester
+  # DEATH JESTER
   
   The arrival of a Death Jester in a killzone is announced by a hissing storm of shrieker cannon fire. Enemy infantry are torn apart as the weapon's gene-toxins cause them to combust horrifically from within. Adding insult to injury, the Death Jester ensures every demise is cruelly ironic.
   
-  # Player
+  # PLAYER
   
   Harlequin Players perform with breathtaking skill, whether their stage is a wraithbone-and-glass amphitheatre bathed in crystalline light or the firelit hell of the battlefield. They tumble, sprint and leap, with every trigger squeeze and blade slash bringing orchestrated death to the enemy.
   
-  # Shadowseer
+  # SHADOWSEER
   
   Shadowseers can blind foes and drive them mad with their psychic powers. As they obscure their allies with illusions, they fire hallucinogenic grenades that cause disorientation or death. In close combat, Shadowseers' miststaves scramble the perceptions of those they hit. 2
   
-  # Archetypes
+  # ARCHETYPES
   
-  # Infiltration Recon
+  # INFILTRATION RECON
   
   Archetypes are used in certain mission packs, e.g. Approved Ops. The game sequence will specify how.
   
-  # Void-Dancer Troupe Kill Team
+  # VOID-DANCER TROUPE KILL TEAM
+  
+  # VOID-DANCER TROUPE » KILL TEAM SELECTION
+  
+  # LEAD PLAYER
+  
+  # DEATH JESTER
+  
+  > **' STRIKE NOT WHERE YOUR ENEMY EXPECTS YOUR BLADE TO FALL, NOR EVEN WHERE LOGIC DICTATES. STRIKE INSTEAD WHERE YOUR BLOW WILL HAVE THE GREATEST MEANING. LEAVE YOUR LESSON WRIT LARGE IN BLOOD UPON THE FIELD OF BATTLE.'**
+  >
+  > — extract from the Teachings of Cegorach Kiss Shuriken pistol Shrieker cannon Shrieker blade
+  
+  # VOID-DANCER TROUPE » KILL TEAM SELECTION
+  
+  > **' THERE WERE SO FEW OF THEM. NO TANKS, NO ARTILLERY, JUST THIS… HANDFUL… OF XENOS. WE EXPECTED AN EASY FIGHT. THEN THE MADNESS STARTED TO SPREAD; MEN BEGAN TO SCREAM, TO TURN UPON ONE ANOTHER. THE THINGS I SAW… EVEN NOW I CANNOT TRUST MY OWN MIND. EXECUTE ME, I BEG YOU. MAYBE THAT WILL FINALLY WIPE AWAY THE NIGHTMARES.'**
+  >
+  > — tribunal testimony of Sergeant Gastor, Cadian 654th
+  
+  # PLAYER
+  
+  # SHADOWSEER
+  
+  Kiss Shuriken pistol Caress Shuriken pistol Blade Neuro disruptor Neuro disruptor Neuro disruptor Hallucinogen grenade Miststave 4
 universalEquipment:
   - name: Portable Barricade
     text: 'Little more than a suppression shield with armoured feet, these barricades can be hefted and borne forwards to provide mobile cover. A portable barricade is Light, Protective and Portable terrain, except the feet which are Insignificant and Exposed. Before the battle, you can set it up wholly within your territory, on the killzone floor and more than 2" from other equipment terrain features, access points and Accessible terrain. Protective: While an operative is in cover from this terrain feature, improve its Save stat by 1 (to a maximum of 2+). RULE'
@@ -479,7 +507,7 @@ universalEquipment:
     text: From neuro‑suppressant psybombs to smoke‑belching chemical charges, grenades of this sort can suppress the enemy and be the difference between life and death. When you select this equipment, select two utility grenades (2 smoke, 2 stun, or 1 smoke and 1 stun). Each selection is a unique action your operatives can perform, but your kill team can only perform that action a total number of times during the battle equal to your selection. RULE
   - name: Ammo Cache
     text: |-
-      Whether stockpiles deliberately set out for warriors to access quickly, or the abandoned munitions of the slain, these caches can prove vital for a swift reload in the heat of battle. Before the battle, you can set up one of your Ammo Cache markers wholly within your territory. Friendly operatives can perform the following mission action during the battle. **AMMO RESUPPLY** 0AP  One of your Ammo Cache markers the active operative controls is used during this turning point.  Until the start of the next turning point, whenever this operative is shooting with a weapon from its datacard, you can re‑roll one of your attack dice.
+      Whether stockpiles deliberately set out for warriors to access quickly, or the abandoned munitions of the slain, these caches can prove vital for a swift reload in the heat of battle. Before the battle, you can set up one of your Ammo Cache markers wholly within your territory. Friendly operatives can perform the following mission action during the battle. **AMMO RESUPPLY** 0AP One of your Ammo Cache markers the active operative controls is used during this turning point. Until the start of the next turning point, whenever this operative is shooting with a weapon from its datacard, you can re‑roll one of your attack dice.
       
       An operative cannot perform this action while within control range of an enemy operative, if that marker isn't yours, or if that marker has been used this turning point.
   - name: Razor Wire
@@ -498,10 +526,10 @@ universalEquipment:
   - name: Ladders
     text: |-
       Carried into battle in their compacted forms, these ladders provide a rapid route of ingress to strongholds, or access to vital vantage points. Ladders are Insignificant and Exposed terrain. Before the battle, you can set up any of them as follows:
-        -  Wholly within your territory.
-        -  Upright against terrain that's at least 2" tall.
-        -  More than 2" from other equipment terrain features.
-        -  More than 1" from doors and access points.
+        - Wholly within your territory.
+        - Upright against terrain that's at least 2" tall.
+        - More than 2" from other equipment terrain features.
+        - More than 1" from doors and access points.
       
       Once per action, whenever an operative is climbing the terrain feature a ladder is placed against, treat the vertical distance as 1" if the ladder is within that operative's control range during that entire climb.
   - name: Explosive Grenades

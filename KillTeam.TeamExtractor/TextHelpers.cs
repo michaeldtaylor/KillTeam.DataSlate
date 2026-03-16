@@ -31,6 +31,7 @@ internal static partial class TextHelpers
         s = new string(s.Where(c => c >= 32 || c == '\n').ToArray());
 
         s = s
+            .Replace("\u0393\u00C7\u00F3", "\u2022") // mojibake for bullet (ΓÇó → •)
             .Replace('\u2019', '\'')               // right single quotation mark → apostrophe
             .Replace('\u2018', '\'')               // left single quotation mark → apostrophe
             .Replace('\u201C', '"')                // left double quotation mark

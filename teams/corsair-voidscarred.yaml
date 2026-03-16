@@ -1,4 +1,4 @@
-id: corsair-voidscarred
+﻿id: corsair-voidscarred
 name: Corsair Voidscarred
 grandFaction: Aeldari
 faction: Anhrathe
@@ -61,7 +61,7 @@ datacards:
       - name: Veteran Raider
         text: This operative can perform a 1AP action for free during their activation as a result of the Aeldari Raiders rule (instead of the Dash action).
       - name: One Step Ahead
-        text: 'Once per battle, after an enemy operative performs an action, if this operative is ready, you can use this rule.If you do, roll one D6: if the result is higher than that enemy operative''s APL stat, you can interrupt and immediately perform either a free Shoot or a free Fight action with this operative, but you cannot select any other enemy operative as a valid target or to fight against during that action (note that secondary targets from the Blast weapon rule can still be targeted).After you perform that action, subtract 1 from this operative''s APL stat until the end of its next activation.'
+        text: 'Once per battle, after an enemy operative performs an action, if this operative is ready, you can use this rule. If you do, roll one D6: if the result is higher than that enemy operative''s APL stat, you can interrupt and immediately perform either a free Shoot or a free Fight action with this operative, but you cannot select any other enemy operative as a valid target or to fight against during that action (note that secondary targets from the Blast weapon rule can still be targeted). After you perform that action, subtract 1 from this operative''s APL stat until the end of its next activation.'
   - name: Voidscarred Fate Dealer
     operativeType: Voidscarred Fate Dealer
     primaryKeyword: Corsair Voidscarred
@@ -546,7 +546,7 @@ datacards:
           normal: 1
           crit: 2
         weaponRules:
-          - P SYCHIC
+          - PSYCHIC
           - Severe
           - Silent
           - Stun
@@ -671,6 +671,7 @@ operativeSelection:
       - **SHADE RUNNER**
       - **SOUL WEAVER**
     
+    
       - **STARSTORM DUELLIST**
       - **WARRIOR with one of the following options:**
         - Shuriken pistol; power weapon
@@ -699,113 +700,139 @@ strategyPloys:
       
       Whenever a friendly **CORSAIR VOIDSCARRED** operative is more than 5" from other friendly operatives, its weapons have the Punishing weapon rule.
 supplementaryInformation: |-
-  # Corsair Voidscarred: Update Log
+  # CORSAIR VOIDSCARRED: UPDATE LOG
   
   Rules will be periodically updated to maintain fair balance and interact more smoothly with the game. Rules changes will be updated directly into online documents and then listed below. Any minor changes to standardise wording that don't have any practical impact on the rule will be updated directly into online documents but not be listed here.
   
-  # Errata January '26
+  # ERRATA JANUARY '26
   
   This section collects amendments to the rules. Amended text for clarification and edits are shown in blue, while amended text for balance updates are shown in magenta.
   
-  # Shade Runner Operative, Blink Pack Rule
+  ## SHADE RUNNER OPERATIVE, BLINK PACK RULE
   
   Last sentence deleted: ~~'This operative cannot warp jump during the same activation in which it performed the Dash action (or vice versa).'~~
   
-  # Previous Erratas Firefight Ploys, Capricious Flight
+  ## PREVIOUS ERRATAS FIREFIGHT PLOYS, CAPRICIOUS FLIGHT
   
   First sentence changed to read: 'Use this firefight ploy during a friendly **CORSAIR VOIDSCARRED** operative's activation, before or after it performs an action.'
   
-  # Felarch Operative, One Step Ahead Rule
+  ## FELARCH OPERATIVE, ONE STEP AHEAD RULE
   
   Relevant parts of first and second sentences deleted: ~~'Once per battle, after an enemy operative performs an action during its activation, if this operative is ready, you can use this rule. If you do, roll one D6: if the result is higher than that enemy operative's APL stat, you can interrupt that activation and immediately […]'~~
   
-  # Kurnite Hunter Operative, Faolchú's Bond Rule
+  ## KURNITE HUNTER OPERATIVE, FAOLCHÚ'S BOND RULE
   
-  Relevant part changed to read: 'The first time during each turning point that this operative ~~is retaliating, if it's ready it hasn't used its Faolchú ranged~~ ~~weapon during this turning point, in the Resolve Attack Dice~~ step of that sequence, […]'
+  Relevant part changed to read: 'The first time during each turning point that this operative is retaliating, if it's ready it hasn't used its Faolchú ranged weapon during this turning point, in the Resolve Attack Dice step of that sequence, […]'
   
-  # Kurnite Hunter Operative, Erudite Hunter Rule
+  ## KURNITE HUNTER OPERATIVE, ERUDITE HUNTER RULE
   
-  Relevant parts of third sentence deleted: 'Once during this turning point, after that enemy operative ~~performs an action in which it moves during its activation, you~~ ~~can interrupt that activation to use this rule.~~
+  Relevant parts of third sentence deleted: 'Once during this turning point, after that enemy operative performs an action in which it moves during its activation, you can interrupt that activation to use this rule.
   
-  # Starstorm Duellist Operative, Pistol Barrage Action
+  ## STARSTORM DUELLIST OPERATIVE, PISTOL BARRAGE ACTION
   
   Condition changed to read: '
   
   This operative cannot perform this action while it has a Conceal order, or during an activation in which it performed the Shoot action (or vice versa).'
   
-  # Shade Runner Operative, Slicing Attack Rule
+  ## SHADE RUNNER OPERATIVE, SLICING ATTACK RULE
   
   Additional text added between fourth and fifth sentence: 'You cannot inflict damage on an enemy operative that was not visible to this operative at the start of that action.'
   
-  # Way Seeker Operative, Warding Shield Action
+  ## WAY SEEKER OPERATIVE, WARDING SHIELD ACTION
   
   Relevant part of last sentence of effect changed to read: '[…] the first time an attack dice inflicts Normal Dmg on that friendly operative, ignore that inflicted damage.'
   
-  # Previous Rules Commentaries
+  # PREVIOUS RULES COMMENTARIES
   
-  This section provides clarification on ambiguous and complex rules interactions. Q: If a **STARSTORM DUELLIST** is on guard and I interrupt an activation to perform a Shoot action against an enemy operative within its control range, can I use its Quick on the Trigger rule to perform the Shoot action normally, or must it be a point-blank shot? A: The former – you can perform the Shoot action normally.
+  This section provides clarification on ambiguous and complex rules interactions. Q:  If a **STARSTORM DUELLIST** is on guard and I interrupt an activation to perform a Shoot action against an enemy operative within its control range, can I use its Quick on the Trigger rule to perform the Shoot action normally, or must it be a point-blank shot? A:  The former – you can perform the Shoot action normally.
   
-  # Corsair Voidscarred
+  # CORSAIR VOIDSCARRED
   
-  # Operatives
+  # OPERATIVES
   
   Corsairs are avaricious raiders grouped together by charismatic commanders who draw their members from both craftworlds and the Dark City. The most experienced of Corsairs are the Voidscarred, each of whom possesses their own unique combat skills and have been hardened by several lifetimes of voidfaring and piracy.
   
-  # Voidscarred Felarch
+  # VOIDSCARRED FELARCH
   
   Felarchs are veteran Corsairs, with centuries or even millennia of experience reaving the stars. They have fought countless different races and mastered numerous weapons, making them deadly enemies for any who face them.
   
-  # Voidscarred Warrior
+  # VOIDSCARRED WARRIOR
   
   Corsairs are lithe and nimble warriors, skilled marksmen and bladesmen both. Swift fighters, they make up for lack of physical strength with sheer agility.
   
-  # Voidscarred Gunner
+  # VOIDSCARRED GUNNER
   
   Corsairs utilise weapons hailing from every Aeldari society. Shredders unleash an expanding mesh of monofilament, entangling foes in a net and slicing them apart, while blasters use mysterious darklight technology, lethal even to the most armoured foe.
   
-  # Voidscarred Heavy Gunner
+  # VOIDSCARRED HEAVY GUNNER
   
   With rapid volleys of shuriken fire, Corsairs can shred enemy infantry and provide cover for their coterie. Some Corsairs wield wraithcannons. These weapons tear rifts between warp and realspace, ripping apart targets caught in the vortex.
   
-  # Voidscarred Starstorm Duellist
+  # VOIDSCARRED STARSTORM DUELLIST
   
   Brash and arrogant, Starstorm Duellists are expert pistol wielders who dive through the fray to deliver salvoes of pinpoint fire at close range.
   
-  # Voidscarred Kurnite Hunter
+  # VOIDSCARRED KURNITE HUNTER
   
   Those Corsairs known a Kurnite Hunters are followers of Kurnous, Aeldari god of the hunt. Their bond with creatures of the hunt, such as the Faolchú, is often stronger than that with their fellow Corsairs.
   
-  # Voidscarred Shade Runner
+  # VOIDSCARRED SHADE RUNNER
   
   Shade Runners are experts at the surprise attack. Utilising their blink packs – which function in a similar manner to the warp jump generators used by Warp Spiders of the Asuryani – they flank their enemies, striking with the swift, savage blows of their Hekatarii blades. 2
   
-  # Voidscarred Kurnathi
+  # VOIDSCARRED KURNATHI
   
   The Kurnathi are true blademasters. Assassins all, they have learned their bloody trade in Asuryani Aspect Shrines, in the arenas of Commorragh or even alongside the Harlequins. Now they put their skills to work however they see fit.
   
-  # Voidscarred Fate Dealer
+  # VOIDSCARRED FATE DEALER
   
   Once a Fate Dealer has an enemy in their sights, it is the mark of the unfortunate soul's death. Expert infiltrators, they hide in positions with greatest oversight of the whole battlefield, and are rendered all but invisible by camo cloaks.
   
-  # Voidscarred Way Seeker
+  # VOIDSCARRED WAY SEEKER
   
   It is the role of the Way Seekers to guide and steer smaller Corsair ships on their travels. They are also powerful battlefield psykers who work closely with Fate Dealers and Kurnathi, identifying targets for these assassins as they would identify obstacles to their craft.
   
-  # Voidscarred Soul Weaver
+  # VOIDSCARRED SOUL WEAVER
   
   Spiritual mystics, Soul Weavers utilise the power and knowledge of the Aeldari souls in the spirit stones they carry. With this energy they can enhance warriors' abilities in combat or heal the wounded.
   
-  > **'THE VOID IS WEALTH. THE VOID IS FREEDOM. I REJECT THE TIGHTLY BOUND CHORDS OF THE PATH. I REJECT THE PETTINESS OF COMMORRITE POLITICS. I REJECT THE PLAIN FRUGALITY OF THE EXODITES. I REJECT THE MASKS OF THE CLOWN AND THE MIME. I MOST CERTAINLY REJECT DEATH. THE STARS BELONGED TO MY ANCESTORS. THUS THEY BELONG TO ME. THUS I GO WHERE I WILL, TAKE WHAT I WILL AND KILL WHOM I WILL.'**
+  > **' THE VOID IS WEALTH. THE VOID IS FREEDOM. I REJECT THE TIGHTLY BOUND CHORDS OF THE PATH. I REJECT THE PETTINESS OF COMMORRITE POLITICS. I REJECT THE PLAIN FRUGALITY OF THE EXODITES. I REJECT THE MASKS OF THE CLOWN AND THE MIME. I MOST CERTAINLY REJECT DEATH. THE STARS BELONGED TO MY ANCESTORS. THUS THEY BELONG TO ME. THUS I GO WHERE I WILL, TAKE WHAT I WILL AND KILL WHOM I WILL.'**
   >
   > — Lady Hale'drithea of the Black Suns
   
-  # Archetypes
+  # ARCHETYPES
   
-  # Infiltration Recon
+  # INFILTRATION RECON
   
   Archetypes are used in certain mission packs, e.g. Approved Ops. The game sequence will specify how.
   
-  # Corsair Voidscarred Kill Team
+  # CORSAIR VOIDSCARRED KILL TEAM
+  
+  # CORSAIR VOIDSCARRED » KILL TEAM SELECTION
+  
+  # FELARCH
+  
+  # FATE DEALER
+  
+  # SHADE RUNNER
+  
+  Neuro disruptor Power weapon Shuriken pistol Ranger long rifle Shuriken pistol Throwing blades Hekatarii blades 4
+  
+  # CORSAIR VOIDSCARRED » KILL TEAM SELECTION
+  
+  # GUNNER
+  
+  # KURNITE HUNTER
+  
+  # STARSTORM DUELLIST HEAVY GUNNER
+  
+  # WARRIOR
+  
+  # KURNATHI SOUL WEAVER
+  
+  # WAY SEEKER
+  
+  Shuriken pistol Power weapon Shredder Blaster Shuriken cannon Faolchú Shuriken pistol Power weapon Shuriken rifle Shuriken pistol Fusion pistol Dual power weapons Shuriken pistol Power weapon Shuriken pistol Witch staff 5
 universalEquipment:
   - name: Portable Barricade
     text: 'Little more than a suppression shield with armoured feet, these barricades can be hefted and borne forwards to provide mobile cover. A portable barricade is Light, Protective and Portable terrain, except the feet which are Insignificant and Exposed. Before the battle, you can set it up wholly within your territory, on the killzone floor and more than 2" from other equipment terrain features, access points and Accessible terrain. Protective: While an operative is in cover from this terrain feature, improve its Save stat by 1 (to a maximum of 2+). RULE'
@@ -813,7 +840,7 @@ universalEquipment:
     text: From neuro‑suppressant psybombs to smoke‑belching chemical charges, grenades of this sort can suppress the enemy and be the difference between life and death. When you select this equipment, select two utility grenades (2 smoke, 2 stun, or 1 smoke and 1 stun). Each selection is a unique action your operatives can perform, but your kill team can only perform that action a total number of times during the battle equal to your selection. RULE
   - name: Ammo Cache
     text: |-
-      Whether stockpiles deliberately set out for warriors to access quickly, or the abandoned munitions of the slain, these caches can prove vital for a swift reload in the heat of battle. Before the battle, you can set up one of your Ammo Cache markers wholly within your territory. Friendly operatives can perform the following mission action during the battle. **AMMO RESUPPLY** 0AP  One of your Ammo Cache markers the active operative controls is used during this turning point.  Until the start of the next turning point, whenever this operative is shooting with a weapon from its datacard, you can re‑roll one of your attack dice.
+      Whether stockpiles deliberately set out for warriors to access quickly, or the abandoned munitions of the slain, these caches can prove vital for a swift reload in the heat of battle. Before the battle, you can set up one of your Ammo Cache markers wholly within your territory. Friendly operatives can perform the following mission action during the battle. **AMMO RESUPPLY** 0AP One of your Ammo Cache markers the active operative controls is used during this turning point. Until the start of the next turning point, whenever this operative is shooting with a weapon from its datacard, you can re‑roll one of your attack dice.
       
       An operative cannot perform this action while within control range of an enemy operative, if that marker isn't yours, or if that marker has been used this turning point.
   - name: Razor Wire
@@ -832,10 +859,10 @@ universalEquipment:
   - name: Ladders
     text: |-
       Carried into battle in their compacted forms, these ladders provide a rapid route of ingress to strongholds, or access to vital vantage points. Ladders are Insignificant and Exposed terrain. Before the battle, you can set up any of them as follows:
-        -  Wholly within your territory.
-        -  Upright against terrain that's at least 2" tall.
-        -  More than 2" from other equipment terrain features.
-        -  More than 1" from doors and access points.
+        - Wholly within your territory.
+        - Upright against terrain that's at least 2" tall.
+        - More than 2" from other equipment terrain features.
+        - More than 1" from doors and access points.
       
       Once per action, whenever an operative is climbing the terrain feature a ladder is placed against, treat the vertical distance as 1" if the ladder is within that operative's control range during that entire climb.
   - name: Explosive Grenades

@@ -1,15 +1,18 @@
-using System.Diagnostics;
 using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
 using KillTeam.TeamExtractor.Models;
 using KillTeam.TeamExtractor;
+using UglyToad.PdfPig;
+using UglyToad.PdfPig.Content;
+using UglyToad.PdfPig.Core;
+using UglyToad.PdfPig.DocumentLayoutAnalysis.TextExtractor;
 
 namespace KillTeam.TeamExtractor.Services;
 
 /// <summary>
 /// Extracts Kill Team operative data from official GW PDF sources.
-/// Uses pdftotext for text layout extraction and PdfPig for weapon type detection.
+/// Uses PdfPig for all PDF operations: text extraction, weapon type detection, and strikethrough detection.
 /// </summary>
 public partial class PdfTeamExtractor
 {
@@ -20,7 +23,7 @@ public partial class PdfTeamExtractor
     };
 
     /// <summary>
-    /// ALL-CAPS tokens that appear in raw-mode pdftotext output but are stats labels or
+    /// ALL-CAPS tokens that appear in content-order PDF text but are stats labels or
     /// page markers, not operative names.  These must be excluded when scanning for
     /// operative name boundaries in <see cref="BuildRawBackCardSections"/>.
     /// </summary>
@@ -253,13 +256,27 @@ public partial class PdfTeamExtractor
                     var wDmgCrit = int.Parse(wm.Groups[5].Value, CultureInfo.InvariantCulture);
                     var wRulesRaw = StripControlChars(wm.Groups[6].Value.Trim());
 
-                    while (i + 1 < count)
+                    // Continuation detection: if rules text ends with comma, the next non-blank
+                    // line(s) continue the rule list. PdfPig layout mode may place them on separate
+                    // lines with zero indentation and intervening blank lines.
+                    while (i + 1 < count && wRulesRaw.TrimEnd().EndsWith(','))
                     {
                         var next = lines[i + 1];
 
-                        if (next.Length >= 15 && next[..15].All(c => c == ' ') && !ContinuationExcludeRegex().IsMatch(next))
+                        if (string.IsNullOrWhiteSpace(next))
                         {
-                            wRulesRaw = (wRulesRaw + " " + next.Trim()).Trim();
+                            i++;
+                            continue;
+                        }
+
+                        var nextTrimmed = next.Trim();
+
+                        if (nextTrimmed.Length < 80
+                            && !WeaponRowRegex().IsMatch(next)
+                            && !StatsHeaderRegex().IsMatch(next)
+                            && !AllCapsNameRegex().IsMatch(nextTrimmed))
+                        {
+                            wRulesRaw = wRulesRaw + " " + nextTrimmed;
                             i++;
                         }
                         else
@@ -477,7 +494,7 @@ public partial class PdfTeamExtractor
     }
 
     /// <summary>
-    /// Scans raw-mode pdftotext lines and builds two lookups of operative name →
+    /// Scans content-order PDF text lines and builds two lookups of operative name →
     /// back-card body lines, distinguished by PDF structure variant:
     /// <list type="bullet">
     ///   <item>
@@ -537,11 +554,15 @@ public partial class PdfTeamExtractor
 
                 // A standalone ALL-CAPS name (letters/spaces/hyphens only, no digits or
                 // commas, not a known stats label) is the end marker and becomes the key.
-                if (AllCapsNameRegex().IsMatch(contentTrimmed)
-                    && !contentTrimmed.Contains(',')
-                    && !RawModeStatsKeywords.Contains(contentTrimmed))
+                // ContentOrderTextExtractor may append trailing digits (e.g. page numbers or stat values)
+                // to the name line — strip those before matching.
+                var nameCandidate = PageNumberSuffixRegex().Replace(contentTrimmed, "").Trim();
+                if (nameCandidate.Length > 0
+                    && AllCapsNameRegex().IsMatch(nameCandidate)
+                    && !nameCandidate.Contains(',')
+                    && !RawModeStatsKeywords.Contains(nameCandidate))
                 {
-                    operativeName = ToTitleCase(contentTrimmed);
+                    operativeName = ToTitleCase(nameCandidate);
                     i++; // past the name line
                     break;
                 }
@@ -1383,7 +1404,7 @@ public partial class PdfTeamExtractor
 
         foreach (var line in lines)
         {
-            // Strip control characters (BEL and others that pdftotext appends in raw mode)
+            // Strip control characters (BEL and others that PDFs embed as rendering artefacts)
             // before Trim(), so lines containing only \x07 are treated as empty.
             // Also apply text normalisation (smart quotes, mojibake apostrophes) so that
             // rule names containing apostrophes (e.g. SCORPION'S EYE) match the regex.
@@ -1527,7 +1548,7 @@ public partial class PdfTeamExtractor
         }
 
         // Post-process: fold inline weapon tables (NAME ATK HIT DMG + WR) into the preceding rule's text.
-        // pdftotext parses "NAME ATK HIT DMG" as an ALL-CAPS rule name.  The data row and "WR" header
+        // PDF extraction parses "NAME ATK HIT DMG" as an ALL-CAPS rule name.  The data row and "WR" header
         // follow as separate rules.  Merge them back as a Markdown table appended to the rule that
         // ended with "...can use the following ranged weapon:" (or similar).
         for (var i = deduped.Count - 1; i >= 0; i--)
@@ -1648,7 +1669,7 @@ public partial class PdfTeamExtractor
     }
 
     /// <summary>
-    /// Converts raw pdftotext lines from the operative selection into Markdown.
+    /// Converts content-order PDF text lines from the operative selection into Markdown.
     /// Tracks bullet depth and joins word-wrapped continuation lines.
     /// Applies text normalisation, bold conversion, and paragraph-break logic inline —
     /// the result must NOT be passed through <see cref="TextHelpers.StructureToMarkdown"/>
@@ -1738,13 +1759,10 @@ public partial class PdfTeamExtractor
             {
                 FlushItem();
                 var bulletContent = stripped[1..].TrimStart();
-                // If the bullet starts with an ALL-CAPS operative name (two consecutive uppercase
-                // chars), bold the entire label including any qualifying text such as
-                // "with auxiliary grenade launcher and one of the following options:".
-                // Otherwise (e.g. "Plasma pistol; chainsword") apply selective bolding only.
-                var rest = bulletContent.Length >= 2 && char.IsUpper(bulletContent[0]) && char.IsUpper(bulletContent[1])
-                    ? $"**{bulletContent}**"
-                    : ApplyBold(bulletContent);
+                // Apply selective ALL-CAPS bolding (e.g. "**ASSAULT INTERCESSOR SERGEANT** with...")
+                // FlushItem's OperativeBulletRewrapRegex will then re-wrap to bold the full text
+                // including lowercase qualifier ("with one of the following options:").
+                var rest = ApplyBold(bulletContent);
                 currentItem.Append("  - ").Append(rest);
                 parentDepth = 2;
             }
@@ -1948,7 +1966,9 @@ public partial class PdfTeamExtractor
                 output.Append("\n\n");
             }
 
-            output.Append("# ").Append(TextHelpers.ToTitleCase(pendingHeaderText.ToString())).Append("\n\n");
+            var headerText = pendingHeaderText.ToString();
+            var headerLevel = headerText.Contains(',') ? "##" : "#";
+            output.Append(headerLevel).Append(' ').Append(headerText).Append("\n\n");
             pendingHeaderText.Clear();
         }
 
@@ -1957,7 +1977,6 @@ public partial class PdfTeamExtractor
         // Kill Team Selection section state
         var ktsTeamName = string.Empty; // e.g. "ANGELS OF DEATH"
         var ktsNameWords = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-        var inKtsFragSkip = false; // true = skipping heading fragment lines
         var ktsArchetypesProcessed = false; // true once the ARCHETYPES heading line has been seen
         var ktsStatCardsMode = false; // true once stat-card pages begin (skip everything)
 
@@ -2000,7 +2019,6 @@ public partial class PdfTeamExtractor
             // emitted, a subsequent » marks the start of the stat-card pages; skip everything after.
             if (trimmed == "\u00BB")
             {
-                inKtsFragSkip = true;
                 if (ktsTeamName.Length > 0 && ktsArchetypesProcessed)
                 {
                     ktsStatCardsMode = true;
@@ -2075,8 +2093,7 @@ public partial class PdfTeamExtractor
                             output.Remove(output.Length - 1, 1);
                         }
 
-                        output.Append($"\n\n# {TextHelpers.ToTitleCase(trimmed)}\n\n");
-                        inKtsFragSkip = true;
+                        output.Append($"\n\n# {trimmed}\n\n");
                         prevWasHeader = false;
                         continue;
                     }
@@ -2093,9 +2110,6 @@ public partial class PdfTeamExtractor
                     {
                         continue;
                     }
-
-                    // Non-fragment content in KTS section: exit skip mode, process normally
-                    inKtsFragSkip = false;
 
                     // Merge into pending header when:
                     // - pending ends with '&' or ',' (mid-phrase word-wrap on current line), OR
@@ -2234,6 +2248,15 @@ public partial class PdfTeamExtractor
 
         var text = TextHelpers.StructureToMarkdown(output.ToString().TrimStart());
 
+        // Heading lines (# / ##) are already emphasised by the heading marker — strip
+        // any bold markers that StructureToMarkdown added to ALL-CAPS heading text.
+        text = Regex.Replace(text, @"^(#{1,2}\s+)(.+)$", m =>
+        {
+            var prefix = m.Groups[1].Value;
+            var content = m.Groups[2].Value.Replace("**", "");
+            return prefix + content;
+        }, RegexOptions.Multiline);
+
         // Strikethrough for explicitly labelled deleted rule text: deleted: '...'
         // Pattern: allow apostrophes inside contractions (e.g. "it's", "doesn't") by requiring
         // them to be followed by a word character; stop at paragraph boundaries (newlines) to
@@ -2243,7 +2266,7 @@ public partial class PdfTeamExtractor
             @"deleted: '((?:[^'\n]|'(?=[a-z]))+)'",
             "deleted: ~~'$1'~~");
 
-        // Strikethrough for visually struck text detected by the pdf.js operator-stream analysis.
+        // Strikethrough for visually struck text detected by PdfPig path analysis.
         // This runs AFTER the deleted: regex so we can skip regions already marked as struck.
         if (struckPhrases.Count > 0)
         {
@@ -2254,42 +2277,116 @@ public partial class PdfTeamExtractor
     }
 
     /// <summary>
-    /// Runs the Node.js strikethrough-detection script against the supplied PDF and returns
-    /// a deduplicated list of phrases that are visually struck through in the document.
-    /// Returns an empty list if Node.js is unavailable or the script cannot be found.
+    /// Detects visually struck-through text in a PDF by finding thin horizontal vector
+    /// paths (drawn over text as strikethrough marks) and identifying which letters they
+    /// overlap. Returns a deduplicated list of struck phrases after text normalisation.
     /// </summary>
     private static IReadOnlyList<string> GetStruckPhrases(string pdfPath)
     {
         try
         {
-            var scriptPath = Path.Combine(AppContext.BaseDirectory, "scripts", "find_strikethrough.mjs");
-            if (!File.Exists(scriptPath))
+            using var doc = PdfDocument.Open(pdfPath);
+            var phrases = new List<string>();
+
+            for (var pageNum = 1; pageNum <= doc.NumberOfPages; pageNum++)
             {
-                return [];
+                var page = doc.GetPage(pageNum);
+                var letters = page.Letters
+                    .Where(l => !string.IsNullOrWhiteSpace(l.Value))
+                    .ToList();
+
+                if (letters.Count == 0)
+                {
+                    continue;
+                }
+
+                // Collect thin horizontal lines (potential strikethrough marks)
+                var strikeRects = new List<PdfRectangle>();
+                foreach (var path in page.ExperimentalAccess.Paths)
+                {
+                    try
+                    {
+                        var bb = path.GetBoundingRectangle();
+                        if (bb == null)
+                        {
+                            continue;
+                        }
+
+                        var r = bb.Value;
+                        if (path.IsStroked
+                            && path.LineWidth <= 1.0
+                            && r.Height <= Math.Max(path.LineWidth, 0.5) + 0.5
+                            && r.Width > 15)
+                        {
+                            strikeRects.Add(r);
+                        }
+                    }
+                    catch
+                    {
+                        // Ignore malformed paths
+                    }
+                }
+
+                if (strikeRects.Count == 0)
+                {
+                    continue;
+                }
+
+                // Group letters into visual lines and extract struck phrases
+                var lineGroups = GroupLettersIntoLines(letters);
+
+                foreach (var group in lineGroups)
+                {
+                    var sorted = group.Letters.OrderBy(l => l.GlyphRectangle.Left).ToList();
+                    var currentPhrase = new StringBuilder();
+                    Letter? prevStruck = null;
+
+                    foreach (var letter in sorted)
+                    {
+                        if (IsLetterStruck(letter, strikeRects))
+                        {
+                            if (prevStruck != null)
+                            {
+                                var gap = letter.GlyphRectangle.Left - prevStruck.GlyphRectangle.Right;
+                                var avgW = (letter.GlyphRectangle.Width + prevStruck.GlyphRectangle.Width) / 2;
+                                if (gap > Math.Max(avgW * 0.25, 0.5))
+                                {
+                                    currentPhrase.Append(' ');
+                                }
+                            }
+
+                            currentPhrase.Append(letter.Value);
+                            prevStruck = letter;
+                        }
+                        else
+                        {
+                            if (currentPhrase.Length > 0)
+                            {
+                                var phrase = TextHelpers.NormaliseText(currentPhrase.ToString());
+                                if (phrase.Length > 0)
+                                {
+                                    phrases.Add(phrase);
+                                }
+
+                                currentPhrase.Clear();
+                            }
+
+                            prevStruck = null;
+                        }
+                    }
+
+                    if (currentPhrase.Length > 0)
+                    {
+                        var phrase = TextHelpers.NormaliseText(currentPhrase.ToString());
+                        if (phrase.Length > 0)
+                        {
+                            phrases.Add(phrase);
+                        }
+                    }
+                }
             }
 
-            var psi = new ProcessStartInfo("node")
-            {
-                Arguments = $"\"{scriptPath}\" \"{pdfPath}\"",
-                WorkingDirectory = Path.GetDirectoryName(scriptPath)!,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                UseShellExecute = false,
-                StandardOutputEncoding = Encoding.UTF8,
-            };
-
-            using var proc = Process.Start(psi)!;
-            var json = proc.StandardOutput.ReadToEnd();
-            proc.WaitForExit();
-
-            if (proc.ExitCode != 0 || string.IsNullOrWhiteSpace(json))
-            {
-                return [];
-            }
-
-            var raw = System.Text.Json.JsonSerializer.Deserialize<string[]>(json) ?? [];
-            return raw
-                .Select(TextHelpers.NormaliseText)
+            return phrases
                 .Where(p => p.Length > 0)
                 .Distinct(StringComparer.Ordinal)
                 .ToList();
@@ -2301,10 +2398,10 @@ public partial class PdfTeamExtractor
     }
 
     /// <summary>
-    /// Applies Markdown strikethrough for visually struck phrases detected by pdf.js.
-    /// Bullet prefixes (• ○) are stripped from phrases before matching because
-    /// <see cref="AppendText"/> has already converted them to Markdown list syntax.
-    /// All occurrences of each phrase are struck. Positions already inside
+    /// Applies Markdown strikethrough for visually struck phrases detected by PdfPig
+    /// vector path analysis. Bullet prefixes (• ○) are stripped from phrases before
+    /// matching because <see cref="AppendText"/> has already converted them to Markdown
+    /// list syntax. All occurrences of each phrase are struck. Positions already inside
     /// <c>~~...~~</c> markers (from the <c>deleted:</c> regex) are skipped.
     /// </summary>
     private static string ApplyVisualStrikethrough(string text, IReadOnlyList<string> struckPhrases)
@@ -2466,7 +2563,7 @@ public partial class PdfTeamExtractor
 
     /// <summary>
     /// Strips ASCII control characters (NUL–US, i.e. code points 0–31) from a name string.
-    /// pdftotext emits characters such as BEL (0x07) and BS (0x08) as PDF rendering artefacts;
+    /// PDF text extraction can emit characters such as BEL (0x07) and BS (0x08) as rendering artefacts;
     /// these must be removed before storing names.
     /// </summary>
     private static string StripControlChars(string s)
@@ -2521,48 +2618,254 @@ public partial class PdfTeamExtractor
         return EquipmentSkipPatterns.Any(p => Regex.IsMatch(text, p, RegexOptions.IgnoreCase));
     }
 
+    /// <summary>
+    /// Extracts text lines from a PDF using PdfPig word extraction.
+    /// <list type="bullet">
+    ///   <item><c>raw: true</c> — reading-order text with single-space word joins (prose content)</item>
+    ///   <item><c>raw: false</c> — layout-preserving text with gap-proportional spacing (weapon tables)</item>
+    /// </list>
+    /// Unicode quotes and common mojibake sequences are normalised for downstream regex compatibility.
+    /// </summary>
     private static List<string> GetPdfLines(string pdfPath, bool raw = false)
     {
-        var psi = new ProcessStartInfo
-        {
-            FileName = "pdftotext",
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
-            UseShellExecute = false,
-            StandardOutputEncoding = Encoding.UTF8,
-        };
+        using var doc = PdfDocument.Open(pdfPath);
+        var allLines = new List<string>();
 
-        if (raw)
+        for (var pageNum = 1; pageNum <= doc.NumberOfPages; pageNum++)
         {
-            psi.ArgumentList.Add("-raw");
+            if (pageNum > 1)
+            {
+                allLines.Add("");
+            }
+
+            var page = doc.GetPage(pageNum);
+
+            if (raw)
+            {
+                // Raw mode: use content-stream order to preserve column sequencing.
+                // This prevents two-column ability text from being interleaved.
+                var rawText = ContentOrderTextExtractor.GetText(page);
+
+                foreach (var line in rawText.Split('\n'))
+                {
+                    var trimmed = line.TrimEnd();
+
+                    if (trimmed.Length == 0)
+                    {
+                        continue;
+                    }
+
+                    allLines.Add(NormalizePdfText(trimmed));
+                }
+            }
+            else
+            {
+                // Layout mode: spatial word grouping with gap-proportional spacing.
+                var words = page.GetWords().ToList();
+
+                if (words.Count == 0)
+                {
+                    continue;
+                }
+
+                var allLetters = page.Letters
+                    .Where(l => !string.IsNullOrWhiteSpace(l.Value))
+                    .ToList();
+                var avgCharWidth = allLetters.Count > 0
+                    ? allLetters.Average(l => l.GlyphRectangle.Width)
+                    : 3.0;
+
+                var lineGroups = GroupWordsIntoLines(words);
+                lineGroups.Sort((a, b) => b.Y.CompareTo(a.Y));
+
+                var medianHeight = GetMedianWordHeight(words);
+
+                for (var g = 0; g < lineGroups.Count; g++)
+                {
+                    if (g > 0)
+                    {
+                        var gap = lineGroups[g - 1].Y - lineGroups[g].Y;
+                        if (gap > medianHeight * 1.8)
+                        {
+                            allLines.Add("");
+                        }
+                    }
+
+                    var sortedWords = lineGroups[g].Words
+                        .OrderBy(w => w.BoundingBox.Left)
+                        .ToList();
+
+                    var lineText = BuildLayoutLineText(sortedWords, avgCharWidth);
+                    lineText = NormalizePdfText(lineText);
+                    allLines.Add(lineText);
+                }
+            }
         }
-        else
+
+        return allLines;
+    }
+
+    /// <summary>Groups words into visual lines based on Y-position proximity.</summary>
+    private static List<(double Y, List<Word> Words)> GroupWordsIntoLines(List<Word> words)
+    {
+        if (words.Count == 0)
         {
-            psi.ArgumentList.Add("-layout");
+            return [];
         }
 
-        psi.ArgumentList.Add(pdfPath);
-        psi.ArgumentList.Add("-");
+        var sorted = words.OrderByDescending(w => w.BoundingBox.Bottom).ToList();
+        var groups = new List<(double Y, List<Word> Words)>();
+        var currentWords = new List<Word> { sorted[0] };
+        var currentY = sorted[0].BoundingBox.Bottom;
 
-        using var process = Process.Start(psi)
-            ?? throw new InvalidOperationException("Failed to start pdftotext. Is Poppler installed?");
-
-        var lines = new List<string>();
-
-        while (process.StandardOutput.ReadLine() is { } line)
+        for (var i = 1; i < sorted.Count; i++)
         {
-            lines.Add(line.Replace("\f", ""));
+            var wordY = sorted[i].BoundingBox.Bottom;
+            var height = sorted[i].BoundingBox.Height;
+            var tolerance = Math.Max(height * 0.4, 1.5);
+
+            if (currentY - wordY <= tolerance)
+            {
+                currentWords.Add(sorted[i]);
+            }
+            else
+            {
+                groups.Add((currentY, currentWords));
+                currentWords = new List<Word> { sorted[i] };
+                currentY = wordY;
+            }
         }
 
-        process.WaitForExit();
+        groups.Add((currentY, currentWords));
+        return groups;
+    }
 
-        if (process.ExitCode != 0)
+    /// <summary>
+    /// Builds a layout-mode string with gap-proportional spacing between words.
+    /// Column gaps produce multiple spaces, enabling regex patterns like <c>\s{2,}</c>
+    /// to detect table column boundaries.
+    /// Also merges split words where PdfPig produces a single uppercase letter
+    /// followed by a closely-spaced lowercase continuation (e.g. "R" + "ange" → "Range").
+    /// </summary>
+    private static string BuildLayoutLineText(List<Word> sortedWords, double avgCharWidth)
+    {
+        if (sortedWords.Count == 0)
         {
-            throw new InvalidOperationException(
-                $"pdftotext failed with exit code {process.ExitCode} for '{pdfPath}'");
+            return "";
         }
 
-        return lines;
+        var sb = new StringBuilder();
+        var i = 0;
+
+        while (i < sortedWords.Count)
+        {
+            if (i > 0)
+            {
+                var gap = sortedWords[i].BoundingBox.Left - sortedWords[i - 1].BoundingBox.Right;
+                var spaceCount = Math.Max(1, (int)Math.Round(gap / avgCharWidth));
+                sb.Append(' ', spaceCount);
+            }
+
+            // Merge split word: single letter closely followed by the rest of the word.
+            // Kill Team PDFs render the first letter of some words as separate text objects.
+            // Handles both "R" + "ange" (lowercase) and "P" + "SYCHIC" (uppercase) continuations.
+            if (sortedWords[i].Text.Length == 1
+                && char.IsUpper(sortedWords[i].Text[0])
+                && i + 1 < sortedWords.Count
+                && sortedWords[i + 1].Text.Length > 1)
+            {
+                var wordGap = sortedWords[i + 1].BoundingBox.Left - sortedWords[i].BoundingBox.Right;
+                if (wordGap < avgCharWidth * 2)
+                {
+                    sb.Append(sortedWords[i].Text);
+                    sb.Append(sortedWords[i + 1].Text);
+                    i += 2;
+                    continue;
+                }
+            }
+
+            sb.Append(sortedWords[i].Text);
+            i++;
+        }
+
+        return sb.ToString();
+    }
+
+    /// <summary>Returns the median word height for blank-line gap detection.</summary>
+    private static double GetMedianWordHeight(IReadOnlyList<Word> words)
+    {
+        if (words.Count == 0)
+        {
+            return 10.0;
+        }
+
+        var heights = words.Select(w => w.BoundingBox.Height).OrderBy(h => h).ToList();
+        return heights[heights.Count / 2];
+    }
+
+    /// <summary>
+    /// Normalises common mojibake sequences and Unicode characters in PDF-extracted text
+    /// for downstream regex compatibility.
+    /// </summary>
+    private static string NormalizePdfText(string text)
+    {
+        return text
+            .TrimStart('\uFEFF')                       // strip BOM
+            .Replace("\u0393\u00C7\u00F3", "\u2022")   // mojibake → • (bullet)
+            .Replace("\u0393\u00C7\u00D6", "'")         // mojibake → ' (right single quote)
+            .Replace('\u2019', '\'')
+            .Replace('\u2018', '\'')
+            .Replace('\u201C', '"')
+            .Replace('\u201D', '"')
+            .Replace("\u00AE", "")
+            .Replace("\u2122", "");
+    }
+
+    /// <summary>Checks whether a letter is vertically overlapped by any strikethrough line.</summary>
+    private static bool IsLetterStruck(Letter letter, List<PdfRectangle> strikeRects)
+    {
+        var letterBottom = letter.GlyphRectangle.Bottom;
+        var letterTop = letter.GlyphRectangle.Top;
+        return strikeRects.Any(r =>
+            r.Bottom <= letterTop
+            && r.Top >= letterBottom
+            && letter.GlyphRectangle.Left >= r.Left - 2
+            && letter.GlyphRectangle.Right <= r.Right + 2);
+    }
+
+    /// <summary>Groups letters into visual lines based on Y-position proximity (for strikethrough detection).</summary>
+    private static List<(double Y, List<Letter> Letters)> GroupLettersIntoLines(IReadOnlyList<Letter> letters)
+    {
+        if (letters.Count == 0)
+        {
+            return [];
+        }
+
+        var sorted = letters.OrderByDescending(l => l.GlyphRectangle.Bottom).ToList();
+        var groups = new List<(double Y, List<Letter> Letters)>();
+        var currentLetters = new List<Letter> { sorted[0] };
+        var currentY = sorted[0].GlyphRectangle.Bottom;
+
+        for (var i = 1; i < sorted.Count; i++)
+        {
+            var letterY = sorted[i].GlyphRectangle.Bottom;
+            var height = sorted[i].GlyphRectangle.Height;
+            var tolerance = Math.Max(height * 0.4, 1.5);
+
+            if (currentY - letterY <= tolerance)
+            {
+                currentLetters.Add(sorted[i]);
+            }
+            else
+            {
+                groups.Add((currentY, currentLetters));
+                currentLetters = new List<Letter> { sorted[i] };
+                currentY = letterY;
+            }
+        }
+
+        groups.Add((currentY, currentLetters));
+        return groups;
     }
 
     private static int SkipBlankLines(List<string> lines, int i)

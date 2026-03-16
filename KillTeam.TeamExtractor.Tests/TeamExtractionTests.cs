@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using KillTeam.TeamExtractor.Services;
 using VerifyXunit;
 
@@ -6,9 +5,9 @@ namespace KillTeam.TeamExtractor.Tests;
 
 /// <summary>
 /// Snapshot tests that re-extract teams from the GW PDF reference files and compare
-/// the output against approved <c>.verified.json</c> baselines.
+/// the output against approved <c>.verified.yaml</c> baselines.
 ///
-/// These tests require <c>pdftotext</c> (Poppler) to be on the system PATH.
+/// These tests require the <c>references/kill-teams/</c> directory to be present.
 /// If it is unavailable the tests are skipped rather than failed.
 /// </summary>
 public class TeamExtractionTests
@@ -34,34 +33,9 @@ public class TeamExtractionTests
         return null;
     }
 
-    private static bool IsPdfToTextAvailable()
-    {
-        try
-        {
-            var psi = new ProcessStartInfo
-            {
-                FileName = "pdftotext",
-                ArgumentList = { "-v" },
-                RedirectStandardError = true,
-                RedirectStandardOutput = true,
-                UseShellExecute = false,
-            };
-
-            using var proc = Process.Start(psi);
-            proc?.WaitForExit(3000);
-
-            return true;
-        }
-        catch
-        {
-            return false;
-        }
-    }
-
     private static void SkipIfPreconditionsMissing()
     {
         Skip.If(ReferencesRoot == null, "references/kill-teams/ directory not found — skipping extraction tests");
-        Skip.IfNot(IsPdfToTextAvailable(), "pdftotext (Poppler) not found on PATH — skipping extraction tests");
     }
 
     [SkippableTheory]
@@ -79,7 +53,7 @@ public class TeamExtractionTests
         var extractor = new PdfTeamExtractor(new PdfWeaponTypeDetector());
         var team = extractor.Extract(teamFolderName, teamFolder);
 
-        return Verify(team.ToYaml(), extension: "yaml")
+        return Verify(team.ToYaml().TrimStart('\uFEFF'), extension: "yaml")
             .UseDirectory("snapshots")
             .UseParameters(teamFolderName);
     }
