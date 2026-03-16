@@ -80,7 +80,7 @@ public class ShootSessionOrchestrator(
                     var saturate = w.ParsedRules.Any(r => r.Kind == SpecialRuleKind.Saturate)
                         ? " [yellow]⚠ Saturate[/]"
                         : "";
-                    return $"{Markup.Escape(w.Name)}  (ATK {w.Atk} | Hit {w.Hit}+ | DMG {w.NormalDmg}/{w.CriticalDmg}{Markup.Escape(rulesText)}){saturate}";
+                    return $"{Markup.Escape(w.Name)}  (Attack: {w.Atk} | Hit: {w.Hit}+ | Normal: {w.NormalDmg} | Crit: {w.CriticalDmg}{Markup.Escape(rulesText)}){saturate}";
                 })
                 .AddChoices(rangedWeapons));
 
@@ -111,7 +111,7 @@ public class ShootSessionOrchestrator(
                 .Validate(v => v is >= 0 and <= 2));
 
         // 5. Attacker dice entry
-        int[] attackDice = await RollOrEnterDiceAsync(weapon.Atk, $"{Markup.Escape(attacker.Name)} attack dice (ATK {weapon.Atk})");
+        int[] attackDice = await RollOrEnterDiceAsync(weapon.Atk, $"{Markup.Escape(attacker.Name)} attack dice (Attack: {weapon.Atk})");
 
         // 6. Weapon re-rolls + attacker CP re-roll
         attackDice = await rerollOrchestrator.ApplyAttackerRerollsAsync(

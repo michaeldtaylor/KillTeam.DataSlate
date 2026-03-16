@@ -73,7 +73,7 @@ public class FightSessionOrchestrator(
                 .UseConverter(w =>
                 {
                     var injured = atkIsInjured ? $" [yellow](Injured: effective Hit {w.Hit + 1}+)[/]" : "";
-                    return $"{Markup.Escape(w.Name)}  (ATK {w.Atk} | Hit {w.Hit}+ | DMG {w.NormalDmg}/{w.CriticalDmg}){injured}";
+                    return $"{Markup.Escape(w.Name)}  (Attack: {w.Atk} | Hit: {w.Hit}+ | Normal: {w.NormalDmg} | Crit: {w.CriticalDmg}){injured}";
                 })
                 .AddChoices(atkMeleeWeapons));
 
@@ -89,7 +89,7 @@ public class FightSessionOrchestrator(
             defWeapon = console.Prompt(
                 new SelectionPrompt<Weapon>()
                     .Title("Select defender's melee weapon:")
-                    .UseConverter(w => $"{Markup.Escape(w.Name)}  (ATK {w.Atk} | Hit {w.Hit}+ | DMG {w.NormalDmg}/{w.CriticalDmg})")
+                    .UseConverter(w => $"{Markup.Escape(w.Name)}  (Attack: {w.Atk} | Hit: {w.Hit}+ | Normal: {w.NormalDmg} | Crit: {w.CriticalDmg})")
                     .AddChoices(defMeleeWeapons));
             var defIsInjured = targetState.CurrentWounds < targetOp.Wounds / 2;
             defEffectiveHit = defIsInjured ? defWeapon.Hit + 1 : defWeapon.Hit;
@@ -106,7 +106,7 @@ public class FightSessionOrchestrator(
         atkEffectiveHit = Math.Max(2, atkEffectiveHit - fightAssist);
 
         // 5. Attacker dice entry
-        int[] atkRolls = await RollOrEnterDiceAsync(atkWeapon.Atk, $"{Markup.Escape(attacker.Name)} attack dice (ATK {atkWeapon.Atk})");
+        int[] atkRolls = await RollOrEnterDiceAsync(atkWeapon.Atk, $"{Markup.Escape(attacker.Name)} attack dice (Attack: {atkWeapon.Atk})");
         atkRolls = await rerollOrchestrator.ApplyAttackerRerollsAsync(
             atkRolls, atkWeapon.ParsedRules.ToList(), game.Id, isAttackerTeamA, attacker.Name);
 
@@ -115,7 +115,7 @@ public class FightSessionOrchestrator(
         int[] defRolls = [];
         if (defAtkCount > 0)
         {
-            defRolls = await RollOrEnterDiceAsync(defAtkCount, $"{Markup.Escape(targetOp.Name)} fight-back dice (ATK {defAtkCount})");
+            defRolls = await RollOrEnterDiceAsync(defAtkCount, $"{Markup.Escape(targetOp.Name)} fight-back dice (Attack: {defAtkCount})");
             defRolls = await rerollOrchestrator.ApplyDefenderRerollAsync(defRolls, game.Id, isDefenderTeamA, targetOp.Name);
         }
 

@@ -72,7 +72,7 @@ public class BlastTorrentSessionOrchestrator(
         }
 
         // Shared attack dice
-        int[] attackDice = await RollOrEnterDiceAsync(weapon.Atk, $"{Markup.Escape(attacker.Name)} attack dice (ATK {weapon.Atk})");
+        int[] attackDice = await RollOrEnterDiceAsync(weapon.Atk, $"{Markup.Escape(attacker.Name)} attack dice (Attack: {weapon.Atk})");
         attackDice = await rerollOrchestrator.ApplyAttackerRerollsAsync(
             attackDice, weapon.ParsedRules.ToList(), game.Id, isAttackerTeamA, attacker.Name);
 
