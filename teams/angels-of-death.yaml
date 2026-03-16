@@ -616,7 +616,7 @@ factionRules:
       
       When selecting your kill team, select a primary and secondary **CHAPTER TACTIC** for friendly **ANGEL OF DEATH** operatives to gain for the battle. Multiple instances of the same **CHAPTER TACTIC** aren't cumulative.
       
-      Designer's Note: If you're playing a series of games, i.e. a campaign or tournament, you must select the same primary and secondary **CHAPTER TACTIC** for every battle (you can still change the secondary with the Adaptive Tactics strategy ploy).
+      > Designer's Note: If you're playing a series of games, i.e. a campaign or tournament, you must select the same primary and secondary **CHAPTER TACTIC** for every battle (you can still change the secondary with the Adaptive Tactics strategy ploy).
       
       1. **AGGRESSIVE** This operative's melee weapons have the Rending weapon rule.
       2. **DUELLER** Whenever this operative is fighting or retaliating, each of your normal successes can block one unresolved critical success (unless the enemy operative's weapon has the Brutal weapon rule).
@@ -821,7 +821,7 @@ supplementaryInformation: |-
   
   Archetypes are used in certain mission packs, e.g. Approved Ops. The game sequence will specify how.
   
-  Some **ANGEL OF DEATH** rules refer to a 'bolt weapon'. This is a ranged weapon that includes 'bolt' in its name, e.g. stalker bolt rifle, heavy bolt pistol, etc.
+  > Some **ANGEL OF DEATH** rules refer to a 'bolt weapon'. This is a ranged weapon that includes 'bolt' in its name, e.g. stalker bolt rifle, heavy bolt pistol, etc.
   
   # ANGELS OF DEATH KILL TEAM
   

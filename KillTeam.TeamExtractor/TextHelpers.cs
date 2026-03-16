@@ -219,7 +219,62 @@ internal static partial class TextHelpers
         // Collapse 3+ consecutive newlines to a single paragraph break
         text = MultipleBlankLinesRegex().Replace(text, "\n\n");
 
+        // Step 10: Convert bordered callout paragraphs to blockquotes.
+        // In the PDF these appear inside a visible border/box. Format as Markdown `> `.
+        text = ConvertCalloutsToBlockquotes(text);
+
         return text.TrimStart().TrimEnd();
+    }
+
+    /// <summary>
+    /// Converts paragraphs that represent bordered callout boxes in the PDF to Markdown blockquotes.
+    /// Each line of a matching paragraph is prefixed with <c>&gt; </c>.
+    /// </summary>
+    private static string ConvertCalloutsToBlockquotes(string text)
+    {
+        var paragraphs = text.Split("\n\n");
+        var changed = false;
+
+        for (var i = 0; i < paragraphs.Length; i++)
+        {
+            var trimmed = paragraphs[i].TrimStart();
+
+            // "Designer's Note:" callout boxes
+            if (trimmed.StartsWith("Designer's Note:", StringComparison.OrdinalIgnoreCase))
+            {
+                paragraphs[i] = PrefixBlockquote(trimmed);
+                changed = true;
+            }
+            // "Some <KEYWORD> rules refer to..." callout boxes
+            else if (trimmed.StartsWith("Some ", StringComparison.OrdinalIgnoreCase) &&
+                     trimmed.Contains(" rules refer", StringComparison.OrdinalIgnoreCase))
+            {
+                paragraphs[i] = PrefixBlockquote(trimmed);
+                changed = true;
+            }
+        }
+
+        return changed ? string.Join("\n\n", paragraphs) : text;
+    }
+
+    /// <summary>
+    /// Prefixes each line of a paragraph with <c>&gt; </c> for Markdown blockquote formatting.
+    /// </summary>
+    private static string PrefixBlockquote(string paragraph)
+    {
+        var lines = paragraph.Split('\n');
+        var sb = new StringBuilder();
+        for (var i = 0; i < lines.Length; i++)
+        {
+            if (i > 0)
+            {
+                sb.Append('\n');
+            }
+
+            sb.Append("> ").Append(lines[i]);
+        }
+
+        return sb.ToString();
     }
 
     /// <summary>

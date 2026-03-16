@@ -233,6 +233,15 @@ Specific Kill Team phrasings that begin a new paragraph in the PDF but arrive jo
 
 Multiple blank lines (3+) are collapsed to `\n\n`. Result is trimmed.
 
+### Step 10: Bordered Callout Blockquotes
+
+Paragraphs that appear inside a visible border/box in the PDF are converted to Markdown blockquotes (`> `). Each line of a matching paragraph is prefixed with `> `.
+
+| Pattern | Example |
+|---------|---------|
+| Starts with `Designer's Note:` | `> Designer's Note: If you're playing a series of games...` |
+| Starts with `Some ` and contains ` rules refer` | `> Some **ANGEL OF DEATH** rules refer to a 'bolt weapon'...` |
+
 **Applied to:** ability.text, ploy.text, rule.text, equipment.text, operativeSelection.text, supplementaryInformation.
 
 `BuildOperativeSelectionMarkdown` applies its own constraint and sentence-break patterns (subset of the above) plus blank-line deduplication to suppress consecutive empty lines from the raw PDF.
