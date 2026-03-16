@@ -198,15 +198,44 @@ Process line by line, tracking list depth:
 Continuation line (non-bullet follows a list item, not a numbered item) → append with space.
 Numbered items (`^\d+\. `) always start a new block, never treated as continuation.
 
-### Step 8: Constraint Sentence Paragraph Break
-Insert `\n\n` before:
+### Step 8: Constraint Sentence Bullets
+
+Abilities/actions with a constraint sentence ("This operative cannot perform this action...") display on the physical card as two icon-marked sections: ▶ for the effect and ◆ for the constraint. These are represented as a Markdown bullet list.
+
+**Patterns** (only fire after `.` to avoid breaking quoted errata text):
 - `This operative cannot perform this action`
-- `An operative cannot perform this action`
 - `This operative cannot perform this ability`
+- `An operative cannot perform this action`
+
+When a pattern matches, the constraint is prefixed with `- ` and the preceding effect text is also prefixed with `- `, creating a two-item bullet list:
+
+```yaml
+text: |-
+  - Select one enemy operative visible to and within 7" of this operative...
+  - This operative cannot perform this action while within control range of an enemy operative.
+```
+
+### Step 9: Sentence-Start Paragraph Breaks
+
+Specific Kill Team phrasings that begin a new paragraph in the PDF but arrive joined to the preceding sentence by a space. Each is replaced with `.\n\n`:
+
+| Pattern | Context |
+|---------|---------|
+| `. Your kill team` | Faction rules → kill team composition instruction |
+| `. Use this ` | Ploy/rule body → usage instruction |
+| `. When selecting ` | Rules → selection instruction |
+| `. Designer's Note:` | Rules → designer's note callout |
+| `. You can use ` | Equipment lore → rule trigger |
+| `. Once per ` | Equipment lore → frequency constraint trigger |
+| `. When this equipment ` | Equipment lore → equipment trigger |
+| `. During each friendly ` | Faction rule lore → rule paragraph |
+| `. Each friendly ` | Faction rule → separate rule paragraph |
 
 Multiple blank lines (3+) are collapsed to `\n\n`. Result is trimmed.
 
 **Applied to:** ability.text, ploy.text, rule.text, equipment.text, operativeSelection.text, supplementaryInformation.
+
+`BuildOperativeSelectionMarkdown` applies its own constraint and sentence-break patterns (subset of the above) plus blank-line deduplication to suppress consecutive empty lines from the raw PDF.
 
 ---
 
@@ -286,10 +315,19 @@ A `\n\n` is inserted before a line when:
 
 ### ALL-CAPS header merging
 
-Consecutive ALL-CAPS lines are only merged into one heading when the pending header ends with `&` (mid-phrase word-wrap). Each standalone ALL-CAPS line otherwise gets its own `**heading**`.
+Consecutive ALL-CAPS lines are merged into one heading when:
+- The pending header ends with `&` (mid-word wrap, e.g. `SEEK &` + `DESTROY`)
+- The pending header ends with `,` (mid-phrase wrap, e.g. `MALIGNANT PLAGUECASTER OPERATIVE,` + `PUTRESCENT VITALITY ACTION`)
+- The pending header contains `,` but the incoming line does not (word-wrapped mid-phrase continuation)
 
-Example: `SEEK &` followed by `DESTROY` → `**Seek & Destroy**` (merged).
-Example: `ARCHETYPES` followed by `SECURITY` → two separate headings (not merged).
+Otherwise each standalone ALL-CAPS line gets its own heading.
+
+**Header level:**
+- Contains a comma → `##` (sub-item, e.g. `## FACTION EQUIPMENT, POISON VENTS`)
+- No comma → `#` (section heading, e.g. `# ERRATA JANUARY '26`)
+
+Example: `SEEK &` followed by `DESTROY` → `# Seek & Destroy` (merged, no comma → `#`).
+Example: `ARCHETYPES` followed by `SECURITY` → two separate `#` headings (not merged).
 
 ### Kill Team Selection section (end of PDF)
 
