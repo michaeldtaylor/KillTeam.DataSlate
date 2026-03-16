@@ -51,7 +51,7 @@ public class BlastTorrentSessionOrchestrator(
                         }
                         var isFriendly = o.TeamId == attacker.TeamId;
                         var friendly = isFriendly ? " [red][FRIENDLY FIRE!][/]" : "";
-                        return $"{Markup.Escape(o.Name)} (W:{s.CurrentWounds}/{o.Wounds}){friendly}";
+                        return $"{Markup.Escape(o.Name)} (Wounds: {s.CurrentWounds}/{o.Wounds}){friendly}";
                     })
                     .AddChoices(additionalCandidates)
                     .NotRequired());
@@ -106,7 +106,7 @@ public class BlastTorrentSessionOrchestrator(
                 continue;
             }
 
-            console.Write(new Rule($"[bold]{Markup.Escape(targetOp.Name)}[/] (W: {targetState.CurrentWounds}/{targetOp.Wounds})"));
+            console.Write(new Rule($"[bold]{Markup.Escape(targetOp.Name)}[/] (Wounds: {targetState.CurrentWounds}/{targetOp.Wounds})"));
 
             var coverOptions = new[] { "In cover", "Obscured", "Neither" };
             var coverChoice = console.Prompt(

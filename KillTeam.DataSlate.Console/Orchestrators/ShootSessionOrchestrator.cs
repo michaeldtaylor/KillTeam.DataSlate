@@ -47,7 +47,7 @@ public class ShootSessionOrchestrator(
             new SelectionPrompt<GameOperativeState>()
                 .Title("Select a target to shoot:")
                 .UseConverter(s => allOperatives.TryGetValue(s.OperativeId, out var o)
-                    ? $"{Markup.Escape(o.Name)} (W:{s.CurrentWounds}/{o.Wounds})"
+                    ? $"{Markup.Escape(o.Name)} (Wounds: {s.CurrentWounds}/{o.Wounds})"
                     : s.OperativeId.ToString())
                 .AddChoices(enemyStates));
 
@@ -184,7 +184,7 @@ public class ShootSessionOrchestrator(
             var newAttackerWounds = Math.Max(0, attackerState.CurrentWounds - selfDamage);
             attackerState.CurrentWounds = newAttackerWounds;
             await stateRepository.UpdateWoundsAsync(attackerState.Id, newAttackerWounds);
-            console.MarkupLine($"[red]🔥 Hot! {Markup.Escape(attacker.Name)} takes {selfDamage} self-damage! (W: {newAttackerWounds})[/]");
+            console.MarkupLine($"[red]🔥 Hot! {Markup.Escape(attacker.Name)} takes {selfDamage} self-damage! (Wounds: {newAttackerWounds})[/]");
             if (newAttackerWounds <= 0 && !attackerState.IsIncapacitated)
             {
                 attackerState.IsIncapacitated = true;

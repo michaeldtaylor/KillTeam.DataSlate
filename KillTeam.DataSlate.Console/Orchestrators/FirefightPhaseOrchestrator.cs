@@ -479,7 +479,7 @@ public class FirefightPhaseOrchestrator(
             new SelectionPrompt<(Operative op, GameOperativeState state)>()
                 .Title(title)
                 .UseConverter(pair =>
-                    $"{Markup.Escape(pair.op.Name)} (W:{pair.state.CurrentWounds}/{pair.op.Wounds}, {pair.state.Order})")
+                    $"{Markup.Escape(pair.op.Name)} (Wounds: {pair.state.CurrentWounds}/{pair.op.Wounds}, {pair.state.Order})")
                 .AddChoices(readyOps));
     }
 

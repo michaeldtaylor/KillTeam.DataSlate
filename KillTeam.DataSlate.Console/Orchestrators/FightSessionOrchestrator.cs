@@ -47,7 +47,7 @@ public class FightSessionOrchestrator(
             new SelectionPrompt<GameOperativeState>()
                 .Title("Select an enemy to fight (must be within control range):")
                 .UseConverter(s => allOperatives.TryGetValue(s.OperativeId, out var o)
-                    ? $"{Markup.Escape(o.Name)} (W:{s.CurrentWounds}/{o.Wounds})"
+                    ? $"{Markup.Escape(o.Name)} (Wounds: {s.CurrentWounds}/{o.Wounds})"
                     : s.OperativeId.ToString())
                 .AddChoices(enemyStates));
 
