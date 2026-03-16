@@ -289,7 +289,7 @@ public class ShootSessionOrchestrator(
         if (choice == "Roll for me")
         {
             var rolled = Enumerable.Range(0, count).Select(_ => Random.Shared.Next(1, 7)).ToArray();
-            console.MarkupLine($"  Rolled: [{string.Join(", ", rolled)}]");
+            console.MarkupLine($"  Rolled: [green]{string.Join(", ", rolled)}[/]");
             return rolled;
         }
 

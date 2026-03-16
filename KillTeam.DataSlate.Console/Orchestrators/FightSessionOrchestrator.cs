@@ -370,7 +370,7 @@ public class FightSessionOrchestrator(
     private static string FormatDie(string prefix, int num, FightDie die)
     {
         var result = die.Result == DieResult.Crit ? "[bold yellow]CRIT[/]" : "[green]HIT [/]";
-        return $"{prefix}{num}: {result} [rolled {die.RolledValue}]";
+        return $"{prefix}{num}: {result} (rolled [green]{die.RolledValue}[/])";
     }
 
     private static string FormatFightAction(FightAction a)
@@ -398,7 +398,7 @@ public class FightSessionOrchestrator(
         if (choice == "Roll for me")
         {
             var rolled = Enumerable.Range(0, count).Select(_ => Random.Shared.Next(1, 7)).ToArray();
-            console.MarkupLine($"  Rolled: [{string.Join(", ", rolled)}]");
+            console.MarkupLine($"  Rolled: [green]{string.Join(", ", rolled)}[/]");
             return rolled;
         }
 

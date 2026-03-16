@@ -30,7 +30,7 @@ public class BlastTorrentSessionOrchestrator(
         var isAttackerTeamA = attacker.TeamId == game.Participant1.TeamId;
         var weaponType = weapon.ParsedRules.Any(r => r.Kind == SpecialRuleKind.Torrent) ? "Torrent" : "Blast";
 
-        console.MarkupLine($"[bold yellow]⚠ [MULTI-TARGET][/] This weapon hits multiple targets. [{weaponType}]");
+        console.MarkupLine($"[bold yellow]⚠ MULTI-TARGET[/] This weapon hits multiple targets. ({weaponType})");
 
         // Additional target selection (excluding primary, must not be incapacitated)
         var additionalCandidates = allOperativeStates
@@ -244,7 +244,7 @@ public class BlastTorrentSessionOrchestrator(
         if (choice == "Roll for me")
         {
             var rolled = Enumerable.Range(0, count).Select(_ => Random.Shared.Next(1, 7)).ToArray();
-            console.MarkupLine($"  Rolled: [{string.Join(", ", rolled)}]");
+            console.MarkupLine($"  Rolled: [green]{string.Join(", ", rolled)}[/]");
             return rolled;
         }
 
