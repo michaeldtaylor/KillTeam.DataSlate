@@ -242,7 +242,7 @@ public class SimulateSessionOrchestrator(
     }
 
     private static string FormatOperative(Models.Operative o) =>
-        $"{Markup.Escape(o.Name)} [dim](M{o.Move}\" APL{o.Apl} W{o.Wounds} SV{o.Save}+)[/]";
+        $"{Markup.Escape(o.Name)} [dim](APL {o.Apl} · Move {o.Move}\" · Save {o.Save}+ · Wounds {o.Wounds})[/]";
 
     private void DisplayMatchup(
         Models.Operative playerOp, Models.Team playerTeam,
@@ -259,8 +259,8 @@ public class SimulateSessionOrchestrator(
             $"[bold]{Markup.Escape(aiOp.Name)}[/]\n[dim]{Markup.Escape(aiTeam.Name)}[/]");
 
         table.AddRow(
-            $"W{playerOp.Wounds}  SV{playerOp.Save}+  APL{playerOp.Apl}",
-            $"W{aiOp.Wounds}  SV{aiOp.Save}+  APL{aiOp.Apl}");
+            $"APL {playerOp.Apl}  Move {playerOp.Move}\"  Save {playerOp.Save}+  Wounds {playerOp.Wounds}",
+            $"APL {aiOp.Apl}  Move {aiOp.Move}\"  Save {aiOp.Save}+  Wounds {aiOp.Wounds}");
 
         console.Write(table);
         console.WriteLine();
