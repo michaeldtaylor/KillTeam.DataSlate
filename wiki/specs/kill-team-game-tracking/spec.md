@@ -1,6 +1,6 @@
 # Spec: Kill Team Game Tracking
 
-Last updated: 2026-03-14 (Updated US-008 after human review of simulate spike)
+Last updated: 2026-07-15 (Expanded scope: full game loop evented; merged from combat-event-stream spec)
 
 ## Introduction
 
@@ -35,6 +35,7 @@ with narrative fluff. Game history and win-rate statistics are available at any 
 - No campaign progression mechanics (just individual game results in this iteration)
 - No points-cost validation
 - No PDF roster import (rosters sourced from the Kill Team app; export to JSON manually or via a future conversion tool)
+- Prompts (selection menus, text input) remain as direct Spectre.Console calls — only output/display moves to events
 
 ---
 
@@ -316,6 +317,7 @@ dotnet test --filter "FullyQualifiedName~GameSession OR FullyQualifiedName~Comba
 - Operative removal: wounds <= 0 → mark incapacitated, remove from active list
 - Spectre.Console `SelectionPrompt` for operative/weapon/action selection; `TextPrompt` for dice entry
 - Counteract: when your team is all expended but opponent has ready operatives, offer counteract option
+- All interactive output from `FirefightPhaseOrchestrator` and sub-orchestrators will emit `GameEvent`s rather than direct console writes; see US-010–020 for the event architecture
 
 ---
 
@@ -485,7 +487,7 @@ dotnet test --filter "FullyQualifiedName~Player"
 
 **Technical Considerations:**
 - New classes: `SimulateCommand`, `InMemoryGameOperativeStateRepository`, `InMemoryActionRepository` — all in `KillTeam.DataSlate.Console`
-- Existing orchestrators (`FightSessionOrchestrator`, `ShootSessionOrchestrator`) are **reused unchanged** — they receive synthetic `Game` (with `CpTeamA/B = 0`), synthetic `TurningPoint`, synthetic `Activation`, and in-memory repository implementations constructed by `SimulateCommand`
+- Existing orchestrators (`FightSessionOrchestrator`, `ShootSessionOrchestrator`) are reused; they will emit `GameEvent` objects into a `GameEventStream` per the event architecture (see US-010–020) — they receive synthetic `Game` (with `CpTeamA/B = 0`), synthetic `TurningPoint`, synthetic `Activation`, and in-memory repository implementations constructed by `SimulateCommand`
 - `InMemoryGameOperativeStateRepository` implements `IGameOperativeStateRepository` with `Dictionary<Guid, GameOperativeState>`; no SQLite dependency
 - `InMemoryActionRepository` implements `IActionRepository` as a no-op; satisfies the interface without writing to DB
 - Roster loading uses the existing `ITeamRepository.GetWithOperativesAsync(...)` — no new repository needed
@@ -529,7 +531,398 @@ dotnet test --filter "FullyQualifiedName~Player"
 
 ---
 
+## Event Architecture (US-010–020)
 
+### US-010: Define Game Event Types (Domain)
+
+**Description:** As a developer, I need event record types covering all combat and game loop phases so orchestrators can emit structured data instead of writing to the console.
+
+**Workstream:** `backend-dotnet`
+
+**Acceptance Criteria:**
+- [ ] Create `GameEvent` base record: `Timestamp`, `EncounterId` (Guid), `SequenceNumber`, `Participant` (string team ID)
+- [ ] Define all event types listed in FR-2 (see below)
+- [ ] Events are immutable records — no mutable state
+- [ ] `GameEventStream` class: collects events, exposes `IReadOnlyList<GameEvent>`, supports synchronous `event Action<GameEvent>? OnEventEmitted` callback
+- [ ] Each event carries rendering context (names, values) — no external lookups needed
+- [ ] All existing tests pass unchanged
+
+**Quality Gates:**
+```
+dotnet build KillTeam.DataSlate.Domain/KillTeam.DataSlate.Domain.csproj
+dotnet test KillTeam.DataSlate.Tests --verbosity quiet
+```
+
+**Technical Considerations:**
+- Place in `KillTeam.DataSlate.Domain/Events/`. `GameEventStream.Emit()` fires the callback synchronously inline — no threading needed. `Participant` is string team ID; renderer maps to `[You]`/`[AI]`/name.
+
+---
+
+### US-011: Refactor RerollOrchestrator to Inject IAnsiConsole (Prerequisite)
+
+**Description:** As a developer, `RerollOrchestrator` currently uses static `AnsiConsole` calls; it must be refactored to use injected `IAnsiConsole` before any event stream work can proceed.
+
+**Workstream:** `backend-dotnet`
+
+**Acceptance Criteria:**
+- [ ] `RerollOrchestrator` constructor accepts `IAnsiConsole console`
+- [ ] All 9 static `AnsiConsole.*` calls replaced with `console.*`
+- [ ] DI registration unchanged (Singleton, auto-resolved)
+- [ ] All existing tests pass unchanged
+
+**Quality Gates:**
+```
+dotnet build
+dotnet test
+```
+
+**Technical Considerations:**
+- Trivial refactor — ~10 lines changed, no logic change. Parent orchestrators already hold `IAnsiConsole` and can pass it through.
+
+---
+
+### US-012: Refactor FightSessionOrchestrator to Emit Events
+
+**Description:** As a developer, I need the fight orchestrator to emit events instead of writing to the console so combat output can be rendered from the event stream.
+
+**Workstream:** `backend-dotnet`
+
+**Acceptance Criteria:**
+- [ ] `FightSessionOrchestrator` accepts a `GameEventStream` parameter
+- [ ] All `console.MarkupLine()` calls replaced with event emissions (see FR-2 fight section)
+- [ ] Prompts (target selection, weapon selection, dice entry, action selection) remain as direct console calls
+- [ ] Synchronous `OnEventEmitted` callback renders fight pool table before each action prompt
+- [ ] `FormatFightAction` and `DisplayFightPools` logic moves to `GameEventRenderer`
+- [ ] All existing tests pass; new unit tests verify event emission
+
+**Quality Gates:**
+```
+dotnet build
+dotnet test
+```
+
+**Technical Considerations:**
+- Fight loop stays synchronous. `FightPoolStateEvent` fires before the SelectionPrompt; callback renders it. `FightResolvedEvent` fires after loop.
+
+---
+
+### US-013: Refactor ShootSessionOrchestrator to Emit Events
+
+**Description:** As a developer, I need the shoot orchestrator to emit events so ranged combat output flows through the event stream.
+
+**Workstream:** `backend-dotnet`
+
+**Acceptance Criteria:**
+- [ ] `ShootSessionOrchestrator` accepts a `GameEventStream` parameter
+- [ ] All `console.MarkupLine()` calls replaced with event emissions (see FR-2 shoot section)
+- [ ] Prompts remain as direct console calls
+- [ ] All existing tests pass; new unit tests verify event emission
+
+**Quality Gates:**
+```
+dotnet build
+dotnet test
+```
+
+**Technical Considerations:**
+- `ShootResultDisplayedEvent` replaces the shoot results table. `CoverSaveNotifiedEvent` replaces the inline "+1 cover save" message.
+
+---
+
+### US-014: Refactor BlastTorrentSessionOrchestrator to Emit Events
+
+**Description:** As a developer, I need the blast/torrent orchestrator to emit events so multi-target ranged combat flows through the event stream.
+
+**Workstream:** `backend-dotnet`
+
+**Acceptance Criteria:**
+- [ ] `BlastTorrentSessionOrchestrator` accepts a `GameEventStream` parameter
+- [ ] All `console.MarkupLine()` calls replaced with event emissions (see FR-2 blast/torrent section)
+- [ ] Friendly fire events emitted (`FriendlyFireWarningEvent`, `FriendlyFireConfirmedEvent`)
+- [ ] Per-target events emitted for each blast target
+- [ ] Prompts remain as direct console calls
+- [ ] All existing tests pass; new unit tests verify event emission
+
+**Quality Gates:**
+```
+dotnet build
+dotnet test
+```
+
+**Technical Considerations:**
+- `BlastTargetProcessingEvent` replaces the per-target Rule separator. Shared attack dice: one DiceRolled event, one per-target defence.
+
+---
+
+### US-015: Refactor StrategyPhaseOrchestrator to Emit Events
+
+**Description:** As a developer, I need the strategy phase orchestrator to emit events for all non-prompt output.
+
+**Workstream:** `backend-dotnet`
+
+**Acceptance Criteria:**
+- [ ] `StrategyPhaseOrchestrator` accepts a `GameEventStream` parameter
+- [ ] Events emitted: `StrategyPhaseStartedEvent`, `TieRolledAgainEvent`, `InitiativeWinnerDeterminedEvent`, `CommandPointsGainedEvent`, `PloyInsufficientCpEvent`, `PloyRecordedEvent`, `StrategyPhaseCompleteEvent`
+- [ ] Prompts remain as direct console calls
+- [ ] All existing tests pass; new unit tests verify event emission
+
+**Quality Gates:**
+```
+dotnet build
+dotnet test
+```
+
+---
+
+### US-016: Refactor FirefightPhaseOrchestrator to Emit Events
+
+**Description:** As a developer, I need the firefight phase orchestrator to emit events for all non-prompt output.
+
+**Workstream:** `backend-dotnet`
+
+**Acceptance Criteria:**
+- [ ] `FirefightPhaseOrchestrator` accepts a `GameEventStream` parameter
+- [ ] Events emitted: `FirefightPhaseStartedEvent`, `BoardStateDisplayedEvent`, `ActivationStartedEvent`, `OrderSelectedEvent`, `ActivationActionChosenEvent`, `ActivationEndedEvent`, `GuardActionSetEvent`, `RepositionActionExecutedEvent`, `DashActionExecutedEvent`, `ChargeActionExecutedEvent`, `FallBackActionExecutedEvent`, `OtherActionExecutedEvent`, `HasMovedNonDashFlaggedEvent`, `TurningPointCompleteEvent`, `OperativeStateResetEvent`, `GameOverAnnouncedEvent`, `WinnerDeterminedEvent`, `GameCompletedEvent`
+- [ ] Counteract events emitted: `CounteractAvailableEvent`, `CounteractSkippedEvent`, `CounteractActivationCreatedEvent`, `CounteractMoveExecutedEvent`, `CounteractShootExecutedEvent`, `CounteractFightExecutedEvent`, `CounteractUsedForTurnEvent`
+- [ ] Prompts remain as direct console calls
+- [ ] All existing tests pass; new unit tests verify event emission
+
+**Quality Gates:**
+```
+dotnet build
+dotnet test
+```
+
+**Technical Considerations:**
+- `BoardStateDisplayedEvent` fires at the start of each activation (the table of operative states). `ActivationStartedEvent` fires before the order selection prompt.
+
+---
+
+### US-017: Refactor GuardInterruptOrchestrator to Emit Events
+
+**Description:** As a developer, I need the guard interrupt orchestrator to emit events so guard interactions flow through the event stream.
+
+**Workstream:** `backend-dotnet`
+
+**Acceptance Criteria:**
+- [ ] `GuardInterruptOrchestrator` accepts a `GameEventStream` parameter
+- [ ] Events emitted: `GuardClearedByControlRangeEvent`, `GuardNotVisiblePreservedEvent`, `GuardInterruptAvailableEvent`, `GuardInterruptSkippedEvent`, `GuardInterruptActivatedEvent`, `GuardClearedEvent`
+- [ ] Prompts remain as direct console calls
+- [ ] All existing tests pass; new unit tests verify event emission
+
+**Quality Gates:**
+```
+dotnet build
+dotnet test
+```
+
+**Technical Considerations:**
+- Guard event sequence: `GuardClearedByControlRangeEvent` | `GuardNotVisiblePreservedEvent` | (`GuardInterruptAvailableEvent` → `GuardInterruptSkippedEvent` | `GuardInterruptActivatedEvent`) → `GuardClearedEvent`
+
+---
+
+### US-018: Game Event Renderer with Participant Labels
+
+**Description:** As a player, I want all game output labelled with participant context (`[You]` / `[AI]`) so I can clearly follow who is doing what.
+
+**Workstream:** `backend-dotnet`
+
+**Acceptance Criteria:**
+- [ ] `GameEventRenderer` class consumes `GameEvent` objects and renders to `IAnsiConsole`
+- [ ] Participant labels derived from team ID → display label mapping
+- [ ] Fight pool tables and shoot result tables render from events
+- [ ] Incremental rendering via `OnEventEmitted` callback registered before combat starts
+- [ ] All existing tests pass; new unit tests verify rendering output
+
+**Quality Gates:**
+```
+dotnet build
+dotnet test
+```
+
+**Technical Considerations:**
+- Use pattern matching on event types. Renderer receives participant map (teamId → label). Green values pattern continues.
+
+---
+
+### US-019: Persist Game Events to SQLite
+
+**Description:** As a developer, I need game events persisted to SQLite so encounters can be reviewed or replayed later.
+
+**Workstream:** `backend-dotnet`
+
+**Acceptance Criteria:**
+- [ ] New `game_events` table: `id, game_id, sequence_number, event_type, event_data_json, created_at`
+- [ ] `IGameEventRepository` with `SaveAsync` and `GetByGameAsync`
+- [ ] JSON serialisation with `[JsonDerivedType]` on `GameEvent` base type
+- [ ] Migration added to `DatabaseInitialiser`
+- [ ] Persistence is opt-in via `--save-events` flag
+- [ ] Roundtrip test: emit events → persist → load → verify identical
+- [ ] All existing tests pass unchanged
+
+**Quality Gates:**
+```
+dotnet build
+dotnet test
+```
+
+**Technical Considerations:**
+- `game_id` is a standalone GUID per game session (not tied to `GameAction.Id`). In simulate mode, transient GUID.
+
+---
+
+### US-020: Wire GameEventStream into All Orchestrators
+
+**Description:** As a developer, I need end-to-end wiring so all game output flows through the `GameEventStream`.
+
+**Workstream:** `backend-dotnet`
+
+**Acceptance Criteria:**
+- [ ] All orchestrators accept and propagate a shared `GameEventStream`
+- [ ] `SimulateSessionOrchestrator` creates the stream and registers the renderer callback
+- [ ] `PlayCommand` creates the stream for real games
+- [ ] `SimulateSessionOrchestrator`'s own output (matchup table, session headers) remains as direct console writes — only sub-orchestrator output moves to events
+- [ ] `DisplayEncounterSummary` renders from `FightResolvedEvent` / `ShootResolvedEvent`
+- [ ] All existing tests pass; integration test verifies end-to-end event flow
+
+**Quality Gates:**
+```
+dotnet build
+dotnet test
+```
+
+**Technical Considerations:**
+- The boundary: once `RunAsync()` is called on any orchestrator, output flows through events. Callers (`PlayCommand`, `SimulateSessionOrchestrator`) remain as direct console calls for their own UI chrome.
+
+## Functional Requirements
+
+### FR-1: Interactive prompts remain as direct Spectre.Console calls
+Selection menus, text input, confirm prompts — these must never become events. Only output/display moves to events.
+
+### FR-2: Game Event Type Catalogue
+
+The following event types must be defined in `KillTeam.DataSlate.Domain/Events/`:
+
+**Game Session:**
+- `GameSessionStartedEvent` — game begins, teams, matchup info
+- `GameSessionResumedEvent` — incomplete game resumed
+- `GameSessionCompletedEvent` — game ends with winner/draw
+- `GameResultDisplayedEvent` — final VP scores, winner announcement
+
+**Strategy Phase:**
+- `StrategyPhaseStartedEvent` — TP strategy phase begins
+- `TieRolledAgainEvent` — initiative tied, re-rolling
+- `InitiativeWinnerDeterminedEvent` — initiative decided
+- `CommandPointsGainedEvent` — CP awarded to both teams
+- `PloyInsufficientCpEvent` — ploy attempt failed (not enough CP)
+- `PloyRecordedEvent` — ploy recorded with CP cost and remaining CP
+- `StrategyPhaseCompleteEvent` — strategy phase ended
+
+**Firefight Phase:**
+- `FirefightPhaseStartedEvent` — firefight phase begins with TP header
+- `BoardStateDisplayedEvent` — snapshot of all operative statuses
+- `ActivationStartedEvent` — operative activates
+- `OrderSelectedEvent` — Engage/Conceal order set
+- `ActivationActionChosenEvent` — action type selected (move/shoot/fight/guard)
+- `ActivationEndedEvent` — operative expended
+
+**Movement Actions:**
+- `RepositionActionExecutedEvent` — operative repositioned
+- `DashActionExecutedEvent` — operative dashed
+- `ChargeActionExecutedEvent` — operative charged
+- `FallBackActionExecutedEvent` — operative fell back
+- `OtherActionExecutedEvent` — narrative custom action
+- `HasMovedNonDashFlaggedEvent` — Heavy penalty flag set
+
+**Guard:**
+- `GuardActionSetEvent` — operative set On Guard
+- `GuardClearedByControlRangeEvent` — guard cleared (enemy in 6")
+- `GuardNotVisiblePreservedEvent` — guard preserved (enemy not visible)
+- `GuardInterruptAvailableEvent` — interrupt offered to player
+- `GuardInterruptSkippedEvent` — player skipped interrupt
+- `GuardInterruptActivatedEvent` — guard operative activated out-of-turn
+- `GuardClearedEvent` — guard cleared after interrupt
+
+**Counteract:**
+- `CounteractAvailableEvent` — counteract option available
+- `CounteractSkippedEvent` — player skipped counteract
+- `CounteractActivationCreatedEvent` — counteract activation announced
+- `CounteractMoveExecutedEvent` — counteracting operative moved
+- `CounteractShootExecutedEvent` — counteracting operative shot
+- `CounteractFightExecutedEvent` — counteracting operative fought
+- `CounteractUsedForTurnEvent` — operative marked as counteract-expended
+
+**Turning Point End / Game End:**
+- `TurningPointCompleteEvent` — TP ended, reset begins
+- `OperativeStateResetEvent` — operatives reset for next TP
+- `GameOverAnnouncedEvent` — game over header
+- `VictoryPointsSubmittedEvent` — final VP entered
+- `WinnerDeterminedEvent` — winner or draw calculated
+- `GameCompletedEvent` — final result persisted
+
+**Fight Combat:**
+- `NoValidFightTargetsEvent` — no enemies in range
+- `FightTargetAutoSelectedEvent` — single enemy auto-selected
+- `FightTargetNotFoundEvent` — target lookup failed
+- `NoMeleeWeaponsAvailableEvent` — attacker cannot fight
+- `AttackerWeaponAutoSelectedEvent` — single melee weapon auto-selected (with injury status)
+- `DefenderWeaponAutoSelectedEvent` — defender weapon auto-selected
+- `DefenderNoMeleeWeaponsEvent` — defender rolls 0 ATK dice
+- `AttackerDiceRolledEvent` — attack dice rolled
+- `DefenderDiceRolledEvent` — defence dice rolled
+- `ShockAppliedEvent` — Shock rule: discard defender's lowest success
+- `FightPoolsDisplayedEvent` — snapshot of dice pools (for table rendering)
+- `FightStrikeResolvedEvent` — die used, damage dealt
+- `FightBlockResolvedEvent` — active die cancels opponent die
+- `FightTargetIncapacitatedEvent` — target knocked out
+- `FightAttackerIncapacitatedEvent` — attacker knocked out
+- `FightResolvedEvent` — summary totals (damage, incap flags)
+
+**Reroll:**
+- `BalancedRerollAppliedEvent` — Balanced: 1 die re-rolled
+- `CeaselessRerollAppliedEvent` — Ceaseless: matching face re-rolled
+- `RelentlessRerollAppliedEvent` — Relentless: player-chosen dice re-rolled
+- `CpRerollAppliedEvent` — CP spent to re-roll 1 die
+
+**Shoot Combat:**
+- `NoValidShootTargetsEvent` — no enemies to shoot
+- `ShootTargetAutoSelectedEvent` — single enemy auto-selected
+- `ShootTargetNotFoundEvent` — target lookup failed
+- `NoRangedWeaponsAvailableEvent` — operative cannot shoot
+- `RangedWeaponAutoSelectedEvent` — single ranged weapon auto-selected
+- `CoverStatusSetEvent` — cover/obscured status determined
+- `CoverSaveNotifiedEvent` — "+1 cover save will be added automatically"
+- `ShootAttackDiceRolledEvent` — attack dice rolled
+- `ShootDefenceDiceRolledEvent` — defence dice rolled
+- `ShootResultDisplayedEvent` — results table (crits, normals, damage)
+- `ShootTargetIncapacitatedEvent` — target knocked out by shooting
+- `StunAppliedEvent` — target stunned (-1 APL)
+- `SelfDamageDealtEvent` — HOT: attacker takes self-damage
+- `AttackerIncapacitatedBySelfDamageEvent` — attacker knocked out by own weapon
+
+**Blast/Torrent:**
+- `BlastTorrentWarningDisplayedEvent` — multi-target weapon alert
+- `FriendlyFireWarningEvent` — friendly operatives will be affected
+- `FriendlyFireConfirmedEvent` — player confirmed friendly fire
+- `BlastTargetProcessingEvent` — processing individual target (per-target header)
+- `BlastTargetIncapacitatedEvent` — blast target knocked out
+- `BlastResultDisplayedEvent` — per-target results table
+
+**Simulate Mode:**
+- `SimulateModeStartedEvent` — simulate mode header
+- `NoTeamsImportedEvent` — no teams available, early exit
+- `SimulateMatchupDisplayedEvent` — operative stats table
+- `SimulateSessionEndedEvent` — simulate session ended
+- `SimulateEncounterSummaryDisplayedEvent` — encounter results table
+
+### FR-3: GameEventStream contract
+- `GameEventStream.Emit(GameEvent)` fires `OnEventEmitted` synchronously inline
+- Renderer subscribes before combat starts and renders each event to `IAnsiConsole` immediately
+- `GameEventStream` also maintains `IReadOnlyList<GameEvent>` for persistence
+
+### FR-4: Persistence is opt-in
+- `--save-events` flag or similar; not on by default
+- In-memory mode (no SQLite) is the default
 
 - FR-1: The app must be runnable as a single CLI executable with sub-commands (`import-teams`, `new-game`, `play`, `annotate`, `view-game`, `history`, `stats`, `player add`, `player list`, `player delete`, `simulate`)
 - FR-2: Rosters must be importable from a single JSON file path **or** auto-discovered from a configured roster folder (`DataSlate:RosterFolder`); player names are not stored in roster files
@@ -592,6 +985,62 @@ sequenceDiagram
     App->>DB: Save Action (dice, hits, damage)
     App->>DB: Update GameOperativeState (wounds -= damage)
     App->>Player: "Hit! 1 critical success → 4 damage. Target: 8/12 wounds."
+```
+
+### Game Event Flow
+
+```mermaid
+flowchart TD
+    Start([PlayCommand / SimulateCommand]) --> CreateStream[Create GameEventStream\nRegister GameEventRenderer callback]
+    CreateStream --> Strategy[StrategyPhaseOrchestrator\nEmits: StrategyPhaseStarted → CommandPointsGained\n→ PloyRecorded → StrategyPhaseComplete]
+    Strategy --> Firefight[FirefightPhaseOrchestrator\nEmits: FirefightPhaseStarted → BoardStateDisplayed\n→ ActivationStarted → ActivationEnded]
+    Firefight --> Guard{Guard interrupt?}
+    Guard -- Yes --> GuardOrch[GuardInterruptOrchestrator\nEmits: GuardInterruptAvailable\n→ GuardInterruptActivated / Skipped]
+    Guard -- No --> ActionType{Action type?}
+    GuardOrch --> ActionType
+    ActionType -- Fight --> Fight[FightSessionOrchestrator\nEmits: AttackerDiceRolled → FightPoolsDisplayed\n→ FightStrikeResolved → FightResolved]
+    ActionType -- Shoot --> Shoot[ShootSessionOrchestrator\nEmits: CoverStatusSet → ShootAttackDiceRolled\n→ ShootResultDisplayed]
+    ActionType -- Blast/Torrent --> Blast[BlastTorrentSessionOrchestrator\nEmits: FriendlyFireWarning\n→ BlastTargetProcessing → BlastResultDisplayed]
+    ActionType -- Move/Guard/Other --> Move[FirefightPhaseOrchestrator\nEmits: RepositionActionExecuted /\nDashActionExecuted / GuardActionSet etc.]
+    Fight --> Reroll[RerollOrchestrator\nEmits: BalancedRerollApplied /\nCeaselessRerollApplied / CpRerollApplied]
+    Shoot --> Reroll
+    Reroll --> Renderer[[GameEventRenderer\nRenders to IAnsiConsole\nvia OnEventEmitted callback]]
+    Fight --> Renderer
+    Shoot --> Renderer
+    Blast --> Renderer
+    Move --> Renderer
+    Renderer --> TPEnd{TP complete?}
+    TPEnd -- No --> Firefight
+    TPEnd -- Yes --> GameEnd[FirefightPhaseOrchestrator\nEmits: TurningPointComplete\n→ OperativeStateReset]
+    GameEnd --> LastTP{Game over?}
+    LastTP -- No --> Strategy
+    LastTP -- Yes --> Done[FirefightPhaseOrchestrator\nEmits: GameOverAnnounced\n→ VictoryPointsSubmitted\n→ WinnerDetermined → GameCompleted]
+```
+
+### GameEventStream Sequence
+
+```mermaid
+sequenceDiagram
+    participant Caller as PlayCommand / SimulateCommand
+    participant Stream as GameEventStream
+    participant Orch as Orchestrator (any phase)
+    participant Renderer as GameEventRenderer
+    participant Console as IAnsiConsole
+
+    Caller->>Stream: new GameEventStream()
+    Caller->>Renderer: new GameEventRenderer(participantMap)
+    Caller->>Stream: OnEventEmitted += renderer.Render
+    Caller->>Orch: RunAsync(stream, ...)
+    loop For each game step
+        Orch->>Stream: Emit(new SomeGameEvent(...))
+        Stream->>Renderer: OnEventEmitted(event)  [synchronous]
+        Renderer->>Console: MarkupLine(formatted output)
+        Stream->>Stream: Events.Add(event)
+    end
+    Orch-->>Caller: returns
+    opt --save-events flag
+        Caller->>Stream: await repo.SaveAsync(stream.Events)
+    end
 ```
 
 ---
@@ -674,6 +1123,14 @@ Sergeant Intercessor expended.
 - **Strategy Phase**: `StrategyPhaseOrchestrator` drives initiative roll (with tie re-roll), CP gain (TP1: both +1CP; TP2-4: initiative +1CP, non-initiative +2CP), ploy recording (`ploy_uses` table), and `is_strategy_phase_complete` flag for resume detection. CP displayed as `[NCP]` inline (≥3 white, 1–2 yellow, 0 red). Full design: `spike-strategy-phase.md`.
 - **Re-roll mechanics**: `RerollOrchestrator` handles weapon re-rolls (Balanced: pick 1; Ceaseless: re-roll all matching a chosen face; Relentless: checkbox-select any/all) then CP Re-roll for attacker and defender (1CP, 1 die, cannot re-roll a re-rolled die). In-memory `RollableDie(Index, Value, HasBeenRerolled)` record; only final int[] persisted. Full UX: `spike-reroll-mechanics.md`.
 - **Blast/Torrent multi-target**: Blast/Torrent weapons trigger a multi-target shoot flow. Primary target selected normally; additional targets selected via `MultiSelectionPrompt` (player declares from game state). Attack dice rolled **once** (shared). Each target rolls their own defence dice; damage resolved independently. Friendly fire supported (⚠ warning). Additional targets stored in new `action_blast_targets` table (Migration 003). Once-vs-per-target rule evaluation: Severe/Rending/Punishing fire on shared pool; Piercing Crits evaluated per target using shared crit count; Saturate negates cover for all targets. Full design: `spike-blast-torrent.md`.
+- **GameEventStream**: Synchronous event emitter. `Emit()` fires `Action<GameEvent> OnEventEmitted` inline. No threading complexity; events render in the same call stack as the fight loop. Spectre.Console stays single-threaded.
+- **Event serialisation (FR-2 persistence)**: Use `System.Text.Json` with `[JsonDerivedType]` on `GameEvent` base type.
+- **No changes to resolution services**: `FightResolutionService` and `CombatResolutionService` stay pure.
+- **RerollOrchestrator DI prerequisite (US-011)**: Currently uses static `AnsiConsole` (9 calls). Must be refactored to `IAnsiConsole` constructor injection before any event stream work. Trivial change — ~10 lines, no tests affected.
+- **Testing**: Test event emission by running orchestrators with mock console for prompts, asserting on `GameEventStream.Events`.
+- **Orchestrator boundary**: Once `RunAsync()` is called on any orchestrator, output flows through events. The callers (`PlayCommand`, `SimulateSessionOrchestrator`) retain direct console writes for their own UI chrome (matchup tables, mode headers, session messages).
+- **Firefight integration**: `FirefightPhaseOrchestrator` creates the `GameEventStream` for each turning point and passes it to sub-orchestrators. `PlayCommand` registers the renderer before combat begins.
+- **SimulateSessionOrchestrator boundary**: Only sub-orchestrator output moves to events. `SimulateSessionOrchestrator`'s own output (matchup table, session headers, error messages) remains direct console writes.
 
 ---
 
@@ -1003,6 +1460,7 @@ Items explicitly requested but deferred until the basic game tracking is working
 - **Simulate batch mode** — `dataslate simulate --runs N` to run N simulations automatically and report average/min/max damage; useful for statistical weapon comparisons (follow-up to US-008)
 - **AI tool-calling mode** — `dataslate simulate --tools` to enable the advisor to call `CombatResolutionService` internally and compare alternative dice outcomes (follow-up to US-009)
 - **Simulate Blast/Torrent** — extend `SimulateShootOrchestrator` to support multi-target weapons with ad-hoc entry for additional target wound/save stats (follow-up to US-008)
+- **Narrative layer** — AI-generated narrative text from the game event stream (separate spec)
 
 ---
 
