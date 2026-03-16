@@ -30,7 +30,7 @@ public class BlastTorrentSessionOrchestrator(
         var isAttackerTeamA = attacker.TeamId == game.Participant1.TeamId;
         var weaponType = weapon.ParsedRules.Any(r => r.Kind == SpecialRuleKind.Torrent) ? "Torrent" : "Blast";
 
-        console.MarkupLine($"[bold yellow]⚠ MULTI-TARGET[/] This weapon hits multiple targets. ({weaponType})");
+        console.MarkupLine($"[bold yellow]WARNING: MULTI-TARGET[/] This weapon hits multiple targets. ({weaponType})");
 
         // Additional target selection (excluding primary, must not be incapacitated)
         var additionalCandidates = allOperativeStates
@@ -64,7 +64,7 @@ public class BlastTorrentSessionOrchestrator(
             allOperatives.TryGetValue(s.OperativeId, out var o) && o.TeamId == attacker.TeamId);
         if (friendlyCount > 0)
         {
-            console.MarkupLine($"[red]⚠ This will affect {friendlyCount} friendly operative(s).[/]");
+            console.MarkupLine($"[red]WARNING: This will affect {friendlyCount} friendly operative(s).[/]");
             if (!console.Confirm("Confirm?", defaultValue: false))
             {
                 return new BlastSessionResult(false, 0);
@@ -155,7 +155,7 @@ public class BlastTorrentSessionOrchestrator(
                 await stateRepository.UpdateGuardAsync(targetState.Id, false);
                 targetState.IsOnGuard = false;
                 anyIncapacitation = true;
-                console.MarkupLine($"[red]💀 {Markup.Escape(targetOp.Name)} is incapacitated![/]");
+                console.MarkupLine($"[red]INCAPACITATED! {Markup.Escape(targetOp.Name)} is out of action![/]");
             }
 
             totalDamage += dmg;

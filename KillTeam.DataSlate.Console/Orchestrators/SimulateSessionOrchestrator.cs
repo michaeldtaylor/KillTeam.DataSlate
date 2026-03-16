@@ -19,7 +19,7 @@ public class SimulateSessionOrchestrator(
 {
     public async Task RunAsync()
     {
-        console.Write(new Rule("[bold cyan]⚔ Simulate Mode[/]"));
+        console.Write(new Rule("[bold cyan]Simulate Mode[/]"));
         console.MarkupLine("[dim]Test fight and shoot encounters without a full game session. Nothing is saved.[/]");
         console.WriteLine();
 
@@ -224,7 +224,7 @@ public class SimulateSessionOrchestrator(
                 playerOp, playerState, allStates, allOperatives, game, tp, activation);
 
             console.MarkupLine(shootResult.CausedIncapacitation
-                ? $"[red]💀 {Markup.Escape(aiOp.Name)} incapacitated! Dealt {shootResult.DamageDealt} damage.[/]"
+                ? $"[red]INCAPACITATED! {Markup.Escape(aiOp.Name)} is out of action! Dealt {shootResult.DamageDealt} damage.[/]"
                 : $"Dealt [bold]{shootResult.DamageDealt}[/] damage to {Markup.Escape(aiOp.Name)}.");
         }
     }

@@ -162,7 +162,7 @@ public class FightSessionOrchestrator(
             if (lowestDefSuccess is not null)
             {
                 defPool = defPool with { Remaining = defPool.Remaining.Where(d => d.Id != lowestDefSuccess.Id).ToList() };
-                console.MarkupLine($"[yellow]⚡ Shock: {Markup.Escape(targetOp.Name)} discards die (rolled {lowestDefSuccess.RolledValue})[/]");
+                console.MarkupLine($"[yellow]SHOCK: {Markup.Escape(targetOp.Name)} discards die (rolled {lowestDefSuccess.RolledValue})[/]");
             }
         }
 
@@ -242,7 +242,7 @@ public class FightSessionOrchestrator(
             if (actionChoice.Type == FightActionType.Strike)
             {
                 var dmg = fightResolutionService.ApplyStrike(actionChoice.ActiveDie, activeWeapon.NormalDmg, activeWeapon.CriticalDmg);
-                console.MarkupLine($"  ⚔ Strike with die ({actionChoice.ActiveDie.RolledValue}) → {dmg} damage to {Markup.Escape(opponentOp.Name)}");
+                console.MarkupLine($"  [red]STRIKE[/] with die ({actionChoice.ActiveDie.RolledValue}) — {dmg} damage to {Markup.Escape(opponentOp.Name)}");
 
                 if (activeOwner == DieOwner.Attacker)
                 {
@@ -263,7 +263,7 @@ public class FightSessionOrchestrator(
             }
             else // Block
             {
-                console.MarkupLine($"  🛡 Block: die ({actionChoice.ActiveDie.RolledValue}) cancels ({actionChoice.TargetDie!.RolledValue})");
+                console.MarkupLine($"  [cyan]BLOCK[/]: die ({actionChoice.ActiveDie.RolledValue}) cancels ({actionChoice.TargetDie!.RolledValue})");
                 (activePool, opponentPool) = fightResolutionService.ApplySingleBlock(
                     actionChoice.ActiveDie, actionChoice.TargetDie!, activePool, opponentPool);
             }
@@ -305,7 +305,7 @@ public class FightSessionOrchestrator(
             await stateRepository.SetIncapacitatedAsync(targetState.Id, true);
             await stateRepository.UpdateGuardAsync(targetState.Id, false);
             targetState.IsOnGuard = false;
-            console.MarkupLine($"[red]💀 {Markup.Escape(targetOp.Name)} is incapacitated![/]");
+            console.MarkupLine($"[red]INCAPACITATED! {Markup.Escape(targetOp.Name)} is out of action![/]");
         }
         if (defCausedIncap)
         {
@@ -313,7 +313,7 @@ public class FightSessionOrchestrator(
             await stateRepository.SetIncapacitatedAsync(attackerState.Id, true);
             await stateRepository.UpdateGuardAsync(attackerState.Id, false);
             attackerState.IsOnGuard = false;
-            console.MarkupLine($"[red]💀 {Markup.Escape(attacker.Name)} is incapacitated![/]");
+            console.MarkupLine($"[red]INCAPACITATED! {Markup.Escape(attacker.Name)} is out of action![/]");
         }
 
         // 11. Persist action
@@ -378,9 +378,9 @@ public class FightSessionOrchestrator(
         var resultLabel = a.ActiveDie.Result == DieResult.Crit ? "CRIT" : "HIT";
         var dieInfo = $"rolled [green]{a.ActiveDie.RolledValue}[/] ({resultLabel})";
         if (a.Type == FightActionType.Strike)
-            return $"⚔ Strike — {dieInfo}";
+            return $"[red]STRIKE[/] — {dieInfo}";
         var targetLabel = a.TargetDie!.Result == DieResult.Crit ? "CRIT" : "HIT";
-        return $"🛡 Block — {dieInfo} cancels rolled [green]{a.TargetDie.RolledValue}[/] ({targetLabel})";
+        return $"[cyan]BLOCK[/] — {dieInfo} cancels rolled [green]{a.TargetDie.RolledValue}[/] ({targetLabel})";
     }
 
     private async Task<int[]> RollOrEnterDiceAsync(int count, string label)

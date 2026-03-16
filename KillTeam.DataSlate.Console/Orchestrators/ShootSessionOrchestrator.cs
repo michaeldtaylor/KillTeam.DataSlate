@@ -101,7 +101,7 @@ public class ShootSessionOrchestrator(
                             ? $" | {string.Join(", ", w.ParsedRules.Select(r => r.RawText))}"
                             : "";
                         var saturate = w.ParsedRules.Any(r => r.Kind == SpecialRuleKind.Saturate)
-                            ? " [yellow]⚠ Saturate[/]"
+                            ? " [yellow]Saturate[/]"
                             : "";
                         return $"{Markup.Escape(w.Name)} (Attack: [green]{w.Atk}[/] | Hit: [green]{w.Hit}+[/] | Normal: [green]{w.NormalDmg}[/] | Crit: [green]{w.CriticalDmg}[/]{Markup.Escape(rulesText)}){saturate}";
                     })
@@ -188,7 +188,7 @@ public class ShootSessionOrchestrator(
             await stateRepository.SetIncapacitatedAsync(targetState.Id, true);
             await stateRepository.UpdateGuardAsync(targetState.Id, false);
             targetState.IsOnGuard = false;
-            console.MarkupLine($"[red]💀 {Markup.Escape(targetOp.Name)} is incapacitated![/]");
+            console.MarkupLine($"[red]INCAPACITATED! {Markup.Escape(targetOp.Name)} is out of action![/]");
         }
 
         // 11. Stun check
@@ -199,7 +199,7 @@ public class ShootSessionOrchestrator(
         {
             await stateRepository.SetAplModifierAsync(targetState.Id, -1);
             targetState.AplModifier -= 1;
-            console.MarkupLine($"[yellow]⚡ Stun applied to {Markup.Escape(targetOp.Name)} (-1 APL)[/]");
+            console.MarkupLine($"[yellow]STUN applied to {Markup.Escape(targetOp.Name)} (-1 APL)[/]");
         }
 
         // 12. Hot check (self-damage)
@@ -209,12 +209,12 @@ public class ShootSessionOrchestrator(
             var newAttackerWounds = Math.Max(0, attackerState.CurrentWounds - selfDamage);
             attackerState.CurrentWounds = newAttackerWounds;
             await stateRepository.UpdateWoundsAsync(attackerState.Id, newAttackerWounds);
-            console.MarkupLine($"[red]🔥 Hot! {Markup.Escape(attacker.Name)} takes {selfDamage} self-damage! (Wounds: {newAttackerWounds})[/]");
+            console.MarkupLine($"[red]HOT! {Markup.Escape(attacker.Name)} takes {selfDamage} self-damage! (Wounds: {newAttackerWounds})[/]");
             if (newAttackerWounds <= 0 && !attackerState.IsIncapacitated)
             {
                 attackerState.IsIncapacitated = true;
                 await stateRepository.SetIncapacitatedAsync(attackerState.Id, true);
-                console.MarkupLine($"[red]💀 {Markup.Escape(attacker.Name)} is incapacitated by their own weapon![/]");
+                console.MarkupLine($"[red]INCAPACITATED! {Markup.Escape(attacker.Name)} is out of action from their own weapon![/]");
             }
         }
 

@@ -73,7 +73,7 @@ public class GuardInterruptOrchestrator(
             // 3. Guard interrupt choice
             var interruptChoice = console.Prompt(
                 new SelectionPrompt<string>()
-                    .Title($"[bold yellow]⚔ Guard interrupt available![/] Use {Markup.Escape(guardOp.Name)}'s Guard?")
+                    .Title($"[bold yellow]Guard interrupt available![/] Use {Markup.Escape(guardOp.Name)}'s Guard?")
                     .AddChoices("Shoot", "Fight", "Skip"));
 
             if (interruptChoice == "Skip")
