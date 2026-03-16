@@ -69,20 +69,32 @@ public class ShootSessionOrchestrator(
             return new ShootSessionResult(false, 0, null);
         }
 
-        var weapon = console.Prompt(
-            new SelectionPrompt<Weapon>()
-                .Title("Select a ranged weapon:")
-                .UseConverter(w =>
-                {
-                    var rulesText = w.ParsedRules.Count > 0
-                        ? $" | {string.Join(", ", w.ParsedRules.Select(r => r.RawText))}"
-                        : "";
-                    var saturate = w.ParsedRules.Any(r => r.Kind == SpecialRuleKind.Saturate)
-                        ? " [yellow]⚠ Saturate[/]"
-                        : "";
-                    return $"{Markup.Escape(w.Name)}  (Attack: {w.Atk} | Hit: {w.Hit}+ | Normal: {w.NormalDmg} | Crit: {w.CriticalDmg}{Markup.Escape(rulesText)}){saturate}";
-                })
-                .AddChoices(rangedWeapons));
+        Weapon weapon;
+        if (rangedWeapons.Count == 1)
+        {
+            weapon = rangedWeapons[0];
+            var rulesText = weapon.ParsedRules.Count > 0
+                ? $" | {string.Join(", ", weapon.ParsedRules.Select(r => r.RawText))}"
+                : "";
+            console.MarkupLine($"[dim]Auto-selected ranged weapon:[/] {Markup.Escape(weapon.Name)}  (Attack: {weapon.Atk} | Hit: {weapon.Hit}+ | Normal: {weapon.NormalDmg} | Crit: {weapon.CriticalDmg}{Markup.Escape(rulesText)})");
+        }
+        else
+        {
+            weapon = console.Prompt(
+                new SelectionPrompt<Weapon>()
+                    .Title("Select a ranged weapon:")
+                    .UseConverter(w =>
+                    {
+                        var rulesText = w.ParsedRules.Count > 0
+                            ? $" | {string.Join(", ", w.ParsedRules.Select(r => r.RawText))}"
+                            : "";
+                        var saturate = w.ParsedRules.Any(r => r.Kind == SpecialRuleKind.Saturate)
+                            ? " [yellow]⚠ Saturate[/]"
+                            : "";
+                        return $"{Markup.Escape(w.Name)}  (Attack: {w.Atk} | Hit: {w.Hit}+ | Normal: {w.NormalDmg} | Crit: {w.CriticalDmg}{Markup.Escape(rulesText)}){saturate}";
+                    })
+                    .AddChoices(rangedWeapons));
+        }
 
         // Delegate Blast / Torrent
         if (weapon.ParsedRules.Any(r => r.Kind == SpecialRuleKind.Blast || r.Kind == SpecialRuleKind.Torrent))

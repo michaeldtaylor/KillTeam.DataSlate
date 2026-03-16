@@ -67,15 +67,25 @@ public class FightSessionOrchestrator(
         }
 
         var atkIsInjured = attackerState.CurrentWounds < attacker.Wounds / 2;
-        var atkWeapon = console.Prompt(
-            new SelectionPrompt<Weapon>()
-                .Title("Select attacker's melee weapon:")
-                .UseConverter(w =>
-                {
-                    var injured = atkIsInjured ? $" [yellow](Injured: effective Hit {w.Hit + 1}+)[/]" : "";
-                    return $"{Markup.Escape(w.Name)}  (Attack: {w.Atk} | Hit: {w.Hit}+ | Normal: {w.NormalDmg} | Crit: {w.CriticalDmg}){injured}";
-                })
-                .AddChoices(atkMeleeWeapons));
+        Weapon atkWeapon;
+        if (atkMeleeWeapons.Count == 1)
+        {
+            atkWeapon = atkMeleeWeapons[0];
+            var injured = atkIsInjured ? $" [yellow](Injured: effective Hit {atkWeapon.Hit + 1}+)[/]" : "";
+            console.MarkupLine($"[dim]Auto-selected melee weapon:[/] {Markup.Escape(atkWeapon.Name)}  (Attack: {atkWeapon.Atk} | Hit: {atkWeapon.Hit}+ | Normal: {atkWeapon.NormalDmg} | Crit: {atkWeapon.CriticalDmg}){injured}");
+        }
+        else
+        {
+            atkWeapon = console.Prompt(
+                new SelectionPrompt<Weapon>()
+                    .Title("Select attacker's melee weapon:")
+                    .UseConverter(w =>
+                    {
+                        var injured = atkIsInjured ? $" [yellow](Injured: effective Hit {w.Hit + 1}+)[/]" : "";
+                        return $"{Markup.Escape(w.Name)}  (Attack: {w.Atk} | Hit: {w.Hit}+ | Normal: {w.NormalDmg} | Crit: {w.CriticalDmg}){injured}";
+                    })
+                    .AddChoices(atkMeleeWeapons));
+        }
 
         var atkEffectiveHit = atkIsInjured ? atkWeapon.Hit + 1 : atkWeapon.Hit;
 
@@ -84,7 +94,14 @@ public class FightSessionOrchestrator(
         Weapon? defWeapon = null;
         var defEffectiveHit = 3;
 
-        if (defMeleeWeapons.Count > 0)
+        if (defMeleeWeapons.Count == 1)
+        {
+            defWeapon = defMeleeWeapons[0];
+            console.MarkupLine($"[dim]Auto-selected defender weapon:[/] {Markup.Escape(defWeapon.Name)}  (Attack: {defWeapon.Atk} | Hit: {defWeapon.Hit}+ | Normal: {defWeapon.NormalDmg} | Crit: {defWeapon.CriticalDmg})");
+            var defIsInjured = targetState.CurrentWounds < targetOp.Wounds / 2;
+            defEffectiveHit = defIsInjured ? defWeapon.Hit + 1 : defWeapon.Hit;
+        }
+        else if (defMeleeWeapons.Count > 1)
         {
             defWeapon = console.Prompt(
                 new SelectionPrompt<Weapon>()
