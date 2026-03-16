@@ -61,7 +61,8 @@ internal static partial class TextHelpers
             .Replace("\u0393\u00C7\u00D6", "'")   // pdftotext mojibake of right single quote (ΓÇÖ → ')
             .Replace("CONTINUES ON OTHER SIDE", "", StringComparison.OrdinalIgnoreCase)
             .Replace("\u00AE", "")     // ®
-            .Replace("\u2122", "");    // ™
+            .Replace("\u2122", "")    // ™
+            .Replace('\u2011', '-');  // non-breaking hyphen → standard hyphen
 
         s = ApConcatPattern().Replace(s, m => m.Groups[1].Value + " " + m.Groups[2].Value);
 
