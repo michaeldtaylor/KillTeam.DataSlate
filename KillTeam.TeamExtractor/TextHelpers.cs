@@ -179,10 +179,11 @@ internal static partial class TextHelpers
         // Step 7: Unicode bullet symbols → Markdown hierarchy
         text = FormatBulletSymbols(text);
 
-        // Step 8: Insert paragraph break before constraint sentences
+        // Step 8: Insert paragraph break before constraint sentences, but only after a period
+        // (not inside quoted text like "Changed to read: 'This operative cannot...'").
         foreach (var pattern in ConstraintSentencePatterns)
         {
-            text = text.Replace(pattern, "\n\n" + pattern, StringComparison.OrdinalIgnoreCase);
+            text = text.Replace(". " + pattern, ".\n\n" + pattern, StringComparison.OrdinalIgnoreCase);
         }
 
         // Sentence-start paragraph breaks: specific Kill Team phrasings that begin a new

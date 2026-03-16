@@ -2112,11 +2112,13 @@ public partial class PdfTeamExtractor
                     }
 
                     // Merge into pending header when:
-                    // - pending ends with '&' or ',' (mid-phrase word-wrap on current line), OR
-                    // - incoming line contains ',' (rule reference continuation, e.g.
-                    //   "DIRE AVENGER EXARCH & DIRE AVENGER WARRIOR" + "OPERATIVES, DEFENCE TACTICS RULE")
+                    // - pending ends with '&' or ',' (mid-phrase word-wrap), OR
+                    // - pending contains ',' but doesn't end with one (word-wrapped mid-phrase,
+                    //   e.g. "MALIGNANT PLAGUECASTER OPERATIVE, PUTRESCENT" + "VITALITY ACTION")
+                    //   AND incoming doesn't contain ',' (new items have commas, continuations don't)
                     var pendingTrimmed = pendingHeaderText.ToString().TrimEnd();
-                    if (prevWasHeader && (pendingTrimmed.EndsWith('&') || pendingTrimmed.EndsWith(',') || trimmed.Contains(',')))
+                    if (prevWasHeader && (pendingTrimmed.EndsWith('&') || pendingTrimmed.EndsWith(',')
+                        || (pendingTrimmed.Contains(',') && !trimmed.Contains(','))))
                     {
                         pendingHeaderText.Append(' ').Append(trimmed);
                     }

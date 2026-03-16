@@ -712,7 +712,9 @@ supplementaryInformation: |-
   
   Last sentence deleted: ~~'This operative cannot warp jump during the same activation in which it performed the Dash action (or vice versa).'~~
   
-  ## PREVIOUS ERRATAS FIREFIGHT PLOYS, CAPRICIOUS FLIGHT
+  # PREVIOUS ERRATAS
+  
+  ## FIREFIGHT PLOYS, CAPRICIOUS FLIGHT
   
   First sentence changed to read: 'Use this firefight ploy during a friendly **CORSAIR VOIDSCARRED** operative's activation, before or after it performs an action.'
   
@@ -730,9 +732,7 @@ supplementaryInformation: |-
   
   ## STARSTORM DUELLIST OPERATIVE, PISTOL BARRAGE ACTION
   
-  Condition changed to read: '
-  
-  This operative cannot perform this action while it has a Conceal order, or during an activation in which it performed the Shoot action (or vice versa).'
+  Condition changed to read: 'This operative cannot perform this action while it has a Conceal order, or during an activation in which it performed the Shoot action (or vice versa).'
   
   ## SHADE RUNNER OPERATIVE, SLICING ATTACK RULE
   
