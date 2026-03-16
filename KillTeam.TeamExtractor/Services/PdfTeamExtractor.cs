@@ -53,13 +53,13 @@ public partial class PdfTeamExtractor
     public ExtractedTeam Extract(string teamName, string teamFolder)
     {
         var datacardsPath = FindPdf(teamFolder, "*Datacards*");
-        var factionEquipPath = FindPdf(teamFolder, "*Faction Equipment*");
-        var universalEquipPath = FindPdf(teamFolder, "*Universal Equipment*");
+        var factionEquipmentPath = FindPdf(teamFolder, "*Faction Equipment*");
         var factionRulesPath = FindPdf(teamFolder, "*Faction Rules*");
-        var strategyPloysPath = FindPdf(teamFolder, "*Strategy Ploys*");
         var firefightPloysPath = FindPdf(teamFolder, "*Firefight Ploys*");
         var operativeSelectionPath = FindPdf(teamFolder, "*Operative Selection*");
-        var supplementaryInfoPath = FindPdf(teamFolder, "*Supplementary Information*");
+        var strategyPloysPath = FindPdf(teamFolder, "*Strategy Ploys*");
+        var supplementaryInformationPath = FindPdf(teamFolder, "*Supplementary Information*");
+        var universalEquipmentPath = FindPdf(teamFolder, "*Universal Equipment*");
 
         if (datacardsPath == null)
         {
@@ -69,18 +69,18 @@ public partial class PdfTeamExtractor
         var weaponTypes = this._weaponTypeDetector.Detect(datacardsPath);
         var (operatives, faction, grandFaction) = this.ParseDatacards(datacardsPath, weaponTypes);
 
-        var factionEquipment = factionEquipPath != null
-            ? this.ParseEquipmentWithDescriptions([factionEquipPath])
+        var factionEquipment = factionEquipmentPath != null
+            ? this.ParseEquipmentWithDescriptions([factionEquipmentPath])
             : [];
-        var universalEquipment = universalEquipPath != null
-            ? this.ParseEquipmentWithDescriptions([universalEquipPath])
+        var universalEquipment = universalEquipmentPath != null
+            ? this.ParseEquipmentWithDescriptions([universalEquipmentPath])
             : [];
         var primaryKeyword = operatives.Count > 0 ? operatives[0].PrimaryKeyword : null;
         var factionRules = factionRulesPath != null ? this.ParseRulesDoc(factionRulesPath, teamName, primaryKeyword) : [];
-        var strategyPloys = strategyPloysPath != null ? this.ParseRulesDoc(strategyPloysPath, teamName, primaryKeyword) : [];
-        var firefightPloys = firefightPloysPath != null ? this.ParseRulesDoc(firefightPloysPath, teamName, primaryKeyword) : [];
+        var strategyPloys = strategyPloysPath != null ? this.ParseRulesDoc(strategyPloysPath, teamName, primaryKeyword, isPloy: true) : [];
+        var firefightPloys = firefightPloysPath != null ? this.ParseRulesDoc(firefightPloysPath, teamName, primaryKeyword, isPloy: true) : [];
         var operativeSelection = operativeSelectionPath != null ? this.ParseOperativeSelection(operativeSelectionPath) : null;
-        var supplementaryInfo = supplementaryInfoPath != null ? this.ParseSupplementaryInfo(supplementaryInfoPath) : "";
+        var supplementaryInfo = supplementaryInformationPath != null ? this.ParseSupplementaryInfo(supplementaryInformationPath) : "";
 
         if (operatives.Count == 0)
         {
@@ -1391,7 +1391,7 @@ public partial class PdfTeamExtractor
     /// </code>
     /// "CONTINUES ON OTHER SIDE" causes the description to merge with the next page.
     /// </summary>
-    public List<ExtractedRule> ParseRulesDoc(string path, string? teamName = null, string? primaryKeyword = null)
+    public List<ExtractedRule> ParseRulesDoc(string path, string? teamName = null, string? primaryKeyword = null, bool isPloy = false)
     {
         var lines = GetPdfLines(path, raw: true);
         var result = new List<ExtractedRule>();
@@ -1401,6 +1401,13 @@ public partial class PdfTeamExtractor
         var emptyChain = new List<string>(); // consecutive empty-text ALL-CAPS names before the next rule
         var teamNameTitleCase = teamName != null ? ToTitleCase(teamName) : null;
         var primaryKeywordTitleCase = primaryKeyword != null ? ToTitleCase(primaryKeyword) : null;
+
+        // Format rule text with optional ploy-specific paragraph breaks
+        string FormatText(string raw)
+        {
+            var text = TextHelpers.StructureToMarkdown(raw.Trim());
+            return isPloy ? TextHelpers.ApplyPloyParagraphBreaks(text) : text;
+        }
 
         foreach (var line in lines)
         {
@@ -1455,7 +1462,7 @@ public partial class PdfTeamExtractor
                         // Different name — save current and start fresh
                         if (currentName.Length > 0)
                         {
-                            result.Add(new ExtractedRule { Category = DetermineRuleCategory(emptyChain, teamNameTitleCase, primaryKeywordTitleCase), Name = currentName, Text = TextHelpers.StructureToMarkdown(currentText.ToString().Trim()) });
+                            result.Add(new ExtractedRule { Category = DetermineRuleCategory(emptyChain, teamNameTitleCase, primaryKeywordTitleCase), Name = currentName, Text = FormatText(currentText.ToString()) });
                             emptyChain.Clear();
                         }
 
@@ -1471,7 +1478,7 @@ public partial class PdfTeamExtractor
                         if (currentText.Length > 0)
                         {
                             // Rule has text — determine category from the empty-header chain
-                            result.Add(new ExtractedRule { Category = DetermineRuleCategory(emptyChain, teamNameTitleCase, primaryKeywordTitleCase), Name = currentName, Text = TextHelpers.StructureToMarkdown(currentText.ToString().Trim()) });
+                            result.Add(new ExtractedRule { Category = DetermineRuleCategory(emptyChain, teamNameTitleCase, primaryKeywordTitleCase), Name = currentName, Text = FormatText(currentText.ToString()) });
                             emptyChain.Clear();
                         }
                         else
@@ -1518,7 +1525,7 @@ public partial class PdfTeamExtractor
         // Flush the last rule
         if (currentName.Length > 0)
         {
-            result.Add(new ExtractedRule { Category = DetermineRuleCategory(emptyChain, teamNameTitleCase, primaryKeywordTitleCase), Name = currentName, Text = TextHelpers.StructureToMarkdown(currentText.ToString().Trim()) });
+            result.Add(new ExtractedRule { Category = DetermineRuleCategory(emptyChain, teamNameTitleCase, primaryKeywordTitleCase), Name = currentName, Text = FormatText(currentText.ToString()) });
         }
 
         // and deduplicate by name (concatenate text if the same rule name appears on multiple pages)

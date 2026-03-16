@@ -244,6 +244,26 @@ Paragraphs that appear inside a visible border/box in the PDF are converted to M
 
 **Applied to:** ability.text, ploy.text, rule.text, equipment.text, operativeSelection.text, supplementaryInformation.
 
+### Step 11: Ploy-Specific Paragraph Breaks (strategy and firefight ploys only)
+
+Kill Team ploys have a lore/flavour paragraph followed by a mechanical rule paragraph. In the raw PDF text these arrive joined by a space. These patterns are applied ONLY to strategy and firefight ploy PDFs (not faction rules, where the same phrases appear mid-paragraph).
+
+`ParseRulesDoc` is called with `isPloy: true` for strategy and firefight ploy PDFs. When enabled, `TextHelpers.ApplyPloyParagraphBreaks` inserts `\n\n` before these rule-start patterns (after `.`):
+
+| Pattern | Context |
+|---------|---------|
+| `Whenever a friendly ` | Ploy rule targeting a friendly operative |
+| `Whenever an operative ` | Ploy rule targeting any operative |
+| `Whenever you're ` | Ploy rule about player action |
+| `Friendly ` | Ploy rule starting with operative subject |
+| `Select one ` | Ploy rule with selection instruction |
+| `Select two ` | Ploy rule with selection instruction |
+| `You can ignore ` | Ploy rule with override instruction |
+| `Change your ` | Ploy rule with state change instruction |
+| `Place one ` | Ploy rule with setup instruction |
+| `Up to D` | Ploy rule with quantity instruction |
+| `One friendly ` | Ploy rule with operative count |
+
 `BuildOperativeSelectionMarkdown` applies its own constraint and sentence-break patterns (subset of the above) plus blank-line deduplication to suppress consecutive empty lines from the raw PDF.
 
 ---

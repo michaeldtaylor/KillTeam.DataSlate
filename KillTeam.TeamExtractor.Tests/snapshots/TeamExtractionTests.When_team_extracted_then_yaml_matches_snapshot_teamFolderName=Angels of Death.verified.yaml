@@ -695,16 +695,29 @@ operativeSelection:
 strategyPloys:
   - name: Combat Doctrine
     text: |-
-      Space Marines hold the teachings of the Codex Astartes in highest esteem, employing its flexible combat doctrines to annihilate their enemies. Select one **COMBAT DOCTRINE** from those presented below. Whenever a friendly **ANGEL OF DEATH** operative is x, its weapons have the Balanced weapon rule. X is the **COMBAT DOCTRINE** you selected.
+      Space Marines hold the teachings of the Codex Astartes in highest esteem, employing its flexible combat doctrines to annihilate their enemies.
+      
+      Select one **COMBAT DOCTRINE** from those presented below.
+      
+      Whenever a friendly **ANGEL OF DEATH** operative is x, its weapons have the Balanced weapon rule. X is the **COMBAT DOCTRINE** you selected.
         - Devastator Doctrine: Shooting an operative more than 6" from it.
         - Tactical Doctrine: Shooting an operative within 6" of it.
         - Assault Doctrine: Fighting or retaliating.
   - name: And They Shall Know No Fear
-    text: Space Marines possess extraordinary courage and are utterly unflinching in the face of terrifying horrors and overwhelming odds. You can ignore any changes to the stats of friendly **ANGEL OF DEATH** operatives from being injured (including their weapons' stats).
+    text: |-
+      Space Marines possess extraordinary courage and are utterly unflinching in the face of terrifying horrors and overwhelming odds.
+      
+      You can ignore any changes to the stats of friendly **ANGEL OF DEATH** operatives from being injured (including their weapons' stats).
   - name: Adaptive Tactics
-    text: There are few more tactically flexible warriors than the Adeptus Astartes. Supplementing the teachings of the Codex Astartes with their own experience, Space Marines may adjust their strategies at a moment's notice. Change your secondary **CHAPTER TACTIC**. Note this ploy only lasts until the end of the turning point, at which point your original secondary **CHAPTER TACTIC** returns.
+    text: |-
+      There are few more tactically flexible warriors than the Adeptus Astartes. Supplementing the teachings of the Codex Astartes with their own experience, Space Marines may adjust their strategies at a moment's notice.
+      
+      Change your secondary **CHAPTER TACTIC**. Note this ploy only lasts until the end of the turning point, at which point your original secondary **CHAPTER TACTIC** returns.
   - name: Indomitus
-    text: This is the Era Indomitus. The Imperium wages galaxy-spanning crusades to drive back the horrors that plague it, and the battle-brothers of the Adeptus Astartes are spurred on by this righteous purpose. Whenever an operative is shooting a friendly **ANGEL OF DEATH** operative, if you roll two or more fails, you can discard one of them to retain another as a normal success instead.
+    text: |-
+      This is the Era Indomitus. The Imperium wages galaxy-spanning crusades to drive back the horrors that plague it, and the battle-brothers of the Adeptus Astartes are spurred on by this righteous purpose.
+      
+      Whenever an operative is shooting a friendly **ANGEL OF DEATH** operative, if you roll two or more fails, you can discard one of them to retain another as a normal success instead.
 supplementaryInformation: |-
   # ANGELS OF DEATH: UPDATE LOG
   

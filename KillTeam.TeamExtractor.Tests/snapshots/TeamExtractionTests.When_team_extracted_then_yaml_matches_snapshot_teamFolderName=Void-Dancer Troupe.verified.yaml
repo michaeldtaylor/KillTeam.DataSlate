@@ -365,13 +365,25 @@ operativeSelection:
     Your kill team can only include up to one fusion pistol and up to one neuro disruptor.
 strategyPloys:
   - name: Darting Salvo
-    text: Advancing in a dazzling blurr of vibrant colour, Harlequins fire on the move, leaping away before their opponents can return fire. Whenever a friendly **VOID-DANCER TROUPE** operative performs the Reposition action during its activation, it can perform the Shoot action during that action (it must do so in a location it can be placed, and any remaining move distance it had from that Reposition action can be used after it does so).
+    text: |-
+      Advancing in a dazzling blurr of vibrant colour, Harlequins fire on the move, leaping away before their opponents can return fire.
+      
+      Whenever a friendly **VOID-DANCER TROUPE** operative performs the Reposition action during its activation, it can perform the Shoot action during that action (it must do so in a location it can be placed, and any remaining move distance it had from that Reposition action can be used after it does so).
   - name: Rising Crescendo
-    text: With each darting advance and lethal flourish, the tempo of the troupe's performance increases, building towards a violent crescendo. Friendly **VOID-DANCER TROUPE** operatives can perform the Dash action during the same activation in which they performed the Charge action, but not vice versa (i.e. not Dash then Charge).
+    text: |-
+      With each darting advance and lethal flourish, the tempo of the troupe's performance increases, building towards a violent crescendo.
+      
+      Friendly **VOID-DANCER TROUPE** operatives can perform the Dash action during the same activation in which they performed the Charge action, but not vice versa (i.e. not Dash then Charge).
   - name: Prismatic Blur
-    text: So swift and dazzling are the Harlequins that even veteran marksmen struggle to draw a bead upon their lithe forms. Whenever an operative is shooting a friendly **VOID-DANCER TROUPE** operative that performed an action in which it moved during this turning point, you can re-roll one of your defence dice.
+    text: |-
+      So swift and dazzling are the Harlequins that even veteran marksmen struggle to draw a bead upon their lithe forms.
+      
+      Whenever an operative is shooting a friendly **VOID-DANCER TROUPE** operative that performed an action in which it moved during this turning point, you can re-roll one of your defence dice.
   - name: Cegorach's Jest
-    text: 'Attempts to engage the troupe in melee combat meet with little success. Luckless assailants find their well- aimed strikes meeting only thin air. Whenever a friendly **VOID-DANCER TROUPE** operative is fighting or retaliating and your opponent strikes with a normal success, you can roll one D6: if the result is less than the Hit stat of your opponent''s selected weapon, that strike is allocated to block one of your dice instead (ignore the Brutal weapon rule, if relevant) and you cannot use this rule for the rest of the sequence.'
+    text: |-
+      Attempts to engage the troupe in melee combat meet with little success. Luckless assailants find their well- aimed strikes meeting only thin air.
+      
+      Whenever a friendly **VOID-DANCER TROUPE** operative is fighting or retaliating and your opponent strikes with a normal success, you can roll one D6: if the result is less than the Hit stat of your opponent's selected weapon, that strike is allocated to block one of your dice instead (ignore the Brutal weapon rule, if relevant) and you cannot use this rule for the rest of the sequence.
 supplementaryInformation: |-
   # VOID-DANCER TROUPE: UPDATE LOG
   

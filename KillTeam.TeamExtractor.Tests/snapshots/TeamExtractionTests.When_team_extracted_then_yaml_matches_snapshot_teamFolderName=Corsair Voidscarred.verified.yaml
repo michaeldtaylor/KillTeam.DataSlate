@@ -663,13 +663,25 @@ operativeSelection:
     Your kill team cannot include both a blaster and a wraithcannon.
 strategyPloys:
   - name: Plunderers
-    text: Aeldari Corsairs prioritise profit over glory, moving swiftly towards their objective in the hope of seizing their prize before the foe can react. Up to D3 friendly **CORSAIR VOIDSCARRED** operatives can immediately perform a free Dash action in an order of your choice. This turning point, each that does so cannot perform the Dash action during their activation. You cannot use this ploy during the first turning point.
+    text: |-
+      Aeldari Corsairs prioritise profit over glory, moving swiftly towards their objective in the hope of seizing their prize before the foe can react.
+      
+      Up to D3 friendly **CORSAIR VOIDSCARRED** operatives can immediately perform a free Dash action in an order of your choice. This turning point, each that does so cannot perform the Dash action during their activation. You cannot use this ploy during the first turning point.
   - name: Piratical Profiteers
-    text: Any foolish enough to attempt to contest a prize claimed by the Corsair Voidscarred will soon find themselves caught in a blizzard of shuriken fire and sword thrusts. Whenever a friendly **CORSAIR VOIDSCARRED** operative is shooting, fighting or retaliating, if it or the enemy operative in that sequence contests an objective marker or one of your mission markers, that friendly operative's weapons have the Balanced weapon rule.
+    text: |-
+      Any foolish enough to attempt to contest a prize claimed by the Corsair Voidscarred will soon find themselves caught in a blizzard of shuriken fire and sword thrusts.
+      
+      Whenever a friendly **CORSAIR VOIDSCARRED** operative is shooting, fighting or retaliating, if it or the enemy operative in that sequence contests an objective marker or one of your mission markers, that friendly operative's weapons have the Balanced weapon rule.
   - name: Mobile Engagement
-    text: Aeldari Corsairs rely upon blistering speed to avoid heavy fire. Whenever an operative is shooting a friendly **CORSAIR VOIDSCARRED** operative that performed an action in which it moved during this turning point, you can re-roll one of your defence dice.
+    text: |-
+      Aeldari Corsairs rely upon blistering speed to avoid heavy fire.
+      
+      Whenever an operative is shooting a friendly **CORSAIR VOIDSCARRED** operative that performed an action in which it moved during this turning point, you can re-roll one of your defence dice.
   - name: Outcasts
-    text: Those who walk the Path of the Outcast are no strangers to solitude. Some even fight better alone. Whenever a friendly **CORSAIR VOIDSCARRED** operative is more than 5" from other friendly operatives, its weapons have the Punishing weapon rule.
+    text: |-
+      Those who walk the Path of the Outcast are no strangers to solitude. Some even fight better alone.
+      
+      Whenever a friendly **CORSAIR VOIDSCARRED** operative is more than 5" from other friendly operatives, its weapons have the Punishing weapon rule.
 supplementaryInformation: |-
   # CORSAIR VOIDSCARRED: UPDATE LOG
   

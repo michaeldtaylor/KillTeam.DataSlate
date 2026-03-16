@@ -540,13 +540,25 @@ operativeSelection:
     Other than **WARRIOR** operatives, your kill team can only include each operative on this list once.
 strategyPloys:
   - name: We Have Come for You
-    text: The Night Lords strike their foes swiftly, utilising shock, awe and terror to brutalise the enemy before they can lift a blade in response. Whenever a friendly **NEMESIS CLAW** operative is activated, if the first action it performs during that activation is the Charge action, when it ends its move during that action, you can inflict D3 damage on one enemy operative within its control range.
+    text: |-
+      The Night Lords strike their foes swiftly, utilising shock, awe and terror to brutalise the enemy before they can lift a blade in response.
+      
+      Whenever a friendly **NEMESIS CLAW** operative is activated, if the first action it performs during that activation is the Charge action, when it ends its move during that action, you can inflict D3 damage on one enemy operative within its control range.
   - name: The Black Hunt
-    text: A terrible malice burns within the twin hearts of each Night Lord, and they enjoy nothing more than toying with their wounded prey. Whenever a friendly **NEMESIS CLAW** operative is shooting against, fighting against or retaliating against a wounded enemy operative, you can re-roll one of your attack dice.
+    text: |-
+      A terrible malice burns within the twin hearts of each Night Lord, and they enjoy nothing more than toying with their wounded prey.
+      
+      Whenever a friendly **NEMESIS CLAW** operative is shooting against, fighting against or retaliating against a wounded enemy operative, you can re-roll one of your attack dice.
   - name: Preysight
-    text: The Night Lords seem able to sense the fear of cowering prey, hunting down the craven with unerring precision. Whenever you're selecting a valid target for a friendly **NEMESIS CLAW** operative, enemy operatives within 6" of it cannot use Light terrain for cover. While this can allow such operatives to be targeted (assuming they're visible), it doesn't remove their cover save (if any).
+    text: |-
+      The Night Lords seem able to sense the fear of cowering prey, hunting down the craven with unerring precision.
+      
+      Whenever you're selecting a valid target for a friendly **NEMESIS CLAW** operative, enemy operatives within 6" of it cannot use Light terrain for cover. While this can allow such operatives to be targeted (assuming they're visible), it doesn't remove their cover save (if any).
   - name: Return to Darkness
-    text: 'The Night Lords move from shadow to shadow with an agility and speed belied by their transhuman bulk. One friendly **NEMESIS CLAW** operative can immediately perform a free Fall Back or Reposition action, but it must end that move with Heavy terrain within its control range, or any part of its base underneath Vantage terrain. In addition, it cannot move more than 4" during that action and it cannot end that move closer to enemy operatives (in a killzone that uses the close quarters rules, e.g. Killzone: Tomb World, ignore Wall terrain when determining this).'
+    text: |-
+      The Night Lords move from shadow to shadow with an agility and speed belied by their transhuman bulk.
+      
+      One friendly **NEMESIS CLAW** operative can immediately perform a free Fall Back or Reposition action, but it must end that move with Heavy terrain within its control range, or any part of its base underneath Vantage terrain. In addition, it cannot move more than 4" during that action and it cannot end that move closer to enemy operatives (in a killzone that uses the close quarters rules, e.g. Killzone: Tomb World, ignore Wall terrain when determining this).
 supplementaryInformation: |-
   # NEMESIS CLAW: UPDATE LOG
   

@@ -22,6 +22,27 @@ internal static partial class TextHelpers
     ];
 
     /// <summary>
+    /// Ploy-specific sentence-break patterns. Kill Team ploys (strategy and firefight) have a
+    /// lore/flavour paragraph followed by a mechanical rule paragraph. In the raw PDF text these
+    /// arrive joined by a space. These patterns are NOT safe for faction rules (where the same
+    /// phrases can appear mid-paragraph).
+    /// </summary>
+    private static readonly string[] PloyRuleStartPatterns =
+    [
+        "Whenever a friendly ",
+        "Whenever an operative ",
+        "Whenever you're ",
+        "Friendly ",
+        "Select one ",
+        "Select two ",
+        "You can ignore ",
+        "Change your ",
+        "Place one ",
+        "Up to D",
+        "One friendly ",
+    ];
+
+    /// <summary>
     /// Normalises a string value for output: smart quotes, AP concatenation repair,
     /// trademark symbols, PDF chrome, and control characters.
     /// </summary>
@@ -275,6 +296,22 @@ internal static partial class TextHelpers
         }
 
         return sb.ToString();
+    }
+
+    /// <summary>
+    /// Inserts paragraph breaks at lore-to-rule transitions in ploy text.
+    /// Kill Team ploys have a flavour/lore paragraph followed by a mechanical rule paragraph.
+    /// These patterns are NOT safe for faction rules (where the same phrases appear mid-paragraph),
+    /// so this method is only called for strategy and firefight ploy PDFs.
+    /// </summary>
+    internal static string ApplyPloyParagraphBreaks(string text)
+    {
+        foreach (var pattern in PloyRuleStartPatterns)
+        {
+            text = text.Replace(". " + pattern, ".\n\n" + pattern, StringComparison.Ordinal);
+        }
+
+        return text;
     }
 
     /// <summary>

@@ -372,11 +372,22 @@ strategyPloys:
         - It has one of your Poison tokens and is visible to (or vice versa) and within 3" of friendly **PLAGUE MARINE** operatives.
         - It's visible to (or vice versa) and within 3" of a friendly **PLAGUE MARINE ICON BEARER** operative.
   - name: Lumbering Death
-    text: Plague Marines are methodical and uncompromising in their approach to warfare, advancing and firing with steadfast determination. Whenever a friendly **PLAGUE MARINE** operative is shooting or fighting during an activation in which it hasn't moved more than 3", or whenever it's retaliating, its weapons have the Ceaseless weapon rule.
+    text: |-
+      Plague Marines are methodical and uncompromising in their approach to warfare, advancing and firing with steadfast determination.
+      
+      Whenever a friendly **PLAGUE MARINE** operative is shooting or fighting during an activation in which it hasn't moved more than 3", or whenever it's retaliating, its weapons have the Ceaseless weapon rule.
   - name: Cloud of Flies
-    text: Disgusting, fat-bodied flies swarm the killzone, blurring the forms of advancing Plague Marines and absorbing the enemy's projectiles. Place one of your Cloud of Flies markers in the killzone. Whenever an operative is shooting a friendly **PLAGUE MARINE** operative that's more than 3" from it, if that friendly operative is wholly within 1" of that marker, that friendly operative is obscured. In the Ready step of the next Strategy phase, remove that marker.
+    text: |-
+      Disgusting, fat-bodied flies swarm the killzone, blurring the forms of advancing Plague Marines and absorbing the enemy's projectiles.
+      
+      Place one of your Cloud of Flies markers in the killzone.
+      
+      Whenever an operative is shooting a friendly **PLAGUE MARINE** operative that's more than 3" from it, if that friendly operative is wholly within 1" of that marker, that friendly operative is obscured. In the Ready step of the next Strategy phase, remove that marker.
   - name: Nurglings
-    text: The smallest of Nurgle's daemons, Nurglings are both malicious and playful, cackling wildly as they claw and harass the Plague Marines' foes with pestilent claws and teeth. Select one enemy operative within 3" of a friendly **PLAGUE MARINE** operative, or one enemy operative that has one of your Poison tokens and is within 7" of a friendly **PLAGUE MARINE** operative. Until the end of the selected operative's next activation, subtract 1 from its APL stat.
+    text: |-
+      The smallest of Nurgle's daemons, Nurglings are both malicious and playful, cackling wildly as they claw and harass the Plague Marines' foes with pestilent claws and teeth.
+      
+      Select one enemy operative within 3" of a friendly **PLAGUE MARINE** operative, or one enemy operative that has one of your Poison tokens and is within 7" of a friendly **PLAGUE MARINE** operative. Until the end of the selected operative's next activation, subtract 1 from its APL stat.
 supplementaryInformation: |-
   # PLAGUE MARINES: UPDATE LOG
   
