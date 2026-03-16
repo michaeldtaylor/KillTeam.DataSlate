@@ -629,7 +629,12 @@ factionRules:
       7. **SHARPSHOOTER** Whenever this operative is shooting during an activation in which it hasn't performed the Charge, Fall Back or Reposition action, its bolt weapons have the Accurate 1 and Severe weapon rules.
       8. **SIEGE SPECIALIST** This operative's ranged weapons have the Saturate weapon rule. Whenever this operative is fighting or retaliating, enemy operatives cannot assist.
   - name: Astartes
-    text: 'These genetically modified superhumans are made for one purpose: war. During each friendly **ANGEL OF DEATH** operative''s activation, it can perform either two Shoot actions or two Fight actions. If it''s two Shoot actions, a bolt weapon must be selected for at least one of them, and if it''s a bolt sniper rifle or heavy bolter, 1 additional AP must be spent for the second action if both actions are using that weapon. Each friendly **ANGEL OF DEATH** operative can counteract regardless of its order.'
+    text: |-
+      These genetically modified superhumans are made for one purpose: war.
+      
+      During each friendly **ANGEL OF DEATH** operative's activation, it can perform either two Shoot actions or two Fight actions. If it's two Shoot actions, a bolt weapon must be selected for at least one of them, and if it's a bolt sniper rifle or heavy bolter, 1 additional AP must be spent for the second action if both actions are using that weapon.
+      
+      Each friendly **ANGEL OF DEATH** operative can counteract regardless of its order.
 firefightPloys:
   - name: Adjust Doctrine
     text: |-

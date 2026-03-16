@@ -317,7 +317,12 @@ factionEquipment:
     text: 'Activating vents in their power armour, Plague Marines may unleash clouds of sickening fumes that clog the lungs of nearby foes. Whenever an enemy operative that doesn''t have one of your Poison tokens is activated within 3" of a friendly **PLAGUE MARINE** operative, roll one D3: on a 3, that operative gains one of your Poison tokens.'
 factionRules:
   - name: Astartes
-    text: 'Space Marines are genetically augmented transhumans forged for only one purpose: war. During each friendly **PLAGUE MARINE** operative''s activation, it can perform either two Shoot actions or two Fight actions. If it''s two Shoot actions, a bolt pistol, boltgun or PSYCHIC weapon must be selected for at least one of them. You cannot select the same PSYCHIC ranged weapon more than once per activation. Each friendly **PLAGUE MARINE** operative can counteract regardless of its order.'
+    text: |-
+      Space Marines are genetically augmented transhumans forged for only one purpose: war.
+      
+      During each friendly **PLAGUE MARINE** operative's activation, it can perform either two Shoot actions or two Fight actions. If it's two Shoot actions, a bolt pistol, boltgun or PSYCHIC weapon must be selected for at least one of them. You cannot select the same PSYCHIC ranged weapon more than once per activation.
+      
+      Each friendly **PLAGUE MARINE** operative can counteract regardless of its order.
   - name: Poison
     text: 'Nurgle deals in warp-tainted poisons, toxins, viral plagues and sicknesses of the soul that defy both natural resilience and medical intervention. Some weapons in this team''s rules have the Poison weapon rule. *Poison: In the Resolve Attack Dice step, if you inflict damage with any successes, the operative this weapon is being used against (excluding friendly **PLAGUE MARINE** operatives) gains one of your Poison tokens (if it doesn''t already have one). Whenever an operative that has one of your Poison tokens is activated, inflict 1 damage on it.'
   - name: Disgustingly Resilient

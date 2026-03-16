@@ -474,7 +474,12 @@ factionEquipment:
     text: The Night Lords use jamming devices to sow chaos and confusion by preventing their panicked foes from communicating. Whenever an enemy operative is within 3" of a friendly **NEMESIS CLAW** operative, that enemy operative's APL stat cannot be added to. Note that this doesn't affect APL stats that have already been changed.
 factionRules:
   - name: Astartes
-    text: 'These genetically modified superhumans are made for one purpose: war. During each friendly **NEMESIS CLAW** operative''s activation, it can perform either two Shoot actions or two Fight actions. If it''s two Shoot actions, a bolt pistol, boltgun or scoped bolt pistol must be selected for at least one of them. Each friendly **NEMESIS CLAW** operative can counteract regardless of its order.'
+    text: |-
+      These genetically modified superhumans are made for one purpose: war.
+      
+      During each friendly **NEMESIS CLAW** operative's activation, it can perform either two Shoot actions or two Fight actions. If it's two Shoot actions, a bolt pistol, boltgun or scoped bolt pistol must be selected for at least one of them.
+      
+      Each friendly **NEMESIS CLAW** operative can counteract regardless of its order.
   - name: In Midnight Clad
     text: |-
       Night Lords are one with the darkness, employing it as an ally and a weapon. Whenever an enemy operative is shooting a friendly **NEMESIS CLAW** operative, that friendly operative is obscured if both of the following are true:

@@ -604,7 +604,10 @@ factionRules:
   - name: Rifles
     text: Whilst not all Aeldari outcasts have walked the Path of the Warrior, all are skilled in the use of rifles. Whenever a friendly **CORSAIR VOIDSCARRED** operative is shooting with a shuriken rifle or ranger long rifle during an activation in which it hasn't performed the Charge, Fall Back or Reposition action, that weapon has the Accurate 1 weapon rule. Note that operative isn't restricted from performing those actions after shooting.
   - name: Aeldari Raiders
-    text: Aeldari are lithe, graceful and swift – qualities the Corsair Voidscarred utilise to outmanoeuvre their enemies. Each friendly **CORSAIR VOIDSCARRED** operative can perform a free Dash action during their activation.
+    text: |-
+      Aeldari are lithe, graceful and swift – qualities the Corsair Voidscarred utilise to outmanoeuvre their enemies.
+      
+      Each friendly **CORSAIR VOIDSCARRED** operative can perform a free Dash action during their activation.
   - name: Corsair Voidscarred
     text: MARKER/**TOKEN GUIDE** Erudite Hunter token Faolchú's Bond token Warding Shield token One Step Ahead token Mistfield token Runes of Guidance token
 firefightPloys:

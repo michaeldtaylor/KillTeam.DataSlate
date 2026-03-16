@@ -212,6 +212,9 @@ internal static partial class TextHelpers
         text = text.Replace(". You can use ", ".\n\nYou can use ");
         text = text.Replace(". Once per ", ".\n\nOnce per ");
         text = text.Replace(". When this equipment ", ".\n\nWhen this equipment ");
+        // Faction rules: lore → rule and rule → rule transitions
+        text = text.Replace(". During each friendly ", ".\n\nDuring each friendly ");
+        text = text.Replace(". Each friendly ", ".\n\nEach friendly ");
 
         // Collapse 3+ consecutive newlines to a single paragraph break
         text = MultipleBlankLinesRegex().Replace(text, "\n\n");
