@@ -587,7 +587,10 @@ datacards:
         apCost: 1
 factionEquipment:
   - name: Diuturnal Mantles
-    text: The cloaks worn by Corsair Voidscarred operatives are woven from psychoactive material that hardens in response to explosions and fluctuations in temperature. Whenever an operative is shooting a friendly **CORSAIR VOIDSCARRED** operative, if the ranged weapon in that sequence has the Blast or Torrent weapon rule, you can re-roll one of your defence dice. In addition, friendly **CORSAIR VOIDSCARRED** operatives aren't affected by the x" Devastating x weapon rule (i.e. Devastating with a distance) unless they are the target during that sequence.
+    text: |-
+      The cloaks worn by Corsair Voidscarred operatives are woven from psychoactive material that hardens in response to explosions and fluctuations in temperature.
+      
+      Whenever an operative is shooting a friendly **CORSAIR VOIDSCARRED** operative, if the ranged weapon in that sequence has the Blast or Torrent weapon rule, you can re-roll one of your defence dice. In addition, friendly **CORSAIR VOIDSCARRED** operatives aren't affected by the x" Devastating x weapon rule (i.e. Devastating with a distance) unless they are the target during that sequence.
   - name: Mistfield
     text: |-
       A mistfield projects a field of thick moisture around the bearer that not only obscures their form, but also slows bullets, reducing their lethality.
@@ -599,7 +602,10 @@ factionEquipment:
       
       Once per turning point, when a friendly **CORSAIR VOIDSCARRED WAY SEEKER** or **CORSAIR VOIDSCARRED SOUL WEAVER** operative is performing a PSYCHIC unique action (excluding Warp Fold), you can use this rule. If you do, until the end of that action, add 3" to its distance requirement. Note this has no effect on PSYCHIC weapons (e.g. the Devastating distance requirement of lightning strike).
   - name: Star Charts
-    text: 'The Corsair Voidscarred utilise their peerless knowledge of the void to outmanoeuvre their foes. **STRATEGIC GAMBIT**. Roll one D3: if the result is higher than the number of the current turning point, you gain 1CP and cannot use this **STRATEGIC GAMBIT** for the rest of the battle.'
+    text: |-
+      The Corsair Voidscarred utilise their peerless knowledge of the void to outmanoeuvre their foes.
+      
+      **STRATEGIC**  GAMBIT. Roll one D3: if the result is higher than the number of the current turning point, you gain 1CP and cannot use this **STRATEGIC GAMBIT** for the rest of the battle.
 factionRules:
   - name: Rifles
     text: Whilst not all Aeldari outcasts have walked the Path of the Warrior, all are skilled in the use of rifles. Whenever a friendly **CORSAIR VOIDSCARRED** operative is shooting with a shuriken rifle or ranger long rifle during an activation in which it hasn't performed the Charge, Fall Back or Reposition action, that weapon has the Accurate 1 weapon rule. Note that operative isn't restricted from performing those actions after shooting.
@@ -818,26 +824,51 @@ supplementaryInformation: |-
   Shuriken pistol Power weapon Shredder Blaster Shuriken cannon Faolchú Shuriken pistol Power weapon Shuriken rifle Shuriken pistol Fusion pistol Dual power weapons Shuriken pistol Power weapon Shuriken pistol Witch staff 5
 universalEquipment:
   - name: Portable Barricade
-    text: 'Little more than a suppression shield with armoured feet, these barricades can be hefted and borne forwards to provide mobile cover. A portable barricade is Light, Protective and Portable terrain, except the feet which are Insignificant and Exposed. Before the battle, you can set it up wholly within your territory, on the killzone floor and more than 2" from other equipment terrain features, access points and Accessible terrain. Protective: While an operative is in cover from this terrain feature, improve its Save stat by 1 (to a maximum of 2+). RULE'
+    text: |-
+      Little more than a suppression shield with armoured feet, these barricades can be hefted and borne forwards to provide mobile cover.
+      
+      A portable barricade is Light, Protective and Portable terrain, except the feet which are Insignificant and Exposed. Before the battle, you can set it up wholly within your territory, on the killzone floor and more than 2" from other equipment terrain features, access points and Accessible terrain. Protective: While an operative is in cover from this terrain feature, improve its Save stat by 1 (to a maximum of 2+). RULE
   - name: Utility Grenades
-    text: From neuro-suppressant psybombs to smoke-belching chemical charges, grenades of this sort can suppress the enemy and be the difference between life and death. When you select this equipment, select two utility grenades (2 smoke, 2 stun, or 1 smoke and 1 stun). Each selection is a unique action your operatives can perform, but your kill team can only perform that action a total number of times during the battle equal to your selection. RULE
+    text: |-
+      From neuro-suppressant psybombs to smoke-belching chemical charges, grenades of this sort can suppress the enemy and be the difference between life and death.
+      
+      When you select this equipment, select two utility grenades (2 smoke, 2 stun, or 1 smoke and 1 stun). Each selection is a unique action your operatives can perform, but your kill team can only perform that action a total number of times during the battle equal to your selection. RULE
   - name: Ammo Cache
     text: |-
-      - Whether stockpiles deliberately set out for warriors to access quickly, or the abandoned munitions of the slain, these caches can prove vital for a swift reload in the heat of battle. Before the battle, you can set up one of your Ammo Cache markers wholly within your territory. Friendly operatives can perform the following mission action during the battle. **AMMO RESUPPLY** 0AP One of your Ammo Cache markers the active operative controls is used during this turning point. Until the start of the next turning point, whenever this operative is shooting with a weapon from its datacard, you can re-roll one of your attack dice.
+      - Whether stockpiles deliberately set out for warriors to access quickly, or the abandoned munitions of the slain, these caches can prove vital for a swift reload in the heat of battle.
+      
+      Before the battle, you can set up one of your Ammo Cache markers wholly within your territory. Friendly operatives can perform the following mission action during the battle. **AMMO RESUPPLY** 0AP One of your Ammo Cache markers the active operative controls is used during this turning point. Until the start of the next turning point, whenever this operative is shooting with a weapon from its datacard, you can re-roll one of your attack dice.
       - An operative cannot perform this action while within control range of an enemy operative, if that marker isn't yours, or if that marker has been used this turning point.
   - name: Razor Wire
-    text: 'Spooled rapidly out and affixed to jutting posts, razor wire acts as an easily deployed barrier and a painful deterrent to enemy operatives seeking to attack along particular routes. Razor wire is Exposed and Obstructing terrain. Before the battle, you can set it up wholly within your territory, on the killzone floor and more than 2" from other equipment terrain features, access points and Accessible terrain. Obstructing: Whenever an operative would cross over this terrain feature within 1" of it, treat the distance as an additional 1".'
+    text: |-
+      Spooled rapidly out and affixed to jutting posts, razor wire acts as an easily deployed barrier and a painful deterrent to enemy operatives seeking to attack along particular routes.
+      
+      Razor wire is Exposed and Obstructing terrain. Before the battle, you can set it up wholly within your territory, on the killzone floor and more than 2" from other equipment terrain features, access points and Accessible terrain. Obstructing: Whenever an operative would cross over this terrain feature within 1" of it, treat the distance as an additional 1".
   - name: Comms Device
-    text: Communications devices can be swiftly hijacked and employed to coordinate operations or call in support during a firefight. Before the battle, you can set up one of your Comms Device markers wholly within your territory. While a friendly operative controls this marker, add 3" to the distance requirements of its SUPPORT rules that refer to friendly operatives (e.g. 'select one friendly operative within 6"' would be 9" instead). Note that you cannot benefit from your opponent's Comms Device markers.
+    text: |-
+      Communications devices can be swiftly hijacked and employed to coordinate operations or call in support during a firefight.
+      
+      Before the battle, you can set up one of your Comms Device markers wholly within your territory. While a friendly operative controls this marker, add 3" to the distance requirements of its SUPPORT rules that refer to friendly operatives (e.g. 'select one friendly operative within 6"' would be 9" instead). Note that you cannot benefit from your opponent's Comms Device markers.
   - name: Mines
-    text: The battlefields of the 41st Millennium are plagued by myriad types of mine, from simple frag charges to monofilament web-snares and microplasma charges. Ultimately, all serve a similar, horrible purpose. Before the battle, you can set up one of your Mines markers wholly within your territory and more than 2" from other markers, access points and Accessible terrain. The first time that marker is within an operative's control range, remove that marker and inflict D3+3 damage on that operative.
+    text: |-
+      The battlefields of the 41st Millennium are plagued by myriad types of mine, from simple frag charges to monofilament web-snares and microplasma charges. Ultimately, all serve a similar, horrible purpose.
+      
+      Before the battle, you can set up one of your Mines markers wholly within your territory and more than 2" from other markers, access points and Accessible terrain. The first time that marker is within an operative's control range, remove that marker and inflict D3+3 damage on that operative.
   - name: Light Barricades
-    text: Designed to be lugged into place and then deployed by operatives and combat engineers, these barriers are proof against small arms fire. Light barricades are Light terrain, except the feet, which are Insignificant and Exposed. Before the battle, you can set up any of them wholly within your territory, on the killzone floor and more than 2" from other equipment terrain features, access points and Accessible terrain.
+    text: |-
+      Designed to be lugged into place and then deployed by operatives and combat engineers, these barriers are proof against small arms fire.
+      
+      Light barricades are Light terrain, except the feet, which are Insignificant and Exposed. Before the battle, you can set up any of them wholly within your territory, on the killzone floor and more than 2" from other equipment terrain features, access points and Accessible terrain.
   - name: Heavy Barricade
-    text: A redoubtable slab of plasteel and adamantine, this layered protective barrier provides shelter amidst the fiercest firefights. A heavy barricade is Heavy terrain. Before the battle, you can set it up wholly within 4" of your drop zone, on the killzone floor and more than 2" from other equipment terrain features, access points and Accessible terrain.
+    text: |-
+      A redoubtable slab of plasteel and adamantine, this layered protective barrier provides shelter amidst the fiercest firefights.
+      
+      A heavy barricade is Heavy terrain. Before the battle, you can set it up wholly within 4" of your drop zone, on the killzone floor and more than 2" from other equipment terrain features, access points and Accessible terrain.
   - name: Ladders
     text: |-
-      Carried into battle in their compacted forms, these ladders provide a rapid route of ingress to strongholds, or access to vital vantage points. Ladders are Insignificant and Exposed terrain. Before the battle, you can set up any of them as follows:
+      Carried into battle in their compacted forms, these ladders provide a rapid route of ingress to strongholds, or access to vital vantage points.
+      
+      Ladders are Insignificant and Exposed terrain. Before the battle, you can set up any of them as follows:
         - Wholly within your territory.
         - Upright against terrain that's at least 2" tall.
         - More than 2" from other equipment terrain features.
@@ -846,7 +877,9 @@ universalEquipment:
       Once per action, whenever an operative is climbing the terrain feature a ladder is placed against, treat the vertical distance as 1" if the ladder is within that operative's control range during that entire climb.
   - name: Explosive Grenades
     text: |-
-      A variety of offensive grenades are employed by the forces of the 41st Millennium. These range from simple fragmentation grenades to plasma and gravitic concussion grenades, while even more exotic devices are used to crack open enemy armour. When you select this equipment, select two explosive grenades (2 frag, 2 krak, or 1 frag and 1 krak). Each selection is a ranged weapon your operatives can use, but your kill team can only use that weapon a total number of times during the battle equal to your selection.
+      A variety of offensive grenades are employed by the forces of the 41st Millennium. These range from simple fragmentation grenades to plasma and gravitic concussion grenades, while even more exotic devices are used to crack open enemy armour.
+      
+      When you select this equipment, select two explosive grenades (2 frag, 2 krak, or 1 frag and 1 krak). Each selection is a ranged weapon your operatives can use, but your kill team can only use that weapon a total number of times during the battle equal to your selection.
       
       | NAME | ATK | HIT | DMG | WR |
       |------|-----|-----|-----|----|

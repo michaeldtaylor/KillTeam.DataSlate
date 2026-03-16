@@ -380,11 +380,25 @@ The last pages of the supplementary PDF show a visual "Kill Team Selection" refe
 
 ---
 
-## Rule 13 — Equipment Description: Preserve PDF Blank Lines
+## Rule 13 — Equipment Description: Font-Size Paragraph Breaks
 
-`ParseEquipmentWithDescriptions` collects description text line-by-line from the raw PDF. Blank lines in the PDF represent structural paragraph breaks (e.g. lore text → rules text, prose → weapon table). These blank lines are preserved as `\n\n` paragraph breaks in the description `StringBuilder`, using the same pattern as `ParseRulesDoc`.
+Equipment PDFs use two distinct font sizes within each item's description text:
 
-This is a structural approach: paragraph breaks come from the PDF's own blank lines, not from string-pattern matching.
+| Font | Size | Content |
+|------|------|---------|
+| Lore/flavour | ~9.0pt | Italic descriptive text (first paragraph) |
+| Rules | ~8.5pt | Mechanical rules text (second paragraph onward) |
+
+The transition from 9pt to 8.5pt marks the lore→rules boundary, with a larger Y-gap (~16.7pt vs ~11pt normal line spacing). `ContentOrderTextExtractor` discards font info, so `GetEquipmentFontBreakLines` uses PdfPig's word-level API to detect these transitions.
+
+**How it works:**
+1. `GetEquipmentFontBreakLines(pdfPath)` scans each page's words spatially
+2. Groups words into lines, computes average font size per line
+3. Finds the last ≥8.8pt body-text line before the first ≤8.6pt line
+4. Returns a `HashSet<string>` of those normalised line texts
+5. `ParseEquipmentWithDescriptions` inserts `\n\n` after any content-order line matching the set
+
+Additionally, blank lines in the raw PDF (from `ContentOrderTextExtractor`) are preserved as `\n\n` paragraph breaks in the description `StringBuilder`, using the same pattern as `ParseRulesDoc`. This handles multi-paragraph rules text (e.g. Portable Barricade sub-rules).
 
 ---
 

@@ -1192,6 +1192,7 @@ public partial class PdfTeamExtractor
         {
             var allLines = GetPdfLines(pdfPath, raw: true);
             var total = allLines.Count;
+            var fontBreakLines = GetEquipmentFontBreakLines(pdfPath);
 
             for (var j = 0; j < total; j++)
             {
@@ -1375,7 +1376,18 @@ public partial class PdfTeamExtractor
                     }
 
                     AppendText(descSb, descLine);
-                }
+
+                    // If this line is the last lore-font line before a rules-font transition
+                    // (detected via word-level font-size analysis), insert a paragraph break.
+                    if (fontBreakLines.Contains(descLine))
+                    {
+                        while (descSb.Length > 0 && descSb[descSb.Length - 1] == '\n')
+                        {
+                            descSb.Remove(descSb.Length - 1, 1);
+                        }
+
+                        descSb.Append("\n\n");
+                    }                }
 
                 result.Add(new ExtractedEquipmentItem
                 {
@@ -3063,4 +3075,64 @@ public partial class PdfTeamExtractor
     /// </summary>
     [GeneratedRegex(@"^\d+\.\s+[A-Z]")]
     private static partial Regex NumberedListItemLineRegex();
+
+    // ─── Equipment font-size break detection ─────────────────────────────────────
+
+    /// <summary>
+    /// Scans an equipment PDF using PdfPig's word-level API and returns the normalised
+    /// text of the last lore-font line on each page where a 9pt → 8.5pt font transition
+    /// occurs. These lines mark the boundary between flavour/lore text (9pt) and rules
+    /// text (8.5pt) on the physical card.
+    /// </summary>
+    private static HashSet<string> GetEquipmentFontBreakLines(string pdfPath)
+    {
+        var breakLines = new HashSet<string>(StringComparer.Ordinal);
+
+        using var doc = PdfDocument.Open(pdfPath);
+
+        foreach (var page in doc.GetPages())
+        {
+            var words = page.GetWords().ToList();
+
+            if (words.Count == 0)
+            {
+                continue;
+            }
+
+            var lineGroups = GroupWordsIntoLines(words);
+            lineGroups.Sort((a, b) => b.Y.CompareTo(a.Y)); // top-to-bottom
+
+            // Walk lines top-to-bottom looking for a font-size transition.
+            // Lore text is ~9pt, rules text is ~8.5pt. Headers are 12pt+.
+            // We detect the last ≥8.8pt body-text line before the first ≤8.6pt line.
+            string? lastLoreLine = null;
+
+            foreach (var group in lineGroups)
+            {
+                var avgFontSize = group.Words.Average(w => w.Letters[0].PointSize);
+
+                // Skip header lines (12pt+)
+                if (avgFontSize >= 10)
+                {
+                    lastLoreLine = null;
+                    continue;
+                }
+
+                if (avgFontSize >= 8.8)
+                {
+                    // Lore-font line — build text and remember it
+                    var text = string.Join(" ", group.Words.OrderBy(w => w.BoundingBox.Left).Select(w => w.Text));
+                    lastLoreLine = NormalizePdfText(text.TrimEnd());
+                }
+                else if (avgFontSize <= 8.6 && lastLoreLine != null)
+                {
+                    // First rules-font line after lore — record the break
+                    breakLines.Add(lastLoreLine);
+                    lastLoreLine = null;
+                }
+            }
+        }
+
+        return breakLines;
+    }
 }
