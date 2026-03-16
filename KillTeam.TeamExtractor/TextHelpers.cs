@@ -16,6 +16,7 @@ internal static partial class TextHelpers
 
     internal static readonly string[] ConstraintSentencePatterns =
     [
+        "For the purposes of action restrictions",
         "This operative cannot perform this action",
         "An operative cannot perform this action",
         "This operative cannot perform this ability",
@@ -205,22 +206,27 @@ internal static partial class TextHelpers
         // display as two icon-marked sections on the card (▶ effect, ◆ constraint).
         // Represent these as a Markdown bullet list. Only fires after '.' to avoid
         // breaking quoted text like "Changed to read: 'This operative cannot...'".
-        var hasConstraintBullet = false;
+        // When multiple patterns match, split at the EARLIEST one only — later patterns
+        // are part of the same constraint section (e.g. "For the purposes... This operative cannot...").
+        var bestConstraintPos = -1;
+        var bestConstraintLen = 0;
+
         foreach (var pattern in ConstraintSentencePatterns)
         {
-            var before = text;
-            text = text.Replace(". " + pattern, ".\n- " + pattern, StringComparison.OrdinalIgnoreCase);
-            if (text != before)
+            var search = ". " + pattern;
+            var pos = text.IndexOf(search, StringComparison.OrdinalIgnoreCase);
+
+            if (pos >= 0 && (bestConstraintPos < 0 || pos < bestConstraintPos))
             {
-                hasConstraintBullet = true;
+                bestConstraintPos = pos;
+                bestConstraintLen = search.Length;
             }
         }
 
-        // If a constraint bullet was inserted, also prefix the first paragraph with "- "
-        // to create a consistent two-item bullet list (effect + constraint).
-        if (hasConstraintBullet)
+        if (bestConstraintPos >= 0)
         {
-            text = "- " + text;
+            // Split: keep text up to ".", then "\n- " + text after ". "
+            text = "- " + text[..(bestConstraintPos + 1)] + "\n- " + text[(bestConstraintPos + 2)..];
         }
 
         // Sentence-start paragraph breaks: specific Kill Team phrasings that begin a new

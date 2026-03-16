@@ -120,8 +120,8 @@ datacards:
     specialActions:
       - name: Flail
         text: |-
-          - Inflict D3+2 damage on each other operative that's both visible to and within 2" of this operative. Roll separately for each: if it's an enemy operative, if the D3 result is a 3, that enemy operative also gains one of your Poison tokens (if it doesn't already have one). For the purposes of action restrictions and the Astartes faction rule, this action is treated as a Fight action.
-          - This operative cannot perform this action while it has a Conceal order.
+          - Inflict D3+2 damage on each other operative that's both visible to and within 2" of this operative. Roll separately for each: if it's an enemy operative, if the D3 result is a 3, that enemy operative also gains one of your Poison tokens (if it doesn't already have one).
+          - For the purposes of action restrictions and the Astartes faction rule, this action is treated as a Fight action. This operative cannot perform this action while it has a Conceal order.
         apCost: 1
   - name: Plague Marine Heavy Gunner
     operativeType: Plague Marine Heavy Gunner

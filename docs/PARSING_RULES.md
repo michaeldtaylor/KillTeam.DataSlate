@@ -203,9 +203,12 @@ Numbered items (`^\d+\. `) always start a new block, never treated as continuati
 Abilities/actions with a constraint sentence ("This operative cannot perform this action...") display on the physical card as two icon-marked sections: ▶ for the effect and ◆ for the constraint. These are represented as a Markdown bullet list.
 
 **Patterns** (only fire after `.` to avoid breaking quoted errata text):
+- `For the purposes of action restrictions` (action classification note)
 - `This operative cannot perform this action`
 - `This operative cannot perform this ability`
 - `An operative cannot perform this action`
+
+When multiple patterns match in the same text, only the **earliest** match is used for the split — later patterns are part of the same constraint section. This ensures e.g. "For the purposes...Fight action. This operative cannot..." stays as one bullet.
 
 When a pattern matches, the constraint is prefixed with `- ` and the preceding effect text is also prefixed with `- `, creating a two-item bullet list:
 
