@@ -1881,7 +1881,7 @@ public partial class PdfTeamExtractor
         var prevWasHeader = false;
         var prevAllCapsQuoteMode = false; // true when inside a flavour-text / quote ALL-CAPS block
         var quoteBuffer = new StringBuilder(); // accumulates ALL-CAPS quote-block lines
-        var pendingAttribution = false; // true after a quote block is flushed, waiting for the attribution line
+        string? pendingAttributionText = null; // non-null after a quote block is flushed; accumulates attribution lines
         var pendingHeaderText = new StringBuilder(); // accumulates consecutive all-caps lines into one header
 
         void FlushQuoteBuffer()
@@ -1903,11 +1903,33 @@ public partial class PdfTeamExtractor
 
             output.Append("> **").Append(quoteBuffer.ToString().Trim()).Append("**\n>\n");
             quoteBuffer.Clear();
-            pendingAttribution = true;
+            pendingAttributionText = string.Empty; // waiting for the "- Attribution" line
+        }
+
+        void FlushPendingAttribution()
+        {
+            if (pendingAttributionText == null)
+            {
+                return;
+            }
+
+            if (pendingAttributionText.Length > 0)
+            {
+                output.Append("> \u2014 ").Append(pendingAttributionText).Append("\n\n");
+            }
+            else
+            {
+                // Quote block with no attribution found — just close it
+                output.Append("\n\n");
+            }
+
+            pendingAttributionText = null;
         }
 
         void FlushPendingHeader()
         {
+            FlushPendingAttribution();
+
             if (pendingHeaderText.Length == 0)
             {
                 return;
@@ -1952,11 +1974,7 @@ public partial class PdfTeamExtractor
                 lastLineWasBulletSymbol = false;
                 FlushQuoteBuffer();
                 prevAllCapsQuoteMode = false;
-                if (pendingAttribution)
-                {
-                    output.Append("\n\n");
-                    pendingAttribution = false;
-                }
+                FlushPendingAttribution();
 
                 continue;
             }
@@ -2170,6 +2188,9 @@ public partial class PdfTeamExtractor
             // Accumulate ALL-CAPS quote blocks into quoteBuffer; regular prose via AppendText.
             if (prevAllCapsQuoteMode)
             {
+                // Flush any attribution pending from a previous quote before this new one.
+                FlushPendingAttribution();
+
                 if (quoteBuffer.Length > 0)
                 {
                     quoteBuffer.Append(' ');
@@ -2177,24 +2198,25 @@ public partial class PdfTeamExtractor
 
                 quoteBuffer.Append(trimmed);
             }
-            else if (pendingAttribution)
+            else if (pendingAttributionText != null)
             {
-                // The line immediately after a quote block is the attribution.
-                // If it starts with '- ', include it inside the blockquote as '> — Name'.
-                // Either way, close the blockquote.
-                pendingAttribution = false;
-
-                if (trimmed.StartsWith("- ", StringComparison.Ordinal))
+                if (pendingAttributionText.Length == 0 && trimmed.StartsWith("- ", StringComparison.Ordinal))
                 {
+                    // First attribution line — buffer it (don't emit yet; next line may be continuation)
                     var attribution = trimmed[2..].TrimStart();
-                    // Strip trailing page number (PDF artefact e.g. "Craftworld 3")
                     attribution = System.Text.RegularExpressions.Regex.Replace(attribution, @"\s+\d+$", "");
-                    output.Append("> \u2014 ").Append(attribution).Append("\n\n");
+                    pendingAttributionText = attribution;
+                }
+                else if (pendingAttributionText.Length > 0 && trimmed.Any(char.IsLower) && !trimmed.StartsWith("- ", StringComparison.Ordinal))
+                {
+                    // Continuation of a wrapped attribution line (e.g. "the Onyx Claw Shrine, Biel-Tan Craftworld")
+                    var continuation = System.Text.RegularExpressions.Regex.Replace(trimmed.TrimEnd(), @"\s+\d+$", "");
+                    pendingAttributionText += " " + continuation;
                 }
                 else
                 {
-                    // Not an attribution line — close blockquote and process line normally
-                    output.Append("\n\n");
+                    // Not an attribution or continuation — flush and process line normally
+                    FlushPendingAttribution();
                     AppendText(output, trimmed);
                 }
             }
@@ -2205,12 +2227,7 @@ public partial class PdfTeamExtractor
         }
 
         FlushQuoteBuffer();
-        if (pendingAttribution)
-        {
-            output.Append("\n\n");
-            pendingAttribution = false;
-        }
-
+        FlushPendingAttribution();
         FlushPendingHeader();
 
         var text = TextHelpers.StructureToMarkdown(output.ToString().TrimStart());
