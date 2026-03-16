@@ -51,7 +51,7 @@ properties:
         type: string
       text:
         type: string
-  supplementaryInfo:
+  supplementaryInformation:
     type: string
     description: Raw text from the Supplementary Information PDF (errata, FAQs)
   datacards:

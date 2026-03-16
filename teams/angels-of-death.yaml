@@ -1,4 +1,4 @@
-﻿id: angels-of-death
+id: angels-of-death
 name: Angels of Death
 grandFaction: Imperium
 faction: Adeptus Astartes
@@ -715,7 +715,7 @@ strategyPloys:
       This is the Era Indomitus. The Imperium wages galaxy-spanning crusades to drive back the horrors that plague it, and the battle-brothers of the Adeptus Astartes are spurred on by this righteous purpose.
       
       Whenever an operative is shooting a friendly **ANGEL OF DEATH** operative, if you roll two or more fails, you can discard one of them to retain another as a normal success instead.
-supplementaryInfo: |-
+supplementaryInformation: |-
   # Angels of Death: Update Log
   
   Rules will be periodically updated to maintain fair balance and interact more smoothly with the game. Rules changes will be updated directly into online documents and then listed below. Any minor changes to standardise wording that don't have any practical impact on the rule will be updated directly into online documents but not be listed here.

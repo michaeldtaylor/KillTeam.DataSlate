@@ -1,4 +1,4 @@
-﻿id: void-dancer-troupe
+id: void-dancer-troupe
 name: Void-Dancer Troupe
 grandFaction: Aeldari
 faction: Harlequin
@@ -396,7 +396,7 @@ strategyPloys:
       Attempts to engage the troupe in melee combat meet with little success. Luckless assailants find their well- aimed strikes meeting only thin air.
       
       Whenever a friendly **VOID-DANCER TROUPE** operative is fighting or retaliating and your opponent strikes with a normal success, you can roll one D6: if the result is less than the Hit stat of your opponent's selected weapon, that strike is allocated to block one of your dice instead (ignore the Brutal weapon rule, if relevant) and you cannot use this rule for the rest of the sequence.
-supplementaryInfo: |-
+supplementaryInformation: |-
   # Void-Dancer Troupe: Update Log
   
   Rules will be periodically updated to maintain fair balance and interact more smoothly with the game. Rules changes will be updated directly into online documents and then listed below. Any minor changes to standardise wording that don't have any practical impact on the rule will be updated directly into online documents but not be listed here.

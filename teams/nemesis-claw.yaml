@@ -1,4 +1,4 @@
-﻿id: nemesis-claw
+id: nemesis-claw
 name: Nemesis Claw
 grandFaction: Chaos
 faction: Heretic Astartes
@@ -564,7 +564,7 @@ strategyPloys:
       Whenever you're selecting a valid target for a friendly **NEMESIS CLAW** operative, enemy operatives within 6" of it cannot use Light terrain for cover. While this can allow such operatives to be targeted (assuming they're visible), it doesn't remove their cover save (if any).
   - name: Return to Darkness
     text: 'The Night Lords move from shadow to shadow with an agility and speed belied by their transhuman bulk. One friendly **NEMESIS CLAW** operative can immediately perform a free Fall Back or Reposition action, but it must end that move with Heavy terrain within its control range, or any part of its base underneath Vantage terrain. In addition, it cannot move more than 4" during that action and it cannot end that move closer to enemy operatives (in a killzone that uses the close quarters rules, e.g. Killzone: Tomb World, ignore Wall terrain when determining this).'
-supplementaryInfo: |-
+supplementaryInformation: |-
   # Nemesis Claw: Update Log
   
   Rules will be periodically updated to maintain fair balance and interact more smoothly with the game. Rules changes will be updated directly into online documents and then listed below. Any minor changes to standardise wording that don't have any practical impact on the rule will be updated directly into online documents but not be listed here.

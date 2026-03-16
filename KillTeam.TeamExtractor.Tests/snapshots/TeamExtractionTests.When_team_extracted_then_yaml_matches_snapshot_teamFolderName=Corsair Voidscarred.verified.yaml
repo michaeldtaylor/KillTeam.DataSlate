@@ -1,4 +1,4 @@
-﻿id: corsair-voidscarred
+id: corsair-voidscarred
 name: Corsair Voidscarred
 grandFaction: Aeldari
 faction: Anhrathe
@@ -698,7 +698,7 @@ strategyPloys:
       Those who walk the Path of the Outcast are no strangers to solitude. Some even fight better alone.
       
       Whenever a friendly **CORSAIR VOIDSCARRED** operative is more than 5" from other friendly operatives, its weapons have the Punishing weapon rule.
-supplementaryInfo: |-
+supplementaryInformation: |-
   # Corsair Voidscarred: Update Log
   
   Rules will be periodically updated to maintain fair balance and interact more smoothly with the game. Rules changes will be updated directly into online documents and then listed below. Any minor changes to standardise wording that don't have any practical impact on the rule will be updated directly into online documents but not be listed here.

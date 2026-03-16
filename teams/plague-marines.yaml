@@ -1,4 +1,4 @@
-﻿id: plague-marines
+id: plague-marines
 name: Plague Marines
 grandFaction: Chaos
 faction: Heretic Astartes
@@ -396,7 +396,7 @@ strategyPloys:
       Whenever an operative is shooting a friendly **PLAGUE MARINE** operative that's more than 3" from it, if that friendly operative is wholly within 1" of that marker, that friendly operative is obscured. In the Ready step of the next Strategy phase, remove that marker.
   - name: Nurglings
     text: The smallest of Nurgle's daemons, Nurglings are both malicious and playful, cackling wildly as they claw and harass the Plague Marines' foes with pestilent claws and teeth. Select one enemy operative within 3" of a friendly **PLAGUE MARINE** operative, or one enemy operative that has one of your Poison tokens and is within 7" of a friendly **PLAGUE MARINE** operative. Until the end of the selected operative's next activation, subtract 1 from its APL stat.
-supplementaryInfo: |-
+supplementaryInformation: |-
   # Plague Marines: Update Log
   
   Rules will be periodically updated to maintain fair balance and interact more smoothly with the game. Rules changes will be updated directly into online documents and then listed below. Any minor changes to standardise wording that don't have any practical impact on the rule will be updated directly into online documents but not be listed here.

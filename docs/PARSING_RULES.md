@@ -25,7 +25,7 @@ NOT applied to free-text description/body fields.
 
 ## Rule 3 — Markdown in Complex Text Fields
 
-Text description fields (ability.text, ploy.text, rule.text, operativeSelection.text, supplementaryInfo) use GitHub-compatible Markdown.
+Text description fields (ability.text, ploy.text, rule.text, operativeSelection.text, supplementaryInformation) use GitHub-compatible Markdown.
 
 Goal: capture content and structure for later rendering. Never sacrifice content for formatting.
 
@@ -71,7 +71,7 @@ Every team folder contains exactly 8 PDFs. All produce required output:
 | `*Firefight Ploys*` | `firefightPloys[]` | Named ploys with text |
 | `*Operative Selection*` | `operativeSelection{}` | Archetype + Markdown composition rules |
 | `*Strategy Ploys*` | `strategyPloys[]` | Named ploys with text |
-| `*Supplementary Information*` | `supplementaryInfo` | Raw Markdown text (errata, FAQs) |
+| `*Supplementary Information*` | `supplementaryInformation` | Raw Markdown text (errata, FAQs) |
 | `*Universal Equipment*` | `universalEquipment[]` | Equipment items with `name` and `text` fields |
 
 ## Rule 6 — YAML Field Order
@@ -86,7 +86,7 @@ factionRules                       (Faction Rules)
 firefightPloys                     (Firefight Ploys)
 operativeSelection                 (Operative Selection)
 strategyPloys                      (Strategy Ploys)
-supplementaryInfo                  (Supplementary Information)
+supplementaryInformation                  (Supplementary Information)
 universalEquipment                 (Universal Equipment)
 ```
 
@@ -115,7 +115,7 @@ pdftotext is run in two modes. Datacards require **both** modes in parallel:
 | Mode | Flag | Used for |
 |------|------|----------|
 | Layout | `-layout` | `ParseDatacards` — weapon stats rows require spatially-fixed column positions for the stats-header regex |
-| Raw | `-raw` | Back-card prose (abilities, 1AP actions, footnote rules) in `ParseDatacards`; `ParseRulesDoc`; `ParseEquipmentWithDescriptions`; `ParseSupplementaryInfo`; `ParseOperativeSelection` |
+| Raw | `-raw` | Back-card prose (abilities, 1AP actions, footnote rules) in `ParseDatacards`; `ParseRulesDoc`; `ParseEquipmentWithDescriptions`; `ParsesupplementaryInformation`; `ParseOperativeSelection` |
 
 **Why raw mode for back-card prose:** Two-column card layouts in pdftotext `-layout` interleave text from left and right columns line-by-line (e.g. a single operative's ability text is interleaved with a neighbouring operative's ability text). Raw mode outputs content in PDF stream order — left column fully, then right column — which unambiguously separates one operative's abilities from another's.
 
@@ -194,7 +194,7 @@ Insert `\n\n` before:
 
 Multiple blank lines (3+) are collapsed to `\n\n`. Result is trimmed.
 
-**Applied to:** ability.text, ploy.text, rule.text, equipment.text, operativeSelection.text, supplementaryInfo.
+**Applied to:** ability.text, ploy.text, rule.text, equipment.text, operativeSelection.text, supplementaryInformation.
 
 ---
 
@@ -253,7 +253,7 @@ The `id` field inside the YAML is the same slug value. `Program.cs` writes to `{
 
 ## Rule 12 — Supplementary Info Parsing
 
-`ParseSupplementaryInfo` processes the Supplementary Information PDF in raw mode.
+`ParsesupplementaryInformation` processes the Supplementary Information PDF in raw mode.
 
 ### Bullet symbol lines
 

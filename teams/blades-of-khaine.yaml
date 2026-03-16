@@ -1,4 +1,4 @@
-﻿id: blades-of-khaine
+id: blades-of-khaine
 name: Blades of Khaine
 grandFaction: Aeldari
 faction: Asuryani
@@ -549,7 +549,7 @@ strategyPloys:
       Whenever a friendly **BLADES OF KHAINE** operative is shooting an expended enemy operative, that friendly operative's ranged weapons have the Ceaseless weapon rule.
   - name: Dance of Death
     text: Lithe, acrobatic and utterly deadly, Aeldari Aspect Warriors exchange tactical positions with flawless grace. Select two friendly **BLADES OF KHAINE** operatives visible to and within 6" of each other. Remove them both from the killzone and set them back up in each other's previous locations (in other words, swap their positions).
-supplementaryInfo: |-
+supplementaryInformation: |-
   # Blades of Khaine: Update Log
   
   Rules will be periodically updated to maintain fair balance and interact more smoothly with the game. Rules changes will be updated directly into online documents and then listed below. Any minor changes to standardise wording that don't have any practical impact on the rule will be updated directly into online documents but not be listed here.

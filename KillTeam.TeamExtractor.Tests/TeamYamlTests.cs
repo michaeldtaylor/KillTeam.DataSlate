@@ -388,8 +388,8 @@ public class TeamYamlTests
         strategyPloys.GetArrayLength().Should().BeGreaterThan(0, $"{slug} strategyPloys must not be empty");
 
         // supplementaryInfo is not empty
-        root.TryGetProperty("supplementaryInfo", out var suppInfo).Should().BeTrue($"{slug} must have 'supplementaryInfo'");
-        suppInfo.GetString().Should().NotBeNullOrWhiteSpace($"{slug} supplementaryInfo must not be empty");
+        root.TryGetProperty("supplementaryInformation", out var suppInfo).Should().BeTrue($"{slug} must have 'supplementaryInformation'");
+        suppInfo.GetString().Should().NotBeNullOrWhiteSpace($"{slug} supplementaryInformation must not be empty");
     }
 
     // ─── Schema validation ────────────────────────────────────────────────────────

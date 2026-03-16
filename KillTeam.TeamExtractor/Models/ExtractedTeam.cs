@@ -120,7 +120,7 @@ public class ExtractedTeam
         // ── supplementaryInfo ──────────────────────────────────────────────────
         if (!string.IsNullOrEmpty(this.SupplementaryInfo))
         {
-            YamlWriter.WriteTextField(sb, 0, "supplementaryInfo", N(this.SupplementaryInfo));
+            YamlWriter.WriteTextField(sb, 0, "supplementaryInformation", N(this.SupplementaryInfo));
         }
 
         // ── universalEquipment ─────────────────────────────────────────────────
