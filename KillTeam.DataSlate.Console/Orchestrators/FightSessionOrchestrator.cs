@@ -233,6 +233,17 @@ public class FightSessionOrchestrator(
                 .Select(g => g.First())
                 .ToList();
 
+            // Smart filter: don't offer "CRIT blocks HIT" when opponent still has CRITs to block
+            var opponentHasCrits = opponentPool.Remaining.Any(d => d.Result == DieResult.Crit);
+            if (opponentHasCrits)
+            {
+                uniqueActions = uniqueActions
+                    .Where(a => a.Type != FightActionType.Block
+                        || a.ActiveDie.Result != DieResult.Crit
+                        || a.TargetDie?.Result != DieResult.Hit)
+                    .ToList();
+            }
+
             if (uniqueActions.Count == 0)
             {
                 break;
