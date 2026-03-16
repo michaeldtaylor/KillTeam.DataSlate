@@ -375,10 +375,12 @@ public class FightSessionOrchestrator(
 
     private static string FormatFightAction(FightAction a)
     {
-        var dieInfo = $"die({a.ActiveDie.RolledValue},{(a.ActiveDie.Result == DieResult.Crit ? "CRIT" : "HIT")})";
+        var resultLabel = a.ActiveDie.Result == DieResult.Crit ? "CRIT" : "HIT";
+        var dieInfo = $"rolled [green]{a.ActiveDie.RolledValue}[/] ({resultLabel})";
         if (a.Type == FightActionType.Strike)
-            return $"⚔ Strike with {dieInfo}";
-        return $"🛡 Block {dieInfo} → cancel die({a.TargetDie!.RolledValue},{(a.TargetDie.Result == DieResult.Crit ? "CRIT" : "HIT")})";
+            return $"⚔ Strike — {dieInfo}";
+        var targetLabel = a.TargetDie!.Result == DieResult.Crit ? "CRIT" : "HIT";
+        return $"🛡 Block — {dieInfo} cancels rolled [green]{a.TargetDie.RolledValue}[/] ({targetLabel})";
     }
 
     private async Task<int[]> RollOrEnterDiceAsync(int count, string label)
