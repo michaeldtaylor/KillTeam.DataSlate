@@ -84,7 +84,7 @@ public class FightSessionOrchestrator(
         {
             atkWeapon = atkMeleeWeapons[0];
             var injured = atkIsInjured ? $" [yellow](Injured: effective Hit {atkWeapon.Hit + 1}+)[/]" : "";
-            console.MarkupLine($"[dim]Auto-selected melee weapon:[/] {Markup.Escape(atkWeapon.Name)}  (Attack: [green]{atkWeapon.Atk}[/] | Hit: [green]{atkWeapon.Hit}+[/] | Normal: [green]{atkWeapon.NormalDmg}[/] | Crit: [green]{atkWeapon.CriticalDmg}[/]){injured}");
+            console.MarkupLine($"[dim]Auto-selected melee weapon:[/] {Markup.Escape(atkWeapon.Name)} (Attack: [green]{atkWeapon.Atk}[/] | Hit: [green]{atkWeapon.Hit}+[/] | Normal: [green]{atkWeapon.NormalDmg}[/] | Crit: [green]{atkWeapon.CriticalDmg}[/]){injured}");
         }
         else
         {
@@ -94,7 +94,7 @@ public class FightSessionOrchestrator(
                     .UseConverter(w =>
                     {
                         var injured = atkIsInjured ? $" [yellow](Injured: effective Hit {w.Hit + 1}+)[/]" : "";
-                        return $"{Markup.Escape(w.Name)}  (Attack: [green]{w.Atk}[/] | Hit: [green]{w.Hit}+[/] | Normal: [green]{w.NormalDmg}[/] | Crit: [green]{w.CriticalDmg}[/]){injured}";
+                        return $"{Markup.Escape(w.Name)} (Attack: [green]{w.Atk}[/] | Hit: [green]{w.Hit}+[/] | Normal: [green]{w.NormalDmg}[/] | Crit: [green]{w.CriticalDmg}[/]){injured}";
                     })
                     .AddChoices(atkMeleeWeapons));
         }
@@ -109,7 +109,7 @@ public class FightSessionOrchestrator(
         if (defMeleeWeapons.Count == 1)
         {
             defWeapon = defMeleeWeapons[0];
-            console.MarkupLine($"[dim]Auto-selected defender weapon:[/] {Markup.Escape(defWeapon.Name)}  (Attack: [green]{defWeapon.Atk}[/] | Hit: [green]{defWeapon.Hit}+[/] | Normal: [green]{defWeapon.NormalDmg}[/] | Crit: [green]{defWeapon.CriticalDmg}[/])");
+            console.MarkupLine($"[dim]Auto-selected defender weapon:[/] {Markup.Escape(defWeapon.Name)} (Attack: [green]{defWeapon.Atk}[/] | Hit: [green]{defWeapon.Hit}+[/] | Normal: [green]{defWeapon.NormalDmg}[/] | Crit: [green]{defWeapon.CriticalDmg}[/])");
             var defIsInjured = targetState.CurrentWounds < targetOp.Wounds / 2;
             defEffectiveHit = defIsInjured ? defWeapon.Hit + 1 : defWeapon.Hit;
         }
@@ -118,7 +118,7 @@ public class FightSessionOrchestrator(
             defWeapon = console.Prompt(
                 new SelectionPrompt<Weapon>()
                     .Title("Select defender's melee weapon:")
-                    .UseConverter(w => $"{Markup.Escape(w.Name)}  (Attack: [green]{w.Atk}[/] | Hit: [green]{w.Hit}+[/] | Normal: [green]{w.NormalDmg}[/] | Crit: [green]{w.CriticalDmg}[/])")
+                    .UseConverter(w => $"{Markup.Escape(w.Name)} (Attack: [green]{w.Atk}[/] | Hit: [green]{w.Hit}+[/] | Normal: [green]{w.NormalDmg}[/] | Crit: [green]{w.CriticalDmg}[/])")
                     .AddChoices(defMeleeWeapons));
             var defIsInjured = targetState.CurrentWounds < targetOp.Wounds / 2;
             defEffectiveHit = defIsInjured ? defWeapon.Hit + 1 : defWeapon.Hit;
@@ -129,9 +129,17 @@ public class FightSessionOrchestrator(
         }
 
         // 4. Fight assist
-        var fightAssist = console.Prompt(
-            new TextPrompt<int>("How many non-engaged friendly allies within 6\" of target? (0-2):")
-                .Validate(v => v is >= 0 and <= 2));
+        int fightAssist;
+        if (allOperatives.Count <= 2)
+        {
+            fightAssist = 0;
+        }
+        else
+        {
+            fightAssist = console.Prompt(
+                new TextPrompt<int>("How many non-engaged friendly allies within 6\" of target? (0-2):")
+                    .Validate(v => v is >= 0 and <= 2));
+        }
         atkEffectiveHit = Math.Max(2, atkEffectiveHit - fightAssist);
 
         // 5. Attacker dice entry
