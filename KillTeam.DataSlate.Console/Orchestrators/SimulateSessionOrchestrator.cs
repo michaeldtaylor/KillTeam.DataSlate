@@ -238,7 +238,8 @@ public class SimulateSessionOrchestrator(
 
             DisplayEncounterSummary(playerOperative, aiOperative,
                 fightResult.AttackerDamageDealt, fightResult.DefenderDamageDealt,
-                fightResult.AttackerCausedIncapacitation, fightResult.DefenderCausedIncapacitation);
+                playerIncapacitated: fightResult.DefenderCausedIncapacitation,
+                aiIncapacitated: fightResult.AttackerCausedIncapacitation);
         }
         else
         {
@@ -251,7 +252,8 @@ public class SimulateSessionOrchestrator(
 
             DisplayEncounterSummary(playerOperative, aiOperative,
                 shootResult.DamageDealt, 0,
-                false, shootResult.CausedIncapacitation);
+                playerIncapacitated: false,
+                aiIncapacitated: shootResult.CausedIncapacitation);
         }
     }
 
@@ -307,7 +309,7 @@ public class SimulateSessionOrchestrator(
     private void DisplayEncounterSummary(
         Models.Operative attacker, Models.Operative defender,
         int attackerDamage, int defenderDamage,
-        bool attackerIncapacitated, bool defenderIncapacitated)
+        bool playerIncapacitated, bool aiIncapacitated)
     {
         console.WriteLine();
         var table = new Table()
@@ -318,8 +320,8 @@ public class SimulateSessionOrchestrator(
 
         table.AddRow("Damage dealt", $"[bold]{attackerDamage}[/]", $"[bold]{defenderDamage}[/]");
         table.AddRow("Incapacitated?",
-            attackerIncapacitated ? "[red]No — you were incapacitated[/]" : "[green]Alive[/]",
-            defenderIncapacitated ? "[red]Incapacitated[/]" : "[green]Alive[/]");
+            playerIncapacitated ? "[red]Incapacitated[/]" : "[green]Alive[/]",
+            aiIncapacitated ? "[red]Incapacitated[/]" : "[green]Alive[/]");
 
         console.Write(table);
         console.WriteLine();
