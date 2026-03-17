@@ -223,7 +223,8 @@ public class SimulateSessionOrchestrator(
             [playerTeam.Id] = "You",
             [aiTeam.Id] = "AI"
         };
-        var renderer = new GameEventRenderer(console, participantLabels);
+        var columns = new TwoColumnRenderer(console, participantLabels);
+        var renderer = new GameEventRenderer(console, columns);
 
         stream.OnEventEmitted += renderer.Render;
 
