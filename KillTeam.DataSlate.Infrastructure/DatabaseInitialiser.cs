@@ -1,5 +1,6 @@
+using KillTeam.DataSlate.Domain;
 using Microsoft.Data.Sqlite;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace KillTeam.DataSlate.Infrastructure;
 
@@ -7,9 +8,9 @@ public class DatabaseInitialiser
 {
     private readonly string _connectionString;
 
-    public DatabaseInitialiser(IConfiguration config)
+    public DatabaseInitialiser(IOptions<DataSlateOptions> options)
     {
-        var path = config["DataSlate:DatabasePath"] ?? "./data/kill-team.db";
+        var path = options.Value.DatabasePath;
 
         _connectionString = $"Data Source={path}";
 

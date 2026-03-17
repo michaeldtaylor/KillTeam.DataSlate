@@ -1,5 +1,6 @@
 using Microsoft.Data.Sqlite;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
+using KillTeam.DataSlate.Domain;
 
 namespace KillTeam.DataSlate.Infrastructure;
 
@@ -8,8 +9,8 @@ public sealed class SqliteExecutor : ISqlExecutor
     private readonly string? _connectionString;
     private readonly SqliteConnection? _sharedConnection;
 
-    public SqliteExecutor(IConfiguration config)
-        => _connectionString = $"Data Source={config["DataSlate:DatabasePath"]}";
+    public SqliteExecutor(IOptions<DataSlateOptions> options)
+        => _connectionString = $"Data Source={options.Value.DatabasePath}";
 
     public SqliteExecutor(SqliteConnection connection)
         => _sharedConnection = connection;

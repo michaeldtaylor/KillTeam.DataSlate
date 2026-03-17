@@ -11,6 +11,7 @@ using KillTeam.DataSlate.Infrastructure.Repositories;
 using KillTeam.DataSlate.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Spectre.Console;
 using Spectre.Console.Cli;
 
@@ -29,26 +30,26 @@ public static class Program
         var services = new ServiceCollection();
 
         services.AddSingleton<IConfiguration>(config);
-        services.Configure<DataSlateOptions>(config.GetSection("DataSlate"));
+
+        services
+            .AddOptions<DataSlateOptions>()
+            .BindConfiguration("DataSlate")
+            .ValidateDataAnnotations();
 
         services.AddSingleton(AnsiConsole.Console);
-
         services.AddSingleton<DatabaseInitialiser>();
-
-        var sqlExecutor = new SqliteExecutor(config);
-
-        services.AddSingleton<ISqlExecutor>(sqlExecutor);
-        services.AddSingleton<IPlayerRepository>(new SqlitePlayerRepository(sqlExecutor));
-        services.AddSingleton<ITeamRepository>(new SqliteTeamRepository(sqlExecutor));
-        services.AddSingleton<IGameRepository>(new SqliteGameRepository(sqlExecutor));
-        services.AddSingleton<IGameOperativeStateRepository>(new SqliteGameOperativeStateRepository(sqlExecutor));
-        services.AddSingleton<IActivationRepository>(new SqliteActivationRepository(sqlExecutor));
-        services.AddSingleton<ITurningPointRepository>(new SqliteTurningPointRepository(sqlExecutor));
-        services.AddSingleton<IPloyRepository>(new SqlitePloyRepository(sqlExecutor));
-        services.AddSingleton<IBlastTargetRepository>(new SqliteBlastTargetRepository(sqlExecutor));
-        services.AddSingleton<IActionRepository>(new SqliteActionRepository(sqlExecutor));
-        services.AddSingleton<IOperativeRepository>(new SqliteOperativeRepository(sqlExecutor));
-        services.AddSingleton(new SqliteWeaponRepository(sqlExecutor));
+        services.AddSingleton<ISqlExecutor, SqliteExecutor>();
+        services.AddSingleton<IPlayerRepository, SqlitePlayerRepository>();
+        services.AddSingleton<ITeamRepository, SqliteTeamRepository>();
+        services.AddSingleton<IGameRepository, SqliteGameRepository>();
+        services.AddSingleton<IGameOperativeStateRepository, SqliteGameOperativeStateRepository>();
+        services.AddSingleton<IActivationRepository, SqliteActivationRepository>();
+        services.AddSingleton<ITurningPointRepository, SqliteTurningPointRepository>();
+        services.AddSingleton<IPloyRepository, SqlitePloyRepository>();
+        services.AddSingleton<IBlastTargetRepository, SqliteBlastTargetRepository>();
+        services.AddSingleton<IActionRepository, SqliteActionRepository>();
+        services.AddSingleton<IOperativeRepository, SqliteOperativeRepository>();
+        services.AddSingleton<SqliteWeaponRepository>();
         services.AddSingleton<TeamJsonImporter>();
         services.AddSingleton<TeamYamlImporter>();
         services.AddSingleton<IFightInputProvider, ConsoleFightInputProvider>();
@@ -71,11 +72,14 @@ public static class Program
         services.AddSingleton<FirefightPhaseOrchestrator>();
         services.AddSingleton<SimulateSessionOrchestrator>();
 
-        var initialiser = new DatabaseInitialiser(config);
+        var serviceProvider = services.BuildServiceProvider();
 
-        await initialiser.InitialiseAsync();
+        // Fail at startup if DataSlate configuration is missing or invalid.
+        _ = serviceProvider.GetRequiredService<IOptions<DataSlateOptions>>().Value;
 
-        var registrar = new MyTypeRegistrar(services);
+        await serviceProvider.GetRequiredService<DatabaseInitialiser>().InitialiseAsync();
+
+        var registrar = new MyTypeRegistrar(services, serviceProvider);
         var app = new CommandApp(registrar);
 
         app.Configure(cfg =>
@@ -110,9 +114,9 @@ public static class Program
     }
 }
 
-public sealed class MyTypeRegistrar(IServiceCollection builder) : ITypeRegistrar
+public sealed class MyTypeRegistrar(IServiceCollection builder, IServiceProvider? preBuilt = null) : ITypeRegistrar
 {
-    public ITypeResolver Build() => new MyTypeResolver(builder.BuildServiceProvider());
+    public ITypeResolver Build() => new MyTypeResolver(preBuilt ?? builder.BuildServiceProvider());
 
     public void Register(Type service, Type implementation) =>
         builder.AddSingleton(service, implementation);

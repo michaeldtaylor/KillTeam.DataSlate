@@ -1,8 +1,9 @@
 using System.ComponentModel;
+using KillTeam.DataSlate.Domain;
 using KillTeam.DataSlate.Domain.Repositories;
 using KillTeam.DataSlate.Domain.Services;
 using KillTeam.DataSlate.Infrastructure.Services;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Spectre.Console;
 using Spectre.Console.Cli;
 
@@ -14,7 +15,7 @@ public class ImportTeamsCommand(
     TeamYamlImporter yamlImporter,
     TeamJsonImporter jsonImporter,
     ITeamRepository teams,
-    IConfiguration config) : AsyncCommand<ImportTeamsCommand.Settings>
+    IOptions<DataSlateOptions> options) : AsyncCommand<ImportTeamsCommand.Settings>
 {
     public class Settings : CommandSettings
     {
@@ -31,7 +32,7 @@ public class ImportTeamsCommand(
         }
 
         // Folder scan
-        var folder = config["DataSlate:TeamFolder"] ?? "../teams/";
+        var folder = options.Value.TeamsFolder;
 
         if (!Directory.Exists(folder))
         {
