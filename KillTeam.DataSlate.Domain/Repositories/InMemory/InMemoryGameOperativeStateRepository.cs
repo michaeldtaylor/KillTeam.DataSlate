@@ -1,6 +1,6 @@
 using KillTeam.DataSlate.Domain.Models;
 
-namespace KillTeam.DataSlate.Domain.Repositories;
+namespace KillTeam.DataSlate.Domain.Repositories.InMemory;
 
 /// <summary>Ephemeral in-memory operative state store used by the simulate command.</summary>
 public class InMemoryGameOperativeStateRepository : IGameOperativeStateRepository

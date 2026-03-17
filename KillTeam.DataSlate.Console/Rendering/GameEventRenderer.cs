@@ -168,8 +168,8 @@ public class GameEventRenderer(
         }
         return label switch
         {
-            "You" => "[bold cyan]\\[You][/]",
-            "AI" => "[bold red]\\[AI][/]",
+            "You" => "[bold cyan][[You]][/]",
+            "AI" => "[bold red][[AI]][/]",
             _ => $"[bold]{Markup.Escape(label)}[/]"
         };
     }
