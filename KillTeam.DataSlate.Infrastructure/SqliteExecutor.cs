@@ -23,6 +23,7 @@ public sealed class SqliteExecutor : ISqlExecutor
         }
 
         var connection = new SqliteConnection(_connectionString);
+
         await connection.OpenAsync();
 
         return (connection, true);
@@ -47,7 +48,9 @@ public sealed class SqliteExecutor : ISqlExecutor
         try
         {
             await using var command = connection.CreateCommand();
+
             command.CommandText = sql;
+
             BindParameters(command, parameters);
 
             await command.ExecuteNonQueryAsync();
@@ -68,9 +71,13 @@ public sealed class SqliteExecutor : ISqlExecutor
         try
         {
             await using var command = connection.CreateCommand();
+
             command.CommandText = sql;
+
             BindParameters(command, parameters);
+
             await using var reader = await command.ExecuteReaderAsync();
+
             var results = new List<T>();
 
             while (await reader.ReadAsync())
@@ -93,6 +100,7 @@ public sealed class SqliteExecutor : ISqlExecutor
         Dictionary<string, object?>? parameters = null)
     {
         var (connection, owned) = await GetConnectionAsync();
+
         try
         {
             await using var command = connection.CreateCommand();
@@ -115,11 +123,15 @@ public sealed class SqliteExecutor : ISqlExecutor
         Dictionary<string, object?>? parameters = null)
     {
         var (connection, owned) = await GetConnectionAsync();
+
         try
         {
             await using var command = connection.CreateCommand();
+
             command.CommandText = sql;
+
             BindParameters(command, parameters);
+
             var result = await command.ExecuteScalarAsync();
 
             if (result is null || result == DBNull.Value)
@@ -141,9 +153,11 @@ public sealed class SqliteExecutor : ISqlExecutor
     public async Task ExecuteTransactionAsync(Func<SqliteConnection, SqliteTransaction, Task> work)
     {
         var (connection, owned) = await GetConnectionAsync();
+
         try
         {
             await using var transaction = connection.BeginTransaction();
+
             try
             {
                 await work(connection, transaction);

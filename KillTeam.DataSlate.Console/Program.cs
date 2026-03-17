@@ -14,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Spectre.Console;
 using Spectre.Console.Cli;
+using System.ComponentModel.DataAnnotations;
 
 namespace KillTeam.DataSlate.Console;
 
@@ -27,6 +28,15 @@ public static class Program
             .AddEnvironmentVariables()
             .Build();
 
+        // Validate options and initialise the database before the DI container is built.
+        // This gives a clear startup error rather than a cryptic type-resolution failure.
+        var rawOptions = config.GetSection("DataSlate").Get<DataSlateOptions>()
+            ?? throw new InvalidOperationException("DataSlate configuration section is missing.");
+
+        Validator.ValidateObject(rawOptions, new ValidationContext(rawOptions), validateAllProperties: true);
+
+        await new DatabaseInitialiser(Options.Create(rawOptions)).InitialiseAsync();
+
         var services = new ServiceCollection();
 
         services.AddSingleton<IConfiguration>(config);
@@ -37,7 +47,6 @@ public static class Program
             .ValidateDataAnnotations();
 
         services.AddSingleton(AnsiConsole.Console);
-        services.AddSingleton<DatabaseInitialiser>();
         services.AddSingleton<ISqlExecutor, SqliteExecutor>();
         services.AddSingleton<IPlayerRepository, SqlitePlayerRepository>();
         services.AddSingleton<ITeamRepository, SqliteTeamRepository>();
@@ -72,14 +81,7 @@ public static class Program
         services.AddSingleton<FirefightPhaseOrchestrator>();
         services.AddSingleton<SimulateSessionOrchestrator>();
 
-        var serviceProvider = services.BuildServiceProvider();
-
-        // Fail at startup if DataSlate configuration is missing or invalid.
-        _ = serviceProvider.GetRequiredService<IOptions<DataSlateOptions>>().Value;
-
-        await serviceProvider.GetRequiredService<DatabaseInitialiser>().InitialiseAsync();
-
-        var registrar = new MyTypeRegistrar(services, serviceProvider);
+        var registrar = new MyTypeRegistrar(services);
         var app = new CommandApp(registrar);
 
         app.Configure(cfg =>
@@ -114,9 +116,9 @@ public static class Program
     }
 }
 
-public sealed class MyTypeRegistrar(IServiceCollection builder, IServiceProvider? preBuilt = null) : ITypeRegistrar
+public sealed class MyTypeRegistrar(IServiceCollection builder) : ITypeRegistrar
 {
-    public ITypeResolver Build() => new MyTypeResolver(preBuilt ?? builder.BuildServiceProvider());
+    public ITypeResolver Build() => new MyTypeResolver(builder.BuildServiceProvider());
 
     public void Register(Type service, Type implementation) =>
         builder.AddSingleton(service, implementation);
