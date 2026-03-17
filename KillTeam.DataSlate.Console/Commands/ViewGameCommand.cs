@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel;
+using KillTeam.DataSlate.Domain.Repositories;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Configuration;
 using Spectre.Console;
 using Spectre.Console.Cli;
-using KillTeam.DataSlate.Domain.Repositories;
 
 namespace KillTeam.DataSlate.Console.Commands;
 

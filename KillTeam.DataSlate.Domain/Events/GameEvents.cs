@@ -7,7 +7,7 @@ public enum CombatWarningKind
     NoValidTargets,
     NoWeaponsAvailable,
     TargetNotFound,
-    Other
+    Other,
 }
 
 public sealed record CombatWarningEvent(

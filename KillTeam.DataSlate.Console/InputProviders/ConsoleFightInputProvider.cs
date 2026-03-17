@@ -74,7 +74,10 @@ public class ConsoleFightInputProvider(IAnsiConsole console) : IFightInputProvid
         string operativeName, string role, string phase,
         string participant, GameEventStream? eventStream)
     {
-        if (count == 0) return [];
+        if (count == 0)
+        {
+            return [];
+        }
 
         var choice = console.Prompt(
             new SelectionPrompt<string>()
@@ -121,7 +124,9 @@ public class ConsoleFightInputProvider(IAnsiConsole console) : IFightInputProvid
         var resultLabel = a.ActiveDie.Result == DieResult.Crit ? "CRIT" : "HIT";
         var dieInfo = $"rolled [green]{a.ActiveDie.RolledValue}[/] ({resultLabel})";
         if (a.Type == FightActionType.Strike)
+        {
             return $"[red]STRIKE[/] — {dieInfo}";
+        }
         var targetLabel = a.TargetDie!.Result == DieResult.Crit ? "CRIT" : "HIT";
         return $"[cyan]BLOCK[/] — {dieInfo} cancels rolled [green]{a.TargetDie.RolledValue}[/] ({targetLabel})";
     }

@@ -7,6 +7,7 @@ namespace KillTeam.DataSlate.Domain.Events;
 public class GameEventStream(Guid gameSessionId)
 {
     private readonly List<GameEvent> _events = [];
+
     private int _sequence;
 
     public Guid GameSessionId { get; } = gameSessionId;

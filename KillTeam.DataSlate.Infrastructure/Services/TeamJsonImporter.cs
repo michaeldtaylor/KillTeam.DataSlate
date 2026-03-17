@@ -97,7 +97,9 @@ public class TeamJsonImporter
             ValidateStat(jo.Stats.Wounds, $"{opPrefix}.stats.wounds");
 
             if (jo.Stats.Save is null || jo.Stats.Save.Value.ValueKind == JsonValueKind.Undefined)
+            {
                 throw new TeamValidationException($"Missing required field: '{opPrefix}.stats.save'.");
+            }
 
             var saveRaw = jo.Stats.Save.Value.ValueKind == JsonValueKind.Number
                 ? jo.Stats.Save.Value.GetInt32().ToString()

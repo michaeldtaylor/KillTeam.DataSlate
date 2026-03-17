@@ -75,7 +75,10 @@ public class ConsoleShootInputProvider(IAnsiConsole console) : IShootInputProvid
         string operativeName, string role, string phase,
         string participant, GameEventStream? eventStream)
     {
-        if (count == 0) return [];
+        if (count == 0)
+        {
+            return [];
+        }
 
         var choice = console.Prompt(
             new SelectionPrompt<string>()

@@ -16,11 +16,17 @@ namespace KillTeam.TeamExtractor.Services;
 public class PdfWeaponTypeDetector
 {
     private const double IconXMin = 3.0;
+
     private const double IconXMax = 35.0;
+
     private const double RowGroupingUnits = 12.0;
+
     private const double RowMatchTolerance = 10.0;
+
     private const double WeaponNameXMin = 20.0;
+
     private const double WeaponNameXMax = 120.0;
+
     private const int RangedPathThreshold = 2;
 
     /// <summary>

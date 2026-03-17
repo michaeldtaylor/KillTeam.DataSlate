@@ -14,6 +14,7 @@ namespace KillTeam.TeamExtractor.Tests;
 public class TeamYamlTests
 {
     private static readonly string TeamsRoot = ResolveTeamsRoot();
+
     private static readonly JsonSchema TeamSchema = LoadSchema();
 
     private static string ResolveTeamsRoot()

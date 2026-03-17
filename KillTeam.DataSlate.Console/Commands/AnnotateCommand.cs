@@ -93,7 +93,10 @@ public class AnnotateCommand(
                 .Title("What would you like to do?")
                 .AddChoices("Annotate this activation", "Drill down to a specific action", "Cancel"));
 
-        if (choice == "Cancel") return 0;
+        if (choice == "Cancel")
+        {
+            return 0;
+        }
 
         if (choice == "Annotate this activation")
         {

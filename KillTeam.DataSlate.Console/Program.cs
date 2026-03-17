@@ -1,14 +1,14 @@
 using KillTeam.DataSlate.Console.Commands;
-using KillTeam.DataSlate.Infrastructure;
 using KillTeam.DataSlate.Console.InputProviders;
 using KillTeam.DataSlate.Console.Orchestrators;
-using KillTeam.DataSlate.Infrastructure.Repositories;
-using KillTeam.DataSlate.Infrastructure.Services;
 using KillTeam.DataSlate.Domain;
 using KillTeam.DataSlate.Domain.Engine;
 using KillTeam.DataSlate.Domain.Engine.Input;
 using KillTeam.DataSlate.Domain.Repositories;
 using KillTeam.DataSlate.Domain.Services;
+using KillTeam.DataSlate.Infrastructure;
+using KillTeam.DataSlate.Infrastructure.Repositories;
+using KillTeam.DataSlate.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console;
@@ -31,7 +31,7 @@ public static class Program
         services.AddSingleton<IConfiguration>(config);
         services.Configure<DataSlateOptions>(config.GetSection("DataSlate"));
 
-        services.AddSingleton<IAnsiConsole>(AnsiConsole.Console);
+        services.AddSingleton(AnsiConsole.Console);
 
         services.AddSingleton<DatabaseInitialiser>();
 

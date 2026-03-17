@@ -273,7 +273,10 @@ public class FirefightPhaseOrchestrator(
                 && o.TeamId == exhaustedTeamId)
             .ToList();
 
-        if (eligibles.Count == 0) return false;
+        if (eligibles.Count == 0)
+        {
+            return false;
+        }
 
         var choices = eligibles
             .Where(s => allOperatives.ContainsKey(s.OperativeId))
@@ -286,7 +289,10 @@ public class FirefightPhaseOrchestrator(
                 .Title("[yellow]Counteract available![/] Select operative to counteract, or skip:")
                 .AddChoices(choices));
 
-        if (selected == "Skip counteract") return false;
+        if (selected == "Skip counteract")
+        {
+            return false;
+        }
 
         var counterState = eligibles.First(s =>
             allOperatives.TryGetValue(s.OperativeId, out var o) && o.Name == selected);
@@ -437,11 +443,17 @@ public class FirefightPhaseOrchestrator(
 
         string? winnerTeamId;
         if (teamAAllIncap && !teamBAllIncap)
+        {
             winnerTeamId = game.Participant2.TeamId;
+        }
         else if (teamBAllIncap && !teamAAllIncap)
+        {
             winnerTeamId = game.Participant1.TeamId;
+        }
         else
+        {
             winnerTeamId = vpA > vpB ? game.Participant1.TeamId : vpB > vpA ? game.Participant2.TeamId : null;
+        }
 
         await gameRepository.UpdateStatusAsync(game.Id, GameStatus.Completed, winnerTeamId, vpA, vpB);
 

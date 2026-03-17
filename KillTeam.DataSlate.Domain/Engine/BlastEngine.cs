@@ -157,7 +157,9 @@ public class BlastEngine(
         }
 
         if (!primaryActionPersisted)
+        {
             await actionRepository.CreateAsync(action);
+        }
 
         var note = await inputProvider.GetNarrativeNoteAsync();
         if (!string.IsNullOrWhiteSpace(note))

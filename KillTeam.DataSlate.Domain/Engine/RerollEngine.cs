@@ -56,7 +56,10 @@ public class RerollEngine(IRerollInputProvider inputProvider, IGameRepository ga
     private async Task<List<RollableDie>> ApplyBalancedAsync(
         List<RollableDie> pool, string label, string participant, GameEventStream? eventStream)
     {
-        if (pool.Count == 0) return pool;
+        if (pool.Count == 0)
+        {
+            return pool;
+        }
 
         var choice = await inputProvider.SelectBalancedRerollDieAsync(pool, label);
 
@@ -72,13 +75,19 @@ public class RerollEngine(IRerollInputProvider inputProvider, IGameRepository ga
     private async Task<List<RollableDie>> ApplyCeaselessAsync(
         List<RollableDie> pool, string label, string participant, GameEventStream? eventStream)
     {
-        if (pool.Count == 0) return pool;
+        if (pool.Count == 0)
+        {
+            return pool;
+        }
 
         var face = await inputProvider.GetCeaselessRerollValueAsync(label);
 
         return pool.Select(d =>
         {
-            if (d.Value != face || d.HasBeenRerolled) return d;
+            if (d.Value != face || d.HasBeenRerolled)
+            {
+                return d;
+            }
             var newVal = RollD6();
             eventStream?.Emit((seq, ts) => new CeaselessRerollAppliedEvent(
                 eventStream.GameSessionId, seq, ts, participant, label, d.Index, d.Value, newVal));
@@ -89,10 +98,16 @@ public class RerollEngine(IRerollInputProvider inputProvider, IGameRepository ga
     private async Task<List<RollableDie>> ApplyRelentlessAsync(
         List<RollableDie> pool, string label, string participant, GameEventStream? eventStream)
     {
-        if (pool.Count == 0) return pool;
+        if (pool.Count == 0)
+        {
+            return pool;
+        }
 
         var eligible = pool.Where(d => !d.HasBeenRerolled).ToList();
-        if (eligible.Count == 0) return pool;
+        if (eligible.Count == 0)
+        {
+            return pool;
+        }
 
         var chosen = await inputProvider.SelectRelentlessRerollDiceAsync(eligible, label);
 
@@ -104,7 +119,9 @@ public class RerollEngine(IRerollInputProvider inputProvider, IGameRepository ga
                 eventStream.GameSessionId, seq, ts, participant, label, d.Index, d.Value, newVal));
             var idx = updated.FindIndex(x => x.Index == d.Index);
             if (idx >= 0)
+            {
                 updated[idx] = d with { Value = newVal, HasBeenRerolled = true };
+            }
         }
         return updated;
     }
@@ -112,16 +129,28 @@ public class RerollEngine(IRerollInputProvider inputProvider, IGameRepository ga
     private async Task<List<RollableDie>> ApplyCpRerollAsync(
         List<RollableDie> pool, Guid gameId, bool isTeamA, string label, string participant, GameEventStream? eventStream)
     {
-        if (pool.Count == 0) return pool;
+        if (pool.Count == 0)
+        {
+            return pool;
+        }
 
         var game = await gameRepository.GetByIdAsync(gameId);
-        if (game is null) return pool;
+        if (game is null)
+        {
+            return pool;
+        }
 
         var cp = isTeamA ? game.Participant1.CommandPoints : game.Participant2.CommandPoints;
-        if (cp <= 0) return pool;
+        if (cp <= 0)
+        {
+            return pool;
+        }
 
         var eligible = pool.Where(d => !d.HasBeenRerolled).ToList();
-        if (eligible.Count == 0) return pool;
+        if (eligible.Count == 0)
+        {
+            return pool;
+        }
 
         if (!await inputProvider.ConfirmCpRerollAsync(label, cp))
             return pool;

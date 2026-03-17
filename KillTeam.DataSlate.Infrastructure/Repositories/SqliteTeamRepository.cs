@@ -156,7 +156,9 @@ public class SqliteTeamRepository : ITeamRepository
             ins.Parameters.AddWithValue("@teamId", teamId);
             ins.Parameters.AddWithValue("@name", r.Name);
             if (hasCategoryColumn)
+            {
                 ins.Parameters.AddWithValue("@category", (object?)r.Category ?? DBNull.Value);
+            }
             ins.Parameters.AddWithValue("@text", r.Text);
             ins.Parameters.AddWithValue("@sort", i);
             await ins.ExecuteNonQueryAsync();
@@ -281,7 +283,10 @@ public class SqliteTeamRepository : ITeamRepository
             },
             new() { ["@name"] = name });
 
-        if (row is null) return null;
+        if (row is null)
+        {
+            return null;
+        }
 
         var operatives = (await _db.QueryAsync(
             """

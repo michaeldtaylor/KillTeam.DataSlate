@@ -17,7 +17,9 @@ public sealed class SqliteExecutor : ISqlExecutor
     private async Task<(SqliteConnection conn, bool owned)> GetConnectionAsync()
     {
         if (_sharedConnection is not null)
+        {
             return (_sharedConnection, false);
+        }
         var conn = new SqliteConnection(_connectionString);
         await conn.OpenAsync();
         return (conn, true);

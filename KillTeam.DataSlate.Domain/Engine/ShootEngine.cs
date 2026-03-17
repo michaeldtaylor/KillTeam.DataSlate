@@ -106,7 +106,9 @@ public class ShootEngine(
 
         var defDiceCount = await inputProvider.GetDefenceDiceCountAsync();
         if (inCover)
+        {
             eventStream?.Emit((seq, ts) => new CoverSaveNotifiedEvent(eventStream.GameSessionId, seq, ts, isAttackerTeamId, targetOp.Name));
+        }
 
         int[] defDice = defDiceCount == 0
             ? []

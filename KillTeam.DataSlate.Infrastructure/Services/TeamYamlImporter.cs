@@ -61,7 +61,9 @@ public class TeamYamlImporter
             throw new TeamValidationException("Missing required field: 'name'.");
 
         if (yamlTeam.Datacards is null || yamlTeam.Datacards.Count == 0)
+        {
             throw new TeamValidationException("Missing required field: 'datacards' (empty or absent).");
+        }
 
         var team = new Team
         {
@@ -144,7 +146,10 @@ public class TeamYamlImporter
 
     private static List<NamedRule> MapNamedRules(List<YamlNamedRule>? rules)
     {
-        if (rules is null) return [];
+        if (rules is null)
+        {
+            return [];
+        }
         return rules.Select(r => new NamedRule
         {
             Name = r.Name?.Trim() ?? string.Empty,
@@ -155,7 +160,10 @@ public class TeamYamlImporter
 
     private static List<EquipmentItem> MapEquipment(List<YamlEquipmentItem>? items)
     {
-        if (items is null) return [];
+        if (items is null)
+        {
+            return [];
+        }
         return items.Select(e => new EquipmentItem
         {
             Name = e.Name?.Trim() ?? string.Empty,
@@ -165,7 +173,10 @@ public class TeamYamlImporter
 
     private static List<OperativeAbility> MapAbilities(List<YamlAbility>? abilities)
     {
-        if (abilities is null) return [];
+        if (abilities is null)
+        {
+            return [];
+        }
         return abilities.Select(a => new OperativeAbility
         {
             Name = a.Name?.Trim() ?? string.Empty,
@@ -175,7 +186,10 @@ public class TeamYamlImporter
 
     private static List<OperativeSpecialAction> MapSpecialActions(List<YamlSpecialAction>? actions)
     {
-        if (actions is null) return [];
+        if (actions is null)
+        {
+            return [];
+        }
         return actions.Select(a => new OperativeSpecialAction
         {
             Name = a.Name?.Trim() ?? string.Empty,
@@ -186,7 +200,10 @@ public class TeamYamlImporter
 
     private static List<OperativeWeaponRule> MapWeaponRules(List<YamlWeaponRule>? rules)
     {
-        if (rules is null) return [];
+        if (rules is null)
+        {
+            return [];
+        }
         return rules.Select(r => new OperativeWeaponRule
         {
             Name = r.Name?.Trim() ?? string.Empty,

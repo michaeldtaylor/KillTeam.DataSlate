@@ -1,4 +1,3 @@
-using KillTeam.DataSlate.Infrastructure.Repositories;
 using KillTeam.DataSlate.Console.InputProviders;
 using KillTeam.DataSlate.Console.Rendering;
 using KillTeam.DataSlate.Domain.Engine;
@@ -6,6 +5,7 @@ using KillTeam.DataSlate.Domain.Engine.Input;
 using KillTeam.DataSlate.Domain.Events;
 using KillTeam.DataSlate.Domain.Repositories;
 using KillTeam.DataSlate.Domain.Services;
+using KillTeam.DataSlate.Infrastructure.Repositories;
 using Spectre.Console;
 using Models = KillTeam.DataSlate.Domain.Models;
 

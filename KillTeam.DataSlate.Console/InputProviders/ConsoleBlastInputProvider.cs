@@ -12,7 +12,9 @@ public class ConsoleBlastInputProvider(IAnsiConsole console) : IBlastInputProvid
         string attackerTeamId)
     {
         if (candidates.Count == 0)
+        {
             return [];
+        }
 
         return await Task.FromResult<List<GameOperativeState>>(console.Prompt(
             new MultiSelectionPrompt<GameOperativeState>()
@@ -59,7 +61,10 @@ public class ConsoleBlastInputProvider(IAnsiConsole console) : IBlastInputProvid
 
     public async Task<int[]> RollOrEnterDiceAsync(int count, string label)
     {
-        if (count == 0) return [];
+        if (count == 0)
+        {
+            return [];
+        }
 
         var choice = console.Prompt(
             new SelectionPrompt<string>()
@@ -88,7 +93,9 @@ public class ConsoleBlastInputProvider(IAnsiConsole console) : IBlastInputProvid
                 else { valid = false; break; }
             }
             if (valid && values.Count == count)
+            {
                 return values.ToArray();
+            }
             console.MarkupLine("[red]Invalid input. Enter integers 1-6 separated by spaces or commas.[/]");
         }
     }
