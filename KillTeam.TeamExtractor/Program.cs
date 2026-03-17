@@ -5,7 +5,7 @@ var extractor = new PdfTeamExtractor(new PdfWeaponTypeDetector());
 
 if (args.Length == 0)
 {
-    AnsiConsole.MarkupLine("[red]Usage: team-extractor <folder>[/]");
+    AnsiConsole.MarkupLine("[red]Usage: ktte <folder>[/]");
     AnsiConsole.MarkupLine("[dim]  <folder> can be a single team folder (contains *Datacards.pdf)[/]");
     AnsiConsole.MarkupLine("[dim]           or a root folder whose sub-folders each contain *Datacards.pdf[/]");
     return 1;

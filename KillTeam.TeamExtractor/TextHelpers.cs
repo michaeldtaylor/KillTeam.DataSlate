@@ -59,9 +59,9 @@ internal static partial class TextHelpers
             .Replace('\u201C', '"')                // left double quotation mark
             .Replace('\u201D', '"')                // right double quotation mark
             .Replace("\u0393\u00C7\u00D6", "'")   // pdftotext mojibake of right single quote (ΓÇÖ → ')
-            .Replace("CONTINUES ON OTHER SIDE", "", StringComparison.OrdinalIgnoreCase)
-            .Replace("\u00AE", "")     // ®
-            .Replace("\u2122", "")    // ™
+            .Replace("CONTINUES ON OTHER SIDE", string.Empty, StringComparison.OrdinalIgnoreCase)
+            .Replace("\u00AE", string.Empty)     // ®
+            .Replace("\u2122", string.Empty)    // ™
             .Replace('\u2011', '-');  // non-breaking hyphen → standard hyphen
 
         s = ApConcatPattern().Replace(s, m => m.Groups[1].Value + " " + m.Groups[2].Value);
@@ -123,10 +123,11 @@ internal static partial class TextHelpers
 
         var parts = word.Split('-');
 
-        for (var k = 0; k < parts.Length; k++)
+        for (var i = 0; i < parts.Length; i++)
         {
-            var p = parts[k];
-            parts[k] = p.Length == 0 ? p : char.ToUpperInvariant(p[0]) + p[1..].ToLowerInvariant();
+            var part = parts[i];
+
+            parts[i] = part.Length == 0 ? part : char.ToUpperInvariant(part[0]) + part[1..].ToLowerInvariant();
         }
 
         return string.Join('-', parts);
@@ -162,11 +163,11 @@ internal static partial class TextHelpers
 
         // Step 2: Strip PDF chrome
         // NormaliseText already stripped "CONTINUES ON OTHER SIDE".
-        text = LonePageNumberRegex().Replace(text, "");
-        text = OperativesHeaderRegex().Replace(text, "");
+        text = LonePageNumberRegex().Replace(text, string.Empty);
+        text = OperativesHeaderRegex().Replace(text, string.Empty);
 
         // Step 3: Strip type prefix labels at the very start of the text
-        text = TypePrefixRegex().Replace(text.TrimStart(), "").TrimStart();
+        text = TypePrefixRegex().Replace(text.TrimStart(), string.Empty).TrimStart();
 
         // Step 4: Split inline numbered lists
         // "text 2. DUELLER…" → "text\n2. DUELLER…"

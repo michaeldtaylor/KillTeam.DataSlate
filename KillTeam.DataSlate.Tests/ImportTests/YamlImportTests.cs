@@ -91,20 +91,20 @@ public class YamlImportTests
 
         // Operatives
         team.Operatives.Should().HaveCount(1);
-        var op = team.Operatives[0];
-        op.Name.Should().Be("Test Sergeant");
-        op.PrimaryKeyword.Should().Be("Test");
-        op.Keywords.Should().Contain("Imperium");
-        op.Move.Should().Be(6);
-        op.Apl.Should().Be(3);
-        op.Save.Should().Be(3);
-        op.Wounds.Should().Be(13);
-        op.Weapons.Should().HaveCount(1);
-        op.Abilities.Should().HaveCount(1);
-        op.Abilities[0].Name.Should().Be("Iron Halo");
-        op.SpecialActions.Should().HaveCount(1);
-        op.SpecialActions[0].ApCost.Should().Be(1);
-        op.SpecialRules.Should().HaveCount(1);
+        var operative = team.Operatives[0];
+        operative.Name.Should().Be("Test Sergeant");
+        operative.PrimaryKeyword.Should().Be("Test");
+        operative.Keywords.Should().Contain("Imperium");
+        operative.Move.Should().Be(6);
+        operative.Apl.Should().Be(3);
+        operative.Save.Should().Be(3);
+        operative.Wounds.Should().Be(13);
+        operative.Weapons.Should().HaveCount(1);
+        operative.Abilities.Should().HaveCount(1);
+        operative.Abilities[0].Name.Should().Be("Iron Halo");
+        operative.SpecialActions.Should().HaveCount(1);
+        operative.SpecialActions[0].ApCost.Should().Be(1);
+        operative.SpecialRules.Should().HaveCount(1);
 
         // Team-level data
         team.FactionRules.Should().HaveCount(2);
@@ -233,3 +233,4 @@ public class YamlImportTests
         return Convert.ToInt32(cmd.ExecuteScalar());
     }
 }
+

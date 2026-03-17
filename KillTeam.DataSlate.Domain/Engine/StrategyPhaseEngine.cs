@@ -26,7 +26,7 @@ public class StrategyPhaseEngine(
             ? game.Participant1.TeamId
             : game.Participant2.TeamId;
 
-        var tp = await turningPointRepository.CreateAsync(new TurningPoint
+        var turningPoint = await turningPointRepository.CreateAsync(new TurningPoint
         {
             Id = Guid.NewGuid(),
             GameId = game.Id,
@@ -49,14 +49,14 @@ public class StrategyPhaseEngine(
             : (game.Participant2.TeamId, teamBName);
 
         (cpA, cpB) = await RunPloyLoopAsync(
-            tp, game.Id, game.Participant1.TeamId, nonInitId, nonInitName, cpA, cpB);
+            turningPoint, game.Id, game.Participant1.TeamId, nonInitId, nonInitName, cpA, cpB);
 
         (cpA, cpB) = await RunPloyLoopAsync(
-            tp, game.Id, game.Participant1.TeamId, initId, initName, cpA, cpB);
+            turningPoint, game.Id, game.Participant1.TeamId, initId, initName, cpA, cpB);
 
-        await turningPointRepository.CompleteStrategyPhaseAsync(tp.Id);
+        await turningPointRepository.CompleteStrategyPhaseAsync(turningPoint.Id);
 
-        return tp;
+        return turningPoint;
     }
 
     private static (int cpA, int cpB) ApplyCpGains(Game game, int tpNumber, string initiativeTeamId)
@@ -84,7 +84,7 @@ public class StrategyPhaseEngine(
     }
 
     private async Task<(int cpA, int cpB)> RunPloyLoopAsync(
-        TurningPoint tp,
+        TurningPoint turningPoint,
         Guid gameId,
         string teamAId,
         string activeTeamId,
@@ -110,7 +110,7 @@ public class StrategyPhaseEngine(
             await ployRepository.RecordPloyUseAsync(new PloyUse
             {
                 Id = Guid.NewGuid(),
-                TurningPointId = tp.Id,
+                TurningPointId = turningPoint.Id,
                 TeamId = activeTeamId,
                 PloyName = ploy.Name,
                 Description = ploy.Description,
@@ -132,3 +132,4 @@ public class StrategyPhaseEngine(
         return (cpA, cpB);
     }
 }
+

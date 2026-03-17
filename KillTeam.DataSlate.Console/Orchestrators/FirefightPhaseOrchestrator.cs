@@ -1,4 +1,4 @@
-﻿using KillTeam.DataSlate.Domain.Engine;
+using KillTeam.DataSlate.Domain.Engine;
 using KillTeam.DataSlate.Domain.Models;
 using KillTeam.DataSlate.Domain.Repositories;
 using KillTeam.DataSlate.Domain.Services;
@@ -17,7 +17,7 @@ public class FirefightPhaseOrchestrator(
     FightEngine fightEngine,
     GuardInterruptOrchestrator guardInterruptOrchestrator)
 {
-    public async Task RunAsync(Game game, TurningPoint currentTp)
+    public async Task RunAsync(Game game, TurningPoint currentTurningPoint)
     {
         var teamA = await teamRepository.GetWithOperativesAsync(game.Participant1.TeamName);
         var teamB = await teamRepository.GetWithOperativesAsync(game.Participant2.TeamName);
@@ -27,50 +27,50 @@ public class FirefightPhaseOrchestrator(
 
         var allStates = (await stateRepository.GetByGameAsync(game.Id)).ToList();
 
-        await RunFirefightPhase(game, currentTp, allOperatives, allStates);
+        await RunFirefightPhase(game, currentTurningPoint, allOperatives, allStates);
     }
 
     private async Task RunFirefightPhase(
         Game game,
-        TurningPoint tp,
+        TurningPoint turningPoint,
         Dictionary<Guid, Operative> allOperatives,
         List<GameOperativeState> allStates)
     {
-        console.Write(new Rule($"[bold]Turning Point {tp.Number} — Firefight Phase[/]"));
+        console.Write(new Rule($"[bold]Turning Point {turningPoint.Number} — Firefight Phase[/]"));
 
-        var initiativeTeamId = tp.TeamWithInitiativeId ?? game.Participant1.TeamId;
+        var initiativeTeamId = turningPoint.TeamWithInitiativeId ?? game.Participant1.TeamId;
         var currentTeamId = initiativeTeamId;
 
-        var existingActivations = (await activationRepository.GetByTurningPointAsync(tp.Id)).ToList();
+        var existingActivations = (await activationRepository.GetByTurningPointAsync(turningPoint.Id)).ToList();
         var seqCounter = existingActivations.Count > 0 ? existingActivations.Max(a => a.SequenceNumber) : 0;
 
-        DisplayBoardState(game, tp, allStates, allOperatives);
+        DisplayBoardState(game, turningPoint, allStates, allOperatives);
 
         while (!IsTurningPointOver(allStates, allOperatives, game))
         {
-            var readyThis = GetReadyOps(currentTeamId, allStates, allOperatives);
+            var readyThisTeam = GetReadyOperatives(currentTeamId, allStates, allOperatives);
             var otherTeamId = currentTeamId == game.Participant1.TeamId ? game.Participant2.TeamId : game.Participant1.TeamId;
-            var readyOther = GetReadyOps(otherTeamId, allStates, allOperatives);
+            var readyOtherTeam = GetReadyOperatives(otherTeamId, allStates, allOperatives);
 
-            if (readyThis.Count > 0)
+            if (readyThisTeam.Count > 0)
             {
-                var (op, state) = SelectOperative(readyThis, "Select an operative to activate:");
+                var (operative, state) = SelectOperative(readyThisTeam, "Select an operative to activate:");
                 seqCounter++;
                 var activation = new Activation
                 {
                     Id = Guid.NewGuid(),
-                    TurningPointId = tp.Id,
+                    TurningPointId = turningPoint.Id,
                     SequenceNumber = seqCounter,
-                    OperativeId = op.Id,
-                    TeamId = op.TeamId,
+                    OperativeId = operative.Id,
+                    TeamId = operative.TeamId,
                     IsCounteract = false
                 };
                 activation = await activationRepository.CreateAsync(activation);
 
-                seqCounter = await RunActivation(op, state, tp, activation, allStates, allOperatives, game, seqCounter);
+                seqCounter = await RunActivation(operative, state, turningPoint, activation, allStates, allOperatives, game, seqCounter);
                 game = (await gameRepository.GetByIdAsync(game.Id))!;
 
-                if (IsGameOver(allStates, allOperatives, game, tp))
+                if (IsGameOver(allStates, allOperatives, game, turningPoint))
                 {
                     await EndGame(game, allStates, allOperatives);
                     return;
@@ -78,21 +78,21 @@ public class FirefightPhaseOrchestrator(
 
                 currentTeamId = otherTeamId;
             }
-            else if (readyOther.Count > 0)
+            else if (readyOtherTeam.Count > 0)
             {
                 var counteractTaken = await TryOfferCounteract(
-                    currentTeamId, tp, allStates, allOperatives, game, seqCounter);
+                    currentTeamId, turningPoint, allStates, allOperatives, game, seqCounter);
 
                 if (counteractTaken)
                 {
                     // Re-query seq counter after counteract
-                    var updated = (await activationRepository.GetByTurningPointAsync(tp.Id)).ToList();
+                    var updated = (await activationRepository.GetByTurningPointAsync(turningPoint.Id)).ToList();
                     seqCounter = updated.Count > 0 ? updated.Max(a => a.SequenceNumber) : seqCounter;
                 }
 
                 game = (await gameRepository.GetByIdAsync(game.Id))!;
 
-                if (IsGameOver(allStates, allOperatives, game, tp))
+                if (IsGameOver(allStates, allOperatives, game, turningPoint))
                 {
                     await EndGame(game, allStates, allOperatives);
                     return;
@@ -104,23 +104,23 @@ public class FirefightPhaseOrchestrator(
                 }
                 else
                 {
-                    var (op, state) = SelectOperative(readyOther, "Select an operative to activate:");
+                    var (operative, state) = SelectOperative(readyOtherTeam, "Select an operative to activate:");
                     seqCounter++;
                     var activation = new Activation
                     {
                         Id = Guid.NewGuid(),
-                        TurningPointId = tp.Id,
+                        TurningPointId = turningPoint.Id,
                         SequenceNumber = seqCounter,
-                        OperativeId = op.Id,
-                        TeamId = op.TeamId,
+                        OperativeId = operative.Id,
+                        TeamId = operative.TeamId,
                         IsCounteract = false
                     };
                     activation = await activationRepository.CreateAsync(activation);
 
-                    seqCounter = await RunActivation(op, state, tp, activation, allStates, allOperatives, game, seqCounter);
+                    seqCounter = await RunActivation(operative, state, turningPoint, activation, allStates, allOperatives, game, seqCounter);
                     game = (await gameRepository.GetByIdAsync(game.Id))!;
 
-                    if (IsGameOver(allStates, allOperatives, game, tp))
+                    if (IsGameOver(allStates, allOperatives, game, turningPoint))
                     {
                         await EndGame(game, allStates, allOperatives);
                         return;
@@ -134,24 +134,24 @@ public class FirefightPhaseOrchestrator(
             }
         }
 
-        await EndTurningPoint(game, tp, allStates, allOperatives);
+        await EndTurningPoint(game, turningPoint, allStates, allOperatives);
     }
 
     private async Task<int> RunActivation(
-        Operative op,
+        Operative operative,
         GameOperativeState state,
-        TurningPoint tp,
+        TurningPoint turningPoint,
         Activation activation,
         List<GameOperativeState> allStates,
         Dictionary<Guid, Operative> allOperatives,
         Game game,
         int seqCounter)
     {
-        console.Write(new Rule($"[cyan]{Markup.Escape(op.Name)}[/] activation"));
+        console.Write(new Rule($"[cyan]{Markup.Escape(operative.Name)}[/] activation"));
 
         var orderChoice = console.Prompt(
             new SelectionPrompt<string>()
-                .Title($"Set order for {Markup.Escape(op.Name)}:")
+                .Title($"Set order for {Markup.Escape(operative.Name)}:")
                 .AddChoices("Engage", "Conceal"));
 
         var order = orderChoice == "Engage" ? Order.Engage : Order.Conceal;
@@ -160,17 +160,17 @@ public class FirefightPhaseOrchestrator(
         await stateRepository.UpdateOrderAsync(state.Id, order);
         activation.OrderSelected = order;
 
-        var remainingAp = Math.Max(1, op.Apl + state.AplModifier);
+        var remainingAp = Math.Max(1, operative.Apl + state.AplModifier);
         var hasMovedNonDash = false;
 
         while (remainingAp > 0 && !state.IsIncapacitated)
         {
-            DisplayBoardState(game, tp, allStates, allOperatives);
+            DisplayBoardState(game, turningPoint, allStates, allOperatives);
 
-            var availableActions = BuildActionMenu(op, state, remainingAp, hasMovedNonDash);
+            var availableActions = BuildActionMenu(operative, state, remainingAp, hasMovedNonDash);
             var selectedAction = console.Prompt(
                 new SelectionPrompt<string>()
-                    .Title($"[bold]{Markup.Escape(op.Name)}[/] — {remainingAp} AP remaining. Choose an action:")
+                    .Title($"[bold]{Markup.Escape(operative.Name)}[/] — {remainingAp} AP remaining. Choose an action:")
                     .AddChoices(availableActions));
 
             if (selectedAction == "End Activation")
@@ -180,19 +180,17 @@ public class FirefightPhaseOrchestrator(
 
             if (selectedAction == "Shoot")
             {
-                await shootEngine.RunAsync(
-                    op, state, allStates, allOperatives, game, tp, activation, hasMovedNonDash);
+                await shootEngine.RunAsync(operative, state, allStates, allOperatives, game, turningPoint, activation, hasMovedNonDash);
             }
             else if (selectedAction == "Fight")
             {
-                await fightEngine.RunAsync(
-                    op, state, allStates, allOperatives, game, tp, activation);
+                await fightEngine.RunAsync(operative, state, allStates, allOperatives, game, turningPoint, activation);
             }
             else if (selectedAction == "Guard")
             {
                 state.IsOnGuard = true;
                 await stateRepository.UpdateGuardAsync(state.Id, true);
-                console.MarkupLine($"[green]{Markup.Escape(op.Name)} is now On Guard.[/]");
+                console.MarkupLine($"[green]{Markup.Escape(operative.Name)} is now On Guard.[/]");
 
                 var guardAction = new GameAction
                 {
@@ -216,7 +214,7 @@ public class FirefightPhaseOrchestrator(
                 };
 
                 var distanceStr = console.Prompt(
-                    new TextPrompt<string>($"How far did {Markup.Escape(op.Name)} move? (e.g. '3\"', leave blank to skip):")
+                    new TextPrompt<string>($"How far did {Markup.Escape(operative.Name)} move? (e.g. '3\"', leave blank to skip):")
                         .AllowEmpty());
 
                 var moveAction = new GameAction
@@ -240,8 +238,7 @@ public class FirefightPhaseOrchestrator(
 
             if (selectedAction is "Shoot" or "Fight" or "Reposition" or "Dash" or "Fall Back" or "Charge" or "Other")
             {
-                seqCounter = await guardInterruptOrchestrator.CheckAndRunInterruptsAsync(
-                    op, state, allStates, allOperatives, game, tp, seqCounter);
+                seqCounter = await guardInterruptOrchestrator.CheckAndRunInterruptsAsync(operative, state, allStates, allOperatives, game, turningPoint, seqCounter);
 
                 game = (await gameRepository.GetByIdAsync(game.Id))!;
             }
@@ -260,7 +257,7 @@ public class FirefightPhaseOrchestrator(
 
     private async Task<bool> TryOfferCounteract(
         string exhaustedTeamId,
-        TurningPoint tp,
+        TurningPoint turningPoint,
         List<GameOperativeState> allStates,
         Dictionary<Guid, Operative> allOperatives,
         Game game,
@@ -271,8 +268,8 @@ public class FirefightPhaseOrchestrator(
                 && s.Order == Order.Engage
                 && !s.HasUsedCounteractThisTurningPoint
                 && !s.IsIncapacitated
-                && allOperatives.TryGetValue(s.OperativeId, out var o)
-                && o.TeamId == exhaustedTeamId)
+                && allOperatives.TryGetValue(s.OperativeId, out var operative)
+                && operative.TeamId == exhaustedTeamId)
             .ToList();
 
         if (eligibles.Count == 0)
@@ -297,28 +294,28 @@ public class FirefightPhaseOrchestrator(
         }
 
         var counterState = eligibles.First(s =>
-            allOperatives.TryGetValue(s.OperativeId, out var o) && o.Name == selected);
-        var counterOp = allOperatives[counterState.OperativeId];
+            allOperatives.TryGetValue(s.OperativeId, out var operative) && operative.Name == selected);
+        var counterOperative = allOperatives[counterState.OperativeId];
 
         seqCounter++;
         var counterActivation = new Activation
         {
             Id = Guid.NewGuid(),
-            TurningPointId = tp.Id,
+            TurningPointId = turningPoint.Id,
             SequenceNumber = seqCounter,
-            OperativeId = counterOp.Id,
-            TeamId = counterOp.TeamId,
+            OperativeId = counterOperative.Id,
+            TeamId = counterOperative.TeamId,
             OrderSelected = counterState.Order,
             IsCounteract = true
         };
         counterActivation = await activationRepository.CreateAsync(counterActivation);
 
-        console.MarkupLine($"[yellow]Counteract! {Markup.Escape(counterOp.Name)} gets 1 AP (max 2\" movement).[/]");
+        console.MarkupLine($"[yellow]Counteract! {Markup.Escape(counterOperative.Name)} gets 1 AP (max 2\" movement).[/]");
 
         var counterActions = new[] { "Move (max 2\")", "Shoot", "Fight", "Skip" };
         var counterChoice = console.Prompt(
             new SelectionPrompt<string>()
-                .Title($"{Markup.Escape(counterOp.Name)} counteract action:")
+                .Title($"{Markup.Escape(counterOperative.Name)} counteract action:")
                 .AddChoices(counterActions));
 
         if (counterChoice == "Move (max 2\")")
@@ -336,12 +333,12 @@ public class FirefightPhaseOrchestrator(
         else if (counterChoice == "Shoot")
         {
             await shootEngine.RunAsync(
-                counterOp, counterState, allStates, allOperatives, game, tp, counterActivation);
+                counterOperative, counterState, allStates, allOperatives, game, turningPoint, counterActivation);
         }
         else if (counterChoice == "Fight")
         {
             await fightEngine.RunAsync(
-                counterOp, counterState, allStates, allOperatives, game, tp, counterActivation);
+                counterOperative, counterState, allStates, allOperatives, game, turningPoint, counterActivation);
         }
 
         counterState.HasUsedCounteractThisTurningPoint = true;
@@ -356,10 +353,10 @@ public class FirefightPhaseOrchestrator(
         Game game)
     {
         var teamAAllIncap = allStates
-            .Where(s => allOperatives.TryGetValue(s.OperativeId, out var o) && o.TeamId == game.Participant1.TeamId)
+            .Where(s => allOperatives.TryGetValue(s.OperativeId, out var operative) && operative.TeamId == game.Participant1.TeamId)
             .All(s => s.IsIncapacitated);
         var teamBAllIncap = allStates
-            .Where(s => allOperatives.TryGetValue(s.OperativeId, out var o) && o.TeamId == game.Participant2.TeamId)
+            .Where(s => allOperatives.TryGetValue(s.OperativeId, out var operative) && operative.TeamId == game.Participant2.TeamId)
             .All(s => s.IsIncapacitated);
 
         if (teamAAllIncap || teamBAllIncap)
@@ -369,10 +366,10 @@ public class FirefightPhaseOrchestrator(
 
         var teamAReady = allStates.Any(s =>
             !s.IsIncapacitated && s.IsReady
-            && allOperatives.TryGetValue(s.OperativeId, out var o) && o.TeamId == game.Participant1.TeamId);
+            && allOperatives.TryGetValue(s.OperativeId, out var operative) && operative.TeamId == game.Participant1.TeamId);
         var teamBReady = allStates.Any(s =>
             !s.IsIncapacitated && s.IsReady
-            && allOperatives.TryGetValue(s.OperativeId, out var o) && o.TeamId == game.Participant2.TeamId);
+            && allOperatives.TryGetValue(s.OperativeId, out var operative) && operative.TeamId == game.Participant2.TeamId);
 
         return !teamAReady && !teamBReady;
     }
@@ -381,13 +378,13 @@ public class FirefightPhaseOrchestrator(
         List<GameOperativeState> allStates,
         Dictionary<Guid, Operative> allOperatives,
         Game game,
-        TurningPoint tp)
+        TurningPoint turningPoint)
     {
         var teamAAllIncap = allStates
-            .Where(s => allOperatives.TryGetValue(s.OperativeId, out var o) && o.TeamId == game.Participant1.TeamId)
+            .Where(s => allOperatives.TryGetValue(s.OperativeId, out var operative) && operative.TeamId == game.Participant1.TeamId)
             .All(s => s.IsIncapacitated);
         var teamBAllIncap = allStates
-            .Where(s => allOperatives.TryGetValue(s.OperativeId, out var o) && o.TeamId == game.Participant2.TeamId)
+            .Where(s => allOperatives.TryGetValue(s.OperativeId, out var operative) && operative.TeamId == game.Participant2.TeamId)
             .All(s => s.IsIncapacitated);
 
         if (teamAAllIncap || teamBAllIncap)
@@ -395,22 +392,22 @@ public class FirefightPhaseOrchestrator(
             return true;
         }
 
-        return tp.Number >= 4 && IsTurningPointOver(allStates, allOperatives, game);
+        return turningPoint.Number >= 4 && IsTurningPointOver(allStates, allOperatives, game);
     }
 
     private async Task EndTurningPoint(
         Game game,
-        TurningPoint tp,
+        TurningPoint turningPoint,
         List<GameOperativeState> allStates,
         Dictionary<Guid, Operative> allOperatives)
     {
-        if (IsGameOver(allStates, allOperatives, game, tp))
+        if (IsGameOver(allStates, allOperatives, game, turningPoint))
         {
             await EndGame(game, allStates, allOperatives);
             return;
         }
 
-        console.MarkupLine($"[dim]Turning Point {tp.Number} complete. Resetting for next TP...[/]");
+        console.MarkupLine($"[dim]Turning Point {turningPoint.Number} complete. Resetting for next turningPoint...[/]");
 
         foreach (var state in allStates.Where(s => !s.IsIncapacitated))
         {
@@ -434,10 +431,10 @@ public class FirefightPhaseOrchestrator(
         console.Write(new Rule("[bold red]Game Over![/]"));
 
         var teamAAllIncap = allStates
-            .Where(s => allOperatives.TryGetValue(s.OperativeId, out var o) && o.TeamId == game.Participant1.TeamId)
+            .Where(s => allOperatives.TryGetValue(s.OperativeId, out var operative) && operative.TeamId == game.Participant1.TeamId)
             .All(s => s.IsIncapacitated);
         var teamBAllIncap = allStates
-            .Where(s => allOperatives.TryGetValue(s.OperativeId, out var o) && o.TeamId == game.Participant2.TeamId)
+            .Where(s => allOperatives.TryGetValue(s.OperativeId, out var operative) && operative.TeamId == game.Participant2.TeamId)
             .All(s => s.IsIncapacitated);
 
         var vpA = console.Prompt(new TextPrompt<int>("Enter final VP for Team A:").Validate(v => v >= 0));
@@ -469,37 +466,37 @@ public class FirefightPhaseOrchestrator(
         }
     }
 
-    private static List<(Operative op, GameOperativeState state)> GetReadyOps(
+    private static List<(Operative operative, GameOperativeState state)> GetReadyOperatives(
         string teamId,
         List<GameOperativeState> allStates,
         Dictionary<Guid, Operative> allOperatives)
     {
         return allStates
             .Where(s => !s.IsIncapacitated && s.IsReady
-                && allOperatives.TryGetValue(s.OperativeId, out var o) && o.TeamId == teamId)
+                && allOperatives.TryGetValue(s.OperativeId, out var operative) && operative.TeamId == teamId)
             .Select(s => (allOperatives[s.OperativeId], s))
             .ToList();
     }
 
-    private (Operative op, GameOperativeState state) SelectOperative(
-        List<(Operative op, GameOperativeState state)> readyOps,
+    private (Operative operative, GameOperativeState state) SelectOperative(
+        List<(Operative operative, GameOperativeState state)> readyOperatives,
         string title)
     {
-        if (readyOps.Count == 1)
+        if (readyOperatives.Count == 1)
         {
-            return readyOps[0];
+            return readyOperatives[0];
         }
 
         return console.Prompt(
-            new SelectionPrompt<(Operative op, GameOperativeState state)>()
+            new SelectionPrompt<(Operative operative, GameOperativeState state)>()
                 .Title(title)
                 .UseConverter(pair =>
-                    $"{Markup.Escape(pair.op.Name)} (Wounds: {pair.state.CurrentWounds}/{pair.op.Wounds}, {pair.state.Order})")
-                .AddChoices(readyOps));
+                    $"{Markup.Escape(pair.operative.Name)} (Wounds: {pair.state.CurrentWounds}/{pair.operative.Wounds}, {pair.state.Order})")
+                .AddChoices(readyOperatives));
     }
 
     private static List<string> BuildActionMenu(
-        Operative op,
+        Operative operative,
         GameOperativeState state,
         int remainingAp,
         bool hasMovedNonDash)
@@ -514,12 +511,12 @@ public class FirefightPhaseOrchestrator(
                 actions.Add("Charge");
             }
 
-            if (op.Weapons.Any(w => w.Type == WeaponType.Ranged))
+            if (operative.Weapons.Any(w => w.Type == WeaponType.Ranged))
             {
                 actions.Add("Shoot");
             }
 
-            if (op.Weapons.Any(w => w.Type == WeaponType.Melee))
+            if (operative.Weapons.Any(w => w.Type == WeaponType.Melee))
             {
                 actions.Add("Fight");
             }
@@ -533,12 +530,12 @@ public class FirefightPhaseOrchestrator(
 
     private void DisplayBoardState(
         Game game,
-        TurningPoint tp,
+        TurningPoint turningPoint,
         List<GameOperativeState> allStates,
         Dictionary<Guid, Operative> allOperatives)
     {
         var table = new Table()
-            .Title($"[bold]TP {tp.Number} — Board State[/]")
+            .Title($"[bold]TP {turningPoint.Number} — Board State[/]")
             .Border(TableBorder.Rounded)
             .AddColumn("Name")
             .AddColumn("W")
@@ -548,24 +545,24 @@ public class FirefightPhaseOrchestrator(
 
         foreach (var state in allStates)
         {
-            if (!allOperatives.TryGetValue(state.OperativeId, out var op))
+            if (!allOperatives.TryGetValue(state.OperativeId, out var operative))
             {
                 continue;
             }
 
-            var teamTag = op.TeamId == game.Participant1.TeamId ? "[blue]A[/]" : "[red]B[/]";
-            var name = $"{teamTag} {Markup.Escape(op.Name)}";
+            var teamTag = operative.TeamId == game.Participant1.TeamId ? "[blue]A[/]" : "[red]B[/]";
+            var name = $"{teamTag} {Markup.Escape(operative.Name)}";
 
-            var injured = state.CurrentWounds < op.Wounds / 2;
+            var injured = state.CurrentWounds < operative.Wounds / 2;
             var wounds = injured
-                ? $"{state.CurrentWounds}/{op.Wounds} [yellow](Injured)[/]"
-                : $"{state.CurrentWounds}/{op.Wounds}";
+                ? $"{state.CurrentWounds}/{operative.Wounds} [yellow](Injured)[/]"
+                : $"{state.CurrentWounds}/{operative.Wounds}";
 
             var status = state.IsIncapacitated
                 ? "[red]Incapacitated[/]"
                 : state.IsReady ? "[green]Ready[/]" : "[dim]Expended[/]";
 
-            var guard = state.IsOnGuard ? "[yellow]⚑[/]" : "";
+            var guard = state.IsOnGuard ? "[yellow]⚑[/]" : string.Empty;
 
             table.AddRow(name, wounds, state.Order.ToString(), status, guard);
         }
@@ -574,3 +571,5 @@ public class FirefightPhaseOrchestrator(
         console.MarkupLine($"  CP → A:[yellow]{game.Participant1.CommandPoints}[/]  B:[yellow]{game.Participant2.CommandPoints}[/]");
     }
 }
+
+

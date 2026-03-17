@@ -32,6 +32,7 @@ public class ImportTeamsCommand(
 
         // Folder scan
         var folder = config["DataSlate:TeamFolder"] ?? "../teams/";
+
         if (!Directory.Exists(folder))
         {
             AnsiConsole.MarkupLine($"[yellow]team folder not found: {Markup.Escape(folder)}[/]");
@@ -50,6 +51,7 @@ public class ImportTeamsCommand(
         }
 
         var success = 0;
+
         foreach (var file in files)
         {
             try
@@ -109,6 +111,7 @@ public class ImportTeamsCommand(
         var opCount = team.Operatives.Count;
         var wCount = team.Operatives.Sum(o => o.Weapons.Count);
         var aCount = team.Operatives.Sum(o => o.Abilities.Count);
+
         AnsiConsole.MarkupLine(
             $"[green]Imported '{Markup.Escape(team.Name)}' — {opCount} operatives, {wCount} weapons, {aCount} abilities, " +
             $"{team.FactionRules.Count} rules, {team.StrategyPloys.Count + team.FirefightPloys.Count} ploys, " +

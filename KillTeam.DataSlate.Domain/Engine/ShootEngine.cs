@@ -101,27 +101,29 @@ public class ShootEngine(
 
         var fightAssist = await inputProvider.GetFriendlyAllyCountAsync();
 
-        int[] attackDice = await inputProvider.RollOrEnterDiceAsync(weapon.Atk, $"{attacker.Name} attack dice (Attack: {weapon.Atk})", attacker.Name, "Attacker", "Shoot", isAttackerTeamId, eventStream);
+        var attackDice = await inputProvider.RollOrEnterDiceAsync(weapon.Atk, $"{attacker.Name} attack dice (Attack: {weapon.Atk})", attacker.Name, "Attacker", "Shoot", isAttackerTeamId, eventStream);
 
         attackDice = await rerollEngine.ApplyAttackerRerollsAsync(
             attackDice, weapon.ParsedRules.ToList(), game.Id, isAttackerTeamA, attacker.Name, isAttackerTeamId, eventStream);
 
-        var defDiceCount = await inputProvider.GetDefenceDiceCountAsync();
+        var defenderDiceCount = await inputProvider.GetDefenceDiceCountAsync();
+
         if (inCover)
         {
             eventStream?.Emit((seq, ts) => new CoverSaveNotifiedEvent(eventStream.GameSessionId, seq, ts, isAttackerTeamId, targetOp.Name));
         }
 
-        int[] defDice = defDiceCount == 0
+        int[] defenderDice = defenderDiceCount == 0
             ? []
-            : await inputProvider.RollOrEnterDiceAsync(defDiceCount, $"{targetOp.Name} defence dice", targetOp.Name, "Defender", "Shoot", defenderTeamId, eventStream);
+            : await inputProvider.RollOrEnterDiceAsync(defenderDiceCount, $"{targetOp.Name} defence dice", targetOp.Name, "Defender", "Shoot", defenderTeamId, eventStream);
 
         var isDefenderTeamA = targetOp.TeamId == game.Participant1.TeamId;
-        defDice = await rerollEngine.ApplyDefenderRerollAsync(defDice, game.Id, isDefenderTeamA, targetOp.Name, defenderTeamId, eventStream);
+
+        defenderDice = await rerollEngine.ApplyDefenderRerollAsync(defenderDice, game.Id, isDefenderTeamA, targetOp.Name, defenderTeamId, eventStream);
 
         var ctx = new ShootContext(
             AttackDice: attackDice,
-            DefenceDice: defDice,
+            DefenceDice: defenderDice,
             InCover: inCover,
             IsObscured: isObscured,
             HitThreshold: weapon.Hit,
@@ -185,7 +187,7 @@ public class ShootEngine(
             TargetOperativeId = targetState.OperativeId,
             WeaponId = weapon.Id,
             AttackerDice = attackDice,
-            DefenderDice = defDice,
+            DefenderDice = defenderDice,
             TargetInCover = inCover,
             IsObscured = isObscured,
             NormalHits = result.UnblockedNormals,

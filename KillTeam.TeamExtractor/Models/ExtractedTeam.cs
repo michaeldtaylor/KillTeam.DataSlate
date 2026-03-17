@@ -39,7 +39,7 @@ public class ExtractedTeam
     public ExtractedOperativeSelection? OperativeSelection { get; init; }
 
     /// <summary>Supplementary information text, if a supplementary PDF was found.</summary>
-    public string SupplementaryInfo { get; init; } = "";
+    public string SupplementaryInfo { get; init; } = string.Empty;
 
     /// <summary>
     /// Serialises the team to the YAML format used by the teams/ folder.
@@ -60,9 +60,9 @@ public class ExtractedTeam
         // ── datacards ──────────────────────────────────────────────────────────
         sb.AppendLine("datacards:");
 
-        foreach (var op in this.Datacards)
+        foreach (var datacard in this.Datacards)
         {
-            WriteDatacard(sb, op);
+            WriteDatacard(sb, datacard);
         }
 
         // ── factionEquipment ───────────────────────────────────────────────────
@@ -182,61 +182,61 @@ public class ExtractedTeam
         }
     }
 
-    private static void WriteDatacard(StringBuilder sb, ExtractedOperative op)
+    private static void WriteDatacard(StringBuilder sb, ExtractedOperative operative)
     {
         // First item in the operative mapping uses "- " prefix
-        sb.AppendLine("  - name: " + YamlWriter.Scalar(T(N(op.Name))));
-        sb.AppendLine("    operativeType: " + YamlWriter.Scalar(T(N(op.Name))));
-        sb.AppendLine("    primaryKeyword: " + YamlWriter.Scalar(T(N(op.PrimaryKeyword))));
+        sb.AppendLine("  - name: " + YamlWriter.Scalar(T(N(operative.Name))));
+        sb.AppendLine("    operativeType: " + YamlWriter.Scalar(T(N(operative.Name))));
+        sb.AppendLine("    primaryKeyword: " + YamlWriter.Scalar(T(N(operative.PrimaryKeyword))));
 
-        if (op.Keywords.Count > 0)
+        if (operative.Keywords.Count > 0)
         {
             sb.AppendLine("    keywords:");
 
-            foreach (var kw in op.Keywords)
+            foreach (var kw in operative.Keywords)
             {
                 sb.AppendLine("      - " + YamlWriter.Scalar(T(N(kw))));
             }
         }
 
         sb.AppendLine("    stats:");
-        YamlWriter.WriteKeyInt(sb, 6, "apl", op.Apl);
-        YamlWriter.WriteKeyInt(sb, 6, "move", op.Move);
-        sb.AppendLine("      save: " + YamlWriter.Scalar(N(op.Save)));
-        YamlWriter.WriteKeyInt(sb, 6, "wounds", op.Wounds);
+        YamlWriter.WriteKeyInt(sb, 6, "apl", operative.Apl);
+        YamlWriter.WriteKeyInt(sb, 6, "move", operative.Move);
+        sb.AppendLine("      save: " + YamlWriter.Scalar(N(operative.Save)));
+        YamlWriter.WriteKeyInt(sb, 6, "wounds", operative.Wounds);
 
         sb.AppendLine("    weapons:");
 
-        foreach (var w in op.Weapons)
+        foreach (var w in operative.Weapons)
         {
             WriteWeapon(sb, w);
         }
 
-        if (op.Abilities.Count > 0)
+        if (operative.Abilities.Count > 0)
         {
             sb.AppendLine("    abilities:");
 
-            foreach (var a in op.Abilities)
+            foreach (var a in operative.Abilities)
             {
                 WriteAbility(sb, a);
             }
         }
 
-        if (op.SpecialActions.Count > 0)
+        if (operative.SpecialActions.Count > 0)
         {
             sb.AppendLine("    specialActions:");
 
-            foreach (var a in op.SpecialActions)
+            foreach (var a in operative.SpecialActions)
             {
                 WriteSpecialAction(sb, a);
             }
         }
 
-        if (op.SpecialRules.Count > 0)
+        if (operative.SpecialRules.Count > 0)
         {
             sb.AppendLine("    specialRules:");
 
-            foreach (var sr in op.SpecialRules)
+            foreach (var sr in operative.SpecialRules)
             {
                 sb.AppendLine("      - name: " + YamlWriter.Scalar(T(N(sr.Name))));
                 YamlWriter.WriteTextField(sb, 8, "text", N(sr.Text));
@@ -314,3 +314,4 @@ public class ExtractedTeam
     /// <summary>Applies <see cref="TextHelpers.StructureToMarkdown"/> — short alias for readability.</summary>
     private static string M(string s) => TextHelpers.StructureToMarkdown(s);
 }
+

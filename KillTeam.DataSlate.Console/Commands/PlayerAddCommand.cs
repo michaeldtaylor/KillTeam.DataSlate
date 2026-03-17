@@ -20,6 +20,7 @@ public class PlayerAddCommand(IPlayerRepository players) : AsyncCommand<PlayerAd
     public override async Task<int> ExecuteAsync(CommandContext context, Settings settings)
     {
         var name = settings.Name.Trim();
+
         if (string.IsNullOrWhiteSpace(name))
         {
             AnsiConsole.MarkupLine("[red]Player name cannot be empty.[/]");
@@ -27,6 +28,7 @@ public class PlayerAddCommand(IPlayerRepository players) : AsyncCommand<PlayerAd
         }
 
         var existing = await players.FindByNameAsync(name);
+
         if (existing is not null)
         {
             AnsiConsole.MarkupLine($"[yellow]Player '{Markup.Escape(name)}' already exists.[/]");

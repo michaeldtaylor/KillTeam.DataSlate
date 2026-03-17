@@ -36,6 +36,7 @@ public static class Program
         services.AddSingleton<DatabaseInitialiser>();
 
         var sqlExecutor = new SqliteExecutor(config);
+
         services.AddSingleton<ISqlExecutor>(sqlExecutor);
         services.AddSingleton<IPlayerRepository>(new SqlitePlayerRepository(sqlExecutor));
         services.AddSingleton<ITeamRepository>(new SqliteTeamRepository(sqlExecutor));
@@ -71,6 +72,7 @@ public static class Program
         services.AddSingleton<SimulateSessionOrchestrator>();
 
         var initialiser = new DatabaseInitialiser(config);
+
         await initialiser.InitialiseAsync();
 
         var registrar = new MyTypeRegistrar(services);

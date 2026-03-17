@@ -32,18 +32,19 @@ public class SimulateSessionOrchestrator(
         console.MarkupLine("[dim]Test fight and shoot encounters without a full game session. Nothing is saved.[/]");
         console.WriteLine();
 
-        var (playerOp, aiOp, playerTeam, aiTeam) = await SelectOperativesAsync();
-        if (playerOp is null || aiOp is null)
+        var (playerOperative, aiOperative, playerTeam, aiTeam) = await SelectOperativesAsync();
+
+        if (playerOperative is null || aiOperative is null)
         {
             return;
         }
 
-        await RunSessionLoopAsync(playerOp, aiOp, playerTeam!, aiTeam!);
+        await RunSessionLoopAsync(playerOperative, aiOperative, playerTeam!, aiTeam!);
     }
 
     // --- Operative selection -------------------------------------------------
 
-    private async Task<(Models.Operative? playerOp, Models.Operative? aiOp, Models.Team? playerTeam, Models.Team? aiTeam)> SelectOperativesAsync()
+    private async Task<(Models.Operative? playerOperative, Models.Operative? aiOperative, Models.Team? playerTeam, Models.Team? aiTeam)> SelectOperativesAsync()
     {
         var allTeams = (await teamRepository.GetAllAsync()).ToList();
 
@@ -63,7 +64,7 @@ public class SimulateSessionOrchestrator(
         var playerTeam = (await teamRepository.GetWithOperativesAsync(playerTeamStub.Name))!;
 
         // Step 2 - your operative
-        var playerOp = console.Prompt(
+        var playerOperative = console.Prompt(
             new SelectionPrompt<Models.Operative>()
                 .Title("Select [bold]your[/] operative:")
                 .UseConverter(FormatOperative)
@@ -71,6 +72,7 @@ public class SimulateSessionOrchestrator(
 
         // Step 3 - AI's team (exclude player's team)
         var aiTeamChoices = allTeams.Where(t => t.Name != playerTeamStub.Name).ToList();
+
         if (aiTeamChoices.Count == 0)
         {
             console.MarkupLine("[red]No other teams available for the AI. Import more teams first.[/]");
@@ -86,20 +88,20 @@ public class SimulateSessionOrchestrator(
         var aiTeam = (await teamRepository.GetWithOperativesAsync(aiTeamStub.Name))!;
 
         // Step 4 - AI's operative
-        var aiOp = console.Prompt(
+        var aiOperative = console.Prompt(
             new SelectionPrompt<Models.Operative>()
                 .Title("Select the [bold]AI[/] operative:")
                 .UseConverter(FormatOperative)
                 .AddChoices(aiTeam.Operatives));
 
-        DisplayMatchup(playerOp, playerTeam, aiOp, aiTeam);
-        return (playerOp, aiOp, playerTeam, aiTeam);
+        DisplayMatchup(playerOperative, playerTeam, aiOperative, aiTeam);
+        return (playerOperative, aiOperative, playerTeam, aiTeam);
     }
 
     // --- Session loop --------------------------------------------------------
 
     private async Task RunSessionLoopAsync(
-        Models.Operative playerOp, Models.Operative aiOp,
+        Models.Operative playerOperative, Models.Operative aiOperative,
         Models.Team playerTeam, Models.Team aiTeam)
     {
         while (true)
@@ -112,20 +114,20 @@ public class SimulateSessionOrchestrator(
             switch (choice)
             {
                 case "Fight":
-                    await RunEncounterAsync(playerOp, aiOp, playerTeam, aiTeam, Models.ActionType.Fight);
+                    await RunEncounterAsync(playerOperative, aiOperative, playerTeam, aiTeam, Models.ActionType.Fight);
                     break;
 
                 case "Shoot":
-                    await RunEncounterAsync(playerOp, aiOp, playerTeam, aiTeam, Models.ActionType.Shoot);
+                    await RunEncounterAsync(playerOperative, aiOperative, playerTeam, aiTeam, Models.ActionType.Shoot);
                     break;
 
                 case "Change operatives":
                     var result = await SelectOperativesAsync();
 
-                    if (result.playerOp is not null)
+                    if (result.playerOperative is not null)
                     {
-                        playerOp = result.playerOp;
-                        aiOp = result.aiOp!;
+                        playerOperative = result.playerOperative;
+                        aiOperative = result.aiOperative!;
                         playerTeam = result.playerTeam!;
                         aiTeam = result.aiTeam!;
                     }
@@ -141,7 +143,7 @@ public class SimulateSessionOrchestrator(
     // --- Single encounter ----------------------------------------------------
 
     private async Task RunEncounterAsync(
-        Models.Operative playerOp, Models.Operative aiOp,
+        Models.Operative playerOperative, Models.Operative aiOperative,
         Models.Team playerTeam, Models.Team aiTeam,
         Models.ActionType actionType)
     {
@@ -166,7 +168,7 @@ public class SimulateSessionOrchestrator(
             PlayedAt = DateTime.UtcNow
         };
 
-        var tp = new Models.TurningPoint
+        var turningPoint = new Models.TurningPoint
         {
             Id = Guid.NewGuid(),
             GameId = game.Id,
@@ -176,8 +178,8 @@ public class SimulateSessionOrchestrator(
         var activation = new Models.Activation
         {
             Id = Guid.NewGuid(),
-            TurningPointId = tp.Id,
-            OperativeId = playerOp.Id,
+            TurningPointId = turningPoint.Id,
+            OperativeId = playerOperative.Id,
             TeamId = playerTeam.Id,
             OrderSelected = Models.Order.Engage,
             SequenceNumber = 1
@@ -188,15 +190,15 @@ public class SimulateSessionOrchestrator(
         var playerState = new Models.GameOperativeState
         {
             GameId = game.Id,
-            OperativeId = playerOp.Id,
-            CurrentWounds = playerOp.Wounds,
+            OperativeId = playerOperative.Id,
+            CurrentWounds = playerOperative.Wounds,
             Order = Models.Order.Engage
         };
         var aiState = new Models.GameOperativeState
         {
             GameId = game.Id,
-            OperativeId = aiOp.Id,
-            CurrentWounds = aiOp.Wounds,
+            OperativeId = aiOperative.Id,
+            CurrentWounds = aiOperative.Wounds,
             Order = Models.Order.Engage
         };
         stateRepo.Seed([playerState, aiState]);
@@ -207,8 +209,8 @@ public class SimulateSessionOrchestrator(
         var allStates = stateRepo.GetAll();
         var allOperatives = new Dictionary<Guid, Models.Operative>
         {
-            [playerOp.Id] = playerOp,
-            [aiOp.Id] = aiOp
+            [playerOperative.Id] = playerOperative,
+            [aiOperative.Id] = aiOperative
         };
 
         var stream = new GameEventStream(game.Id);
@@ -227,9 +229,9 @@ public class SimulateSessionOrchestrator(
             var fightEngine = new FightEngine(fightInputProvider, fightResolutionService, rerollEngine, stateRepo, actionRepo);
 
             var fightResult = await fightEngine.RunAsync(
-                playerOp, playerState, allStates, allOperatives, game, tp, activation, stream);
+                playerOperative, playerState, allStates, allOperatives, game, turningPoint, activation, stream);
 
-            DisplayEncounterSummary(playerOp, aiOp,
+            DisplayEncounterSummary(playerOperative, aiOperative,
                 fightResult.AttackerDamageDealt, fightResult.DefenderDamageDealt,
                 fightResult.AttackerCausedIncapacitation, fightResult.DefenderCausedIncapacitation);
         }
@@ -240,9 +242,9 @@ public class SimulateSessionOrchestrator(
             var shootEngine = new ShootEngine(shootInputProvider, combatResolutionService, rerollEngine, blastEngine, stateRepo, actionRepo);
 
             var shootResult = await shootEngine.RunAsync(
-                playerOp, playerState, allStates, allOperatives, game, tp, activation, false, stream);
+                playerOperative, playerState, allStates, allOperatives, game, turningPoint, activation, false, stream);
 
-            DisplayEncounterSummary(playerOp, aiOp,
+            DisplayEncounterSummary(playerOperative, aiOperative,
                 shootResult.DamageDealt, 0,
                 false, shootResult.CausedIncapacitation);
         }
@@ -276,8 +278,8 @@ public class SimulateSessionOrchestrator(
         $"Attack: [green]{w.Atk}[/] | Hit: [green]{w.Hit}+[/] | Normal: [green]{w.NormalDmg}[/] | Crit: [green]{w.CriticalDmg}[/]";
 
     private void DisplayMatchup(
-        Models.Operative playerOp, Models.Team playerTeam,
-        Models.Operative aiOp, Models.Team aiTeam)
+        Models.Operative playerOperative, Models.Team playerTeam,
+        Models.Operative aiOperative, Models.Team aiTeam)
     {
         console.WriteLine();
         var table = new Table()
@@ -286,12 +288,12 @@ public class SimulateSessionOrchestrator(
             .AddColumn("[bold red]AI[/]");
 
         table.AddRow(
-            $"[bold]{Markup.Escape(playerOp.Name)}[/]\n[dim]{Markup.Escape(playerTeam.Name)}[/]",
-            $"[bold]{Markup.Escape(aiOp.Name)}[/]\n[dim]{Markup.Escape(aiTeam.Name)}[/]");
+            $"[bold]{Markup.Escape(playerOperative.Name)}[/]\n[dim]{Markup.Escape(playerTeam.Name)}[/]",
+            $"[bold]{Markup.Escape(aiOperative.Name)}[/]\n[dim]{Markup.Escape(aiTeam.Name)}[/]");
 
         table.AddRow(
-            $"APL: [green]{playerOp.Apl}[/] | Move: [green]{playerOp.Move}\"[/] | Save: [green]{playerOp.Save}+[/] | Wounds: [green]{playerOp.Wounds}[/]",
-            $"APL: [green]{aiOp.Apl}[/] | Move: [green]{aiOp.Move}\"[/] | Save: [green]{aiOp.Save}+[/] | Wounds: [green]{aiOp.Wounds}[/]");
+            $"APL: [green]{playerOperative.Apl}[/] | Move: [green]{playerOperative.Move}\"[/] | Save: [green]{playerOperative.Save}+[/] | Wounds: [green]{playerOperative.Wounds}[/]",
+            $"APL: [green]{aiOperative.Apl}[/] | Move: [green]{aiOperative.Move}\"[/] | Save: [green]{aiOperative.Save}+[/] | Wounds: [green]{aiOperative.Wounds}[/]");
 
         console.Write(table);
         console.WriteLine();
@@ -299,8 +301,8 @@ public class SimulateSessionOrchestrator(
 
     private void DisplayEncounterSummary(
         Models.Operative attacker, Models.Operative defender,
-        int atkDmg, int defDmg,
-        bool atkIncap, bool defIncap)
+        int attackerDamage, int defenderDamage,
+        bool attackerIncapacitated, bool defenderIncapacitated)
     {
         console.WriteLine();
         var table = new Table()
@@ -309,12 +311,14 @@ public class SimulateSessionOrchestrator(
             .AddColumn("[bold cyan]You[/]")
             .AddColumn("[bold red]AI[/]");
 
-        table.AddRow("Damage dealt", $"[bold]{atkDmg}[/]", $"[bold]{defDmg}[/]");
+        table.AddRow("Damage dealt", $"[bold]{attackerDamage}[/]", $"[bold]{defenderDamage}[/]");
         table.AddRow("Incapacitated?",
-            atkIncap ? "[red]No — you were incapacitated[/]" : "[green]Alive[/]",
-            defIncap ? "[red]Incapacitated[/]" : "[green]Alive[/]");
+            attackerIncapacitated ? "[red]No — you were incapacitated[/]" : "[green]Alive[/]",
+            defenderIncapacitated ? "[red]Incapacitated[/]" : "[green]Alive[/]");
 
         console.Write(table);
         console.WriteLine();
     }
 }
+
+

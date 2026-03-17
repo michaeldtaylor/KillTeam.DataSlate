@@ -73,7 +73,7 @@ public class StatsTests
             .WithTeam("team_a", "Team A", "FA").WithTeam("team_b", "Team B", "FB");
 
         // 2 completed games, both won by Team A (player Alpha is player_a)
-        for (int i = 0; i < 2; i++)
+        for (var i = 0; i < 2; i++)
         {
             var gid = Guid.NewGuid();
             using var insertCmd = db.Connection.CreateCommand();

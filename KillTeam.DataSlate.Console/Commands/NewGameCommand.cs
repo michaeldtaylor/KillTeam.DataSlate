@@ -17,6 +17,7 @@ public class NewGameCommand(
     public override async Task<int> ExecuteAsync(CommandContext context)
     {
         var allPlayers = (await players.GetAllAsync()).ToList();
+
         if (allPlayers.Count < 2)
         {
             AnsiConsole.MarkupLine("[red]Need at least 2 registered players. Run `player add <name>` first.[/]");
@@ -24,6 +25,7 @@ public class NewGameCommand(
         }
 
         var allTeams = (await teams.GetAllAsync()).ToList();
+
         if (allTeams.Count < 2)
         {
             AnsiConsole.MarkupLine("[red]Not enough teams imported — run `import-teams` first.[/]");
@@ -93,6 +95,7 @@ public class NewGameCommand(
 
         // Create operative states for both teams
         var allOperatives = new List<Operative>();
+
         if (fullTeamA?.Operatives is not null)
         {
             allOperatives.AddRange(fullTeamA.Operatives);
@@ -103,14 +106,14 @@ public class NewGameCommand(
             allOperatives.AddRange(fullTeamB.Operatives);
         }
 
-        foreach (var op in allOperatives)
+        foreach (var operative in allOperatives)
         {
             await gameStates.CreateAsync(new GameOperativeState
             {
                 Id = Guid.NewGuid(),
                 GameId = created.Id,
-                OperativeId = op.Id,
-                CurrentWounds = op.Wounds,
+                OperativeId = operative.Id,
+                CurrentWounds = operative.Wounds,
                 Order = Order.Conceal,
                 IsReady = true,
                 IsOnGuard = false,

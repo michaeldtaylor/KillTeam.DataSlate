@@ -25,7 +25,7 @@ public class ExtractedOperative
     public List<string> Keywords { get; init; } = [];
 
     /// <summary>The first keyword (primary faction keyword) in title case.</summary>
-    public string PrimaryKeyword { get; init; } = "";
+    public string PrimaryKeyword { get; init; } = string.Empty;
 
     /// <summary>
     /// Abilities from front-of-card (passive) and back-of-card (passive) pages.

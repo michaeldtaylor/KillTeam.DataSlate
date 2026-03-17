@@ -29,10 +29,10 @@ public class ConsoleShootInputProvider(IAnsiConsole console) : IShootInputProvid
                 {
                     var rulesText = w.ParsedRules.Count > 0
                         ? $" | {string.Join(", ", w.ParsedRules.Select(r => r.RawText))}"
-                        : "";
+                        : string.Empty;
                     var saturate = w.ParsedRules.Any(r => r.Kind == SpecialRuleKind.Saturate)
                         ? " [yellow]Saturate[/]"
-                        : "";
+                        : string.Empty;
                     return $"{Markup.Escape(w.Name)} (Attack: [green]{w.Atk}[/] | Hit: [green]{w.Hit}+[/] | Normal: [green]{w.NormalDmg}[/] | Crit: [green]{w.CriticalDmg}[/]{Markup.Escape(rulesText)}){saturate}";
                 })
                 .AddChoices(weapons)));
@@ -88,6 +88,7 @@ public class ConsoleShootInputProvider(IAnsiConsole console) : IShootInputProvid
         if (choice == "Roll for me")
         {
             var rolled = Enumerable.Range(0, count).Select(_ => Random.Shared.Next(1, 7)).ToArray();
+
             eventStream?.Emit((seq, ts) => new DiceRolledEvent(eventStream.GameSessionId, seq, ts, participant, operativeName, role, phase, rolled));
             return rolled;
         }
@@ -100,6 +101,7 @@ public class ConsoleShootInputProvider(IAnsiConsole console) : IShootInputProvid
             var parts = input.Split([' ', ','], StringSplitOptions.RemoveEmptyEntries);
             var values = new List<int>();
             var valid = true;
+
             foreach (var p in parts)
             {
                 if (int.TryParse(p, out int v) && v is >= 1 and <= 6)
@@ -112,12 +114,16 @@ public class ConsoleShootInputProvider(IAnsiConsole console) : IShootInputProvid
                     break;
                 }
             }
+
             if (valid && values.Count == count)
             {
                 var rolled = values.ToArray();
+
                 eventStream?.Emit((seq, ts) => new DiceRolledEvent(eventStream.GameSessionId, seq, ts, participant, operativeName, role, phase, rolled));
+
                 return rolled;
             }
+
             console.MarkupLine("[red]Invalid input. Enter integers 1-6 separated by spaces or commas.[/]");
         }
     }

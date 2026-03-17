@@ -140,14 +140,14 @@ public class TeamYamlTests
     {
         using var doc = LoadTeam(slug);
 
-        foreach (var op in doc.RootElement.GetProperty("datacards").EnumerateArray())
+        foreach (var datacard in doc.RootElement.GetProperty("datacards").EnumerateArray())
         {
-            var name = op.GetProperty("name").GetString();
+            var name = datacard.GetProperty("name").GetString();
 
-            op.TryGetProperty("keywords", out var keywords).Should().BeTrue($"Datacard {name} must have keywords");
+            datacard.TryGetProperty("keywords", out var keywords).Should().BeTrue($"Datacard {name} must have keywords");
             keywords.GetArrayLength().Should().BeGreaterThan(0, $"Datacard {name} in {slug} should have keywords");
 
-            op.TryGetProperty("primaryKeyword", out var pk).Should().BeTrue();
+            datacard.TryGetProperty("primaryKeyword", out var pk).Should().BeTrue();
             pk.GetString().Should().NotBeNullOrWhiteSpace($"Datacard {name} in {slug} should have a primaryKeyword");
         }
     }
@@ -231,7 +231,7 @@ public class TeamYamlTests
         var allWeapons = doc.RootElement
             .GetProperty("datacards")
             .EnumerateArray()
-            .SelectMany(op => op.GetProperty("weapons").EnumerateArray())
+            .SelectMany(datacard => datacard.GetProperty("weapons").EnumerateArray())
             .ToList();
 
         foreach (var weapon in allWeapons)
@@ -254,7 +254,7 @@ public class TeamYamlTests
         var allWeapons = doc.RootElement
             .GetProperty("datacards")
             .EnumerateArray()
-            .SelectMany(op => op.GetProperty("weapons").EnumerateArray())
+            .SelectMany(datacard => datacard.GetProperty("weapons").EnumerateArray())
             .ToList();
 
         foreach (var weapon in allWeapons)
@@ -450,7 +450,7 @@ public class TeamYamlTests
 
                 foreach (var entry in mapping.Children)
                 {
-                    var key = ((YamlScalarNode)entry.Key).Value ?? "";
+                    var key = ((YamlScalarNode)entry.Key).Value ?? string.Empty;
                     obj[key] = YamlNodeToJsonNode(entry.Value);
                 }
 
@@ -504,7 +504,7 @@ public class TeamYamlTests
                 }
 
                 // All quoted scalars and unrecognised plain scalars → string
-                return JsonValue.Create(value ?? "");
+                return JsonValue.Create(value ?? string.Empty);
             }
 
             default:
@@ -538,3 +538,5 @@ public class TeamYamlTests
         return JsonSchema.FromText(schemaJson);
     }
 }
+
+

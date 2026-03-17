@@ -60,44 +60,47 @@ public class FightEngine(
         var defenderTeamId = targetOp.TeamId;
         var isDefenderTeamA = targetOp.TeamId == game.Participant1.TeamId;
 
-        var atkMeleeWeapons = attacker.Weapons.Where(w => w.Type == WeaponType.Melee).ToList();
-        if (atkMeleeWeapons.Count == 0)
+        var attackerMeleeWeapons = attacker.Weapons.Where(w => w.Type == WeaponType.Melee).ToList();
+
+        if (attackerMeleeWeapons.Count == 0)
         {
             eventStream?.Emit((seq, ts) => new CombatWarningEvent(eventStream.GameSessionId, seq, ts, isAttackerTeamId, CombatWarningKind.NoWeaponsAvailable, $"{attacker.Name} has no melee weapons!"));
             return new FightSessionResult(false, false, 0, 0, targetState.OperativeId);
         }
 
-        var atkIsInjured = attackerState.CurrentWounds < attacker.Wounds / 2;
-        Weapon atkWeapon;
-        if (atkMeleeWeapons.Count == 1)
+        var attackerIsInjured = attackerState.CurrentWounds < attacker.Wounds / 2;
+        Weapon attackerWeapon;
+
+        if (attackerMeleeWeapons.Count == 1)
         {
-            atkWeapon = atkMeleeWeapons[0];
-            var atkEffHit = atkIsInjured ? atkWeapon.Hit + 1 : atkWeapon.Hit;
-            eventStream?.Emit((seq, ts) => new WeaponSelectedEvent(eventStream.GameSessionId, seq, ts, isAttackerTeamId, atkWeapon.Name, atkWeapon.Atk, atkWeapon.Hit, atkWeapon.NormalDmg, atkWeapon.CriticalDmg, "Attacker", true, atkIsInjured, atkEffHit));
+            attackerWeapon = attackerMeleeWeapons[0];
+            eventStream?.Emit((seq, ts) => new WeaponSelectedEvent(eventStream.GameSessionId, seq, ts, isAttackerTeamId, attackerWeapon.Name, attackerWeapon.Atk, attackerWeapon.Hit, attackerWeapon.NormalDmg, attackerWeapon.CriticalDmg, "Attacker", true, attackerIsInjured, attackerIsInjured ? attackerWeapon.Hit + 1 : attackerWeapon.Hit));
         }
         else
         {
-            atkWeapon = await inputProvider.SelectAttackerWeaponAsync(atkMeleeWeapons, atkIsInjured);
+            attackerWeapon = await inputProvider.SelectAttackerWeaponAsync(attackerMeleeWeapons, attackerIsInjured);
         }
 
-        var atkEffectiveHit = atkIsInjured ? atkWeapon.Hit + 1 : atkWeapon.Hit;
+        var attackerEffectiveHit = attackerIsInjured ? attackerWeapon.Hit + 1 : attackerWeapon.Hit;
 
-        var defMeleeWeapons = targetOp.Weapons.Where(w => w.Type == WeaponType.Melee).ToList();
-        Weapon? defWeapon = null;
-        var defEffectiveHit = 3;
+        var defenderMeleeWeapons = targetOp.Weapons.Where(w => w.Type == WeaponType.Melee).ToList();
+        Weapon? defenderWeapon = null;
+        var defenderEffectiveHit = 3;
 
-        if (defMeleeWeapons.Count == 1)
+        if (defenderMeleeWeapons.Count == 1)
         {
-            defWeapon = defMeleeWeapons[0];
-            var defIsInjured = targetState.CurrentWounds < targetOp.Wounds / 2;
-            defEffectiveHit = defIsInjured ? defWeapon.Hit + 1 : defWeapon.Hit;
-            eventStream?.Emit((seq, ts) => new WeaponSelectedEvent(eventStream.GameSessionId, seq, ts, defenderTeamId, defWeapon.Name, defWeapon.Atk, defWeapon.Hit, defWeapon.NormalDmg, defWeapon.CriticalDmg, "Defender", true, defIsInjured, defEffectiveHit));
+            defenderWeapon = defenderMeleeWeapons[0];
+            var defenderIsInjured = targetState.CurrentWounds < targetOp.Wounds / 2;
+
+            defenderEffectiveHit = defenderIsInjured ? defenderWeapon.Hit + 1 : defenderWeapon.Hit;
+            eventStream?.Emit((seq, ts) => new WeaponSelectedEvent(eventStream.GameSessionId, seq, ts, defenderTeamId, defenderWeapon.Name, defenderWeapon.Atk, defenderWeapon.Hit, defenderWeapon.NormalDmg, defenderWeapon.CriticalDmg, "Defender", true, defenderIsInjured, defenderEffectiveHit));
         }
-        else if (defMeleeWeapons.Count > 1)
+        else if (defenderMeleeWeapons.Count > 1)
         {
-            defWeapon = await inputProvider.SelectDefenderWeaponAsync(defMeleeWeapons);
-            var defIsInjured = targetState.CurrentWounds < targetOp.Wounds / 2;
-            defEffectiveHit = defIsInjured ? defWeapon.Hit + 1 : defWeapon.Hit;
+            defenderWeapon = await inputProvider.SelectDefenderWeaponAsync(defenderMeleeWeapons);
+            var defenderIsInjured = targetState.CurrentWounds < targetOp.Wounds / 2;
+
+            defenderEffectiveHit = defenderIsInjured ? defenderWeapon.Hit + 1 : defenderWeapon.Hit;
         }
         else
         {
@@ -105,80 +108,83 @@ public class FightEngine(
         }
 
         var fightAssist = await inputProvider.GetFightAssistCountAsync();
-        atkEffectiveHit = Math.Max(2, atkEffectiveHit - fightAssist);
 
-        int[] atkRolls = await inputProvider.RollOrEnterDiceAsync(atkWeapon.Atk, $"{attacker.Name} attack dice (Attack: {atkWeapon.Atk})", attacker.Name, "Attacker", "Fight", isAttackerTeamId, eventStream);
-        atkRolls = await rerollEngine.ApplyAttackerRerollsAsync(
-            atkRolls, atkWeapon.ParsedRules.ToList(), game.Id, isAttackerTeamA, attacker.Name, isAttackerTeamId, eventStream);
+        attackerEffectiveHit = Math.Max(2, attackerEffectiveHit - fightAssist);
 
-        var defAtkCount = defWeapon?.Atk ?? 0;
-        int[] defRolls = [];
-        if (defAtkCount > 0)
+        var attackerRolls = await inputProvider.RollOrEnterDiceAsync(attackerWeapon.Atk, $"{attacker.Name} attack dice (Attack: {attackerWeapon.Atk})", attacker.Name, "Attacker", "Fight", isAttackerTeamId, eventStream);
+        attackerRolls = await rerollEngine.ApplyAttackerRerollsAsync(
+            attackerRolls, attackerWeapon.ParsedRules.ToList(), game.Id, isAttackerTeamA, attacker.Name, isAttackerTeamId, eventStream);
+
+        var defenderAttackCount = defenderWeapon?.Atk ?? 0;
+        int[] defenderRolls = [];
+
+        if (defenderAttackCount > 0)
         {
-            defRolls = await inputProvider.RollOrEnterDiceAsync(defAtkCount, $"{targetOp.Name} fight-back dice (Attack: {defAtkCount})", targetOp.Name, "Defender", "Fight", defenderTeamId, eventStream);
-            defRolls = await rerollEngine.ApplyDefenderRerollAsync(defRolls, game.Id, isDefenderTeamA, targetOp.Name, defenderTeamId, eventStream);
+            defenderRolls = await inputProvider.RollOrEnterDiceAsync(defenderAttackCount, $"{targetOp.Name} fight-back dice (Attack: {defenderAttackCount})", targetOp.Name, "Defender", "Fight", defenderTeamId, eventStream);
+            defenderRolls = await rerollEngine.ApplyDefenderRerollAsync(defenderRolls, game.Id, isDefenderTeamA, targetOp.Name, defenderTeamId, eventStream);
         }
 
-        var atkPool = fightResolutionService.CalculateDice(atkRolls, atkEffectiveHit, DieOwner.Attacker);
-        var defPool = defWeapon is not null
-            ? fightResolutionService.CalculateDice(defRolls, defEffectiveHit, DieOwner.Defender)
+        var attackerPool = fightResolutionService.CalculateDice(attackerRolls, attackerEffectiveHit, DieOwner.Attacker);
+        var defenderPool = defenderWeapon is not null
+            ? fightResolutionService.CalculateDice(defenderRolls, defenderEffectiveHit, DieOwner.Defender)
             : new FightDicePool(DieOwner.Defender, []);
 
-        if (atkWeapon.ParsedRules.Any(r => r.Kind == SpecialRuleKind.Shock) && atkPool.Remaining.Any(d => d.Result == DieResult.Crit))
+        if (attackerWeapon.ParsedRules.Any(r => r.Kind == SpecialRuleKind.Shock) && attackerPool.Remaining.Any(d => d.Result == DieResult.Crit))
         {
-            var lowestDefSuccess = defPool.Remaining.OrderBy(d => d.RolledValue).FirstOrDefault(d => d.Result != DieResult.Miss);
-            if (lowestDefSuccess is not null)
+            var lowestDefenderSuccess = defenderPool.Remaining.OrderBy(d => d.RolledValue).FirstOrDefault(d => d.Result != DieResult.Miss);
+
+            if (lowestDefenderSuccess is not null)
             {
-                defPool = defPool with { Remaining = defPool.Remaining.Where(d => d.Id != lowestDefSuccess.Id).ToList() };
-                eventStream?.Emit((seq, ts) => new ShockAppliedEvent(eventStream.GameSessionId, seq, ts, isAttackerTeamId, targetOp.Name, lowestDefSuccess.RolledValue));
+                defenderPool = defenderPool with { Remaining = defenderPool.Remaining.Where(d => d.Id != lowestDefenderSuccess.Id).ToList() };
+                eventStream?.Emit((seq, ts) => new ShockAppliedEvent(eventStream.GameSessionId, seq, ts, isAttackerTeamId, targetOp.Name, lowestDefenderSuccess.RolledValue));
             }
         }
 
-        var brutalWeapon = atkWeapon.ParsedRules.Any(r => r.Kind == SpecialRuleKind.Brutal);
-        var atkCurrentWounds = attackerState.CurrentWounds;
-        var defCurrentWounds = targetState.CurrentWounds;
-        var totalAtkDmgDealt = 0;
-        var totalDefDmgDealt = 0;
+        var brutalWeapon = attackerWeapon.ParsedRules.Any(r => r.Kind == SpecialRuleKind.Brutal);
+        var attackerCurrentWounds = attackerState.CurrentWounds;
+        var defenderCurrentWounds = targetState.CurrentWounds;
+        var totalAttackerDamageDealt = 0;
+        var totalDefenderDamageDealt = 0;
         var currentOwner = DieOwner.Attacker;
 
-        while (atkPool.Remaining.Count > 0 || defPool.Remaining.Count > 0)
+        while (attackerPool.Remaining.Count > 0 || defenderPool.Remaining.Count > 0)
         {
             FightDicePool activePool, opponentPool;
             DieOwner activeOwner;
 
             if (currentOwner == DieOwner.Attacker)
             {
-                if (atkPool.Remaining.Count > 0)
+                if (attackerPool.Remaining.Count > 0)
                 {
-                    activePool = atkPool; opponentPool = defPool; activeOwner = DieOwner.Attacker;
+                    activePool = attackerPool; opponentPool = defenderPool; activeOwner = DieOwner.Attacker;
                 }
                 else
                 {
-                    activePool = defPool; opponentPool = atkPool; activeOwner = DieOwner.Defender;
+                    activePool = defenderPool; opponentPool = attackerPool; activeOwner = DieOwner.Defender;
                 }
             }
             else
             {
-                if (defPool.Remaining.Count > 0)
+                if (defenderPool.Remaining.Count > 0)
                 {
-                    activePool = defPool; opponentPool = atkPool; activeOwner = DieOwner.Defender;
+                    activePool = defenderPool; opponentPool = attackerPool; activeOwner = DieOwner.Defender;
                 }
                 else
                 {
-                    activePool = atkPool; opponentPool = defPool; activeOwner = DieOwner.Attacker;
+                    activePool = attackerPool; opponentPool = defenderPool; activeOwner = DieOwner.Attacker;
                 }
             }
 
             Operative activeOp = activeOwner == DieOwner.Attacker ? attacker : targetOp;
             Operative opponentOp = activeOwner == DieOwner.Attacker ? targetOp : attacker;
-            Weapon activeWeapon = activeOwner == DieOwner.Attacker ? atkWeapon : (defWeapon ?? atkWeapon);
+            Weapon activeWeapon = activeOwner == DieOwner.Attacker ? attackerWeapon : (defenderWeapon ?? attackerWeapon);
 
             var poolEvt = new FightPoolsDisplayedEvent(
                 eventStream?.GameSessionId ?? Guid.Empty, 0, DateTime.UtcNow, isAttackerTeamId,
-                attacker.Name, atkCurrentWounds, attacker.Wounds,
-                atkPool.Remaining.Select(d => new FightDieSnapshot(d.Result == DieResult.Crit ? "CRIT" : "HIT", d.RolledValue)).ToList(),
-                targetOp.Name, defCurrentWounds, targetOp.Wounds,
-                defPool.Remaining.Select(d => new FightDieSnapshot(d.Result == DieResult.Crit ? "CRIT" : "HIT", d.RolledValue)).ToList());
+                attacker.Name, attackerCurrentWounds, attacker.Wounds,
+                attackerPool.Remaining.Select(d => new FightDieSnapshot(d.Result == DieResult.Crit ? "CRIT" : "HIT", d.RolledValue)).ToList(),
+                targetOp.Name, defenderCurrentWounds, targetOp.Wounds,
+                defenderPool.Remaining.Select(d => new FightDieSnapshot(d.Result == DieResult.Crit ? "CRIT" : "HIT", d.RolledValue)).ToList());
             eventStream?.Emit(poolEvt);
 
             var useBrutal = brutalWeapon && activeOwner == DieOwner.Attacker;
@@ -190,6 +196,7 @@ public class FightEngine(
                 .ToList();
 
             var opponentHasCrits = opponentPool.Remaining.Any(d => d.Result == DieResult.Crit);
+
             if (opponentHasCrits)
             {
                 uniqueActions = uniqueActions
@@ -209,17 +216,18 @@ public class FightEngine(
             if (actionChoice.Type == FightActionType.Strike)
             {
                 var dmg = fightResolutionService.ApplyStrike(actionChoice.ActiveDie, activeWeapon.NormalDmg, activeWeapon.CriticalDmg);
+
                 eventStream?.Emit((seq, ts) => new FightStrikeResolvedEvent(eventStream.GameSessionId, seq, ts, activeOp.TeamId, activeOp.Name, opponentOp.Name, actionChoice.ActiveDie.RolledValue, actionChoice.ActiveDie.Result == DieResult.Crit ? "CRIT" : "HIT", dmg));
 
                 if (activeOwner == DieOwner.Attacker)
                 {
-                    defCurrentWounds = Math.Max(0, defCurrentWounds - dmg);
-                    totalAtkDmgDealt += dmg;
+                    defenderCurrentWounds = Math.Max(0, defenderCurrentWounds - dmg);
+                    totalAttackerDamageDealt += dmg;
                 }
                 else
                 {
-                    atkCurrentWounds = Math.Max(0, atkCurrentWounds - dmg);
-                    totalDefDmgDealt += dmg;
+                    attackerCurrentWounds = Math.Max(0, attackerCurrentWounds - dmg);
+                    totalDefenderDamageDealt += dmg;
                 }
 
                 activePool = activePool with
@@ -236,33 +244,34 @@ public class FightEngine(
 
             if (activeOwner == DieOwner.Attacker)
             {
-                atkPool = activePool;
-                defPool = opponentPool;
+                attackerPool = activePool;
+                defenderPool = opponentPool;
             }
             else
             {
-                defPool = activePool;
-                atkPool = opponentPool;
+                defenderPool = activePool;
+                attackerPool = opponentPool;
             }
 
             var nextOwner = activeOwner == DieOwner.Attacker ? DieOwner.Defender : DieOwner.Attacker;
-            var nextHasDice = nextOwner == DieOwner.Attacker ? atkPool.Remaining.Count > 0 : defPool.Remaining.Count > 0;
+            var nextHasDice = nextOwner == DieOwner.Attacker ? attackerPool.Remaining.Count > 0 : defenderPool.Remaining.Count > 0;
+
             if (nextHasDice)
             {
                 currentOwner = nextOwner;
             }
         }
 
-        var atkCausedIncap = defCurrentWounds <= 0 && !targetState.IsIncapacitated;
-        var defCausedIncap = atkCurrentWounds <= 0 && !attackerState.IsIncapacitated;
+        var attackerCausedIncapacitation = defenderCurrentWounds <= 0 && !targetState.IsIncapacitated;
+        var defenderCausedIncapacitation = attackerCurrentWounds <= 0 && !attackerState.IsIncapacitated;
 
-        attackerState.CurrentWounds = atkCurrentWounds;
-        targetState.CurrentWounds = defCurrentWounds;
+        attackerState.CurrentWounds = attackerCurrentWounds;
+        targetState.CurrentWounds = defenderCurrentWounds;
 
-        await stateRepository.UpdateWoundsAsync(attackerState.Id, atkCurrentWounds);
-        await stateRepository.UpdateWoundsAsync(targetState.Id, defCurrentWounds);
+        await stateRepository.UpdateWoundsAsync(attackerState.Id, attackerCurrentWounds);
+        await stateRepository.UpdateWoundsAsync(targetState.Id, defenderCurrentWounds);
 
-        if (atkCausedIncap)
+        if (attackerCausedIncapacitation)
         {
             targetState.IsIncapacitated = true;
             await stateRepository.SetIncapacitatedAsync(targetState.Id, true);
@@ -270,7 +279,7 @@ public class FightEngine(
             targetState.IsOnGuard = false;
             eventStream?.Emit((seq, ts) => new IncapacitationEvent(eventStream.GameSessionId, seq, ts, isAttackerTeamId, targetOp.Name, "Fight"));
         }
-        if (defCausedIncap)
+        if (defenderCausedIncapacitation)
         {
             attackerState.IsIncapacitated = true;
             await stateRepository.SetIncapacitatedAsync(attackerState.Id, true);
@@ -286,15 +295,15 @@ public class FightEngine(
             Type = ActionType.Fight,
             ApCost = 1,
             TargetOperativeId = targetState.OperativeId,
-            WeaponId = atkWeapon.Id,
-            AttackerDice = atkRolls,
-            DefenderDice = defRolls,
-            NormalDamageDealt = totalAtkDmgDealt,
+            WeaponId = attackerWeapon.Id,
+            AttackerDice = attackerRolls,
+            DefenderDice = defenderRolls,
+            NormalDamageDealt = totalAttackerDamageDealt,
             CriticalDamageDealt = 0,
-            CausedIncapacitation = atkCausedIncap
+            CausedIncapacitation = attackerCausedIncapacitation
         };
         await actionRepository.CreateAsync(action);
-        eventStream?.Emit((seq, ts) => new FightResolvedEvent(eventStream.GameSessionId, seq, ts, isAttackerTeamId, attacker.Name, targetOp.Name, totalAtkDmgDealt, totalDefDmgDealt, atkCausedIncap, defCausedIncap));
+        eventStream?.Emit((seq, ts) => new FightResolvedEvent(eventStream.GameSessionId, seq, ts, isAttackerTeamId, attacker.Name, targetOp.Name, totalAttackerDamageDealt, totalDefenderDamageDealt, attackerCausedIncapacitation, defenderCausedIncapacitation));
 
         var note = await inputProvider.GetNarrativeNoteAsync();
 
@@ -303,6 +312,6 @@ public class FightEngine(
             await actionRepository.UpdateNarrativeAsync(action.Id, note);
         }
 
-        return new FightSessionResult(atkCausedIncap, defCausedIncap, totalAtkDmgDealt, totalDefDmgDealt, targetState.OperativeId);
+        return new FightSessionResult(attackerCausedIncapacitation, defenderCausedIncapacitation, totalAttackerDamageDealt, totalDefenderDamageDealt, targetState.OperativeId);
     }
 }

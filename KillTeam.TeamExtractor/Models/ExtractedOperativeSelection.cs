@@ -4,8 +4,8 @@ namespace KillTeam.TeamExtractor.Models;
 public class ExtractedOperativeSelection
 {
     /// <summary>The archetype string extracted from the ARCHETYPE: line.</summary>
-    public string Archetype { get; init; } = "";
+    public string Archetype { get; init; } = string.Empty;
 
     /// <summary>The full selection rules text following the archetype declaration.</summary>
-    public string Text { get; init; } = "";
+    public string Text { get; init; } = string.Empty;
 }

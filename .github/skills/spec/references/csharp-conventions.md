@@ -261,18 +261,22 @@ Exception — JSON deserialization targets: Internal DTOs used with `System.Text
 
 ## 11. Always use `var` for local variables
 
-Always use `var` for local variable declarations when the type can be inferred from the right-hand side.
+Always use `var` for local variable declarations when the type can be inferred from the right-hand side. This applies everywhere — method bodies, loop initializers, `foreach`, and nested blocks.
 
 ```csharp
 // ✅ Correct
 var folder = config["DataSlate:TeamFolder"] ?? "../teams/";
 var files = Directory.GetFiles(folder, "*.json");
+
 foreach (var file in files) { ... }
 
-// ❌ Wrong
+for (var i = 0; i < maxRows; i++) { ... }
+
+// ❌ Wrong — explicit type when var is inferrable
 string folder = config["DataSlate:TeamFolder"] ?? "../teams/";
 string[] files = Directory.GetFiles(folder, "*.json");
 foreach (string file in files) { ... }
+for (int i = 0; i < maxRows; i++) { ... }
 ```
 
 Exception: variables initialized with `null` must keep the explicit type:
@@ -406,6 +410,8 @@ Common rename mappings:
 | `r` / `reader` abbrev | `reader` |
 | `tp` (variable) | `turningPoint` / `turningPoints` |
 | `op` (variable) | `operative` |
+| `atk` prefix | `attacker` (e.g. `atkCell` → `attackerCell`, `atkPool` → `attackerPool`) |
+| `def` prefix | `defender` (e.g. `defCell` → `defenderCell`, `defPool` → `defenderPool`) |
 | `g`, `w` | `playerGames`, `playerWins` |
 | `pct` | `winPercentage` |
 | `gCmd` | `gameQueryCommand` (or context-specific) |
@@ -417,22 +423,62 @@ Exception: loop variables in short, unambiguous `foreach` may use conventional s
 
 ## 16. Blank line after `var` / `using var` / `await using var` declaration block
 
-When a method or block begins with one or more `var`, `using var`, or `await using var` declarations, add a blank line after the last declaration before the first non-declaration statement. This extends Rule 4 to cover `using var` and `await using var` patterns.
+When a method or block begins with one or more `var`, `using var`, or `await using var` declarations, add a blank line after the last declaration before the first non-declaration statement. This extends Rule 4 to cover `using var` and `await using var` patterns. **This rule also applies inside loops and nested blocks — not just at the start of a method.**
 
 ```csharp
-// ✅ Correct
+// ✅ Correct — method level
 await using var connection = new SqliteConnection(connectionString);
 await using var command = connection.CreateCommand();
 
 command.CommandText = sql;
 await command.ExecuteNonQueryAsync();
+
+// ✅ Correct — inside a loop
+for (var i = 0; i < maxRows; i++)
+{
+    var attackerCell = i < attackerDice.Count ? FormatDie(attackerDice[i]) : string.Empty;
+    var defenderCell = i < defenderDice.Count ? FormatDie(defenderDice[i]) : string.Empty;
+
+    table.AddRow(attackerCell, defenderCell);
+}
 
 // ❌ Wrong — no blank line after declaration block
 await using var connection = new SqliteConnection(connectionString);
 await using var command = connection.CreateCommand();
 command.CommandText = sql;
 await command.ExecuteNonQueryAsync();
+
+// ❌ Wrong — no blank line after var block inside loop
+for (var i = 0; i < maxRows; i++)
+{
+    var attackerCell = i < attackerDice.Count ? FormatDie(attackerDice[i]) : string.Empty;
+    var defenderCell = i < defenderDice.Count ? FormatDie(defenderDice[i]) : string.Empty;
+    table.AddRow(attackerCell, defenderCell);
+}
 ```
+
+---
+
+## 17. Use `string.Empty` instead of `""`
+
+Always use `string.Empty` instead of `""` for empty string literals. This avoids unnecessary string allocation and makes intent explicit.
+
+```csharp
+// ✅ Correct
+var note = string.Empty;
+return string.Empty;
+var flagStr = flags.Count > 0 ? $"({string.Join(", ", flags)})" : string.Empty;
+command.Parameters.AddWithValue("@name", string.IsNullOrWhiteSpace(name) ? string.Empty : name);
+
+// ❌ Wrong
+var note = "";
+return "";
+var flagStr = flags.Count > 0 ? $"({string.Join(", ", flags)})" : "";
+```
+
+**Exceptions** — `string.Empty` cannot be used as:
+- A default parameter value: `void Foo(string name = "")` — this is a compile error; keep `""`
+- An attribute argument: `[Description("")]` — keep `""`
 
 ---
 

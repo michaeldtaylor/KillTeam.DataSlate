@@ -34,6 +34,7 @@ public class BlastEngine(
             .ToList();
 
         var additionalTargetStates = new List<GameOperativeState>();
+
         if (additionalCandidates.Count > 0)
         {
             additionalTargetStates = await inputProvider.SelectAdditionalTargetsAsync(
@@ -44,6 +45,7 @@ public class BlastEngine(
 
         var friendlyCount = allTargetStates.Count(s =>
             allOperatives.TryGetValue(s.OperativeId, out var o) && o.TeamId == attacker.TeamId);
+
         if (friendlyCount > 0)
         {
             if (!await inputProvider.ConfirmFriendlyFireAsync(friendlyCount))
@@ -52,7 +54,7 @@ public class BlastEngine(
             }
         }
 
-        int[] attackDice = await inputProvider.RollOrEnterDiceAsync(weapon.Atk, $"{attacker.Name} attack dice (Attack: {weapon.Atk})");
+        var attackDice = await inputProvider.RollOrEnterDiceAsync(weapon.Atk, $"{attacker.Name} attack dice (Attack: {weapon.Atk})");
         attackDice = await rerollEngine.ApplyAttackerRerollsAsync(
             attackDice, weapon.ParsedRules.ToList(), game.Id, isAttackerTeamA, attacker.Name);
 
@@ -73,7 +75,7 @@ public class BlastEngine(
         var totalDamage = 0;
         var primaryActionPersisted = false;
 
-        for (int i = 0; i < allTargetStates.Count; i++)
+        for (var i = 0; i < allTargetStates.Count; i++)
         {
             var targetState = allTargetStates[i];
 
@@ -86,18 +88,19 @@ public class BlastEngine(
             var inCover = coverChoice == "In cover";
             var isObscured = coverChoice == "Obscured";
 
-            var defDiceCount = await inputProvider.GetDefenceDiceCountAsync(targetOp.Name);
+            var defenderDiceCount = await inputProvider.GetDefenceDiceCountAsync(targetOp.Name);
 
-            int[] defDice = defDiceCount == 0
+            int[] defenderDice = defenderDiceCount == 0
                 ? []
-                : await inputProvider.RollOrEnterDiceAsync(defDiceCount, $"{targetOp.Name} defence dice");
+                : await inputProvider.RollOrEnterDiceAsync(defenderDiceCount, $"{targetOp.Name} defence dice");
 
             var isDefenderTeamA = targetOp.TeamId == game.Participant1.TeamId;
-            defDice = await rerollEngine.ApplyDefenderRerollAsync(defDice, game.Id, isDefenderTeamA, targetOp.Name);
+
+            defenderDice = await rerollEngine.ApplyDefenderRerollAsync(defenderDice, game.Id, isDefenderTeamA, targetOp.Name);
 
             var ctx = new ShootContext(
                 AttackDice: attackDice,
-                DefenceDice: defDice,
+                DefenceDice: defenderDice,
                 InCover: inCover,
                 IsObscured: isObscured,
                 HitThreshold: effectiveHit,
@@ -132,7 +135,7 @@ public class BlastEngine(
 
             if (!primaryActionPersisted)
             {
-                action.DefenderDice = defDice;
+                action.DefenderDice = defenderDice;
                 action.TargetInCover = inCover;
                 action.IsObscured = isObscured;
                 action.NormalHits = result.UnblockedNormals;
@@ -151,7 +154,7 @@ public class BlastEngine(
                     ActionId = action.Id,
                     TargetOperativeId = targetState.OperativeId,
                     OperativeName = targetOp.Name,
-                    DefenderDice = defDice,
+                    DefenderDice = defenderDice,
                     NormalHits = result.UnblockedNormals,
                     CriticalHits = result.UnblockedCrits,
                     NormalDamageDealt = result.UnblockedNormals * weapon.NormalDmg,

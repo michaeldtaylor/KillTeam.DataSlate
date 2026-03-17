@@ -14,6 +14,7 @@ public class GameEventRenderer(
     public void Render(GameEvent evt)
     {
         var label = Label(evt.Participant);
+
         switch (evt)
         {
             case FightTargetSelectedEvent e:
@@ -25,7 +26,7 @@ public class GameEventRenderer(
                 break;
 
             case WeaponSelectedEvent e:
-                var injuredNote = e.IsInjured ? $" [yellow](Injured: effective Hit {e.EffectiveHit}+)[/]" : "";
+                var injuredNote = e.IsInjured ? $" [yellow](Injured: effective Hit {e.EffectiveHit}+)[/]" : string.Empty;
                 var autoNote = e.WasAutoSelected ? "Auto-selected" : "Selected";
 
                 console.MarkupLine($"{label} {autoNote} {e.Role.ToLower()} weapon: [bold]{Markup.Escape(e.WeaponName)}[/] (Attack: [green]{e.Attack}[/] | Hit: [green]{e.Hit}+[/] | Normal: [green]{e.NormalDmg}[/] | Crit: [green]{e.CritDmg}[/]){injuredNote}");
@@ -117,8 +118,8 @@ public class GameEventRenderer(
     {
         var table = new Table()
             .Border(TableBorder.Rounded)
-            .AddColumn($"[bold]{Markup.Escape(e.AttackerName)}[/] (Atk)")
-            .AddColumn($"[bold]{Markup.Escape(e.DefenderName)}[/] (Def)");
+            .AddColumn($"[bold]{Markup.Escape(e.AttackerName)}[/] (Attacker)")
+            .AddColumn($"[bold]{Markup.Escape(e.DefenderName)}[/] (Defender)");
 
         table.AddRow(
             $"Wounds: {e.AttackerWounds}/{e.AttackerMaxWounds}",
@@ -126,12 +127,12 @@ public class GameEventRenderer(
 
         var maxRows = Math.Max(e.AttackerDice.Count, e.DefenderDice.Count);
 
-        for (int i = 0; i < maxRows; i++)
+        for (var i = 0; i < maxRows; i++)
         {
-            var atkCell = i < e.AttackerDice.Count ? FormatDieSnapshot("A", i + 1, e.AttackerDice[i]) : "";
-            var defCell = i < e.DefenderDice.Count ? FormatDieSnapshot("D", i + 1, e.DefenderDice[i]) : "";
+            var attackerCell = i < e.AttackerDice.Count ? FormatDieSnapshot("A", i + 1, e.AttackerDice[i]) : string.Empty;
+            var defenderCell = i < e.DefenderDice.Count ? FormatDieSnapshot("D", i + 1, e.DefenderDice[i]) : string.Empty;
 
-            table.AddRow(atkCell, defCell);
+            table.AddRow(attackerCell, defenderCell);
         }
 
         console.Write(table);
@@ -171,7 +172,7 @@ public class GameEventRenderer(
     {
         if (!participantLabels.TryGetValue(participantId, out var label))
         {
-            return "";
+            return string.Empty;
         }
 
         return label switch

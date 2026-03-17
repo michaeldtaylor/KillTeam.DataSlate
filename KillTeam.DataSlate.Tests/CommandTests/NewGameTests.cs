@@ -15,20 +15,20 @@ public class NewGameTests
         var playerId2 = Guid.NewGuid();
         const string teamAName = "Angels of Death";
         const string teamBName = "Plague Marines";
-        var op1Id = Guid.NewGuid();
-        var op2Id = Guid.NewGuid();
-        var op3Id = Guid.NewGuid();
-        var op4Id = Guid.NewGuid();
+        var operative1Id = Guid.NewGuid();
+        var operative2Id = Guid.NewGuid();
+        var operative3Id = Guid.NewGuid();
+        var operative4Id = Guid.NewGuid();
 
         using var db = TestDbBuilder.Create()
             .WithPlayer(playerId1, "Michael")
             .WithPlayer(playerId2, "Solomon")
             .WithTeam("angels_of_death", teamAName, "Adeptus Astartes")
             .WithTeam("plague_marines", teamBName, "Heretic Astartes")
-            .WithOperative(op1Id, "angels_of_death", "Sergeant", wounds: 13, save: 3, apl: 3, move: 3)
-            .WithOperative(op2Id, "angels_of_death", "Intercessor", wounds: 13, save: 3, apl: 2, move: 3)
-            .WithOperative(op3Id, "plague_marines", "Champion", wounds: 14, save: 3, apl: 3, move: 3)
-            .WithOperative(op4Id, "plague_marines", "Warrior", wounds: 14, save: 3, apl: 2, move: 3);
+            .WithOperative(operative1Id, "angels_of_death", "Sergeant", wounds: 13, save: 3, apl: 3, move: 3)
+            .WithOperative(operative2Id, "angels_of_death", "Intercessor", wounds: 13, save: 3, apl: 2, move: 3)
+            .WithOperative(operative3Id, "plague_marines", "Champion", wounds: 14, save: 3, apl: 3, move: 3)
+            .WithOperative(operative4Id, "plague_marines", "Warrior", wounds: 14, save: 3, apl: 2, move: 3);
 
         var gameRepo = new SqliteGameRepository(db.Connection);
         var stateRepo = new SqliteGameOperativeStateRepository(db.Connection);
@@ -59,16 +59,16 @@ public class NewGameTests
 
         var fullTeamA = await teamRepo.GetWithOperativesAsync(teamAName);
         var fullTeamB = await teamRepo.GetWithOperativesAsync(teamBName);
-        var allOps = (fullTeamA?.Operatives ?? []).Concat(fullTeamB?.Operatives ?? []).ToList();
+        var allOperatives = (fullTeamA?.Operatives ?? []).Concat(fullTeamB?.Operatives ?? []).ToList();
 
-        foreach (var op in allOps)
+        foreach (var operative in allOperatives)
         {
             await stateRepo.CreateAsync(new GameOperativeState
             {
                 Id = Guid.NewGuid(),
                 GameId = created.Id,
-                OperativeId = op.Id,
-                CurrentWounds = op.Wounds,
+                OperativeId = operative.Id,
+                CurrentWounds = operative.Wounds,
                 Order = Order.Conceal,
                 IsReady = true
             });
@@ -114,3 +114,4 @@ public class NewGameTests
         players.Should().BeEmpty("NewGameCommand would reject this with no players");
     }
 }
+

@@ -80,7 +80,7 @@ public partial class PdfTeamExtractor
         var strategyPloys = strategyPloysPath != null ? this.ParseRulesDoc(strategyPloysPath, teamName, primaryKeyword, isPloy: true) : [];
         var firefightPloys = firefightPloysPath != null ? this.ParseRulesDoc(firefightPloysPath, teamName, primaryKeyword, isPloy: true) : [];
         var operativeSelection = operativeSelectionPath != null ? this.ParseOperativeSelection(operativeSelectionPath) : null;
-        var supplementaryInfo = supplementaryInformationPath != null ? this.ParseSupplementaryInfo(supplementaryInformationPath) : "";
+        var supplementaryInfo = supplementaryInformationPath != null ? this.ParseSupplementaryInfo(supplementaryInformationPath) : string.Empty;
 
         if (operatives.Count == 0)
         {
@@ -287,7 +287,7 @@ public partial class PdfTeamExtractor
 
                     if (wRulesRaw == "-")
                     {
-                        wRulesRaw = "";
+                        wRulesRaw = string.Empty;
                     }
 
                     var wRules = wRulesRaw
@@ -345,7 +345,7 @@ public partial class PdfTeamExtractor
 
             // Parse keywords from the faction keyword line (currently at position i)
             var keywords = new List<string>();
-            var primaryKeyword = "";
+            var primaryKeyword = string.Empty;
 
             if (i < count && FactionKeywordLineRegex().IsMatch(lines[i]) && lines[i].Split(',').Length >= 3)
             {
@@ -355,7 +355,7 @@ public partial class PdfTeamExtractor
                 // Strip trailing page number from the last token
                 if (parts.Count > 0)
                 {
-                    parts[^1] = PageNumberSuffixRegex().Replace(parts[^1], "").Trim();
+                    parts[^1] = PageNumberSuffixRegex().Replace(parts[^1], string.Empty).Trim();
                 }
 
                 keywords = parts
@@ -363,7 +363,7 @@ public partial class PdfTeamExtractor
                     .Select(p => ToTitleCase(p))
                     .ToList();
 
-                primaryKeyword = keywords.FirstOrDefault() ?? "";
+                primaryKeyword = keywords.FirstOrDefault() ?? string.Empty;
 
                 // Third keyword (index 2) is the faction; second (index 1) is the grand faction
                 if (faction == null && keywords.Count >= 3)
@@ -556,7 +556,7 @@ public partial class PdfTeamExtractor
                 // commas, not a known stats label) is the end marker and becomes the key.
                 // ContentOrderTextExtractor may append trailing digits (e.g. page numbers or stat values)
                 // to the name line — strip those before matching.
-                var nameCandidate = PageNumberSuffixRegex().Replace(contentTrimmed, "").Trim();
+                var nameCandidate = PageNumberSuffixRegex().Replace(contentTrimmed, string.Empty).Trim();
                 if (nameCandidate.Length > 0
                     && AllCapsNameRegex().IsMatch(nameCandidate)
                     && !nameCandidate.Contains(',')
@@ -838,7 +838,7 @@ public partial class PdfTeamExtractor
                         var leftPart = contentLine[..safeLen].TrimStart('\x07').Trim();
                         var rightPartC = contentLine.Length > contentBoundary
                             ? contentLine[contentBoundary..].Trim()
-                            : "";
+                            : string.Empty;
 
                         if (leftPart.Length > 0)
                         {
@@ -903,7 +903,7 @@ public partial class PdfTeamExtractor
                         var rightColonIdx = rightColContent.IndexOf(':');
                         var rightName = rightColonIdx > 0
                             ? rightColContent[..rightColonIdx].Trim()
-                            : "";
+                            : string.Empty;
                         var rightOpenText = rightColonIdx > 0
                             ? rightColContent[(rightColonIdx + 1)..].Trim()
                             : rightColContent.Trim();
@@ -940,7 +940,7 @@ public partial class PdfTeamExtractor
                             var leftPart = contentLine[..safeLen].TrimStart('\x07').Trim();
                             var rightPart = contentLine.Length > rightColStart
                                 ? contentLine[rightColStart..].TrimStart('\x07').Trim()
-                                : "";
+                                : string.Empty;
 
                             if (leftPart.Length > 0)
                             {
@@ -1224,15 +1224,15 @@ public partial class PdfTeamExtractor
                 }
 
                 // Check the next non-blank line is not a section header (would mean this is a category label)
-                var nextNonBlank = "";
+                var nextNonBlank = string.Empty;
 
-                for (var k = j + 1; k < total; k++)
+                for (var lineIndex = j + 1; lineIndex < total; lineIndex++)
                 {
-                    var kLine = allLines[k].Trim();
+                    var nextLine = allLines[lineIndex].Trim();
 
-                    if (kLine.Length > 0)
+                    if (nextLine.Length > 0)
                     {
-                        nextNonBlank = kLine;
+                        nextNonBlank = nextLine;
                         break;
                     }
                 }
@@ -1242,7 +1242,7 @@ public partial class PdfTeamExtractor
                     continue;
                 }
 
-                var itemName = QuantityPrefixRegex().Replace(trimmed, "");
+                var itemName = QuantityPrefixRegex().Replace(trimmed, string.Empty);
 
                 if (itemName.Length < 4)
                 {
@@ -1259,9 +1259,9 @@ public partial class PdfTeamExtractor
                 // Collect description lines until the next item name or section header
                 var descSb = new StringBuilder();
 
-                for (var k = j + 1; k < total; k++)
+                for (var lineIndex = j + 1; lineIndex < total; lineIndex++)
                 {
-                    var descLine = allLines[k].Trim();
+                    var descLine = allLines[lineIndex].Trim();
 
                     if (string.IsNullOrWhiteSpace(descLine))
                     {
@@ -1302,72 +1302,72 @@ public partial class PdfTeamExtractor
                         }
 
                         var tableRows = new List<string>();
-                        var wrText = "";
-                        k++; // advance past the header
+                        var wrText = string.Empty;
+                        lineIndex++; // advance past the header
 
-                        while (k < total)
+                        while (lineIndex < total)
                         {
-                            var tl = allLines[k].Trim();
+                            var tableLine = allLines[lineIndex].Trim();
 
-                            if (string.IsNullOrWhiteSpace(tl))
+                            if (string.IsNullOrWhiteSpace(tableLine))
                             {
-                                k++;
+                                lineIndex++;
                                 continue;
                             }
 
                             // WR header — next non-blank line is the weapon rules list
-                            if (string.Equals(tl, "WR", StringComparison.OrdinalIgnoreCase))
+                            if (string.Equals(tableLine, "WR", StringComparison.OrdinalIgnoreCase))
                             {
-                                k++; // advance past "WR"
+                                lineIndex++; // advance past "WR"
 
-                                while (k < total)
+                                while (lineIndex < total)
                                 {
-                                    var wrl = allLines[k].Trim();
+                                    var weaponRuleLine = allLines[lineIndex].Trim();
 
-                                    if (!string.IsNullOrWhiteSpace(wrl))
+                                    if (!string.IsNullOrWhiteSpace(weaponRuleLine))
                                     {
-                                        wrText = wrl;
+                                        wrText = weaponRuleLine;
                                         break;
                                     }
 
-                                    k++;
+                                    lineIndex++;
                                 }
 
                                 break; // table complete
                             }
 
                             // Another weapon table header — step back so outer loop handles it
-                            if (WeaponTableHeaderRegex().IsMatch(tl))
+                            if (WeaponTableHeaderRegex().IsMatch(tableLine))
                             {
-                                k--;
+                                lineIndex--;
                                 break;
                             }
 
                             // Next equipment item — step back so outer loop handles it
-                            if (AllCapsEquipmentRegex().IsMatch(tl) && !IsEquipmentSkip(tl))
+                            if (AllCapsEquipmentRegex().IsMatch(tableLine) && !IsEquipmentSkip(tableLine))
                             {
-                                var stripped = QuantityPrefixRegex().Replace(tl, "");
+                                var stripped = QuantityPrefixRegex().Replace(tableLine, string.Empty);
 
                                 if (stripped.Length >= 4)
                                 {
-                                    k--;
+                                    lineIndex--;
                                     break;
                                 }
                             }
 
-                            tableRows.Add(tl);
-                            k++;
+                            tableRows.Add(tableLine);
+                            lineIndex++;
                         }
 
                         descSb.Append(BuildInlineWeaponTableMarkdown(string.Join("\n", tableRows), wrText));
                         descSb.Append("\n\n");
-                        continue; // outer for k++ advances past the WR text line
+                        continue; // outer for lineIndex++ advances past the WR text line
                     }
 
                     // Next ALL CAPS item name ends the description block
                     if (AllCapsEquipmentRegex().IsMatch(descLine) && !IsEquipmentSkip(descLine))
                     {
-                        var stripped = QuantityPrefixRegex().Replace(descLine, "");
+                        var stripped = QuantityPrefixRegex().Replace(descLine, string.Empty);
 
                         if (stripped.Length >= 4 && !WeaponTableHeaderRegex().IsMatch(descLine))
                         {
@@ -1419,7 +1419,7 @@ public partial class PdfTeamExtractor
     {
         var lines = GetPdfLines(path, raw: true);
         var result = new List<ExtractedRule>();
-        var currentName = "";
+        var currentName = string.Empty;
         var currentText = new StringBuilder();
         var pendingContinuation = false;
         var emptyChain = new List<string>(); // consecutive empty-text ALL-CAPS names before the next rule
@@ -1600,7 +1600,7 @@ public partial class PdfTeamExtractor
             }
 
             var dataText = deduped[i].Text.Trim();
-            var wrText = "";
+            var wrText = string.Empty;
 
             if (i + 1 < deduped.Count && string.Equals(deduped[i + 1].Name, "Wr", StringComparison.OrdinalIgnoreCase))
             {
@@ -1654,18 +1654,18 @@ public partial class PdfTeamExtractor
 
             if (tokens.Length >= 4)
             {
-                var dmg = tokens[^1];
+                var damage = tokens[^1];
                 var hit = tokens[^2];
-                var atk = tokens[^3];
+                var attackCount = tokens[^3];
                 var name = string.Join(" ", tokens[..^3]);
 
                 if (hasWr)
                 {
-                    sb.AppendLine($"| {name} | {atk} | {hit} | {dmg} | {wrText} |");
+                    sb.AppendLine($"| {name} | {attackCount} | {hit} | {damage} | {wrText} |");
                 }
                 else
                 {
-                    sb.AppendLine($"| {name} | {atk} | {hit} | {dmg} |");
+                    sb.AppendLine($"| {name} | {attackCount} | {hit} | {damage} |");
                 }
             }
         }
@@ -1684,7 +1684,7 @@ public partial class PdfTeamExtractor
     public ExtractedOperativeSelection ParseOperativeSelection(string path)
     {
         var lines = GetPdfLines(path, raw: true);
-        var archetype = "";
+        var archetype = string.Empty;
         var foundArchetype = false;
         var contentLines = new List<string>();
 
@@ -2286,13 +2286,13 @@ public partial class PdfTeamExtractor
                 {
                     // First attribution line — buffer it (don't emit yet; next line may be continuation)
                     var attribution = trimmed[2..].TrimStart();
-                    attribution = System.Text.RegularExpressions.Regex.Replace(attribution, @"\s+\d+$", "");
+                    attribution = System.Text.RegularExpressions.Regex.Replace(attribution, @"\s+\d+$", string.Empty);
                     pendingAttributionText = attribution;
                 }
                 else if (pendingAttributionText.Length > 0 && trimmed.Any(char.IsLower) && !trimmed.StartsWith("- ", StringComparison.Ordinal))
                 {
                     // Continuation of a wrapped attribution line (e.g. "the Onyx Claw Shrine, Biel-Tan Craftworld")
-                    var continuation = System.Text.RegularExpressions.Regex.Replace(trimmed.TrimEnd(), @"\s+\d+$", "");
+                    var continuation = System.Text.RegularExpressions.Regex.Replace(trimmed.TrimEnd(), @"\s+\d+$", string.Empty);
                     pendingAttributionText += " " + continuation;
                 }
                 else
@@ -2319,7 +2319,7 @@ public partial class PdfTeamExtractor
         text = Regex.Replace(text, @"^(#{1,2}\s+)(.+)$", m =>
         {
             var prefix = m.Groups[1].Value;
-            var content = m.Groups[2].Value.Replace("**", "");
+            var content = m.Groups[2].Value.Replace("**", string.Empty);
             return prefix + content;
         }, RegexOptions.Multiline);
 
@@ -2701,7 +2701,7 @@ public partial class PdfTeamExtractor
         {
             if (pageNum > 1)
             {
-                allLines.Add("");
+                allLines.Add(string.Empty);
             }
 
             var page = doc.GetPage(pageNum);
@@ -2753,7 +2753,7 @@ public partial class PdfTeamExtractor
                         var gap = lineGroups[g - 1].Y - lineGroups[g].Y;
                         if (gap > medianHeight * 1.8)
                         {
-                            allLines.Add("");
+                            allLines.Add(string.Empty);
                         }
                     }
 
@@ -2817,7 +2817,7 @@ public partial class PdfTeamExtractor
     {
         if (sortedWords.Count == 0)
         {
-            return "";
+            return string.Empty;
         }
 
         var sb = new StringBuilder();
@@ -2883,8 +2883,8 @@ public partial class PdfTeamExtractor
             .Replace('\u2018', '\'')
             .Replace('\u201C', '"')
             .Replace('\u201D', '"')
-            .Replace("\u00AE", "")
-            .Replace("\u2122", "");
+            .Replace("\u00AE", string.Empty)
+            .Replace("\u2122", string.Empty);
     }
 
     /// <summary>Checks whether a letter is vertically overlapped by any strikethrough line.</summary>
@@ -2954,9 +2954,9 @@ public partial class PdfTeamExtractor
     {
         return name.ToLowerInvariant()
             .Replace(" ", "-")
-            .Replace("'", "")
-            .Replace("(", "")
-            .Replace(")", "");
+            .Replace("'", string.Empty)
+            .Replace("(", string.Empty)
+            .Replace(")", string.Empty);
     }
 
     private static string ToTitleCase(string text) => TextHelpers.ToTitleCase(text);

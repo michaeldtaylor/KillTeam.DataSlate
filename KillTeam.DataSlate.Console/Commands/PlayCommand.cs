@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using KillTeam.DataSlate.Console.Orchestrators;
 using KillTeam.DataSlate.Domain.Models;
 using KillTeam.DataSlate.Domain.Repositories;
@@ -21,7 +21,7 @@ public class PlayCommand(
     {
         [Description("The ID of the game to play or resume.")]
         [CommandArgument(0, "<game-id>")]
-        public string GameId { get; set; } = "";
+        public string GameId { get; set; } = string.Empty;
     }
 
     public override async Task<int> ExecuteAsync(CommandContext context, Settings settings)
@@ -33,6 +33,7 @@ public class PlayCommand(
         }
 
         var game = await gameRepository.GetByIdAsync(gameId);
+
         if (game is null)
         {
             console.MarkupLine($"[red]Game {settings.GameId} not found.[/]");

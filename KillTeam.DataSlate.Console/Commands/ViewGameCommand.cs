@@ -50,24 +50,24 @@ public class ViewGameCommand(
 
         var turningPointSummaries = await turningPoints.GetSummariesByGameAsync(gameId);
 
-        foreach (var tp in turningPointSummaries)
+        foreach (var turningPoint in turningPointSummaries)
         {
-            AnsiConsole.MarkupLine($"\n[bold]=== Turning Point {tp.Number} ===[/]");
+            AnsiConsole.MarkupLine($"\n[bold]=== Turning Point {turningPoint.Number} ===[/]");
 
-            if (tp.InitiativeTeamName is not null)
+            if (turningPoint.InitiativeTeamName is not null)
             {
-                AnsiConsole.MarkupLine($"  Initiative: {Markup.Escape(tp.InitiativeTeamName)}");
+                AnsiConsole.MarkupLine($"  Initiative: {Markup.Escape(turningPoint.InitiativeTeamName)}");
             }
 
-            var ployList = (await ploys.GetByTurningPointAsync(tp.Id)).ToList();
+            var ployList = (await ploys.GetByTurningPointAsync(turningPoint.Id)).ToList();
 
             foreach (var ploy in ployList)
             {
                 AnsiConsole.MarkupLine($"  [dim]Ploy:[/] {Markup.Escape(ploy.PloyName)} ({Markup.Escape(ploy.TeamId)}, {ploy.CpCost}CP)" +
-                    (ploy.Description is not null ? $" — {Markup.Escape(ploy.Description)}" : ""));
+                    (ploy.Description is not null ? $" — {Markup.Escape(ploy.Description)}" : string.Empty));
             }
 
-            var activationList = (await activations.GetByTurningPointAsync(tp.Id)).ToList();
+            var activationList = (await activations.GetByTurningPointAsync(turningPoint.Id)).ToList();
 
             foreach (var activation in activationList)
             {
@@ -84,7 +84,7 @@ public class ViewGameCommand(
                     flags.Add("Guard Interrupt");
                 }
 
-                var flagStr = flags.Count > 0 ? $" [dim]({string.Join(", ", flags)})[/]" : "";
+                var flagStr = flags.Count > 0 ? $" [dim]({string.Join(", ", flags)})[/]" : string.Empty;
 
                 AnsiConsole.MarkupLine($"  [Act {activation.SequenceNumber}] {Markup.Escape(operativeName)} ({activation.OrderSelected}){flagStr}");
 
@@ -100,10 +100,10 @@ public class ViewGameCommand(
                     var targetName = action.TargetOperativeId.HasValue
                         ? await operatives.GetNameByIdAsync(action.TargetOperativeId.Value) : null;
                     var damage = action.NormalDamageDealt + action.CriticalDamageDealt;
-                    var coverStr = action.TargetInCover == true ? " [dim](cover)[/]" : "";
-                    var obscStr = action.IsObscured == true ? " [dim](obscured)[/]" : "";
-                    var incapStr = action.CausedIncapacitation ? " [red](Incapacitated!)[/]" : "";
-                    var targetStr = targetName is not null ? $" → {Markup.Escape(targetName)}" : "";
+                    var coverStr = action.TargetInCover == true ? " [dim](cover)[/]" : string.Empty;
+                    var obscStr = action.IsObscured == true ? " [dim](obscured)[/]" : string.Empty;
+                    var incapStr = action.CausedIncapacitation ? " [red](Incapacitated!)[/]" : string.Empty;
+                    var targetStr = targetName is not null ? $" → {Markup.Escape(targetName)}" : string.Empty;
 
                     AnsiConsole.MarkupLine($"    {action.Type}{targetStr}: {damage} dmg{coverStr}{obscStr}{incapStr}");
 

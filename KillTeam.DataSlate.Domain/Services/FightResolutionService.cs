@@ -33,7 +33,8 @@ public class FightResolutionService
     public FightDicePool CalculateDice(int[] rolls, int hitThreshold, DieOwner owner)
     {
         var dice = new List<FightDie>();
-        for (int i = 0; i < rolls.Length; i++)
+
+        for (var i = 0; i < rolls.Length; i++)
         {
             var result = CalculateDie(rolls[i], hitThreshold);
 

@@ -28,7 +28,8 @@ public class ConsoleFightInputProvider(IAnsiConsole console) : IFightInputProvid
                 .Title("Select attacker''s melee weapon:")
                 .UseConverter(w =>
                 {
-                    var injuredNote = isInjured ? $" [yellow](Injured: effective Hit {w.Hit + 1}+)[/]" : "";
+                    var injuredNote = isInjured ? $" [yellow](Injured: effective Hit {w.Hit + 1}+)[/]" : string.Empty;
+
                     return $"{Markup.Escape(w.Name)} (Attack: [green]{w.Atk}[/] | Hit: [green]{w.Hit}+[/] | Normal: [green]{w.NormalDmg}[/] | Crit: [green]{w.CriticalDmg}[/]){injuredNote}";
                 })
                 .AddChoices(weapons)));
@@ -87,6 +88,7 @@ public class ConsoleFightInputProvider(IAnsiConsole console) : IFightInputProvid
         if (choice == "Roll for me")
         {
             var rolled = Enumerable.Range(0, count).Select(_ => Random.Shared.Next(1, 7)).ToArray();
+
             eventStream?.Emit((seq, ts) => new DiceRolledEvent(eventStream.GameSessionId, seq, ts, participant, operativeName, role, phase, rolled));
             return rolled;
         }
@@ -99,6 +101,7 @@ public class ConsoleFightInputProvider(IAnsiConsole console) : IFightInputProvid
             var parts = input.Split([' ', ','], StringSplitOptions.RemoveEmptyEntries);
             var values = new List<int>();
             var valid = true;
+
             foreach (var p in parts)
             {
                 if (int.TryParse(p, out int v) && v is >= 1 and <= 6)
@@ -111,12 +114,15 @@ public class ConsoleFightInputProvider(IAnsiConsole console) : IFightInputProvid
                     break;
                 }
             }
+
             if (valid && values.Count == count)
             {
                 var rolled = values.ToArray();
+
                 eventStream?.Emit((seq, ts) => new DiceRolledEvent(eventStream.GameSessionId, seq, ts, participant, operativeName, role, phase, rolled));
                 return rolled;
             }
+
             console.MarkupLine("[red]Invalid input. Enter integers 1-6 separated by spaces or commas.[/]");
         }
     }
@@ -125,11 +131,13 @@ public class ConsoleFightInputProvider(IAnsiConsole console) : IFightInputProvid
     {
         var resultLabel = a.ActiveDie.Result == DieResult.Crit ? "CRIT" : "HIT";
         var dieInfo = $"rolled [green]{a.ActiveDie.RolledValue}[/] ({resultLabel})";
+
         if (a.Type == FightActionType.Strike)
         {
             return $"[red]STRIKE[/] — {dieInfo}";
         }
         var targetLabel = a.TargetDie!.Result == DieResult.Crit ? "CRIT" : "HIT";
+
         return $"[cyan]BLOCK[/] — {dieInfo} cancels rolled [green]{a.TargetDie.RolledValue}[/] ({targetLabel})";
     }
 }

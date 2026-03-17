@@ -7,5 +7,5 @@ public class ExtractedEquipmentItem
     public required string Name { get; init; }
 
     /// <summary>The description text for the item, or empty string if none found.</summary>
-    public string Text { get; init; } = "";
+    public string Text { get; init; } = string.Empty;
 }

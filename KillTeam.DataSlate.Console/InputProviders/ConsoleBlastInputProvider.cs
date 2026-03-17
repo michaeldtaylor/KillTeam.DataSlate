@@ -26,7 +26,8 @@ public class ConsoleBlastInputProvider(IAnsiConsole console) : IBlastInputProvid
                         return s.OperativeId.ToString();
                     }
                     var isFriendly = o.TeamId == attackerTeamId;
-                    var friendly = isFriendly ? " [red][FRIENDLY FIRE!][/]" : "";
+                    var friendly = isFriendly ? " [red][FRIENDLY FIRE!][/]" : string.Empty;
+
                     return $"{Markup.Escape(o.Name)} (Wounds: {s.CurrentWounds}/{o.Wounds}){friendly}";
                 })
                 .AddChoices(candidates)
@@ -76,6 +77,7 @@ public class ConsoleBlastInputProvider(IAnsiConsole console) : IBlastInputProvid
         if (choice == "Roll for me")
         {
             var rolled = Enumerable.Range(0, count).Select(_ => Random.Shared.Next(1, 7)).ToArray();
+
             console.MarkupLine($"  Rolled: [green]{string.Join(", ", rolled)}[/]");
             return rolled;
         }
@@ -88,6 +90,7 @@ public class ConsoleBlastInputProvider(IAnsiConsole console) : IBlastInputProvid
             var parts = input.Split([' ', ','], StringSplitOptions.RemoveEmptyEntries);
             var values = new List<int>();
             var valid = true;
+
             foreach (var p in parts)
             {
                 if (int.TryParse(p, out int v) && v is >= 1 and <= 6)
@@ -98,11 +101,14 @@ public class ConsoleBlastInputProvider(IAnsiConsole console) : IBlastInputProvid
                 {
                     valid = false;
                     break;
-                }            }
+                }
+            }
+
             if (valid && values.Count == count)
             {
                 return values.ToArray();
             }
+
             console.MarkupLine("[red]Invalid input. Enter integers 1-6 separated by spaces or commas.[/]");
         }
     }

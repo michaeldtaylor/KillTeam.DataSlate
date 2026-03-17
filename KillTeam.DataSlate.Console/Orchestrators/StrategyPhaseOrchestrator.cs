@@ -16,14 +16,14 @@ public class StrategyPhaseOrchestrator(IAnsiConsole console, StrategyPhaseEngine
     {
         console.Write(new Rule($"[bold]Turning Point {tpNumber} — Strategy Phase[/]"));
 
-        var tp = await engine.RunAsync(game, tpNumber, teamAName, teamBName);
+        var turningPoint = await engine.RunAsync(game, tpNumber, teamAName, teamBName);
 
         var cpA = game.Participant1.CommandPoints;
         var cpB = game.Participant2.CommandPoints;
         console.MarkupLine(FormatCp(teamAName, cpA) + "  " + FormatCp(teamBName, cpB));
         console.MarkupLine("[dim]Strategy Phase complete.[/]");
 
-        return tp;
+        return turningPoint;
     }
 
     private static string FormatCp(string teamName, int cp)

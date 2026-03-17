@@ -10,6 +10,7 @@ public class DatabaseInitialiser
     public DatabaseInitialiser(IConfiguration config)
     {
         var path = config["DataSlate:DatabasePath"] ?? "./data/kill-team.db";
+
         _connectionString = $"Data Source={path}";
 
         var dir = Path.GetDirectoryName(path);
@@ -50,6 +51,7 @@ public class DatabaseInitialiser
     private static async Task<int> GetCurrentVersionAsync(SqliteConnection connection)
     {
         await using var checkCommand = connection.CreateCommand();
+
         checkCommand.CommandText = "SELECT name FROM sqlite_master WHERE type='table' AND name='schema_version'";
         var exists = await checkCommand.ExecuteScalarAsync() is not null;
 
@@ -59,6 +61,7 @@ public class DatabaseInitialiser
         }
 
         await using var readCommand = connection.CreateCommand();
+
         readCommand.CommandText = "SELECT version FROM schema_version LIMIT 1";
         var result = await readCommand.ExecuteScalarAsync();
 
