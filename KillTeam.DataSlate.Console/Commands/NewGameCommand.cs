@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using KillTeam.DataSlate.Domain.Models;
 using KillTeam.DataSlate.Domain.Repositories;
+using Microsoft.Extensions.Logging;
 using Spectre.Console;
 using Spectre.Console.Cli;
 
@@ -12,7 +13,8 @@ public class NewGameCommand(
     IPlayerRepository players,
     ITeamRepository teams,
     IGameRepository games,
-    IGameOperativeStateRepository gameStates) : AsyncCommand
+    IGameOperativeStateRepository gameStates,
+    ILogger<NewGameCommand> logger) : AsyncCommand
 {
     public override async Task<int> ExecuteAsync(CommandContext context)
     {
@@ -92,6 +94,8 @@ public class NewGameCommand(
         };
 
         var created = await games.CreateAsync(game);
+
+        logger.LogInformation("New game {GameId} created: {TeamA} vs {TeamB}", created.Id, teamA.Name, teamB.Name);
 
         // Create operative states for both teams
         var allOperatives = new List<Operative>();

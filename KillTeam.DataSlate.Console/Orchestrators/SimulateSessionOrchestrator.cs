@@ -6,6 +6,7 @@ using KillTeam.DataSlate.Domain.Events;
 using KillTeam.DataSlate.Domain.Repositories;
 using KillTeam.DataSlate.Domain.Repositories.InMemory;
 using KillTeam.DataSlate.Domain.Services;
+using Microsoft.Extensions.Logging;
 using Spectre.Console;
 using Models = KillTeam.DataSlate.Domain.Models;
 
@@ -24,10 +25,12 @@ public class SimulateSessionOrchestrator(
     IRerollInputProvider rerollInputProvider,
     IBlastInputProvider blastInputProvider,
     CombatResolutionService combatResolutionService,
-    FightResolutionService fightResolutionService)
+    FightResolutionService fightResolutionService,
+    ILogger<SimulateSessionOrchestrator> logger)
 {
     public async Task RunAsync()
     {
+        logger.LogInformation("Simulate session started");
         console.Write(new Rule("[bold cyan]Simulate Mode[/]"));
         console.MarkupLine("[dim]Test fight and shoot encounters without a full game session. Nothing is saved.[/]");
         console.WriteLine();
@@ -40,6 +43,7 @@ public class SimulateSessionOrchestrator(
         }
 
         await RunSessionLoopAsync(playerOperative, aiOperative, playerTeam!, aiTeam!);
+        logger.LogInformation("Simulate session ended");
     }
 
     // --- Operative selection -------------------------------------------------

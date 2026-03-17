@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using KillTeam.DataSlate.Domain.Models;
 using KillTeam.DataSlate.Domain.Repositories;
+using Microsoft.Extensions.Logging;
 using Spectre.Console;
 using Spectre.Console.Cli;
 
@@ -14,7 +15,8 @@ public class ViewGameCommand(
     IActionRepository actions,
     IPloyRepository ploys,
     ITurningPointRepository turningPoints,
-    IOperativeRepository operatives) : AsyncCommand<ViewGameCommand.Settings>
+    IOperativeRepository operatives,
+    ILogger<ViewGameCommand> logger) : AsyncCommand<ViewGameCommand.Settings>
 {
     public class Settings : CommandSettings
     {
@@ -32,10 +34,13 @@ public class ViewGameCommand(
             return 1;
         }
 
+        logger.LogDebug("Viewing game {GameId}", gameId);
+
         var header = await games.GetHeaderAsync(gameId);
 
         if (header is null)
         {
+            logger.LogWarning("Game {GameId} not found for view", gameId);
             AnsiConsole.MarkupLine($"[red]Game {Markup.Escape(settings.GameId)} not found.[/]");
 
             return 1;

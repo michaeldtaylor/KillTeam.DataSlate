@@ -3,6 +3,7 @@ using KillTeam.DataSlate.Domain;
 using KillTeam.DataSlate.Domain.Repositories;
 using KillTeam.DataSlate.Domain.Services;
 using KillTeam.DataSlate.Infrastructure.Services;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Spectre.Console;
 using Spectre.Console.Cli;
@@ -15,7 +16,8 @@ public class ImportTeamsCommand(
     TeamYamlImporter yamlImporter,
     TeamJsonImporter jsonImporter,
     ITeamRepository teams,
-    IOptions<DataSlateOptions> options) : AsyncCommand<ImportTeamsCommand.Settings>
+    IOptions<DataSlateOptions> options,
+    ILogger<ImportTeamsCommand> logger) : AsyncCommand<ImportTeamsCommand.Settings>
 {
     public class Settings : CommandSettings
     {
@@ -26,23 +28,24 @@ public class ImportTeamsCommand(
 
     public override async Task<int> ExecuteAsync(CommandContext context, Settings settings)
     {
+        logger.LogDebug("import-teams started. Path={Path}", settings.FilePath ?? "(folder scan)");
         if (!string.IsNullOrWhiteSpace(settings.FilePath))
         {
             return await ImportSingleFile(settings.FilePath);
         }
 
         // Folder scan
-        var folder = options.Value.TeamsFolder;
+        var teamsFolder = options.Value.TeamsFolder;
 
-        if (!Directory.Exists(folder))
+        if (!Directory.Exists(teamsFolder))
         {
-            AnsiConsole.MarkupLine($"[yellow]team folder not found: {Markup.Escape(folder)}[/]");
+            AnsiConsole.MarkupLine($"[yellow]team folder not found: {Markup.Escape(teamsFolder)}[/]");
             return 1;
         }
 
-        var files = Directory.GetFiles(folder, "*.yaml")
-            .Concat(Directory.GetFiles(folder, "*.yml"))
-            .Concat(Directory.GetFiles(folder, "*.json"))
+        var files = Directory.GetFiles(teamsFolder, "*.yaml")
+            .Concat(Directory.GetFiles(teamsFolder, "*.yml"))
+            .Concat(Directory.GetFiles(teamsFolder, "*.json"))
             .ToArray();
 
         if (files.Length == 0)
@@ -62,6 +65,7 @@ public class ImportTeamsCommand(
             }
             catch (Exception ex)
             {
+                logger.LogWarning(ex, "Skipped file {File}", Path.GetFileName(file));
                 AnsiConsole.MarkupLine($"[yellow]Warning: skipped '{Markup.Escape(Path.GetFileName(file))}' — {Markup.Escape(ex.Message)}[/]");
             }
         }
@@ -85,11 +89,13 @@ public class ImportTeamsCommand(
         }
         catch (TeamValidationException ex)
         {
+            logger.LogWarning(ex, "Import validation failed for {Path}", path);
             AnsiConsole.MarkupLine($"[red]Import failed: {Markup.Escape(ex.Message)}[/]");
             return 1;
         }
         catch (Exception ex)
         {
+            logger.LogError(ex, "Unexpected error importing {Path}", path);
             AnsiConsole.MarkupLine($"[red]Unexpected error: {Markup.Escape(ex.Message)}[/]");
             return 1;
         }
@@ -108,6 +114,8 @@ public class ImportTeamsCommand(
         };
 
         await teams.UpsertAsync(team);
+
+        logger.LogDebug("Imported team {TeamName} from {Path}", team.Name, path);
 
         var opCount = team.Operatives.Count;
         var wCount = team.Operatives.Sum(o => o.Weapons.Count);

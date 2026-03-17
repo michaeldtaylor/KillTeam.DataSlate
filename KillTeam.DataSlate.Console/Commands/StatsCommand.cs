@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using KillTeam.DataSlate.Domain.Repositories;
+using Microsoft.Extensions.Logging;
 using Spectre.Console;
 using Spectre.Console.Cli;
 
@@ -10,7 +11,8 @@ namespace KillTeam.DataSlate.Console.Commands;
 public class StatsCommand(
     ITeamRepository teams,
     IGameRepository games,
-    IPlayerRepository players) : AsyncCommand<StatsCommand.Settings>
+    IPlayerRepository players,
+    ILogger<StatsCommand> logger) : AsyncCommand<StatsCommand.Settings>
 {
     public class Settings : CommandSettings
     {
@@ -25,6 +27,7 @@ public class StatsCommand(
 
     public override async Task<int> ExecuteAsync(CommandContext context, Settings settings)
     {
+        logger.LogDebug("Stats command. Team={Team}, Player={Player}", settings.TeamName, settings.PlayerName);
         if (!string.IsNullOrWhiteSpace(settings.TeamName))
         {
             return await ShowTeamStatsAsync(settings.TeamName);
@@ -39,6 +42,7 @@ public class StatsCommand(
 
         if (team is null)
         {
+            logger.LogWarning("Team {TeamName} not found for stats", teamName);
             AnsiConsole.MarkupLine($"[red]Team '{Markup.Escape(teamName)}' not found.[/]");
 
             return 1;
@@ -48,6 +52,7 @@ public class StatsCommand(
 
         if (stats is null)
         {
+            logger.LogWarning("No stats found for team {TeamName}", teamName);
             AnsiConsole.MarkupLine($"[red]Could not load stats for team '{Markup.Escape(teamName)}'.[/]");
 
             return 1;

@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using KillTeam.DataSlate.Domain.Repositories;
+using Microsoft.Extensions.Logging;
 using Spectre.Console;
 using Spectre.Console.Cli;
 
@@ -12,7 +13,8 @@ public class AnnotateCommand(
     IActivationRepository activations,
     IActionRepository actions,
     ITurningPointRepository turningPoints,
-    IOperativeRepository operatives) : AsyncCommand<AnnotateCommand.Settings>
+    IOperativeRepository operatives,
+    ILogger<AnnotateCommand> logger) : AsyncCommand<AnnotateCommand.Settings>
 {
     public class Settings : CommandSettings
     {
@@ -30,10 +32,13 @@ public class AnnotateCommand(
             return 1;
         }
 
+        logger.LogDebug("Annotate command for game {GameId}", gameId);
+
         var game = await games.GetByIdAsync(gameId);
 
         if (game is null)
         {
+            logger.LogWarning("Game {GameId} not found for annotate", gameId);
             AnsiConsole.MarkupLine($"[red]Game {Markup.Escape(settings.GameId)} not found.[/]");
 
             return 1;
@@ -102,6 +107,7 @@ public class AnnotateCommand(
                 new TextPrompt<string>("Enter annotation:").AllowEmpty());
 
             await activations.UpdateNarrativeAsync(selected.ActivationId, string.IsNullOrWhiteSpace(note) ? null : note);
+            logger.LogDebug("Annotation saved for activation {Id}", selected.ActivationId);
             AnsiConsole.MarkupLine("[green]Annotation saved.[/]");
 
             return 0;
@@ -131,6 +137,7 @@ public class AnnotateCommand(
             new TextPrompt<string>("Enter annotation:").AllowEmpty());
 
         await actions.UpdateNarrativeAsync(selectedAction.Id, string.IsNullOrWhiteSpace(actionNote) ? null : actionNote);
+        logger.LogDebug("Annotation saved for action {Id}", selectedAction.Id);
         AnsiConsole.MarkupLine("[green]Action annotation saved.[/]");
 
         return 0;

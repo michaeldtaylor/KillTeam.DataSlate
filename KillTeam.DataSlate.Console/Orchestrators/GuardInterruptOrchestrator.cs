@@ -1,11 +1,12 @@
 using KillTeam.DataSlate.Domain.Engine;
 using KillTeam.DataSlate.Domain.Events;
 using KillTeam.DataSlate.Domain.Models;
+using Microsoft.Extensions.Logging;
 using Spectre.Console;
 
 namespace KillTeam.DataSlate.Console.Orchestrators;
 
-public class GuardInterruptOrchestrator(IAnsiConsole console, GuardInterruptEngine engine)
+public class GuardInterruptOrchestrator(IAnsiConsole console, GuardInterruptEngine engine, ILogger<GuardInterruptOrchestrator> logger)
 {
     /// <summary>
     /// Checks each eligible guard operative on the friendly side.
@@ -21,6 +22,7 @@ public class GuardInterruptOrchestrator(IAnsiConsole console, GuardInterruptEngi
         int seqCounter,
         GameEventStream? eventStream = null)
     {
+        logger.LogDebug("Checking guard interrupts for game {GameId}", game.Id);
         return await engine.CheckAndRunInterruptsAsync(
             actingEnemy, actingEnemyState, allOperativeStates, allOperatives,
             game, tp, seqCounter, eventStream);

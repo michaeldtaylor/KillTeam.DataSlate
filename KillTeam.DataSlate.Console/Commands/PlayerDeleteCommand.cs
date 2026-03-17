@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using KillTeam.DataSlate.Domain.Repositories;
+using Microsoft.Extensions.Logging;
 using Spectre.Console;
 using Spectre.Console.Cli;
 
@@ -7,7 +8,7 @@ namespace KillTeam.DataSlate.Console.Commands;
 
 /// <summary>Deletes a registered player (blocked if they have recorded games).</summary>
 [Description("Delete a player (blocked if they have recorded games).")]
-public class PlayerDeleteCommand(IPlayerRepository players) : AsyncCommand<PlayerDeleteCommand.Settings>
+public class PlayerDeleteCommand(IPlayerRepository players, ILogger<PlayerDeleteCommand> logger) : AsyncCommand<PlayerDeleteCommand.Settings>
 {
     public class Settings : CommandSettings
     {
@@ -23,6 +24,7 @@ public class PlayerDeleteCommand(IPlayerRepository players) : AsyncCommand<Playe
 
         if (player is null)
         {
+            logger.LogWarning("Player {Name} not found for delete", name);
             AnsiConsole.MarkupLine($"[yellow]Player '{Markup.Escape(name)}' not found.[/]");
 
             return 1;
@@ -32,6 +34,7 @@ public class PlayerDeleteCommand(IPlayerRepository players) : AsyncCommand<Playe
 
         if (gameCount > 0)
         {
+            logger.LogWarning("Cannot delete player {Name} — has {GameCount} games", name, gameCount);
             AnsiConsole.MarkupLine($"[red]Cannot delete '{Markup.Escape(name)}' — they have {gameCount} recorded game(s).[/]");
 
             return 1;
@@ -43,6 +46,7 @@ public class PlayerDeleteCommand(IPlayerRepository players) : AsyncCommand<Playe
         }
 
         await players.DeleteAsync(player.Id);
+        logger.LogInformation("Player {Name} deleted", name);
         AnsiConsole.MarkupLine($"[green]Player '{Markup.Escape(name)}' deleted.[/]");
 
         return 0;

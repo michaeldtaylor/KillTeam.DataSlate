@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using KillTeam.DataSlate.Domain.Repositories;
+using Microsoft.Extensions.Logging;
 using Spectre.Console;
 using Spectre.Console.Cli;
 
@@ -7,7 +8,7 @@ namespace KillTeam.DataSlate.Console.Commands;
 
 /// <summary>Lists completed games, optionally filtered by player name.</summary>
 [Description("List completed games, optionally filtered by player.")]
-public class HistoryCommand(IGameRepository games) : AsyncCommand<HistoryCommand.Settings>
+public class HistoryCommand(IGameRepository games, ILogger<HistoryCommand> logger) : AsyncCommand<HistoryCommand.Settings>
 {
     public class Settings : CommandSettings
     {
@@ -18,6 +19,7 @@ public class HistoryCommand(IGameRepository games) : AsyncCommand<HistoryCommand
 
     public override async Task<int> ExecuteAsync(CommandContext context, Settings settings)
     {
+        logger.LogDebug("Listing game history. PlayerFilter={Player}", settings.PlayerName ?? "(all)");
         var rows = await games.GetHistoryAsync(settings.PlayerName);
 
         if (rows.Count == 0)

@@ -2,6 +2,7 @@ using KillTeam.DataSlate.Domain.Engine;
 using KillTeam.DataSlate.Domain.Models;
 using KillTeam.DataSlate.Domain.Repositories;
 using KillTeam.DataSlate.Domain.Services;
+using Microsoft.Extensions.Logging;
 using Spectre.Console;
 
 namespace KillTeam.DataSlate.Console.Orchestrators;
@@ -15,10 +16,12 @@ public class FirefightPhaseOrchestrator(
     ITeamRepository teamRepository,
     ShootEngine shootEngine,
     FightEngine fightEngine,
-    GuardInterruptOrchestrator guardInterruptOrchestrator)
+    GuardInterruptOrchestrator guardInterruptOrchestrator,
+    ILogger<FirefightPhaseOrchestrator> logger)
 {
     public async Task RunAsync(Game game, TurningPoint currentTurningPoint)
     {
+        logger.LogDebug("Firefight phase TP{TpNumber} started for game {GameId}", currentTurningPoint.Number, game.Id);
         var teamA = await teamRepository.GetWithOperativesAsync(game.Participant1.TeamName);
         var teamB = await teamRepository.GetWithOperativesAsync(game.Participant2.TeamName);
         var allOperatives = (teamA?.Operatives ?? [])

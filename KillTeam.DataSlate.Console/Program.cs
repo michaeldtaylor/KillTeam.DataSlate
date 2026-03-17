@@ -11,7 +11,9 @@ using KillTeam.DataSlate.Infrastructure.Repositories;
 using KillTeam.DataSlate.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using NLog.Extensions.Logging;
 using Spectre.Console;
 using Spectre.Console.Cli;
 using System.ComponentModel.DataAnnotations;
@@ -31,7 +33,7 @@ public static class Program
         // Validate options and initialise the database before the DI container is built.
         // This gives a clear startup error rather than a cryptic type-resolution failure.
         var rawOptions = config.GetSection("DataSlate").Get<DataSlateOptions>()
-            ?? throw new InvalidOperationException("DataSlate configuration section is missing.");
+            ?? throw new InvalidOperationException("KillTeam: Data Slate configuration section is missing.");
 
         Validator.ValidateObject(rawOptions, new ValidationContext(rawOptions), validateAllProperties: true);
 
@@ -40,6 +42,8 @@ public static class Program
         var services = new ServiceCollection();
 
         services.AddSingleton<IConfiguration>(config);
+
+        services.AddLogging(logging => logging.AddNLog());
 
         services
             .AddOptions<DataSlateOptions>()

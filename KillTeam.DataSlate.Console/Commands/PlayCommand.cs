@@ -2,6 +2,7 @@ using System.ComponentModel;
 using KillTeam.DataSlate.Console.Orchestrators;
 using KillTeam.DataSlate.Domain.Models;
 using KillTeam.DataSlate.Domain.Repositories;
+using Microsoft.Extensions.Logging;
 using Spectre.Console;
 using Spectre.Console.Cli;
 
@@ -15,7 +16,8 @@ public class PlayCommand(
     ITurningPointRepository turningPointRepository,
     ITeamRepository teamRepository,
     StrategyPhaseOrchestrator strategyPhaseOrchestrator,
-    FirefightPhaseOrchestrator firefightPhaseOrchestrator) : AsyncCommand<PlayCommand.Settings>
+    FirefightPhaseOrchestrator firefightPhaseOrchestrator,
+    ILogger<PlayCommand> logger) : AsyncCommand<PlayCommand.Settings>
 {
     public class Settings : CommandSettings
     {
@@ -32,15 +34,19 @@ public class PlayCommand(
             return 1;
         }
 
+        logger.LogInformation("Playing game {GameId}", gameId);
+
         var game = await gameRepository.GetByIdAsync(gameId);
 
         if (game is null)
         {
+            logger.LogWarning("Game {GameId} not found", gameId);
             console.MarkupLine($"[red]Game {settings.GameId} not found.[/]");
             return 1;
         }
         if (game.Status == GameStatus.Completed)
         {
+            logger.LogInformation("Game {GameId} already completed", gameId);
             console.MarkupLine("[yellow]Game is already completed.[/]");
             return 0;
         }
@@ -58,6 +64,7 @@ public class PlayCommand(
 
         for (var tpNumber = startTpNumber; tpNumber <= 4; tpNumber++)
         {
+            logger.LogDebug("Starting TP {TpNumber} for game {GameId}", tpNumber, gameId);
             TurningPoint activeTp;
 
             if (currentTp is not null && currentTp.Number == tpNumber)
@@ -80,6 +87,7 @@ public class PlayCommand(
 
             // Run firefight phase
             await firefightPhaseOrchestrator.RunAsync(game, activeTp);
+            logger.LogDebug("Completed TP {TpNumber} for game {GameId}", tpNumber, gameId);
 
             // Check if game ended
             game = (await gameRepository.GetByIdAsync(game.Id))!;
@@ -100,6 +108,7 @@ public class PlayCommand(
                 : game.WinnerTeamId == game.Participant1.TeamId
                     ? $"{teamAName} wins"
                     : $"{teamBName} wins";
+            logger.LogInformation("Game {GameId} completed. Winner: {Winner}", gameId, winner);
             console.MarkupLine($"Result: [bold]{Markup.Escape(winner)}[/]  |  {Markup.Escape(teamAName)}: {game.Participant1.VictoryPoints} VP  |  {Markup.Escape(teamBName)}: {game.Participant2.VictoryPoints} VP");
         }
 

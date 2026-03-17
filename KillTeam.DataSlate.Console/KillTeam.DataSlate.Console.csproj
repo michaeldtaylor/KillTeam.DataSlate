@@ -12,6 +12,9 @@
         <Content Include="appsettings.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
+        <Content Include="NLog.config">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
     </ItemGroup>
 
     <ItemGroup>
@@ -21,6 +24,8 @@
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.5" />
         <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="10.0.5" />
         <PackageReference Include="Microsoft.Extensions.Options.DataAnnotations" Version="10.0.5" />
+        <PackageReference Include="NLog" Version="5.*" />
+        <PackageReference Include="NLog.Extensions.Logging" Version="5.*" />
         <PackageReference Include="Spectre.Console" Version="0.50.0" />
         <PackageReference Include="Spectre.Console.Cli" Version="0.50.0" />
     </ItemGroup>
