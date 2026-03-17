@@ -113,7 +113,7 @@ public class ShootEngine(
             eventStream?.Emit((seq, ts) => new CoverSaveNotifiedEvent(eventStream.GameSessionId, seq, ts, isAttackerTeamId, targetOp.Name));
         }
 
-        int[] defenderDice = defenderDiceCount == 0
+        var defenderDice = defenderDiceCount == 0
             ? []
             : await inputProvider.RollOrEnterDiceAsync(defenderDiceCount, $"{targetOp.Name} defence dice", targetOp.Name, "Defender", "Shoot", defenderTeamId, eventStream);
 

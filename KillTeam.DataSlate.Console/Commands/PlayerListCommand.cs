@@ -8,7 +8,7 @@ namespace KillTeam.DataSlate.Console.Commands;
 
 /// <summary>Lists all registered players with their win/loss statistics.</summary>
 [Description("List all registered players with win/loss stats.")]
-public class PlayerListCommand(IPlayerRepository players, ILogger<PlayerListCommand> logger) : AsyncCommand
+public class PlayerListCommand(IAnsiConsole console, IPlayerRepository players, ILogger<PlayerListCommand> logger) : AsyncCommand
 {
     public override async Task<int> ExecuteAsync(CommandContext context)
     {
@@ -17,7 +17,7 @@ public class PlayerListCommand(IPlayerRepository players, ILogger<PlayerListComm
 
         if (playerStats.Count == 0)
         {
-            AnsiConsole.MarkupLine("[dim]No players registered yet.[/]");
+            console.MarkupLine("[dim]No players registered yet.[/]");
 
             return 0;
         }
@@ -35,7 +35,7 @@ public class PlayerListCommand(IPlayerRepository players, ILogger<PlayerListComm
             table.AddRow(Markup.Escape(stat.Name), stat.GamesPlayed.ToString(), stat.Wins.ToString(), winPercentage);
         }
 
-        AnsiConsole.Write(table);
+        console.Write(table);
 
         return 0;
     }

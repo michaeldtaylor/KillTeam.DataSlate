@@ -26,7 +26,7 @@ public class PlayerCommandTests
         var repo = new SqlitePlayerRepository(db.Connection);
         await repo.AddAsync(new Player { Id = Guid.NewGuid(), Name = "Solomon" });
 
-        Func<Task> act = () => repo.AddAsync(new Player { Id = Guid.NewGuid(), Name = "Solomon" });
+        var act = () => repo.AddAsync(new Player { Id = Guid.NewGuid(), Name = "Solomon" });
 
         await act.Should().ThrowAsync<Exception>();
     }

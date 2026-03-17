@@ -9,6 +9,7 @@ namespace KillTeam.DataSlate.Console.Commands;
 /// <summary>Displays win/loss statistics per player or per team.</summary>
 [Description("Show win/loss statistics per player or per team.")]
 public class StatsCommand(
+    IAnsiConsole console,
     ITeamRepository teams,
     IGameRepository games,
     IPlayerRepository players,
@@ -43,7 +44,7 @@ public class StatsCommand(
         if (team is null)
         {
             logger.LogWarning("Team {TeamName} not found for stats", teamName);
-            AnsiConsole.MarkupLine($"[red]Team '{Markup.Escape(teamName)}' not found.[/]");
+            console.MarkupLine($"[red]Team '{Markup.Escape(teamName)}' not found.[/]");
 
             return 1;
         }
@@ -53,7 +54,7 @@ public class StatsCommand(
         if (stats is null)
         {
             logger.LogWarning("No stats found for team {TeamName}", teamName);
-            AnsiConsole.MarkupLine($"[red]Could not load stats for team '{Markup.Escape(teamName)}'.[/]");
+            console.MarkupLine($"[red]Could not load stats for team '{Markup.Escape(teamName)}'.[/]");
 
             return 1;
         }
@@ -61,7 +62,7 @@ public class StatsCommand(
         var losses = stats.GamesPlayed - stats.Wins;
         var winPercentage = stats.GamesPlayed > 0 ? $"{stats.Wins * 100 / stats.GamesPlayed}%" : "—";
 
-        AnsiConsole.MarkupLine($"[bold]{Markup.Escape(team.Name)}[/] ({Markup.Escape(team.Faction)})");
+        console.MarkupLine($"[bold]{Markup.Escape(team.Name)}[/] ({Markup.Escape(team.Faction)})");
 
         var statsTable = new Table()
             .AddColumn("Games").AddColumn("Wins").AddColumn("Losses")
@@ -75,7 +76,7 @@ public class StatsCommand(
             stats.Kills.ToString(),
             Markup.Escape(stats.MostUsedWeapon ?? "—"));
 
-        AnsiConsole.Write(statsTable);
+        console.Write(statsTable);
 
         return 0;
     }
@@ -86,7 +87,7 @@ public class StatsCommand(
 
         if (playerStats.Count == 0)
         {
-            AnsiConsole.MarkupLine("[dim]No players registered yet.[/]");
+            console.MarkupLine("[dim]No players registered yet.[/]");
 
             return 0;
         }
@@ -104,7 +105,7 @@ public class StatsCommand(
             table.AddRow(Markup.Escape(stat.Name), stat.GamesPlayed.ToString(), stat.Wins.ToString(), winPercentage);
         }
 
-        AnsiConsole.Write(table);
+        console.Write(table);
 
         return 0;
     }

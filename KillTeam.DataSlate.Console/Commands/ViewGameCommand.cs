@@ -10,6 +10,7 @@ namespace KillTeam.DataSlate.Console.Commands;
 /// <summary>Displays the full detail of a game: turning points, activations, actions, dice, and narrative notes.</summary>
 [Description("View full details of a game — turning points, activations, actions, and notes.")]
 public class ViewGameCommand(
+    IAnsiConsole console,
     IGameRepository games,
     IActivationRepository activations,
     IActionRepository actions,
@@ -29,7 +30,7 @@ public class ViewGameCommand(
     {
         if (!Guid.TryParse(settings.GameId, out var gameId))
         {
-            AnsiConsole.MarkupLine("[red]Invalid game ID format.[/]");
+            console.MarkupLine("[red]Invalid game ID format.[/]");
 
             return 1;
         }
@@ -41,34 +42,34 @@ public class ViewGameCommand(
         if (header is null)
         {
             logger.LogWarning("Game {GameId} not found for view", gameId);
-            AnsiConsole.MarkupLine($"[red]Game {Markup.Escape(settings.GameId)} not found.[/]");
+            console.MarkupLine($"[red]Game {Markup.Escape(settings.GameId)} not found.[/]");
 
             return 1;
         }
 
-        AnsiConsole.MarkupLine($"[bold]=== {Markup.Escape(header.PlayerAName)} ({Markup.Escape(header.TeamAName)}) vs {Markup.Escape(header.PlayerBName)} ({Markup.Escape(header.TeamBName)}) ===[/]");
+        console.MarkupLine($"[bold]=== {Markup.Escape(header.PlayerAName)} ({Markup.Escape(header.TeamAName)}) vs {Markup.Escape(header.PlayerBName)} ({Markup.Escape(header.TeamBName)}) ===[/]");
 
         if (header.MissionName is not null)
         {
-            AnsiConsole.MarkupLine($"Mission: {Markup.Escape(header.MissionName)}");
+            console.MarkupLine($"Mission: {Markup.Escape(header.MissionName)}");
         }
 
         var turningPointSummaries = await turningPoints.GetSummariesByGameAsync(gameId);
 
         foreach (var turningPoint in turningPointSummaries)
         {
-            AnsiConsole.MarkupLine($"\n[bold]=== Turning Point {turningPoint.Number} ===[/]");
+            console.MarkupLine($"\n[bold]=== Turning Point {turningPoint.Number} ===[/]");
 
             if (turningPoint.InitiativeTeamName is not null)
             {
-                AnsiConsole.MarkupLine($"  Initiative: {Markup.Escape(turningPoint.InitiativeTeamName)}");
+                console.MarkupLine($"  Initiative: {Markup.Escape(turningPoint.InitiativeTeamName)}");
             }
 
             var ployList = (await ploys.GetByTurningPointAsync(turningPoint.Id)).ToList();
 
             foreach (var ploy in ployList)
             {
-                AnsiConsole.MarkupLine($"  [dim]Ploy:[/] {Markup.Escape(ploy.PloyName)} ({Markup.Escape(ploy.TeamId)}, {ploy.CpCost}CP)" +
+                console.MarkupLine($"  [dim]Ploy:[/] {Markup.Escape(ploy.PloyName)} ({Markup.Escape(ploy.TeamId)}, {ploy.CpCost}CP)" +
                     (ploy.Description is not null ? $" — {Markup.Escape(ploy.Description)}" : string.Empty));
             }
 
@@ -91,11 +92,11 @@ public class ViewGameCommand(
 
                 var flagStr = flags.Count > 0 ? $" [dim]({string.Join(", ", flags)})[/]" : string.Empty;
 
-                AnsiConsole.MarkupLine($"  [Act {activation.SequenceNumber}] {Markup.Escape(operativeName)} ({activation.OrderSelected}){flagStr}");
+                console.MarkupLine($"  [Act {activation.SequenceNumber}] {Markup.Escape(operativeName)} ({activation.OrderSelected}){flagStr}");
 
                 if (activation.NarrativeNote is not null)
                 {
-                    AnsiConsole.MarkupLine($"    [dim]🖊 {Markup.Escape(activation.NarrativeNote)}[/]");
+                    console.MarkupLine($"    [dim]🖊 {Markup.Escape(activation.NarrativeNote)}[/]");
                 }
 
                 var actionList = (await actions.GetByActivationAsync(activation.Id)).ToList();
@@ -110,25 +111,25 @@ public class ViewGameCommand(
                     var incapStr = action.CausedIncapacitation ? " [red](Incapacitated!)[/]" : string.Empty;
                     var targetStr = targetName is not null ? $" → {Markup.Escape(targetName)}" : string.Empty;
 
-                    AnsiConsole.MarkupLine($"    {action.Type}{targetStr}: {damage} dmg{coverStr}{obscStr}{incapStr}");
+                    console.MarkupLine($"    {action.Type}{targetStr}: {damage} dmg{coverStr}{obscStr}{incapStr}");
 
                     if (action.NarrativeNote is not null)
                     {
-                        AnsiConsole.MarkupLine($"      [dim]🖊 {Markup.Escape(action.NarrativeNote)}[/]");
+                        console.MarkupLine($"      [dim]🖊 {Markup.Escape(action.NarrativeNote)}[/]");
                     }
                 }
             }
         }
 
-        AnsiConsole.WriteLine();
+        console.WriteLine();
 
         if (header.Status == GameStatus.Completed && header.WinnerTeamName is not null)
         {
-            AnsiConsole.MarkupLine($"[bold]Final Score:[/] {header.TeamAName} {header.VictoryPointsA} — {header.VictoryPointsB} {header.TeamBName}  |  Winner: [green]{Markup.Escape(header.WinnerTeamName)}[/]");
+            console.MarkupLine($"[bold]Final Score:[/] {header.TeamAName} {header.VictoryPointsA} — {header.VictoryPointsB} {header.TeamBName}  |  Winner: [green]{Markup.Escape(header.WinnerTeamName)}[/]");
         }
         else
         {
-            AnsiConsole.MarkupLine($"[dim](In Progress — TP{turningPointSummaries.LastOrDefault()?.Number})[/]");
+            console.MarkupLine($"[dim](In Progress — TP{turningPointSummaries.LastOrDefault()?.Number})[/]");
         }
 
         return 0;

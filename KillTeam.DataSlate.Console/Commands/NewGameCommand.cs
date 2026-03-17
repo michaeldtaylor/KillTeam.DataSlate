@@ -10,6 +10,7 @@ namespace KillTeam.DataSlate.Console.Commands;
 /// <summary>Creates a new game session, prompting for players, teams, and mission.</summary>
 [Description("Start a new game — select players, teams, and mission.")]
 public class NewGameCommand(
+    IAnsiConsole console,
     IPlayerRepository players,
     ITeamRepository teams,
     IGameRepository games,
@@ -22,7 +23,7 @@ public class NewGameCommand(
 
         if (allPlayers.Count < 2)
         {
-            AnsiConsole.MarkupLine("[red]Need at least 2 registered players. Run `player add <name>` first.[/]");
+            console.MarkupLine("[red]Need at least 2 registered players. Run `player add <name>` first.[/]");
             return 1;
         }
 
@@ -30,18 +31,18 @@ public class NewGameCommand(
 
         if (allTeams.Count < 2)
         {
-            AnsiConsole.MarkupLine("[red]Not enough teams imported — run `import-teams` first.[/]");
+            console.MarkupLine("[red]Not enough teams imported — run `import-teams` first.[/]");
             return 1;
         }
 
         // Team A selection
-        var teamA = AnsiConsole.Prompt(
+        var teamA = console.Prompt(
             new SelectionPrompt<KillTeam.DataSlate.Domain.Models.Team>()
                 .Title("Select [green]Team A[/]:")
                 .UseConverter(FormatTeam)
                 .AddChoices(allTeams));
 
-        var playerA = AnsiConsole.Prompt(
+        var playerA = console.Prompt(
             new SelectionPrompt<Player>()
                 .Title($"Select player for [green]{Markup.Escape(teamA.Name)}[/]:")
                 .UseConverter(p => p.Name)
@@ -49,20 +50,20 @@ public class NewGameCommand(
 
         // Team B selection (exclude Team A)
         var teamBChoices = allTeams.Where(t => t.Name != teamA.Name).ToList();
-        var teamB = AnsiConsole.Prompt(
+        var teamB = console.Prompt(
             new SelectionPrompt<KillTeam.DataSlate.Domain.Models.Team>()
                 .Title("Select [blue]Team B[/]:")
                 .UseConverter(FormatTeam)
                 .AddChoices(teamBChoices));
 
         var playerBChoices = allPlayers.Where(p => p.Id != playerA.Id).ToList();
-        var playerB = AnsiConsole.Prompt(
+        var playerB = console.Prompt(
             new SelectionPrompt<Player>()
                 .Title($"Select player for [blue]{Markup.Escape(teamB.Name)}[/]:")
                 .UseConverter(p => p.Name)
                 .AddChoices(playerBChoices.Count > 0 ? playerBChoices : allPlayers));
 
-        var missionName = AnsiConsole.Prompt(
+        var missionName = console.Prompt(
             new TextPrompt<string>("Mission name [dim](optional)[/]:").AllowEmpty());
 
         // Load full team data with operatives
@@ -127,13 +128,13 @@ public class NewGameCommand(
             });
         }
 
-        AnsiConsole.MarkupLine($"[green]Game {created.Id}[/]");
-        AnsiConsole.MarkupLine($"  {Markup.Escape(playerA.Name)} ([green]{Markup.Escape(teamA.Name)}[/]) vs {Markup.Escape(playerB.Name)} ([blue]{Markup.Escape(teamB.Name)}[/])");
+        console.MarkupLine($"[green]Game {created.Id}[/]");
+        console.MarkupLine($"  {Markup.Escape(playerA.Name)} ([green]{Markup.Escape(teamA.Name)}[/]) vs {Markup.Escape(playerB.Name)} ([blue]{Markup.Escape(teamB.Name)}[/])");
         if (!string.IsNullOrEmpty(missionName))
         {
-            AnsiConsole.MarkupLine($"  Mission: {Markup.Escape(missionName)}");
+            console.MarkupLine($"  Mission: {Markup.Escape(missionName)}");
         }
-        AnsiConsole.MarkupLine($"  {allOperatives.Count} operative state(s) initialized.");
+        console.MarkupLine($"  {allOperatives.Count} operative state(s) initialized.");
 
         return 0;
     }

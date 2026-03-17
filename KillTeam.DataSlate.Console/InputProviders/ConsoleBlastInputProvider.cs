@@ -86,7 +86,7 @@ public class ConsoleBlastInputProvider(IAnsiConsole console) : IBlastInputProvid
 
             foreach (var p in parts)
             {
-                if (int.TryParse(p, out int v) && v is >= 1 and <= 6)
+                if (int.TryParse(p, out var v) && v is >= 1 and <= 6)
                 {
                     values.Add(v);
                 }

@@ -9,6 +9,7 @@ namespace KillTeam.DataSlate.Console.Commands;
 /// <summary>Adds or edits narrative notes on activations and actions within a game.</summary>
 [Description("Add or edit narrative notes on activations and actions for a game.")]
 public class AnnotateCommand(
+    IAnsiConsole console,
     IGameRepository games,
     IActivationRepository activations,
     IActionRepository actions,
@@ -27,7 +28,7 @@ public class AnnotateCommand(
     {
         if (!Guid.TryParse(settings.GameId, out var gameId))
         {
-            AnsiConsole.MarkupLine("[red]Invalid game ID format.[/]");
+            console.MarkupLine("[red]Invalid game ID format.[/]");
 
             return 1;
         }
@@ -39,7 +40,7 @@ public class AnnotateCommand(
         if (game is null)
         {
             logger.LogWarning("Game {GameId} not found for annotate", gameId);
-            AnsiConsole.MarkupLine($"[red]Game {Markup.Escape(settings.GameId)} not found.[/]");
+            console.MarkupLine($"[red]Game {Markup.Escape(settings.GameId)} not found.[/]");
 
             return 1;
         }
@@ -48,7 +49,7 @@ public class AnnotateCommand(
 
         if (turningPointSummaries.Count == 0)
         {
-            AnsiConsole.MarkupLine("[dim]No turning points recorded for this game.[/]");
+            console.MarkupLine("[dim]No turning points recorded for this game.[/]");
 
             return 0;
         }
@@ -75,12 +76,12 @@ public class AnnotateCommand(
 
         if (allActivations.Count == 0)
         {
-            AnsiConsole.MarkupLine("[dim]No activations recorded for this game.[/]");
+            console.MarkupLine("[dim]No activations recorded for this game.[/]");
 
             return 0;
         }
 
-        var selected = AnsiConsole.Prompt(
+        var selected = console.Prompt(
             new SelectionPrompt<ActivationEntry>()
                 .Title("Select an activation to annotate:")
                 .UseConverter(entry =>
@@ -91,7 +92,7 @@ public class AnnotateCommand(
                 })
                 .AddChoices(allActivations));
 
-        var choice = AnsiConsole.Prompt(
+        var choice = console.Prompt(
             new SelectionPrompt<string>()
                 .Title("What would you like to do?")
                 .AddChoices("Annotate this activation", "Drill down to a specific action", "Cancel"));
@@ -103,12 +104,12 @@ public class AnnotateCommand(
 
         if (choice == "Annotate this activation")
         {
-            var note = AnsiConsole.Prompt(
+            var note = console.Prompt(
                 new TextPrompt<string>("Enter annotation:").AllowEmpty());
 
             await activations.UpdateNarrativeAsync(selected.ActivationId, string.IsNullOrWhiteSpace(note) ? null : note);
             logger.LogDebug("Annotation saved for activation {Id}", selected.ActivationId);
-            AnsiConsole.MarkupLine("[green]Annotation saved.[/]");
+            console.MarkupLine("[green]Annotation saved.[/]");
 
             return 0;
         }
@@ -117,12 +118,12 @@ public class AnnotateCommand(
 
         if (actList.Count == 0)
         {
-            AnsiConsole.MarkupLine("[dim]No actions recorded for this activation.[/]");
+            console.MarkupLine("[dim]No actions recorded for this activation.[/]");
 
             return 0;
         }
 
-        var selectedAction = AnsiConsole.Prompt(
+        var selectedAction = console.Prompt(
             new SelectionPrompt<KillTeam.DataSlate.Domain.Models.GameAction>()
                 .Title("Select an action to annotate:")
                 .UseConverter(action =>
@@ -133,12 +134,12 @@ public class AnnotateCommand(
                 })
                 .AddChoices(actList));
 
-        var actionNote = AnsiConsole.Prompt(
+        var actionNote = console.Prompt(
             new TextPrompt<string>("Enter annotation:").AllowEmpty());
 
         await actions.UpdateNarrativeAsync(selectedAction.Id, string.IsNullOrWhiteSpace(actionNote) ? null : actionNote);
         logger.LogDebug("Annotation saved for action {Id}", selectedAction.Id);
-        AnsiConsole.MarkupLine("[green]Action annotation saved.[/]");
+        console.MarkupLine("[green]Action annotation saved.[/]");
 
         return 0;
     }

@@ -13,6 +13,7 @@ namespace KillTeam.DataSlate.Console.Commands;
 /// <summary>Imports team data from YAML or JSON files, or scans a folder for all team files.</summary>
 [Description("Import a team from a YAML/JSON file (or scan the team folder).")]
 public class ImportTeamsCommand(
+    IAnsiConsole console,
     TeamYamlImporter yamlImporter,
     TeamJsonImporter jsonImporter,
     ITeamRepository teams,
@@ -39,7 +40,7 @@ public class ImportTeamsCommand(
 
         if (!Directory.Exists(teamsFolder))
         {
-            AnsiConsole.MarkupLine($"[yellow]team folder not found: {Markup.Escape(teamsFolder)}[/]");
+            console.MarkupLine($"[yellow]team folder not found: {Markup.Escape(teamsFolder)}[/]");
             return 1;
         }
 
@@ -50,7 +51,7 @@ public class ImportTeamsCommand(
 
         if (files.Length == 0)
         {
-            AnsiConsole.MarkupLine("[dim]No team files found in team folder.[/]");
+            console.MarkupLine("[dim]No team files found in team folder.[/]");
             return 0;
         }
 
@@ -66,11 +67,11 @@ public class ImportTeamsCommand(
             catch (Exception ex)
             {
                 logger.LogWarning(ex, "Skipped file {File}", Path.GetFileName(file));
-                AnsiConsole.MarkupLine($"[yellow]Warning: skipped '{Markup.Escape(Path.GetFileName(file))}' — {Markup.Escape(ex.Message)}[/]");
+                console.MarkupLine($"[yellow]Warning: skipped '{Markup.Escape(Path.GetFileName(file))}' — {Markup.Escape(ex.Message)}[/]");
             }
         }
 
-        AnsiConsole.MarkupLine($"[green]Imported {success} of {files.Length} team file(s).[/]");
+        console.MarkupLine($"[green]Imported {success} of {files.Length} team file(s).[/]");
         return 0;
     }
 
@@ -78,7 +79,7 @@ public class ImportTeamsCommand(
     {
         if (!File.Exists(path))
         {
-            AnsiConsole.MarkupLine($"[red]File not found: {Markup.Escape(path)}[/]");
+            console.MarkupLine($"[red]File not found: {Markup.Escape(path)}[/]");
             return 1;
         }
 
@@ -90,13 +91,13 @@ public class ImportTeamsCommand(
         catch (TeamValidationException ex)
         {
             logger.LogWarning(ex, "Import validation failed for {Path}", path);
-            AnsiConsole.MarkupLine($"[red]Import failed: {Markup.Escape(ex.Message)}[/]");
+            console.MarkupLine($"[red]Import failed: {Markup.Escape(ex.Message)}[/]");
             return 1;
         }
         catch (Exception ex)
         {
             logger.LogError(ex, "Unexpected error importing {Path}", path);
-            AnsiConsole.MarkupLine($"[red]Unexpected error: {Markup.Escape(ex.Message)}[/]");
+            console.MarkupLine($"[red]Unexpected error: {Markup.Escape(ex.Message)}[/]");
             return 1;
         }
     }
@@ -121,7 +122,7 @@ public class ImportTeamsCommand(
         var wCount = team.Operatives.Sum(o => o.Weapons.Count);
         var aCount = team.Operatives.Sum(o => o.Abilities.Count);
 
-        AnsiConsole.MarkupLine(
+        console.MarkupLine(
             $"[green]Imported '{Markup.Escape(team.Name)}' — {opCount} operatives, {wCount} weapons, {aCount} abilities, " +
             $"{team.FactionRules.Count} rules, {team.StrategyPloys.Count + team.FirefightPloys.Count} ploys, " +
             $"{team.FactionEquipment.Count + team.UniversalEquipment.Count} equipment.[/]");

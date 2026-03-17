@@ -207,7 +207,7 @@ public class FirefightPhaseOrchestrator(
             else
             {
                 var isDash = selectedAction == "Dash";
-                ActionType actionType = selectedAction switch
+                var actionType = selectedAction switch
                 {
                     "Reposition" => ActionType.Reposition,
                     "Dash" => ActionType.Dash,

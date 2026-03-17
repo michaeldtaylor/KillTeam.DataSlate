@@ -9,7 +9,7 @@ namespace KillTeam.DataSlate.Console.Commands;
 
 /// <summary>Registers a new player by name.</summary>
 [Description("Register a new player.")]
-public class PlayerAddCommand(IPlayerRepository players, ILogger<PlayerAddCommand> logger) : AsyncCommand<PlayerAddCommand.Settings>
+public class PlayerAddCommand(IAnsiConsole console, IPlayerRepository players, ILogger<PlayerAddCommand> logger) : AsyncCommand<PlayerAddCommand.Settings>
 {
     public class Settings : CommandSettings
     {
@@ -24,7 +24,7 @@ public class PlayerAddCommand(IPlayerRepository players, ILogger<PlayerAddComman
 
         if (string.IsNullOrWhiteSpace(name))
         {
-            AnsiConsole.MarkupLine("[red]Player name cannot be empty.[/]");
+            console.MarkupLine("[red]Player name cannot be empty.[/]");
             return 1;
         }
 
@@ -34,13 +34,13 @@ public class PlayerAddCommand(IPlayerRepository players, ILogger<PlayerAddComman
         if (existing is not null)
         {
             logger.LogWarning("Player {Name} already exists", name);
-            AnsiConsole.MarkupLine($"[yellow]Player '{Markup.Escape(name)}' already exists.[/]");
+            console.MarkupLine($"[yellow]Player '{Markup.Escape(name)}' already exists.[/]");
             return 1;
         }
 
         await players.AddAsync(new Player { Id = Guid.NewGuid(), Name = name });
         logger.LogInformation("Player {Name} created", name);
-        AnsiConsole.MarkupLine($"[green]Player '{Markup.Escape(name)}' created.[/]");
+        console.MarkupLine($"[green]Player '{Markup.Escape(name)}' created.[/]");
         return 0;
     }
 }

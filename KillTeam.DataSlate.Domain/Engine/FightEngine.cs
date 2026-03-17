@@ -175,9 +175,9 @@ public class FightEngine(
                 }
             }
 
-            Operative activeOp = activeOwner == DieOwner.Attacker ? attacker : targetOp;
-            Operative opponentOp = activeOwner == DieOwner.Attacker ? targetOp : attacker;
-            Weapon activeWeapon = activeOwner == DieOwner.Attacker ? attackerWeapon : (defenderWeapon ?? attackerWeapon);
+            var activeOp = activeOwner == DieOwner.Attacker ? attacker : targetOp;
+            var opponentOp = activeOwner == DieOwner.Attacker ? targetOp : attacker;
+            var activeWeapon = activeOwner == DieOwner.Attacker ? attackerWeapon : (defenderWeapon ?? attackerWeapon);
 
             var poolEvt = new FightPoolsDisplayedEvent(
                 eventStream?.GameSessionId ?? Guid.Empty, 0, DateTime.UtcNow, isAttackerTeamId,

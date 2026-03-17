@@ -8,7 +8,7 @@ namespace KillTeam.DataSlate.Console.Commands;
 
 /// <summary>Lists completed games, optionally filtered by player name.</summary>
 [Description("List completed games, optionally filtered by player.")]
-public class HistoryCommand(IGameRepository games, ILogger<HistoryCommand> logger) : AsyncCommand<HistoryCommand.Settings>
+public class HistoryCommand(IAnsiConsole console, IGameRepository games, ILogger<HistoryCommand> logger) : AsyncCommand<HistoryCommand.Settings>
 {
     public class Settings : CommandSettings
     {
@@ -24,7 +24,7 @@ public class HistoryCommand(IGameRepository games, ILogger<HistoryCommand> logge
 
         if (rows.Count == 0)
         {
-            AnsiConsole.MarkupLine("[dim]No games recorded yet.[/]");
+            console.MarkupLine("[dim]No games recorded yet.[/]");
 
             return 0;
         }
@@ -53,7 +53,7 @@ public class HistoryCommand(IGameRepository games, ILogger<HistoryCommand> logge
                 Markup.Escape(row.WinnerTeamName ?? "—"));
         }
 
-        AnsiConsole.Write(table);
+        console.Write(table);
 
         return 0;
     }

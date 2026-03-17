@@ -90,7 +90,7 @@ public class BlastEngine(
 
             var defenderDiceCount = targetOp.Defence + targetState.DefenceDiceModifier;
 
-            int[] defenderDice = defenderDiceCount == 0
+            var defenderDice = defenderDiceCount == 0
                 ? []
                 : await inputProvider.RollOrEnterDiceAsync(defenderDiceCount, $"{targetOp.Name} defence dice");
 
