@@ -5,7 +5,7 @@ using KillTeam.DataSlate.Domain.Services;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
-namespace KillTeam.DataSlate.Console.Services;
+namespace KillTeam.DataSlate.Infrastructure.Services;
 
 /// <summary>Imports a team from the YAML format produced by TeamExtractor.</summary>
 public class TeamYamlImporter

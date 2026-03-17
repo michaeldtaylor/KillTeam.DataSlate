@@ -1,4 +1,4 @@
-﻿using KillTeam.DataSlate.Console.Infrastructure.Repositories;
+using KillTeam.DataSlate.Infrastructure.Repositories;
 using KillTeam.DataSlate.Console.InputProviders;
 using KillTeam.DataSlate.Console.Rendering;
 using KillTeam.DataSlate.Domain.Engine;

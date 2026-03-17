@@ -1,5 +1,5 @@
-﻿using Microsoft.Data.Sqlite;
-using KillTeam.DataSlate.Console.Infrastructure;
+using Microsoft.Data.Sqlite;
+using KillTeam.DataSlate.Infrastructure;
 
 namespace KillTeam.DataSlate.Tests;
 

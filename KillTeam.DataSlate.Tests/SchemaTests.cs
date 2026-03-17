@@ -1,7 +1,7 @@
 using FluentAssertions;
 using Microsoft.Data.Sqlite;
-using KillTeam.DataSlate.Console.Infrastructure;
-using KillTeam.DataSlate.Console.Infrastructure.Repositories;
+using KillTeam.DataSlate.Infrastructure;
+using KillTeam.DataSlate.Infrastructure.Repositories;
 using KillTeam.DataSlate.Domain.Models;
 using Xunit;
 

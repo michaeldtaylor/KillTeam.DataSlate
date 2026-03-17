@@ -1,7 +1,7 @@
-﻿using Microsoft.Data.Sqlite;
+using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Configuration;
 
-namespace KillTeam.DataSlate.Console.Infrastructure;
+namespace KillTeam.DataSlate.Infrastructure;
 
 public class DatabaseInitialiser
 {

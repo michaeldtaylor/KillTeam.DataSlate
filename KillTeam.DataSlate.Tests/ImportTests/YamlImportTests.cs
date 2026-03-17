@@ -1,6 +1,6 @@
 using FluentAssertions;
-using KillTeam.DataSlate.Console.Infrastructure.Repositories;
-using KillTeam.DataSlate.Console.Services;
+using KillTeam.DataSlate.Infrastructure.Repositories;
+using KillTeam.DataSlate.Infrastructure.Services;
 using Xunit;
 
 namespace KillTeam.DataSlate.Tests.ImportTests;

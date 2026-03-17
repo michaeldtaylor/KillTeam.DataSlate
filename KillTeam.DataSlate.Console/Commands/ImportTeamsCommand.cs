@@ -1,5 +1,5 @@
-﻿using System.ComponentModel;
-using KillTeam.DataSlate.Console.Services;
+using System.ComponentModel;
+using KillTeam.DataSlate.Infrastructure.Services;
 using KillTeam.DataSlate.Domain.Repositories;
 using KillTeam.DataSlate.Domain.Services;
 using Microsoft.Extensions.Configuration;

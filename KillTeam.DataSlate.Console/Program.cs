@@ -1,9 +1,9 @@
-﻿using KillTeam.DataSlate.Console.Commands;
-using KillTeam.DataSlate.Console.Infrastructure;
+using KillTeam.DataSlate.Console.Commands;
+using KillTeam.DataSlate.Infrastructure;
 using KillTeam.DataSlate.Console.InputProviders;
 using KillTeam.DataSlate.Console.Orchestrators;
-using KillTeam.DataSlate.Console.Infrastructure.Repositories;
-using KillTeam.DataSlate.Console.Services;
+using KillTeam.DataSlate.Infrastructure.Repositories;
+using KillTeam.DataSlate.Infrastructure.Services;
 using KillTeam.DataSlate.Domain;
 using KillTeam.DataSlate.Domain.Engine;
 using KillTeam.DataSlate.Domain.Engine.Input;
@@ -54,10 +54,14 @@ public static class Program
         services.AddSingleton<IShootInputProvider, ConsoleShootInputProvider>();
         services.AddSingleton<IRerollInputProvider, ConsoleRerollInputProvider>();
         services.AddSingleton<IBlastInputProvider, ConsoleBlastInputProvider>();
+        services.AddSingleton<IStrategyPhaseInputProvider, ConsoleStrategyPhaseInputProvider>();
+        services.AddSingleton<IGuardInterruptInputProvider, ConsoleGuardInterruptInputProvider>();
         services.AddSingleton<RerollEngine>();
         services.AddSingleton<BlastEngine>();
         services.AddSingleton<ShootEngine>();
         services.AddSingleton<FightEngine>();
+        services.AddSingleton<StrategyPhaseEngine>();
+        services.AddSingleton<GuardInterruptEngine>();
         services.AddSingleton<CombatResolutionService>();
         services.AddSingleton<FightResolutionService>();
         services.AddSingleton<GuardResolutionService>();

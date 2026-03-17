@@ -20,14 +20,13 @@
         <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="9.0.0" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0" />
         <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="9.0.0" />
-        <PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.0" />
         <PackageReference Include="Spectre.Console" Version="0.50.0" />
         <PackageReference Include="Spectre.Console.Cli" Version="0.50.0" />
-        <PackageReference Include="YamlDotNet" Version="16.3.0" />
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\KillTeam.DataSlate.Domain\KillTeam.DataSlate.Domain.csproj" />
+        <ProjectReference Include="..\KillTeam.DataSlate.Infrastructure\KillTeam.DataSlate.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>

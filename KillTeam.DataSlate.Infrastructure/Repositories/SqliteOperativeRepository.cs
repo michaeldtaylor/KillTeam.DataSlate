@@ -1,8 +1,8 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using Microsoft.Data.Sqlite;
 using KillTeam.DataSlate.Domain.Models;
 
-namespace KillTeam.DataSlate.Console.Infrastructure.Repositories;
+namespace KillTeam.DataSlate.Infrastructure.Repositories;
 
 public class SqliteOperativeRepository
 {

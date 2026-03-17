@@ -1,8 +1,8 @@
-﻿using Microsoft.Data.Sqlite;
+using Microsoft.Data.Sqlite;
 using KillTeam.DataSlate.Domain.Models;
 using KillTeam.DataSlate.Domain.Repositories;
 
-namespace KillTeam.DataSlate.Console.Infrastructure.Repositories;
+namespace KillTeam.DataSlate.Infrastructure.Repositories;
 
 public class SqlitePlayerRepository : IPlayerRepository
 {

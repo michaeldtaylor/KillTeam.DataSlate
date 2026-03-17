@@ -1,5 +1,5 @@
-﻿using FluentAssertions;
-using KillTeam.DataSlate.Console.Infrastructure.Repositories;
+using FluentAssertions;
+using KillTeam.DataSlate.Infrastructure.Repositories;
 using KillTeam.DataSlate.Domain.Models;
 using Xunit;
 
