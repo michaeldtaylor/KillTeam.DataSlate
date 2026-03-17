@@ -239,7 +239,9 @@ public class SimulateSessionOrchestrator(
             DisplayEncounterSummary(playerOperative, aiOperative,
                 fightResult.AttackerDamageDealt, fightResult.DefenderDamageDealt,
                 playerIncapacitated: fightResult.DefenderCausedIncapacitation,
-                aiIncapacitated: fightResult.AttackerCausedIncapacitation);
+                aiIncapacitated: fightResult.AttackerCausedIncapacitation,
+                playerCurrentWounds: playerState.CurrentWounds,
+                aiCurrentWounds: aiState.CurrentWounds);
         }
         else
         {
@@ -253,7 +255,9 @@ public class SimulateSessionOrchestrator(
             DisplayEncounterSummary(playerOperative, aiOperative,
                 shootResult.DamageDealt, 0,
                 playerIncapacitated: false,
-                aiIncapacitated: shootResult.CausedIncapacitation);
+                aiIncapacitated: shootResult.CausedIncapacitation,
+                playerCurrentWounds: playerState.CurrentWounds,
+                aiCurrentWounds: aiState.CurrentWounds);
         }
     }
 
@@ -309,7 +313,8 @@ public class SimulateSessionOrchestrator(
     private void DisplayEncounterSummary(
         Models.Operative attacker, Models.Operative defender,
         int attackerDamage, int defenderDamage,
-        bool playerIncapacitated, bool aiIncapacitated)
+        bool playerIncapacitated, bool aiIncapacitated,
+        int playerCurrentWounds, int aiCurrentWounds)
     {
         console.WriteLine();
         var table = new Table()
@@ -318,6 +323,12 @@ public class SimulateSessionOrchestrator(
             .AddColumn("[bold cyan]You[/]")
             .AddColumn("[bold red]AI[/]");
 
+        var playerWoundsColor = playerCurrentWounds > 0 ? "green" : "red";
+        var aiWoundsColor = aiCurrentWounds > 0 ? "green" : "red";
+
+        table.AddRow("Wounds remaining",
+            $"[{playerWoundsColor}]{playerCurrentWounds}/{attacker.Wounds}[/]",
+            $"[{aiWoundsColor}]{aiCurrentWounds}/{defender.Wounds}[/]");
         table.AddRow("Damage dealt", $"[bold]{attackerDamage}[/]", $"[bold]{defenderDamage}[/]");
         table.AddRow("Incapacitated?",
             playerIncapacitated ? "[red]Incapacitated[/]" : "[green]Alive[/]",
