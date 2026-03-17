@@ -55,10 +55,14 @@ public class TeamYamlImporter
         }
 
         if (string.IsNullOrWhiteSpace(yamlTeam.Id))
+        {
             throw new TeamValidationException("Missing required field: 'id'.");
+        }
 
         if (string.IsNullOrWhiteSpace(yamlTeam.Name))
+        {
             throw new TeamValidationException("Missing required field: 'name'.");
+        }
 
         if (yamlTeam.Datacards is null || yamlTeam.Datacards.Count == 0)
         {
@@ -85,7 +89,9 @@ public class TeamYamlImporter
         foreach (var dc in yamlTeam.Datacards)
         {
             if (string.IsNullOrWhiteSpace(dc.Name))
+            {
                 throw new TeamValidationException("Datacard missing required field: 'name'.");
+            }
 
             var operativeType = dc.OperativeType?.Trim() ?? dc.Name.Trim();
             var operative = new Operative
@@ -110,10 +116,14 @@ public class TeamYamlImporter
                 foreach (var w in dc.Weapons)
                 {
                     if (string.IsNullOrWhiteSpace(w.Name))
+                    {
                         continue;
+                    }
 
                     if (!Enum.TryParse<WeaponType>(w.Type, ignoreCase: true, out var wt))
+                    {
                         wt = WeaponType.Ranged;
+                    }
 
                     operative.Weapons.Add(new Weapon
                     {

@@ -22,7 +22,9 @@ public class ConsoleBlastInputProvider(IAnsiConsole console) : IBlastInputProvid
                 .UseConverter(s =>
                 {
                     if (!allOperatives.TryGetValue(s.OperativeId, out var o))
+                    {
                         return s.OperativeId.ToString();
+                    }
                     var isFriendly = o.TeamId == attackerTeamId;
                     var friendly = isFriendly ? " [red][FRIENDLY FIRE!][/]" : "";
                     return $"{Markup.Escape(o.Name)} (Wounds: {s.CurrentWounds}/{o.Wounds}){friendly}";
@@ -89,9 +91,14 @@ public class ConsoleBlastInputProvider(IAnsiConsole console) : IBlastInputProvid
             foreach (var p in parts)
             {
                 if (int.TryParse(p, out int v) && v is >= 1 and <= 6)
+                {
                     values.Add(v);
-                else { valid = false; break; }
-            }
+                }
+                else
+                {
+                    valid = false;
+                    break;
+                }            }
             if (valid && values.Count == count)
             {
                 return values.ToArray();

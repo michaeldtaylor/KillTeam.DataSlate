@@ -5,7 +5,6 @@ using KillTeam.DataSlate.Domain.Engine.Input;
 using KillTeam.DataSlate.Domain.Events;
 using KillTeam.DataSlate.Domain.Repositories;
 using KillTeam.DataSlate.Domain.Services;
-using KillTeam.DataSlate.Infrastructure.Repositories;
 using Spectre.Console;
 using Models = KillTeam.DataSlate.Domain.Models;
 
@@ -46,6 +45,7 @@ public class SimulateSessionOrchestrator(
     private async Task<(Models.Operative? playerOp, Models.Operative? aiOp, Models.Team? playerTeam, Models.Team? aiTeam)> SelectOperativesAsync()
     {
         var allTeams = (await teamRepository.GetAllAsync()).ToList();
+
         if (allTeams.Count == 0)
         {
             console.MarkupLine("[red]No teams imported. Run [bold]import-teams[/] first.[/]");
@@ -250,10 +250,16 @@ public class SimulateSessionOrchestrator(
     private static string FormatTeam(Models.Team t)
     {
         var display = Markup.Escape(t.Name);
+
         if (!string.IsNullOrEmpty(t.GrandFaction))
+        {
             display += $" [dim]({Markup.Escape(t.Faction)} — {Markup.Escape(t.GrandFaction)})[/]";
+        }
         else if (!string.IsNullOrEmpty(t.Faction))
+        {
             display += $" [dim]({Markup.Escape(t.Faction)})[/]";
+        }
+
         return display;
     }
 

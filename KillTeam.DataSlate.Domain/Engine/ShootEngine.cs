@@ -45,7 +45,9 @@ public class ShootEngine(
         {
             targetState = enemyStates[0];
             if (allOperatives.TryGetValue(targetState.OperativeId, out var autoTarget))
+            {
                 eventStream?.Emit((seq, ts) => new ShootTargetSelectedEvent(eventStream.GameSessionId, seq, ts, isAttackerTeamId, autoTarget.Name, targetState.CurrentWounds, autoTarget.Wounds, true));
+            }
         }
         else
         {
@@ -198,8 +200,11 @@ public class ShootEngine(
         eventStream?.Emit((seq, ts) => new ShootResolvedEvent(eventStream.GameSessionId, seq, ts, isAttackerTeamId, attacker.Name, targetOp.Name, result.TotalDamage, causedIncap));
 
         var note = await inputProvider.GetNarrativeNoteAsync();
+
         if (!string.IsNullOrWhiteSpace(note))
+        {
             await actionRepository.UpdateNarrativeAsync(action.Id, note);
+        }
 
         return new ShootSessionResult(causedIncap, result.TotalDamage, targetState.OperativeId);
     }

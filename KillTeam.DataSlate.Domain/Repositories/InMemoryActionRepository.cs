@@ -1,7 +1,6 @@
 using KillTeam.DataSlate.Domain.Models;
-using KillTeam.DataSlate.Domain.Repositories;
 
-namespace KillTeam.DataSlate.Infrastructure.Repositories;
+namespace KillTeam.DataSlate.Domain.Repositories;
 
 /// <summary>No-op action store used by the simulate command — discards all writes.</summary>
 public class InMemoryActionRepository : IActionRepository

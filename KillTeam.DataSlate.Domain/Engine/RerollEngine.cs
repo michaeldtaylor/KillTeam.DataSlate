@@ -24,13 +24,19 @@ public class RerollEngine(IRerollInputProvider inputProvider, IGameRepository ga
         var pool = dice.Select((v, i) => new RollableDie(i, v)).ToList();
 
         if (rules.Any(r => r.Kind == SpecialRuleKind.Balanced))
+        {
             pool = await ApplyBalancedAsync(pool, ownerLabel, participant, eventStream);
+        }
 
         if (rules.Any(r => r.Kind == SpecialRuleKind.Ceaseless))
+        {
             pool = await ApplyCeaselessAsync(pool, ownerLabel, participant, eventStream);
+        }
 
         if (rules.Any(r => r.Kind == SpecialRuleKind.Relentless))
+        {
             pool = await ApplyRelentlessAsync(pool, ownerLabel, participant, eventStream);
+        }
 
         pool = await ApplyCpRerollAsync(pool, gameId, isTeamA, ownerLabel, participant, eventStream);
 
@@ -49,7 +55,9 @@ public class RerollEngine(IRerollInputProvider inputProvider, IGameRepository ga
         GameEventStream? eventStream = null)
     {
         var pool = dice.Select((v, i) => new RollableDie(i, v)).ToList();
+
         pool = await ApplyCpRerollAsync(pool, gameId, isTeamA, ownerLabel, participant, eventStream);
+
         return pool.Select(d => d.Value).ToArray();
     }
 
@@ -153,7 +161,9 @@ public class RerollEngine(IRerollInputProvider inputProvider, IGameRepository ga
         }
 
         if (!await inputProvider.ConfirmCpRerollAsync(label, cp))
+        {
             return pool;
+        }
 
         var choice = await inputProvider.SelectCpRerollDieAsync(eligible);
 

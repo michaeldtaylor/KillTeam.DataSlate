@@ -102,7 +102,9 @@ public class ConsoleFightInputProvider(IAnsiConsole console) : IFightInputProvid
             foreach (var p in parts)
             {
                 if (int.TryParse(p, out int v) && v is >= 1 and <= 6)
+                {
                     values.Add(v);
+                }
                 else
                 {
                     valid = false;

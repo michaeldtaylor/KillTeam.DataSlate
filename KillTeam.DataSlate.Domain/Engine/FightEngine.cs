@@ -43,7 +43,9 @@ public class FightEngine(
         {
             targetState = enemyStates[0];
             if (allOperatives.TryGetValue(targetState.OperativeId, out var autoTarget))
+            {
                 eventStream?.Emit((seq, ts) => new FightTargetSelectedEvent(eventStream.GameSessionId, seq, ts, isAttackerTeamId, autoTarget.Name, targetState.CurrentWounds, autoTarget.Wounds, true));
+            }
         }
         else
         {
@@ -197,7 +199,10 @@ public class FightEngine(
                     .ToList();
             }
 
-            if (uniqueActions.Count == 0) break;
+            if (uniqueActions.Count == 0)
+            {
+                break;
+            }
 
             var actionChoice = await inputProvider.SelectActionAsync(uniqueActions, activeOp.Name);
 
@@ -242,7 +247,10 @@ public class FightEngine(
 
             var nextOwner = activeOwner == DieOwner.Attacker ? DieOwner.Defender : DieOwner.Attacker;
             var nextHasDice = nextOwner == DieOwner.Attacker ? atkPool.Remaining.Count > 0 : defPool.Remaining.Count > 0;
-            if (nextHasDice) currentOwner = nextOwner;
+            if (nextHasDice)
+            {
+                currentOwner = nextOwner;
+            }
         }
 
         var atkCausedIncap = defCurrentWounds <= 0 && !targetState.IsIncapacitated;
@@ -289,8 +297,11 @@ public class FightEngine(
         eventStream?.Emit((seq, ts) => new FightResolvedEvent(eventStream.GameSessionId, seq, ts, isAttackerTeamId, attacker.Name, targetOp.Name, totalAtkDmgDealt, totalDefDmgDealt, atkCausedIncap, defCausedIncap));
 
         var note = await inputProvider.GetNarrativeNoteAsync();
+
         if (!string.IsNullOrWhiteSpace(note))
+        {
             await actionRepository.UpdateNarrativeAsync(action.Id, note);
+        }
 
         return new FightSessionResult(atkCausedIncap, defCausedIncap, totalAtkDmgDealt, totalDefDmgDealt, targetState.OperativeId);
     }

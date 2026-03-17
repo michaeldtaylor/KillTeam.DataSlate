@@ -1,7 +1,6 @@
 using KillTeam.DataSlate.Domain.Models;
-using KillTeam.DataSlate.Domain.Repositories;
 
-namespace KillTeam.DataSlate.Infrastructure.Repositories;
+namespace KillTeam.DataSlate.Domain.Repositories;
 
 /// <summary>Ephemeral in-memory operative state store used by the simulate command.</summary>
 public class InMemoryGameOperativeStateRepository : IGameOperativeStateRepository
@@ -19,6 +18,7 @@ public class InMemoryGameOperativeStateRepository : IGameOperativeStateRepositor
     public Task CreateAsync(GameOperativeState state)
     {
         _states[state.Id] = state;
+
         return Task.CompletedTask;
     }
 

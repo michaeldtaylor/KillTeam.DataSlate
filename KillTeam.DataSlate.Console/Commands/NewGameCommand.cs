@@ -134,10 +134,16 @@ public class NewGameCommand(
     private static string FormatTeam(KillTeam.DataSlate.Domain.Models.Team t)
     {
         var display = Markup.Escape(t.Name);
+
         if (!string.IsNullOrEmpty(t.GrandFaction))
+        {
             display += $" [dim]({Markup.Escape(t.Faction)} — {Markup.Escape(t.GrandFaction)})[/]";
+        }
         else if (!string.IsNullOrEmpty(t.Faction))
+        {
             display += $" [dim]({Markup.Escape(t.Faction)})[/]";
+        }
+
         return display;
     }
 }

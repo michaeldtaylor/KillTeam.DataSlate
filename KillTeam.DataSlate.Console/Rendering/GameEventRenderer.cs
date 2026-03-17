@@ -142,8 +142,15 @@ public class GameEventRenderer(
         table.AddRow("Unblocked Crits", $"[bold]{e.UnblockedCrits}[/]");
         table.AddRow("Unblocked Normals", $"[bold]{e.UnblockedNormals}[/]");
         table.AddRow("Total Damage", $"[bold red]{e.TotalDamage}[/]");
-        if (e.InCover) table.AddRow("Cover Save", "[green]Applied[/]");
-        if (e.IsObscured) table.AddRow("Obscured", "[green]Crits converted[/]");
+        if (e.InCover)
+        {
+            table.AddRow("Cover Save", "[green]Applied[/]");
+        }
+
+        if (e.IsObscured)
+        {
+            table.AddRow("Obscured", "[green]Crits converted[/]");
+        }
         console.Write(table);
     }
 
@@ -156,7 +163,9 @@ public class GameEventRenderer(
     private string Label(string participantId)
     {
         if (!participantLabels.TryGetValue(participantId, out var label))
+        {
             return "";
+        }
         return label switch
         {
             "You" => "[bold cyan]\\[You][/]",

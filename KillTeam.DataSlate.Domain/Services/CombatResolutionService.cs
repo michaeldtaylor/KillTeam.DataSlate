@@ -154,8 +154,12 @@ public class CombatResolutionService
         var selfDamage = 0;
         if (ctx.WeaponRules.Any(r => r.Kind == SpecialRuleKind.Hot))
         {
-            var d6 = Random.Shared.Next(1, 7);            if (d6 < ctx.HitThreshold)
+            var d6 = Random.Shared.Next(1, 7);
+
+            if (d6 < ctx.HitThreshold)
+            {
                 selfDamage = 2 * d6;
+            }
         }
 
         // ─── 8. Stun ───────────────────────────────────────────────────────────

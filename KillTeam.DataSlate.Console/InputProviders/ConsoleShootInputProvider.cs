@@ -103,8 +103,14 @@ public class ConsoleShootInputProvider(IAnsiConsole console) : IShootInputProvid
             foreach (var p in parts)
             {
                 if (int.TryParse(p, out int v) && v is >= 1 and <= 6)
+                {
                     values.Add(v);
-                else { valid = false; break; }
+                }
+                else
+                {
+                    valid = false;
+                    break;
+                }
             }
             if (valid && values.Count == count)
             {

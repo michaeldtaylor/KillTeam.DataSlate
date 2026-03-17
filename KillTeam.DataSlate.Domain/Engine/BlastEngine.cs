@@ -47,7 +47,9 @@ public class BlastEngine(
         if (friendlyCount > 0)
         {
             if (!await inputProvider.ConfirmFriendlyFireAsync(friendlyCount))
+            {
                 return new BlastSessionResult(false, 0);
+            }
         }
 
         int[] attackDice = await inputProvider.RollOrEnterDiceAsync(weapon.Atk, $"{attacker.Name} attack dice (Attack: {weapon.Atk})");
@@ -74,7 +76,11 @@ public class BlastEngine(
         for (int i = 0; i < allTargetStates.Count; i++)
         {
             var targetState = allTargetStates[i];
-            if (!allOperatives.TryGetValue(targetState.OperativeId, out var targetOp)) continue;
+
+            if (!allOperatives.TryGetValue(targetState.OperativeId, out var targetOp))
+            {
+                continue;
+            }
 
             var coverChoice = await inputProvider.GetCoverStatusAsync(targetOp.Name);
             var inCover = coverChoice == "In cover";
@@ -162,8 +168,11 @@ public class BlastEngine(
         }
 
         var note = await inputProvider.GetNarrativeNoteAsync();
+
         if (!string.IsNullOrWhiteSpace(note))
+        {
             await actionRepository.UpdateNarrativeAsync(action.Id, note);
+        }
 
         return new BlastSessionResult(anyIncapacitation, totalDamage);
     }

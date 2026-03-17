@@ -153,7 +153,9 @@ public class TeamJsonImporter
 
                     var (normalDmg, critDmg) = ParseDamage(jw.Dmg, wPrefix);
                     if (!Enum.TryParse<WeaponType>(jw.Type, ignoreCase: true, out var wt))
+                    {
                         throw new TeamValidationException($"Invalid weapon type '{jw.Type}' at '{wPrefix}.type'. Expected 'Ranged' or 'Melee'.");
+                    }
 
                     operative.Weapons.Add(new Weapon
                     {
@@ -195,8 +197,11 @@ public class TeamJsonImporter
         var parts = raw.Trim().Split('/');
         if (parts.Length != 2 || !int.TryParse(parts[0].Trim(), out var n) ||
             !int.TryParse(parts[1].Trim(), out var c))
+        {
             throw new TeamValidationException(
                 $"Invalid damage format '{raw}' at '{fieldPath}.dmg'. Expected 'N/C' e.g. '3/4'.");
+        }
+
         return (n, c);
     }
 }

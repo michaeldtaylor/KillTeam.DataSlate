@@ -36,11 +36,13 @@ public class FightResolutionService
         for (int i = 0; i < rolls.Length; i++)
         {
             var result = CalculateDie(rolls[i], hitThreshold);
+
             if (result != DieResult.Miss)
             {
                 dice.Add(new FightDie(i, rolls[i], result));
             }
         }
+
         return new FightDicePool(owner, dice);
     }
 
@@ -59,6 +61,7 @@ public class FightResolutionService
         {
             Remaining = opponentPool.Remaining.Where(d => d.Id != targetDie.Id).ToList()
         };
+
         return (newBlocker, newOpponent);
     }
 
