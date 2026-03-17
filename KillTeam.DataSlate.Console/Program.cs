@@ -8,6 +8,7 @@ using KillTeam.DataSlate.Domain.Repositories;
 using KillTeam.DataSlate.Domain.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Spectre.Console;
 using Spectre.Console.Cli;
 
 namespace KillTeam.DataSlate.Console;
@@ -26,6 +27,8 @@ public static class Program
 
         services.AddSingleton<IConfiguration>(config);
         services.Configure<DataSlateOptions>(config.GetSection("DataSlate"));
+
+        services.AddSingleton<IAnsiConsole>(AnsiConsole.Console);
 
         services.AddSingleton<DatabaseInitialiser>();
 
