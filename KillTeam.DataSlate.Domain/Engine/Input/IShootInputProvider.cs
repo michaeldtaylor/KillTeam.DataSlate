@@ -10,9 +10,13 @@ public interface IShootInputProvider
         IReadOnlyDictionary<Guid, Operative> allOperatives);
 
     Task<Weapon> SelectWeaponAsync(IList<Weapon> weapons, bool hasMovedNonDash);
+
     Task<string> GetCoverStatusAsync(string targetName);
+
     Task<int> GetFriendlyAllyCountAsync();
+
     Task<int> GetDefenceDiceCountAsync();
+
     Task<string> GetNarrativeNoteAsync();
 
     Task<int[]> RollOrEnterDiceAsync(

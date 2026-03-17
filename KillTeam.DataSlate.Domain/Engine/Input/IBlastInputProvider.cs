@@ -10,8 +10,12 @@ public interface IBlastInputProvider
         string attackerTeamId);
 
     Task<bool> ConfirmFriendlyFireAsync(int friendlyCount);
+
     Task<string> GetCoverStatusAsync(string targetName);
+
     Task<int> GetDefenceDiceCountAsync(string targetName);
+
     Task<string> GetNarrativeNoteAsync();
+
     Task<int[]> RollOrEnterDiceAsync(int count, string label);
 }
