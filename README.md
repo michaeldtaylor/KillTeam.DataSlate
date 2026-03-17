@@ -104,20 +104,20 @@ Settings are in `appsettings.json` under the `DataSlate` section:
 
 | Key | Default | Description |
 |-----|---------|-------------|
-| `DataSlate:DatabasePath` | `./data/kill-team.db` | Path to the SQLite database file |
+| `DataSlate:DatabasePath` | `./data/ktds.db` | Path to the SQLite database file |
 | `DataSlate:TeamFolder` | `../teams/` | Default folder scanned by `import-teams` when given a directory |
 
 Example `appsettings.json`:
 ```json
 {
   "DataSlate": {
-    "DatabasePath": "./data/kill-team.db",
+    "DatabasePath": "./data/ktds.db",
     "TeamFolder": "../teams/"
   }
 }
 ```
 
-The database is created automatically on first run. If it is missing or corrupt, delete `data/kill-team.db` — it will be recreated on the next run (**all data will be lost**).
+The database is created automatically on first run. If it is missing or corrupt, delete `data/ktds.db` — it will be recreated on the next run (**all data will be lost**).
 
 ---
 
