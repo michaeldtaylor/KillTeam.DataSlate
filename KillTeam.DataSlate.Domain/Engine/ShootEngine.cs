@@ -106,7 +106,7 @@ public class ShootEngine(
         attackDice = await rerollEngine.ApplyAttackerRerollsAsync(
             attackDice, weapon.ParsedRules.ToList(), game.Id, isAttackerTeamA, attacker.Name, isAttackerTeamId, eventStream);
 
-        var defenderDiceCount = await inputProvider.GetDefenceDiceCountAsync();
+        var defenderDiceCount = targetOp.Defence + targetState.DefenceDiceModifier;
 
         if (inCover)
         {

@@ -19,10 +19,12 @@ public class SqliteGameOperativeStateRepository : IGameOperativeStateRepository
             """
             INSERT INTO game_operative_states
             (id, game_id, operative_id, current_wounds, "order", is_ready,
-             is_on_guard, is_incapacitated, has_used_counteract_this_turning_point, apl_modifier)
+             is_on_guard, is_incapacitated, has_used_counteract_this_turning_point, apl_modifier,
+             defence_dice_modifier)
             VALUES
             (@id, @gameId, @operativeId, @currentWounds, @order, @isReady,
-             @isOnGuard, @isIncapacitated, @hasUsedCounteract, @aplModifier)
+             @isOnGuard, @isIncapacitated, @hasUsedCounteract, @aplModifier,
+             @defenceDiceModifier)
             """,
             new()
             {
@@ -35,7 +37,8 @@ public class SqliteGameOperativeStateRepository : IGameOperativeStateRepository
                 ["@isOnGuard"] = state.IsOnGuard ? 1 : 0,
                 ["@isIncapacitated"] = state.IsIncapacitated ? 1 : 0,
                 ["@hasUsedCounteract"] = state.HasUsedCounteractThisTurningPoint ? 1 : 0,
-                ["@aplModifier"] = state.AplModifier
+                ["@aplModifier"] = state.AplModifier,
+                ["@defenceDiceModifier"] = state.DefenceDiceModifier
             });
     }
 
@@ -44,7 +47,8 @@ public class SqliteGameOperativeStateRepository : IGameOperativeStateRepository
         return await _db.QueryAsync(
             """
             SELECT id, game_id, operative_id, current_wounds, "order", is_ready,
-                   is_on_guard, is_incapacitated, has_used_counteract_this_turning_point, apl_modifier
+                   is_on_guard, is_incapacitated, has_used_counteract_this_turning_point, apl_modifier,
+                   defence_dice_modifier
             FROM game_operative_states
             WHERE game_id = @gameId
             """,
@@ -59,7 +63,8 @@ public class SqliteGameOperativeStateRepository : IGameOperativeStateRepository
                 IsOnGuard = reader.GetInt32(6) != 0,
                 IsIncapacitated = reader.GetInt32(7) != 0,
                 HasUsedCounteractThisTurningPoint = reader.GetInt32(8) != 0,
-                AplModifier = reader.GetInt32(9)
+                AplModifier = reader.GetInt32(9),
+                DefenceDiceModifier = reader.GetInt32(10)
             },
             new() { ["@gameId"] = gameId.ToString() });
     }

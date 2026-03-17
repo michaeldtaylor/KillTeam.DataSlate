@@ -48,13 +48,6 @@ public class ConsoleBlastInputProvider(IAnsiConsole console) : IBlastInputProvid
                 .AddChoices("In cover", "Obscured", "Neither")));
     }
 
-    public Task<int> GetDefenceDiceCountAsync(string targetName)
-    {
-        return Task.FromResult(console.Prompt(
-            new TextPrompt<int>($"  How many defence dice for {Markup.Escape(targetName)}? (0 or more):")
-                .Validate(v => v >= 0)));
-    }
-
     public Task<string> GetNarrativeNoteAsync()
     {
         return Task.FromResult(console.Prompt(

@@ -13,8 +13,6 @@ public interface IBlastInputProvider
 
     Task<string> GetCoverStatusAsync(string targetName);
 
-    Task<int> GetDefenceDiceCountAsync(string targetName);
-
     Task<string> GetNarrativeNoteAsync();
 
     Task<int[]> RollOrEnterDiceAsync(int count, string label);

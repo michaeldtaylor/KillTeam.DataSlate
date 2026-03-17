@@ -21,4 +21,6 @@ public class GameOperativeState
     public bool HasUsedCounteractThisTurningPoint { get; set; }
 
     public int AplModifier { get; set; }
+
+    public int DefenceDiceModifier { get; set; }
 }

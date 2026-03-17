@@ -88,7 +88,7 @@ public class BlastEngine(
             var inCover = coverChoice == "In cover";
             var isObscured = coverChoice == "Obscured";
 
-            var defenderDiceCount = await inputProvider.GetDefenceDiceCountAsync(targetOp.Name);
+            var defenderDiceCount = targetOp.Defence + targetState.DefenceDiceModifier;
 
             int[] defenderDice = defenderDiceCount == 0
                 ? []

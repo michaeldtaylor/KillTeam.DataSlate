@@ -15,8 +15,6 @@ public interface IShootInputProvider
 
     Task<int> GetFriendlyAllyCountAsync();
 
-    Task<int> GetDefenceDiceCountAsync();
-
     Task<string> GetNarrativeNoteAsync();
 
     Task<int[]> RollOrEnterDiceAsync(

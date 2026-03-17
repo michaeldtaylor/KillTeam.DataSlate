@@ -101,6 +101,7 @@ internal static class Migrations
     internal static readonly IReadOnlyList<(int Version, string Sql)> All =
     [
         (1, Migration_001),
+        (2, Migration_002),
     ];
 
     private const string Migration_001 = """
@@ -363,5 +364,10 @@ internal static class Migrations
 
         CREATE INDEX IF NOT EXISTS idx_operative_special_rules_op
             ON operative_special_rules (operative_id, sort_order);
+        """;
+
+    private const string Migration_002 = """
+        ALTER TABLE operatives ADD COLUMN defence INTEGER NOT NULL DEFAULT 3;
+        ALTER TABLE game_operative_states ADD COLUMN defence_dice_modifier INTEGER NOT NULL DEFAULT 0;
         """;
 }

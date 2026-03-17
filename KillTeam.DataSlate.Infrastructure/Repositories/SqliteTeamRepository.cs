@@ -66,9 +66,9 @@ public class SqliteTeamRepository : ITeamRepository
                 operativeCommand.Transaction = transaction;
                 operativeCommand.CommandText = """
                     INSERT OR REPLACE INTO operatives
-                    (id, team_id, name, operative_type, move, apl, wounds, save,
+                    (id, team_id, name, operative_type, move, apl, wounds, save, defence,
                      equipment_json, primary_keyword, keywords_json)
-                    VALUES (@id, @teamId, @name, @operativeType, @move, @apl, @wounds, @save,
+                    VALUES (@id, @teamId, @name, @operativeType, @move, @apl, @wounds, @save, @defence,
                             @equipmentJson, @primaryKeyword, @keywordsJson)
                     """;
                 operativeCommand.Parameters.AddWithValue("@id", operative.Id.ToString());
@@ -79,6 +79,7 @@ public class SqliteTeamRepository : ITeamRepository
                 operativeCommand.Parameters.AddWithValue("@apl", operative.Apl);
                 operativeCommand.Parameters.AddWithValue("@wounds", operative.Wounds);
                 operativeCommand.Parameters.AddWithValue("@save", operative.Save);
+                operativeCommand.Parameters.AddWithValue("@defence", operative.Defence);
                 operativeCommand.Parameters.AddWithValue("@equipmentJson", JsonSerializer.Serialize(operative.Equipment));
                 operativeCommand.Parameters.AddWithValue("@primaryKeyword", operative.PrimaryKeyword);
                 operativeCommand.Parameters.AddWithValue("@keywordsJson", JsonSerializer.Serialize(operative.Keywords));
@@ -293,7 +294,7 @@ public class SqliteTeamRepository : ITeamRepository
 
         var operatives = (await _db.QueryAsync(
             """
-            SELECT id, name, operative_type, move, apl, wounds, save, equipment_json,
+            SELECT id, name, operative_type, move, apl, wounds, save, defence, equipment_json,
                    primary_keyword, keywords_json
             FROM operatives WHERE team_id = @teamId
             """,
@@ -307,9 +308,10 @@ public class SqliteTeamRepository : ITeamRepository
                 Apl = reader.GetInt32(4),
                 Wounds = reader.GetInt32(5),
                 Save = reader.GetInt32(6),
-                Equipment = JsonSerializer.Deserialize<string[]>(reader.GetString(7)) ?? [],
-                PrimaryKeyword = reader.GetString(8),
-                Keywords = JsonSerializer.Deserialize<string[]>(reader.GetString(9)) ?? [],
+                Defence = reader.GetInt32(7),
+                Equipment = JsonSerializer.Deserialize<string[]>(reader.GetString(8)) ?? [],
+                PrimaryKeyword = reader.GetString(9),
+                Keywords = JsonSerializer.Deserialize<string[]>(reader.GetString(10)) ?? [],
             },
             new() { ["@teamId"] = row.Id })).ToList();
 

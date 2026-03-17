@@ -22,6 +22,8 @@ public class Operative
 
     public int Save { get; init; }
 
+    public int Defence { get; init; } = 3;
+
     public string[] Equipment { get; init; } = [];
 
     public List<Weapon> Weapons { get; init; } = [];

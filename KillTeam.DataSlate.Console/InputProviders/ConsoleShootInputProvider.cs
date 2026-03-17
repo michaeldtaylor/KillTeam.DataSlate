@@ -56,13 +56,6 @@ public class ConsoleShootInputProvider(IAnsiConsole console) : IShootInputProvid
                     : ValidationResult.Error("[red]Enter 0, 1, or 2.[/]"))));
     }
 
-    public Task<int> GetDefenceDiceCountAsync()
-    {
-        return Task.FromResult(console.Prompt(
-            new TextPrompt<int>("How many defence dice to roll? (0 or more):")
-                .Validate(v => v >= 0)));
-    }
-
     public Task<string> GetNarrativeNoteAsync()
     {
         return Task.FromResult(console.Prompt(

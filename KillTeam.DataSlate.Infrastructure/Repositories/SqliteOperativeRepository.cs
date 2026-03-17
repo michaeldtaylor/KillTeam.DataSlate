@@ -38,8 +38,8 @@ public class SqliteOperativeRepository : IOperativeRepository
                 command.Transaction = transaction;
                 command.CommandText = """
                     INSERT INTO operatives
-                    (id, team_id, name, operative_type, move, apl, wounds, save, equipment_json)
-                    VALUES (@id, @teamId, @name, @operativeType, @move, @apl, @wounds, @save, @equipmentJson)
+                    (id, team_id, name, operative_type, move, apl, wounds, save, defence, equipment_json)
+                    VALUES (@id, @teamId, @name, @operativeType, @move, @apl, @wounds, @save, @defence, @equipmentJson)
                     """;
                 command.Parameters.AddWithValue("@id", operative.Id.ToString());
                 command.Parameters.AddWithValue("@teamId", operative.TeamId);
@@ -49,6 +49,7 @@ public class SqliteOperativeRepository : IOperativeRepository
                 command.Parameters.AddWithValue("@apl", operative.Apl);
                 command.Parameters.AddWithValue("@wounds", operative.Wounds);
                 command.Parameters.AddWithValue("@save", operative.Save);
+                command.Parameters.AddWithValue("@defence", operative.Defence);
                 command.Parameters.AddWithValue("@equipmentJson", JsonSerializer.Serialize(operative.Equipment));
                 await command.ExecuteNonQueryAsync();
             }
