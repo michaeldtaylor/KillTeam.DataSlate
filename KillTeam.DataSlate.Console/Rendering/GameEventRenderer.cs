@@ -27,6 +27,7 @@ public class GameEventRenderer(
             case WeaponSelectedEvent e:
                 var injuredNote = e.IsInjured ? $" [yellow](Injured: effective Hit {e.EffectiveHit}+)[/]" : "";
                 var autoNote = e.WasAutoSelected ? "Auto-selected" : "Selected";
+
                 console.MarkupLine($"{label} {autoNote} {e.Role.ToLower()} weapon: [bold]{Markup.Escape(e.WeaponName)}[/] (Attack: [green]{e.Attack}[/] | Hit: [green]{e.Hit}+[/] | Normal: [green]{e.NormalDmg}[/] | Crit: [green]{e.CritDmg}[/]){injuredNote}");
                 break;
 
@@ -124,12 +125,15 @@ public class GameEventRenderer(
             $"Wounds: {e.DefenderWounds}/{e.DefenderMaxWounds}");
 
         var maxRows = Math.Max(e.AttackerDice.Count, e.DefenderDice.Count);
+
         for (int i = 0; i < maxRows; i++)
         {
             var atkCell = i < e.AttackerDice.Count ? FormatDieSnapshot("A", i + 1, e.AttackerDice[i]) : "";
             var defCell = i < e.DefenderDice.Count ? FormatDieSnapshot("D", i + 1, e.DefenderDice[i]) : "";
+
             table.AddRow(atkCell, defCell);
         }
+
         console.Write(table);
     }
 
@@ -139,6 +143,7 @@ public class GameEventRenderer(
             .Border(TableBorder.Rounded)
             .AddColumn("Result")
             .AddColumn("Value");
+
         table.AddRow("Unblocked Crits", $"[bold]{e.UnblockedCrits}[/]");
         table.AddRow("Unblocked Normals", $"[bold]{e.UnblockedNormals}[/]");
         table.AddRow("Total Damage", $"[bold red]{e.TotalDamage}[/]");
@@ -151,12 +156,14 @@ public class GameEventRenderer(
         {
             table.AddRow("Obscured", "[green]Crits converted[/]");
         }
+
         console.Write(table);
     }
 
     private static string FormatDieSnapshot(string prefix, int num, FightDieSnapshot die)
     {
         var result = die.Result == "CRIT" ? "[bold yellow]CRIT[/]" : "[green]HIT [/]";
+
         return $"{prefix}{num}: {result} (rolled [green]{die.RolledValue}[/])";
     }
 
@@ -166,6 +173,7 @@ public class GameEventRenderer(
         {
             return "";
         }
+
         return label switch
         {
             "You" => "[bold cyan][[You]][/]",

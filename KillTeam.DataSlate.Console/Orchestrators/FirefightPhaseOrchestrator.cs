@@ -155,6 +155,7 @@ public class FirefightPhaseOrchestrator(
                 .AddChoices("Engage", "Conceal"));
 
         var order = orderChoice == "Engage" ? Order.Engage : Order.Conceal;
+
         state.Order = order;
         await stateRepository.UpdateOrderAsync(state.Id, order);
         activation.OrderSelected = order;
@@ -226,6 +227,7 @@ public class FirefightPhaseOrchestrator(
                     ApCost = 1,
                     NarrativeNote = string.IsNullOrWhiteSpace(distanceStr) ? null : $"Moved {distanceStr}"
                 };
+
                 await actionRepository.CreateAsync(moveAction);
 
                 if (!isDash)

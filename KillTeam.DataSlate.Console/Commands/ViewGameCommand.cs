@@ -85,6 +85,7 @@ public class ViewGameCommand(
                 }
 
                 var flagStr = flags.Count > 0 ? $" [dim]({string.Join(", ", flags)})[/]" : "";
+
                 AnsiConsole.MarkupLine($"  [Act {activation.SequenceNumber}] {Markup.Escape(operativeName)} ({activation.OrderSelected}){flagStr}");
 
                 if (activation.NarrativeNote is not null)

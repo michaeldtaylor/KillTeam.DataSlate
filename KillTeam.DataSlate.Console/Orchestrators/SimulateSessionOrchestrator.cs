@@ -121,6 +121,7 @@ public class SimulateSessionOrchestrator(
 
                 case "Change operatives":
                     var result = await SelectOperativesAsync();
+
                     if (result.playerOp is not null)
                     {
                         playerOp = result.playerOp;
@@ -217,6 +218,7 @@ public class SimulateSessionOrchestrator(
             [aiTeam.Id] = "AI"
         };
         var renderer = new GameEventRenderer(console, participantLabels);
+
         stream.OnEventEmitted += renderer.Render;
 
         if (actionType == Models.ActionType.Fight)
