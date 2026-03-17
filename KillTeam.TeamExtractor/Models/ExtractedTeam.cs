@@ -43,7 +43,7 @@ public class ExtractedTeam
 
     /// <summary>
     /// Serialises the team to the YAML format used by the teams/ folder.
-    /// Field order follows PARSING_RULES.md Rule 6.
+    /// Field order follows kt_extractor_parsing_rules.md Rule 6.
     /// All string values are normalised via <see cref="TextHelpers.NormaliseText"/>.
     /// Name fields use title case via <see cref="TextHelpers.ToTitleCase"/>.
     /// </summary>

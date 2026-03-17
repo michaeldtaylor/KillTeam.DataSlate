@@ -1,4 +1,5 @@
-﻿using KillTeam.DataSlate.Domain.Models;
+﻿using KillTeam.DataSlate.Domain.Engine;
+using KillTeam.DataSlate.Domain.Models;
 using KillTeam.DataSlate.Domain.Repositories;
 using KillTeam.DataSlate.Domain.Services;
 using Spectre.Console;
@@ -12,8 +13,8 @@ public class FirefightPhaseOrchestrator(
     IActivationRepository activationRepository,
     IActionRepository actionRepository,
     ITeamRepository teamRepository,
-    ShootSessionOrchestrator shootOrchestrator,
-    FightSessionOrchestrator fightOrchestrator,
+    ShootEngine shootEngine,
+    FightEngine fightEngine,
     GuardInterruptOrchestrator guardInterruptOrchestrator)
 {
     public async Task RunAsync(Game game, TurningPoint currentTp)
@@ -178,12 +179,12 @@ public class FirefightPhaseOrchestrator(
 
             if (selectedAction == "Shoot")
             {
-                await shootOrchestrator.RunAsync(
+                await shootEngine.RunAsync(
                     op, state, allStates, allOperatives, game, tp, activation, hasMovedNonDash);
             }
             else if (selectedAction == "Fight")
             {
-                await fightOrchestrator.RunAsync(
+                await fightEngine.RunAsync(
                     op, state, allStates, allOperatives, game, tp, activation);
             }
             else if (selectedAction == "Guard")
@@ -326,12 +327,12 @@ public class FirefightPhaseOrchestrator(
         }
         else if (counterChoice == "Shoot")
         {
-            await shootOrchestrator.RunAsync(
+            await shootEngine.RunAsync(
                 counterOp, counterState, allStates, allOperatives, game, tp, counterActivation);
         }
         else if (counterChoice == "Fight")
         {
-            await fightOrchestrator.RunAsync(
+            await fightEngine.RunAsync(
                 counterOp, counterState, allStates, allOperatives, game, tp, counterActivation);
         }
 

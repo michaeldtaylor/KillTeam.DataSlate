@@ -1,4 +1,5 @@
-﻿using KillTeam.DataSlate.Domain.Models;
+﻿using KillTeam.DataSlate.Domain.Engine;
+using KillTeam.DataSlate.Domain.Models;
 using KillTeam.DataSlate.Domain.Repositories;
 using KillTeam.DataSlate.Domain.Services;
 using Spectre.Console;
@@ -7,8 +8,8 @@ namespace KillTeam.DataSlate.Console.Orchestrators;
 
 public class GuardInterruptOrchestrator(
     GuardResolutionService guardResolutionService,
-    ShootSessionOrchestrator shootOrchestrator,
-    FightSessionOrchestrator fightOrchestrator,
+    ShootEngine shootEngine,
+    FightEngine fightEngine,
     IAnsiConsole console,
     IActivationRepository activationRepository,
     IGameOperativeStateRepository stateRepository)
@@ -98,7 +99,7 @@ public class GuardInterruptOrchestrator(
 
             if (interruptChoice == "Shoot")
             {
-                await shootOrchestrator.RunAsync(
+                await shootEngine.RunAsync(
                     guardOp, guardState,
                     allOperativeStates,
                     allOperatives,
@@ -106,7 +107,7 @@ public class GuardInterruptOrchestrator(
             }
             else // Fight
             {
-                await fightOrchestrator.RunAsync(
+                await fightEngine.RunAsync(
                     guardOp, guardState,
                     allOperativeStates,
                     allOperatives,

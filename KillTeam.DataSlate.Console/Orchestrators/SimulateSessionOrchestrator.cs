@@ -1,5 +1,8 @@
 ﻿using KillTeam.DataSlate.Console.Infrastructure.Repositories;
+using KillTeam.DataSlate.Console.InputProviders;
 using KillTeam.DataSlate.Console.Rendering;
+using KillTeam.DataSlate.Domain.Engine;
+using KillTeam.DataSlate.Domain.Engine.Input;
 using KillTeam.DataSlate.Domain.Events;
 using KillTeam.DataSlate.Domain.Repositories;
 using KillTeam.DataSlate.Domain.Services;
@@ -15,9 +18,13 @@ namespace KillTeam.DataSlate.Console.Orchestrators;
 public class SimulateSessionOrchestrator(
     IAnsiConsole console,
     ITeamRepository teamRepository,
+    IGameRepository gameRepository,
+    IFightInputProvider fightInputProvider,
+    IShootInputProvider shootInputProvider,
+    IRerollInputProvider rerollInputProvider,
+    IBlastInputProvider blastInputProvider,
     CombatResolutionService combatResolutionService,
-    FightResolutionService fightResolutionService,
-    RerollOrchestrator rerollOrchestrator)
+    FightResolutionService fightResolutionService)
 {
     public async Task RunAsync()
     {
@@ -145,7 +152,7 @@ public class SimulateSessionOrchestrator(
                 TeamId = playerTeam.Id,
                 TeamName = playerTeam.Name,
                 PlayerId = Guid.Empty,
-                CommandPoints = 0,  // suppresses CP re-roll prompts (RerollOrchestrator skips when game not in DB)
+                CommandPoints = 0,  // suppresses CP re-roll prompts (RerollEngine skips when game not in DB)
             },
             Participant2 = new Models.GameParticipant
             {
@@ -213,10 +220,10 @@ public class SimulateSessionOrchestrator(
 
         if (actionType == Models.ActionType.Fight)
         {
-            var fightOrchestrator = new FightSessionOrchestrator(
-                console, fightResolutionService, rerollOrchestrator, stateRepo, actionRepo);
+            var rerollEngine = new RerollEngine(rerollInputProvider, gameRepository);
+            var fightEngine = new FightEngine(fightInputProvider, fightResolutionService, rerollEngine, stateRepo, actionRepo);
 
-            var fightResult = await fightOrchestrator.RunAsync(
+            var fightResult = await fightEngine.RunAsync(
                 playerOp, playerState, allStates, allOperatives, game, tp, activation, stream);
 
             DisplayEncounterSummary(playerOp, aiOp,
@@ -225,13 +232,11 @@ public class SimulateSessionOrchestrator(
         }
         else
         {
-            var blastOrchestrator = new BlastTorrentSessionOrchestrator(
-                console, combatResolutionService, rerollOrchestrator, stateRepo, actionRepo, blastTargetRepo);
+            var rerollEngine = new RerollEngine(rerollInputProvider, gameRepository);
+            var blastEngine = new BlastEngine(blastInputProvider, combatResolutionService, rerollEngine, stateRepo, actionRepo, blastTargetRepo);
+            var shootEngine = new ShootEngine(shootInputProvider, combatResolutionService, rerollEngine, blastEngine, stateRepo, actionRepo);
 
-            var shootOrchestrator = new ShootSessionOrchestrator(
-                console, combatResolutionService, rerollOrchestrator, blastOrchestrator, stateRepo, actionRepo);
-
-            var shootResult = await shootOrchestrator.RunAsync(
+            var shootResult = await shootEngine.RunAsync(
                 playerOp, playerState, allStates, allOperatives, game, tp, activation, false, stream);
 
             DisplayEncounterSummary(playerOp, aiOp,
