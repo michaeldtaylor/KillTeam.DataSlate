@@ -151,6 +151,7 @@ public class TeamYamlImporter
     private static int ParseSave(string raw)
     {
         var s = raw.Trim().TrimEnd('+');
+
         return int.TryParse(s, out var n) ? n : 0;
     }
 
@@ -160,6 +161,7 @@ public class TeamYamlImporter
         {
             return [];
         }
+
         return rules.Select(r => new NamedRule
         {
             Name = r.Name?.Trim() ?? string.Empty,
@@ -174,6 +176,7 @@ public class TeamYamlImporter
         {
             return [];
         }
+
         return items.Select(e => new EquipmentItem
         {
             Name = e.Name?.Trim() ?? string.Empty,
@@ -187,6 +190,7 @@ public class TeamYamlImporter
         {
             return [];
         }
+
         return abilities.Select(a => new OperativeAbility
         {
             Name = a.Name?.Trim() ?? string.Empty,
@@ -200,6 +204,7 @@ public class TeamYamlImporter
         {
             return [];
         }
+
         return actions.Select(a => new OperativeSpecialAction
         {
             Name = a.Name?.Trim() ?? string.Empty,
@@ -214,6 +219,7 @@ public class TeamYamlImporter
         {
             return [];
         }
+
         return rules.Select(r => new OperativeWeaponRule
         {
             Name = r.Name?.Trim() ?? string.Empty,

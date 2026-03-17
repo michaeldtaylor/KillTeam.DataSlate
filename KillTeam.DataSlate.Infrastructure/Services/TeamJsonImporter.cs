@@ -189,6 +189,7 @@ public class TeamJsonImporter
     private static int ParseStat(string raw)
     {
         var s = raw.Trim().TrimEnd('+');
+
         return int.TryParse(s, out var n) ? n : 0;
     }
 
