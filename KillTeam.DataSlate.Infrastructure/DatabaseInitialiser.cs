@@ -28,8 +28,9 @@ public class DatabaseInitialiser
         await connection.OpenAsync();
 
         await using var pragmaCommand = connection.CreateCommand();
+
         pragmaCommand.CommandText = "PRAGMA foreign_keys = ON";
-        pragmaCommand.ExecuteNonQuery();
+        await pragmaCommand.ExecuteNonQueryAsync();
 
         var currentVersion = await GetCurrentVersionAsync(connection);
 
