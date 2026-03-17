@@ -1,7 +1,6 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
+using KillTeam.DataSlate.Domain.Models;
 using KillTeam.DataSlate.Domain.Repositories;
-using Microsoft.Data.Sqlite;
-using Microsoft.Extensions.Configuration;
 using Spectre.Console;
 using Spectre.Console.Cli;
 
@@ -10,10 +9,12 @@ namespace KillTeam.DataSlate.Console.Commands;
 /// <summary>Displays the full detail of a game: turning points, activations, actions, dice, and narrative notes.</summary>
 [Description("View full details of a game — turning points, activations, actions, and notes.")]
 public class ViewGameCommand(
+    IGameRepository games,
     IActivationRepository activations,
     IActionRepository actions,
     IPloyRepository ploys,
-    IConfiguration config) : AsyncCommand<ViewGameCommand.Settings>
+    ITurningPointRepository turningPoints,
+    IOperativeRepository operatives) : AsyncCommand<ViewGameCommand.Settings>
 {
     public class Settings : CommandSettings
     {
@@ -27,142 +28,103 @@ public class ViewGameCommand(
         if (!Guid.TryParse(settings.GameId, out var gameId))
         {
             AnsiConsole.MarkupLine("[red]Invalid game ID format.[/]");
+
             return 1;
         }
 
-        var dbPath = config["DataSlate:DatabasePath"] ?? "./data/kill-team.db";
-        await using var conn = new SqliteConnection($"Data Source={dbPath}");
-        await conn.OpenAsync();
+        var header = await games.GetHeaderAsync(gameId);
 
-        // Load game header
-        using var gameCmd = conn.CreateCommand();
-        gameCmd.CommandText = """
-            SELECT g.status, g.mission_name, g.participant1_victory_points, g.participant2_victory_points,
-                   pa.name, g.participant1_team_name, pb.name, g.participant2_team_name,
-                   CASE WHEN g.winner_team_id = g.participant1_team_id THEN g.participant1_team_name
-                        WHEN g.winner_team_id = g.participant2_team_id THEN g.participant2_team_name
-                        ELSE NULL END
-            FROM games g
-            JOIN players pa ON pa.id = g.participant1_player_id
-            JOIN players pb ON pb.id = g.participant2_player_id
-            WHERE g.id = @id
-            """;
-        gameCmd.Parameters.AddWithValue("@id", gameId.ToString());
-
-        string? status, missionName, playerA, teamA, playerB, teamB, winner;
-        int vpA, vpB;
-
-        using (var r = await gameCmd.ExecuteReaderAsync())
+        if (header is null)
         {
-            if (!await r.ReadAsync())
-            {
-                AnsiConsole.MarkupLine($"[red]Game {Markup.Escape(settings.GameId)} not found.[/]");
-                return 1;
-            }
-            status = r.GetString(0);
-            missionName = r.IsDBNull(1) ? null : r.GetString(1);
-            vpA = r.GetInt32(2); vpB = r.GetInt32(3);
-            playerA = r.GetString(4); teamA = r.GetString(5);
-            playerB = r.GetString(6); teamB = r.GetString(7);
-            winner = r.IsDBNull(8) ? null : r.GetString(8);
+            AnsiConsole.MarkupLine($"[red]Game {Markup.Escape(settings.GameId)} not found.[/]");
+
+            return 1;
         }
 
-        AnsiConsole.MarkupLine($"[bold]=== {Markup.Escape(playerA)} ({Markup.Escape(teamA)}) vs {Markup.Escape(playerB)} ({Markup.Escape(teamB)}) ===[/]");
-        if (missionName is not null)
+        AnsiConsole.MarkupLine($"[bold]=== {Markup.Escape(header.PlayerAName)} ({Markup.Escape(header.TeamAName)}) vs {Markup.Escape(header.PlayerBName)} ({Markup.Escape(header.TeamBName)}) ===[/]");
+
+        if (header.MissionName is not null)
         {
-            AnsiConsole.MarkupLine($"Mission: {Markup.Escape(missionName)}");
+            AnsiConsole.MarkupLine($"Mission: {Markup.Escape(header.MissionName)}");
         }
 
-        // Load turning points
-        using var tpCmd = conn.CreateCommand();
-        tpCmd.CommandText = """
-            SELECT tp.id, tp.number, kt.name
-            FROM turning_points tp
-            LEFT JOIN teams kt ON kt.id = tp.team_with_initiative_id
-            WHERE tp.game_id = @gid ORDER BY tp.number
-            """;
-        tpCmd.Parameters.AddWithValue("@gid", gameId.ToString());
+        var turningPointSummaries = await turningPoints.GetSummariesByGameAsync(gameId);
 
-        var tpList = new List<(Guid Id, int Number, string? InitTeam)>();
-        using (var r = await tpCmd.ExecuteReaderAsync())
+        foreach (var tp in turningPointSummaries)
         {
-            while (await r.ReadAsync())
-            {
-                tpList.Add((Guid.Parse(r.GetString(0)), r.GetInt32(1), r.IsDBNull(2) ? null : r.GetString(2)));
-            }
-        }
+            AnsiConsole.MarkupLine($"\n[bold]=== Turning Point {tp.Number} ===[/]");
 
-        foreach (var (tpId, tpNum, initTeam) in tpList)
-        {
-            AnsiConsole.MarkupLine($"\n[bold]=== Turning Point {tpNum} ===[/]");
-            if (initTeam is not null)
+            if (tp.InitiativeTeamName is not null)
             {
-                AnsiConsole.MarkupLine($"  Initiative: {Markup.Escape(initTeam)}");
+                AnsiConsole.MarkupLine($"  Initiative: {Markup.Escape(tp.InitiativeTeamName)}");
             }
 
-            // Show ploys
-            var ployList = (await ploys.GetByTurningPointAsync(tpId)).ToList();
-            foreach (var p in ployList)
+            var ployList = (await ploys.GetByTurningPointAsync(tp.Id)).ToList();
+
+            foreach (var ploy in ployList)
             {
-                var teamLabel = p.TeamId;
-                AnsiConsole.MarkupLine($"  [dim]Ploy:[/] {Markup.Escape(p.PloyName)} ({Markup.Escape(teamLabel)}, {p.CpCost}CP)" +
-                    (p.Description is not null ? $" — {Markup.Escape(p.Description)}" : ""));
+                AnsiConsole.MarkupLine($"  [dim]Ploy:[/] {Markup.Escape(ploy.PloyName)} ({Markup.Escape(ploy.TeamId)}, {ploy.CpCost}CP)" +
+                    (ploy.Description is not null ? $" — {Markup.Escape(ploy.Description)}" : ""));
             }
 
-            // Show activations
-            var actList = (await activations.GetByTurningPointAsync(tpId)).ToList();
-            foreach (var act in actList)
+            var activationList = (await activations.GetByTurningPointAsync(tp.Id)).ToList();
+
+            foreach (var activation in activationList)
             {
-                var opName = await GetOperativeNameAsync(conn, act.OperativeId);
+                var operativeName = await operatives.GetNameByIdAsync(activation.OperativeId) ?? activation.OperativeId.ToString()[..8];
                 var flags = new List<string>();
-                if (act.IsCounteract) flags.Add("Counteract");
-                if (act.IsGuardInterrupt) flags.Add("Guard Interrupt");
-                var flagStr = flags.Count > 0 ? $" [dim]({string.Join(", ", flags)})[/]" : "";
-                AnsiConsole.MarkupLine($"  [Act {act.SequenceNumber}] {Markup.Escape(opName)} ({act.OrderSelected}){flagStr}");
-                if (act.NarrativeNote is not null)
+
+                if (activation.IsCounteract)
                 {
-                    AnsiConsole.MarkupLine($"    [dim]🖊 {Markup.Escape(act.NarrativeNote)}[/]");
+                    flags.Add("Counteract");
                 }
 
-                // Show actions
-                var actionList = (await actions.GetByActivationAsync(act.Id)).ToList();
-                foreach (var a in actionList)
+                if (activation.IsGuardInterrupt)
                 {
-                    var targetName = a.TargetOperativeId.HasValue
-                        ? await GetOperativeNameAsync(conn, a.TargetOperativeId.Value) : null;
-                    var dmg = a.NormalDamageDealt + a.CriticalDamageDealt;
-                    var coverStr = a.TargetInCover == true ? " [dim](cover)[/]" : "";
-                    var obscStr = a.IsObscured == true ? " [dim](obscured)[/]" : "";
-                    var incapStr = a.CausedIncapacitation ? " [red](Incapacitated!)[/]" : "";
+                    flags.Add("Guard Interrupt");
+                }
+
+                var flagStr = flags.Count > 0 ? $" [dim]({string.Join(", ", flags)})[/]" : "";
+                AnsiConsole.MarkupLine($"  [Act {activation.SequenceNumber}] {Markup.Escape(operativeName)} ({activation.OrderSelected}){flagStr}");
+
+                if (activation.NarrativeNote is not null)
+                {
+                    AnsiConsole.MarkupLine($"    [dim]🖊 {Markup.Escape(activation.NarrativeNote)}[/]");
+                }
+
+                var actionList = (await actions.GetByActivationAsync(activation.Id)).ToList();
+
+                foreach (var action in actionList)
+                {
+                    var targetName = action.TargetOperativeId.HasValue
+                        ? await operatives.GetNameByIdAsync(action.TargetOperativeId.Value) : null;
+                    var damage = action.NormalDamageDealt + action.CriticalDamageDealt;
+                    var coverStr = action.TargetInCover == true ? " [dim](cover)[/]" : "";
+                    var obscStr = action.IsObscured == true ? " [dim](obscured)[/]" : "";
+                    var incapStr = action.CausedIncapacitation ? " [red](Incapacitated!)[/]" : "";
                     var targetStr = targetName is not null ? $" → {Markup.Escape(targetName)}" : "";
-                    AnsiConsole.MarkupLine($"    {a.Type}{targetStr}: {dmg} dmg{coverStr}{obscStr}{incapStr}");
-                    if (a.NarrativeNote is not null)
+
+                    AnsiConsole.MarkupLine($"    {action.Type}{targetStr}: {damage} dmg{coverStr}{obscStr}{incapStr}");
+
+                    if (action.NarrativeNote is not null)
                     {
-                        AnsiConsole.MarkupLine($"      [dim]🖊 {Markup.Escape(a.NarrativeNote)}[/]");
+                        AnsiConsole.MarkupLine($"      [dim]🖊 {Markup.Escape(action.NarrativeNote)}[/]");
                     }
                 }
             }
         }
 
-        // Final score
         AnsiConsole.WriteLine();
-        if (status == "Completed" && winner is not null)
+
+        if (header.Status == GameStatus.Completed && header.WinnerTeamName is not null)
         {
-            AnsiConsole.MarkupLine($"[bold]Final Score:[/] {teamA} {vpA} — {vpB} {teamB}  |  Winner: [green]{Markup.Escape(winner)}[/]");
+            AnsiConsole.MarkupLine($"[bold]Final Score:[/] {header.TeamAName} {header.VictoryPointsA} — {header.VictoryPointsB} {header.TeamBName}  |  Winner: [green]{Markup.Escape(header.WinnerTeamName)}[/]");
         }
         else
         {
-            AnsiConsole.MarkupLine($"[dim](In Progress — TP{tpList.LastOrDefault().Number})[/]");
+            AnsiConsole.MarkupLine($"[dim](In Progress — TP{turningPointSummaries.LastOrDefault()?.Number})[/]");
         }
 
         return 0;
-    }
-
-    private static async Task<string> GetOperativeNameAsync(SqliteConnection conn, Guid id)
-    {
-        using var cmd = conn.CreateCommand();
-        cmd.CommandText = "SELECT name FROM operatives WHERE id = @id";
-        cmd.Parameters.AddWithValue("@id", id.ToString());
-        return await cmd.ExecuteScalarAsync() as string ?? id.ToString()[..8];
     }
 }

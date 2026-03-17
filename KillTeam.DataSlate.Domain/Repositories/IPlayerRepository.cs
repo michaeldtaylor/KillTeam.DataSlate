@@ -11,4 +11,9 @@ public interface IPlayerRepository
     Task DeleteAsync(Guid id);
 
     Task<Player?> FindByNameAsync(string name);
+
+    Task<int> CountGamesAsync(Guid playerId);
+
+    Task<IReadOnlyList<PlayerStats>> GetAllWithStatsAsync(string? nameFilter = null);
 }
+

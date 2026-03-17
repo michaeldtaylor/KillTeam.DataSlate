@@ -1,10 +1,11 @@
 using System.Text.Json;
-using Microsoft.Data.Sqlite;
 using KillTeam.DataSlate.Domain.Models;
+using KillTeam.DataSlate.Domain.Repositories;
+using Microsoft.Data.Sqlite;
 
 namespace KillTeam.DataSlate.Infrastructure.Repositories;
 
-public class SqliteOperativeRepository
+public class SqliteOperativeRepository : IOperativeRepository
 {
     private readonly ISqlExecutor _db;
 
@@ -13,36 +14,43 @@ public class SqliteOperativeRepository
     public SqliteOperativeRepository(SqliteConnection connection)
         : this(new SqliteExecutor(connection)) { }
 
+    public async Task<string?> GetNameByIdAsync(Guid operativeId)
+    {
+        return await _db.ScalarAsync<string>(
+            "SELECT name FROM operatives WHERE id = @id",
+            new() { ["@id"] = operativeId.ToString() });
+    }
+
     public async Task UpsertByTeamAsync(IEnumerable<Operative> operatives, string teamId)
     {
-        await _db.ExecuteTransactionAsync(async (conn, tx) =>
+        await _db.ExecuteTransactionAsync(async (connection, transaction) =>
         {
-            using var del = conn.CreateCommand();
-            del.Transaction = tx;
-            del.CommandText = "DELETE FROM operatives WHERE team_id = @teamId";
-            del.Parameters.AddWithValue("@teamId", teamId);
-            await del.ExecuteNonQueryAsync();
+            await using var deleteCommand = connection.CreateCommand();
+            deleteCommand.Transaction = transaction;
+            deleteCommand.CommandText = "DELETE FROM operatives WHERE team_id = @teamId";
+            deleteCommand.Parameters.AddWithValue("@teamId", teamId);
+            await deleteCommand.ExecuteNonQueryAsync();
 
             foreach (var operative in operatives)
             {
                 operative.TeamId = teamId;
-                using var cmd = conn.CreateCommand();
-                cmd.Transaction = tx;
-                cmd.CommandText = """
+                await using var command = connection.CreateCommand();
+                command.Transaction = transaction;
+                command.CommandText = """
                     INSERT INTO operatives
                     (id, team_id, name, operative_type, move, apl, wounds, save, equipment_json)
                     VALUES (@id, @teamId, @name, @operativeType, @move, @apl, @wounds, @save, @equipmentJson)
                     """;
-                cmd.Parameters.AddWithValue("@id", operative.Id.ToString());
-                cmd.Parameters.AddWithValue("@teamId", operative.TeamId);
-                cmd.Parameters.AddWithValue("@name", operative.Name);
-                cmd.Parameters.AddWithValue("@operativeType", operative.OperativeType);
-                cmd.Parameters.AddWithValue("@move", operative.Move);
-                cmd.Parameters.AddWithValue("@apl", operative.Apl);
-                cmd.Parameters.AddWithValue("@wounds", operative.Wounds);
-                cmd.Parameters.AddWithValue("@save", operative.Save);
-                cmd.Parameters.AddWithValue("@equipmentJson", JsonSerializer.Serialize(operative.Equipment));
-                await cmd.ExecuteNonQueryAsync();
+                command.Parameters.AddWithValue("@id", operative.Id.ToString());
+                command.Parameters.AddWithValue("@teamId", operative.TeamId);
+                command.Parameters.AddWithValue("@name", operative.Name);
+                command.Parameters.AddWithValue("@operativeType", operative.OperativeType);
+                command.Parameters.AddWithValue("@move", operative.Move);
+                command.Parameters.AddWithValue("@apl", operative.Apl);
+                command.Parameters.AddWithValue("@wounds", operative.Wounds);
+                command.Parameters.AddWithValue("@save", operative.Save);
+                command.Parameters.AddWithValue("@equipmentJson", JsonSerializer.Serialize(operative.Equipment));
+                await command.ExecuteNonQueryAsync();
             }
         });
     }

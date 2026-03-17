@@ -1,6 +1,5 @@
-﻿using System.ComponentModel;
-using Microsoft.Data.Sqlite;
-using Microsoft.Extensions.Configuration;
+using System.ComponentModel;
+using KillTeam.DataSlate.Domain.Repositories;
 using Spectre.Console;
 using Spectre.Console.Cli;
 
@@ -8,7 +7,7 @@ namespace KillTeam.DataSlate.Console.Commands;
 
 /// <summary>Lists completed games, optionally filtered by player name.</summary>
 [Description("List completed games, optionally filtered by player.")]
-public class HistoryCommand(IConfiguration config) : AsyncCommand<HistoryCommand.Settings>
+public class HistoryCommand(IGameRepository games) : AsyncCommand<HistoryCommand.Settings>
 {
     public class Settings : CommandSettings
     {
@@ -19,51 +18,12 @@ public class HistoryCommand(IConfiguration config) : AsyncCommand<HistoryCommand
 
     public override async Task<int> ExecuteAsync(CommandContext context, Settings settings)
     {
-        var dbPath = config["DataSlate:DatabasePath"] ?? "./data/kill-team.db";
-        await using var conn = new SqliteConnection($"Data Source={dbPath}");
-        await conn.OpenAsync();
-
-        using var cmd = conn.CreateCommand();
-        cmd.CommandText = """
-            SELECT g.id, g.played_at, g.mission_name,
-                   pa.name as participant1_player_name, g.participant1_team_name,
-                   pb.name as participant2_player_name, g.participant2_team_name,
-                   g.participant1_victory_points, g.participant2_victory_points,
-                   CASE WHEN g.winner_team_id = g.participant1_team_id THEN g.participant1_team_name
-                        WHEN g.winner_team_id = g.participant2_team_id THEN g.participant2_team_name
-                        ELSE '—' END as winner
-            FROM games g
-            JOIN players pa ON pa.id = g.participant1_player_id
-            JOIN players pb ON pb.id = g.participant2_player_id
-            WHERE g.status = 'Completed'
-            """;
-
-        if (!string.IsNullOrWhiteSpace(settings.PlayerName))
-        {
-            cmd.CommandText += " AND (pa.name LIKE @pname OR pb.name LIKE @pname)";
-            cmd.Parameters.AddWithValue("@pname", $"%{settings.PlayerName}%");
-        }
-
-        cmd.CommandText += " ORDER BY g.played_at DESC";
-
-        var rows = new List<(string Date, string Mission, string PlayerA, string TeamA,
-            string PlayerB, string TeamB, int VpA, int VpB, string Winner)>();
-
-        using var reader = await cmd.ExecuteReaderAsync();
-        while (await reader.ReadAsync())
-        {
-            var date = DateTime.TryParse(reader.GetString(1), out var dt)
-                ? dt.ToString("yyyy-MM-dd") : reader.GetString(1);
-            rows.Add((date, reader.IsDBNull(2) ? "—" : reader.GetString(2),
-                reader.GetString(3), reader.GetString(4),
-                reader.GetString(5), reader.GetString(6),
-                reader.GetInt32(7), reader.GetInt32(8),
-                reader.GetString(9)));
-        }
+        var rows = await games.GetHistoryAsync(settings.PlayerName);
 
         if (rows.Count == 0)
         {
             AnsiConsole.MarkupLine("[dim]No games recorded yet.[/]");
+
             return 0;
         }
 
@@ -76,15 +36,23 @@ public class HistoryCommand(IConfiguration config) : AsyncCommand<HistoryCommand
             .AddColumn(new TableColumn("Score B").Centered())
             .AddColumn("Winner");
 
-        foreach (var r in rows)
+        foreach (var row in rows)
         {
-            table.AddRow(r.Date, Markup.Escape(r.Mission),
-                $"{Markup.Escape(r.PlayerA)} ({Markup.Escape(r.TeamA)})",
-                $"{Markup.Escape(r.PlayerB)} ({Markup.Escape(r.TeamB)})",
-                r.VpA.ToString(), r.VpB.ToString(), Markup.Escape(r.Winner));
+            var date = DateTime.TryParse(row.PlayedAt, out var parsed)
+                ? parsed.ToString("yyyy-MM-dd") : row.PlayedAt;
+
+            table.AddRow(
+                date,
+                Markup.Escape(row.MissionName ?? "—"),
+                $"{Markup.Escape(row.PlayerAName)} ({Markup.Escape(row.TeamAName)})",
+                $"{Markup.Escape(row.PlayerBName)} ({Markup.Escape(row.TeamBName)})",
+                row.VictoryPointsA.ToString(),
+                row.VictoryPointsB.ToString(),
+                Markup.Escape(row.WinnerTeamName ?? "—"));
         }
 
         AnsiConsole.Write(table);
+
         return 0;
     }
 }

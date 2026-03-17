@@ -282,4 +282,158 @@ SomeType x = null; // can't infer type from null
 
 ---
 
+## 12. Blank line before `return` (when not the only statement)
+
+When a `return` statement is not the only statement in a block, add a blank line immediately before it.
+
+```csharp
+// ✅ Correct
+public async Task<int> ExecuteAsync(CommandContext context, Settings settings)
+{
+    var result = await DoWorkAsync();
+
+    return result;
+}
+
+if (!await reader.ReadAsync())
+{
+    AnsiConsole.MarkupLine("[red]Not found.[/]");
+
+    return 1;
+}
+
+// ❌ Wrong — no blank line before return
+public async Task<int> ExecuteAsync(CommandContext context, Settings settings)
+{
+    var result = await DoWorkAsync();
+    return result;
+}
+```
+
+Exception: a `return` that is the sole statement in a block (e.g. a guard clause with no preceding statement) does not need a blank line before it:
+
+```csharp
+// ✅ Correct — sole statement, no blank line needed
+if (operative is null)
+{
+    return;
+}
+```
+
+---
+
+## 13. Using directives in Rider sort order
+
+Using directives must be sorted in Rider's default "Optimise Imports" order:
+1. `System.*` namespaces first, sorted alphabetically within the group
+2. All other namespaces after, sorted alphabetically
+3. No blank line between the two groups
+
+```csharp
+// ✅ Correct
+using System.ComponentModel;
+using System.Text.Json;
+using KillTeam.DataSlate.Domain.Models;
+using Microsoft.Data.Sqlite;
+using Spectre.Console;
+
+// ❌ Wrong — non-System usings before System
+using KillTeam.DataSlate.Domain.Models;
+using System.ComponentModel;
+using Microsoft.Data.Sqlite;
+```
+
+---
+
+## 14. `await using` for `IAsyncDisposable` types
+
+Use `await using` (instead of `using`) whenever the type implements `IAsyncDisposable`. This includes `SqliteConnection`, `SqliteCommand`, `SqliteDataReader`, and `SqliteTransaction`.
+
+Prefer the `await using var` declaration form over the `await using ( )` block form.
+
+```csharp
+// ✅ Correct
+await using var connection = new SqliteConnection(connectionString);
+await connection.OpenAsync();
+
+await using var command = connection.CreateCommand();
+command.CommandText = sql;
+
+await using var reader = await command.ExecuteReaderAsync();
+
+// ❌ Wrong — plain using for IAsyncDisposable
+using var conn = new SqliteConnection(connectionString);
+using (var reader = await command.ExecuteReaderAsync()) { ... }
+```
+
+---
+
+## 15. Use descriptive variable names — no abbreviations
+
+Variable names must be fully descriptive. Single-letter variables, truncated names, and cryptic abbreviations are not allowed.
+
+```csharp
+// ✅ Correct
+await using var command = connection.CreateCommand();
+await using var reader = await command.ExecuteReaderAsync();
+await using var transaction = connection.BeginTransaction();
+
+foreach (var (parameterName, parameterValue) in parameters)
+{
+    command.Parameters.AddWithValue(parameterName, parameterValue ?? DBNull.Value);
+}
+
+var playerGames = 0;
+var playerWins = 0;
+var winPercentage = playerGames > 0 ? $"{playerWins * 100 / playerGames}%" : "—";
+
+// ❌ Wrong — abbreviations and single-letter names
+using var cmd = connection.CreateCommand();
+using var r = await cmd.ExecuteReaderAsync();
+using var tx = connection.BeginTransaction();
+var g = 0;
+var w = 0;
+var pct = g > 0 ? $"{w * 100 / g}%" : "—";
+var gCmd = connection.CreateCommand();
+```
+
+Common rename mappings:
+| Abbreviation | Descriptive name |
+|---|---|
+| `cmd` | `command` |
+| `conn` | `connection` |
+| `tx` | `transaction` |
+| `r` / `reader` abbrev | `reader` |
+| `tp` (variable) | `turningPoint` / `turningPoints` |
+| `op` (variable) | `operative` |
+| `g`, `w` | `playerGames`, `playerWins` |
+| `pct` | `winPercentage` |
+| `gCmd` | `gameQueryCommand` (or context-specific) |
+| `t` (table) | `table` / `statsTable` |
+
+Exception: loop variables in short, unambiguous `foreach` may use conventional short forms only if the type makes the meaning obvious (e.g. `foreach (var file in files)`). Single-letter names are never acceptable.
+
+---
+
+## 16. Blank line after `var` / `using var` / `await using var` declaration block
+
+When a method or block begins with one or more `var`, `using var`, or `await using var` declarations, add a blank line after the last declaration before the first non-declaration statement. This extends Rule 4 to cover `using var` and `await using var` patterns.
+
+```csharp
+// ✅ Correct
+await using var connection = new SqliteConnection(connectionString);
+await using var command = connection.CreateCommand();
+
+command.CommandText = sql;
+await command.ExecuteNonQueryAsync();
+
+// ❌ Wrong — no blank line after declaration block
+await using var connection = new SqliteConnection(connectionString);
+await using var command = connection.CreateCommand();
+command.CommandText = sql;
+await command.ExecuteNonQueryAsync();
+```
+
+---
+
 *More conventions will be added here as the project evolves.*

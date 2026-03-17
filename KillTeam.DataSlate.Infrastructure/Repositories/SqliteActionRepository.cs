@@ -1,7 +1,7 @@
 using System.Text.Json;
-using Microsoft.Data.Sqlite;
 using KillTeam.DataSlate.Domain.Models;
 using KillTeam.DataSlate.Domain.Repositories;
+using Microsoft.Data.Sqlite;
 
 namespace KillTeam.DataSlate.Infrastructure.Repositories;
 
@@ -53,6 +53,7 @@ public class SqliteActionRepository : IActionRepository
                 ["@causedIncapacitation"] = action.CausedIncapacitation ? 1 : 0,
                 ["@narrativeNote"] = action.NarrativeNote
             });
+
         return action;
     }
 
@@ -74,27 +75,27 @@ public class SqliteActionRepository : IActionRepository
                    stun_applied, narrative_note
             FROM actions WHERE activation_id = @id ORDER BY rowid
             """,
-            r => new GameAction
+            reader => new GameAction
             {
-                Id = Guid.Parse(r.GetString(0)),
-                ActivationId = Guid.Parse(r.GetString(1)),
-                Type = Enum.Parse<ActionType>(r.GetString(2)),
-                ApCost = r.GetInt32(3),
-                TargetOperativeId = r.IsDBNull(4) ? null : Guid.Parse(r.GetString(4)),
-                WeaponId = r.IsDBNull(5) ? null : Guid.Parse(r.GetString(5)),
-                AttackerDice = r.IsDBNull(6) ? [] : JsonSerializer.Deserialize<int[]>(r.GetString(6)) ?? [],
-                DefenderDice = r.IsDBNull(7) ? [] : JsonSerializer.Deserialize<int[]>(r.GetString(7)) ?? [],
-                TargetInCover = r.IsDBNull(8) ? null : r.GetInt32(8) != 0,
-                IsObscured = r.IsDBNull(9) ? null : r.GetInt32(9) != 0,
-                NormalHits = r.GetInt32(10),
-                CriticalHits = r.GetInt32(11),
-                Blocks = r.GetInt32(12),
-                NormalDamageDealt = r.GetInt32(13),
-                CriticalDamageDealt = r.GetInt32(14),
-                CausedIncapacitation = r.GetInt32(15) != 0,
-                SelfDamageDealt = r.GetInt32(16),
-                StunApplied = r.GetInt32(17) != 0,
-                NarrativeNote = r.IsDBNull(18) ? null : r.GetString(18)
+                Id = Guid.Parse(reader.GetString(0)),
+                ActivationId = Guid.Parse(reader.GetString(1)),
+                Type = Enum.Parse<ActionType>(reader.GetString(2)),
+                ApCost = reader.GetInt32(3),
+                TargetOperativeId = reader.IsDBNull(4) ? null : Guid.Parse(reader.GetString(4)),
+                WeaponId = reader.IsDBNull(5) ? null : Guid.Parse(reader.GetString(5)),
+                AttackerDice = reader.IsDBNull(6) ? [] : JsonSerializer.Deserialize<int[]>(reader.GetString(6)) ?? [],
+                DefenderDice = reader.IsDBNull(7) ? [] : JsonSerializer.Deserialize<int[]>(reader.GetString(7)) ?? [],
+                TargetInCover = reader.IsDBNull(8) ? null : reader.GetInt32(8) != 0,
+                IsObscured = reader.IsDBNull(9) ? null : reader.GetInt32(9) != 0,
+                NormalHits = reader.GetInt32(10),
+                CriticalHits = reader.GetInt32(11),
+                Blocks = reader.GetInt32(12),
+                NormalDamageDealt = reader.GetInt32(13),
+                CriticalDamageDealt = reader.GetInt32(14),
+                CausedIncapacitation = reader.GetInt32(15) != 0,
+                SelfDamageDealt = reader.GetInt32(16),
+                StunApplied = reader.GetInt32(17) != 0,
+                NarrativeNote = reader.IsDBNull(18) ? null : reader.GetString(18)
             },
             new() { ["@id"] = activationId.ToString() });
     }

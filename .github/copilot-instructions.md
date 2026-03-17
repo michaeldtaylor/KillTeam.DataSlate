@@ -23,6 +23,11 @@ Key rules to apply at all times:
 10. **Always use `var`** — for local variables when type is inferable. Exception: variables initialised with `null`.
 11. **File-scoped namespaces** — `namespace Foo.Bar;` not `namespace Foo.Bar { }`.
 12. **No expression-bodied methods or constructors** — use block bodies.
+13. **Blank line before `return`** — when `return` is not the sole statement in a block, add a blank line immediately before it. Exception: sole guard-clause `return` with no preceding statement.
+14. **Using directives in Rider sort order** — `System.*` first (alphabetical), then all others (alphabetical), no blank line between groups.
+15. **`await using` for `IAsyncDisposable`** — use `await using var` for `SqliteConnection`, `SqliteCommand`, `SqliteDataReader`, `SqliteTransaction`, and any other `IAsyncDisposable`.
+16. **Descriptive variable names** — no abbreviations: `command` not `cmd`, `connection` not `conn`, `transaction` not `tx`, `reader` not `r`, `gameQueryCommand` not `gCmd`. Full table in csharp-conventions.md Rule 15.
+17. **Blank line after declaration block** — a run of `var`/`using var`/`await using var` declarations must be followed by a blank line before the first non-declaration statement (extends Rule 4).
 
 ---
 

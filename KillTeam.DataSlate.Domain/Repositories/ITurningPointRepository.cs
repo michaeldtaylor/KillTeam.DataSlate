@@ -8,7 +8,10 @@ public interface ITurningPointRepository
 
     Task<TurningPoint?> GetCurrentAsync(Guid gameId);
 
+    Task<IReadOnlyList<TurningPointSummary>> GetSummariesByGameAsync(Guid gameId);
+
     Task CompleteStrategyPhaseAsync(Guid id);
 
     Task<bool> IsStrategyPhaseCompleteAsync(Guid id);
 }
+

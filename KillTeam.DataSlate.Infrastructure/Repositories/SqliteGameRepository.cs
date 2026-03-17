@@ -1,6 +1,6 @@
-using Microsoft.Data.Sqlite;
 using KillTeam.DataSlate.Domain.Models;
 using KillTeam.DataSlate.Domain.Repositories;
+using Microsoft.Data.Sqlite;
 
 namespace KillTeam.DataSlate.Infrastructure.Repositories;
 
@@ -44,6 +44,7 @@ public class SqliteGameRepository : IGameRepository
                 ["@vpTeamA"] = game.Participant1.VictoryPoints,
                 ["@vpTeamB"] = game.Participant2.VictoryPoints
             });
+
         return game;
     }
 
@@ -66,15 +67,15 @@ public class SqliteGameRepository : IGameRepository
         await _db.ExecuteAsync(
             """
             UPDATE games SET status = @status, winner_team_id = @winnerId,
-                participant1_victory_points = @vpA, participant2_victory_points = @vpB
+                participant1_victory_points = @victoryPointsA, participant2_victory_points = @victoryPointsB
             WHERE id = @id
             """,
             new()
             {
                 ["@status"] = status.ToString(),
                 ["@winnerId"] = winnerTeamId,
-                ["@vpA"] = victoryPointsParticipant1,
-                ["@vpB"] = victoryPointsParticipant2,
+                ["@victoryPointsA"] = victoryPointsParticipant1,
+                ["@victoryPointsB"] = victoryPointsParticipant2,
                 ["@id"] = gameId.ToString()
             });
     }
@@ -86,28 +87,140 @@ public class SqliteGameRepository : IGameRepository
             new() { ["@cpA"] = commandPointsParticipant1, ["@cpB"] = commandPointsParticipant2, ["@id"] = gameId.ToString() });
     }
 
-    private static Game MapGame(SqliteDataReader r) => new()
+    public async Task<GameHeader?> GetHeaderAsync(Guid gameId)
     {
-        Id = Guid.Parse(r.GetString(0)),
-        PlayedAt = DateTime.Parse(r.GetString(1)).ToUniversalTime(),
-        MissionName = r.IsDBNull(2) ? null : r.GetString(2),
+        return await _db.QuerySingleAsync(
+            """
+            SELECT g.status, g.mission_name,
+                   pa.name, g.participant1_team_name, pb.name, g.participant2_team_name,
+                   CASE WHEN g.winner_team_id = g.participant1_team_id THEN g.participant1_team_name
+                        WHEN g.winner_team_id = g.participant2_team_id THEN g.participant2_team_name
+                        ELSE NULL END,
+                   g.participant1_victory_points, g.participant2_victory_points
+            FROM games g
+            JOIN players pa ON pa.id = g.participant1_player_id
+            JOIN players pb ON pb.id = g.participant2_player_id
+            WHERE g.id = @id
+            """,
+            reader => new GameHeader(
+                Enum.Parse<GameStatus>(reader.GetString(0)),
+                reader.IsDBNull(1) ? null : reader.GetString(1),
+                reader.GetString(2),
+                reader.GetString(3),
+                reader.GetString(4),
+                reader.GetString(5),
+                reader.IsDBNull(6) ? null : reader.GetString(6),
+                reader.GetInt32(7),
+                reader.GetInt32(8)),
+            new() { ["@id"] = gameId.ToString() });
+    }
+
+    public async Task<IReadOnlyList<GameHistoryEntry>> GetHistoryAsync(string? playerNameFilter = null)
+    {
+        var sql = """
+            SELECT g.id, g.played_at, g.mission_name,
+                   pa.name, g.participant1_team_name, pb.name, g.participant2_team_name,
+                   g.participant1_victory_points, g.participant2_victory_points,
+                   CASE WHEN g.winner_team_id = g.participant1_team_id THEN g.participant1_team_name
+                        WHEN g.winner_team_id = g.participant2_team_id THEN g.participant2_team_name
+                        ELSE NULL END
+            FROM games g
+            JOIN players pa ON pa.id = g.participant1_player_id
+            JOIN players pb ON pb.id = g.participant2_player_id
+            WHERE g.status = 'Completed'
+            """;
+
+        Dictionary<string, object?> parameters = new();
+
+        if (!string.IsNullOrWhiteSpace(playerNameFilter))
+        {
+            sql += " AND (pa.name LIKE @playerFilter OR pb.name LIKE @playerFilter) COLLATE NOCASE";
+            parameters["@playerFilter"] = $"%{playerNameFilter}%";
+        }
+
+        sql += " ORDER BY g.played_at DESC";
+
+        return await _db.QueryAsync(
+            sql,
+            reader => new GameHistoryEntry(
+                Guid.Parse(reader.GetString(0)),
+                reader.GetString(1),
+                reader.IsDBNull(2) ? null : reader.GetString(2),
+                reader.GetString(3),
+                reader.GetString(4),
+                reader.GetString(5),
+                reader.GetString(6),
+                reader.GetInt32(7),
+                reader.GetInt32(8),
+                reader.IsDBNull(9) ? null : reader.GetString(9)),
+            parameters);
+    }
+
+    public async Task<TeamStats?> GetTeamStatsAsync(string teamId)
+    {
+        var gamesAndWins = await _db.QuerySingleAsync(
+            """
+            SELECT COUNT(*), COALESCE(SUM(CASE WHEN winner_team_id = @id THEN 1 ELSE 0 END), 0)
+            FROM games
+            WHERE (participant1_team_id = @id OR participant2_team_id = @id) AND status = 'Completed'
+            """,
+            reader => (Games: reader.GetInt32(0), Wins: reader.GetInt32(1)),
+            new() { ["@id"] = teamId });
+
+        var kills = await _db.ScalarAsync<int>(
+            """
+            SELECT COUNT(*) FROM actions a
+            JOIN activations act ON act.id = a.activation_id
+            JOIN turning_points tp ON tp.id = act.turning_point_id
+            WHERE a.caused_incapacitation = 1 AND act.team_id = @id
+            UNION ALL
+            SELECT COUNT(*) FROM action_blast_targets abt
+            JOIN actions a2 ON a2.id = abt.action_id
+            JOIN activations act2 ON act2.id = a2.activation_id
+            JOIN turning_points tp2 ON tp2.id = act2.turning_point_id
+            WHERE abt.caused_incapacitation = 1 AND act2.team_id = @id
+            """,
+            new() { ["@id"] = teamId });
+
+        var mostUsedWeapon = await _db.QuerySingleAsync(
+            """
+            SELECT w.name
+            FROM actions a
+            JOIN activations act ON act.id = a.activation_id
+            JOIN weapons w ON w.id = a.weapon_id
+            WHERE a.type IN ('Shoot', 'Fight') AND act.team_id = @id AND a.weapon_id IS NOT NULL
+            GROUP BY a.weapon_id
+            ORDER BY COUNT(*) DESC
+            LIMIT 1
+            """,
+            reader => reader.GetString(0),
+            new() { ["@id"] = teamId });
+
+        return new TeamStats(gamesAndWins.Games, gamesAndWins.Wins, kills, mostUsedWeapon);
+    }
+
+    private static Game MapGame(SqliteDataReader reader) => new()
+    {
+        Id = Guid.Parse(reader.GetString(0)),
+        PlayedAt = DateTime.Parse(reader.GetString(1)).ToUniversalTime(),
+        MissionName = reader.IsDBNull(2) ? null : reader.GetString(2),
         Participant1 = new GameParticipant
         {
-            TeamId = r.GetString(3),
-            TeamName = r.GetString(4),
-            PlayerId = Guid.Parse(r.GetString(5)),
-            CommandPoints = r.GetInt32(6),
-            VictoryPoints = r.GetInt32(7)
+            TeamId = reader.GetString(3),
+            TeamName = reader.GetString(4),
+            PlayerId = Guid.Parse(reader.GetString(5)),
+            CommandPoints = reader.GetInt32(6),
+            VictoryPoints = reader.GetInt32(7)
         },
         Participant2 = new GameParticipant
         {
-            TeamId = r.GetString(8),
-            TeamName = r.GetString(9),
-            PlayerId = Guid.Parse(r.GetString(10)),
-            CommandPoints = r.GetInt32(11),
-            VictoryPoints = r.GetInt32(12)
+            TeamId = reader.GetString(8),
+            TeamName = reader.GetString(9),
+            PlayerId = Guid.Parse(reader.GetString(10)),
+            CommandPoints = reader.GetInt32(11),
+            VictoryPoints = reader.GetInt32(12)
         },
-        Status = Enum.Parse<GameStatus>(r.GetString(13)),
-        WinnerTeamId = r.IsDBNull(14) ? null : r.GetString(14)
+        Status = Enum.Parse<GameStatus>(reader.GetString(13)),
+        WinnerTeamId = reader.IsDBNull(14) ? null : reader.GetString(14)
     };
 }

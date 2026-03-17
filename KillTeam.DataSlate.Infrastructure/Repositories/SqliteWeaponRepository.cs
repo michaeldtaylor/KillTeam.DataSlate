@@ -1,5 +1,5 @@
-using Microsoft.Data.Sqlite;
 using KillTeam.DataSlate.Domain.Models;
+using Microsoft.Data.Sqlite;
 
 namespace KillTeam.DataSlate.Infrastructure.Repositories;
 
@@ -14,34 +14,34 @@ public class SqliteWeaponRepository
 
     public async Task UpsertByOperativeAsync(IEnumerable<Weapon> weapons, Guid operativeId)
     {
-        await _db.ExecuteTransactionAsync(async (conn, tx) =>
+        await _db.ExecuteTransactionAsync(async (connection, transaction) =>
         {
-            using var del = conn.CreateCommand();
-            del.Transaction = tx;
-            del.CommandText = "DELETE FROM weapons WHERE operative_id = @operativeId";
-            del.Parameters.AddWithValue("@operativeId", operativeId.ToString());
-            await del.ExecuteNonQueryAsync();
+            await using var deleteCommand = connection.CreateCommand();
+            deleteCommand.Transaction = transaction;
+            deleteCommand.CommandText = "DELETE FROM weapons WHERE operative_id = @operativeId";
+            deleteCommand.Parameters.AddWithValue("@operativeId", operativeId.ToString());
+            await deleteCommand.ExecuteNonQueryAsync();
 
             foreach (var weapon in weapons)
             {
                 weapon.OperativeId = operativeId;
-                using var cmd = conn.CreateCommand();
-                cmd.Transaction = tx;
-                cmd.CommandText = """
+                await using var command = connection.CreateCommand();
+                command.Transaction = transaction;
+                command.CommandText = """
                     INSERT INTO weapons
                     (id, operative_id, name, type, atk, hit, normal_dmg, critical_dmg, special_rules)
                     VALUES (@id, @operativeId, @name, @type, @atk, @hit, @normalDmg, @criticalDmg, @specialRules)
                     """;
-                cmd.Parameters.AddWithValue("@id", weapon.Id.ToString());
-                cmd.Parameters.AddWithValue("@operativeId", weapon.OperativeId.ToString());
-                cmd.Parameters.AddWithValue("@name", weapon.Name);
-                cmd.Parameters.AddWithValue("@type", weapon.Type.ToString());
-                cmd.Parameters.AddWithValue("@atk", weapon.Atk);
-                cmd.Parameters.AddWithValue("@hit", weapon.Hit);
-                cmd.Parameters.AddWithValue("@normalDmg", weapon.NormalDmg);
-                cmd.Parameters.AddWithValue("@criticalDmg", weapon.CriticalDmg);
-                cmd.Parameters.AddWithValue("@specialRules", weapon.SpecialRules);
-                await cmd.ExecuteNonQueryAsync();
+                command.Parameters.AddWithValue("@id", weapon.Id.ToString());
+                command.Parameters.AddWithValue("@operativeId", weapon.OperativeId.ToString());
+                command.Parameters.AddWithValue("@name", weapon.Name);
+                command.Parameters.AddWithValue("@type", weapon.Type.ToString());
+                command.Parameters.AddWithValue("@atk", weapon.Atk);
+                command.Parameters.AddWithValue("@hit", weapon.Hit);
+                command.Parameters.AddWithValue("@normalDmg", weapon.NormalDmg);
+                command.Parameters.AddWithValue("@criticalDmg", weapon.CriticalDmg);
+                command.Parameters.AddWithValue("@specialRules", weapon.SpecialRules);
+                await command.ExecuteNonQueryAsync();
             }
         });
     }

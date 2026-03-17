@@ -22,67 +22,70 @@ public class DatabaseInitialiser
 
     public async Task InitialiseAsync()
     {
-        await using var conn = new SqliteConnection(_connectionString);
-        await conn.OpenAsync();
+        await using var connection = new SqliteConnection(_connectionString);
+        await connection.OpenAsync();
 
-        using var pragma = conn.CreateCommand();
-        pragma.CommandText = "PRAGMA foreign_keys = ON";
-        pragma.ExecuteNonQuery();
+        await using var pragmaCommand = connection.CreateCommand();
+        pragmaCommand.CommandText = "PRAGMA foreign_keys = ON";
+        pragmaCommand.ExecuteNonQuery();
 
-        var currentVersion = await GetCurrentVersionAsync(conn);
+        var currentVersion = await GetCurrentVersionAsync(connection);
 
         foreach (var (version, sql) in Migrations.All.Where(m => m.Version > currentVersion))
         {
-            await ApplyMigrationAsync(conn, version, sql);
+            await ApplyMigrationAsync(connection, version, sql);
         }
     }
 
-    public static void ApplyAllMigrations(SqliteConnection conn)
+    public static void ApplyAllMigrations(SqliteConnection connection)
     {
-        var currentVersion = GetCurrentVersionAsync(conn).GetAwaiter().GetResult();
+        var currentVersion = GetCurrentVersionAsync(connection).GetAwaiter().GetResult();
+
         foreach (var (version, sql) in Migrations.All.Where(m => m.Version > currentVersion))
         {
-            ApplyMigrationAsync(conn, version, sql).GetAwaiter().GetResult();
+            ApplyMigrationAsync(connection, version, sql).GetAwaiter().GetResult();
         }
     }
 
-    private static async Task<int> GetCurrentVersionAsync(SqliteConnection conn)
+    private static async Task<int> GetCurrentVersionAsync(SqliteConnection connection)
     {
-        using var check = conn.CreateCommand();
-        check.CommandText = "SELECT name FROM sqlite_master WHERE type='table' AND name='schema_version'";
-        var exists = await check.ExecuteScalarAsync() is not null;
+        await using var checkCommand = connection.CreateCommand();
+        checkCommand.CommandText = "SELECT name FROM sqlite_master WHERE type='table' AND name='schema_version'";
+        var exists = await checkCommand.ExecuteScalarAsync() is not null;
+
         if (!exists)
         {
             return 0;
         }
 
-        using var read = conn.CreateCommand();
-        read.CommandText = "SELECT version FROM schema_version LIMIT 1";
-        var result = await read.ExecuteScalarAsync();
+        await using var readCommand = connection.CreateCommand();
+        readCommand.CommandText = "SELECT version FROM schema_version LIMIT 1";
+        var result = await readCommand.ExecuteScalarAsync();
+
         return result is null ? 0 : Convert.ToInt32(result);
     }
 
-    private static async Task ApplyMigrationAsync(SqliteConnection conn, int version, string sql)
+    private static async Task ApplyMigrationAsync(SqliteConnection connection, int version, string sql)
     {
-        using var tx = conn.BeginTransaction();
+        await using var transaction = connection.BeginTransaction();
         try
         {
-            using var cmd = conn.CreateCommand();
-            cmd.Transaction = tx;
-            cmd.CommandText = sql;
-            await cmd.ExecuteNonQueryAsync();
+            await using var command = connection.CreateCommand();
+            command.Transaction = transaction;
+            command.CommandText = sql;
+            await command.ExecuteNonQueryAsync();
 
-            using var ver = conn.CreateCommand();
-            ver.Transaction = tx;
-            ver.CommandText = "DELETE FROM schema_version; INSERT INTO schema_version VALUES (@v)";
-            ver.Parameters.AddWithValue("@v", version);
-            await ver.ExecuteNonQueryAsync();
+            await using var versionCommand = connection.CreateCommand();
+            versionCommand.Transaction = transaction;
+            versionCommand.CommandText = "DELETE FROM schema_version; INSERT INTO schema_version VALUES (@v)";
+            versionCommand.Parameters.AddWithValue("@v", version);
+            await versionCommand.ExecuteNonQueryAsync();
 
-            tx.Commit();
+            transaction.Commit();
         }
         catch (Exception ex)
         {
-            tx.Rollback();
+            transaction.Rollback();
             throw new InvalidOperationException($"Migration {version:D3} failed: {ex.Message}", ex);
         }
     }

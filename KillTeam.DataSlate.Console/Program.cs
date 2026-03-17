@@ -46,7 +46,7 @@ public static class Program
         services.AddSingleton<IPloyRepository>(new SqlitePloyRepository(sqlExecutor));
         services.AddSingleton<IBlastTargetRepository>(new SqliteBlastTargetRepository(sqlExecutor));
         services.AddSingleton<IActionRepository>(new SqliteActionRepository(sqlExecutor));
-        services.AddSingleton(new SqliteOperativeRepository(sqlExecutor));
+        services.AddSingleton<IOperativeRepository>(new SqliteOperativeRepository(sqlExecutor));
         services.AddSingleton(new SqliteWeaponRepository(sqlExecutor));
         services.AddSingleton<TeamJsonImporter>();
         services.AddSingleton<TeamYamlImporter>();

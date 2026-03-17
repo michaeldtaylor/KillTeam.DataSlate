@@ -1,6 +1,6 @@
-using Microsoft.Data.Sqlite;
 using KillTeam.DataSlate.Domain.Models;
 using KillTeam.DataSlate.Domain.Repositories;
+using Microsoft.Data.Sqlite;
 
 namespace KillTeam.DataSlate.Infrastructure.Repositories;
 
@@ -36,6 +36,7 @@ public class SqliteActivationRepository : IActivationRepository
                 ["@isGuardInterrupt"] = activation.IsGuardInterrupt ? 1 : 0,
                 ["@narrativeNote"] = activation.NarrativeNote
             });
+
         return activation;
     }
 
@@ -49,17 +50,17 @@ public class SqliteActivationRepository : IActivationRepository
             WHERE turning_point_id = @tpId
             ORDER BY sequence_number
             """,
-            r => new Activation
+            reader => new Activation
             {
-                Id = Guid.Parse(r.GetString(0)),
-                TurningPointId = Guid.Parse(r.GetString(1)),
-                SequenceNumber = r.GetInt32(2),
-                OperativeId = Guid.Parse(r.GetString(3)),
-                TeamId = r.GetString(4),
-                OrderSelected = Enum.Parse<Order>(r.GetString(5)),
-                IsCounteract = r.GetInt32(6) != 0,
-                IsGuardInterrupt = r.GetInt32(7) != 0,
-                NarrativeNote = r.IsDBNull(8) ? null : r.GetString(8)
+                Id = Guid.Parse(reader.GetString(0)),
+                TurningPointId = Guid.Parse(reader.GetString(1)),
+                SequenceNumber = reader.GetInt32(2),
+                OperativeId = Guid.Parse(reader.GetString(3)),
+                TeamId = reader.GetString(4),
+                OrderSelected = Enum.Parse<Order>(reader.GetString(5)),
+                IsCounteract = reader.GetInt32(6) != 0,
+                IsGuardInterrupt = reader.GetInt32(7) != 0,
+                NarrativeNote = reader.IsDBNull(8) ? null : reader.GetString(8)
             },
             new() { ["@tpId"] = turningPointId.ToString() });
     }

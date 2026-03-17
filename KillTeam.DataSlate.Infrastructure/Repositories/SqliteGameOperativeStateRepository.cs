@@ -1,6 +1,6 @@
-using Microsoft.Data.Sqlite;
 using KillTeam.DataSlate.Domain.Models;
 using KillTeam.DataSlate.Domain.Repositories;
+using Microsoft.Data.Sqlite;
 
 namespace KillTeam.DataSlate.Infrastructure.Repositories;
 
@@ -48,18 +48,18 @@ public class SqliteGameOperativeStateRepository : IGameOperativeStateRepository
             FROM game_operative_states
             WHERE game_id = @gameId
             """,
-            r => new GameOperativeState
+            reader => new GameOperativeState
             {
-                Id = Guid.Parse(r.GetString(0)),
-                GameId = Guid.Parse(r.GetString(1)),
-                OperativeId = Guid.Parse(r.GetString(2)),
-                CurrentWounds = r.GetInt32(3),
-                Order = Enum.Parse<Order>(r.GetString(4)),
-                IsReady = r.GetInt32(5) != 0,
-                IsOnGuard = r.GetInt32(6) != 0,
-                IsIncapacitated = r.GetInt32(7) != 0,
-                HasUsedCounteractThisTurningPoint = r.GetInt32(8) != 0,
-                AplModifier = r.GetInt32(9)
+                Id = Guid.Parse(reader.GetString(0)),
+                GameId = Guid.Parse(reader.GetString(1)),
+                OperativeId = Guid.Parse(reader.GetString(2)),
+                CurrentWounds = reader.GetInt32(3),
+                Order = Enum.Parse<Order>(reader.GetString(4)),
+                IsReady = reader.GetInt32(5) != 0,
+                IsOnGuard = reader.GetInt32(6) != 0,
+                IsIncapacitated = reader.GetInt32(7) != 0,
+                HasUsedCounteractThisTurningPoint = reader.GetInt32(8) != 0,
+                AplModifier = reader.GetInt32(9)
             },
             new() { ["@gameId"] = gameId.ToString() });
     }

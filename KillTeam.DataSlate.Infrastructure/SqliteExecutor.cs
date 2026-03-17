@@ -14,45 +14,48 @@ public sealed class SqliteExecutor : ISqlExecutor
     public SqliteExecutor(SqliteConnection connection)
         => _sharedConnection = connection;
 
-    private async Task<(SqliteConnection conn, bool owned)> GetConnectionAsync()
+    private async Task<(SqliteConnection connection, bool owned)> GetConnectionAsync()
     {
         if (_sharedConnection is not null)
         {
             return (_sharedConnection, false);
         }
-        var conn = new SqliteConnection(_connectionString);
-        await conn.OpenAsync();
-        return (conn, true);
+
+        var connection = new SqliteConnection(_connectionString);
+        await connection.OpenAsync();
+
+        return (connection, true);
     }
 
-    private static void BindParameters(SqliteCommand cmd, Dictionary<string, object?>? parameters)
+    private static void BindParameters(SqliteCommand command, Dictionary<string, object?>? parameters)
     {
         if (parameters is null)
         {
             return;
         }
 
-        foreach (var (k, v) in parameters)
+        foreach (var (parameterName, parameterValue) in parameters)
         {
-            cmd.Parameters.AddWithValue(k, v ?? DBNull.Value);
+            command.Parameters.AddWithValue(parameterName, parameterValue ?? DBNull.Value);
         }
     }
 
     public async Task ExecuteAsync(string sql, Dictionary<string, object?> parameters)
     {
-        var (conn, owned) = await GetConnectionAsync();
+        var (connection, owned) = await GetConnectionAsync();
         try
         {
-            using var cmd = conn.CreateCommand();
-            cmd.CommandText = sql;
-            BindParameters(cmd, parameters);
-            await cmd.ExecuteNonQueryAsync();
+            await using var command = connection.CreateCommand();
+            command.CommandText = sql;
+            BindParameters(command, parameters);
+
+            await command.ExecuteNonQueryAsync();
         }
         finally
         {
             if (owned)
             {
-                await conn.DisposeAsync();
+                await connection.DisposeAsync();
             }
         }
     }
@@ -60,25 +63,27 @@ public sealed class SqliteExecutor : ISqlExecutor
     public async Task<IReadOnlyList<T>> QueryAsync<T>(string sql, Func<SqliteDataReader, T> map,
         Dictionary<string, object?>? parameters = null)
     {
-        var (conn, owned) = await GetConnectionAsync();
+        var (connection, owned) = await GetConnectionAsync();
         try
         {
-            using var cmd = conn.CreateCommand();
-            cmd.CommandText = sql;
-            BindParameters(cmd, parameters);
-            using var reader = await cmd.ExecuteReaderAsync();
+            await using var command = connection.CreateCommand();
+            command.CommandText = sql;
+            BindParameters(command, parameters);
+            await using var reader = await command.ExecuteReaderAsync();
             var results = new List<T>();
+
             while (await reader.ReadAsync())
             {
                 results.Add(map(reader));
             }
+
             return results;
         }
         finally
         {
             if (owned)
             {
-                await conn.DisposeAsync();
+                await connection.DisposeAsync();
             }
         }
     }
@@ -86,20 +91,21 @@ public sealed class SqliteExecutor : ISqlExecutor
     public async Task<T?> QuerySingleAsync<T>(string sql, Func<SqliteDataReader, T> map,
         Dictionary<string, object?>? parameters = null)
     {
-        var (conn, owned) = await GetConnectionAsync();
+        var (connection, owned) = await GetConnectionAsync();
         try
         {
-            using var cmd = conn.CreateCommand();
-            cmd.CommandText = sql;
-            BindParameters(cmd, parameters);
-            using var reader = await cmd.ExecuteReaderAsync();
+            await using var command = connection.CreateCommand();
+            command.CommandText = sql;
+            BindParameters(command, parameters);
+            await using var reader = await command.ExecuteReaderAsync();
+
             return await reader.ReadAsync() ? map(reader) : default;
         }
         finally
         {
             if (owned)
             {
-                await conn.DisposeAsync();
+                await connection.DisposeAsync();
             }
         }
     }
@@ -107,13 +113,14 @@ public sealed class SqliteExecutor : ISqlExecutor
     public async Task<T?> ScalarAsync<T>(string sql,
         Dictionary<string, object?>? parameters = null)
     {
-        var (conn, owned) = await GetConnectionAsync();
+        var (connection, owned) = await GetConnectionAsync();
         try
         {
-            using var cmd = conn.CreateCommand();
-            cmd.CommandText = sql;
-            BindParameters(cmd, parameters);
-            var result = await cmd.ExecuteScalarAsync();
+            await using var command = connection.CreateCommand();
+            command.CommandText = sql;
+            BindParameters(command, parameters);
+            var result = await command.ExecuteScalarAsync();
+
             if (result is null || result == DBNull.Value)
             {
                 return default;
@@ -125,25 +132,25 @@ public sealed class SqliteExecutor : ISqlExecutor
         {
             if (owned)
             {
-                await conn.DisposeAsync();
+                await connection.DisposeAsync();
             }
         }
     }
 
     public async Task ExecuteTransactionAsync(Func<SqliteConnection, SqliteTransaction, Task> work)
     {
-        var (conn, owned) = await GetConnectionAsync();
+        var (connection, owned) = await GetConnectionAsync();
         try
         {
-            using var tx = conn.BeginTransaction();
+            await using var transaction = connection.BeginTransaction();
             try
             {
-                await work(conn, tx);
-                tx.Commit();
+                await work(connection, transaction);
+                transaction.Commit();
             }
             catch
             {
-                tx.Rollback();
+                transaction.Rollback();
                 throw;
             }
         }
@@ -151,7 +158,7 @@ public sealed class SqliteExecutor : ISqlExecutor
         {
             if (owned)
             {
-                await conn.DisposeAsync();
+                await connection.DisposeAsync();
             }
         }
     }

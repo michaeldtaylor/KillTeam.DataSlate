@@ -1,6 +1,6 @@
-using Microsoft.Data.Sqlite;
 using KillTeam.DataSlate.Domain.Models;
 using KillTeam.DataSlate.Domain.Repositories;
+using Microsoft.Data.Sqlite;
 
 namespace KillTeam.DataSlate.Infrastructure.Repositories;
 
@@ -39,14 +39,14 @@ public class SqlitePloyRepository : IPloyRepository
             SELECT id, turning_point_id, team_id, ploy_name, description, cp_cost
             FROM ploy_uses WHERE turning_point_id = @tpId
             """,
-            r => new PloyUse
+            reader => new PloyUse
             {
-                Id = Guid.Parse(r.GetString(0)),
-                TurningPointId = Guid.Parse(r.GetString(1)),
-                TeamId = r.GetString(2),
-                PloyName = r.GetString(3),
-                Description = r.IsDBNull(4) ? null : r.GetString(4),
-                CpCost = r.GetInt32(5)
+                Id = Guid.Parse(reader.GetString(0)),
+                TurningPointId = Guid.Parse(reader.GetString(1)),
+                TeamId = reader.GetString(2),
+                PloyName = reader.GetString(3),
+                Description = reader.IsDBNull(4) ? null : reader.GetString(4),
+                CpCost = reader.GetInt32(5)
             },
             new() { ["@tpId"] = turningPointId.ToString() });
     }

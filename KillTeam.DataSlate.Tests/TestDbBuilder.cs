@@ -1,34 +1,35 @@
-using Microsoft.Data.Sqlite;
 using KillTeam.DataSlate.Infrastructure;
+using Microsoft.Data.Sqlite;
 
 namespace KillTeam.DataSlate.Tests;
 
 public sealed class TestDbBuilder : IDisposable
 {
-    private readonly SqliteConnection _conn;
+    private readonly SqliteConnection _connection;
 
     private TestDbBuilder()
     {
-        _conn = new SqliteConnection("Data Source=:memory:");
-        _conn.Open();
+        _connection = new SqliteConnection("Data Source=:memory:");
+        _connection.Open();
 
-        using var pragma = _conn.CreateCommand();
-        pragma.CommandText = "PRAGMA foreign_keys = ON";
-        pragma.ExecuteNonQuery();
+        using var pragmaCommand = _connection.CreateCommand();
+        pragmaCommand.CommandText = "PRAGMA foreign_keys = ON";
+        pragmaCommand.ExecuteNonQuery();
 
-        DatabaseInitialiser.ApplyAllMigrations(_conn);
+        DatabaseInitialiser.ApplyAllMigrations(_connection);
     }
 
     public static TestDbBuilder Create() => new();
 
-    public SqliteConnection Connection => _conn;
+    public SqliteConnection Connection => _connection;
 
-    public void Dispose() => _conn.Dispose();
+    public void Dispose() => _connection.Dispose();
 
     public TestDbBuilder WithPlayer(Guid id, string name)
     {
         Exec("INSERT INTO players (id, name) VALUES (@id, @name)",
             ("@id", id.ToString()), ("@name", name));
+
         return this;
     }
 
@@ -36,6 +37,7 @@ public sealed class TestDbBuilder : IDisposable
     {
         Exec("INSERT INTO teams (id, name, faction) VALUES (@id, @name, @faction)",
             ("@id", id), ("@name", name), ("@faction", faction));
+
         return this;
     }
 
@@ -49,6 +51,7 @@ public sealed class TestDbBuilder : IDisposable
             """,
             ("@id", id.ToString()), ("@teamId", teamId), ("@name", name),
             ("@move", move), ("@apl", apl), ("@wounds", wounds), ("@save", save));
+
         return this;
     }
 
@@ -63,6 +66,7 @@ public sealed class TestDbBuilder : IDisposable
             ("@id", id.ToString()), ("@opId", operativeId.ToString()), ("@name", name),
             ("@type", type), ("@atk", atk), ("@hit", hit), ("@nd", normalDmg),
             ("@cd", critDmg), ("@sr", specialRules));
+
         return this;
     }
 
@@ -81,6 +85,7 @@ public sealed class TestDbBuilder : IDisposable
             ("@tbId", teamBId), ("@tbName", teamBName),
             ("@pa", playerAId.ToString()), ("@pb", playerBId.ToString()),
             ("@st", status));
+
         return this;
     }
 
@@ -94,6 +99,7 @@ public sealed class TestDbBuilder : IDisposable
             """,
             ("@id", id.ToString()), ("@gid", gameId.ToString()), ("@num", number),
             ("@spc", strategyPhaseComplete ? 1 : 0));
+
         return this;
     }
 
@@ -107,6 +113,7 @@ public sealed class TestDbBuilder : IDisposable
             """,
             ("@id", id.ToString()), ("@tpid", turningPointId.ToString()), ("@seq", seq),
             ("@opid", operativeId.ToString()), ("@tid", teamId), ("@ord", order));
+
         return this;
     }
 
@@ -120,17 +127,20 @@ public sealed class TestDbBuilder : IDisposable
             """,
             ("@id", id.ToString()), ("@gid", gameId.ToString()),
             ("@opid", operativeId.ToString()), ("@cw", currentWounds), ("@ord", order));
+
         return this;
     }
 
     private void Exec(string sql, params (string Name, object Value)[] parameters)
     {
-        using var cmd = _conn.CreateCommand();
-        cmd.CommandText = sql;
+        using var command = _connection.CreateCommand();
+        command.CommandText = sql;
+
         foreach (var (name, value) in parameters)
         {
-            cmd.Parameters.AddWithValue(name, value);
+            command.Parameters.AddWithValue(name, value);
         }
-        cmd.ExecuteNonQuery();
+
+        command.ExecuteNonQuery();
     }
 }

@@ -1,7 +1,7 @@
 using System.Text.Json;
-using Microsoft.Data.Sqlite;
 using KillTeam.DataSlate.Domain.Models;
 using KillTeam.DataSlate.Domain.Repositories;
+using Microsoft.Data.Sqlite;
 using Models = KillTeam.DataSlate.Domain.Models;
 
 namespace KillTeam.DataSlate.Infrastructure.Repositories;
@@ -17,12 +17,12 @@ public class SqliteTeamRepository : ITeamRepository
 
     public async Task UpsertAsync(Models.Team team)
     {
-        await _db.ExecuteTransactionAsync(async (conn, tx) =>
+        await _db.ExecuteTransactionAsync(async (connection, transaction) =>
         {
             // ── Team row ───────────────────────────────────────────────────────
-            using var cmd = conn.CreateCommand();
-            cmd.Transaction = tx;
-            cmd.CommandText = """
+            await using var command = connection.CreateCommand();
+            command.Transaction = transaction;
+            command.CommandText = """
                 INSERT INTO teams (id, name, faction, grand_faction,
                                    operative_selection_archetype, operative_selection_text,
                                    supplementary_info)
@@ -36,83 +36,83 @@ public class SqliteTeamRepository : ITeamRepository
                     operative_selection_text = excluded.operative_selection_text,
                     supplementary_info = excluded.supplementary_info
                 """;
-            cmd.Parameters.AddWithValue("@id", team.Id);
-            cmd.Parameters.AddWithValue("@name", team.Name);
-            cmd.Parameters.AddWithValue("@faction", team.Faction);
-            cmd.Parameters.AddWithValue("@grandFaction", team.GrandFaction);
-            cmd.Parameters.AddWithValue("@selArchetype", team.OperativeSelectionArchetype);
-            cmd.Parameters.AddWithValue("@selText", team.OperativeSelectionText);
-            cmd.Parameters.AddWithValue("@suppInfo", team.SupplementaryInfo);
-            await cmd.ExecuteNonQueryAsync();
+            command.Parameters.AddWithValue("@id", team.Id);
+            command.Parameters.AddWithValue("@name", team.Name);
+            command.Parameters.AddWithValue("@faction", team.Faction);
+            command.Parameters.AddWithValue("@grandFaction", team.GrandFaction);
+            command.Parameters.AddWithValue("@selArchetype", team.OperativeSelectionArchetype);
+            command.Parameters.AddWithValue("@selText", team.OperativeSelectionText);
+            command.Parameters.AddWithValue("@suppInfo", team.SupplementaryInfo);
+            await command.ExecuteNonQueryAsync();
 
             // ── Team-level child tables (delete + reinsert) ────────────────────
-            await DeleteByTeamAsync(conn, tx, "faction_rules", team.Id);
-            await DeleteByTeamAsync(conn, tx, "strategy_ploys", team.Id);
-            await DeleteByTeamAsync(conn, tx, "firefight_ploys", team.Id);
-            await DeleteByTeamAsync(conn, tx, "faction_equipment", team.Id);
-            await DeleteByTeamAsync(conn, tx, "universal_equipment", team.Id);
+            await DeleteByTeamAsync(connection, transaction, "faction_rules", team.Id);
+            await DeleteByTeamAsync(connection, transaction, "strategy_ploys", team.Id);
+            await DeleteByTeamAsync(connection, transaction, "firefight_ploys", team.Id);
+            await DeleteByTeamAsync(connection, transaction, "faction_equipment", team.Id);
+            await DeleteByTeamAsync(connection, transaction, "universal_equipment", team.Id);
 
-            await InsertNamedRulesAsync(conn, tx, "faction_rules", team.Id, team.FactionRules);
-            await InsertNamedRulesAsync(conn, tx, "strategy_ploys", team.Id, team.StrategyPloys);
-            await InsertNamedRulesAsync(conn, tx, "firefight_ploys", team.Id, team.FirefightPloys);
-            await InsertEquipmentAsync(conn, tx, "faction_equipment", team.Id, team.FactionEquipment);
-            await InsertEquipmentAsync(conn, tx, "universal_equipment", team.Id, team.UniversalEquipment);
+            await InsertNamedRulesAsync(connection, transaction, "faction_rules", team.Id, team.FactionRules);
+            await InsertNamedRulesAsync(connection, transaction, "strategy_ploys", team.Id, team.StrategyPloys);
+            await InsertNamedRulesAsync(connection, transaction, "firefight_ploys", team.Id, team.FirefightPloys);
+            await InsertEquipmentAsync(connection, transaction, "faction_equipment", team.Id, team.FactionEquipment);
+            await InsertEquipmentAsync(connection, transaction, "universal_equipment", team.Id, team.UniversalEquipment);
 
             // ── Operatives ─────────────────────────────────────────────────────
             foreach (var operative in team.Operatives)
             {
                 operative.TeamId = team.Id;
-                using var opCmd = conn.CreateCommand();
-                opCmd.Transaction = tx;
-                opCmd.CommandText = """
+                await using var operativeCommand = connection.CreateCommand();
+                operativeCommand.Transaction = transaction;
+                operativeCommand.CommandText = """
                     INSERT OR REPLACE INTO operatives
                     (id, team_id, name, operative_type, move, apl, wounds, save,
                      equipment_json, primary_keyword, keywords_json)
                     VALUES (@id, @teamId, @name, @operativeType, @move, @apl, @wounds, @save,
                             @equipmentJson, @primaryKeyword, @keywordsJson)
                     """;
-                opCmd.Parameters.AddWithValue("@id", operative.Id.ToString());
-                opCmd.Parameters.AddWithValue("@teamId", operative.TeamId);
-                opCmd.Parameters.AddWithValue("@name", operative.Name);
-                opCmd.Parameters.AddWithValue("@operativeType", operative.OperativeType);
-                opCmd.Parameters.AddWithValue("@move", operative.Move);
-                opCmd.Parameters.AddWithValue("@apl", operative.Apl);
-                opCmd.Parameters.AddWithValue("@wounds", operative.Wounds);
-                opCmd.Parameters.AddWithValue("@save", operative.Save);
-                opCmd.Parameters.AddWithValue("@equipmentJson", JsonSerializer.Serialize(operative.Equipment));
-                opCmd.Parameters.AddWithValue("@primaryKeyword", operative.PrimaryKeyword);
-                opCmd.Parameters.AddWithValue("@keywordsJson", JsonSerializer.Serialize(operative.Keywords));
-                await opCmd.ExecuteNonQueryAsync();
+                operativeCommand.Parameters.AddWithValue("@id", operative.Id.ToString());
+                operativeCommand.Parameters.AddWithValue("@teamId", operative.TeamId);
+                operativeCommand.Parameters.AddWithValue("@name", operative.Name);
+                operativeCommand.Parameters.AddWithValue("@operativeType", operative.OperativeType);
+                operativeCommand.Parameters.AddWithValue("@move", operative.Move);
+                operativeCommand.Parameters.AddWithValue("@apl", operative.Apl);
+                operativeCommand.Parameters.AddWithValue("@wounds", operative.Wounds);
+                operativeCommand.Parameters.AddWithValue("@save", operative.Save);
+                operativeCommand.Parameters.AddWithValue("@equipmentJson", JsonSerializer.Serialize(operative.Equipment));
+                operativeCommand.Parameters.AddWithValue("@primaryKeyword", operative.PrimaryKeyword);
+                operativeCommand.Parameters.AddWithValue("@keywordsJson", JsonSerializer.Serialize(operative.Keywords));
+                await operativeCommand.ExecuteNonQueryAsync();
 
                 // Operative child tables
-                await DeleteByOperativeAsync(conn, tx, "operative_abilities", operative.Id);
-                await DeleteByOperativeAsync(conn, tx, "operative_special_actions", operative.Id);
-                await DeleteByOperativeAsync(conn, tx, "operative_special_rules", operative.Id);
+                await DeleteByOperativeAsync(connection, transaction, "operative_abilities", operative.Id);
+                await DeleteByOperativeAsync(connection, transaction, "operative_special_actions", operative.Id);
+                await DeleteByOperativeAsync(connection, transaction, "operative_special_rules", operative.Id);
 
-                await InsertAbilitiesAsync(conn, tx, operative.Id, operative.Abilities);
-                await InsertSpecialActionsAsync(conn, tx, operative.Id, operative.SpecialActions);
-                await InsertWeaponRulesAsync(conn, tx, operative.Id, operative.SpecialRules);
+                await InsertAbilitiesAsync(connection, transaction, operative.Id, operative.Abilities);
+                await InsertSpecialActionsAsync(connection, transaction, operative.Id, operative.SpecialActions);
+                await InsertWeaponRulesAsync(connection, transaction, operative.Id, operative.SpecialRules);
 
                 foreach (var weapon in operative.Weapons)
                 {
                     weapon.OperativeId = operative.Id;
-                    using var wpCmd = conn.CreateCommand();
-                    wpCmd.Transaction = tx;
-                    wpCmd.CommandText = """
+                    await using var weaponCommand = connection.CreateCommand();
+                    weaponCommand.Transaction = transaction;
+                    weaponCommand.CommandText = """
                         INSERT OR REPLACE INTO weapons
                         (id, operative_id, name, type, atk, hit, normal_dmg, critical_dmg, special_rules)
                         VALUES (@id, @operativeId, @name, @type, @atk, @hit, @normalDmg, @criticalDmg, @specialRules)
                         """;
-                    wpCmd.Parameters.AddWithValue("@id", weapon.Id.ToString());
-                    wpCmd.Parameters.AddWithValue("@operativeId", weapon.OperativeId.ToString());
-                    wpCmd.Parameters.AddWithValue("@name", weapon.Name);
-                    wpCmd.Parameters.AddWithValue("@type", weapon.Type.ToString());
-                    wpCmd.Parameters.AddWithValue("@atk", weapon.Atk);
-                    wpCmd.Parameters.AddWithValue("@hit", weapon.Hit);
-                    wpCmd.Parameters.AddWithValue("@normalDmg", weapon.NormalDmg);
-                    wpCmd.Parameters.AddWithValue("@criticalDmg", weapon.CriticalDmg);
-                    wpCmd.Parameters.AddWithValue("@specialRules", weapon.SpecialRules);
-                    await wpCmd.ExecuteNonQueryAsync();
+                    weaponCommand.Parameters.AddWithValue("@id", weapon.Id.ToString());
+                    weaponCommand.Parameters.AddWithValue("@operativeId", weapon.OperativeId.ToString());
+                    weaponCommand.Parameters.AddWithValue("@name", weapon.Name);
+                    weaponCommand.Parameters.AddWithValue("@type", weapon.Type.ToString());
+                    weaponCommand.Parameters.AddWithValue("@atk", weapon.Atk);
+                    weaponCommand.Parameters.AddWithValue("@hit", weapon.Hit);
+                    weaponCommand.Parameters.AddWithValue("@normalDmg", weapon.NormalDmg);
+                    weaponCommand.Parameters.AddWithValue("@criticalDmg", weapon.CriticalDmg);
+                    weaponCommand.Parameters.AddWithValue("@specialRules", weapon.SpecialRules);
+                    await weaponCommand.ExecuteNonQueryAsync();
                 }
             }
         });
@@ -120,121 +120,124 @@ public class SqliteTeamRepository : ITeamRepository
 
     // ─── Child table helpers ──────────────────────────────────────────────────
 
-    private static async Task DeleteByTeamAsync(SqliteConnection conn, SqliteTransaction tx,
+    private static async Task DeleteByTeamAsync(SqliteConnection connection, SqliteTransaction transaction,
         string table, string teamId)
     {
-        using var del = conn.CreateCommand();
-        del.Transaction = tx;
-        del.CommandText = $"DELETE FROM {table} WHERE team_id = @teamId";
-        del.Parameters.AddWithValue("@teamId", teamId);
-        await del.ExecuteNonQueryAsync();
+        await using var deleteCommand = connection.CreateCommand();
+        deleteCommand.Transaction = transaction;
+        deleteCommand.CommandText = $"DELETE FROM {table} WHERE team_id = @teamId";
+        deleteCommand.Parameters.AddWithValue("@teamId", teamId);
+        await deleteCommand.ExecuteNonQueryAsync();
     }
 
-    private static async Task DeleteByOperativeAsync(SqliteConnection conn, SqliteTransaction tx,
+    private static async Task DeleteByOperativeAsync(SqliteConnection connection, SqliteTransaction transaction,
         string table, Guid operativeId)
     {
-        using var del = conn.CreateCommand();
-        del.Transaction = tx;
-        del.CommandText = $"DELETE FROM {table} WHERE operative_id = @opId";
-        del.Parameters.AddWithValue("@opId", operativeId.ToString());
-        await del.ExecuteNonQueryAsync();
+        await using var deleteCommand = connection.CreateCommand();
+        deleteCommand.Transaction = transaction;
+        deleteCommand.CommandText = $"DELETE FROM {table} WHERE operative_id = @opId";
+        deleteCommand.Parameters.AddWithValue("@opId", operativeId.ToString());
+        await deleteCommand.ExecuteNonQueryAsync();
     }
 
-    private static async Task InsertNamedRulesAsync(SqliteConnection conn, SqliteTransaction tx,
+    private static async Task InsertNamedRulesAsync(SqliteConnection connection, SqliteTransaction transaction,
         string table, string teamId, List<NamedRule> rules)
     {
         var hasCategoryColumn = table == "faction_rules";
+
         for (var i = 0; i < rules.Count; i++)
         {
-            var r = rules[i];
-            using var ins = conn.CreateCommand();
-            ins.Transaction = tx;
-            ins.CommandText = hasCategoryColumn
+            var rule = rules[i];
+            await using var insertCommand = connection.CreateCommand();
+            insertCommand.Transaction = transaction;
+            insertCommand.CommandText = hasCategoryColumn
                 ? $"INSERT INTO {table} (id, team_id, name, category, text, sort_order) VALUES (@id, @teamId, @name, @category, @text, @sort)"
                 : $"INSERT INTO {table} (id, team_id, name, text, sort_order) VALUES (@id, @teamId, @name, @text, @sort)";
-            ins.Parameters.AddWithValue("@id", Guid.NewGuid().ToString());
-            ins.Parameters.AddWithValue("@teamId", teamId);
-            ins.Parameters.AddWithValue("@name", r.Name);
+            insertCommand.Parameters.AddWithValue("@id", Guid.NewGuid().ToString());
+            insertCommand.Parameters.AddWithValue("@teamId", teamId);
+            insertCommand.Parameters.AddWithValue("@name", rule.Name);
+
             if (hasCategoryColumn)
             {
-                ins.Parameters.AddWithValue("@category", (object?)r.Category ?? DBNull.Value);
+                insertCommand.Parameters.AddWithValue("@category", (object?)rule.Category ?? DBNull.Value);
             }
-            ins.Parameters.AddWithValue("@text", r.Text);
-            ins.Parameters.AddWithValue("@sort", i);
-            await ins.ExecuteNonQueryAsync();
+
+            insertCommand.Parameters.AddWithValue("@text", rule.Text);
+            insertCommand.Parameters.AddWithValue("@sort", i);
+            await insertCommand.ExecuteNonQueryAsync();
         }
     }
 
-    private static async Task InsertEquipmentAsync(SqliteConnection conn, SqliteTransaction tx,
+    private static async Task InsertEquipmentAsync(SqliteConnection connection, SqliteTransaction transaction,
         string table, string teamId, List<EquipmentItem> items)
     {
         for (var i = 0; i < items.Count; i++)
         {
-            var e = items[i];
-            using var ins = conn.CreateCommand();
-            ins.Transaction = tx;
-            ins.CommandText = $"INSERT INTO {table} (id, team_id, name, text, sort_order) VALUES (@id, @teamId, @name, @text, @sort)";
-            ins.Parameters.AddWithValue("@id", Guid.NewGuid().ToString());
-            ins.Parameters.AddWithValue("@teamId", teamId);
-            ins.Parameters.AddWithValue("@name", e.Name);
-            ins.Parameters.AddWithValue("@text", e.Text);
-            ins.Parameters.AddWithValue("@sort", i);
-            await ins.ExecuteNonQueryAsync();
+            var equipment = items[i];
+            await using var insertCommand = connection.CreateCommand();
+            insertCommand.Transaction = transaction;
+            insertCommand.CommandText = $"INSERT INTO {table} (id, team_id, name, text, sort_order) VALUES (@id, @teamId, @name, @text, @sort)";
+            insertCommand.Parameters.AddWithValue("@id", Guid.NewGuid().ToString());
+            insertCommand.Parameters.AddWithValue("@teamId", teamId);
+            insertCommand.Parameters.AddWithValue("@name", equipment.Name);
+            insertCommand.Parameters.AddWithValue("@text", equipment.Text);
+            insertCommand.Parameters.AddWithValue("@sort", i);
+            await insertCommand.ExecuteNonQueryAsync();
         }
     }
 
-    private static async Task InsertAbilitiesAsync(SqliteConnection conn, SqliteTransaction tx,
+    private static async Task InsertAbilitiesAsync(SqliteConnection connection, SqliteTransaction transaction,
         Guid operativeId, List<OperativeAbility> abilities)
     {
         for (var i = 0; i < abilities.Count; i++)
         {
-            var a = abilities[i];
-            using var ins = conn.CreateCommand();
-            ins.Transaction = tx;
-            ins.CommandText = "INSERT INTO operative_abilities (id, operative_id, name, text, sort_order) VALUES (@id, @opId, @name, @text, @sort)";
-            ins.Parameters.AddWithValue("@id", Guid.NewGuid().ToString());
-            ins.Parameters.AddWithValue("@opId", operativeId.ToString());
-            ins.Parameters.AddWithValue("@name", a.Name);
-            ins.Parameters.AddWithValue("@text", a.Text);
-            ins.Parameters.AddWithValue("@sort", i);
-            await ins.ExecuteNonQueryAsync();
+            var ability = abilities[i];
+            await using var insertCommand = connection.CreateCommand();
+            insertCommand.Transaction = transaction;
+            insertCommand.CommandText = "INSERT INTO operative_abilities (id, operative_id, name, text, sort_order) VALUES (@id, @opId, @name, @text, @sort)";
+            insertCommand.Parameters.AddWithValue("@id", Guid.NewGuid().ToString());
+            insertCommand.Parameters.AddWithValue("@opId", operativeId.ToString());
+            insertCommand.Parameters.AddWithValue("@name", ability.Name);
+            insertCommand.Parameters.AddWithValue("@text", ability.Text);
+            insertCommand.Parameters.AddWithValue("@sort", i);
+            await insertCommand.ExecuteNonQueryAsync();
         }
     }
 
-    private static async Task InsertSpecialActionsAsync(SqliteConnection conn, SqliteTransaction tx,
+    private static async Task InsertSpecialActionsAsync(SqliteConnection connection, SqliteTransaction transaction,
         Guid operativeId, List<OperativeSpecialAction> actions)
     {
         for (var i = 0; i < actions.Count; i++)
         {
-            var a = actions[i];
-            using var ins = conn.CreateCommand();
-            ins.Transaction = tx;
-            ins.CommandText = "INSERT INTO operative_special_actions (id, operative_id, name, text, ap_cost, sort_order) VALUES (@id, @opId, @name, @text, @apCost, @sort)";
-            ins.Parameters.AddWithValue("@id", Guid.NewGuid().ToString());
-            ins.Parameters.AddWithValue("@opId", operativeId.ToString());
-            ins.Parameters.AddWithValue("@name", a.Name);
-            ins.Parameters.AddWithValue("@text", a.Text);
-            ins.Parameters.AddWithValue("@apCost", a.ApCost);
-            ins.Parameters.AddWithValue("@sort", i);
-            await ins.ExecuteNonQueryAsync();
+            var action = actions[i];
+            await using var insertCommand = connection.CreateCommand();
+            insertCommand.Transaction = transaction;
+            insertCommand.CommandText = "INSERT INTO operative_special_actions (id, operative_id, name, text, ap_cost, sort_order) VALUES (@id, @opId, @name, @text, @apCost, @sort)";
+            insertCommand.Parameters.AddWithValue("@id", Guid.NewGuid().ToString());
+            insertCommand.Parameters.AddWithValue("@opId", operativeId.ToString());
+            insertCommand.Parameters.AddWithValue("@name", action.Name);
+            insertCommand.Parameters.AddWithValue("@text", action.Text);
+            insertCommand.Parameters.AddWithValue("@apCost", action.ApCost);
+            insertCommand.Parameters.AddWithValue("@sort", i);
+            await insertCommand.ExecuteNonQueryAsync();
         }
     }
 
-    private static async Task InsertWeaponRulesAsync(SqliteConnection conn, SqliteTransaction tx,
+    private static async Task InsertWeaponRulesAsync(SqliteConnection connection, SqliteTransaction transaction,
         Guid operativeId, List<OperativeWeaponRule> rules)
     {
         for (var i = 0; i < rules.Count; i++)
         {
-            var r = rules[i];
-            using var ins = conn.CreateCommand();
-            ins.Transaction = tx;
-            ins.CommandText = "INSERT INTO operative_special_rules (id, operative_id, name, text, sort_order) VALUES (@id, @opId, @name, @text, @sort)";
-            ins.Parameters.AddWithValue("@id", Guid.NewGuid().ToString());
-            ins.Parameters.AddWithValue("@opId", operativeId.ToString());
-            ins.Parameters.AddWithValue("@name", r.Name);
-            ins.Parameters.AddWithValue("@text", r.Text);
-            ins.Parameters.AddWithValue("@sort", i);
-            await ins.ExecuteNonQueryAsync();
+            var rule = rules[i];
+            await using var insertCommand = connection.CreateCommand();
+            insertCommand.Transaction = transaction;
+            insertCommand.CommandText = "INSERT INTO operative_special_rules (id, operative_id, name, text, sort_order) VALUES (@id, @opId, @name, @text, @sort)";
+            insertCommand.Parameters.AddWithValue("@id", Guid.NewGuid().ToString());
+            insertCommand.Parameters.AddWithValue("@opId", operativeId.ToString());
+            insertCommand.Parameters.AddWithValue("@name", rule.Name);
+            insertCommand.Parameters.AddWithValue("@text", rule.Text);
+            insertCommand.Parameters.AddWithValue("@sort", i);
+            await insertCommand.ExecuteNonQueryAsync();
         }
     }
 
@@ -242,12 +245,12 @@ public class SqliteTeamRepository : ITeamRepository
     {
         return await _db.QueryAsync(
             "SELECT id, name, faction, grand_faction FROM teams",
-            r => new Models.Team
+            reader => new Models.Team
             {
-                Id = r.GetString(0),
-                Name = r.GetString(1),
-                Faction = r.GetString(2),
-                GrandFaction = r.GetString(3),
+                Id = reader.GetString(0),
+                Name = reader.GetString(1),
+                Faction = reader.GetString(2),
+                GrandFaction = reader.GetString(3),
             });
     }
 
@@ -255,12 +258,12 @@ public class SqliteTeamRepository : ITeamRepository
     {
         return await _db.QuerySingleAsync(
             "SELECT id, name, faction, grand_faction FROM teams WHERE name = @name COLLATE NOCASE LIMIT 1",
-            r => new Models.Team
+            reader => new Models.Team
             {
-                Id = r.GetString(0),
-                Name = r.GetString(1),
-                Faction = r.GetString(2),
-                GrandFaction = r.GetString(3),
+                Id = reader.GetString(0),
+                Name = reader.GetString(1),
+                Faction = reader.GetString(2),
+                GrandFaction = reader.GetString(3),
             },
             new() { ["@name"] = name });
     }
@@ -274,12 +277,12 @@ public class SqliteTeamRepository : ITeamRepository
                    supplementary_info
             FROM teams WHERE name = @name COLLATE NOCASE
             """,
-            r => new
+            reader => new
             {
-                Id = r.GetString(0), Name = r.GetString(1), Faction = r.GetString(2),
-                GrandFaction = r.GetString(3),
-                SelectionArchetype = r.GetString(4), SelectionText = r.GetString(5),
-                SupplementaryInfo = r.GetString(6),
+                Id = reader.GetString(0), Name = reader.GetString(1), Faction = reader.GetString(2),
+                GrandFaction = reader.GetString(3),
+                SelectionArchetype = reader.GetString(4), SelectionText = reader.GetString(5),
+                SupplementaryInfo = reader.GetString(6),
             },
             new() { ["@name"] = name });
 
@@ -294,43 +297,43 @@ public class SqliteTeamRepository : ITeamRepository
                    primary_keyword, keywords_json
             FROM operatives WHERE team_id = @teamId
             """,
-            r => new Operative
+            reader => new Operative
             {
-                Id = Guid.Parse(r.GetString(0)),
+                Id = Guid.Parse(reader.GetString(0)),
                 TeamId = row.Id,
-                Name = r.GetString(1),
-                OperativeType = r.GetString(2),
-                Move = r.GetInt32(3),
-                Apl = r.GetInt32(4),
-                Wounds = r.GetInt32(5),
-                Save = r.GetInt32(6),
-                Equipment = JsonSerializer.Deserialize<string[]>(r.GetString(7)) ?? [],
-                PrimaryKeyword = r.GetString(8),
-                Keywords = JsonSerializer.Deserialize<string[]>(r.GetString(9)) ?? [],
+                Name = reader.GetString(1),
+                OperativeType = reader.GetString(2),
+                Move = reader.GetInt32(3),
+                Apl = reader.GetInt32(4),
+                Wounds = reader.GetInt32(5),
+                Save = reader.GetInt32(6),
+                Equipment = JsonSerializer.Deserialize<string[]>(reader.GetString(7)) ?? [],
+                PrimaryKeyword = reader.GetString(8),
+                Keywords = JsonSerializer.Deserialize<string[]>(reader.GetString(9)) ?? [],
             },
             new() { ["@teamId"] = row.Id })).ToList();
 
-        foreach (var op in operatives)
+        foreach (var operative in operatives)
         {
             var weapons = await _db.QueryAsync(
                 """
                 SELECT id, name, type, atk, hit, normal_dmg, critical_dmg, special_rules
                 FROM weapons WHERE operative_id = @opId
                 """,
-                r => new Weapon
+                reader => new Weapon
                 {
-                    Id = Guid.Parse(r.GetString(0)),
-                    OperativeId = op.Id,
-                    Name = r.GetString(1),
-                    Type = Enum.Parse<WeaponType>(r.GetString(2)),
-                    Atk = r.GetInt32(3),
-                    Hit = r.GetInt32(4),
-                    NormalDmg = r.GetInt32(5),
-                    CriticalDmg = r.GetInt32(6),
-                    SpecialRules = r.GetString(7)
+                    Id = Guid.Parse(reader.GetString(0)),
+                    OperativeId = operative.Id,
+                    Name = reader.GetString(1),
+                    Type = Enum.Parse<WeaponType>(reader.GetString(2)),
+                    Atk = reader.GetInt32(3),
+                    Hit = reader.GetInt32(4),
+                    NormalDmg = reader.GetInt32(5),
+                    CriticalDmg = reader.GetInt32(6),
+                    SpecialRules = reader.GetString(7)
                 },
-                new() { ["@opId"] = op.Id.ToString() });
-            op.Weapons.AddRange(weapons);
+                new() { ["@opId"] = operative.Id.ToString() });
+            operative.Weapons.AddRange(weapons);
         }
 
         return new Models.Team

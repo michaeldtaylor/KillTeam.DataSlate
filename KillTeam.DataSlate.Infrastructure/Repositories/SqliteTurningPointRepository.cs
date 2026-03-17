@@ -1,6 +1,6 @@
-using Microsoft.Data.Sqlite;
 using KillTeam.DataSlate.Domain.Models;
 using KillTeam.DataSlate.Domain.Repositories;
+using Microsoft.Data.Sqlite;
 
 namespace KillTeam.DataSlate.Infrastructure.Repositories;
 
@@ -13,7 +13,7 @@ public class SqliteTurningPointRepository : ITurningPointRepository
     public SqliteTurningPointRepository(SqliteConnection connection)
         : this(new SqliteExecutor(connection)) { }
 
-    public async Task<TurningPoint> CreateAsync(TurningPoint tp)
+    public async Task<TurningPoint> CreateAsync(TurningPoint turningPoint)
     {
         await _db.ExecuteAsync(
             """
@@ -23,15 +23,16 @@ public class SqliteTurningPointRepository : ITurningPointRepository
             """,
             new()
             {
-                ["@id"] = tp.Id.ToString(),
-                ["@gameId"] = tp.GameId.ToString(),
-                ["@number"] = tp.Number,
-                ["@teamWithInitiativeId"] = tp.TeamWithInitiativeId,
-                ["@cpTeamA"] = tp.CommandPointsParticipant1,
-                ["@cpTeamB"] = tp.CommandPointsParticipant2,
-                ["@isStrategyPhaseComplete"] = tp.IsStrategyPhaseComplete ? 1 : 0
+                ["@id"] = turningPoint.Id.ToString(),
+                ["@gameId"] = turningPoint.GameId.ToString(),
+                ["@number"] = turningPoint.Number,
+                ["@teamWithInitiativeId"] = turningPoint.TeamWithInitiativeId,
+                ["@cpTeamA"] = turningPoint.CommandPointsParticipant1,
+                ["@cpTeamB"] = turningPoint.CommandPointsParticipant2,
+                ["@isStrategyPhaseComplete"] = turningPoint.IsStrategyPhaseComplete ? 1 : 0
             });
-        return tp;
+
+        return turningPoint;
     }
 
     public async Task<TurningPoint?> GetCurrentAsync(Guid gameId)
@@ -62,17 +63,35 @@ public class SqliteTurningPointRepository : ITurningPointRepository
         var result = await _db.ScalarAsync<int>(
             "SELECT is_strategy_phase_complete FROM turning_points WHERE id = @id",
             new() { ["@id"] = id.ToString() });
+
         return result != 0;
     }
 
-    private static TurningPoint MapTurningPoint(SqliteDataReader r) => new()
+    public async Task<IReadOnlyList<TurningPointSummary>> GetSummariesByGameAsync(Guid gameId)
     {
-        Id = Guid.Parse(r.GetString(0)),
-        GameId = Guid.Parse(r.GetString(1)),
-        Number = r.GetInt32(2),
-        TeamWithInitiativeId = r.IsDBNull(3) ? null : r.GetString(3),
-        CommandPointsParticipant1 = r.GetInt32(4),
-        CommandPointsParticipant2 = r.GetInt32(5),
-        IsStrategyPhaseComplete = r.GetInt32(6) != 0
+        return await _db.QueryAsync(
+            """
+            SELECT tp.id, tp.number, t.name
+            FROM turning_points tp
+            LEFT JOIN teams t ON t.id = tp.team_with_initiative_id
+            WHERE tp.game_id = @gameId
+            ORDER BY tp.number
+            """,
+            reader => new TurningPointSummary(
+                Guid.Parse(reader.GetString(0)),
+                reader.GetInt32(1),
+                reader.IsDBNull(2) ? null : reader.GetString(2)),
+            new() { ["@gameId"] = gameId.ToString() });
+    }
+
+    private static TurningPoint MapTurningPoint(SqliteDataReader reader) => new()
+    {
+        Id = Guid.Parse(reader.GetString(0)),
+        GameId = Guid.Parse(reader.GetString(1)),
+        Number = reader.GetInt32(2),
+        TeamWithInitiativeId = reader.IsDBNull(3) ? null : reader.GetString(3),
+        CommandPointsParticipant1 = reader.GetInt32(4),
+        CommandPointsParticipant2 = reader.GetInt32(5),
+        IsStrategyPhaseComplete = reader.GetInt32(6) != 0
     };
 }

@@ -1,7 +1,7 @@
 using System.Text.Json;
-using Microsoft.Data.Sqlite;
 using KillTeam.DataSlate.Domain.Models;
 using KillTeam.DataSlate.Domain.Repositories;
+using Microsoft.Data.Sqlite;
 
 namespace KillTeam.DataSlate.Infrastructure.Repositories;
 
@@ -52,19 +52,19 @@ public class SqliteBlastTargetRepository : IBlastTargetRepository
                    caused_incapacitation
             FROM action_blast_targets WHERE action_id = @actionId
             """,
-            r => new BlastTarget
+            reader => new BlastTarget
             {
-                Id = Guid.Parse(r.GetString(0)),
-                ActionId = Guid.Parse(r.GetString(1)),
-                TargetOperativeId = Guid.Parse(r.GetString(2)),
-                OperativeName = r.GetString(3),
-                DefenderDice = JsonSerializer.Deserialize<int[]>(r.GetString(4)) ?? [],
-                NormalHits = r.GetInt32(5),
-                CriticalHits = r.GetInt32(6),
-                Blocks = r.GetInt32(7),
-                NormalDamageDealt = r.GetInt32(8),
-                CriticalDamageDealt = r.GetInt32(9),
-                CausedIncapacitation = r.GetInt32(10) != 0
+                Id = Guid.Parse(reader.GetString(0)),
+                ActionId = Guid.Parse(reader.GetString(1)),
+                TargetOperativeId = Guid.Parse(reader.GetString(2)),
+                OperativeName = reader.GetString(3),
+                DefenderDice = JsonSerializer.Deserialize<int[]>(reader.GetString(4)) ?? [],
+                NormalHits = reader.GetInt32(5),
+                CriticalHits = reader.GetInt32(6),
+                Blocks = reader.GetInt32(7),
+                NormalDamageDealt = reader.GetInt32(8),
+                CriticalDamageDealt = reader.GetInt32(9),
+                CausedIncapacitation = reader.GetInt32(10) != 0
             },
             new() { ["@actionId"] = actionId.ToString() });
     }
