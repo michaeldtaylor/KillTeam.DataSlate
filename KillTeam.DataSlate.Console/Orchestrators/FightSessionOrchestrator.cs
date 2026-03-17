@@ -1,4 +1,5 @@
-﻿using KillTeam.DataSlate.Domain.Models;
+﻿using KillTeam.DataSlate.Domain.Events;
+using KillTeam.DataSlate.Domain.Models;
 using KillTeam.DataSlate.Domain.Repositories;
 using KillTeam.DataSlate.Domain.Services;
 using Spectre.Console;
@@ -26,9 +27,11 @@ public class FightSessionOrchestrator(
         IReadOnlyDictionary<Guid, Operative> allOperatives,
         Game game,
         TurningPoint tp,
-        Activation activation)
+        Activation activation,
+        GameEventStream? eventStream = null)
     {
         var isAttackerTeamA = attacker.TeamId == game.Participant1.TeamId;
+        var isAttackerTeamId = attacker.TeamId;
 
         // 1. Target selection
         var enemyStates = allOperativeStates
@@ -39,7 +42,7 @@ public class FightSessionOrchestrator(
 
         if (enemyStates.Count == 0)
         {
-            console.MarkupLine("[yellow]No valid fight targets available.[/]");
+            eventStream?.Emit((seq, ts) => new CombatWarningEvent(eventStream.GameSessionId, seq, ts, isAttackerTeamId, CombatWarningKind.NoValidTargets, "No valid fight targets available."));
             return new FightSessionResult(false, false, 0, 0, Guid.Empty);
         }
 
@@ -49,7 +52,7 @@ public class FightSessionOrchestrator(
             targetState = enemyStates[0];
             if (allOperatives.TryGetValue(targetState.OperativeId, out var autoTarget))
             {
-                console.MarkupLine($"[dim]Target:[/] {Markup.Escape(autoTarget.Name)} (Wounds: [green]{targetState.CurrentWounds}/{autoTarget.Wounds}[/])");
+                eventStream?.Emit((seq, ts) => new FightTargetSelectedEvent(eventStream.GameSessionId, seq, ts, isAttackerTeamId, autoTarget.Name, targetState.CurrentWounds, autoTarget.Wounds, true));
             }
         }
         else
@@ -65,16 +68,17 @@ public class FightSessionOrchestrator(
 
         if (!allOperatives.TryGetValue(targetState.OperativeId, out var targetOp))
         {
-            console.MarkupLine("[red]Target operative not found.[/]");
+            eventStream?.Emit((seq, ts) => new CombatWarningEvent(eventStream.GameSessionId, seq, ts, isAttackerTeamId, CombatWarningKind.TargetNotFound, "Target operative not found."));
             return new FightSessionResult(false, false, 0, 0, Guid.Empty);
         }
+        var defenderTeamId = targetOp.TeamId;
         var isDefenderTeamA = targetOp.TeamId == game.Participant1.TeamId;
 
         // 2. Attacker weapon selection (melee only)
         var atkMeleeWeapons = attacker.Weapons.Where(w => w.Type == WeaponType.Melee).ToList();
         if (atkMeleeWeapons.Count == 0)
         {
-            console.MarkupLine($"[red]{Markup.Escape(attacker.Name)} has no melee weapons![/]");
+            eventStream?.Emit((seq, ts) => new CombatWarningEvent(eventStream.GameSessionId, seq, ts, isAttackerTeamId, CombatWarningKind.NoWeaponsAvailable, $"{attacker.Name} has no melee weapons!"));
             return new FightSessionResult(false, false, 0, 0, targetState.OperativeId);
         }
 
@@ -83,8 +87,8 @@ public class FightSessionOrchestrator(
         if (atkMeleeWeapons.Count == 1)
         {
             atkWeapon = atkMeleeWeapons[0];
-            var injured = atkIsInjured ? $" [yellow](Injured: effective Hit {atkWeapon.Hit + 1}+)[/]" : "";
-            console.MarkupLine($"[dim]Auto-selected melee weapon:[/] {Markup.Escape(atkWeapon.Name)} (Attack: [green]{atkWeapon.Atk}[/] | Hit: [green]{atkWeapon.Hit}+[/] | Normal: [green]{atkWeapon.NormalDmg}[/] | Crit: [green]{atkWeapon.CriticalDmg}[/]){injured}");
+            var atkEffHit = atkIsInjured ? atkWeapon.Hit + 1 : atkWeapon.Hit;
+            eventStream?.Emit((seq, ts) => new WeaponSelectedEvent(eventStream.GameSessionId, seq, ts, isAttackerTeamId, atkWeapon.Name, atkWeapon.Atk, atkWeapon.Hit, atkWeapon.NormalDmg, atkWeapon.CriticalDmg, "Attacker", true, atkIsInjured, atkEffHit));
         }
         else
         {
@@ -109,9 +113,9 @@ public class FightSessionOrchestrator(
         if (defMeleeWeapons.Count == 1)
         {
             defWeapon = defMeleeWeapons[0];
-            console.MarkupLine($"[dim]Auto-selected defender weapon:[/] {Markup.Escape(defWeapon.Name)} (Attack: [green]{defWeapon.Atk}[/] | Hit: [green]{defWeapon.Hit}+[/] | Normal: [green]{defWeapon.NormalDmg}[/] | Crit: [green]{defWeapon.CriticalDmg}[/])");
             var defIsInjured = targetState.CurrentWounds < targetOp.Wounds / 2;
             defEffectiveHit = defIsInjured ? defWeapon.Hit + 1 : defWeapon.Hit;
+            eventStream?.Emit((seq, ts) => new WeaponSelectedEvent(eventStream.GameSessionId, seq, ts, defenderTeamId, defWeapon.Name, defWeapon.Atk, defWeapon.Hit, defWeapon.NormalDmg, defWeapon.CriticalDmg, "Defender", true, defIsInjured, defEffectiveHit));
         }
         else if (defMeleeWeapons.Count > 1)
         {
@@ -125,7 +129,7 @@ public class FightSessionOrchestrator(
         }
         else
         {
-            console.MarkupLine($"[dim]{Markup.Escape(targetOp.Name)} has no melee weapons — rolls 0 attack dice.[/]");
+            eventStream?.Emit((seq, ts) => new DefenderNoMeleeWeaponsEvent(eventStream.GameSessionId, seq, ts, defenderTeamId, targetOp.Name));
         }
 
         // 4. Fight assist
@@ -136,17 +140,17 @@ public class FightSessionOrchestrator(
         atkEffectiveHit = Math.Max(2, atkEffectiveHit - fightAssist);
 
         // 5. Attacker dice entry
-        int[] atkRolls = await RollOrEnterDiceAsync(atkWeapon.Atk, $"{Markup.Escape(attacker.Name)} attack dice (Attack: {atkWeapon.Atk})");
+        int[] atkRolls = await RollOrEnterDiceAsync(atkWeapon.Atk, $"{Markup.Escape(attacker.Name)} attack dice (Attack: {atkWeapon.Atk})", attacker.Name, "Attacker", "Fight", isAttackerTeamId, eventStream);
         atkRolls = await rerollOrchestrator.ApplyAttackerRerollsAsync(
-            atkRolls, atkWeapon.ParsedRules.ToList(), game.Id, isAttackerTeamA, attacker.Name);
+            atkRolls, atkWeapon.ParsedRules.ToList(), game.Id, isAttackerTeamA, attacker.Name, isAttackerTeamId, eventStream);
 
         // 6. Defender dice entry
         var defAtkCount = defWeapon?.Atk ?? 0;
         int[] defRolls = [];
         if (defAtkCount > 0)
         {
-            defRolls = await RollOrEnterDiceAsync(defAtkCount, $"{Markup.Escape(targetOp.Name)} fight-back dice (Attack: {defAtkCount})");
-            defRolls = await rerollOrchestrator.ApplyDefenderRerollAsync(defRolls, game.Id, isDefenderTeamA, targetOp.Name);
+            defRolls = await RollOrEnterDiceAsync(defAtkCount, $"{Markup.Escape(targetOp.Name)} fight-back dice (Attack: {defAtkCount})", targetOp.Name, "Defender", "Fight", defenderTeamId, eventStream);
+            defRolls = await rerollOrchestrator.ApplyDefenderRerollAsync(defRolls, game.Id, isDefenderTeamA, targetOp.Name, defenderTeamId, eventStream);
         }
 
         // 7. Classify dice
@@ -162,7 +166,7 @@ public class FightSessionOrchestrator(
             if (lowestDefSuccess is not null)
             {
                 defPool = defPool with { Remaining = defPool.Remaining.Where(d => d.Id != lowestDefSuccess.Id).ToList() };
-                console.MarkupLine($"[yellow]SHOCK: {Markup.Escape(targetOp.Name)} discards die (rolled {lowestDefSuccess.RolledValue})[/]");
+                eventStream?.Emit((seq, ts) => new ShockAppliedEvent(eventStream.GameSessionId, seq, ts, isAttackerTeamId, targetOp.Name, lowestDefSuccess.RolledValue));
             }
         }
 
@@ -220,9 +224,17 @@ public class FightSessionOrchestrator(
             var activeCurrentWounds = activeOwner == DieOwner.Attacker ? atkCurrentWounds : defCurrentWounds;
             var opponentCurrentWounds = activeOwner == DieOwner.Attacker ? defCurrentWounds : atkCurrentWounds;
 
-            DisplayFightPools(
-                attacker.Name, atkCurrentWounds, attacker.Wounds, atkPool,
-                targetOp.Name, defCurrentWounds, targetOp.Wounds, defPool);
+            var poolEvt = new FightPoolsDisplayedEvent(
+                eventStream?.GameSessionId ?? Guid.Empty, 0, DateTime.UtcNow, isAttackerTeamId,
+                attacker.Name, atkCurrentWounds, attacker.Wounds,
+                atkPool.Remaining.Select(d => new FightDieSnapshot(d.Result == DieResult.Crit ? "CRIT" : "HIT", d.RolledValue)).ToList(),
+                targetOp.Name, defCurrentWounds, targetOp.Wounds,
+                defPool.Remaining.Select(d => new FightDieSnapshot(d.Result == DieResult.Crit ? "CRIT" : "HIT", d.RolledValue)).ToList());
+            if (eventStream is not null)
+                eventStream.Emit(poolEvt);
+            else
+                DisplayFightPools(attacker.Name, atkCurrentWounds, attacker.Wounds, atkPool,
+                    targetOp.Name, defCurrentWounds, targetOp.Wounds, defPool);
 
             var useBrutal = brutalWeapon && activeOwner == DieOwner.Attacker;
             var actions = fightResolutionService.GetAvailableActions(activePool, opponentPool, useBrutal);
@@ -259,7 +271,7 @@ public class FightSessionOrchestrator(
             if (actionChoice.Type == FightActionType.Strike)
             {
                 var dmg = fightResolutionService.ApplyStrike(actionChoice.ActiveDie, activeWeapon.NormalDmg, activeWeapon.CriticalDmg);
-                console.MarkupLine($"  [red]STRIKE[/] with die ({actionChoice.ActiveDie.RolledValue}) — {dmg} damage to {Markup.Escape(opponentOp.Name)}");
+                eventStream?.Emit((seq, ts) => new FightStrikeResolvedEvent(eventStream.GameSessionId, seq, ts, activeOp.TeamId, activeOp.Name, opponentOp.Name, actionChoice.ActiveDie.RolledValue, actionChoice.ActiveDie.Result == DieResult.Crit ? "CRIT" : "HIT", dmg));
 
                 if (activeOwner == DieOwner.Attacker)
                 {
@@ -280,7 +292,7 @@ public class FightSessionOrchestrator(
             }
             else // Block
             {
-                console.MarkupLine($"  [cyan]BLOCK[/]: die ({actionChoice.ActiveDie.RolledValue}) cancels ({actionChoice.TargetDie!.RolledValue})");
+                eventStream?.Emit((seq, ts) => new FightBlockResolvedEvent(eventStream.GameSessionId, seq, ts, activeOp.TeamId, activeOp.Name, actionChoice.ActiveDie.RolledValue, actionChoice.ActiveDie.Result == DieResult.Crit ? "CRIT" : "HIT", actionChoice.TargetDie!.RolledValue, actionChoice.TargetDie!.Result == DieResult.Crit ? "CRIT" : "HIT"));
                 (activePool, opponentPool) = fightResolutionService.ApplySingleBlock(
                     actionChoice.ActiveDie, actionChoice.TargetDie!, activePool, opponentPool);
             }
@@ -322,7 +334,7 @@ public class FightSessionOrchestrator(
             await stateRepository.SetIncapacitatedAsync(targetState.Id, true);
             await stateRepository.UpdateGuardAsync(targetState.Id, false);
             targetState.IsOnGuard = false;
-            console.MarkupLine($"[red]INCAPACITATED! {Markup.Escape(targetOp.Name)} is out of action![/]");
+            eventStream?.Emit((seq, ts) => new IncapacitationEvent(eventStream.GameSessionId, seq, ts, isAttackerTeamId, targetOp.Name, "Fight"));
         }
         if (defCausedIncap)
         {
@@ -330,7 +342,7 @@ public class FightSessionOrchestrator(
             await stateRepository.SetIncapacitatedAsync(attackerState.Id, true);
             await stateRepository.UpdateGuardAsync(attackerState.Id, false);
             attackerState.IsOnGuard = false;
-            console.MarkupLine($"[red]INCAPACITATED! {Markup.Escape(attacker.Name)} is out of action![/]");
+            eventStream?.Emit((seq, ts) => new IncapacitationEvent(eventStream.GameSessionId, seq, ts, defenderTeamId, attacker.Name, "Fight"));
         }
 
         // 11. Persist action
@@ -349,6 +361,7 @@ public class FightSessionOrchestrator(
             CausedIncapacitation = atkCausedIncap
         };
         await actionRepository.CreateAsync(action);
+        eventStream?.Emit((seq, ts) => new FightResolvedEvent(eventStream.GameSessionId, seq, ts, isAttackerTeamId, attacker.Name, targetOp.Name, totalAtkDmgDealt, totalDefDmgDealt, atkCausedIncap, defCausedIncap));
 
         var note = console.Prompt(
             new TextPrompt<string>("Narrative note [dim](optional, press enter to skip)[/]:")
@@ -400,7 +413,7 @@ public class FightSessionOrchestrator(
         return $"[cyan]BLOCK[/] — {dieInfo} cancels rolled [green]{a.TargetDie.RolledValue}[/] ({targetLabel})";
     }
 
-    private async Task<int[]> RollOrEnterDiceAsync(int count, string label)
+    private async Task<int[]> RollOrEnterDiceAsync(int count, string label, string operativeName = "", string role = "", string phase = "", string participant = "", GameEventStream? eventStream = null)
     {
         if (count == 0)
         {
@@ -415,7 +428,7 @@ public class FightSessionOrchestrator(
         if (choice == "Roll for me")
         {
             var rolled = Enumerable.Range(0, count).Select(_ => Random.Shared.Next(1, 7)).ToArray();
-            console.MarkupLine($"  Rolled: [green]{string.Join(", ", rolled)}[/]");
+            eventStream?.Emit((seq, ts) => new DiceRolledEvent(eventStream.GameSessionId, seq, ts, participant, operativeName, role, phase, rolled));
             return rolled;
         }
 

@@ -2,7 +2,7 @@
 
 public class DataSlateOptions
 {
-    public string DatabasePath { get; set; } = "./data/kill-team.db";
+    public required string DatabasePath { get; init; }
 
-    public string TeamFolder { get; set; } = "../teams/";
+    public required string TeamsFolder { get; init; }
 }

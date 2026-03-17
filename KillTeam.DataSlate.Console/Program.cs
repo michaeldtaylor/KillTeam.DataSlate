@@ -40,8 +40,8 @@ public static class Program
         services.AddSingleton<IPloyRepository>(new SqlitePloyRepository(sqlExecutor));
         services.AddSingleton<IBlastTargetRepository>(new SqliteBlastTargetRepository(sqlExecutor));
         services.AddSingleton<IActionRepository>(new SqliteActionRepository(sqlExecutor));
-        services.AddSingleton<SqliteOperativeRepository>(new SqliteOperativeRepository(sqlExecutor));
-        services.AddSingleton<SqliteWeaponRepository>(new SqliteWeaponRepository(sqlExecutor));
+        services.AddSingleton(new SqliteOperativeRepository(sqlExecutor));
+        services.AddSingleton(new SqliteWeaponRepository(sqlExecutor));
         services.AddSingleton<TeamJsonImporter>();
         services.AddSingleton<TeamYamlImporter>();
         services.AddSingleton<RerollOrchestrator>();
@@ -90,7 +90,7 @@ public static class Program
                .WithDescription("Simulate fight/shoot encounters without a saved game.");
         });
 
-        return app.Run(args);
+        return await app.RunAsync(args);
     }
 }
 
@@ -119,6 +119,8 @@ public sealed class MyTypeResolver(IServiceProvider provider) : ITypeResolver, I
     public void Dispose()
     {
         if (provider is IDisposable disposable)
+        {
             disposable.Dispose();
+        }
     }
 }

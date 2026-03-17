@@ -1,4 +1,5 @@
-﻿using KillTeam.DataSlate.Domain.Models;
+﻿using KillTeam.DataSlate.Domain.Events;
+using KillTeam.DataSlate.Domain.Models;
 using KillTeam.DataSlate.Domain.Repositories;
 using KillTeam.DataSlate.Domain.Services;
 using Spectre.Console;
@@ -26,9 +27,11 @@ public class ShootSessionOrchestrator(
         Game game,
         TurningPoint tp,
         Activation activation,
-        bool hasMovedNonDash = false)
+        bool hasMovedNonDash = false,
+        GameEventStream? eventStream = null)
     {
         var isAttackerTeamA = attacker.TeamId == game.Participant1.TeamId;
+        var isAttackerTeamId = attacker.TeamId;
 
         // 1. Target selection: enemy operatives
         var enemyStates = allOperativeStates
@@ -39,7 +42,7 @@ public class ShootSessionOrchestrator(
 
         if (enemyStates.Count == 0)
         {
-            console.MarkupLine("[yellow]No valid targets available.[/]");
+            eventStream?.Emit((seq, ts) => new CombatWarningEvent(eventStream.GameSessionId, seq, ts, isAttackerTeamId, CombatWarningKind.NoValidTargets, "No valid targets available."));
             return new ShootSessionResult(false, 0, null);
         }
 
@@ -49,7 +52,7 @@ public class ShootSessionOrchestrator(
             targetState = enemyStates[0];
             if (allOperatives.TryGetValue(targetState.OperativeId, out var autoTarget))
             {
-                console.MarkupLine($"[dim]Target:[/] {Markup.Escape(autoTarget.Name)} (Wounds: [green]{targetState.CurrentWounds}/{autoTarget.Wounds}[/])");
+                eventStream?.Emit((seq, ts) => new ShootTargetSelectedEvent(eventStream.GameSessionId, seq, ts, isAttackerTeamId, autoTarget.Name, targetState.CurrentWounds, autoTarget.Wounds, true));
             }
         }
         else
@@ -65,9 +68,10 @@ public class ShootSessionOrchestrator(
 
         if (!allOperatives.TryGetValue(targetState.OperativeId, out var targetOp))
         {
-            console.MarkupLine("[red]Target operative not found.[/]");
+            eventStream?.Emit((seq, ts) => new CombatWarningEvent(eventStream.GameSessionId, seq, ts, isAttackerTeamId, CombatWarningKind.TargetNotFound, "Target operative not found."));
             return new ShootSessionResult(false, 0, null);
         }
+        var defenderTeamId = targetOp.TeamId;
 
         // 2. Weapon selection (ranged only; filter Heavy if moved non-dash)
         var rangedWeapons = attacker.Weapons
@@ -77,7 +81,7 @@ public class ShootSessionOrchestrator(
 
         if (rangedWeapons.Count == 0)
         {
-            console.MarkupLine("[yellow]No ranged weapons available.[/]");
+            eventStream?.Emit((seq, ts) => new CombatWarningEvent(eventStream.GameSessionId, seq, ts, isAttackerTeamId, CombatWarningKind.NoWeaponsAvailable, "No ranged weapons available."));
             return new ShootSessionResult(false, 0, null);
         }
 
@@ -85,10 +89,7 @@ public class ShootSessionOrchestrator(
         if (rangedWeapons.Count == 1)
         {
             weapon = rangedWeapons[0];
-            var rulesText = weapon.ParsedRules.Count > 0
-                ? $" | {string.Join(", ", weapon.ParsedRules.Select(r => r.RawText))}"
-                : "";
-            console.MarkupLine($"[dim]Auto-selected ranged weapon:[/] {Markup.Escape(weapon.Name)} (Attack: [green]{weapon.Atk}[/] | Hit: [green]{weapon.Hit}+[/] | Normal: [green]{weapon.NormalDmg}[/] | Crit: [green]{weapon.CriticalDmg}[/]{Markup.Escape(rulesText)})");
+            eventStream?.Emit((seq, ts) => new WeaponSelectedEvent(eventStream.GameSessionId, seq, ts, isAttackerTeamId, weapon.Name, weapon.Atk, weapon.Hit, weapon.NormalDmg, weapon.CriticalDmg, "Attacker", true, false, weapon.Hit));
         }
         else
         {
@@ -136,26 +137,26 @@ public class ShootSessionOrchestrator(
                 .Validate(v => v is >= 0 and <= 2));
 
         // 5. Attacker dice entry
-        int[] attackDice = await RollOrEnterDiceAsync(weapon.Atk, $"{Markup.Escape(attacker.Name)} attack dice (Attack: {weapon.Atk})");
+        int[] attackDice = await RollOrEnterDiceAsync(weapon.Atk, $"{Markup.Escape(attacker.Name)} attack dice (Attack: {weapon.Atk})", attacker.Name, "Attacker", "Shoot", isAttackerTeamId, eventStream);
 
         // 6. Weapon re-rolls + attacker CP re-roll
         attackDice = await rerollOrchestrator.ApplyAttackerRerollsAsync(
-            attackDice, weapon.ParsedRules.ToList(), game.Id, isAttackerTeamA, attacker.Name);
+            attackDice, weapon.ParsedRules.ToList(), game.Id, isAttackerTeamA, attacker.Name, isAttackerTeamId, eventStream);
 
         // 7. Defence dice entry (player decides how many to roll)
         var defDiceCount = console.Prompt(
             new TextPrompt<int>("How many defence dice to roll? (0 or more):")
                 .Validate(v => v >= 0));
         if (inCover)
-            console.MarkupLine("[green]+1 cover save will be added automatically.[/]");
+            eventStream?.Emit((seq, ts) => new CoverSaveNotifiedEvent(eventStream.GameSessionId, seq, ts, isAttackerTeamId, targetOp.Name));
 
         int[] defDice = defDiceCount == 0
             ? []
-            : await RollOrEnterDiceAsync(defDiceCount, $"{Markup.Escape(targetOp.Name)} defence dice");
+            : await RollOrEnterDiceAsync(defDiceCount, $"{Markup.Escape(targetOp.Name)} defence dice", targetOp.Name, "Defender", "Shoot", defenderTeamId, eventStream);
 
         // 8. Defender CP re-roll
         var isDefenderTeamA = targetOp.TeamId == game.Participant1.TeamId;
-        defDice = await rerollOrchestrator.ApplyDefenderRerollAsync(defDice, game.Id, isDefenderTeamA, targetOp.Name);
+        defDice = await rerollOrchestrator.ApplyDefenderRerollAsync(defDice, game.Id, isDefenderTeamA, targetOp.Name, defenderTeamId, eventStream);
 
         // 9. Resolve shoot
         var ctx = new ShootContext(
@@ -173,7 +174,10 @@ public class ShootSessionOrchestrator(
 
         var result = combatResolutionService.ResolveShoot(ctx);
 
-        DisplayShootResult(targetOp.Name, result, inCover, isObscured);
+        if (eventStream is not null)
+            eventStream.Emit((seq, ts) => new ShootResultDisplayedEvent(eventStream.GameSessionId, seq, ts, isAttackerTeamId, targetOp.Name, result.UnblockedCrits, result.UnblockedNormals, result.TotalDamage, inCover, isObscured));
+        else
+            DisplayShootResult(targetOp.Name, result, inCover, isObscured);
 
         // 10. Apply damage
         var newWounds = Math.Max(0, targetState.CurrentWounds - result.TotalDamage);
@@ -188,7 +192,7 @@ public class ShootSessionOrchestrator(
             await stateRepository.SetIncapacitatedAsync(targetState.Id, true);
             await stateRepository.UpdateGuardAsync(targetState.Id, false);
             targetState.IsOnGuard = false;
-            console.MarkupLine($"[red]INCAPACITATED! {Markup.Escape(targetOp.Name)} is out of action![/]");
+            eventStream?.Emit((seq, ts) => new IncapacitationEvent(eventStream.GameSessionId, seq, ts, isAttackerTeamId, targetOp.Name, "Shoot"));
         }
 
         // 11. Stun check
@@ -199,7 +203,7 @@ public class ShootSessionOrchestrator(
         {
             await stateRepository.SetAplModifierAsync(targetState.Id, -1);
             targetState.AplModifier -= 1;
-            console.MarkupLine($"[yellow]STUN applied to {Markup.Escape(targetOp.Name)} (-1 APL)[/]");
+            eventStream?.Emit((seq, ts) => new StunAppliedEvent(eventStream.GameSessionId, seq, ts, isAttackerTeamId, targetOp.Name, 1));
         }
 
         // 12. Hot check (self-damage)
@@ -209,12 +213,12 @@ public class ShootSessionOrchestrator(
             var newAttackerWounds = Math.Max(0, attackerState.CurrentWounds - selfDamage);
             attackerState.CurrentWounds = newAttackerWounds;
             await stateRepository.UpdateWoundsAsync(attackerState.Id, newAttackerWounds);
-            console.MarkupLine($"[red]HOT! {Markup.Escape(attacker.Name)} takes {selfDamage} self-damage! (Wounds: {newAttackerWounds})[/]");
+            eventStream?.Emit((seq, ts) => new SelfDamageDealtEvent(eventStream.GameSessionId, seq, ts, isAttackerTeamId, attacker.Name, selfDamage, newAttackerWounds));
             if (newAttackerWounds <= 0 && !attackerState.IsIncapacitated)
             {
                 attackerState.IsIncapacitated = true;
                 await stateRepository.SetIncapacitatedAsync(attackerState.Id, true);
-                console.MarkupLine($"[red]INCAPACITATED! {Markup.Escape(attacker.Name)} is out of action from their own weapon![/]");
+                eventStream?.Emit((seq, ts) => new IncapacitationEvent(eventStream.GameSessionId, seq, ts, isAttackerTeamId, attacker.Name, "SelfDamage"));
             }
         }
 
@@ -240,6 +244,7 @@ public class ShootSessionOrchestrator(
             StunApplied = stunApplied
         };
         await actionRepository.CreateAsync(action);
+        eventStream?.Emit((seq, ts) => new ShootResolvedEvent(eventStream.GameSessionId, seq, ts, isAttackerTeamId, attacker.Name, targetOp.Name, result.TotalDamage, causedIncap));
 
         // 14. Narrative note
         var note = console.Prompt(
@@ -274,7 +279,7 @@ public class ShootSessionOrchestrator(
         console.Write(table);
     }
 
-    internal async Task<int[]> RollOrEnterDiceAsync(int count, string label)
+    internal async Task<int[]> RollOrEnterDiceAsync(int count, string label, string operativeName = "", string role = "", string phase = "", string participant = "", GameEventStream? eventStream = null)
     {
         if (count == 0)
         {
@@ -289,7 +294,7 @@ public class ShootSessionOrchestrator(
         if (choice == "Roll for me")
         {
             var rolled = Enumerable.Range(0, count).Select(_ => Random.Shared.Next(1, 7)).ToArray();
-            console.MarkupLine($"  Rolled: [green]{string.Join(", ", rolled)}[/]");
+            eventStream?.Emit((seq, ts) => new DiceRolledEvent(eventStream.GameSessionId, seq, ts, participant, operativeName, role, phase, rolled));
             return rolled;
         }
 

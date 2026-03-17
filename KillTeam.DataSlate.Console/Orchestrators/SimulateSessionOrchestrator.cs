@@ -1,4 +1,6 @@
 ﻿using KillTeam.DataSlate.Console.Infrastructure.Repositories;
+using KillTeam.DataSlate.Console.Rendering;
+using KillTeam.DataSlate.Domain.Events;
 using KillTeam.DataSlate.Domain.Repositories;
 using KillTeam.DataSlate.Domain.Services;
 using Spectre.Console;
@@ -200,13 +202,22 @@ public class SimulateSessionOrchestrator(
             [aiOp.Id] = aiOp
         };
 
+        var stream = new GameEventStream(game.Id);
+        var participantLabels = new Dictionary<string, string>
+        {
+            [playerTeam.Id] = "You",
+            [aiTeam.Id] = "AI"
+        };
+        var renderer = new GameEventRenderer(console, participantLabels);
+        stream.OnEventEmitted += renderer.Render;
+
         if (actionType == Models.ActionType.Fight)
         {
             var fightOrchestrator = new FightSessionOrchestrator(
                 console, fightResolutionService, rerollOrchestrator, stateRepo, actionRepo);
 
             var fightResult = await fightOrchestrator.RunAsync(
-                playerOp, playerState, allStates, allOperatives, game, tp, activation);
+                playerOp, playerState, allStates, allOperatives, game, tp, activation, stream);
 
             DisplayEncounterSummary(playerOp, aiOp,
                 fightResult.AttackerDamageDealt, fightResult.DefenderDamageDealt,
@@ -221,11 +232,11 @@ public class SimulateSessionOrchestrator(
                 console, combatResolutionService, rerollOrchestrator, blastOrchestrator, stateRepo, actionRepo);
 
             var shootResult = await shootOrchestrator.RunAsync(
-                playerOp, playerState, allStates, allOperatives, game, tp, activation);
+                playerOp, playerState, allStates, allOperatives, game, tp, activation, false, stream);
 
-            console.MarkupLine(shootResult.CausedIncapacitation
-                ? $"[red]INCAPACITATED! {Markup.Escape(aiOp.Name)} is out of action! Dealt {shootResult.DamageDealt} damage.[/]"
-                : $"Dealt [bold]{shootResult.DamageDealt}[/] damage to {Markup.Escape(aiOp.Name)}.");
+            DisplayEncounterSummary(playerOp, aiOp,
+                shootResult.DamageDealt, 0,
+                false, shootResult.CausedIncapacitation);
         }
     }
 
