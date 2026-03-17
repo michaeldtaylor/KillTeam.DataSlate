@@ -1,0 +1,23 @@
+using KillTeam.DataSlate.Domain.Events;
+using KillTeam.DataSlate.Domain.Models;
+using KillTeam.DataSlate.Domain.Services;
+
+namespace KillTeam.DataSlate.Domain.Engine.Input;
+
+public interface IFightInputProvider
+{
+    Task<GameOperativeState> SelectTargetAsync(
+        IList<GameOperativeState> candidates,
+        IReadOnlyDictionary<Guid, Operative> allOperatives);
+
+    Task<Weapon> SelectAttackerWeaponAsync(IList<Weapon> weapons, bool isInjured);
+    Task<Weapon> SelectDefenderWeaponAsync(IList<Weapon> weapons);
+    Task<int> GetFightAssistCountAsync();
+    Task<FightAction> SelectActionAsync(IList<FightAction> actions, string operativeName);
+    Task<string> GetNarrativeNoteAsync();
+
+    Task<int[]> RollOrEnterDiceAsync(
+        int count, string label,
+        string operativeName, string role, string phase,
+        string participant, GameEventStream? eventStream);
+}
