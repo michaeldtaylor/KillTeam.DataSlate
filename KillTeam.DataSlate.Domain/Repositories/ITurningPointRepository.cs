@@ -4,7 +4,7 @@ namespace KillTeam.DataSlate.Domain.Repositories;
 
 public interface ITurningPointRepository
 {
-    Task CreateAsync(TurningPoint tp);
+    Task CreateAsync(TurningPoint turningPoint);
 
     Task<TurningPoint?> GetCurrentAsync(Guid gameId);
 

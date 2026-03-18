@@ -17,9 +17,9 @@ public class StatsCommand(
 {
     public class Settings : CommandSettings
     {
-        [Description("Show statistics for a specific team (case-insensitive).")]
-        [CommandOption("--team <name>")]
-        public string? TeamName { get; set; }
+        [Description("Show statistics for a specific team (by slug/ID, e.g. death-guard).")]
+        [CommandOption("--team <id>")]
+        public string? TeamId { get; set; }
 
         [Description("Filter statistics to a specific player (case-insensitive).")]
         [CommandOption("--player <name>")]
@@ -28,23 +28,24 @@ public class StatsCommand(
 
     public override async Task<int> ExecuteAsync(CommandContext context, Settings settings)
     {
-        logger.LogDebug("Stats command. Team={Team}, Player={Player}", settings.TeamName, settings.PlayerName);
-        if (!string.IsNullOrWhiteSpace(settings.TeamName))
+        logger.LogDebug("Stats command. Team={Team}, Player={Player}", settings.TeamId, settings.PlayerName);
+
+        if (!string.IsNullOrWhiteSpace(settings.TeamId))
         {
-            return await ShowTeamStatsAsync(settings.TeamName);
+            return await ShowTeamStatsAsync(settings.TeamId);
         }
 
         return await ShowPlayerStatsAsync(settings.PlayerName);
     }
 
-    private async Task<int> ShowTeamStatsAsync(string teamName)
+    private async Task<int> ShowTeamStatsAsync(string teamId)
     {
-        var team = await teams.GetByNameAsync(teamName);
+        var team = await teams.GetByIdAsync(teamId);
 
         if (team is null)
         {
-            logger.LogWarning("Team {TeamName} not found for stats", teamName);
-            console.MarkupLine($"[red]Team '{Markup.Escape(teamName)}' not found.[/]");
+            logger.LogWarning("Team {TeamId} not found for stats", teamId);
+            console.MarkupLine($"[red]Team '{Markup.Escape(teamId)}' not found.[/]");
 
             return 1;
         }
@@ -53,8 +54,8 @@ public class StatsCommand(
 
         if (stats is null)
         {
-            logger.LogWarning("No stats found for team {TeamName}", teamName);
-            console.MarkupLine($"[red]Could not load stats for team '{Markup.Escape(teamName)}'.[/]");
+            logger.LogWarning("No stats found for team {TeamId}", teamId);
+            console.MarkupLine($"[red]Could not load stats for team '{Markup.Escape(teamId)}'.[/]");
 
             return 1;
         }

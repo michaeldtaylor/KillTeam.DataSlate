@@ -256,10 +256,10 @@ public class SqliteTeamRepository : ITeamRepository
             });
     }
 
-    public async Task<Team?> GetByNameAsync(string name)
+    public async Task<Team?> GetByIdAsync(string id)
     {
         return await _db.QuerySingleAsync(
-            "SELECT id, name, faction, grand_faction FROM teams WHERE name = @name COLLATE NOCASE LIMIT 1",
+            "SELECT id, name, faction, grand_faction FROM teams WHERE id = @id LIMIT 1",
             reader => new Team
             {
                 Id = reader.GetString(0),
@@ -267,17 +267,17 @@ public class SqliteTeamRepository : ITeamRepository
                 Faction = reader.GetString(2),
                 GrandFaction = reader.GetString(3),
             },
-            new() { ["@name"] = name });
+            new() { ["@id"] = id });
     }
 
-    public async Task<Team?> GetWithOperativesAsync(string name)
+    public async Task<Team?> GetWithOperativesAsync(string id)
     {
         var row = await _db.QuerySingleAsync(
             """
             SELECT id, name, faction, grand_faction,
                    operative_selection_archetype, operative_selection_text,
                    supplementary_info
-            FROM teams WHERE name = @name COLLATE NOCASE
+            FROM teams WHERE id = @id
             """,
             reader => new
             {
@@ -286,7 +286,7 @@ public class SqliteTeamRepository : ITeamRepository
                 SelectionArchetype = reader.GetString(4), SelectionText = reader.GetString(5),
                 SupplementaryInfo = reader.GetString(6),
             },
-            new() { ["@name"] = name });
+            new() { ["@id"] = id });
 
         if (row is null)
         {

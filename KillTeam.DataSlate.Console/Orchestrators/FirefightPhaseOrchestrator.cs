@@ -22,8 +22,8 @@ public class FirefightPhaseOrchestrator(
     public async Task RunAsync(Game game, TurningPoint currentTurningPoint)
     {
         logger.LogDebug("Firefight phase TP{TpNumber} started for game {GameId}", currentTurningPoint.Number, game.Id);
-        var team1 = await teamRepository.GetWithOperativesAsync(game.Participant1.TeamName);
-        var team2 = await teamRepository.GetWithOperativesAsync(game.Participant2.TeamName);
+        var team1 = await teamRepository.GetWithOperativesAsync(game.Participant1.TeamId);
+        var team2 = await teamRepository.GetWithOperativesAsync(game.Participant2.TeamId);
         var allOperatives = (team1?.Operatives ?? [])
             .Concat(team2?.Operatives ?? [])
             .ToDictionary(o => o.Id);

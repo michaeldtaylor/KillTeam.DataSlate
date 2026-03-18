@@ -57,8 +57,8 @@ public class NewGameTests
         };
         await gameRepo.CreateAsync(game);
 
-        var fullTeam1 = await teamRepo.GetWithOperativesAsync(team1Name);
-        var fullTeam2 = await teamRepo.GetWithOperativesAsync(team2Name);
+        var fullTeam1 = await teamRepo.GetWithOperativesAsync("angels_of_death");
+        var fullTeam2 = await teamRepo.GetWithOperativesAsync("plague_marines");
         var allOperatives = (fullTeam1?.Operatives ?? []).Concat(fullTeam2?.Operatives ?? []).ToList();
 
         foreach (var operative in allOperatives)

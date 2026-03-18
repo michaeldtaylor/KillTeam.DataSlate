@@ -67,8 +67,8 @@ public class NewGameCommand(
             new TextPrompt<string>("Mission name [dim](optional)[/]:").AllowEmpty());
 
         // Load full team data with operatives
-        var fullTeam1 = await teams.GetWithOperativesAsync(team1.Name);
-        var fullTeam2 = await teams.GetWithOperativesAsync(team2.Name);
+        var fullTeam1 = await teams.GetWithOperativesAsync(team1.Id);
+        var fullTeam2 = await teams.GetWithOperativesAsync(team2.Id);
 
         var game = new Game
         {

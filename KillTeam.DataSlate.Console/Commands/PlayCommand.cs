@@ -51,8 +51,8 @@ public class PlayCommand(
             return 0;
         }
 
-        var team1 = await teamRepository.GetWithOperativesAsync(game.Participant1.TeamName);
-        var team2 = await teamRepository.GetWithOperativesAsync(game.Participant2.TeamName);
+        var team1 = await teamRepository.GetWithOperativesAsync(game.Participant1.TeamId);
+        var team2 = await teamRepository.GetWithOperativesAsync(game.Participant2.TeamId);
         var team1Name = team1?.Name ?? game.Participant1.TeamName;
         var team2Name = team2?.Name ?? game.Participant2.TeamName;
 
