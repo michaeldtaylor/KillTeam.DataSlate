@@ -5,14 +5,14 @@ namespace KillTeam.DataSlate.Console.InputProviders;
 
 public class ConsoleStrategyPhaseInputProvider(IAnsiConsole console) : IStrategyPhaseInputProvider
 {
-    public Task<string> SelectInitiativeWinnerAsync(string teamAName, string teamBName)
+    public Task<string> SelectInitiativeWinnerAsync(string team1Name, string team2Name)
     {
         while (true)
         {
             var winner = console.Prompt(
                 new SelectionPrompt<string>()
                     .Title("Who won initiative? (or T for a tie roll)")
-                    .AddChoices(teamAName, teamBName, "Tie — re-roll"));
+                    .AddChoices(team1Name, team2Name, "Tie — re-roll"));
 
             if (winner == "Tie — re-roll")
             {

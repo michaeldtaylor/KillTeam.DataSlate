@@ -46,7 +46,7 @@ public partial class PdfTeamExtractor
     /// <summary>Initialises a new instance of <see cref="PdfTeamExtractor"/>.</summary>
     public PdfTeamExtractor(PdfWeaponTypeDetector weaponTypeDetector)
     {
-        this._weaponTypeDetector = weaponTypeDetector;
+        _weaponTypeDetector = weaponTypeDetector;
     }
 
     /// <summary>Extracts a team from the PDFs in the given folder and returns the structured result.</summary>
@@ -66,21 +66,21 @@ public partial class PdfTeamExtractor
             throw new InvalidOperationException($"No Datacards PDF found in {teamFolder}");
         }
 
-        var weaponTypes = this._weaponTypeDetector.Detect(datacardsPath);
-        var (operatives, faction, grandFaction) = this.ParseDatacards(datacardsPath, weaponTypes);
+        var weaponTypes = _weaponTypeDetector.Detect(datacardsPath);
+        var (operatives, faction, grandFaction) = ParseDatacards(datacardsPath, weaponTypes);
 
         var factionEquipment = factionEquipmentPath != null
-            ? this.ParseEquipmentWithDescriptions([factionEquipmentPath])
+            ? ParseEquipmentWithDescriptions([factionEquipmentPath])
             : [];
         var universalEquipment = universalEquipmentPath != null
-            ? this.ParseEquipmentWithDescriptions([universalEquipmentPath])
+            ? ParseEquipmentWithDescriptions([universalEquipmentPath])
             : [];
         var primaryKeyword = operatives.Count > 0 ? operatives[0].PrimaryKeyword : null;
-        var factionRules = factionRulesPath != null ? this.ParseRulesDoc(factionRulesPath, teamName, primaryKeyword) : [];
-        var strategyPloys = strategyPloysPath != null ? this.ParseRulesDoc(strategyPloysPath, teamName, primaryKeyword, isPloy: true) : [];
-        var firefightPloys = firefightPloysPath != null ? this.ParseRulesDoc(firefightPloysPath, teamName, primaryKeyword, isPloy: true) : [];
-        var operativeSelection = operativeSelectionPath != null ? this.ParseOperativeSelection(operativeSelectionPath) : null;
-        var supplementaryInfo = supplementaryInformationPath != null ? this.ParseSupplementaryInfo(supplementaryInformationPath) : string.Empty;
+        var factionRules = factionRulesPath != null ? ParseRulesDoc(factionRulesPath, teamName, primaryKeyword) : [];
+        var strategyPloys = strategyPloysPath != null ? ParseRulesDoc(strategyPloysPath, teamName, primaryKeyword, isPloy: true) : [];
+        var firefightPloys = firefightPloysPath != null ? ParseRulesDoc(firefightPloysPath, teamName, primaryKeyword, isPloy: true) : [];
+        var operativeSelection = operativeSelectionPath != null ? ParseOperativeSelection(operativeSelectionPath) : null;
+        var supplementaryInfo = supplementaryInformationPath != null ? ParseSupplementaryInfo(supplementaryInformationPath) : string.Empty;
 
         if (operatives.Count == 0)
         {
@@ -158,7 +158,7 @@ public partial class PdfTeamExtractor
             {
                 if (operativeMap.TryGetValue(operativeName, out var existingOp))
                 {
-                    i = this.ParseBackOfCard(lines, rawBackSections, i, existingOp);
+                    i = ParseBackOfCard(lines, rawBackSections, i, existingOp);
                 }
                 else
                 {
@@ -2286,13 +2286,13 @@ public partial class PdfTeamExtractor
                 {
                     // First attribution line — buffer it (don't emit yet; next line may be continuation)
                     var attribution = trimmed[2..].TrimStart();
-                    attribution = System.Text.RegularExpressions.Regex.Replace(attribution, @"\s+\d+$", string.Empty);
+                    attribution = Regex.Replace(attribution, @"\s+\d+$", string.Empty);
                     pendingAttributionText = attribution;
                 }
                 else if (pendingAttributionText.Length > 0 && trimmed.Any(char.IsLower) && !trimmed.StartsWith("- ", StringComparison.Ordinal))
                 {
                     // Continuation of a wrapped attribution line (e.g. "the Onyx Claw Shrine, Biel-Tan Craftworld")
-                    var continuation = System.Text.RegularExpressions.Regex.Replace(trimmed.TrimEnd(), @"\s+\d+$", string.Empty);
+                    var continuation = Regex.Replace(trimmed.TrimEnd(), @"\s+\d+$", string.Empty);
                     pendingAttributionText += " " + continuation;
                 }
                 else

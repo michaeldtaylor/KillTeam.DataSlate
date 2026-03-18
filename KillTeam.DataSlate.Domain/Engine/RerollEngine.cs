@@ -16,7 +16,7 @@ public class RerollEngine(IRerollInputProvider inputProvider, IGameRepository ga
         int[] dice,
         List<WeaponRule> rules,
         Guid gameId,
-        bool isTeamA,
+        bool isTeam1,
         string ownerLabel,
         string participant = "",
         GameEventStream? eventStream = null)
@@ -38,7 +38,7 @@ public class RerollEngine(IRerollInputProvider inputProvider, IGameRepository ga
             pool = await ApplyRelentlessAsync(pool, ownerLabel, participant, eventStream);
         }
 
-        pool = await ApplyCpRerollAsync(pool, gameId, isTeamA, ownerLabel, participant, eventStream);
+        pool = await ApplyCpRerollAsync(pool, gameId, isTeam1, ownerLabel, participant, eventStream);
 
         return pool.Select(d => d.Value).ToArray();
     }
@@ -49,14 +49,14 @@ public class RerollEngine(IRerollInputProvider inputProvider, IGameRepository ga
     public async Task<int[]> ApplyDefenderRerollAsync(
         int[] dice,
         Guid gameId,
-        bool isTeamA,
+        bool isTeam1,
         string ownerLabel,
         string participant = "",
         GameEventStream? eventStream = null)
     {
         var pool = dice.Select((v, i) => new RollableDie(i, v)).ToList();
 
-        pool = await ApplyCpRerollAsync(pool, gameId, isTeamA, ownerLabel, participant, eventStream);
+        pool = await ApplyCpRerollAsync(pool, gameId, isTeam1, ownerLabel, participant, eventStream);
 
         return pool.Select(d => d.Value).ToArray();
     }
@@ -135,7 +135,7 @@ public class RerollEngine(IRerollInputProvider inputProvider, IGameRepository ga
     }
 
     private async Task<List<RollableDie>> ApplyCpRerollAsync(
-        List<RollableDie> pool, Guid gameId, bool isTeamA, string label, string participant, GameEventStream? eventStream)
+        List<RollableDie> pool, Guid gameId, bool isTeam1, string label, string participant, GameEventStream? eventStream)
     {
         if (pool.Count == 0)
         {
@@ -148,7 +148,7 @@ public class RerollEngine(IRerollInputProvider inputProvider, IGameRepository ga
             return pool;
         }
 
-        var cp = isTeamA ? game.Participant1.CommandPoints : game.Participant2.CommandPoints;
+        var cp = isTeam1 ? game.Participant1.CommandPoints : game.Participant2.CommandPoints;
         if (cp <= 0)
         {
             return pool;
@@ -168,14 +168,14 @@ public class RerollEngine(IRerollInputProvider inputProvider, IGameRepository ga
         var choice = await inputProvider.SelectCpRerollDieAsync(eligible);
 
         var newVal = RollD6();
-        var newCpA = isTeamA ? game.Participant1.CommandPoints - 1 : game.Participant1.CommandPoints;
-        var newCpB = isTeamA ? game.Participant2.CommandPoints : game.Participant2.CommandPoints - 1;
-        var remainingCp = isTeamA ? newCpA : newCpB;
+        var newCp1 = isTeam1 ? game.Participant1.CommandPoints - 1 : game.Participant1.CommandPoints;
+        var newCp2 = isTeam1 ? game.Participant2.CommandPoints : game.Participant2.CommandPoints - 1;
+        var remainingCp = isTeam1 ? newCp1 : newCp2;
 
         eventStream?.Emit((seq, ts) => new CpRerollAppliedEvent(
             eventStream.GameSessionId, seq, ts, participant, label, choice.Index, choice.Value, newVal, remainingCp));
 
-        await gameRepository.UpdateCpAsync(gameId, newCpA, newCpB);
+        await gameRepository.UpdateCpAsync(gameId, newCp1, newCp2);
 
         return pool.Select(d => d.Index == choice.Index
             ? d with { Value = newVal, HasBeenRerolled = true }

@@ -4,10 +4,10 @@ namespace KillTeam.DataSlate.Domain.Models;
 public record GameHeader(
     GameStatus Status,
     string? MissionName,
-    string PlayerAName,
-    string TeamAName,
-    string PlayerBName,
-    string TeamBName,
+    string Player1Name,
+    string Team1Name,
+    string Player2Name,
+    string Team2Name,
     string? WinnerTeamName,
-    int VictoryPointsA,
-    int VictoryPointsB);
+    int VictoryPoints1,
+    int VictoryPoints2);

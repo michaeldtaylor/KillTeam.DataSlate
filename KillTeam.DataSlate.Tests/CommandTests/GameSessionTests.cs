@@ -58,9 +58,9 @@ public class GameSessionTests
         await gameRepo.UpdateCpAsync(gameId, 3, 3);
 
         // Team A has initiative in TP2: +1 for A, +2 for B
-        var cpA = 3 + 1; // initiative team
-        var cpB = 3 + 2; // other team
-        await gameRepo.UpdateCpAsync(gameId, cpA, cpB);
+        var cp1 = 3 + 1; // initiative team
+        var cp2 = 3 + 2; // other team
+        await gameRepo.UpdateCpAsync(gameId, cp1, cp2);
 
         var updated = await gameRepo.GetByIdAsync(gameId);
         updated!.Participant1.CommandPoints.Should().Be(4, "initiative team gains 1CP");

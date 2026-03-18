@@ -16,7 +16,7 @@ public class SqliteTeamRepository : ITeamRepository
     public SqliteTeamRepository(SqliteConnection connection)
         : this(new SqliteExecutor(connection)) { }
 
-    public async Task UpsertAsync(Models.Team team)
+    public async Task UpsertAsync(Team team)
     {
         await _db.ExecuteTransactionAsync(async (connection, transaction) =>
         {
@@ -243,11 +243,11 @@ public class SqliteTeamRepository : ITeamRepository
         }
     }
 
-    public async Task<IEnumerable<Models.Team>> GetAllAsync()
+    public async Task<IEnumerable<Team>> GetAllAsync()
     {
         return await _db.QueryAsync(
             "SELECT id, name, faction, grand_faction FROM teams",
-            reader => new Models.Team
+            reader => new Team
             {
                 Id = reader.GetString(0),
                 Name = reader.GetString(1),
@@ -256,11 +256,11 @@ public class SqliteTeamRepository : ITeamRepository
             });
     }
 
-    public async Task<Models.Team?> GetByNameAsync(string name)
+    public async Task<Team?> GetByNameAsync(string name)
     {
         return await _db.QuerySingleAsync(
             "SELECT id, name, faction, grand_faction FROM teams WHERE name = @name COLLATE NOCASE LIMIT 1",
-            reader => new Models.Team
+            reader => new Team
             {
                 Id = reader.GetString(0),
                 Name = reader.GetString(1),
@@ -270,7 +270,7 @@ public class SqliteTeamRepository : ITeamRepository
             new() { ["@name"] = name });
     }
 
-    public async Task<Models.Team?> GetWithOperativesAsync(string name)
+    public async Task<Team?> GetWithOperativesAsync(string name)
     {
         var row = await _db.QuerySingleAsync(
             """
@@ -340,7 +340,7 @@ public class SqliteTeamRepository : ITeamRepository
             operative.Weapons.AddRange(weapons);
         }
 
-        return new Models.Team
+        return new Team
         {
             Id = row.Id,
             Name = row.Name,

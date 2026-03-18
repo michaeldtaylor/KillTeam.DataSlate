@@ -124,7 +124,7 @@ public class AnnotateCommand(
         }
 
         var selectedAction = console.Prompt(
-            new SelectionPrompt<KillTeam.DataSlate.Domain.Models.GameAction>()
+            new SelectionPrompt<Domain.Models.GameAction>()
                 .Title("Select an action to annotate:")
                 .UseConverter(action =>
                 {

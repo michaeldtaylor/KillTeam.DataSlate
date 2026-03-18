@@ -25,7 +25,7 @@ public class ShootEngine(
         bool hasMovedNonDash = false,
         GameEventStream? eventStream = null)
     {
-        var isAttackerTeamA = attacker.TeamId == game.Participant1.TeamId;
+        var isAttackerTeam1 = attacker.TeamId == game.Participant1.TeamId;
         var isAttackerTeamId = attacker.TeamId;
 
         // ── Conceal order check (Silent rule) ────────────────────────────────────
@@ -161,7 +161,7 @@ public class ShootEngine(
         var attackDice = await inputProvider.RollOrEnterDiceAsync(weapon.Atk, $"{attacker.Name} attack dice (Attack: {weapon.Atk})", attacker.Name, "Attacker", "Shoot", isAttackerTeamId, eventStream);
 
         attackDice = await rerollEngine.ApplyAttackerRerollsAsync(
-            attackDice, weapon.Rules.ToList(), game.Id, isAttackerTeamA, attacker.Name, isAttackerTeamId, eventStream);
+            attackDice, weapon.Rules.ToList(), game.Id, isAttackerTeam1, attacker.Name, isAttackerTeamId, eventStream);
 
         var defenderDiceCount = targetOp.Defence + targetState.DefenceDiceModifier;
 
@@ -174,9 +174,9 @@ public class ShootEngine(
             ? []
             : await inputProvider.RollOrEnterDiceAsync(defenderDiceCount, $"{targetOp.Name} defence dice", targetOp.Name, "Defender", "Shoot", defenderTeamId, eventStream);
 
-        var isDefenderTeamA = targetOp.TeamId == game.Participant1.TeamId;
+        var isDefenderTeam1 = targetOp.TeamId == game.Participant1.TeamId;
 
-        defenderDice = await rerollEngine.ApplyDefenderRerollAsync(defenderDice, game.Id, isDefenderTeamA, targetOp.Name, defenderTeamId, eventStream);
+        defenderDice = await rerollEngine.ApplyDefenderRerollAsync(defenderDice, game.Id, isDefenderTeam1, targetOp.Name, defenderTeamId, eventStream);
 
         var effectiveSave = inCover ? targetOp.Save - 1 : targetOp.Save;
         var attackSnapshots = attackDice.Select(d => new FightDieSnapshot(

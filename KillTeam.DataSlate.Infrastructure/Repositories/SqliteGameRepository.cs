@@ -22,9 +22,9 @@ public class SqliteGameRepository : IGameRepository
              participant1_player_id, participant2_player_id, status, participant1_command_points, participant2_command_points,
              winner_team_id, participant1_victory_points, participant2_victory_points)
             VALUES
-            (@id, @playedAt, @missionName, @teamAId, @teamAName, @teamBId, @teamBName,
-             @playerAId, @playerBId, @status, @cpTeamA, @cpTeamB,
-             @winnerTeamId, @vpTeamA, @vpTeamB)
+            (@id, @playedAt, @missionName, @teamAId, @team1Name, @teamBId, @team2Name,
+             @player1Id, @player2Id, @status, @cpTeam1, @cpTeam2,
+             @winnerTeamId, @vpTeam1, @vpTeam2)
             """,
             new()
             {
@@ -32,17 +32,17 @@ public class SqliteGameRepository : IGameRepository
                 ["@playedAt"] = game.PlayedAt.ToUniversalTime().ToString("o"),
                 ["@missionName"] = game.MissionName,
                 ["@teamAId"] = game.Participant1.TeamId,
-                ["@teamAName"] = game.Participant1.TeamName,
+                ["@team1Name"] = game.Participant1.TeamName,
                 ["@teamBId"] = game.Participant2.TeamId,
-                ["@teamBName"] = game.Participant2.TeamName,
-                ["@playerAId"] = game.Participant1.PlayerId.ToString(),
-                ["@playerBId"] = game.Participant2.PlayerId.ToString(),
+                ["@team2Name"] = game.Participant2.TeamName,
+                ["@player1Id"] = game.Participant1.PlayerId.ToString(),
+                ["@player2Id"] = game.Participant2.PlayerId.ToString(),
                 ["@status"] = game.Status.ToString(),
-                ["@cpTeamA"] = game.Participant1.CommandPoints,
-                ["@cpTeamB"] = game.Participant2.CommandPoints,
+                ["@cpTeam1"] = game.Participant1.CommandPoints,
+                ["@cpTeam2"] = game.Participant2.CommandPoints,
                 ["@winnerTeamId"] = game.WinnerTeamId,
-                ["@vpTeamA"] = game.Participant1.VictoryPoints,
-                ["@vpTeamB"] = game.Participant2.VictoryPoints
+                ["@vpTeam1"] = game.Participant1.VictoryPoints,
+                ["@vpTeam2"] = game.Participant2.VictoryPoints
             });
 
         return game;
@@ -67,15 +67,15 @@ public class SqliteGameRepository : IGameRepository
         await _db.ExecuteAsync(
             """
             UPDATE games SET status = @status, winner_team_id = @winnerId,
-                participant1_victory_points = @victoryPointsA, participant2_victory_points = @victoryPointsB
+                participant1_victory_points = @victoryPoints1, participant2_victory_points = @victoryPoints2
             WHERE id = @id
             """,
             new()
             {
                 ["@status"] = status.ToString(),
                 ["@winnerId"] = winnerTeamId,
-                ["@victoryPointsA"] = victoryPointsParticipant1,
-                ["@victoryPointsB"] = victoryPointsParticipant2,
+                ["@victoryPoints1"] = victoryPointsParticipant1,
+                ["@victoryPoints2"] = victoryPointsParticipant2,
                 ["@id"] = gameId.ToString()
             });
     }
@@ -83,8 +83,8 @@ public class SqliteGameRepository : IGameRepository
     public async Task UpdateCpAsync(Guid gameId, int commandPointsParticipant1, int commandPointsParticipant2)
     {
         await _db.ExecuteAsync(
-            "UPDATE games SET participant1_command_points = @cpA, participant2_command_points = @cpB WHERE id = @id",
-            new() { ["@cpA"] = commandPointsParticipant1, ["@cpB"] = commandPointsParticipant2, ["@id"] = gameId.ToString() });
+            "UPDATE games SET participant1_command_points = @cp1, participant2_command_points = @cp2 WHERE id = @id",
+            new() { ["@cp1"] = commandPointsParticipant1, ["@cp2"] = commandPointsParticipant2, ["@id"] = gameId.ToString() });
     }
 
     public async Task<GameHeader?> GetHeaderAsync(Guid gameId)

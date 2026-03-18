@@ -51,12 +51,12 @@ public class PlayCommand(
             return 0;
         }
 
-        var teamA = await teamRepository.GetWithOperativesAsync(game.Participant1.TeamName);
-        var teamB = await teamRepository.GetWithOperativesAsync(game.Participant2.TeamName);
-        var teamAName = teamA?.Name ?? game.Participant1.TeamName;
-        var teamBName = teamB?.Name ?? game.Participant2.TeamName;
+        var team1 = await teamRepository.GetWithOperativesAsync(game.Participant1.TeamName);
+        var team2 = await teamRepository.GetWithOperativesAsync(game.Participant2.TeamName);
+        var team1Name = team1?.Name ?? game.Participant1.TeamName;
+        var team2Name = team2?.Name ?? game.Participant2.TeamName;
 
-        console.Write(new Rule($"[bold]Team Game[/]  {Markup.Escape(teamAName)} vs {Markup.Escape(teamBName)}"));
+        console.Write(new Rule($"[bold]Team Game[/]  {Markup.Escape(team1Name)} vs {Markup.Escape(team2Name)}"));
 
         // Determine starting TP
         var currentTp = await turningPointRepository.GetCurrentAsync(game.Id);
@@ -81,7 +81,7 @@ public class PlayCommand(
             else
             {
                 // Run strategy phase — creates a new TP
-                activeTp = await strategyPhaseOrchestrator.RunAsync(game, tpNumber, teamAName, teamBName);
+                activeTp = await strategyPhaseOrchestrator.RunAsync(game, tpNumber, team1Name, team2Name);
                 game = (await gameRepository.GetByIdAsync(game.Id))!;
             }
 
@@ -106,10 +106,10 @@ public class PlayCommand(
             var winner = game.WinnerTeamId is null
                 ? "Draw"
                 : game.WinnerTeamId == game.Participant1.TeamId
-                    ? $"{teamAName} wins"
-                    : $"{teamBName} wins";
+                    ? $"{team1Name} wins"
+                    : $"{team2Name} wins";
             logger.LogInformation("Game {GameId} completed. Winner: {Winner}", gameId, winner);
-            console.MarkupLine($"Result: [bold]{Markup.Escape(winner)}[/]  |  {Markup.Escape(teamAName)}: {game.Participant1.VictoryPoints} VP  |  {Markup.Escape(teamBName)}: {game.Participant2.VictoryPoints} VP");
+            console.MarkupLine($"Result: [bold]{Markup.Escape(winner)}[/]  |  {Markup.Escape(team1Name)}: {game.Participant1.VictoryPoints} VP  |  {Markup.Escape(team2Name)}: {game.Participant2.VictoryPoints} VP");
         }
 
         return 0;

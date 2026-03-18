@@ -18,11 +18,11 @@ public class StrategyPhaseEngine(
     public async Task<TurningPoint> RunAsync(
         Game game,
         int tpNumber,
-        string teamAName,
-        string teamBName)
+        string team1Name,
+        string team2Name)
     {
-        var winnerName = await inputProvider.SelectInitiativeWinnerAsync(teamAName, teamBName);
-        var initiativeTeamId = winnerName == teamAName
+        var winnerName = await inputProvider.SelectInitiativeWinnerAsync(team1Name, team2Name);
+        var initiativeTeamId = winnerName == team1Name
             ? game.Participant1.TeamId
             : game.Participant2.TeamId;
 
@@ -34,67 +34,67 @@ public class StrategyPhaseEngine(
             TeamWithInitiativeId = initiativeTeamId,
         });
 
-        var (cpA, cpB) = ApplyCpGains(game, tpNumber, initiativeTeamId);
+        var (cp1, cp2) = ApplyCpGains(game, tpNumber, initiativeTeamId);
 
-        await gameRepository.UpdateCpAsync(game.Id, cpA, cpB);
-        game.Participant1.CommandPoints = cpA;
-        game.Participant2.CommandPoints = cpB;
+        await gameRepository.UpdateCpAsync(game.Id, cp1, cp2);
+        game.Participant1.CommandPoints = cp1;
+        game.Participant2.CommandPoints = cp2;
 
         var (nonInitId, nonInitName) = initiativeTeamId == game.Participant1.TeamId
-            ? (game.Participant2.TeamId, teamBName)
-            : (game.Participant1.TeamId, teamAName);
+            ? (game.Participant2.TeamId, team2Name)
+            : (game.Participant1.TeamId, team1Name);
 
         var (initId, initName) = initiativeTeamId == game.Participant1.TeamId
-            ? (game.Participant1.TeamId, teamAName)
-            : (game.Participant2.TeamId, teamBName);
+            ? (game.Participant1.TeamId, team1Name)
+            : (game.Participant2.TeamId, team2Name);
 
-        (cpA, cpB) = await RunPloyLoopAsync(
-            turningPoint, game.Id, game.Participant1.TeamId, nonInitId, nonInitName, cpA, cpB);
+        (cp1, cp2) = await RunPloyLoopAsync(
+            turningPoint, game.Id, game.Participant1.TeamId, nonInitId, nonInitName, cp1, cp2);
 
-        (cpA, cpB) = await RunPloyLoopAsync(
-            turningPoint, game.Id, game.Participant1.TeamId, initId, initName, cpA, cpB);
+        (cp1, cp2) = await RunPloyLoopAsync(
+            turningPoint, game.Id, game.Participant1.TeamId, initId, initName, cp1, cp2);
 
         await turningPointRepository.CompleteStrategyPhaseAsync(turningPoint.Id);
 
         return turningPoint;
     }
 
-    private static (int cpA, int cpB) ApplyCpGains(Game game, int tpNumber, string initiativeTeamId)
+    private static (int cp1, int cp2) ApplyCpGains(Game game, int tpNumber, string initiativeTeamId)
     {
-        var cpA = game.Participant1.CommandPoints;
-        var cpB = game.Participant2.CommandPoints;
+        var cp1 = game.Participant1.CommandPoints;
+        var cp2 = game.Participant2.CommandPoints;
 
         if (tpNumber == 1)
         {
-            cpA += 1;
-            cpB += 1;
+            cp1 += 1;
+            cp2 += 1;
         }
         else if (initiativeTeamId == game.Participant1.TeamId)
         {
-            cpA += 1;
-            cpB += 2;
+            cp1 += 1;
+            cp2 += 2;
         }
         else
         {
-            cpA += 2;
-            cpB += 1;
+            cp1 += 2;
+            cp2 += 1;
         }
 
-        return (cpA, cpB);
+        return (cp1, cp2);
     }
 
-    private async Task<(int cpA, int cpB)> RunPloyLoopAsync(
+    private async Task<(int cp1, int cp2)> RunPloyLoopAsync(
         TurningPoint turningPoint,
         Guid gameId,
         string teamAId,
         string activeTeamId,
         string activeTeamName,
-        int cpA,
-        int cpB)
+        int cp1,
+        int cp2)
     {
         while (true)
         {
-            var currentCp = activeTeamId == teamAId ? cpA : cpB;
+            var currentCp = activeTeamId == teamAId ? cp1 : cp2;
             var ploy = await inputProvider.GetPloyDetailsAsync(activeTeamName, currentCp);
 
             if (ploy is null)
@@ -119,17 +119,17 @@ public class StrategyPhaseEngine(
 
             if (activeTeamId == teamAId)
             {
-                cpA -= ploy.CpCost;
+                cp1 -= ploy.CpCost;
             }
             else
             {
-                cpB -= ploy.CpCost;
+                cp2 -= ploy.CpCost;
             }
 
-            await gameRepository.UpdateCpAsync(gameId, cpA, cpB);
+            await gameRepository.UpdateCpAsync(gameId, cp1, cp2);
         }
 
-        return (cpA, cpB);
+        return (cp1, cp2);
     }
 }
 

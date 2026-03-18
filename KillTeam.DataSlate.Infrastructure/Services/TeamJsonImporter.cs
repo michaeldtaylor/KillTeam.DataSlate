@@ -36,7 +36,7 @@ public class TeamJsonImporter
         return new Guid(hash[..16]);
     }
 
-    public KillTeam.DataSlate.Domain.Models.Team Import(string json)
+    public Team Import(string json)
     {
         JsonTeam? jsonTeam;
         try
@@ -69,7 +69,7 @@ public class TeamJsonImporter
             throw new TeamValidationException("Missing required field: 'operatives' (empty or absent).");
         }
 
-        var team = new KillTeam.DataSlate.Domain.Models.Team
+        var team = new Team
         {
             Id = jsonTeam.Id.Trim(),
             Name = jsonTeam.Name.Trim(),

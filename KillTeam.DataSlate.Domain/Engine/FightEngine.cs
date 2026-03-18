@@ -23,7 +23,7 @@ public class FightEngine(
         Activation activation,
         GameEventStream? eventStream = null)
     {
-        var isAttackerTeamA = attacker.TeamId == game.Participant1.TeamId;
+        var isAttackerTeam1 = attacker.TeamId == game.Participant1.TeamId;
         var isAttackerTeamId = attacker.TeamId;
 
         var enemyStates = allOperativeStates
@@ -58,7 +58,7 @@ public class FightEngine(
             return new FightSessionResult(false, false, 0, 0, Guid.Empty);
         }
         var defenderTeamId = targetOp.TeamId;
-        var isDefenderTeamA = targetOp.TeamId == game.Participant1.TeamId;
+        var isDefenderTeam1 = targetOp.TeamId == game.Participant1.TeamId;
 
         var attackerMeleeWeapons = attacker.Weapons.Where(w => w.Type == WeaponType.Melee).ToList();
 
@@ -113,7 +113,7 @@ public class FightEngine(
 
         var attackerRolls = await inputProvider.RollOrEnterDiceAsync(attackerWeapon.Atk, $"{attacker.Name} attack dice (Attack: {attackerWeapon.Atk})", attacker.Name, "Attacker", "Fight", isAttackerTeamId, eventStream);
         attackerRolls = await rerollEngine.ApplyAttackerRerollsAsync(
-            attackerRolls, attackerWeapon.Rules.ToList(), game.Id, isAttackerTeamA, attacker.Name, isAttackerTeamId, eventStream);
+            attackerRolls, attackerWeapon.Rules.ToList(), game.Id, isAttackerTeam1, attacker.Name, isAttackerTeamId, eventStream);
 
         var defenderAttackCount = defenderWeapon?.Atk ?? 0;
         int[] defenderRolls = [];
@@ -121,7 +121,7 @@ public class FightEngine(
         if (defenderAttackCount > 0)
         {
             defenderRolls = await inputProvider.RollOrEnterDiceAsync(defenderAttackCount, $"{targetOp.Name} fight-back dice (Attack: {defenderAttackCount})", targetOp.Name, "Defender", "Fight", defenderTeamId, eventStream);
-            defenderRolls = await rerollEngine.ApplyDefenderRerollAsync(defenderRolls, game.Id, isDefenderTeamA, targetOp.Name, defenderTeamId, eventStream);
+            defenderRolls = await rerollEngine.ApplyDefenderRerollAsync(defenderRolls, game.Id, isDefenderTeam1, targetOp.Name, defenderTeamId, eventStream);
         }
 
         var attackerPool = fightResolutionService.CalculateDice(attackerRolls, attackerEffectiveHit, DieOwner.Attacker);

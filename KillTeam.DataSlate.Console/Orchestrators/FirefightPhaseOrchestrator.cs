@@ -22,10 +22,10 @@ public class FirefightPhaseOrchestrator(
     public async Task RunAsync(Game game, TurningPoint currentTurningPoint)
     {
         logger.LogDebug("Firefight phase TP{TpNumber} started for game {GameId}", currentTurningPoint.Number, game.Id);
-        var teamA = await teamRepository.GetWithOperativesAsync(game.Participant1.TeamName);
-        var teamB = await teamRepository.GetWithOperativesAsync(game.Participant2.TeamName);
-        var allOperatives = (teamA?.Operatives ?? [])
-            .Concat(teamB?.Operatives ?? [])
+        var team1 = await teamRepository.GetWithOperativesAsync(game.Participant1.TeamName);
+        var team2 = await teamRepository.GetWithOperativesAsync(game.Participant2.TeamName);
+        var allOperatives = (team1?.Operatives ?? [])
+            .Concat(team2?.Operatives ?? [])
             .ToDictionary(o => o.Id);
 
         var allStates = (await stateRepository.GetByGameAsync(game.Id)).ToList();
@@ -440,8 +440,8 @@ public class FirefightPhaseOrchestrator(
             .Where(s => allOperatives.TryGetValue(s.OperativeId, out var operative) && operative.TeamId == game.Participant2.TeamId)
             .All(s => s.IsIncapacitated);
 
-        var vpA = console.Prompt(new TextPrompt<int>("Enter final VP for Team A:").Validate(v => v >= 0));
-        var vpB = console.Prompt(new TextPrompt<int>("Enter final VP for Team B:").Validate(v => v >= 0));
+        var vp1 = console.Prompt(new TextPrompt<int>("Enter final VP for Team A:").Validate(v => v >= 0));
+        var vp2 = console.Prompt(new TextPrompt<int>("Enter final VP for Team B:").Validate(v => v >= 0));
 
         string? winnerTeamId;
         if (teamAAllIncap && !teamBAllIncap)
@@ -454,18 +454,18 @@ public class FirefightPhaseOrchestrator(
         }
         else
         {
-            winnerTeamId = vpA > vpB ? game.Participant1.TeamId : vpB > vpA ? game.Participant2.TeamId : null;
+            winnerTeamId = vp1 > vp2 ? game.Participant1.TeamId : vp2 > vp1 ? game.Participant2.TeamId : null;
         }
 
-        await gameRepository.UpdateStatusAsync(game.Id, GameStatus.Completed, winnerTeamId, vpA, vpB);
+        await gameRepository.UpdateStatusAsync(game.Id, GameStatus.Completed, winnerTeamId, vp1, vp2);
 
         if (winnerTeamId is not null)
         {
-            console.MarkupLine($"[bold green]Winner: {(winnerTeamId == game.Participant1.TeamId ? "Team A" : "Team B")} — {(winnerTeamId == game.Participant1.TeamId ? vpA : vpB)} VP[/]");
+            console.MarkupLine($"[bold green]Winner: {(winnerTeamId == game.Participant1.TeamId ? "Team A" : "Team B")} — {(winnerTeamId == game.Participant1.TeamId ? vp1 : vp2)} VP[/]");
         }
         else
         {
-            console.MarkupLine($"[yellow]Draw! Team A: {vpA} VP  |  Team B: {vpB} VP[/]");
+            console.MarkupLine($"[yellow]Draw! Team A: {vp1} VP  |  Team B: {vp2} VP[/]");
         }
     }
 

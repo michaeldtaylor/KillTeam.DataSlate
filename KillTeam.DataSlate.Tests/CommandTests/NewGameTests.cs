@@ -13,8 +13,8 @@ public class NewGameTests
         // Arrange
         var playerId1 = Guid.NewGuid();
         var playerId2 = Guid.NewGuid();
-        const string teamAName = "Angels of Death";
-        const string teamBName = "Plague Marines";
+        const string team1Name = "Angels of Death";
+        const string team2Name = "Plague Marines";
         var operative1Id = Guid.NewGuid();
         var operative2Id = Guid.NewGuid();
         var operative3Id = Guid.NewGuid();
@@ -23,8 +23,8 @@ public class NewGameTests
         using var db = TestDbBuilder.Create()
             .WithPlayer(playerId1, "Michael")
             .WithPlayer(playerId2, "Solomon")
-            .WithTeam("angels_of_death", teamAName, "Adeptus Astartes")
-            .WithTeam("plague_marines", teamBName, "Heretic Astartes")
+            .WithTeam("angels_of_death", team1Name, "Adeptus Astartes")
+            .WithTeam("plague_marines", team2Name, "Heretic Astartes")
             .WithOperative(operative1Id, "angels_of_death", "Sergeant", wounds: 13, save: 3, apl: 3, move: 3)
             .WithOperative(operative2Id, "angels_of_death", "Intercessor", wounds: 13, save: 3, apl: 2, move: 3)
             .WithOperative(operative3Id, "plague_marines", "Champion", wounds: 14, save: 3, apl: 3, move: 3)
@@ -42,14 +42,14 @@ public class NewGameTests
             Participant1 = new GameParticipant
             {
                 TeamId = "angels_of_death",
-                TeamName = teamAName,
+                TeamName = team1Name,
                 PlayerId = playerId1,
                 CommandPoints = 2
             },
             Participant2 = new GameParticipant
             {
                 TeamId = "plague_marines",
-                TeamName = teamBName,
+                TeamName = team2Name,
                 PlayerId = playerId2,
                 CommandPoints = 2
             },
@@ -57,9 +57,9 @@ public class NewGameTests
         };
         var created = await gameRepo.CreateAsync(game);
 
-        var fullTeamA = await teamRepo.GetWithOperativesAsync(teamAName);
-        var fullTeamB = await teamRepo.GetWithOperativesAsync(teamBName);
-        var allOperatives = (fullTeamA?.Operatives ?? []).Concat(fullTeamB?.Operatives ?? []).ToList();
+        var fullTeam1 = await teamRepo.GetWithOperativesAsync(team1Name);
+        var fullTeam2 = await teamRepo.GetWithOperativesAsync(team2Name);
+        var allOperatives = (fullTeam1?.Operatives ?? []).Concat(fullTeam2?.Operatives ?? []).ToList();
 
         foreach (var operative in allOperatives)
         {

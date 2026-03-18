@@ -52,83 +52,83 @@ public class ExtractedTeam
         var sb = new StringBuilder();
 
         // ── Metadata header ────────────────────────────────────────────────────
-        YamlWriter.WriteKeyValue(sb, 0, "id", N(this.Id));
-        YamlWriter.WriteKeyValue(sb, 0, "name", N(this.Name));
-        YamlWriter.WriteKeyValue(sb, 0, "grandFaction", N(this.GrandFaction));
-        YamlWriter.WriteKeyValue(sb, 0, "faction", N(this.Faction));
+        YamlWriter.WriteKeyValue(sb, 0, "id", N(Id));
+        YamlWriter.WriteKeyValue(sb, 0, "name", N(Name));
+        YamlWriter.WriteKeyValue(sb, 0, "grandFaction", N(GrandFaction));
+        YamlWriter.WriteKeyValue(sb, 0, "faction", N(Faction));
 
         // ── datacards ──────────────────────────────────────────────────────────
         sb.AppendLine("datacards:");
 
-        foreach (var datacard in this.Datacards)
+        foreach (var datacard in Datacards)
         {
             WriteDatacard(sb, datacard);
         }
 
         // ── factionEquipment ───────────────────────────────────────────────────
-        if (this.FactionEquipment.Count > 0)
+        if (FactionEquipment.Count > 0)
         {
             sb.AppendLine("factionEquipment:");
 
-            foreach (var e in this.FactionEquipment)
+            foreach (var e in FactionEquipment)
             {
                 WriteEquipmentItem(sb, e);
             }
         }
 
         // ── factionRules ───────────────────────────────────────────────────────
-        if (this.FactionRules.Count > 0)
+        if (FactionRules.Count > 0)
         {
             sb.AppendLine("factionRules:");
 
-            foreach (var r in this.FactionRules)
+            foreach (var r in FactionRules)
             {
                 WriteNamedRule(sb, r);
             }
         }
 
         // ── firefightPloys ─────────────────────────────────────────────────────
-        if (this.FirefightPloys.Count > 0)
+        if (FirefightPloys.Count > 0)
         {
             sb.AppendLine("firefightPloys:");
 
-            foreach (var r in this.FirefightPloys)
+            foreach (var r in FirefightPloys)
             {
                 WriteNamedRule(sb, r);
             }
         }
 
         // ── operativeSelection ─────────────────────────────────────────────────
-        if (this.OperativeSelection != null)
+        if (OperativeSelection != null)
         {
             sb.AppendLine("operativeSelection:");
-            YamlWriter.WriteKeyValue(sb, 2, "archetype", N(this.OperativeSelection.Archetype));
-            YamlWriter.WriteTextField(sb, 2, "text", N(this.OperativeSelection.Text));
+            YamlWriter.WriteKeyValue(sb, 2, "archetype", N(OperativeSelection.Archetype));
+            YamlWriter.WriteTextField(sb, 2, "text", N(OperativeSelection.Text));
         }
 
         // ── strategyPloys ──────────────────────────────────────────────────────
-        if (this.StrategyPloys.Count > 0)
+        if (StrategyPloys.Count > 0)
         {
             sb.AppendLine("strategyPloys:");
 
-            foreach (var r in this.StrategyPloys)
+            foreach (var r in StrategyPloys)
             {
                 WriteNamedRule(sb, r);
             }
         }
 
         // ── supplementaryInfo ──────────────────────────────────────────────────
-        if (!string.IsNullOrEmpty(this.SupplementaryInfo))
+        if (!string.IsNullOrEmpty(SupplementaryInfo))
         {
-            YamlWriter.WriteTextField(sb, 0, "supplementaryInformation", N(this.SupplementaryInfo));
+            YamlWriter.WriteTextField(sb, 0, "supplementaryInformation", N(SupplementaryInfo));
         }
 
         // ── universalEquipment ─────────────────────────────────────────────────
-        if (this.UniversalEquipment.Count > 0)
+        if (UniversalEquipment.Count > 0)
         {
             sb.AppendLine("universalEquipment:");
 
-            foreach (var e in this.UniversalEquipment)
+            foreach (var e in UniversalEquipment)
             {
                 WriteEquipmentItem(sb, e);
             }

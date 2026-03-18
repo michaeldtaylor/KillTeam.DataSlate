@@ -47,7 +47,7 @@ public class ViewGameCommand(
             return 1;
         }
 
-        console.MarkupLine($"[bold]=== {Markup.Escape(header.PlayerAName)} ({Markup.Escape(header.TeamAName)}) vs {Markup.Escape(header.PlayerBName)} ({Markup.Escape(header.TeamBName)}) ===[/]");
+        console.MarkupLine($"[bold]=== {Markup.Escape(header.Player1Name)} ({Markup.Escape(header.Team1Name)}) vs {Markup.Escape(header.Player2Name)} ({Markup.Escape(header.Team2Name)}) ===[/]");
 
         if (header.MissionName is not null)
         {
@@ -125,7 +125,7 @@ public class ViewGameCommand(
 
         if (header.Status == GameStatus.Completed && header.WinnerTeamName is not null)
         {
-            console.MarkupLine($"[bold]Final Score:[/] {header.TeamAName} {header.VictoryPointsA} — {header.VictoryPointsB} {header.TeamBName}  |  Winner: [green]{Markup.Escape(header.WinnerTeamName)}[/]");
+            console.MarkupLine($"[bold]Final Score:[/] {header.Team1Name} {header.VictoryPoints1} — {header.VictoryPoints2} {header.Team2Name}  |  Winner: [green]{Markup.Escape(header.WinnerTeamName)}[/]");
         }
         else
         {

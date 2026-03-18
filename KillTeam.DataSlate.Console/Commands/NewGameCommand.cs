@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using KillTeam.DataSlate.Domain.Models;
 using KillTeam.DataSlate.Domain.Repositories;
 using Microsoft.Extensions.Logging;
@@ -36,30 +36,30 @@ public class NewGameCommand(
         }
 
         // Team A selection
-        var teamA = console.Prompt(
-            new SelectionPrompt<KillTeam.DataSlate.Domain.Models.Team>()
+        var team1 = console.Prompt(
+            new SelectionPrompt<Team>()
                 .Title("Select [green]Team A[/]:")
                 .UseConverter(FormatTeam)
                 .AddChoices(allTeams));
 
-        var playerA = console.Prompt(
+        var player1 = console.Prompt(
             new SelectionPrompt<Player>()
-                .Title($"Select player for [green]{Markup.Escape(teamA.Name)}[/]:")
+                .Title($"Select player for [green]{Markup.Escape(team1.Name)}[/]:")
                 .UseConverter(p => p.Name)
                 .AddChoices(allPlayers));
 
         // Team B selection (exclude Team A)
-        var teamBChoices = allTeams.Where(t => t.Name != teamA.Name).ToList();
-        var teamB = console.Prompt(
-            new SelectionPrompt<KillTeam.DataSlate.Domain.Models.Team>()
+        var teamBChoices = allTeams.Where(t => t.Name != team1.Name).ToList();
+        var team2 = console.Prompt(
+            new SelectionPrompt<Team>()
                 .Title("Select [blue]Team B[/]:")
                 .UseConverter(FormatTeam)
                 .AddChoices(teamBChoices));
 
-        var playerBChoices = allPlayers.Where(p => p.Id != playerA.Id).ToList();
-        var playerB = console.Prompt(
+        var playerBChoices = allPlayers.Where(p => p.Id != player1.Id).ToList();
+        var player2 = console.Prompt(
             new SelectionPrompt<Player>()
-                .Title($"Select player for [blue]{Markup.Escape(teamB.Name)}[/]:")
+                .Title($"Select player for [blue]{Markup.Escape(team2.Name)}[/]:")
                 .UseConverter(p => p.Name)
                 .AddChoices(playerBChoices.Count > 0 ? playerBChoices : allPlayers));
 
@@ -67,8 +67,8 @@ public class NewGameCommand(
             new TextPrompt<string>("Mission name [dim](optional)[/]:").AllowEmpty());
 
         // Load full team data with operatives
-        var fullTeamA = await teams.GetWithOperativesAsync(teamA.Name);
-        var fullTeamB = await teams.GetWithOperativesAsync(teamB.Name);
+        var fullTeam1 = await teams.GetWithOperativesAsync(team1.Name);
+        var fullTeam2 = await teams.GetWithOperativesAsync(team2.Name);
 
         var game = new Game
         {
@@ -77,17 +77,17 @@ public class NewGameCommand(
             MissionName = string.IsNullOrWhiteSpace(missionName) ? null : missionName,
             Participant1 = new GameParticipant
             {
-                TeamId = teamA.Id,
-                TeamName = teamA.Name,
-                PlayerId = playerA.Id,
+                TeamId = team1.Id,
+                TeamName = team1.Name,
+                PlayerId = player1.Id,
                 CommandPoints = 2,
                 VictoryPoints = 0
             },
             Participant2 = new GameParticipant
             {
-                TeamId = teamB.Id,
-                TeamName = teamB.Name,
-                PlayerId = playerB.Id,
+                TeamId = team2.Id,
+                TeamName = team2.Name,
+                PlayerId = player2.Id,
                 CommandPoints = 2,
                 VictoryPoints = 0
             },
@@ -96,19 +96,19 @@ public class NewGameCommand(
 
         var created = await games.CreateAsync(game);
 
-        logger.LogInformation("New game {GameId} created: {TeamA} vs {TeamB}", created.Id, teamA.Name, teamB.Name);
+        logger.LogInformation("New game {GameId} created: {Team1} vs {Team2}", created.Id, team1.Name, team2.Name);
 
         // Create operative states for both teams
         var allOperatives = new List<Operative>();
 
-        if (fullTeamA?.Operatives is not null)
+        if (fullTeam1?.Operatives is not null)
         {
-            allOperatives.AddRange(fullTeamA.Operatives);
+            allOperatives.AddRange(fullTeam1.Operatives);
         }
 
-        if (fullTeamB?.Operatives is not null)
+        if (fullTeam2?.Operatives is not null)
         {
-            allOperatives.AddRange(fullTeamB.Operatives);
+            allOperatives.AddRange(fullTeam2.Operatives);
         }
 
         foreach (var operative in allOperatives)
@@ -129,7 +129,7 @@ public class NewGameCommand(
         }
 
         console.MarkupLine($"[green]Game {created.Id}[/]");
-        console.MarkupLine($"  {Markup.Escape(playerA.Name)} ([green]{Markup.Escape(teamA.Name)}[/]) vs {Markup.Escape(playerB.Name)} ([blue]{Markup.Escape(teamB.Name)}[/])");
+        console.MarkupLine($"  {Markup.Escape(player1.Name)} ([green]{Markup.Escape(team1.Name)}[/]) vs {Markup.Escape(player2.Name)} ([blue]{Markup.Escape(team2.Name)}[/])");
         if (!string.IsNullOrEmpty(missionName))
         {
             console.MarkupLine($"  Mission: {Markup.Escape(missionName)}");
@@ -139,7 +139,7 @@ public class NewGameCommand(
         return 0;
     }
 
-    private static string FormatTeam(KillTeam.DataSlate.Domain.Models.Team t)
+    private static string FormatTeam(Team t)
     {
         var display = Markup.Escape(t.Name);
 

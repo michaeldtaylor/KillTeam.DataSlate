@@ -70,8 +70,8 @@ public sealed class TestDbBuilder : IDisposable
         return this;
     }
 
-    public TestDbBuilder WithGame(Guid id, string teamAId, string teamAName,
-        string teamBId, string teamBName,
+    public TestDbBuilder WithGame(Guid id, string teamAId, string team1Name,
+        string teamBId, string team2Name,
         Guid playerAId, Guid playerBId, string status = "InProgress")
     {
         Exec("""
@@ -81,8 +81,8 @@ public sealed class TestDbBuilder : IDisposable
             VALUES (@id, @at, @taId, @taName, @tbId, @tbName, @pa, @pb, @st)
             """,
             ("@id", id.ToString()), ("@at", DateTime.UtcNow.ToString("o")),
-            ("@taId", teamAId), ("@taName", teamAName),
-            ("@tbId", teamBId), ("@tbName", teamBName),
+            ("@taId", teamAId), ("@taName", team1Name),
+            ("@tbId", teamBId), ("@tbName", team2Name),
             ("@pa", playerAId.ToString()), ("@pb", playerBId.ToString()),
             ("@st", status));
 

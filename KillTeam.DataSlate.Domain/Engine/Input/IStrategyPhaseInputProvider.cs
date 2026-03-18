@@ -6,7 +6,7 @@ public interface IStrategyPhaseInputProvider
     /// Prompts for initiative winner. Handles tie re-rolls internally.
     /// Returns the name of the winning team.
     /// </summary>
-    Task<string> SelectInitiativeWinnerAsync(string teamAName, string teamBName);
+    Task<string> SelectInitiativeWinnerAsync(string team1Name, string team2Name);
 
     /// <summary>
     /// Prompts whether the team wants to record a ploy, and if so collects details.

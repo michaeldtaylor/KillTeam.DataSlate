@@ -27,7 +27,7 @@ public class BlastEngine(
         Activation activation,
         GameEventStream? eventStream = null)
     {
-        var isAttackerTeamA = attacker.TeamId == game.Participant1.TeamId;
+        var isAttackerTeam1 = attacker.TeamId == game.Participant1.TeamId;
 
         var additionalCandidates = allOperativeStates
             .Where(s => s.OperativeId != primaryTarget.Id && !s.IsIncapacitated && allOperatives.ContainsKey(s.OperativeId))
@@ -56,7 +56,7 @@ public class BlastEngine(
 
         var attackDice = await inputProvider.RollOrEnterDiceAsync(weapon.Atk, $"{attacker.Name} attack dice (Attack: {weapon.Atk})");
         attackDice = await rerollEngine.ApplyAttackerRerollsAsync(
-            attackDice, weapon.Rules.ToList(), game.Id, isAttackerTeamA, attacker.Name);
+            attackDice, weapon.Rules.ToList(), game.Id, isAttackerTeam1, attacker.Name);
 
         var effectiveHit = weapon.Hit;
 
@@ -94,9 +94,9 @@ public class BlastEngine(
                 ? []
                 : await inputProvider.RollOrEnterDiceAsync(defenderDiceCount, $"{targetOp.Name} defence dice");
 
-            var isDefenderTeamA = targetOp.TeamId == game.Participant1.TeamId;
+            var isDefenderTeam1 = targetOp.TeamId == game.Participant1.TeamId;
 
-            defenderDice = await rerollEngine.ApplyDefenderRerollAsync(defenderDice, game.Id, isDefenderTeamA, targetOp.Name);
+            defenderDice = await rerollEngine.ApplyDefenderRerollAsync(defenderDice, game.Id, isDefenderTeam1, targetOp.Name);
 
             var ctx = new ShootContext(
                 AttackDice: attackDice,

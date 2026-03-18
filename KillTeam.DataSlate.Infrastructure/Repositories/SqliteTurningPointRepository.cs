@@ -19,7 +19,7 @@ public class SqliteTurningPointRepository : ITurningPointRepository
             """
             INSERT INTO turning_points
             (id, game_id, number, team_with_initiative_id, command_points_participant1, command_points_participant2, is_strategy_phase_complete)
-            VALUES (@id, @gameId, @number, @teamWithInitiativeId, @cpTeamA, @cpTeamB, @isStrategyPhaseComplete)
+            VALUES (@id, @gameId, @number, @teamWithInitiativeId, @cpTeam1, @cpTeam2, @isStrategyPhaseComplete)
             """,
             new()
             {
@@ -27,8 +27,8 @@ public class SqliteTurningPointRepository : ITurningPointRepository
                 ["@gameId"] = turningPoint.GameId.ToString(),
                 ["@number"] = turningPoint.Number,
                 ["@teamWithInitiativeId"] = turningPoint.TeamWithInitiativeId,
-                ["@cpTeamA"] = turningPoint.CommandPointsParticipant1,
-                ["@cpTeamB"] = turningPoint.CommandPointsParticipant2,
+                ["@cpTeam1"] = turningPoint.CommandPointsParticipant1,
+                ["@cpTeam2"] = turningPoint.CommandPointsParticipant2,
                 ["@isStrategyPhaseComplete"] = turningPoint.IsStrategyPhaseComplete ? 1 : 0
             });
 

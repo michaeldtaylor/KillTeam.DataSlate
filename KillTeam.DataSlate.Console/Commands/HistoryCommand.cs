@@ -46,10 +46,10 @@ public class HistoryCommand(IAnsiConsole console, IGameRepository games, ILogger
             table.AddRow(
                 date,
                 Markup.Escape(row.MissionName ?? "—"),
-                $"{Markup.Escape(row.PlayerAName)} ({Markup.Escape(row.TeamAName)})",
-                $"{Markup.Escape(row.PlayerBName)} ({Markup.Escape(row.TeamBName)})",
-                row.VictoryPointsA.ToString(),
-                row.VictoryPointsB.ToString(),
+                $"{Markup.Escape(row.Player1Name)} ({Markup.Escape(row.Team1Name)})",
+                $"{Markup.Escape(row.Player2Name)} ({Markup.Escape(row.Team2Name)})",
+                row.VictoryPoints1.ToString(),
+                row.VictoryPoints2.ToString(),
                 Markup.Escape(row.WinnerTeamName ?? "—"));
         }
 

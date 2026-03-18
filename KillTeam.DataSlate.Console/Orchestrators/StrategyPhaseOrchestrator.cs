@@ -13,16 +13,16 @@ public class StrategyPhaseOrchestrator(IAnsiConsole console, StrategyPhaseEngine
     /// Returns the created TurningPoint.
     /// </summary>
     public async Task<TurningPoint> RunAsync(Game game, int tpNumber,
-        string teamAName, string teamBName)
+        string team1Name, string team2Name)
     {
         logger.LogDebug("Strategy phase TP{TpNumber} started for game {GameId}", tpNumber, game.Id);
         console.Write(new Rule($"[bold]Turning Point {tpNumber} — Strategy Phase[/]"));
 
-        var turningPoint = await engine.RunAsync(game, tpNumber, teamAName, teamBName);
+        var turningPoint = await engine.RunAsync(game, tpNumber, team1Name, team2Name);
 
-        var cpA = game.Participant1.CommandPoints;
-        var cpB = game.Participant2.CommandPoints;
-        console.MarkupLine(FormatCp(teamAName, cpA) + "  " + FormatCp(teamBName, cpB));
+        var cp1 = game.Participant1.CommandPoints;
+        var cp2 = game.Participant2.CommandPoints;
+        console.MarkupLine(FormatCp(team1Name, cp1) + "  " + FormatCp(team2Name, cp2));
         console.MarkupLine("[dim]Strategy Phase complete.[/]");
         logger.LogDebug("Strategy phase TP{TpNumber} complete", tpNumber);
 
