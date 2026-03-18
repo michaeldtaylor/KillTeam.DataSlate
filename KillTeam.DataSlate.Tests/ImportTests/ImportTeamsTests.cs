@@ -166,4 +166,22 @@ public class SpecialRuleParserTests
         var rules = SpecialRuleParser.Parse("Lethal 5, Brutal, Accurate 1");
         rules.Should().HaveCount(3);
     }
+
+    [Fact]
+    public void Parse_Range8Inches_ReturnsKindWithParam8()
+    {
+        var rules = SpecialRuleParser.Parse("Range 8\"");
+        rules.Should().ContainSingle();
+        rules[0].Kind.Should().Be(SpecialRuleKind.Range);
+        rules[0].Param.Should().Be(8);
+    }
+
+    [Fact]
+    public void Parse_Range8WithoutInchSymbol_ReturnsKindWithParam8()
+    {
+        var rules = SpecialRuleParser.Parse("Range 8");
+        rules.Should().ContainSingle();
+        rules[0].Kind.Should().Be(SpecialRuleKind.Range);
+        rules[0].Param.Should().Be(8);
+    }
 }

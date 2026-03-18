@@ -1,6 +1,7 @@
 using System.Text.Json;
 using KillTeam.DataSlate.Domain.Models;
 using KillTeam.DataSlate.Domain.Repositories;
+using KillTeam.DataSlate.Domain.Services;
 using Microsoft.Data.Sqlite;
 using Models = KillTeam.DataSlate.Domain.Models;
 
@@ -332,7 +333,8 @@ public class SqliteTeamRepository : ITeamRepository
                     Hit = reader.GetInt32(4),
                     NormalDmg = reader.GetInt32(5),
                     CriticalDmg = reader.GetInt32(6),
-                    SpecialRules = reader.GetString(7)
+                    SpecialRules = reader.GetString(7),
+                    ParsedRules = SpecialRuleParser.Parse(reader.GetString(7))
                 },
                 new() { ["@opId"] = operative.Id.ToString() });
             operative.Weapons.AddRange(weapons);

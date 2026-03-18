@@ -25,10 +25,11 @@ public static class SpecialRuleParser
 
     private static WeaponSpecialRule ParseToken(string token)
     {
-        // Try to match "Name N" patterns (e.g. "Lethal 5", "Piercing 1", "Devastating 3")
+        // Try to match "Name N" patterns (e.g. "Lethal 5", "Piercing 1", "Range 8\"")
         var parts = token.Split(' ', 2, StringSplitOptions.RemoveEmptyEntries);
         var name = parts[0];
-        int? param = parts.Length > 1 && int.TryParse(parts[1], out var p) ? p : null;
+        var paramRaw = parts.Length > 1 ? parts[1].TrimEnd('"', '\'') : string.Empty;
+        int? param = !string.IsNullOrEmpty(paramRaw) && int.TryParse(paramRaw, out var p) ? p : null;
 
         // Special cases
         if (token.Equals("Heavy (Dash only)", StringComparison.OrdinalIgnoreCase))
