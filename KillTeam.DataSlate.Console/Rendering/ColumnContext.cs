@@ -31,7 +31,7 @@ public class ColumnContext
             var systemLabel = "[System]";
             var systemPadding = new string(' ', width - systemLabel.Length);
 
-            return $"[dim grey]{Markup.Escape(systemLabel)}[/]{systemPadding} │ ";
+            return $"[grey62]{Markup.Escape(systemLabel)}[/]{systemPadding} │ ";
         }
     }
 }

@@ -37,7 +37,7 @@ public class SimulateSessionOrchestrator(
         console.MarkupLine("[dim]Test fight and shoot encounters without a full game session. Nothing is saved.[/]");
         console.WriteLine();
 
-        var youPlayer = await playerRepository.FindByNameAsync("You");
+        var youPlayer = await playerRepository.FindByNameAsync("Player");
         var aiPlayer = await playerRepository.FindByNameAsync("AI");
 
         if (youPlayer is null || aiPlayer is null)

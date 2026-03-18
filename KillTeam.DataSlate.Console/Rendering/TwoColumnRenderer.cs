@@ -7,7 +7,7 @@ namespace KillTeam.DataSlate.Console.Rendering;
 /// and free-form content on the right separated by │.
 ///
 /// Column width adapts dynamically to the longest participant name so that all labels align
-/// regardless of name length. System output uses a [System] label in dim grey.
+/// regardless of name length. System output uses a [System] label in light grey.
 /// </summary>
 public class TwoColumnRenderer
 {
@@ -36,7 +36,7 @@ public class TwoColumnRenderer
 
         var systemPadding = new string(' ', columnWidth - SystemText.Length);
 
-        _systemLabel = $"[dim grey]{Markup.Escape(SystemText)}[/]{systemPadding}";
+        _systemLabel = $"[grey62]{Markup.Escape(SystemText)}[/]{systemPadding}";
         _labelMarkup = new Dictionary<string, string>();
 
         foreach (var (participantId, name) in participantLabels)

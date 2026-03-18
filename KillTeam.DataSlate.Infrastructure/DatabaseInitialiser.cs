@@ -103,6 +103,7 @@ internal static class Migrations
         (1, Migration_001),
         (2, Migration_002),
         (3, Migration_003),
+        (4, Migration_004),
     ];
 
     private const string Migration_001 = """
@@ -379,5 +380,9 @@ internal static class Migrations
             VALUES ('00000000-0000-0000-0000-000000000001', 'You', 'cyan', 1);
         INSERT OR IGNORE INTO players (id, name, colour, is_internal)
             VALUES ('00000000-0000-0000-0000-000000000002', 'AI', 'red', 1);
+        """;
+
+    private const string Migration_004 = """
+        UPDATE players SET name = 'Player' WHERE id = '00000000-0000-0000-0000-000000000001';
         """;
 }
