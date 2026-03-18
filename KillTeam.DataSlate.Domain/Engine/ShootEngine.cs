@@ -28,6 +28,15 @@ public class ShootEngine(
         var isAttackerTeamA = attacker.TeamId == game.Participant1.TeamId;
         var isAttackerTeamId = attacker.TeamId;
 
+        var isEngaged = await inputProvider.IsEngagedAsync();
+
+        if (isEngaged)
+        {
+            eventStream?.Emit((seq, ts) => new CombatWarningEvent(eventStream.GameSessionId, seq, ts, isAttackerTeamId, CombatWarningKind.NoWeaponsAvailable, "Cannot shoot — operative is within Engagement Range of an enemy."));
+
+            return new ShootSessionResult(false, 0, null);
+        }
+
         var enemyStates = allOperativeStates
             .Where(s => !s.IsIncapacitated
                 && allOperatives.TryGetValue(s.OperativeId, out var o)
