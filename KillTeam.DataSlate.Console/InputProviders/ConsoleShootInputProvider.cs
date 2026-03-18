@@ -30,7 +30,9 @@ public class ConsoleShootInputProvider(IAnsiConsole console, ColumnContext colum
                 {
                     var rulesText = w.ParsedRules.Count > 0
                         ? $" | {string.Join(", ", w.ParsedRules.Select(r => r.RawText))}"
-                        : string.Empty;
+                        : !string.IsNullOrWhiteSpace(w.SpecialRules)
+                            ? $" | {w.SpecialRules}"
+                            : string.Empty;
                     var saturate = w.ParsedRules.Any(r => r.Kind == SpecialRuleKind.Saturate)
                         ? " [yellow]Saturate[/]"
                         : string.Empty;

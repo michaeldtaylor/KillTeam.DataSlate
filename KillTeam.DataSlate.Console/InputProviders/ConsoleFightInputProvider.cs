@@ -29,9 +29,14 @@ public class ConsoleFightInputProvider(IAnsiConsole console, ColumnContext colum
                 .Title($"{columnContext.Prefix}Select attacker''s melee weapon:")
                 .UseConverter(w =>
                 {
+                    var rulesText = w.ParsedRules.Count > 0
+                        ? $" | {string.Join(", ", w.ParsedRules.Select(r => r.RawText))}"
+                        : !string.IsNullOrWhiteSpace(w.SpecialRules)
+                            ? $" | {w.SpecialRules}"
+                            : string.Empty;
                     var injuredNote = isInjured ? $" [yellow](Injured: effective Hit {w.Hit + 1}+)[/]" : string.Empty;
 
-                    return $"{Markup.Escape(w.Name)} (Attack: [green]{w.Atk}[/] | Hit: [green]{w.Hit}+[/] | Normal: [green]{w.NormalDmg}[/] | Crit: [green]{w.CriticalDmg}[/]){injuredNote}";
+                    return $"{Markup.Escape(w.Name)} (Attack: [green]{w.Atk}[/] | Hit: [green]{w.Hit}+[/] | Normal: [green]{w.NormalDmg}[/] | Crit: [green]{w.CriticalDmg}[/]{Markup.Escape(rulesText)}){injuredNote}";
                 })
                 .AddChoices(weapons)));
     }
@@ -41,7 +46,16 @@ public class ConsoleFightInputProvider(IAnsiConsole console, ColumnContext colum
         return await Task.FromResult(console.Prompt(
             new SelectionPrompt<Weapon>()
                 .Title($"{columnContext.Prefix}Select defender''s melee weapon:")
-                .UseConverter(w => $"{Markup.Escape(w.Name)} (Attack: [green]{w.Atk}[/] | Hit: [green]{w.Hit}+[/] | Normal: [green]{w.NormalDmg}[/] | Crit: [green]{w.CriticalDmg}[/])")
+                .UseConverter(w =>
+                {
+                    var rulesText = w.ParsedRules.Count > 0
+                        ? $" | {string.Join(", ", w.ParsedRules.Select(r => r.RawText))}"
+                        : !string.IsNullOrWhiteSpace(w.SpecialRules)
+                            ? $" | {w.SpecialRules}"
+                            : string.Empty;
+
+                    return $"{Markup.Escape(w.Name)} (Attack: [green]{w.Atk}[/] | Hit: [green]{w.Hit}+[/] | Normal: [green]{w.NormalDmg}[/] | Crit: [green]{w.CriticalDmg}[/]{Markup.Escape(rulesText)})";
+                })
                 .AddChoices(weapons)));
     }
 
