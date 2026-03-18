@@ -1,10 +1,11 @@
+using KillTeam.DataSlate.Console.Rendering;
 using KillTeam.DataSlate.Domain.Engine.Input;
 using KillTeam.DataSlate.Domain.Models;
 using Spectre.Console;
 
 namespace KillTeam.DataSlate.Console.InputProviders;
 
-public class ConsoleBlastInputProvider(IAnsiConsole console) : IBlastInputProvider
+public class ConsoleBlastInputProvider(IAnsiConsole console, ColumnContext columnContext) : IBlastInputProvider
 {
     public async Task<List<GameOperativeState>> SelectAdditionalTargetsAsync(
         IList<GameOperativeState> candidates,
@@ -18,13 +19,14 @@ public class ConsoleBlastInputProvider(IAnsiConsole console) : IBlastInputProvid
 
         return await Task.FromResult<List<GameOperativeState>>(console.Prompt(
             new MultiSelectionPrompt<GameOperativeState>()
-                .Title("Select additional targets (space to toggle, enter to confirm):")
+                .Title($"{columnContext.Prefix}Select additional targets (space to toggle, enter to confirm):")
                 .UseConverter(s =>
                 {
                     if (!allOperatives.TryGetValue(s.OperativeId, out var o))
                     {
                         return s.OperativeId.ToString();
                     }
+
                     var isFriendly = o.TeamId == attackerTeamId;
                     var friendly = isFriendly ? " [red][FRIENDLY FIRE!][/]" : string.Empty;
 
@@ -36,7 +38,8 @@ public class ConsoleBlastInputProvider(IAnsiConsole console) : IBlastInputProvid
 
     public Task<bool> ConfirmFriendlyFireAsync(int friendlyCount)
     {
-        console.MarkupLine($"[red]WARNING: This will affect {friendlyCount} friendly operative(s).[/]");
+        console.MarkupLine($"{columnContext.Prefix}[red]WARNING: This will affect {friendlyCount} friendly operative(s).[/]");
+
         return Task.FromResult(console.Confirm("Confirm?", defaultValue: false));
     }
 
@@ -44,14 +47,14 @@ public class ConsoleBlastInputProvider(IAnsiConsole console) : IBlastInputProvid
     {
         return Task.FromResult(console.Prompt(
             new SelectionPrompt<string>()
-                .Title($"Is {Markup.Escape(targetName)} in cover or obscured?")
+                .Title($"{columnContext.Prefix}Is {Markup.Escape(targetName)} in cover or obscured?")
                 .AddChoices("In cover", "Obscured", "Neither")));
     }
 
     public Task<string> GetNarrativeNoteAsync()
     {
         return Task.FromResult(console.Prompt(
-            new TextPrompt<string>("Narrative note [dim](optional, press enter to skip)[/]:")
+            new TextPrompt<string>($"{columnContext.Prefix}Narrative note [dim](optional, press enter to skip)[/]:")
                 .AllowEmpty()));
     }
 
@@ -64,7 +67,7 @@ public class ConsoleBlastInputProvider(IAnsiConsole console) : IBlastInputProvid
 
         var choice = console.Prompt(
             new SelectionPrompt<string>()
-                .Title($"[bold]{Markup.Escape(label)}[/] ({count} dice):")
+                .Title($"{columnContext.Prefix}[bold]{Markup.Escape(label)}[/] ({count} dice):")
                 .AddChoices("Roll for me", "Enter manually"));
 
         if (choice == "Roll for me")
@@ -72,13 +75,14 @@ public class ConsoleBlastInputProvider(IAnsiConsole console) : IBlastInputProvid
             var rolled = Enumerable.Range(0, count).Select(_ => Random.Shared.Next(1, 7)).ToArray();
 
             console.MarkupLine($"  Rolled: [green]{string.Join(", ", rolled)}[/]");
+
             return rolled;
         }
 
         while (true)
         {
             var input = console.Prompt(
-                new TextPrompt<string>($"Enter {count} dice values (space or comma separated):")
+                new TextPrompt<string>($"{columnContext.Prefix}Enter {count} dice values (space or comma separated):")
                     .AllowEmpty());
             var parts = input.Split([' ', ','], StringSplitOptions.RemoveEmptyEntries);
             var values = new List<int>();

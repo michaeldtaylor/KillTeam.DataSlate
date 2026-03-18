@@ -20,12 +20,14 @@ public class SimulateSessionOrchestrator(
     IAnsiConsole console,
     ITeamRepository teamRepository,
     IGameRepository gameRepository,
+    IPlayerRepository playerRepository,
     IFightInputProvider fightInputProvider,
     IShootInputProvider shootInputProvider,
     IRerollInputProvider rerollInputProvider,
     IBlastInputProvider blastInputProvider,
     CombatResolutionService combatResolutionService,
     FightResolutionService fightResolutionService,
+    ColumnContext columnContext,
     ILogger<SimulateSessionOrchestrator> logger)
 {
     public async Task RunAsync()
@@ -35,6 +37,15 @@ public class SimulateSessionOrchestrator(
         console.MarkupLine("[dim]Test fight and shoot encounters without a full game session. Nothing is saved.[/]");
         console.WriteLine();
 
+        var youPlayer = await playerRepository.FindByNameAsync("You");
+        var aiPlayer = await playerRepository.FindByNameAsync("AI");
+
+        if (youPlayer is null || aiPlayer is null)
+        {
+            console.MarkupLine("[red]Internal simulate players not found. Re-initialise the database.[/]");
+            return;
+        }
+
         var (playerOperative, aiOperative, playerTeam, aiTeam) = await SelectOperativesAsync();
 
         if (playerOperative is null || aiOperative is null)
@@ -42,7 +53,8 @@ public class SimulateSessionOrchestrator(
             return;
         }
 
-        await RunSessionLoopAsync(playerOperative, aiOperative, playerTeam!, aiTeam!);
+        DisplayMatchup(playerOperative, playerTeam!, aiOperative, aiTeam!, youPlayer.Colour, aiPlayer.Colour);
+        await RunSessionLoopAsync(playerOperative, aiOperative, playerTeam!, aiTeam!, youPlayer, aiPlayer);
         logger.LogInformation("Simulate session ended");
     }
 
@@ -98,7 +110,6 @@ public class SimulateSessionOrchestrator(
                 .UseConverter(FormatOperative)
                 .AddChoices(aiTeam.Operatives));
 
-        DisplayMatchup(playerOperative, playerTeam, aiOperative, aiTeam);
         return (playerOperative, aiOperative, playerTeam, aiTeam);
     }
 
@@ -106,7 +117,8 @@ public class SimulateSessionOrchestrator(
 
     private async Task RunSessionLoopAsync(
         Models.Operative playerOperative, Models.Operative aiOperative,
-        Models.Team playerTeam, Models.Team aiTeam)
+        Models.Team playerTeam, Models.Team aiTeam,
+        Models.Player youPlayer, Models.Player aiPlayer)
     {
         while (true)
         {
@@ -118,11 +130,11 @@ public class SimulateSessionOrchestrator(
             switch (choice)
             {
                 case "Fight":
-                    await RunEncounterAsync(playerOperative, aiOperative, playerTeam, aiTeam, Models.ActionType.Fight);
+                    await RunEncounterAsync(playerOperative, aiOperative, playerTeam, aiTeam, Models.ActionType.Fight, youPlayer, aiPlayer);
                     break;
 
                 case "Shoot":
-                    await RunEncounterAsync(playerOperative, aiOperative, playerTeam, aiTeam, Models.ActionType.Shoot);
+                    await RunEncounterAsync(playerOperative, aiOperative, playerTeam, aiTeam, Models.ActionType.Shoot, youPlayer, aiPlayer);
                     break;
 
                 case "Change operatives":
@@ -134,6 +146,7 @@ public class SimulateSessionOrchestrator(
                         aiOperative = result.aiOperative!;
                         playerTeam = result.playerTeam!;
                         aiTeam = result.aiTeam!;
+                        DisplayMatchup(playerOperative, playerTeam, aiOperative, aiTeam, youPlayer.Colour, aiPlayer.Colour);
                     }
                     break;
 
@@ -149,7 +162,8 @@ public class SimulateSessionOrchestrator(
     private async Task RunEncounterAsync(
         Models.Operative playerOperative, Models.Operative aiOperative,
         Models.Team playerTeam, Models.Team aiTeam,
-        Models.ActionType actionType)
+        Models.ActionType actionType,
+        Models.Player youPlayer, Models.Player aiPlayer)
     {
         // Synthetic domain objects - no DB interaction
         var game = new Models.Game
@@ -223,7 +237,12 @@ public class SimulateSessionOrchestrator(
             [playerTeam.Id] = "You",
             [aiTeam.Id] = "AI"
         };
-        var columns = new TwoColumnRenderer(console, participantLabels);
+        var participantColours = new Dictionary<string, string>
+        {
+            [playerTeam.Id] = youPlayer.Colour,
+            [aiTeam.Id] = aiPlayer.Colour,
+        };
+        var columns = new TwoColumnRenderer(console, participantLabels, participantColours, columnContext);
         var renderer = new GameEventRenderer(console, columns);
 
         stream.OnEventEmitted += renderer.Render;
@@ -241,7 +260,9 @@ public class SimulateSessionOrchestrator(
                 playerIncapacitated: fightResult.DefenderCausedIncapacitation,
                 aiIncapacitated: fightResult.AttackerCausedIncapacitation,
                 playerCurrentWounds: playerState.CurrentWounds,
-                aiCurrentWounds: aiState.CurrentWounds);
+                aiCurrentWounds: aiState.CurrentWounds,
+                youColour: youPlayer.Colour,
+                aiColour: aiPlayer.Colour);
         }
         else
         {
@@ -257,7 +278,9 @@ public class SimulateSessionOrchestrator(
                 playerIncapacitated: false,
                 aiIncapacitated: shootResult.CausedIncapacitation,
                 playerCurrentWounds: playerState.CurrentWounds,
-                aiCurrentWounds: aiState.CurrentWounds);
+                aiCurrentWounds: aiState.CurrentWounds,
+                youColour: youPlayer.Colour,
+                aiColour: aiPlayer.Colour);
         }
     }
 
@@ -290,13 +313,14 @@ public class SimulateSessionOrchestrator(
 
     private void DisplayMatchup(
         Models.Operative playerOperative, Models.Team playerTeam,
-        Models.Operative aiOperative, Models.Team aiTeam)
+        Models.Operative aiOperative, Models.Team aiTeam,
+        string youColour, string aiColour)
     {
         console.WriteLine();
         var table = new Table()
             .Border(TableBorder.Rounded)
-            .AddColumn("[bold cyan]You[/]")
-            .AddColumn("[bold red]AI[/]");
+            .AddColumn($"[bold {youColour}]You[/]")
+            .AddColumn($"[bold {aiColour}]AI[/]");
 
         table.AddRow(
             $"[bold]{Markup.Escape(playerOperative.Name)}[/]\n[dim]{Markup.Escape(playerTeam.Name)}[/]",
@@ -314,14 +338,15 @@ public class SimulateSessionOrchestrator(
         Models.Operative attacker, Models.Operative defender,
         int attackerDamage, int defenderDamage,
         bool playerIncapacitated, bool aiIncapacitated,
-        int playerCurrentWounds, int aiCurrentWounds)
+        int playerCurrentWounds, int aiCurrentWounds,
+        string youColour, string aiColour)
     {
         console.WriteLine();
         var table = new Table()
             .Border(TableBorder.Rounded)
             .AddColumn("Result")
-            .AddColumn("[bold cyan]You[/]")
-            .AddColumn("[bold red]AI[/]");
+            .AddColumn($"[bold {youColour}]You[/]")
+            .AddColumn($"[bold {aiColour}]AI[/]");
 
         var playerWoundsColor = playerCurrentWounds > 0 ? "green" : "red";
         var aiWoundsColor = aiCurrentWounds > 0 ? "green" : "red";

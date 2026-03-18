@@ -1,3 +1,4 @@
+using KillTeam.DataSlate.Console.Rendering;
 using KillTeam.DataSlate.Domain.Engine.Input;
 using KillTeam.DataSlate.Domain.Events;
 using KillTeam.DataSlate.Domain.Models;
@@ -5,7 +6,7 @@ using Spectre.Console;
 
 namespace KillTeam.DataSlate.Console.InputProviders;
 
-public class ConsoleShootInputProvider(IAnsiConsole console) : IShootInputProvider
+public class ConsoleShootInputProvider(IAnsiConsole console, ColumnContext columnContext) : IShootInputProvider
 {
     public async Task<GameOperativeState> SelectTargetAsync(
         IList<GameOperativeState> candidates,
@@ -13,7 +14,7 @@ public class ConsoleShootInputProvider(IAnsiConsole console) : IShootInputProvid
     {
         return await Task.FromResult(console.Prompt(
             new SelectionPrompt<GameOperativeState>()
-                .Title("Select a target to shoot:")
+                .Title($"{columnContext.Prefix}Select a target to shoot:")
                 .UseConverter(s => allOperatives.TryGetValue(s.OperativeId, out var o)
                     ? $"{Markup.Escape(o.Name)} (Wounds: {s.CurrentWounds}/{o.Wounds})"
                     : s.OperativeId.ToString())
@@ -24,7 +25,7 @@ public class ConsoleShootInputProvider(IAnsiConsole console) : IShootInputProvid
     {
         return await Task.FromResult(console.Prompt(
             new SelectionPrompt<Weapon>()
-                .Title("Select a ranged weapon:")
+                .Title($"{columnContext.Prefix}Select a ranged weapon:")
                 .UseConverter(w =>
                 {
                     var rulesText = w.ParsedRules.Count > 0
@@ -33,6 +34,7 @@ public class ConsoleShootInputProvider(IAnsiConsole console) : IShootInputProvid
                     var saturate = w.ParsedRules.Any(r => r.Kind == SpecialRuleKind.Saturate)
                         ? " [yellow]Saturate[/]"
                         : string.Empty;
+
                     return $"{Markup.Escape(w.Name)} (Attack: [green]{w.Atk}[/] | Hit: [green]{w.Hit}+[/] | Normal: [green]{w.NormalDmg}[/] | Crit: [green]{w.CriticalDmg}[/]{Markup.Escape(rulesText)}){saturate}";
                 })
                 .AddChoices(weapons)));
@@ -42,14 +44,14 @@ public class ConsoleShootInputProvider(IAnsiConsole console) : IShootInputProvid
     {
         return Task.FromResult(console.Prompt(
             new SelectionPrompt<string>()
-                .Title($"Is {Markup.Escape(targetName)} in cover or obscured?")
+                .Title($"{columnContext.Prefix}Is {Markup.Escape(targetName)} in cover or obscured?")
                 .AddChoices("In cover", "Obscured", "Neither")));
     }
 
     public Task<int> GetFriendlyAllyCountAsync()
     {
         return Task.FromResult(console.Prompt(
-            new TextPrompt<int>("How many non-engaged friendly allies within 6\" of target? (0-2):")
+            new TextPrompt<int>($"{columnContext.Prefix}How many non-engaged friendly allies within 6\" of target? (0-2):")
                 .DefaultValue(0)
                 .Validate(v => v is >= 0 and <= 2
                     ? ValidationResult.Success()
@@ -59,7 +61,7 @@ public class ConsoleShootInputProvider(IAnsiConsole console) : IShootInputProvid
     public Task<string> GetNarrativeNoteAsync()
     {
         return Task.FromResult(console.Prompt(
-            new TextPrompt<string>("Narrative note [dim](optional, press enter to skip)[/]:")
+            new TextPrompt<string>($"{columnContext.Prefix}Narrative note [dim](optional, press enter to skip)[/]:")
                 .AllowEmpty()));
     }
 
@@ -75,7 +77,7 @@ public class ConsoleShootInputProvider(IAnsiConsole console) : IShootInputProvid
 
         var choice = console.Prompt(
             new SelectionPrompt<string>()
-                .Title($"[bold]{Markup.Escape(label)}[/] ({count} dice):")
+                .Title($"{columnContext.Prefix}[bold]{Markup.Escape(label)}[/] ({count} dice):")
                 .AddChoices("Roll for me", "Enter manually"));
 
         if (choice == "Roll for me")
@@ -83,13 +85,14 @@ public class ConsoleShootInputProvider(IAnsiConsole console) : IShootInputProvid
             var rolled = Enumerable.Range(0, count).Select(_ => Random.Shared.Next(1, 7)).ToArray();
 
             eventStream?.Emit((seq, ts) => new DiceRolledEvent(eventStream.GameSessionId, seq, ts, participant, operativeName, role, phase, rolled));
+
             return rolled;
         }
 
         while (true)
         {
             var input = console.Prompt(
-                new TextPrompt<string>($"Enter {count} dice values (space or comma separated):")
+                new TextPrompt<string>($"{columnContext.Prefix}Enter {count} dice values (space or comma separated):")
                     .AllowEmpty());
             var parts = input.Split([' ', ','], StringSplitOptions.RemoveEmptyEntries);
             var values = new List<int>();

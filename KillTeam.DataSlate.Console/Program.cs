@@ -1,6 +1,7 @@
 using KillTeam.DataSlate.Console.Commands;
 using KillTeam.DataSlate.Console.InputProviders;
 using KillTeam.DataSlate.Console.Orchestrators;
+using KillTeam.DataSlate.Console.Rendering;
 using KillTeam.DataSlate.Domain;
 using KillTeam.DataSlate.Domain.Engine;
 using KillTeam.DataSlate.Domain.Engine.Input;
@@ -51,6 +52,7 @@ public static class Program
             .ValidateDataAnnotations();
 
         services.AddSingleton(AnsiConsole.Console);
+        services.AddSingleton<ColumnContext>();
         services.AddSingleton<ISqlExecutor, SqliteExecutor>();
         services.AddSingleton<IPlayerRepository, SqlitePlayerRepository>();
         services.AddSingleton<ITeamRepository, SqliteTeamRepository>();

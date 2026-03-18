@@ -16,15 +16,27 @@ public class SqlitePlayerRepository : IPlayerRepository
     public async Task AddAsync(Player player)
     {
         await _db.ExecuteAsync(
-            "INSERT INTO players (id, name) VALUES (@id, @name)",
-            new() { ["@id"] = player.Id.ToString(), ["@name"] = player.Name });
+            "INSERT INTO players (id, name, colour, is_internal) VALUES (@id, @name, @colour, @isInternal)",
+            new()
+            {
+                ["@id"] = player.Id.ToString(),
+                ["@name"] = player.Name,
+                ["@colour"] = player.Colour,
+                ["@isInternal"] = player.IsInternal ? 1 : 0,
+            });
     }
 
     public async Task<IEnumerable<Player>> GetAllAsync()
     {
         return await _db.QueryAsync(
-            "SELECT id, name FROM players ORDER BY name",
-            reader => new Player { Id = Guid.Parse(reader.GetString(0)), Name = reader.GetString(1) });
+            "SELECT id, name, colour, is_internal FROM players WHERE is_internal = 0 ORDER BY name",
+            reader => new Player
+            {
+                Id = Guid.Parse(reader.GetString(0)),
+                Name = reader.GetString(1),
+                Colour = reader.GetString(2),
+                IsInternal = reader.GetInt32(3) != 0,
+            });
     }
 
     public async Task DeleteAsync(Guid id)
@@ -37,8 +49,14 @@ public class SqlitePlayerRepository : IPlayerRepository
     public async Task<Player?> FindByNameAsync(string name)
     {
         return await _db.QuerySingleAsync(
-            "SELECT id, name FROM players WHERE name = @name COLLATE NOCASE LIMIT 1",
-            reader => new Player { Id = Guid.Parse(reader.GetString(0)), Name = reader.GetString(1) },
+            "SELECT id, name, colour, is_internal FROM players WHERE name = @name COLLATE NOCASE LIMIT 1",
+            reader => new Player
+            {
+                Id = Guid.Parse(reader.GetString(0)),
+                Name = reader.GetString(1),
+                Colour = reader.GetString(2),
+                IsInternal = reader.GetInt32(3) != 0,
+            },
             new() { ["@name"] = name });
     }
 
@@ -65,9 +83,11 @@ public class SqlitePlayerRepository : IPlayerRepository
 
         Dictionary<string, object?> parameters = new();
 
+        sql += " WHERE p.is_internal = 0";
+
         if (!string.IsNullOrWhiteSpace(nameFilter))
         {
-            sql += " WHERE p.name LIKE @filter COLLATE NOCASE";
+            sql += " AND p.name LIKE @filter COLLATE NOCASE";
             parameters["@filter"] = $"%{nameFilter}%";
         }
 

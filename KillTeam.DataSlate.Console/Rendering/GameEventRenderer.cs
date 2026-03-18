@@ -11,9 +11,9 @@ public class GameEventRenderer(
     IAnsiConsole console,
     TwoColumnRenderer columns)
 {
-    public void Render(GameEvent evt)
+    public void Render(GameEvent gameEvent)
     {
-        switch (evt)
+        switch (gameEvent)
         {
             case FightTargetSelectedEvent e:
                 columns.PrintLine(e.Participant, $"Target: [bold]{Markup.Escape(e.TargetName)}[/] (Wounds: [green]{e.CurrentWounds}/{e.MaxWounds}[/])");

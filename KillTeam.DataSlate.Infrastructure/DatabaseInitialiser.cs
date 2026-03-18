@@ -102,6 +102,7 @@ internal static class Migrations
     [
         (1, Migration_001),
         (2, Migration_002),
+        (3, Migration_003),
     ];
 
     private const string Migration_001 = """
@@ -369,5 +370,14 @@ internal static class Migrations
     private const string Migration_002 = """
         ALTER TABLE operatives ADD COLUMN defence INTEGER NOT NULL DEFAULT 3;
         ALTER TABLE game_operative_states ADD COLUMN defence_dice_modifier INTEGER NOT NULL DEFAULT 0;
+        """;
+
+    private const string Migration_003 = """
+        ALTER TABLE players ADD COLUMN colour TEXT NOT NULL DEFAULT 'cyan';
+        ALTER TABLE players ADD COLUMN is_internal INTEGER NOT NULL DEFAULT 0;
+        INSERT OR IGNORE INTO players (id, name, colour, is_internal)
+            VALUES ('00000000-0000-0000-0000-000000000001', 'You', 'cyan', 1);
+        INSERT OR IGNORE INTO players (id, name, colour, is_internal)
+            VALUES ('00000000-0000-0000-0000-000000000002', 'AI', 'red', 1);
         """;
 }
