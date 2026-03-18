@@ -9,6 +9,8 @@ public interface IShootInputProvider
         IList<GameOperativeState> candidates,
         IReadOnlyDictionary<Guid, Operative> allOperatives);
 
+    Task<int> GetTargetDistanceAsync(string targetName);
+
     Task<Weapon> SelectWeaponAsync(IList<Weapon> weapons, bool hasMovedNonDash);
 
     Task<string> GetCoverStatusAsync(string targetName);

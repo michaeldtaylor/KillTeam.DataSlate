@@ -40,6 +40,16 @@ public class ConsoleShootInputProvider(IAnsiConsole console, ColumnContext colum
                 .AddChoices(weapons)));
     }
 
+    public Task<int> GetTargetDistanceAsync(string targetName)
+    {
+        return Task.FromResult(console.Prompt(
+            new TextPrompt<int>($"{columnContext.Prefix}How far away is {Markup.Escape(targetName)}? (inches):")
+                .DefaultValue(0)
+                .Validate(v => v >= 0
+                    ? ValidationResult.Success()
+                    : ValidationResult.Error("[red]Enter a non-negative number.[/]"))));
+    }
+
     public Task<string> GetCoverStatusAsync(string targetName)
     {
         return Task.FromResult(console.Prompt(

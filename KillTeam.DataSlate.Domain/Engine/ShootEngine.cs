@@ -59,16 +59,29 @@ public class ShootEngine(
             eventStream?.Emit((seq, ts) => new CombatWarningEvent(eventStream.GameSessionId, seq, ts, isAttackerTeamId, CombatWarningKind.TargetNotFound, "Target operative not found."));
             return new ShootSessionResult(false, 0, null);
         }
+
         var defenderTeamId = targetOp.TeamId;
+        var targetDistance = await inputProvider.GetTargetDistanceAsync(targetOp.Name);
 
         var rangedWeapons = attacker.Weapons
             .Where(w => w.Type == WeaponType.Ranged)
             .Where(w => !hasMovedNonDash || !w.ParsedRules.Any(r => r.Kind == SpecialRuleKind.Heavy))
+            .Where(w =>
+            {
+                var rangeRule = w.ParsedRules.FirstOrDefault(r => r.Kind == SpecialRuleKind.Range);
+
+                return rangeRule is null || rangeRule.Param >= targetDistance;
+            })
             .ToList();
 
         if (rangedWeapons.Count == 0)
         {
-            eventStream?.Emit((seq, ts) => new CombatWarningEvent(eventStream.GameSessionId, seq, ts, isAttackerTeamId, CombatWarningKind.NoWeaponsAvailable, "No ranged weapons available."));
+            var outOfRangeMsg = targetDistance > 0
+                ? $"No ranged weapons can reach {targetOp.Name} at {targetDistance}\"."
+                : "No ranged weapons available.";
+
+            eventStream?.Emit((seq, ts) => new CombatWarningEvent(eventStream.GameSessionId, seq, ts, isAttackerTeamId, CombatWarningKind.NoWeaponsAvailable, outOfRangeMsg));
+
             return new ShootSessionResult(false, 0, null);
         }
 

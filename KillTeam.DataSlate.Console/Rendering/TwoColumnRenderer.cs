@@ -11,10 +11,12 @@ namespace KillTeam.DataSlate.Console.Rendering;
 /// </summary>
 public class TwoColumnRenderer
 {
+    private const string SystemText = "[System]";
+    private const string Separator = " │ ";
+
     private readonly IAnsiConsole _console;
     private readonly Dictionary<string, string> _labelMarkup;
     private readonly string _systemLabel;
-    private readonly string _separator = " │ ";
 
     public TwoColumnRenderer(
         IAnsiConsole console,
@@ -32,10 +34,9 @@ public class TwoColumnRenderer
 
         columnContext.ColumnWidth = columnWidth;
 
-        var systemText = "[System]";
-        var systemPadding = new string(' ', columnWidth - systemText.Length);
-        _systemLabel = $"[dim grey]{Markup.Escape(systemText)}[/]{systemPadding}";
+        var systemPadding = new string(' ', columnWidth - SystemText.Length);
 
+        _systemLabel = $"[dim grey]{Markup.Escape(SystemText)}[/]{systemPadding}";
         _labelMarkup = new Dictionary<string, string>();
 
         foreach (var (participantId, name) in participantLabels)
@@ -53,13 +54,13 @@ public class TwoColumnRenderer
     {
         var label = _labelMarkup.GetValueOrDefault(participantId, _systemLabel);
 
-        _console.MarkupLine($"{label}{_separator}{content}");
+        _console.MarkupLine($"{label}{Separator}{content}");
     }
 
     /// <summary>Prints a system line: [System] │ content</summary>
     public void PrintLine(string content)
     {
-        _console.MarkupLine($"{_systemLabel}{_separator}{content}");
+        _console.MarkupLine($"{_systemLabel}{Separator}{content}");
     }
 
     /// <summary>Prints a labelled sub-line with 2-space indent inside the content column.</summary>
