@@ -256,17 +256,15 @@ public class SqliteTeamRepository : ITeamRepository
             });
     }
 
-    public async Task<Team?> GetByIdAsync(string id)
+    public async Task<TeamSummary?> GetByIdAsync(string id)
     {
         return await _db.QuerySingleAsync(
             "SELECT id, name, faction, grand_faction FROM teams WHERE id = @id LIMIT 1",
-            reader => new Team
-            {
-                Id = reader.GetString(0),
-                Name = reader.GetString(1),
-                Faction = reader.GetString(2),
-                GrandFaction = reader.GetString(3),
-            },
+            reader => new TeamSummary(
+                reader.GetString(0),
+                reader.GetString(1),
+                reader.GetString(2),
+                reader.GetString(3)),
             new() { ["@id"] = id });
     }
 
