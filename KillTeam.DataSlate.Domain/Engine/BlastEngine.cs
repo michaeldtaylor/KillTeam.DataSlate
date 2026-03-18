@@ -112,10 +112,10 @@ public class BlastEngine(
 
             var result = combatResolutionService.ResolveShoot(ctx);
             var dmg = result.TotalDamage;
-
-            eventStream?.Emit((seq, ts) => new ShootResultDisplayedEvent(eventStream.GameSessionId, seq, ts, attacker.TeamId, targetOp.Name, result.UnblockedCrits, result.UnblockedNormals, result.TotalDamage, inCover, isObscured));
-
             var newWounds = Math.Max(0, targetState.CurrentWounds - dmg);
+
+            eventStream?.Emit((seq, ts) => new ShootResultDisplayedEvent(eventStream.GameSessionId, seq, ts, attacker.TeamId, targetOp.Name, result.UnblockedCrits, result.UnblockedNormals, result.TotalDamage, newWounds, targetOp.Wounds, inCover, isObscured));
+
             var causedIncap = newWounds <= 0 && !targetState.IsIncapacitated;
 
             targetState.CurrentWounds = newWounds;

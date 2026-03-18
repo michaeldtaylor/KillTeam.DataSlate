@@ -134,6 +134,20 @@ public class ShootEngine(
 
         defenderDice = await rerollEngine.ApplyDefenderRerollAsync(defenderDice, game.Id, isDefenderTeamA, targetOp.Name, defenderTeamId, eventStream);
 
+        var effectiveSave = inCover ? targetOp.Save - 1 : targetOp.Save;
+        var attackSnapshots = attackDice.Select(d => new FightDieSnapshot(
+            d >= 6 ? "CRIT" : d >= weapon.Hit ? "HIT" : "MISS", d)).ToList();
+        var defenceSnapshots = defenderDice.Select(d => new FightDieSnapshot(
+            d >= effectiveSave ? "SAVE" : "FAIL", d)).ToList();
+
+        if (eventStream is not null)
+        {
+            eventStream.Emit((seq, ts) => new ShootPoolsDisplayedEvent(
+                eventStream.GameSessionId, seq, ts, isAttackerTeamId,
+                attacker.Name, attackerState.CurrentWounds, attacker.Wounds, attackSnapshots,
+                targetOp.Name, targetState.CurrentWounds, targetOp.Wounds, defenceSnapshots));
+        }
+
         var ctx = new ShootContext(
             AttackDice: attackDice,
             DefenceDice: defenderDice,
@@ -149,9 +163,10 @@ public class ShootEngine(
 
         var result = combatResolutionService.ResolveShoot(ctx);
 
-        eventStream?.Emit((seq, ts) => new ShootResultDisplayedEvent(eventStream.GameSessionId, seq, ts, isAttackerTeamId, targetOp.Name, result.UnblockedCrits, result.UnblockedNormals, result.TotalDamage, inCover, isObscured));
-
         var newWounds = Math.Max(0, targetState.CurrentWounds - result.TotalDamage);
+
+        eventStream?.Emit((seq, ts) => new ShootResultDisplayedEvent(eventStream.GameSessionId, seq, ts, isAttackerTeamId, targetOp.Name, result.UnblockedCrits, result.UnblockedNormals, result.TotalDamage, newWounds, targetOp.Wounds, inCover, isObscured));
+
         var causedIncap = newWounds <= 0 && !targetState.IsIncapacitated;
 
         targetState.CurrentWounds = newWounds;

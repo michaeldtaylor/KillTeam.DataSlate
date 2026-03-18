@@ -116,7 +116,19 @@ public sealed record FightPoolsDisplayedEvent(
     : GameEvent(GameSessionId, SequenceNumber, Timestamp, Participant);
 
 /// <summary>Snapshot of a single fight die for event transport (no domain type dependency in renderer).</summary>
-public sealed record FightDieSnapshot(string Result, int RolledValue); // Result: "CRIT" | "HIT" | "MISS"
+public sealed record FightDieSnapshot(string Result, int RolledValue); // Result: "CRIT" | "HIT" | "MISS" | "SAVE" | "FAIL"
+
+public sealed record ShootPoolsDisplayedEvent(
+    Guid GameSessionId, int SequenceNumber, DateTime Timestamp, string Participant,
+    string AttackerName,
+    int AttackerWounds,
+    int AttackerMaxWounds,
+    IReadOnlyList<FightDieSnapshot> AttackerDice,
+    string DefenderName,
+    int DefenderWounds,
+    int DefenderMaxWounds,
+    IReadOnlyList<FightDieSnapshot> DefenderDice)
+    : GameEvent(GameSessionId, SequenceNumber, Timestamp, Participant);
 
 public sealed record FightStrikeResolvedEvent(
     Guid GameSessionId, int SequenceNumber, DateTime Timestamp, string Participant,
@@ -182,6 +194,8 @@ public sealed record ShootResultDisplayedEvent(
     int UnblockedCrits,
     int UnblockedNormals,
     int TotalDamage,
+    int TargetWoundsAfter,
+    int TargetMaxWounds,
     bool InCover,
     bool IsObscured)
     : GameEvent(GameSessionId, SequenceNumber, Timestamp, Participant);

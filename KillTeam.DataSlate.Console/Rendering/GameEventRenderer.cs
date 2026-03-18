@@ -94,6 +94,10 @@ public class GameEventRenderer(
                 columns.PrintLine("[green]+1 cover save will be added automatically.[/]");
                 break;
 
+            case ShootPoolsDisplayedEvent e:
+                RenderShootPools(e);
+                break;
+
             case ShootResultDisplayedEvent e:
                 RenderShootResult(e);
                 break;
@@ -110,6 +114,56 @@ public class GameEventRenderer(
                 // Summary handled by SimulateSessionOrchestrator
                 break;
         }
+    }
+
+    private void RenderShootPools(ShootPoolsDisplayedEvent e)
+    {
+        var table = new Table()
+            .Border(TableBorder.Rounded)
+            .AddColumn($"[bold]{Markup.Escape(e.AttackerName)}[/] (Attacker)")
+            .AddColumn($"[bold]{Markup.Escape(e.DefenderName)}[/] (Defender)");
+
+        table.AddRow(
+            $"Wounds: {e.AttackerWounds}/{e.AttackerMaxWounds}",
+            $"Wounds: {e.DefenderWounds}/{e.DefenderMaxWounds}");
+
+        var maxRows = Math.Max(e.AttackerDice.Count, e.DefenderDice.Count);
+
+        for (var i = 0; i < maxRows; i++)
+        {
+            var attackerCell = i < e.AttackerDice.Count ? FormatAttackDieSnapshot(i + 1, e.AttackerDice[i]) : string.Empty;
+            var defenderCell = i < e.DefenderDice.Count ? FormatDefenceDieSnapshot(i + 1, e.DefenderDice[i]) : string.Empty;
+
+            table.AddRow(attackerCell, defenderCell);
+        }
+
+        console.Write(table);
+    }
+
+    private void RenderShootResult(ShootResultDisplayedEvent e)
+    {
+        var woundsColour = e.TargetWoundsAfter > 0 ? "green" : "red";
+        var table = new Table()
+            .Border(TableBorder.Rounded)
+            .AddColumn("Result")
+            .AddColumn($"[bold]{Markup.Escape(e.TargetName)}[/]");
+
+        table.AddRow("Wounds remaining", $"[{woundsColour}]{e.TargetWoundsAfter}/{e.TargetMaxWounds}[/]");
+        table.AddRow("Damage dealt", $"[bold red]{e.TotalDamage}[/]");
+        table.AddRow("Unblocked Crits", $"[bold]{e.UnblockedCrits}[/]");
+        table.AddRow("Unblocked Normals", $"[bold]{e.UnblockedNormals}[/]");
+
+        if (e.InCover)
+        {
+            table.AddRow("Cover Save", "[green]Applied[/]");
+        }
+
+        if (e.IsObscured)
+        {
+            table.AddRow("Obscured", "[green]Crits converted[/]");
+        }
+
+        console.Write(table);
     }
 
     private void RenderFightPools(FightPoolsDisplayedEvent e)
@@ -136,35 +190,30 @@ public class GameEventRenderer(
         console.Write(table);
     }
 
-    private void RenderShootResult(ShootResultDisplayedEvent e)
-    {
-        var table = new Table()
-            .Border(TableBorder.Rounded)
-            .AddColumn("Result")
-            .AddColumn("Value");
-
-        table.AddRow("Unblocked Crits", $"[bold]{e.UnblockedCrits}[/]");
-        table.AddRow("Unblocked Normals", $"[bold]{e.UnblockedNormals}[/]");
-        table.AddRow("Total Damage", $"[bold red]{e.TotalDamage}[/]");
-
-        if (e.InCover)
-        {
-            table.AddRow("Cover Save", "[green]Applied[/]");
-        }
-
-        if (e.IsObscured)
-        {
-            table.AddRow("Obscured", "[green]Crits converted[/]");
-        }
-
-        console.Write(table);
-    }
-
     private static string FormatDieSnapshot(string prefix, int num, FightDieSnapshot die)
     {
         var result = die.Result == "CRIT" ? "[bold yellow]CRIT[/]" : "[green]HIT [/]";
 
         return $"{prefix}{num}: {result} (rolled [green]{die.RolledValue}[/])";
+    }
+
+    private static string FormatAttackDieSnapshot(int num, FightDieSnapshot die)
+    {
+        var result = die.Result switch
+        {
+            "CRIT" => "[bold yellow]CRIT[/]",
+            "HIT"  => "[green]HIT [/]",
+            _      => "[dim]MISS[/]",
+        };
+
+        return $"A{num}: {result} (rolled [green]{die.RolledValue}[/])";
+    }
+
+    private static string FormatDefenceDieSnapshot(int num, FightDieSnapshot die)
+    {
+        var result = die.Result == "SAVE" ? "[green]SAVE[/]" : "[red]FAIL[/]";
+
+        return $"D{num}: {result} (rolled [green]{die.RolledValue}[/])";
     }
 }
 
