@@ -46,21 +46,27 @@ public enum SpecialRuleKind
     HeavyDashOnly,
     Hot,
     Lethal,
-    Limited,       // parsed but not yet resolved
+    Limited,
     Piercing,
     PiercingCrits,
     Punishing,
-    Range,         // enforced at weapon-selection time (not yet implemented): weapon unusable beyond X inches
+    Range,
     Relentless,
     Rending,
     Saturate,
-    Seek,          // parsed but not yet resolved
-    SeekLight,     // parsed but not yet resolved
+    Seek,
+    SeekLight,
     Severe,
     Shock,
-    Silent,        // parsed but not yet resolved
+    Silent,
     Stun,
     Torrent,
     Unknown,
 }
 
+public enum SpecialRulePhase
+{
+    Fight,
+    Shoot,
+    Both,
+}

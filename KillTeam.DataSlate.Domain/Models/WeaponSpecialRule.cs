@@ -1,3 +1,9 @@
-﻿namespace KillTeam.DataSlate.Domain.Models;
+using KillTeam.DataSlate.Domain.Services;
 
-public record WeaponSpecialRule(SpecialRuleKind Kind, int? Param, string RawText);
+namespace KillTeam.DataSlate.Domain.Models;
+
+public record WeaponSpecialRule(SpecialRuleKind Kind, int? Param, string RawText)
+{
+    public SpecialRuleDefinition? Definition => SpecialRuleRegistry.ByKind.GetValueOrDefault(Kind);
+}
+
