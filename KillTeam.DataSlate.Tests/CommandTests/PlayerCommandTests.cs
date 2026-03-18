@@ -13,7 +13,7 @@ public class PlayerCommandTests
         using var db = TestDbBuilder.Create();
         var repo = new SqlitePlayerRepository(db.Connection);
 
-        await repo.AddAsync(new Player { Id = Guid.NewGuid(), Name = "Michael" });
+        await repo.CreateAsync(new Player { Id = Guid.NewGuid(), Name = "Michael" });
 
         var all = (await repo.GetAllAsync()).ToList();
         all.Should().ContainSingle(p => p.Name == "Michael");
@@ -24,9 +24,9 @@ public class PlayerCommandTests
     {
         using var db = TestDbBuilder.Create();
         var repo = new SqlitePlayerRepository(db.Connection);
-        await repo.AddAsync(new Player { Id = Guid.NewGuid(), Name = "Solomon" });
+        await repo.CreateAsync(new Player { Id = Guid.NewGuid(), Name = "Solomon" });
 
-        var act = () => repo.AddAsync(new Player { Id = Guid.NewGuid(), Name = "Solomon" });
+        var act = () => repo.CreateAsync(new Player { Id = Guid.NewGuid(), Name = "Solomon" });
 
         await act.Should().ThrowAsync<Exception>();
     }
@@ -36,8 +36,8 @@ public class PlayerCommandTests
     {
         using var db = TestDbBuilder.Create();
         var repo = new SqlitePlayerRepository(db.Connection);
-        await repo.AddAsync(new Player { Id = Guid.NewGuid(), Name = "Zara" });
-        await repo.AddAsync(new Player { Id = Guid.NewGuid(), Name = "Aaron" });
+        await repo.CreateAsync(new Player { Id = Guid.NewGuid(), Name = "Zara" });
+        await repo.CreateAsync(new Player { Id = Guid.NewGuid(), Name = "Aaron" });
 
         var all = (await repo.GetAllAsync()).ToList();
 
@@ -52,7 +52,7 @@ public class PlayerCommandTests
         using var db = TestDbBuilder.Create();
         var repo = new SqlitePlayerRepository(db.Connection);
         var player = new Player { Id = Guid.NewGuid(), Name = "Doomed" };
-        await repo.AddAsync(player);
+        await repo.CreateAsync(player);
 
         await repo.DeleteAsync(player.Id);
 

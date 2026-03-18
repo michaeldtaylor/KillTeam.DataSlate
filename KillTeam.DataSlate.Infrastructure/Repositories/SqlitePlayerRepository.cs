@@ -13,7 +13,7 @@ public class SqlitePlayerRepository : IPlayerRepository
     public SqlitePlayerRepository(SqliteConnection connection)
         : this(new SqliteExecutor(connection)) { }
 
-    public async Task AddAsync(Player player)
+    public async Task CreateAsync(Player player)
     {
         await _db.ExecuteAsync(
             "INSERT INTO players (id, name, colour, is_internal) VALUES (@id, @name, @colour, @isInternal)",

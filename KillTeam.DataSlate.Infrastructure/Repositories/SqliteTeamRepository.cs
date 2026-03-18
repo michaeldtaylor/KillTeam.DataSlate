@@ -352,4 +352,47 @@ public class SqliteTeamRepository : ITeamRepository
             SupplementaryInfo = row.SupplementaryInfo,
         };
     }
+
+    public async Task<TeamStats?> GetTeamStatsAsync(string teamId)
+    {
+        var gamesAndWins = await _db.QuerySingleAsync(
+            """
+            SELECT COUNT(*), COALESCE(SUM(CASE WHEN winner_team_id = @id THEN 1 ELSE 0 END), 0)
+            FROM games
+            WHERE (participant1_team_id = @id OR participant2_team_id = @id) AND status = 'Completed'
+            """,
+            reader => (Games: reader.GetInt32(0), Wins: reader.GetInt32(1)),
+            new() { ["@id"] = teamId });
+
+        var kills = await _db.ScalarAsync<int>(
+            """
+            SELECT COUNT(*) FROM actions a
+            JOIN activations act ON act.id = a.activation_id
+            JOIN turning_points tp ON tp.id = act.turning_point_id
+            WHERE a.caused_incapacitation = 1 AND act.team_id = @id
+            UNION ALL
+            SELECT COUNT(*) FROM action_blast_targets abt
+            JOIN actions a2 ON a2.id = abt.action_id
+            JOIN activations act2 ON act2.id = a2.activation_id
+            JOIN turning_points tp2 ON tp2.id = act2.turning_point_id
+            WHERE abt.caused_incapacitation = 1 AND act2.team_id = @id
+            """,
+            new() { ["@id"] = teamId });
+
+        var mostUsedWeapon = await _db.QuerySingleAsync(
+            """
+            SELECT w.name
+            FROM actions a
+            JOIN activations act ON act.id = a.activation_id
+            JOIN weapons w ON w.id = a.weapon_id
+            WHERE a.type IN ('Shoot', 'Fight') AND act.team_id = @id AND a.weapon_id IS NOT NULL
+            GROUP BY a.weapon_id
+            ORDER BY COUNT(*) DESC
+            LIMIT 1
+            """,
+            reader => reader.GetString(0),
+            new() { ["@id"] = teamId });
+
+        return new TeamStats(gamesAndWins.Games, gamesAndWins.Wins, kills, mostUsedWeapon);
+    }
 }

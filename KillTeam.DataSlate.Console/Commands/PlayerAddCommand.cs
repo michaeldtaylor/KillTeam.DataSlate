@@ -44,7 +44,7 @@ public class PlayerAddCommand(IAnsiConsole console, IPlayerRepository players, I
                 .Title("Select your colour:")
                 .AddChoices("cyan", "green", "blue", "magenta", "yellow", "white"));
 
-        await players.AddAsync(new Player { Id = Guid.NewGuid(), Name = name, Colour = colour });
+        await players.CreateAsync(new Player { Id = Guid.NewGuid(), Name = name, Colour = colour });
         logger.LogInformation("Player {Name} created", name);
         console.MarkupLine($"[green]Player '{Markup.Escape(name)}' created.[/]");
         return 0;

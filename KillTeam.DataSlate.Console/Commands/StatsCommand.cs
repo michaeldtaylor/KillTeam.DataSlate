@@ -11,7 +11,6 @@ namespace KillTeam.DataSlate.Console.Commands;
 public class StatsCommand(
     IAnsiConsole console,
     ITeamRepository teams,
-    IGameRepository games,
     IPlayerRepository players,
     ILogger<StatsCommand> logger) : AsyncCommand<StatsCommand.Settings>
 {
@@ -50,7 +49,7 @@ public class StatsCommand(
             return 1;
         }
 
-        var stats = await games.GetTeamStatsAsync(team.Id);
+        var stats = await teams.GetTeamStatsAsync(team.Id);
 
         if (stats is null)
         {

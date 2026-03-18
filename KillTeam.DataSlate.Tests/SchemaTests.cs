@@ -61,7 +61,7 @@ public class SchemaTests
         var repo = new SqlitePlayerRepository(db.Connection);
         var player = new Player { Id = Guid.NewGuid(), Name = "Michael" };
 
-        await repo.AddAsync(player);
+        await repo.CreateAsync(player);
 
         var found = await repo.FindByNameAsync("Michael");
         found.Should().NotBeNull();
@@ -74,10 +74,10 @@ public class SchemaTests
     {
         using var db = TestDbBuilder.Create();
         var repo = new SqlitePlayerRepository(db.Connection);
-        await repo.AddAsync(new Player { Id = Guid.NewGuid(), Name = "Solomon" });
+        await repo.CreateAsync(new Player { Id = Guid.NewGuid(), Name = "Solomon" });
 
         await Assert.ThrowsAsync<SqliteException>(
-            () => repo.AddAsync(new Player { Id = Guid.NewGuid(), Name = "Solomon" }));
+            () => repo.CreateAsync(new Player { Id = Guid.NewGuid(), Name = "Solomon" }));
     }
 
     [Fact]
@@ -85,7 +85,7 @@ public class SchemaTests
     {
         using var db = TestDbBuilder.Create();
         var repo = new SqlitePlayerRepository(db.Connection);
-        await repo.AddAsync(new Player { Id = Guid.NewGuid(), Name = "Michael" });
+        await repo.CreateAsync(new Player { Id = Guid.NewGuid(), Name = "Michael" });
 
         var found = await repo.FindByNameAsync("michael");
         found.Should().NotBeNull();
@@ -98,7 +98,7 @@ public class SchemaTests
         using var db = TestDbBuilder.Create();
         var repo = new SqlitePlayerRepository(db.Connection);
         var player = new Player { Id = Guid.NewGuid(), Name = "Doomed" };
-        await repo.AddAsync(player);
+        await repo.CreateAsync(player);
 
         await repo.DeleteAsync(player.Id);
 
