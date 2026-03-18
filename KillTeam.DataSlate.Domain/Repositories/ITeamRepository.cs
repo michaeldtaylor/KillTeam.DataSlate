@@ -1,14 +1,14 @@
-﻿using Models = KillTeam.DataSlate.Domain.Models;
+﻿using KillTeam.DataSlate.Domain.Models;
 
 namespace KillTeam.DataSlate.Domain.Repositories;
 
 public interface ITeamRepository
 {
-    Task UpsertAsync(Models.Team team);
+    Task UpsertAsync(Team team);
 
-    Task<IEnumerable<Models.Team>> GetAllAsync();
+    Task<IEnumerable<Team>> GetAllAsync();
 
-    Task<Models.Team?> GetByNameAsync(string name);
+    Task<Team?> GetByNameAsync(string name);
 
-    Task<Models.Team?> GetWithOperativesAsync(string name);
+    Task<Team?> GetWithOperativesAsync(string name);
 }

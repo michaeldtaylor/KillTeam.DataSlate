@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using KillTeam.DataSlate.Domain.Models;
 using KillTeam.DataSlate.Domain.Repositories;
 using Microsoft.Extensions.Logging;
 using Spectre.Console;
@@ -124,7 +125,7 @@ public class AnnotateCommand(
         }
 
         var selectedAction = console.Prompt(
-            new SelectionPrompt<Domain.Models.GameAction>()
+            new SelectionPrompt<GameAction>()
                 .Title("Select an action to annotate:")
                 .UseConverter(action =>
                 {
