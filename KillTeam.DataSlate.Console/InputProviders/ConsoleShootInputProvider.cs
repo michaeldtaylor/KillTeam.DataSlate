@@ -28,12 +28,12 @@ public class ConsoleShootInputProvider(IAnsiConsole console, ColumnContext colum
                 .Title($"{columnContext.Prefix}Select a ranged weapon:")
                 .UseConverter(w =>
                 {
-                    var rulesText = w.ParsedRules.Count > 0
-                        ? $" | {string.Join(", ", w.ParsedRules.Select(r => r.RawText))}"
-                        : !string.IsNullOrWhiteSpace(w.SpecialRules)
-                            ? $" | {w.SpecialRules}"
+                    var rulesText = w.Rules.Count > 0
+                        ? $" | {string.Join(", ", w.Rules.Select(r => r.RawText))}"
+                        : !string.IsNullOrWhiteSpace(w.WeaponRules)
+                            ? $" | {w.WeaponRules}"
                             : string.Empty;
-                    var saturate = w.ParsedRules.Any(r => r.Kind == SpecialRuleKind.Saturate)
+                    var saturate = w.Rules.Any(r => r.Kind == WeaponRuleKind.Saturate)
                         ? " [yellow]Saturate[/]"
                         : string.Empty;
 

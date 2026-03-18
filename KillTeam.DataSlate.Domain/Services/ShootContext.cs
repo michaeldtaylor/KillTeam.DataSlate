@@ -1,4 +1,4 @@
-﻿using KillTeam.DataSlate.Domain.Models;
+using KillTeam.DataSlate.Domain.Models;
 
 namespace KillTeam.DataSlate.Domain.Services;
 
@@ -11,7 +11,7 @@ public record ShootContext(
     int SaveThreshold,
     int NormalDmg,
     int CritDmg,
-    List<WeaponSpecialRule> WeaponRules,
+    List<WeaponRule> WeaponRules,
     int FightAssistBonus = 0
 );
 

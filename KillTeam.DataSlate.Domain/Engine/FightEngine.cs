@@ -113,7 +113,7 @@ public class FightEngine(
 
         var attackerRolls = await inputProvider.RollOrEnterDiceAsync(attackerWeapon.Atk, $"{attacker.Name} attack dice (Attack: {attackerWeapon.Atk})", attacker.Name, "Attacker", "Fight", isAttackerTeamId, eventStream);
         attackerRolls = await rerollEngine.ApplyAttackerRerollsAsync(
-            attackerRolls, attackerWeapon.ParsedRules.ToList(), game.Id, isAttackerTeamA, attacker.Name, isAttackerTeamId, eventStream);
+            attackerRolls, attackerWeapon.Rules.ToList(), game.Id, isAttackerTeamA, attacker.Name, isAttackerTeamId, eventStream);
 
         var defenderAttackCount = defenderWeapon?.Atk ?? 0;
         int[] defenderRolls = [];
@@ -129,7 +129,7 @@ public class FightEngine(
             ? fightResolutionService.CalculateDice(defenderRolls, defenderEffectiveHit, DieOwner.Defender)
             : new FightDicePool(DieOwner.Defender, []);
 
-        if (attackerWeapon.ParsedRules.Any(r => r.Kind == SpecialRuleKind.Shock) && attackerPool.Remaining.Any(d => d.Result == DieResult.Crit))
+        if (attackerWeapon.Rules.Any(r => r.Kind == WeaponRuleKind.Shock) && attackerPool.Remaining.Any(d => d.Result == DieResult.Crit))
         {
             var lowestDefenderSuccess = defenderPool.Remaining.OrderBy(d => d.RolledValue).FirstOrDefault(d => d.Result != DieResult.Miss);
 
@@ -140,7 +140,7 @@ public class FightEngine(
             }
         }
 
-        var brutalWeapon = attackerWeapon.ParsedRules.Any(r => r.Kind == SpecialRuleKind.Brutal);
+        var brutalWeapon = attackerWeapon.Rules.Any(r => r.Kind == WeaponRuleKind.Brutal);
         var attackerCurrentWounds = attackerState.CurrentWounds;
         var defenderCurrentWounds = targetState.CurrentWounds;
         var totalAttackerDamageDealt = 0;

@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using KillTeam.DataSlate.Domain.Models;
 using KillTeam.DataSlate.Domain.Services;
 using Xunit;
@@ -12,7 +12,7 @@ public class CombatResolutionServiceTests
     private static ShootContext BaseCtx(int[] atk, int[] def, bool inCover = false,
         bool obscured = false, int hitThreshold = 3, int saveThreshold = 3,
         int normalDmg = 3, int critDmg = 4,
-        List<WeaponSpecialRule>? rules = null)
+        List<WeaponRule>? rules = null)
         => new(atk, def, inCover, obscured, hitThreshold, saveThreshold, normalDmg, critDmg,
                rules ?? []);
 
@@ -84,7 +84,7 @@ public class CombatResolutionServiceTests
     {
         // Attack: normal(5), defence: [4, 3] but Piercing 1 removes 1 die
         // Remaining defence: [3] → save threshold 3 → 1 normal save blocks the normal
-        var rules = new List<WeaponSpecialRule> { new(SpecialRuleKind.Piercing, 1, "Piercing 1") };
+        var rules = new List<WeaponRule> { new(WeaponRuleKind.Piercing, 1, "Piercing 1") };
         var ctx = BaseCtx([5], [4, 3], rules: rules);
         var result = _svc.ResolveShoot(ctx);
         // With Piercing 1: remove first die (4), leaving [3]. Die 3 >= save 3 → 1 normal save blocks the 1 normal hit.
@@ -98,7 +98,7 @@ public class CombatResolutionServiceTests
         // Lethal 5: rolls of 5 or 6 are crits
         // Attack: [5], defence: [6] (1 crit save)
         // 5 >= 5 = crit. Crit save blocks crit.
-        var rules = new List<WeaponSpecialRule> { new(SpecialRuleKind.Lethal, 5, "Lethal 5") };
+        var rules = new List<WeaponRule> { new(WeaponRuleKind.Lethal, 5, "Lethal 5") };
         var ctx = BaseCtx([5], [6], rules: rules);
         var result = _svc.ResolveShoot(ctx);
         result.AttackerRawCritHits.Should().BeGreaterThan(0, "Lethal 5 should produce a crit on a 5");
@@ -110,7 +110,7 @@ public class CombatResolutionServiceTests
     {
         // Rending: if any crit, convert 1 normal → crit
         // Attack: [6, 5] → crit + normal; with Rending → 2 crits
-        var rules = new List<WeaponSpecialRule> { new(SpecialRuleKind.Rending, null, "Rending") };
+        var rules = new List<WeaponRule> { new(WeaponRuleKind.Rending, null, "Rending") };
         var ctx = BaseCtx([6, 5], [], rules: rules);
         var result = _svc.ResolveShoot(ctx);
         result.UnblockedCrits.Should().Be(2);
@@ -121,7 +121,7 @@ public class CombatResolutionServiceTests
     {
         // Accurate 1: adds 1 bonus normal hit regardless of dice
         // Attack: [1] (miss), but +1 bonus normal from Accurate
-        var rules = new List<WeaponSpecialRule> { new(SpecialRuleKind.Accurate, 1, "Accurate 1") };
+        var rules = new List<WeaponRule> { new(WeaponRuleKind.Accurate, 1, "Accurate 1") };
         var ctx = BaseCtx([1], [], rules: rules);
         var result = _svc.ResolveShoot(ctx);
         result.UnblockedNormals.Should().Be(1);
@@ -130,7 +130,7 @@ public class CombatResolutionServiceTests
     [Fact]
     public void ResolveShoot_Stun_AppliesWhenCritRetained()
     {
-        var rules = new List<WeaponSpecialRule> { new(SpecialRuleKind.Stun, null, "Stun") };
+        var rules = new List<WeaponRule> { new(WeaponRuleKind.Stun, null, "Stun") };
         var ctx = BaseCtx([6], [], rules: rules);
         var result = _svc.ResolveShoot(ctx);
         result.StunApplied.Should().BeTrue();

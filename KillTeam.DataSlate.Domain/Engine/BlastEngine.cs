@@ -56,7 +56,7 @@ public class BlastEngine(
 
         var attackDice = await inputProvider.RollOrEnterDiceAsync(weapon.Atk, $"{attacker.Name} attack dice (Attack: {weapon.Atk})");
         attackDice = await rerollEngine.ApplyAttackerRerollsAsync(
-            attackDice, weapon.ParsedRules.ToList(), game.Id, isAttackerTeamA, attacker.Name);
+            attackDice, weapon.Rules.ToList(), game.Id, isAttackerTeamA, attacker.Name);
 
         var effectiveHit = weapon.Hit;
 
@@ -107,7 +107,7 @@ public class BlastEngine(
                 SaveThreshold: targetOp.Save,
                 NormalDmg: weapon.NormalDmg,
                 CritDmg: weapon.CriticalDmg,
-                WeaponRules: weapon.ParsedRules.ToList()
+                WeaponRules: weapon.Rules.ToList()
             );
 
             var result = combatResolutionService.ResolveShoot(ctx);

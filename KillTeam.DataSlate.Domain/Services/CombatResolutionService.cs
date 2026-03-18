@@ -11,12 +11,12 @@ public class CombatResolutionService
     public ShootResult ResolveShoot(ShootContext ctx)
     {
         // ─── 1. Accurate x: add x bonus normal hits to attack pool ──────────
-        var accurate = ctx.WeaponRules.FirstOrDefault(r => r.Kind == SpecialRuleKind.Accurate);
+        var accurate = ctx.WeaponRules.FirstOrDefault(r => r.Kind == WeaponRuleKind.Accurate);
         var bonusNormals = accurate?.Param ?? 0;
 
         // ─── 2. Classify attack dice ─────────────────────────────────────────
         var effectiveHit = ctx.HitThreshold - ctx.FightAssistBonus;
-        var lethal = ctx.WeaponRules.FirstOrDefault(r => r.Kind == SpecialRuleKind.Lethal);
+        var lethal = ctx.WeaponRules.FirstOrDefault(r => r.Kind == WeaponRuleKind.Lethal);
 
         var critHits = 0; // bonus normals tracked separately
         var normalHits = bonusNormals;
@@ -45,21 +45,21 @@ public class CombatResolutionService
         }
 
         // Apply Rending: if >= 1 crit hit, convert 1 normal hit → crit
-        if (ctx.WeaponRules.Any(r => r.Kind == SpecialRuleKind.Rending) && normalHits >= 1 && critHits >= 1)
+        if (ctx.WeaponRules.Any(r => r.Kind == WeaponRuleKind.Rending) && normalHits >= 1 && critHits >= 1)
         {
             normalHits--;
             critHits++;
         }
 
         // Apply Punishing: if any crit hits, all normal hits become crits
-        if (ctx.WeaponRules.Any(r => r.Kind == SpecialRuleKind.Punishing) && critHits >= 1)
+        if (ctx.WeaponRules.Any(r => r.Kind == WeaponRuleKind.Punishing) && critHits >= 1)
         {
             critHits += normalHits;
             normalHits = 0;
         }
 
         // Apply Severe: if any crit hits, halve normal hits (round down)
-        if (ctx.WeaponRules.Any(r => r.Kind == SpecialRuleKind.Severe) && critHits >= 1)
+        if (ctx.WeaponRules.Any(r => r.Kind == WeaponRuleKind.Severe) && critHits >= 1)
         {
             normalHits = normalHits / 2;
         }
@@ -76,8 +76,8 @@ public class CombatResolutionService
         }
 
         // ─── 4. Classify defence dice ─────────────────────────────────────────
-        var piercing = ctx.WeaponRules.FirstOrDefault(r => r.Kind == SpecialRuleKind.Piercing);
-        var piercingCrits = ctx.WeaponRules.FirstOrDefault(r => r.Kind == SpecialRuleKind.PiercingCrits);
+        var piercing = ctx.WeaponRules.FirstOrDefault(r => r.Kind == WeaponRuleKind.Piercing);
+        var piercingCrits = ctx.WeaponRules.FirstOrDefault(r => r.Kind == WeaponRuleKind.PiercingCrits);
 
         // Piercing x: remove x dice from defence pool before rolling
         var defenceDiceList = ctx.DefenceDice.ToList();
@@ -145,14 +145,14 @@ public class CombatResolutionService
         unblockedNormals -= normalSavesToUse;
 
         // ─── 6. Damage calculation ─────────────────────────────────────────────
-        var devastating = ctx.WeaponRules.FirstOrDefault(r => r.Kind == SpecialRuleKind.Devastating);
+        var devastating = ctx.WeaponRules.FirstOrDefault(r => r.Kind == WeaponRuleKind.Devastating);
         var effectiveCritDmg = devastating?.Param ?? ctx.CritDmg;
 
         var totalDamage = (unblockedCrits * effectiveCritDmg) + (unblockedNormals * ctx.NormalDmg);
 
         // ─── 7. Hot ────────────────────────────────────────────────────────────
         var selfDamage = 0;
-        if (ctx.WeaponRules.Any(r => r.Kind == SpecialRuleKind.Hot))
+        if (ctx.WeaponRules.Any(r => r.Kind == WeaponRuleKind.Hot))
         {
             var d6 = Random.Shared.Next(1, 7);
 
@@ -163,7 +163,7 @@ public class CombatResolutionService
         }
 
         // ─── 8. Stun ───────────────────────────────────────────────────────────
-        var stun = ctx.WeaponRules.Any(r => r.Kind == SpecialRuleKind.Stun) && unblockedCrits >= 1;
+        var stun = ctx.WeaponRules.Any(r => r.Kind == WeaponRuleKind.Stun) && unblockedCrits >= 1;
 
         return new ShootResult(unblockedCrits, unblockedNormals, totalDamage, rawCrits, stun, selfDamage);
     }

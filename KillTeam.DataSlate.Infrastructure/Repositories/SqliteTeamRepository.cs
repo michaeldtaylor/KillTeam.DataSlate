@@ -113,7 +113,7 @@ public class SqliteTeamRepository : ITeamRepository
                     weaponCommand.Parameters.AddWithValue("@hit", weapon.Hit);
                     weaponCommand.Parameters.AddWithValue("@normalDmg", weapon.NormalDmg);
                     weaponCommand.Parameters.AddWithValue("@criticalDmg", weapon.CriticalDmg);
-                    weaponCommand.Parameters.AddWithValue("@specialRules", weapon.SpecialRules);
+                    weaponCommand.Parameters.AddWithValue("@specialRules", weapon.WeaponRules);
                     await weaponCommand.ExecuteNonQueryAsync();
                 }
             }
@@ -333,8 +333,8 @@ public class SqliteTeamRepository : ITeamRepository
                     Hit = reader.GetInt32(4),
                     NormalDmg = reader.GetInt32(5),
                     CriticalDmg = reader.GetInt32(6),
-                    SpecialRules = reader.GetString(7),
-                    ParsedRules = SpecialRuleParser.Parse(reader.GetString(7))
+                    WeaponRules = reader.GetString(7),
+                    Rules = WeaponRuleParser.Parse(reader.GetString(7))
                 },
                 new() { ["@opId"] = operative.Id.ToString() });
             operative.Weapons.AddRange(weapons);

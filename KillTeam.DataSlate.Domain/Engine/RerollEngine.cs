@@ -14,7 +14,7 @@ public class RerollEngine(IRerollInputProvider inputProvider, IGameRepository ga
     /// </summary>
     public async Task<int[]> ApplyAttackerRerollsAsync(
         int[] dice,
-        List<WeaponSpecialRule> rules,
+        List<WeaponRule> rules,
         Guid gameId,
         bool isTeamA,
         string ownerLabel,
@@ -23,17 +23,17 @@ public class RerollEngine(IRerollInputProvider inputProvider, IGameRepository ga
     {
         var pool = dice.Select((v, i) => new RollableDie(i, v)).ToList();
 
-        if (rules.Any(r => r.Kind == SpecialRuleKind.Balanced))
+        if (rules.Any(r => r.Kind == WeaponRuleKind.Balanced))
         {
             pool = await ApplyBalancedAsync(pool, ownerLabel, participant, eventStream);
         }
 
-        if (rules.Any(r => r.Kind == SpecialRuleKind.Ceaseless))
+        if (rules.Any(r => r.Kind == WeaponRuleKind.Ceaseless))
         {
             pool = await ApplyCeaselessAsync(pool, ownerLabel, participant, eventStream);
         }
 
-        if (rules.Any(r => r.Kind == SpecialRuleKind.Relentless))
+        if (rules.Any(r => r.Kind == WeaponRuleKind.Relentless))
         {
             pool = await ApplyRelentlessAsync(pool, ownerLabel, participant, eventStream);
         }

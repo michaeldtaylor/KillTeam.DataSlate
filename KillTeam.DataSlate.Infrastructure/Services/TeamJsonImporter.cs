@@ -167,7 +167,7 @@ public class TeamJsonImporter
                         Hit = ParseStat(jw.Hit),
                         NormalDmg = normalDmg,
                         CriticalDmg = critDmg,
-                        SpecialRules = jw.SpecialRules?.Trim() ?? string.Empty
+                        WeaponRules = jw.SpecialRules?.Trim() ?? string.Empty
                     });
                 }
             }

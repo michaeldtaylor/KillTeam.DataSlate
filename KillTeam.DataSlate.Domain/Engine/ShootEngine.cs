@@ -72,10 +72,10 @@ public class ShootEngine(
 
         var rangedWeapons = attacker.Weapons
             .Where(w => w.Type == WeaponType.Ranged)
-            .Where(w => !hasMovedNonDash || !w.ParsedRules.Any(r => r.Kind == SpecialRuleKind.Heavy))
+            .Where(w => !hasMovedNonDash || !w.Rules.Any(r => r.Kind == WeaponRuleKind.Heavy))
             .Where(w =>
             {
-                var rangeRule = w.ParsedRules.FirstOrDefault(r => r.Kind == SpecialRuleKind.Range);
+                var rangeRule = w.Rules.FirstOrDefault(r => r.Kind == WeaponRuleKind.Range);
 
                 return rangeRule is null || rangeRule.Param >= targetDistance;
             })
@@ -103,7 +103,7 @@ public class ShootEngine(
             weapon = await inputProvider.SelectWeaponAsync(rangedWeapons, hasMovedNonDash);
         }
 
-        if (weapon.ParsedRules.Any(r => r.Kind == SpecialRuleKind.Blast || r.Kind == SpecialRuleKind.Torrent))
+        if (weapon.Rules.Any(r => r.Kind == WeaponRuleKind.Blast || r.Kind == WeaponRuleKind.Torrent))
         {
             var blastResult = await blastEngine.RunAsync(
                 attacker, attackerState,
@@ -124,7 +124,7 @@ public class ShootEngine(
         var attackDice = await inputProvider.RollOrEnterDiceAsync(weapon.Atk, $"{attacker.Name} attack dice (Attack: {weapon.Atk})", attacker.Name, "Attacker", "Shoot", isAttackerTeamId, eventStream);
 
         attackDice = await rerollEngine.ApplyAttackerRerollsAsync(
-            attackDice, weapon.ParsedRules.ToList(), game.Id, isAttackerTeamA, attacker.Name, isAttackerTeamId, eventStream);
+            attackDice, weapon.Rules.ToList(), game.Id, isAttackerTeamA, attacker.Name, isAttackerTeamId, eventStream);
 
         var defenderDiceCount = targetOp.Defence + targetState.DefenceDiceModifier;
 
@@ -164,7 +164,7 @@ public class ShootEngine(
             SaveThreshold: targetOp.Save,
             NormalDmg: weapon.NormalDmg,
             CritDmg: weapon.CriticalDmg,
-            WeaponRules: weapon.ParsedRules.ToList(),
+            WeaponRules: weapon.Rules.ToList(),
             FightAssistBonus: fightAssist
         );
 
@@ -198,7 +198,7 @@ public class ShootEngine(
             eventStream?.Emit((seq, ts) => new StunAppliedEvent(eventStream.GameSessionId, seq, ts, isAttackerTeamId, targetOp.Name, 1));
         }
 
-        if (weapon.ParsedRules.Any(r => r.Kind == SpecialRuleKind.Hot) && result.SelfDamageDealt > 0)
+        if (weapon.Rules.Any(r => r.Kind == WeaponRuleKind.Hot) && result.SelfDamageDealt > 0)
         {
             selfDamage = result.SelfDamageDealt;
             var newAttackerWounds = Math.Max(0, attackerState.CurrentWounds - selfDamage);

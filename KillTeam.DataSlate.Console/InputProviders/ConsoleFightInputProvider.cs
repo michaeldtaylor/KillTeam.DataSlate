@@ -29,10 +29,10 @@ public class ConsoleFightInputProvider(IAnsiConsole console, ColumnContext colum
                 .Title($"{columnContext.Prefix}Select attacker''s melee weapon:")
                 .UseConverter(w =>
                 {
-                    var rulesText = w.ParsedRules.Count > 0
-                        ? $" | {string.Join(", ", w.ParsedRules.Select(r => r.RawText))}"
-                        : !string.IsNullOrWhiteSpace(w.SpecialRules)
-                            ? $" | {w.SpecialRules}"
+                    var rulesText = w.Rules.Count > 0
+                        ? $" | {string.Join(", ", w.Rules.Select(r => r.RawText))}"
+                        : !string.IsNullOrWhiteSpace(w.WeaponRules)
+                            ? $" | {w.WeaponRules}"
                             : string.Empty;
                     var injuredNote = isInjured ? $" [yellow](Injured: effective Hit {w.Hit + 1}+)[/]" : string.Empty;
 
@@ -48,10 +48,10 @@ public class ConsoleFightInputProvider(IAnsiConsole console, ColumnContext colum
                 .Title($"{columnContext.Prefix}Select defender''s melee weapon:")
                 .UseConverter(w =>
                 {
-                    var rulesText = w.ParsedRules.Count > 0
-                        ? $" | {string.Join(", ", w.ParsedRules.Select(r => r.RawText))}"
-                        : !string.IsNullOrWhiteSpace(w.SpecialRules)
-                            ? $" | {w.SpecialRules}"
+                    var rulesText = w.Rules.Count > 0
+                        ? $" | {string.Join(", ", w.Rules.Select(r => r.RawText))}"
+                        : !string.IsNullOrWhiteSpace(w.WeaponRules)
+                            ? $" | {w.WeaponRules}"
                             : string.Empty;
 
                     return $"{Markup.Escape(w.Name)} (Attack: [green]{w.Atk}[/] | Hit: [green]{w.Hit}+[/] | Normal: [green]{w.NormalDmg}[/] | Crit: [green]{w.CriticalDmg}[/]{Markup.Escape(rulesText)})";

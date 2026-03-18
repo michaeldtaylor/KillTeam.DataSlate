@@ -135,7 +135,7 @@ public class TeamYamlImporter
                         Hit = ParseSave(w.Hit ?? "0"),
                         NormalDmg = w.Dmg?.Normal ?? 0,
                         CriticalDmg = w.Dmg?.Crit ?? 0,
-                        SpecialRules = w.WeaponRules is not null
+                        WeaponRules = w.WeaponRules is not null
                             ? string.Join(", ", w.WeaponRules)
                             : string.Empty,
                     });

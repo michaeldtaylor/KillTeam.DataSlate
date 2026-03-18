@@ -40,7 +40,7 @@ public class SqliteWeaponRepository
                 command.Parameters.AddWithValue("@hit", weapon.Hit);
                 command.Parameters.AddWithValue("@normalDmg", weapon.NormalDmg);
                 command.Parameters.AddWithValue("@criticalDmg", weapon.CriticalDmg);
-                command.Parameters.AddWithValue("@specialRules", weapon.SpecialRules);
+                command.Parameters.AddWithValue("@specialRules", weapon.WeaponRules);
                 await command.ExecuteNonQueryAsync();
             }
         });

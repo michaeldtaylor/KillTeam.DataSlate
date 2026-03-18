@@ -34,7 +34,7 @@ public enum WeaponType
     Melee,
 }
 
-public enum SpecialRuleKind
+public enum WeaponRuleKind
 {
     Accurate,
     Balanced,
@@ -64,7 +64,7 @@ public enum SpecialRuleKind
     Unknown,
 }
 
-public enum SpecialRulePhase
+public enum WeaponRulePhase
 {
     Fight,
     Shoot,

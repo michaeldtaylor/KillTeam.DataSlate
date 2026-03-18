@@ -124,64 +124,64 @@ public class ImportTeamsTests
     }
 }
 
-public class SpecialRuleParserTests
+public class WeaponRuleParserTests
 {
     [Fact]
     public void Parse_HeavyDashOnly_ReturnsCorrectKind()
     {
-        var rules = SpecialRuleParser.Parse("Heavy (Dash only)");
+        var rules = WeaponRuleParser.Parse("Heavy (Dash only)");
         rules.Should().ContainSingle();
-        rules[0].Kind.Should().Be(SpecialRuleKind.HeavyDashOnly);
+        rules[0].Kind.Should().Be(WeaponRuleKind.HeavyDashOnly);
     }
 
     [Fact]
     public void Parse_Piercing1_ReturnsKindWithParam1()
     {
-        var rules = SpecialRuleParser.Parse("Piercing 1");
+        var rules = WeaponRuleParser.Parse("Piercing 1");
         rules.Should().ContainSingle();
-        rules[0].Kind.Should().Be(SpecialRuleKind.Piercing);
+        rules[0].Kind.Should().Be(WeaponRuleKind.Piercing);
         rules[0].Param.Should().Be(1);
     }
 
     [Fact]
     public void Parse_Lethal5_ReturnsKindWithParam5()
     {
-        var rules = SpecialRuleParser.Parse("Lethal 5");
+        var rules = WeaponRuleParser.Parse("Lethal 5");
         rules.Should().ContainSingle();
-        rules[0].Kind.Should().Be(SpecialRuleKind.Lethal);
+        rules[0].Kind.Should().Be(WeaponRuleKind.Lethal);
         rules[0].Param.Should().Be(5);
     }
 
     [Fact]
     public void Parse_UnknownRule_ReturnsUnknownKind()
     {
-        var rules = SpecialRuleParser.Parse("Poison 2");
+        var rules = WeaponRuleParser.Parse("Poison 2");
         rules.Should().ContainSingle();
-        rules[0].Kind.Should().Be(SpecialRuleKind.Unknown);
+        rules[0].Kind.Should().Be(WeaponRuleKind.Unknown);
     }
 
     [Fact]
     public void Parse_MultipleRules_ReturnsAll()
     {
-        var rules = SpecialRuleParser.Parse("Lethal 5, Brutal, Accurate 1");
+        var rules = WeaponRuleParser.Parse("Lethal 5, Brutal, Accurate 1");
         rules.Should().HaveCount(3);
     }
 
     [Fact]
     public void Parse_Range8Inches_ReturnsKindWithParam8()
     {
-        var rules = SpecialRuleParser.Parse("Range 8\"");
+        var rules = WeaponRuleParser.Parse("Range 8\"");
         rules.Should().ContainSingle();
-        rules[0].Kind.Should().Be(SpecialRuleKind.Range);
+        rules[0].Kind.Should().Be(WeaponRuleKind.Range);
         rules[0].Param.Should().Be(8);
     }
 
     [Fact]
     public void Parse_Range8WithoutInchSymbol_ReturnsKindWithParam8()
     {
-        var rules = SpecialRuleParser.Parse("Range 8");
+        var rules = WeaponRuleParser.Parse("Range 8");
         rules.Should().ContainSingle();
-        rules[0].Kind.Should().Be(SpecialRuleKind.Range);
+        rules[0].Kind.Should().Be(WeaponRuleKind.Range);
         rules[0].Param.Should().Be(8);
     }
 }

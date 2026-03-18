@@ -18,8 +18,7 @@ public class Weapon
 
     public int CriticalDmg { get; init; }
 
-    public string SpecialRules { get; init; } = string.Empty;
+    public string WeaponRules { get; init; } = string.Empty;
 
-    // Parsed at use-time, not stored
-    public IReadOnlyList<WeaponSpecialRule> ParsedRules { get; init; } = [];
+    public IReadOnlyList<WeaponRule> Rules { get; init; } = [];
 }
