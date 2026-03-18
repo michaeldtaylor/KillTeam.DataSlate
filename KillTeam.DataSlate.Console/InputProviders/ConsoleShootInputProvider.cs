@@ -8,13 +8,6 @@ namespace KillTeam.DataSlate.Console.InputProviders;
 
 public class ConsoleShootInputProvider(IAnsiConsole console, ColumnContext columnContext) : IShootInputProvider
 {
-    public Task<bool> IsEngagedAsync()
-    {
-        return Task.FromResult(console.Confirm(
-            $"{columnContext.Prefix}Is your operative within Engagement Range (1\") of any enemy?",
-            defaultValue: false));
-    }
-
     public async Task<GameOperativeState> SelectTargetAsync(
         IList<GameOperativeState> candidates,
         IReadOnlyDictionary<Guid, Operative> allOperatives)
