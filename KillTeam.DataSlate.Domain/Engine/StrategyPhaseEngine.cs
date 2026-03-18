@@ -26,13 +26,15 @@ public class StrategyPhaseEngine(
             ? game.Participant1.TeamId
             : game.Participant2.TeamId;
 
-        var turningPoint = await turningPointRepository.CreateAsync(new TurningPoint
+        var turningPoint = new TurningPoint
         {
             Id = Guid.NewGuid(),
             GameId = game.Id,
             Number = tpNumber,
             TeamWithInitiativeId = initiativeTeamId,
-        });
+        };
+
+        await turningPointRepository.CreateAsync(turningPoint);
 
         var (cp1, cp2) = ApplyCpGains(game, tpNumber, initiativeTeamId);
 

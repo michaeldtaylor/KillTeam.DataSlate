@@ -5,7 +5,7 @@ namespace KillTeam.DataSlate.Domain.Repositories.InMemory;
 /// <summary>No-op action store used by the simulate command — discards all writes.</summary>
 public class InMemoryActionRepository : IActionRepository
 {
-    public Task<GameAction> CreateAsync(GameAction action) => Task.FromResult(action);
+    public Task CreateAsync(GameAction action) => Task.CompletedTask;
 
     public Task UpdateNarrativeAsync(Guid id, string? note) => Task.CompletedTask;
 

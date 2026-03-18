@@ -140,9 +140,9 @@ public class SchemaTests
             Status = GameStatus.InProgress
         };
 
-        var created = await repo.CreateAsync(game);
+        await repo.CreateAsync(game);
 
-        var found = await repo.GetByIdAsync(created.Id);
+        var found = await repo.GetByIdAsync(game.Id);
         found.Should().NotBeNull();
         found!.Status.Should().Be(GameStatus.InProgress);
         found.Participant1.CommandPoints.Should().Be(2);

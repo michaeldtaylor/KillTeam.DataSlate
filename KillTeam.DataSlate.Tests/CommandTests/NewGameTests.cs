@@ -55,7 +55,7 @@ public class NewGameTests
             },
             Status = GameStatus.InProgress
         };
-        var created = await gameRepo.CreateAsync(game);
+        await gameRepo.CreateAsync(game);
 
         var fullTeam1 = await teamRepo.GetWithOperativesAsync(team1Name);
         var fullTeam2 = await teamRepo.GetWithOperativesAsync(team2Name);
@@ -66,7 +66,7 @@ public class NewGameTests
             await stateRepo.CreateAsync(new GameOperativeState
             {
                 Id = Guid.NewGuid(),
-                GameId = created.Id,
+                GameId = game.Id,
                 OperativeId = operative.Id,
                 CurrentWounds = operative.Wounds,
                 Order = Order.Conceal,
@@ -75,13 +75,13 @@ public class NewGameTests
         }
 
         // Assert
-        var foundGame = await gameRepo.GetByIdAsync(created.Id);
+        var foundGame = await gameRepo.GetByIdAsync(game.Id);
         foundGame.Should().NotBeNull();
         foundGame!.Status.Should().Be(GameStatus.InProgress);
         foundGame.Participant1.CommandPoints.Should().Be(2);
         foundGame.Participant2.CommandPoints.Should().Be(2);
 
-        var states = (await stateRepo.GetByGameAsync(created.Id)).ToList();
+        var states = (await stateRepo.GetByGameAsync(game.Id)).ToList();
         states.Should().HaveCount(4);
         states.All(s => s.IsReady).Should().BeTrue();
         states.All(s => s.Order == Order.Conceal).Should().BeTrue();

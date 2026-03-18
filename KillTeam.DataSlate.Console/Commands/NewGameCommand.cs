@@ -94,9 +94,9 @@ public class NewGameCommand(
             Status = GameStatus.InProgress
         };
 
-        var created = await games.CreateAsync(game);
+        await games.CreateAsync(game);
 
-        logger.LogInformation("New game {GameId} created: {Team1} vs {Team2}", created.Id, team1.Name, team2.Name);
+        logger.LogInformation("New game {GameId} created: {Team1} vs {Team2}", game.Id, team1.Name, team2.Name);
 
         // Create operative states for both teams
         var allOperatives = new List<Operative>();
@@ -116,7 +116,7 @@ public class NewGameCommand(
             await gameStates.CreateAsync(new GameOperativeState
             {
                 Id = Guid.NewGuid(),
-                GameId = created.Id,
+                GameId = game.Id,
                 OperativeId = operative.Id,
                 CurrentWounds = operative.Wounds,
                 Order = Order.Conceal,
@@ -128,7 +128,7 @@ public class NewGameCommand(
             });
         }
 
-        console.MarkupLine($"[green]Game {created.Id}[/]");
+        console.MarkupLine($"[green]Game {game.Id}[/]");
         console.MarkupLine($"  {Markup.Escape(player1.Name)} ([green]{Markup.Escape(team1.Name)}[/]) vs {Markup.Escape(player2.Name)} ([blue]{Markup.Escape(team2.Name)}[/])");
         if (!string.IsNullOrEmpty(missionName))
         {

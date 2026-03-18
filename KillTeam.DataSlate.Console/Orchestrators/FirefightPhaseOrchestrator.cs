@@ -68,7 +68,7 @@ public class FirefightPhaseOrchestrator(
                     TeamId = operative.TeamId,
                     IsCounteract = false
                 };
-                activation = await activationRepository.CreateAsync(activation);
+                await activationRepository.CreateAsync(activation);
 
                 seqCounter = await RunActivation(operative, state, turningPoint, activation, allStates, allOperatives, game, seqCounter);
                 game = (await gameRepository.GetByIdAsync(game.Id))!;
@@ -118,7 +118,7 @@ public class FirefightPhaseOrchestrator(
                         TeamId = operative.TeamId,
                         IsCounteract = false
                     };
-                    activation = await activationRepository.CreateAsync(activation);
+                    await activationRepository.CreateAsync(activation);
 
                     seqCounter = await RunActivation(operative, state, turningPoint, activation, allStates, allOperatives, game, seqCounter);
                     game = (await gameRepository.GetByIdAsync(game.Id))!;
@@ -311,7 +311,7 @@ public class FirefightPhaseOrchestrator(
             OrderSelected = counterState.Order,
             IsCounteract = true
         };
-        counterActivation = await activationRepository.CreateAsync(counterActivation);
+        await activationRepository.CreateAsync(counterActivation);
 
         console.MarkupLine($"[yellow]Counteract! {Markup.Escape(counterOperative.Name)} gets 1 AP (max 2\" movement).[/]");
 

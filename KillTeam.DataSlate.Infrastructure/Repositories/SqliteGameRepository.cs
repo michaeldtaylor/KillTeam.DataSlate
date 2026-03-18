@@ -13,7 +13,7 @@ public class SqliteGameRepository : IGameRepository
     public SqliteGameRepository(SqliteConnection connection)
         : this(new SqliteExecutor(connection)) { }
 
-    public async Task<Game> CreateAsync(Game game)
+    public async Task CreateAsync(Game game)
     {
         await _db.ExecuteAsync(
             """
@@ -22,7 +22,7 @@ public class SqliteGameRepository : IGameRepository
              participant1_player_id, participant2_player_id, status, participant1_command_points, participant2_command_points,
              winner_team_id, participant1_victory_points, participant2_victory_points)
             VALUES
-            (@id, @playedAt, @missionName, @teamAId, @team1Name, @teamBId, @team2Name,
+            (@id, @playedAt, @missionName, @team1Id, @team1Name, @team2Id, @team2Name,
              @player1Id, @player2Id, @status, @cpTeam1, @cpTeam2,
              @winnerTeamId, @vpTeam1, @vpTeam2)
             """,
@@ -31,9 +31,9 @@ public class SqliteGameRepository : IGameRepository
                 ["@id"] = game.Id.ToString(),
                 ["@playedAt"] = game.PlayedAt.ToUniversalTime().ToString("o"),
                 ["@missionName"] = game.MissionName,
-                ["@teamAId"] = game.Participant1.TeamId,
+                ["@team1Id"] = game.Participant1.TeamId,
                 ["@team1Name"] = game.Participant1.TeamName,
-                ["@teamBId"] = game.Participant2.TeamId,
+                ["@team2Id"] = game.Participant2.TeamId,
                 ["@team2Name"] = game.Participant2.TeamName,
                 ["@player1Id"] = game.Participant1.PlayerId.ToString(),
                 ["@player2Id"] = game.Participant2.PlayerId.ToString(),
@@ -44,8 +44,6 @@ public class SqliteGameRepository : IGameRepository
                 ["@vpTeam1"] = game.Participant1.VictoryPoints,
                 ["@vpTeam2"] = game.Participant2.VictoryPoints
             });
-
-        return game;
     }
 
     public async Task<Game?> GetByIdAsync(Guid id)

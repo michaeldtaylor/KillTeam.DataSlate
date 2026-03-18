@@ -4,7 +4,7 @@ namespace KillTeam.DataSlate.Domain.Repositories;
 
 public interface IActionRepository
 {
-    Task<GameAction> CreateAsync(GameAction action);
+    Task CreateAsync(GameAction action);
 
     Task UpdateNarrativeAsync(Guid id, string? note);
 

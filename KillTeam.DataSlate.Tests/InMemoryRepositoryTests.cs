@@ -106,14 +106,12 @@ public class InMemoryRepositoryTests
     // ── InMemoryActionRepository ──────────────────────────────────────────────
 
     [Fact]
-    public async Task CreateAsync_ReturnsActionUnchanged()
+    public async Task CreateAsync_DoesNotThrow()
     {
         var repo = new InMemoryActionRepository();
         var action = new GameAction { Id = Guid.NewGuid(), Type = ActionType.Fight, ApCost = 1 };
 
-        var result = await repo.CreateAsync(action);
-
-        result.Should().BeSameAs(action);
+        await repo.Invoking(r => r.CreateAsync(action)).Should().NotThrowAsync();
     }
 
     [Fact]

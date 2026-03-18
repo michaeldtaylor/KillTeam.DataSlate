@@ -13,7 +13,7 @@ public class SqliteActivationRepository : IActivationRepository
     public SqliteActivationRepository(SqliteConnection connection)
         : this(new SqliteExecutor(connection)) { }
 
-    public async Task<Activation> CreateAsync(Activation activation)
+    public async Task CreateAsync(Activation activation)
     {
         await _db.ExecuteAsync(
             """
@@ -36,8 +36,6 @@ public class SqliteActivationRepository : IActivationRepository
                 ["@isGuardInterrupt"] = activation.IsGuardInterrupt ? 1 : 0,
                 ["@narrativeNote"] = activation.NarrativeNote
             });
-
-        return activation;
     }
 
     public async Task<IEnumerable<Activation>> GetByTurningPointAsync(Guid turningPointId)

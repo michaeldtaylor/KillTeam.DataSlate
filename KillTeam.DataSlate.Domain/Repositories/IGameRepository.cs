@@ -4,7 +4,7 @@ namespace KillTeam.DataSlate.Domain.Repositories;
 
 public interface IGameRepository
 {
-    Task<Game> CreateAsync(Game game);
+    Task CreateAsync(Game game);
 
     Task<Game?> GetByIdAsync(Guid id);
 

@@ -14,7 +14,7 @@ public class SqliteActionRepository : IActionRepository
     public SqliteActionRepository(SqliteConnection connection)
         : this(new SqliteExecutor(connection)) { }
 
-    public async Task<GameAction> CreateAsync(GameAction action)
+    public async Task CreateAsync(GameAction action)
     {
         await _db.ExecuteAsync(
             """
@@ -53,8 +53,6 @@ public class SqliteActionRepository : IActionRepository
                 ["@causedIncapacitation"] = action.CausedIncapacitation ? 1 : 0,
                 ["@narrativeNote"] = action.NarrativeNote
             });
-
-        return action;
     }
 
     public async Task UpdateNarrativeAsync(Guid id, string? note)

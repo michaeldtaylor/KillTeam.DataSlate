@@ -13,7 +13,7 @@ public class SqliteTurningPointRepository : ITurningPointRepository
     public SqliteTurningPointRepository(SqliteConnection connection)
         : this(new SqliteExecutor(connection)) { }
 
-    public async Task<TurningPoint> CreateAsync(TurningPoint turningPoint)
+    public async Task CreateAsync(TurningPoint turningPoint)
     {
         await _db.ExecuteAsync(
             """
@@ -31,8 +31,6 @@ public class SqliteTurningPointRepository : ITurningPointRepository
                 ["@cpTeam2"] = turningPoint.CommandPointsParticipant2,
                 ["@isStrategyPhaseComplete"] = turningPoint.IsStrategyPhaseComplete ? 1 : 0
             });
-
-        return turningPoint;
     }
 
     public async Task<TurningPoint?> GetCurrentAsync(Guid gameId)
