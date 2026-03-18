@@ -5,6 +5,8 @@ namespace KillTeam.DataSlate.Domain.Engine.Input;
 
 public interface IShootInputProvider
 {
+    Task<bool> IsOnConcealOrderAsync();
+
     Task<GameOperativeState> SelectTargetAsync(
         IList<GameOperativeState> candidates,
         IReadOnlyDictionary<Guid, Operative> allOperatives);
@@ -13,11 +15,15 @@ public interface IShootInputProvider
 
     Task<Weapon> SelectWeaponAsync(IList<Weapon> weapons, bool hasMovedNonDash);
 
-    Task<string> GetCoverStatusAsync(string targetName);
+    Task<string> GetCoverStatusAsync(string targetName, bool lightCoverBlocked = false);
 
     Task<int> GetFriendlyAllyCountAsync();
 
     Task<string> GetNarrativeNoteAsync();
+
+    bool HasRemainingUses(Weapon weapon);
+
+    void RecordWeaponFired(Weapon weapon);
 
     Task<int[]> RollOrEnterDiceAsync(
         int count, string label,

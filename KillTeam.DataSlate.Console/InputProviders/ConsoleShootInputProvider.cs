@@ -8,6 +8,15 @@ namespace KillTeam.DataSlate.Console.InputProviders;
 
 public class ConsoleShootInputProvider(IAnsiConsole console, ColumnContext columnContext) : IShootInputProvider
 {
+    private readonly Dictionary<Guid, int> _limitedUsesRemaining = [];
+
+    public Task<bool> IsOnConcealOrderAsync()
+    {
+        return Task.FromResult(console.Confirm(
+            $"{columnContext.Prefix}Is your operative on a Conceal order?",
+            defaultValue: false));
+    }
+
     public async Task<GameOperativeState> SelectTargetAsync(
         IList<GameOperativeState> candidates,
         IReadOnlyDictionary<Guid, Operative> allOperatives)
@@ -33,11 +42,22 @@ public class ConsoleShootInputProvider(IAnsiConsole console, ColumnContext colum
                         : !string.IsNullOrWhiteSpace(w.WeaponRules)
                             ? $" | {w.WeaponRules}"
                             : string.Empty;
-                    var saturate = w.Rules.Any(r => r.Kind == WeaponRuleKind.Saturate)
-                        ? " [yellow]Saturate[/]"
-                        : string.Empty;
 
-                    return $"{Markup.Escape(w.Name)} (Attack: [green]{w.Atk}[/] | Hit: [green]{w.Hit}+[/] | Normal: [green]{w.NormalDmg}[/] | Crit: [green]{w.CriticalDmg}[/]{Markup.Escape(rulesText)}){saturate}";
+                    var badges = new List<string>();
+                    if (w.Rules.Any(r => r.Kind == WeaponRuleKind.Saturate)) { badges.Add("[yellow]Saturate[/]"); }
+                    if (w.Rules.Any(r => r.Kind == WeaponRuleKind.Seek))     { badges.Add("[yellow]Seek[/]"); }
+                    if (w.Rules.Any(r => r.Kind == WeaponRuleKind.SeekLight)){ badges.Add("[yellow]Seek Light[/]"); }
+                    if (w.Rules.Any(r => r.Kind == WeaponRuleKind.Silent))   { badges.Add("[cyan]Silent[/]"); }
+                    if (w.Rules.Any(r => r.Kind == WeaponRuleKind.Limited))
+                    {
+                        var uses = HasRemainingUses(w) ? _limitedUsesRemaining.GetValueOrDefault(w.Id, -1) : 0;
+                        var usesLabel = uses < 0 ? "?" : uses.ToString();
+                        badges.Add($"[yellow]Limited ({usesLabel} left)[/]");
+                    }
+
+                    var badgeStr = badges.Count > 0 ? " " + string.Join(" ", badges) : string.Empty;
+
+                    return $"{Markup.Escape(w.Name)} (Attack: [green]{w.Atk}[/] | Hit: [green]{w.Hit}+[/] | Normal: [green]{w.NormalDmg}[/] | Crit: [green]{w.CriticalDmg}[/]{Markup.Escape(rulesText)}){badgeStr}";
                 })
                 .AddChoices(weapons)));
     }
@@ -52,12 +72,19 @@ public class ConsoleShootInputProvider(IAnsiConsole console, ColumnContext colum
                     : ValidationResult.Error("[red]Enter a non-negative number.[/]"))));
     }
 
-    public Task<string> GetCoverStatusAsync(string targetName)
+    public Task<string> GetCoverStatusAsync(string targetName, bool lightCoverBlocked = false)
     {
-        return Task.FromResult(console.Prompt(
-            new SelectionPrompt<string>()
-                .Title($"{columnContext.Prefix}Is {Markup.Escape(targetName)} in cover or obscured?")
-                .AddChoices("In cover", "Obscured", "Neither")));
+        var prompt = new SelectionPrompt<string>()
+            .Title($"{columnContext.Prefix}Is {Markup.Escape(targetName)} in cover or obscured?");
+
+        if (!lightCoverBlocked)
+        {
+            prompt.AddChoice("In cover");
+        }
+
+        prompt.AddChoices("Obscured", "Neither");
+
+        return Task.FromResult(console.Prompt(prompt));
     }
 
     public Task<int> GetFriendlyAllyCountAsync()
@@ -75,6 +102,39 @@ public class ConsoleShootInputProvider(IAnsiConsole console, ColumnContext colum
         return Task.FromResult(console.Prompt(
             new TextPrompt<string>($"{columnContext.Prefix}Narrative note [dim](optional, press enter to skip)[/]:")
                 .AllowEmpty()));
+    }
+
+    public bool HasRemainingUses(Weapon weapon)
+    {
+        var limitedRule = weapon.Rules.FirstOrDefault(r => r.Kind == WeaponRuleKind.Limited);
+
+        if (limitedRule is null)
+        {
+            return true;
+        }
+
+        var maxUses = limitedRule.Param ?? 1;
+
+        if (!_limitedUsesRemaining.TryGetValue(weapon.Id, out var remaining))
+        {
+            remaining = maxUses;
+            _limitedUsesRemaining[weapon.Id] = remaining;
+        }
+
+        return remaining > 0;
+    }
+
+    public void RecordWeaponFired(Weapon weapon)
+    {
+        if (!weapon.Rules.Any(r => r.Kind == WeaponRuleKind.Limited))
+        {
+            return;
+        }
+
+        if (_limitedUsesRemaining.TryGetValue(weapon.Id, out var remaining) && remaining > 0)
+        {
+            _limitedUsesRemaining[weapon.Id] = remaining - 1;
+        }
     }
 
     public async Task<int[]> RollOrEnterDiceAsync(

@@ -1,4 +1,5 @@
 using KillTeam.DataSlate.Console.Rendering;
+using KillTeam.DataSlate.Console.TestData;
 using KillTeam.DataSlate.Domain.Engine;
 using KillTeam.DataSlate.Domain.Engine.Input;
 using KillTeam.DataSlate.Domain.Events;
@@ -69,26 +70,41 @@ public class SimulateSessionOrchestrator(
             return (null, null, null, null);
         }
 
-        // Step 1 - your team
+        var testTeam = TestTeamFactory.Create();
+
+        // Step 1 - your team (test team appears first)
         var playerTeamStub = console.Prompt(
             new SelectionPrompt<Team>()
                 .Title("Select [bold]your[/] team:")
                 .UseConverter(FormatTeam)
-                .AddChoices(allTeams));
+                .AddChoices([testTeam, .. allTeams]));
 
-        var playerTeam = (await teamRepository.GetWithOperativesAsync(playerTeamStub.Name))!;
+        var playerTeam = playerTeamStub.Id == TestTeamFactory.TeamId
+            ? testTeam
+            : (await teamRepository.GetWithOperativesAsync(playerTeamStub.Name))!;
 
-        // Step 2 - your operative
-        var playerOperative = console.Prompt(
-            new SelectionPrompt<Operative>()
-                .Title("Select [bold]your[/] operative:")
-                .UseConverter(FormatOperative)
-                .AddChoices(playerTeam.Operatives));
+        // Step 2 - your operative (auto-select if only one)
+        Operative playerOperative;
+        if (playerTeam.Operatives.Count == 1)
+        {
+            playerOperative = playerTeam.Operatives[0];
+        }
+        else
+        {
+            playerOperative = console.Prompt(
+                new SelectionPrompt<Operative>()
+                    .Title("Select [bold]your[/] operative:")
+                    .UseConverter(FormatOperative)
+                    .AddChoices(playerTeam.Operatives));
+        }
 
-        // Step 3 - AI's team (exclude player's team)
+        // Step 3 - AI's team (test team always available; exclude player's real team)
         var aiTeamChoices = allTeams.Where(t => t.Name != playerTeamStub.Name).ToList();
+        var aiTeamOptions = playerTeamStub.Id == TestTeamFactory.TeamId
+            ? (IEnumerable<Team>)[testTeam, .. allTeams]
+            : (IEnumerable<Team>)[testTeam, .. aiTeamChoices];
 
-        if (aiTeamChoices.Count == 0)
+        if (!aiTeamOptions.Any())
         {
             console.MarkupLine("[red]No other teams available for the AI. Import more teams first.[/]");
             return (null, null, null, null);
@@ -98,16 +114,26 @@ public class SimulateSessionOrchestrator(
             new SelectionPrompt<Team>()
                 .Title("Select the [bold]AI[/] team:")
                 .UseConverter(FormatTeam)
-                .AddChoices(aiTeamChoices));
+                .AddChoices(aiTeamOptions));
 
-        var aiTeam = (await teamRepository.GetWithOperativesAsync(aiTeamStub.Name))!;
+        var aiTeam = aiTeamStub.Id == TestTeamFactory.TeamId
+            ? testTeam
+            : (await teamRepository.GetWithOperativesAsync(aiTeamStub.Name))!;
 
-        // Step 4 - AI's operative
-        var aiOperative = console.Prompt(
-            new SelectionPrompt<Operative>()
-                .Title("Select the [bold]AI[/] operative:")
-                .UseConverter(FormatOperative)
-                .AddChoices(aiTeam.Operatives));
+        // Step 4 - AI's operative (auto-select if only one)
+        Operative aiOperative;
+        if (aiTeam.Operatives.Count == 1)
+        {
+            aiOperative = aiTeam.Operatives[0];
+        }
+        else
+        {
+            aiOperative = console.Prompt(
+                new SelectionPrompt<Operative>()
+                    .Title("Select the [bold]AI[/] operative:")
+                    .UseConverter(FormatOperative)
+                    .AddChoices(aiTeam.Operatives));
+        }
 
         return (playerOperative, aiOperative, playerTeam, aiTeam);
     }

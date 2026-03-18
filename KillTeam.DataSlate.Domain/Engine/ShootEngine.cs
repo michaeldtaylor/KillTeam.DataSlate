@@ -28,6 +28,9 @@ public class ShootEngine(
         var isAttackerTeamA = attacker.TeamId == game.Participant1.TeamId;
         var isAttackerTeamId = attacker.TeamId;
 
+        // ── Conceal order check (Silent rule) ────────────────────────────────────
+        var isOnConceal = await inputProvider.IsOnConcealOrderAsync();
+
         var enemyStates = allOperativeStates
             .Where(s => !s.IsIncapacitated
                 && allOperatives.TryGetValue(s.OperativeId, out var o)
@@ -79,15 +82,19 @@ public class ShootEngine(
 
                 return rangeRule is null || rangeRule.Param >= targetDistance;
             })
+            .Where(w => !isOnConceal || w.Rules.Any(r => r.Kind == WeaponRuleKind.Silent))
+            .Where(w => inputProvider.HasRemainingUses(w))
             .ToList();
 
         if (rangedWeapons.Count == 0)
         {
-            var outOfRangeMsg = targetDistance > 0
-                ? $"No ranged weapons can reach {targetOp.Name} at {targetDistance}\"."
-                : "No ranged weapons available.";
+            var noWeaponsMsg = isOnConceal
+                ? "Cannot shoot — operative is on a Conceal order and no weapons have the Silent rule."
+                : targetDistance > 0
+                    ? $"No ranged weapons can reach {targetOp.Name} at {targetDistance}\"."
+                    : "No ranged weapons available.";
 
-            eventStream?.Emit((seq, ts) => new CombatWarningEvent(eventStream.GameSessionId, seq, ts, isAttackerTeamId, CombatWarningKind.NoWeaponsAvailable, outOfRangeMsg));
+            eventStream?.Emit((seq, ts) => new CombatWarningEvent(eventStream.GameSessionId, seq, ts, isAttackerTeamId, CombatWarningKind.NoWeaponsAvailable, noWeaponsMsg));
 
             return new ShootSessionResult(false, 0, null);
         }
@@ -103,6 +110,9 @@ public class ShootEngine(
             weapon = await inputProvider.SelectWeaponAsync(rangedWeapons, hasMovedNonDash);
         }
 
+        // ── Record Limited weapon use ─────────────────────────────────────────────
+        inputProvider.RecordWeaponFired(weapon);
+
         if (weapon.Rules.Any(r => r.Kind == WeaponRuleKind.Blast || r.Kind == WeaponRuleKind.Torrent))
         {
             var blastResult = await blastEngine.RunAsync(
@@ -115,9 +125,36 @@ public class ShootEngine(
             return new ShootSessionResult(blastResult.AnyIncapacitation, blastResult.TotalDamage, targetState.OperativeId);
         }
 
-        var coverChoice = await inputProvider.GetCoverStatusAsync(targetOp.Name);
-        var inCover = coverChoice == "In cover";
-        var isObscured = coverChoice == "Obscured";
+        // ── Cover status: Seek overrides all cover; SeekLight blocks light cover ──
+        bool inCover;
+        bool isObscured;
+
+        if (weapon.Rules.Any(r => r.Kind == WeaponRuleKind.Seek))
+        {
+            eventStream?.Emit((seq, ts) => new CombatWarningEvent(eventStream.GameSessionId, seq, ts, isAttackerTeamId, CombatWarningKind.NoWeaponsAvailable, $"Seek: {targetOp.Name} cannot use terrain for cover."));
+            inCover = false;
+            isObscured = false;
+        }
+        else
+        {
+            var lightCoverBlocked = weapon.Rules.Any(r => r.Kind == WeaponRuleKind.SeekLight);
+            var coverChoice = await inputProvider.GetCoverStatusAsync(targetOp.Name, lightCoverBlocked);
+            inCover = coverChoice == "In cover";
+            isObscured = coverChoice == "Obscured";
+
+            if (lightCoverBlocked && inCover)
+            {
+                eventStream?.Emit((seq, ts) => new CombatWarningEvent(eventStream.GameSessionId, seq, ts, isAttackerTeamId, CombatWarningKind.NoWeaponsAvailable, $"Seek Light: {targetOp.Name} cannot use light terrain for cover."));
+                inCover = false;
+            }
+
+            // ── Saturate: defender cannot retain cover saves ──────────────────────
+            if (weapon.Rules.Any(r => r.Kind == WeaponRuleKind.Saturate) && inCover)
+            {
+                eventStream?.Emit((seq, ts) => new CombatWarningEvent(eventStream.GameSessionId, seq, ts, isAttackerTeamId, CombatWarningKind.NoWeaponsAvailable, $"Saturate: {targetOp.Name} cannot retain cover saves."));
+                inCover = false;
+            }
+        }
 
         var fightAssist = await inputProvider.GetFriendlyAllyCountAsync();
 
