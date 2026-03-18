@@ -37,10 +37,10 @@ public class SimulateSessionOrchestrator(
         console.MarkupLine("[dim]Test fight and shoot encounters without a full game session. Nothing is saved.[/]");
         console.WriteLine();
 
-        var youPlayer = await playerRepository.FindByNameAsync("Player");
+        var player = await playerRepository.FindByNameAsync("Player");
         var aiPlayer = await playerRepository.FindByNameAsync("AI");
 
-        if (youPlayer is null || aiPlayer is null)
+        if (player is null || aiPlayer is null)
         {
             console.MarkupLine("[red]Internal simulate players not found. Re-initialise the database.[/]");
             return;
@@ -53,8 +53,8 @@ public class SimulateSessionOrchestrator(
             return;
         }
 
-        DisplayMatchup(playerOperative, playerTeam!, aiOperative, aiTeam!, youPlayer.Colour, aiPlayer.Colour);
-        await RunSessionLoopAsync(playerOperative, aiOperative, playerTeam!, aiTeam!, youPlayer, aiPlayer);
+        DisplayMatchup(playerOperative, playerTeam!, aiOperative, aiTeam!, player.Name, player.Colour, aiPlayer.Name, aiPlayer.Colour);
+        await RunSessionLoopAsync(playerOperative, aiOperative, playerTeam!, aiTeam!, player, aiPlayer);
         logger.LogInformation("Simulate session ended");
     }
 
@@ -146,7 +146,7 @@ public class SimulateSessionOrchestrator(
                         aiOperative = result.aiOperative!;
                         playerTeam = result.playerTeam!;
                         aiTeam = result.aiTeam!;
-                        DisplayMatchup(playerOperative, playerTeam, aiOperative, aiTeam, youPlayer.Colour, aiPlayer.Colour);
+                        DisplayMatchup(playerOperative, playerTeam, aiOperative, aiTeam, youPlayer.Name, youPlayer.Colour, aiPlayer.Name, aiPlayer.Colour);
                     }
                     break;
 
@@ -234,8 +234,8 @@ public class SimulateSessionOrchestrator(
         var stream = new GameEventStream(game.Id);
         var participantLabels = new Dictionary<string, string>
         {
-            [playerTeam.Id] = "You",
-            [aiTeam.Id] = "AI"
+            [playerTeam.Id] = youPlayer.Name,
+            [aiTeam.Id] = aiPlayer.Name,
         };
         var participantColours = new Dictionary<string, string>
         {
@@ -261,7 +261,9 @@ public class SimulateSessionOrchestrator(
                 aiIncapacitated: fightResult.AttackerCausedIncapacitation,
                 playerCurrentWounds: playerState.CurrentWounds,
                 aiCurrentWounds: aiState.CurrentWounds,
+                youName: youPlayer.Name,
                 youColour: youPlayer.Colour,
+                aiName: aiPlayer.Name,
                 aiColour: aiPlayer.Colour);
         }
         else
@@ -279,7 +281,9 @@ public class SimulateSessionOrchestrator(
                 aiIncapacitated: shootResult.CausedIncapacitation,
                 playerCurrentWounds: playerState.CurrentWounds,
                 aiCurrentWounds: aiState.CurrentWounds,
+                youName: youPlayer.Name,
                 youColour: youPlayer.Colour,
+                aiName: aiPlayer.Name,
                 aiColour: aiPlayer.Colour);
         }
     }
@@ -314,13 +318,13 @@ public class SimulateSessionOrchestrator(
     private void DisplayMatchup(
         Models.Operative playerOperative, Models.Team playerTeam,
         Models.Operative aiOperative, Models.Team aiTeam,
-        string youColour, string aiColour)
+        string youName, string youColour, string aiName, string aiColour)
     {
         console.WriteLine();
         var table = new Table()
             .Border(TableBorder.Rounded)
-            .AddColumn($"[bold {youColour}]You[/]")
-            .AddColumn($"[bold {aiColour}]AI[/]");
+            .AddColumn($"[bold {youColour}]{Markup.Escape(youName)}[/]")
+            .AddColumn($"[bold {aiColour}]{Markup.Escape(aiName)}[/]");
 
         table.AddRow(
             $"[bold]{Markup.Escape(playerOperative.Name)}[/]\n[dim]{Markup.Escape(playerTeam.Name)}[/]",
@@ -339,14 +343,14 @@ public class SimulateSessionOrchestrator(
         int attackerDamage, int defenderDamage,
         bool playerIncapacitated, bool aiIncapacitated,
         int playerCurrentWounds, int aiCurrentWounds,
-        string youColour, string aiColour)
+        string youName, string youColour, string aiName, string aiColour)
     {
         console.WriteLine();
         var table = new Table()
             .Border(TableBorder.Rounded)
             .AddColumn("Result")
-            .AddColumn($"[bold {youColour}]You[/]")
-            .AddColumn($"[bold {aiColour}]AI[/]");
+            .AddColumn($"[bold {youColour}]{Markup.Escape(youName)}[/]")
+            .AddColumn($"[bold {aiColour}]{Markup.Escape(aiName)}[/]");
 
         var playerWoundsColor = playerCurrentWounds > 0 ? "green" : "red";
         var aiWoundsColor = aiCurrentWounds > 0 ? "green" : "red";

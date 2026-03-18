@@ -10,6 +10,8 @@ namespace KillTeam.DataSlate.Console.Rendering;
 /// </summary>
 public class ColumnContext
 {
+    private const string SystemLabel = "[System]";
+
     public Player? CurrentPlayer { get; set; }
 
     public int ColumnWidth { get; set; } = 8;
@@ -28,10 +30,9 @@ public class ColumnContext
                 return $"[bold {CurrentPlayer.Colour}]{Markup.Escape(label)}[/]{padding} │ ";
             }
 
-            var systemLabel = "[System]";
-            var systemPadding = new string(' ', width - systemLabel.Length);
+            var systemPadding = new string(' ', width - SystemLabel.Length);
 
-            return $"[grey62]{Markup.Escape(systemLabel)}[/]{systemPadding} │ ";
+            return $"[grey]{Markup.Escape(SystemLabel)}[/]{systemPadding} │ ";
         }
     }
 }
