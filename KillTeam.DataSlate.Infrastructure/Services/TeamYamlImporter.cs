@@ -128,7 +128,6 @@ public class TeamYamlImporter
                     operative.Weapons.Add(new Weapon
                     {
                         Id = Guid.NewGuid(),
-                        OperativeId = operative.Id,
                         Name = w.Name.Trim(),
                         Type = wt,
                         Atk = w.Atk,

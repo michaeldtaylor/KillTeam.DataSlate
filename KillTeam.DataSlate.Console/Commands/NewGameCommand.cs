@@ -67,13 +67,13 @@ public class NewGameCommand(
             new TextPrompt<string>("Mission name [dim](optional)[/]:").AllowEmpty());
 
         // Load full team data with operatives
-        var fullTeam1 = await teams.GetWithOperativesAsync(team1.Id);
-        var fullTeam2 = await teams.GetWithOperativesAsync(team2.Id);
+        var fullTeam1 = await teams.GetByIdAsync(team1.Id);
+        var fullTeam2 = await teams.GetByIdAsync(team2.Id);
 
         var game = new Game
         {
             Id = Guid.NewGuid(),
-            PlayedAt = DateTime.UtcNow,
+            StartedAt = DateTime.UtcNow,
             MissionName = string.IsNullOrWhiteSpace(missionName) ? null : missionName,
             Participant1 = new GameParticipant
             {

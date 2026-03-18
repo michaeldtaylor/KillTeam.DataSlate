@@ -24,7 +24,6 @@ public class SqliteWeaponRepository
 
             foreach (var weapon in weapons)
             {
-                weapon.OperativeId = operativeId;
                 await using var command = connection.CreateCommand();
                 command.Transaction = transaction;
                 command.CommandText = """
@@ -33,7 +32,7 @@ public class SqliteWeaponRepository
                     VALUES (@id, @operativeId, @name, @type, @atk, @hit, @normalDmg, @criticalDmg, @specialRules)
                     """;
                 command.Parameters.AddWithValue("@id", weapon.Id.ToString());
-                command.Parameters.AddWithValue("@operativeId", weapon.OperativeId.ToString());
+                command.Parameters.AddWithValue("@operativeId", operativeId.ToString());
                 command.Parameters.AddWithValue("@name", weapon.Name);
                 command.Parameters.AddWithValue("@type", weapon.Type.ToString());
                 command.Parameters.AddWithValue("@atk", weapon.Atk);

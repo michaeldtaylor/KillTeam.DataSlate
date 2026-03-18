@@ -122,7 +122,7 @@ public class SchemaTests
         var game = new Game
         {
             Id = Guid.NewGuid(),
-            PlayedAt = DateTime.UtcNow,
+            StartedAt = DateTime.UtcNow,
             Participant1 = new GameParticipant
             {
                 TeamId = "angels_of_death",

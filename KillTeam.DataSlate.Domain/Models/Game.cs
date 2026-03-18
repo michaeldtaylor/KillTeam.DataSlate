@@ -4,7 +4,7 @@ public class Game
 {
     public Guid Id { get; init; } = Guid.NewGuid();
 
-    public DateTime PlayedAt { get; init; }
+    public DateTime StartedAt { get; init; }
 
     public string? MissionName { get; init; }
 

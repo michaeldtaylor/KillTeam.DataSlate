@@ -38,7 +38,7 @@ public class StrategyPhaseEngine(
 
         var (cp1, cp2) = ApplyCpGains(game, tpNumber, initiativeTeamId);
 
-        await gameRepository.UpdateCpAsync(game.Id, cp1, cp2);
+        await gameRepository.UpdateCommandPointsAsync(game.Id, cp1, cp2);
         game.Participant1.CommandPoints = cp1;
         game.Participant2.CommandPoints = cp2;
 
@@ -128,7 +128,7 @@ public class StrategyPhaseEngine(
                 cp2 -= ploy.CpCost;
             }
 
-            await gameRepository.UpdateCpAsync(gameId, cp1, cp2);
+            await gameRepository.UpdateCommandPointsAsync(gameId, cp1, cp2);
         }
 
         return (cp1, cp2);

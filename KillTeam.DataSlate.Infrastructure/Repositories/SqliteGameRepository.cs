@@ -29,7 +29,7 @@ public class SqliteGameRepository : IGameRepository
             new()
             {
                 ["@id"] = game.Id.ToString(),
-                ["@playedAt"] = game.PlayedAt.ToUniversalTime().ToString("o"),
+                ["@playedAt"] = game.StartedAt.ToUniversalTime().ToString("o"),
                 ["@missionName"] = game.MissionName,
                 ["@team1Id"] = game.Participant1.TeamId,
                 ["@team1Name"] = game.Participant1.TeamName,
@@ -60,7 +60,7 @@ public class SqliteGameRepository : IGameRepository
             new() { ["@id"] = id.ToString() });
     }
 
-    public async Task UpdateStatusAsync(Guid gameId, GameStatus status, string? winnerTeamId, int victoryPointsParticipant1, int victoryPointsParticipant2)
+    public async Task UpdateStatusAsync(Guid id, GameStatus status, string? winnerTeamId, int victoryPointsParticipant1, int victoryPointsParticipant2)
     {
         await _db.ExecuteAsync(
             """
@@ -74,15 +74,15 @@ public class SqliteGameRepository : IGameRepository
                 ["@winnerId"] = winnerTeamId,
                 ["@victoryPoints1"] = victoryPointsParticipant1,
                 ["@victoryPoints2"] = victoryPointsParticipant2,
-                ["@id"] = gameId.ToString()
+                ["@id"] = id.ToString()
             });
     }
 
-    public async Task UpdateCpAsync(Guid gameId, int commandPointsParticipant1, int commandPointsParticipant2)
+    public async Task UpdateCommandPointsAsync(Guid id, int commandPointsParticipant1, int commandPointsParticipant2)
     {
         await _db.ExecuteAsync(
             "UPDATE games SET participant1_command_points = @cp1, participant2_command_points = @cp2 WHERE id = @id",
-            new() { ["@cp1"] = commandPointsParticipant1, ["@cp2"] = commandPointsParticipant2, ["@id"] = gameId.ToString() });
+            new() { ["@cp1"] = commandPointsParticipant1, ["@cp2"] = commandPointsParticipant2, ["@id"] = id.ToString() });
     }
 
     public async Task<GameHeader?> GetHeaderAsync(Guid gameId)
@@ -157,7 +157,7 @@ public class SqliteGameRepository : IGameRepository
     private static Game MapGame(SqliteDataReader reader) => new()
     {
         Id = Guid.Parse(reader.GetString(0)),
-        PlayedAt = DateTime.Parse(reader.GetString(1)).ToUniversalTime(),
+        StartedAt = DateTime.Parse(reader.GetString(1)).ToUniversalTime(),
         MissionName = reader.IsDBNull(2) ? null : reader.GetString(2),
         Participant1 = new GameParticipant
         {

@@ -175,7 +175,7 @@ public class RerollEngine(IRerollInputProvider inputProvider, IGameRepository ga
         eventStream?.Emit((seq, ts) => new CpRerollAppliedEvent(
             eventStream.GameSessionId, seq, ts, participant, label, choice.Index, choice.Value, newVal, remainingCp));
 
-        await gameRepository.UpdateCpAsync(gameId, newCp1, newCp2);
+        await gameRepository.UpdateCommandPointsAsync(gameId, newCp1, newCp2);
 
         return pool.Select(d => d.Index == choice.Index
             ? d with { Value = newVal, HasBeenRerolled = true }

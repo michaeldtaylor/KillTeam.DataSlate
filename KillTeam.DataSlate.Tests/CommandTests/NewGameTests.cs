@@ -38,7 +38,7 @@ public class NewGameTests
         var game = new Game
         {
             Id = Guid.NewGuid(),
-            PlayedAt = DateTime.UtcNow,
+            StartedAt = DateTime.UtcNow,
             Participant1 = new GameParticipant
             {
                 TeamId = "angels_of_death",
@@ -57,8 +57,8 @@ public class NewGameTests
         };
         await gameRepo.CreateAsync(game);
 
-        var fullTeam1 = await teamRepo.GetWithOperativesAsync("angels_of_death");
-        var fullTeam2 = await teamRepo.GetWithOperativesAsync("plague_marines");
+        var fullTeam1 = await teamRepo.GetByIdAsync("angels_of_death");
+        var fullTeam2 = await teamRepo.GetByIdAsync("plague_marines");
         var allOperatives = (fullTeam1?.Operatives ?? []).Concat(fullTeam2?.Operatives ?? []).ToList();
 
         foreach (var operative in allOperatives)

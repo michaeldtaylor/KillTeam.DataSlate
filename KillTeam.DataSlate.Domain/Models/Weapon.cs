@@ -4,8 +4,6 @@ public class Weapon
 {
     public Guid Id { get; init; } = Guid.NewGuid();
 
-    public Guid OperativeId { get; set; }
-
     public required string Name { get; init; }
 
     public WeaponType Type { get; init; }

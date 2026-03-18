@@ -3,7 +3,6 @@ using KillTeam.DataSlate.Domain.Models;
 using KillTeam.DataSlate.Domain.Repositories;
 using KillTeam.DataSlate.Domain.Services;
 using Microsoft.Data.Sqlite;
-using Models = KillTeam.DataSlate.Domain.Models;
 
 namespace KillTeam.DataSlate.Infrastructure.Repositories;
 
@@ -97,7 +96,6 @@ public class SqliteTeamRepository : ITeamRepository
 
                 foreach (var weapon in operative.Weapons)
                 {
-                    weapon.OperativeId = operative.Id;
                     await using var weaponCommand = connection.CreateCommand();
                     weaponCommand.Transaction = transaction;
                     weaponCommand.CommandText = """
@@ -106,7 +104,7 @@ public class SqliteTeamRepository : ITeamRepository
                         VALUES (@id, @operativeId, @name, @type, @atk, @hit, @normalDmg, @criticalDmg, @specialRules)
                         """;
                     weaponCommand.Parameters.AddWithValue("@id", weapon.Id.ToString());
-                    weaponCommand.Parameters.AddWithValue("@operativeId", weapon.OperativeId.ToString());
+                    weaponCommand.Parameters.AddWithValue("@operativeId", operative.Id.ToString());
                     weaponCommand.Parameters.AddWithValue("@name", weapon.Name);
                     weaponCommand.Parameters.AddWithValue("@type", weapon.Type.ToString());
                     weaponCommand.Parameters.AddWithValue("@atk", weapon.Atk);
@@ -256,19 +254,7 @@ public class SqliteTeamRepository : ITeamRepository
             });
     }
 
-    public async Task<TeamSummary?> GetByIdAsync(string id)
-    {
-        return await _db.QuerySingleAsync(
-            "SELECT id, name, faction, grand_faction FROM teams WHERE id = @id LIMIT 1",
-            reader => new TeamSummary(
-                reader.GetString(0),
-                reader.GetString(1),
-                reader.GetString(2),
-                reader.GetString(3)),
-            new() { ["@id"] = id });
-    }
-
-    public async Task<Team?> GetWithOperativesAsync(string id)
+    public async Task<Team?> GetByIdAsync(string id)
     {
         var row = await _db.QuerySingleAsync(
             """
@@ -324,7 +310,6 @@ public class SqliteTeamRepository : ITeamRepository
                 reader => new Weapon
                 {
                     Id = Guid.Parse(reader.GetString(0)),
-                    OperativeId = operative.Id,
                     Name = reader.GetString(1),
                     Type = Enum.Parse<WeaponType>(reader.GetString(2)),
                     Atk = reader.GetInt32(3),
@@ -351,7 +336,19 @@ public class SqliteTeamRepository : ITeamRepository
         };
     }
 
-    public async Task<TeamStats?> GetTeamStatsAsync(string teamId)
+    public async Task<TeamSummary?> GetSummaryAsync(string id)
+    {
+        return await _db.QuerySingleAsync(
+            "SELECT id, name, faction, grand_faction FROM teams WHERE id = @id LIMIT 1",
+            reader => new TeamSummary(
+                reader.GetString(0),
+                reader.GetString(1),
+                reader.GetString(2),
+                reader.GetString(3)),
+            new() { ["@id"] = id });
+    }
+
+    public async Task<TeamStats?> GetStatsAsync(string id)
     {
         var gamesAndWins = await _db.QuerySingleAsync(
             """
@@ -360,7 +357,7 @@ public class SqliteTeamRepository : ITeamRepository
             WHERE (participant1_team_id = @id OR participant2_team_id = @id) AND status = 'Completed'
             """,
             reader => (Games: reader.GetInt32(0), Wins: reader.GetInt32(1)),
-            new() { ["@id"] = teamId });
+            new() { ["@id"] = id });
 
         var kills = await _db.ScalarAsync<int>(
             """
@@ -375,7 +372,7 @@ public class SqliteTeamRepository : ITeamRepository
             JOIN turning_points tp2 ON tp2.id = act2.turning_point_id
             WHERE abt.caused_incapacitation = 1 AND act2.team_id = @id
             """,
-            new() { ["@id"] = teamId });
+            new() { ["@id"] = id });
 
         var mostUsedWeapon = await _db.QuerySingleAsync(
             """
@@ -389,7 +386,7 @@ public class SqliteTeamRepository : ITeamRepository
             LIMIT 1
             """,
             reader => reader.GetString(0),
-            new() { ["@id"] = teamId });
+            new() { ["@id"] = id });
 
         return new TeamStats(gamesAndWins.Games, gamesAndWins.Wins, kills, mostUsedWeapon);
     }

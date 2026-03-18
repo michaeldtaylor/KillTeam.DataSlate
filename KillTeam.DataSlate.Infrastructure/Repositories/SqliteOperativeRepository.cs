@@ -14,11 +14,11 @@ public class SqliteOperativeRepository : IOperativeRepository
     public SqliteOperativeRepository(SqliteConnection connection)
         : this(new SqliteExecutor(connection)) { }
 
-    public async Task<string?> GetNameByIdAsync(Guid operativeId)
+    public async Task<string?> GetNameByIdAsync(Guid id)
     {
         return await _db.ScalarAsync<string>(
             "SELECT name FROM operatives WHERE id = @id",
-            new() { ["@id"] = operativeId.ToString() });
+            new() { ["@id"] = id.ToString() });
     }
 
     public async Task UpsertByTeamAsync(IEnumerable<Operative> operatives, string teamId)

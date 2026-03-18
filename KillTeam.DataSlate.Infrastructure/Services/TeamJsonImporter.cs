@@ -160,7 +160,6 @@ public class TeamJsonImporter
                     operative.Weapons.Add(new Weapon
                     {
                         Id = Guid.NewGuid(),
-                        OperativeId = operative.Id,
                         Name = jw.Name.Trim(),
                         Type = wt,
                         Atk = jw.Atk.Value,

@@ -81,7 +81,7 @@ public class SimulateSessionOrchestrator(
 
         var playerTeam = playerTeamStub.Id == TestTeamFactory.TeamId
             ? testTeam
-            : (await teamRepository.GetWithOperativesAsync(playerTeamStub.Id))!;
+            : (await teamRepository.GetByIdAsync(playerTeamStub.Id))!;
 
         // Step 2 - your operative (auto-select if only one)
         Operative playerOperative;
@@ -118,7 +118,7 @@ public class SimulateSessionOrchestrator(
 
         var aiTeam = aiTeamStub.Id == TestTeamFactory.TeamId
             ? testTeam
-            : (await teamRepository.GetWithOperativesAsync(aiTeamStub.Id))!;
+            : (await teamRepository.GetByIdAsync(aiTeamStub.Id))!;
 
         // Step 4 - AI's operative (auto-select if only one)
         Operative aiOperative;
@@ -208,7 +208,7 @@ public class SimulateSessionOrchestrator(
                 PlayerId = Guid.Empty,
                 CommandPoints = 0,
             },
-            PlayedAt = DateTime.UtcNow
+            StartedAt = DateTime.UtcNow
         };
 
         var turningPoint = new TurningPoint

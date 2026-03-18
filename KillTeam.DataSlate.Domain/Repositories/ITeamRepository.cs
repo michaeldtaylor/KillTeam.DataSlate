@@ -8,9 +8,9 @@ public interface ITeamRepository
 
     Task<IEnumerable<Team>> GetAllAsync();
 
-    Task<TeamSummary?> GetByIdAsync(string id);
+    Task<Team?> GetByIdAsync(string id);
 
-    Task<Team?> GetWithOperativesAsync(string id);
+    Task<TeamSummary?> GetSummaryAsync(string id);
 
-    Task<TeamStats?> GetTeamStatsAsync(string teamId);
+    Task<TeamStats?> GetStatsAsync(string id);
 }

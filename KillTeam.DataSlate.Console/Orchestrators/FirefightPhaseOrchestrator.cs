@@ -22,8 +22,8 @@ public class FirefightPhaseOrchestrator(
     public async Task RunAsync(Game game, TurningPoint currentTurningPoint)
     {
         logger.LogDebug("Firefight phase TP{TpNumber} started for game {GameId}", currentTurningPoint.Number, game.Id);
-        var team1 = await teamRepository.GetWithOperativesAsync(game.Participant1.TeamId);
-        var team2 = await teamRepository.GetWithOperativesAsync(game.Participant2.TeamId);
+        var team1 = await teamRepository.GetByIdAsync(game.Participant1.TeamId);
+        var team2 = await teamRepository.GetByIdAsync(game.Participant2.TeamId);
         var allOperatives = (team1?.Operatives ?? [])
             .Concat(team2?.Operatives ?? [])
             .ToDictionary(o => o.Id);
@@ -459,14 +459,9 @@ public class FirefightPhaseOrchestrator(
 
         await gameRepository.UpdateStatusAsync(game.Id, GameStatus.Completed, winnerTeamId, vp1, vp2);
 
-        if (winnerTeamId is not null)
-        {
-            console.MarkupLine($"[bold green]Winner: {(winnerTeamId == game.Participant1.TeamId ? "Team A" : "Team B")} — {(winnerTeamId == game.Participant1.TeamId ? vp1 : vp2)} VP[/]");
-        }
-        else
-        {
-            console.MarkupLine($"[yellow]Draw! Team A: {vp1} VP  |  Team B: {vp2} VP[/]");
-        }
+        console.MarkupLine(winnerTeamId is not null
+            ? $"[bold green]Winner: {(winnerTeamId == game.Participant1.TeamId ? "Team A" : "Team B")} — {(winnerTeamId == game.Participant1.TeamId ? vp1 : vp2)} VP[/]"
+            : $"[yellow]Draw! Team A: {vp1} VP  |  Team B: {vp2} VP[/]");
     }
 
     private static List<(Operative operative, GameOperativeState state)> GetReadyOperatives(

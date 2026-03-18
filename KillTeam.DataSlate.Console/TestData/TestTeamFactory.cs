@@ -106,7 +106,6 @@ public static class TestTeamFactory
         return new Weapon
         {
             Id = Guid.NewGuid(),
-            OperativeId = operativeId,
             Name = name,
             Type = type,
             Atk = atk,

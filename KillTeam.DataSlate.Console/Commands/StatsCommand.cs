@@ -39,7 +39,7 @@ public class StatsCommand(
 
     private async Task<int> ShowTeamStatsAsync(string teamId)
     {
-        var team = await teams.GetByIdAsync(teamId);
+        var team = await teams.GetSummaryAsync(teamId);
 
         if (team is null)
         {
@@ -49,7 +49,7 @@ public class StatsCommand(
             return 1;
         }
 
-        var stats = await teams.GetTeamStatsAsync(team.Id);
+        var stats = await teams.GetStatsAsync(team.Id);
 
         if (stats is null)
         {
