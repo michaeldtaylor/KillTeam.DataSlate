@@ -13,11 +13,9 @@ namespace KillTeam.DataSlate.Domain.Engine;
 /// </summary>
 public class GuardInterruptEngine(
     IGuardInterruptInputProvider inputProvider,
-    GuardResolutionService guardResolutionService,
     ShootEngine shootEngine,
     FightEngine fightEngine,
-    IActivationRepository activationRepository,
-    IGameOperativeStateRepository stateRepository)
+    IActivationRepository activationRepository)
 {
     /// <summary>
     /// Checks each eligible guard operative on the friendly side (i.e. not the acting enemy's team).
@@ -25,7 +23,6 @@ public class GuardInterruptEngine(
     /// </summary>
     public async Task<int> CheckAndRunInterruptsAsync(
         Operative actingEnemy,
-        GameOperativeState actingEnemyState,
         IReadOnlyList<GameOperativeState> allOperativeStates,
         IReadOnlyDictionary<Guid, Operative> allOperatives,
         Game game,
@@ -39,7 +36,9 @@ public class GuardInterruptEngine(
             .Where(s => allOperatives.TryGetValue(s.OperativeId, out var o) && o.TeamId != enemyTeamId)
             .ToList();
 
-        var eligibleGuards = guardResolutionService.GetEligibleGuards(friendlyStates);
+        var eligibleGuards = friendlyStates
+            .Where(s => s is { IsOnGuard: true, IsIncapacitated: false })
+            .ToList();
 
         if (eligibleGuards.Count == 0)
         {
@@ -58,7 +57,13 @@ public class GuardInterruptEngine(
 
             if (inControlRange)
             {
-                await stateRepository.UpdateGuardAsync(guardState.Id, false);
+                await (eventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
+                    new OperativeGuardClearedEvent(
+                        gameSessionId,
+                        sequenceNumber,
+                        timestamp,
+                        guardOp.Name,
+                        guardState.Id)) ?? ValueTask.CompletedTask);
                 guardState.IsOnGuard = false;
                 continue;
             }
@@ -95,16 +100,22 @@ public class GuardInterruptEngine(
             {
                 await shootEngine.RunAsync(
                     guardOp, guardState, allOperativeStates, allOperatives,
-                    game, tp, interruptActivation, eventStream: eventStream);
+                    game, interruptActivation, eventStream: eventStream);
             }
             else
             {
                 await fightEngine.RunAsync(
                     guardOp, guardState, allOperativeStates, allOperatives,
-                    game, tp, interruptActivation, eventStream);
+                    game, interruptActivation, eventStream);
             }
 
-            await stateRepository.UpdateGuardAsync(guardState.Id, false);
+            await (eventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
+                new OperativeGuardClearedEvent(
+                    gameSessionId,
+                    sequenceNumber,
+                    timestamp,
+                    guardOp.Name,
+                    guardState.Id)) ?? ValueTask.CompletedTask);
             guardState.IsOnGuard = false;
         }
 

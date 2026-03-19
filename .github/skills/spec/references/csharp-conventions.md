@@ -419,6 +419,8 @@ Common rename mappings:
 
 Exception: loop variables in short, unambiguous `foreach` may use conventional short forms only if the type makes the meaning obvious (e.g. `foreach (var file in files)`). Single-letter names are never acceptable.
 
+Exception: LINQ/lambda expression parameters may use short conventional names when the lambda body is compact and the type is obvious from context (e.g. `weapons.Where(w => w.Type == WeaponType.Ranged)`, `rules.Any(r => r.Kind == WeaponRuleKind.Heavy)`, `handlers.All(h => h.IsAvailable(weapon, context))`). This applies only inside the lambda expression itself, not to variables in enclosing scope.
+
 ---
 
 ## 16. Blank line after `var` / `using var` / `await using var` declaration block
@@ -479,6 +481,68 @@ var flagStr = flags.Count > 0 ? $"({string.Join(", ", flags)})" : "";
 **Exceptions** — `string.Empty` cannot be used as:
 - A default parameter value: `void Foo(string name = "")` — this is a compile error; keep `""`
 - An attribute argument: `[Description("")]` — keep `""`
+
+---
+
+## 18. Multi-line formatting for calls and definitions with 5+ arguments
+
+When a constructor call, method call, or type definition (record primary constructor, class constructor, method signature) has **5 or more** arguments or parameters — or would exceed **120 characters** on a single line — format with **each argument/parameter on its own line**, indented 4 spaces from the containing statement. The closing delimiter (`)`, `));`, `);`) follows the last argument on the same line.
+
+```csharp
+// ✅ Correct — lambda body on new line, new EventName( indented +4, args indented +4 more
+eventStream?.Emit((gameSessionId, seq, ts) =>
+    new ShootResolvedEvent(
+        gameSessionId,
+        seq,
+        ts,
+        attackerTeamId,
+        attacker.Name,
+        targetOp.Name,
+        result.TotalDamage,
+        causedIncap));
+
+// ❌ Wrong — new EventName( on same line as =>
+eventStream?.Emit((gameSessionId, seq, ts) => new ShootResolvedEvent(
+    gameSessionId,
+    seq,
+    ts,
+    attackerTeamId,
+    attacker.Name,
+    targetOp.Name,
+    result.TotalDamage,
+    causedIncap));
+
+// ❌ Wrong — multiple args crammed per line
+eventStream?.Emit((gameSessionId, seq, ts) => new ShootResolvedEvent(
+    gameSessionId, seq, ts, attackerTeamId,
+    attacker.Name, targetOp.Name, result.TotalDamage, causedIncap));
+```
+
+The same rule applies to record primary constructor definitions:
+
+```csharp
+// ✅ Correct
+public sealed record ShootResolvedEvent(
+    Guid GameSessionId,
+    int SequenceNumber,
+    DateTime Timestamp,
+    string Participant,
+    string AttackerName,
+    string TargetName,
+    int DamageDealt,
+    bool CausedIncapacitation)
+    : GameEvent(GameSessionId, SequenceNumber, Timestamp, Participant);
+
+// ❌ Wrong — grouped on shared lines
+public sealed record ShootResolvedEvent(
+    Guid GameSessionId, int SequenceNumber, DateTime Timestamp, string Participant,
+    string AttackerName, string TargetName, int DamageDealt, bool CausedIncapacitation)
+    : GameEvent(GameSessionId, SequenceNumber, Timestamp, Participant);
+```
+
+**Exceptions:**
+- Calls with 4 or fewer arguments may remain on a single line if they fit within 120 characters.
+- LINQ lambda bodies (`.Select(w => ...)`, `.Where(r => ...)`) are exempt — use compact inline style.
 
 ---
 

@@ -33,6 +33,5 @@ public static class WeaponRuleRegistry
         new() { Kind = WeaponRuleKind.Torrent,       Phase = WeaponRulePhase.Shoot, Description = "Make attacks against all operatives within x\" of target visible to the shooter." },
     ];
 
-    public static IReadOnlyDictionary<WeaponRuleKind, WeaponRuleDefinition> ByKind { get; } =
-        All.ToDictionary(d => d.Kind);
+    public static IReadOnlyDictionary<WeaponRuleKind, WeaponRuleDefinition> ByKind => All.ToDictionary(d => d.Kind);
 }

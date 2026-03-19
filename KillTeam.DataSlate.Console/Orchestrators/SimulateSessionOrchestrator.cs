@@ -2,6 +2,7 @@ using KillTeam.DataSlate.Console.Rendering;
 using KillTeam.DataSlate.Console.TestData;
 using KillTeam.DataSlate.Domain.Engine;
 using KillTeam.DataSlate.Domain.Engine.Input;
+using KillTeam.DataSlate.Domain.Engine.WeaponRules;
 using KillTeam.DataSlate.Domain.Events;
 using KillTeam.DataSlate.Domain.Models;
 using KillTeam.DataSlate.Domain.Repositories;
@@ -25,8 +26,8 @@ public class SimulateSessionOrchestrator(
     IShootInputProvider shootInputProvider,
     IRerollInputProvider rerollInputProvider,
     IBlastInputProvider blastInputProvider,
-    CombatResolutionService combatResolutionService,
-    FightResolutionService fightResolutionService,
+    ShootWeaponRuleApplicator shootWeaponRuleApplicator,
+    IGameStatePersistenceHandler persistenceHandler,
     ColumnContext columnContext,
     ILogger<SimulateSessionOrchestrator> logger)
 {
@@ -37,30 +38,30 @@ public class SimulateSessionOrchestrator(
         console.MarkupLine("[dim]Test fight and shoot encounters without a full game session. Nothing is saved.[/]");
         console.WriteLine();
 
-        var player = await playerRepository.FindByNameAsync("Player");
-        var aiPlayer = await playerRepository.FindByNameAsync("AI");
+        var player1 = await playerRepository.FindByNameAsync("Player 1");
+        var player2 = await playerRepository.FindByNameAsync("Player 2");
 
-        if (player is null || aiPlayer is null)
+        if (player1 is null || player2 is null)
         {
             console.MarkupLine("[red]Internal simulate players not found. Re-initialise the database.[/]");
             return;
         }
 
-        var (playerOperative, aiOperative, playerTeam, aiTeam) = await SelectOperativesAsync();
+        var (player1Operative, player2Operative, player1Team, player2Team) = await SelectOperativesAsync();
 
-        if (playerOperative is null || aiOperative is null)
+        if (player1Operative is null || player2Operative is null)
         {
             return;
         }
 
-        DisplayMatchup(playerOperative, playerTeam!, aiOperative, aiTeam!, player.Name, player.Colour, aiPlayer.Name, aiPlayer.Colour);
-        await RunSessionLoopAsync(playerOperative, aiOperative, playerTeam!, aiTeam!, player, aiPlayer);
+        DisplayMatchup(player1Operative, player1Team!, player2Operative, player2Team!, player1.Name, player1.Colour, player2.Name, player2.Colour);
+        await RunSessionLoopAsync(player1Operative, player2Operative, player1Team!, player2Team!, player1, player2);
         logger.LogInformation("Simulate session ended");
     }
 
     // --- Operative selection -------------------------------------------------
 
-    private async Task<(Operative? playerOperative, Operative? aiOperative, Team? playerTeam, Team? aiTeam)> SelectOperativesAsync()
+    private async Task<(Operative? player1Operative, Operative? player2Operative, Team? player1Team, Team? player2Team)> SelectOperativesAsync()
     {
         var allTeams = (await teamRepository.GetAllAsync()).ToList();
 
@@ -70,80 +71,79 @@ public class SimulateSessionOrchestrator(
             return (null, null, null, null);
         }
 
-        var testTeam = TestTeamFactory.Create();
+        var team1TestTeam = TestTeamFactory.CreateTeam1();
+        var team2TestTeam = TestTeamFactory.CreateTeam2();
 
-        // Step 1 - your team (test team appears first)
-        var playerTeamStub = console.Prompt(
+        // Step 1 - Player 1's team (Test Team 1 appears first)
+        var player1TeamStub = console.Prompt(
             new SelectionPrompt<Team>()
-                .Title("Select [bold]your[/] team:")
+                .Title("Select [bold]Player 1's[/] team:")
                 .UseConverter(FormatTeam)
-                .AddChoices([testTeam, .. allTeams]));
+                .AddChoices([team1TestTeam, .. allTeams]));
 
-        var playerTeam = playerTeamStub.Id == TestTeamFactory.TeamId
-            ? testTeam
-            : (await teamRepository.GetByIdAsync(playerTeamStub.Id))!;
+        var player1Team = player1TeamStub.Id == TestTeamFactory.Team1Id
+            ? team1TestTeam
+            : (await teamRepository.GetByIdAsync(player1TeamStub.Id))!;
 
-        // Step 2 - your operative (auto-select if only one)
-        Operative playerOperative;
-        if (playerTeam.Operatives.Count == 1)
+        // Step 2 - Player 1's operative (auto-select if only one)
+        Operative player1Operative;
+        if (player1Team.Operatives.Count == 1)
         {
-            playerOperative = playerTeam.Operatives[0];
+            player1Operative = player1Team.Operatives[0];
         }
         else
         {
-            playerOperative = console.Prompt(
+            player1Operative = console.Prompt(
                 new SelectionPrompt<Operative>()
-                    .Title("Select [bold]your[/] operative:")
+                    .Title("Select [bold]Player 1's[/] operative:")
                     .UseConverter(FormatOperative)
-                    .AddChoices(playerTeam.Operatives));
+                    .AddChoices(player1Team.Operatives));
         }
 
-        // Step 3 - AI's team (test team always available; exclude player's real team)
-        var aiTeamChoices = allTeams.Where(t => t.Name != playerTeamStub.Name).ToList();
-        var aiTeamOptions = playerTeamStub.Id == TestTeamFactory.TeamId
-            ? (IEnumerable<Team>)[testTeam, .. allTeams]
-            : (IEnumerable<Team>)[testTeam, .. aiTeamChoices];
+        // Step 3 - Player 2's team (Test Team 2 appears first; exclude Player 1's real team)
+        var player2TeamChoices = allTeams.Where(t => t.Name != player1TeamStub.Name).ToList();
+        var player2TeamOptions = (IEnumerable<Team>)[team2TestTeam, .. player2TeamChoices];
 
-        if (!aiTeamOptions.Any())
+        if (!player2TeamOptions.Any())
         {
-            console.MarkupLine("[red]No other teams available for the AI. Import more teams first.[/]");
+            console.MarkupLine("[red]No other teams available for Player 2. Import more teams first.[/]");
             return (null, null, null, null);
         }
 
-        var aiTeamStub = console.Prompt(
+        var player2TeamStub = console.Prompt(
             new SelectionPrompt<Team>()
-                .Title("Select the [bold]AI[/] team:")
+                .Title("Select [bold]Player 2's[/] team:")
                 .UseConverter(FormatTeam)
-                .AddChoices(aiTeamOptions));
+                .AddChoices(player2TeamOptions));
 
-        var aiTeam = aiTeamStub.Id == TestTeamFactory.TeamId
-            ? testTeam
-            : (await teamRepository.GetByIdAsync(aiTeamStub.Id))!;
+        var player2Team = player2TeamStub.Id == TestTeamFactory.Team2Id
+            ? team2TestTeam
+            : (await teamRepository.GetByIdAsync(player2TeamStub.Id))!;
 
-        // Step 4 - AI's operative (auto-select if only one)
-        Operative aiOperative;
-        if (aiTeam.Operatives.Count == 1)
+        // Step 4 - Player 2's operative (auto-select if only one)
+        Operative player2Operative;
+        if (player2Team.Operatives.Count == 1)
         {
-            aiOperative = aiTeam.Operatives[0];
+            player2Operative = player2Team.Operatives[0];
         }
         else
         {
-            aiOperative = console.Prompt(
+            player2Operative = console.Prompt(
                 new SelectionPrompt<Operative>()
-                    .Title("Select the [bold]AI[/] operative:")
+                    .Title("Select [bold]Player 2's[/] operative:")
                     .UseConverter(FormatOperative)
-                    .AddChoices(aiTeam.Operatives));
+                    .AddChoices(player2Team.Operatives));
         }
 
-        return (playerOperative, aiOperative, playerTeam, aiTeam);
+        return (player1Operative, player2Operative, player1Team, player2Team);
     }
 
     // --- Session loop --------------------------------------------------------
 
     private async Task RunSessionLoopAsync(
-        Operative playerOperative, Operative aiOperative,
-        Team playerTeam, Team aiTeam,
-        Player youPlayer, Player aiPlayer)
+        Operative player1Operative, Operative player2Operative,
+        Team player1Team, Team player2Team,
+        Player player1, Player player2)
     {
         while (true)
         {
@@ -155,23 +155,23 @@ public class SimulateSessionOrchestrator(
             switch (choice)
             {
                 case "Fight":
-                    await RunEncounterAsync(playerOperative, aiOperative, playerTeam, aiTeam, ActionType.Fight, youPlayer, aiPlayer);
+                    await RunEncounterAsync(player1Operative, player2Operative, player1Team, player2Team, ActionType.Fight, player1, player2);
                     break;
 
                 case "Shoot":
-                    await RunEncounterAsync(playerOperative, aiOperative, playerTeam, aiTeam, ActionType.Shoot, youPlayer, aiPlayer);
+                    await RunEncounterAsync(player1Operative, player2Operative, player1Team, player2Team, ActionType.Shoot, player1, player2);
                     break;
 
                 case "Change operatives":
                     var result = await SelectOperativesAsync();
 
-                    if (result.playerOperative is not null)
+                    if (result.player1Operative is not null)
                     {
-                        playerOperative = result.playerOperative;
-                        aiOperative = result.aiOperative!;
-                        playerTeam = result.playerTeam!;
-                        aiTeam = result.aiTeam!;
-                        DisplayMatchup(playerOperative, playerTeam, aiOperative, aiTeam, youPlayer.Name, youPlayer.Colour, aiPlayer.Name, aiPlayer.Colour);
+                        player1Operative = result.player1Operative;
+                        player2Operative = result.player2Operative!;
+                        player1Team = result.player1Team!;
+                        player2Team = result.player2Team!;
+                        DisplayMatchup(player1Operative, player1Team, player2Operative, player2Team, player1.Name, player1.Colour, player2.Name, player2.Colour);
                     }
                     break;
 
@@ -185,10 +185,10 @@ public class SimulateSessionOrchestrator(
     // --- Single encounter ----------------------------------------------------
 
     private async Task RunEncounterAsync(
-        Operative playerOperative, Operative aiOperative,
-        Team playerTeam, Team aiTeam,
+        Operative player1Operative, Operative player2Operative,
+        Team player1Team, Team player2Team,
         ActionType actionType,
-        Player youPlayer, Player aiPlayer)
+        Player player1, Player player2)
     {
         // Synthetic domain objects - no DB interaction
         var game = new Game
@@ -196,15 +196,15 @@ public class SimulateSessionOrchestrator(
             Id = Guid.NewGuid(),
             Participant1 = new GameParticipant
             {
-                TeamId = playerTeam.Id,
-                TeamName = playerTeam.Name,
+                TeamId = player1Team.Id,
+                TeamName = player1Team.Name,
                 PlayerId = Guid.Empty,
                 CommandPoints = 0,  // suppresses CP re-roll prompts (RerollEngine skips when game not in DB)
             },
             Participant2 = new GameParticipant
             {
-                TeamId = aiTeam.Id,
-                TeamName = aiTeam.Name,
+                TeamId = player2Team.Id,
+                TeamName = player2Team.Name,
                 PlayerId = Guid.Empty,
                 CommandPoints = 0,
             },
@@ -222,50 +222,49 @@ public class SimulateSessionOrchestrator(
         {
             Id = Guid.NewGuid(),
             TurningPointId = turningPoint.Id,
-            OperativeId = playerOperative.Id,
-            TeamId = playerTeam.Id,
+            OperativeId = player1Operative.Id,
+            TeamId = player1Team.Id,
             OrderSelected = Order.Engage,
             SequenceNumber = 1
         };
 
         // Fresh in-memory repos - wound state resets each encounter
         var stateRepo = new InMemoryGameOperativeStateRepository();
-        var playerState = new GameOperativeState
+        var player1State = new GameOperativeState
         {
             GameId = game.Id,
-            OperativeId = playerOperative.Id,
-            CurrentWounds = playerOperative.Wounds,
+            OperativeId = player1Operative.Id,
+            CurrentWounds = player1Operative.Wounds,
             Order = Order.Engage
         };
-        var aiState = new GameOperativeState
+        var player2State = new GameOperativeState
         {
             GameId = game.Id,
-            OperativeId = aiOperative.Id,
-            CurrentWounds = aiOperative.Wounds,
+            OperativeId = player2Operative.Id,
+            CurrentWounds = player2Operative.Wounds,
             Order = Order.Engage
         };
-        stateRepo.Seed([playerState, aiState]);
+        stateRepo.Seed([player1State, player2State]);
 
         var actionRepo = new InMemoryActionRepository();
-        var blastTargetRepo = new InMemoryBlastTargetRepository();
 
         var allStates = stateRepo.GetAll();
         var allOperatives = new Dictionary<Guid, Operative>
         {
-            [playerOperative.Id] = playerOperative,
-            [aiOperative.Id] = aiOperative
+            [player1Operative.Id] = player1Operative,
+            [player2Operative.Id] = player2Operative
         };
 
-        var stream = new GameEventStream(game.Id);
+        var stream = new GameEventStream(game.Id, persistenceHandler.HandleAsync);
         var participantLabels = new Dictionary<string, string>
         {
-            [playerTeam.Id] = youPlayer.Name,
-            [aiTeam.Id] = aiPlayer.Name,
+            [player1Team.Id] = player1.Name,
+            [player2Team.Id] = player2.Name,
         };
         var participantColours = new Dictionary<string, string>
         {
-            [playerTeam.Id] = youPlayer.Colour,
-            [aiTeam.Id] = aiPlayer.Colour,
+            [player1Team.Id] = player1.Colour,
+            [player2Team.Id] = player2.Colour,
         };
         var columns = new TwoColumnRenderer(console, participantLabels, participantColours, columnContext);
         var renderer = new GameEventRenderer(console, columns);
@@ -275,41 +274,41 @@ public class SimulateSessionOrchestrator(
         if (actionType == ActionType.Fight)
         {
             var rerollEngine = new RerollEngine(rerollInputProvider, gameRepository);
-            var fightEngine = new FightEngine(fightInputProvider, fightResolutionService, rerollEngine, stateRepo, actionRepo);
+            var fightEngine = new FightEngine(fightInputProvider, rerollEngine, actionRepo, new FightWeaponRuleApplicator());
 
             var fightResult = await fightEngine.RunAsync(
-                playerOperative, playerState, allStates, allOperatives, game, turningPoint, activation, stream);
+                player1Operative, player1State, allStates, allOperatives, game, activation, stream);
 
-            DisplayEncounterSummary(playerOperative, aiOperative,
-                fightResult.AttackerDamageDealt, fightResult.DefenderDamageDealt,
-                playerIncapacitated: fightResult.DefenderCausedIncapacitation,
-                aiIncapacitated: fightResult.AttackerCausedIncapacitation,
-                playerCurrentWounds: playerState.CurrentWounds,
-                aiCurrentWounds: aiState.CurrentWounds,
-                youName: youPlayer.Name,
-                youColour: youPlayer.Colour,
-                aiName: aiPlayer.Name,
-                aiColour: aiPlayer.Colour);
+            DisplayEncounterSummary(player1Operative, player2Operative,
+                fightResult.AttackerDamageDealt, fightResult.TargetDamageDealt,
+                player1Incapacitated: fightResult.TargetCausedIncapacitation,
+                player2Incapacitated: fightResult.AttackerCausedIncapacitation,
+                player1CurrentWounds: player1State.CurrentWounds,
+                player2CurrentWounds: player2State.CurrentWounds,
+                player1Name: player1.Name,
+                player1Colour: player1.Colour,
+                player2Name: player2.Name,
+                player2Colour: player2.Colour);
         }
         else
         {
             var rerollEngine = new RerollEngine(rerollInputProvider, gameRepository);
-            var blastEngine = new BlastEngine(blastInputProvider, combatResolutionService, rerollEngine, stateRepo, actionRepo, blastTargetRepo);
-            var shootEngine = new ShootEngine(shootInputProvider, combatResolutionService, rerollEngine, blastEngine, stateRepo, actionRepo);
+            var blastEngine = new BlastEngine(blastInputProvider, shootWeaponRuleApplicator, rerollEngine, actionRepo);
+            var shootEngine = new ShootEngine(shootInputProvider, rerollEngine, blastEngine, actionRepo, shootWeaponRuleApplicator);
 
             var shootResult = await shootEngine.RunAsync(
-                playerOperative, playerState, allStates, allOperatives, game, turningPoint, activation, false, stream);
+                player1Operative, player1State, allStates, allOperatives, game, activation, false, stream);
 
-            DisplayEncounterSummary(playerOperative, aiOperative,
+            DisplayEncounterSummary(player1Operative, player2Operative,
                 shootResult.DamageDealt, 0,
-                playerIncapacitated: false,
-                aiIncapacitated: shootResult.CausedIncapacitation,
-                playerCurrentWounds: playerState.CurrentWounds,
-                aiCurrentWounds: aiState.CurrentWounds,
-                youName: youPlayer.Name,
-                youColour: youPlayer.Colour,
-                aiName: aiPlayer.Name,
-                aiColour: aiPlayer.Colour);
+                player1Incapacitated: false,
+                player2Incapacitated: shootResult.CausedIncapacitation,
+                player1CurrentWounds: player1State.CurrentWounds,
+                player2CurrentWounds: player2State.CurrentWounds,
+                player1Name: player1.Name,
+                player1Colour: player1.Colour,
+                player2Name: player2.Name,
+                player2Colour: player2.Colour);
         }
     }
 
@@ -337,60 +336,56 @@ public class SimulateSessionOrchestrator(
     private static string FormatOperativeStats(Operative o) =>
         $"APL: [green]{o.Apl}[/] | Move: [green]{o.Move}\"[/] | Save: [green]{o.Save}+[/] | Wounds: [green]{o.Wounds}[/]";
 
-    private static string FormatWeaponStats(Weapon w) =>
-        $"Attack: [green]{w.Atk}[/] | Hit: [green]{w.Hit}+[/] | Normal: [green]{w.NormalDmg}[/] | Crit: [green]{w.CriticalDmg}[/]";
-
     private void DisplayMatchup(
-        Operative playerOperative, Team playerTeam,
-        Operative aiOperative, Team aiTeam,
-        string youName, string youColour, string aiName, string aiColour)
+        Operative player1Operative, Team player1Team,
+        Operative player2Operative, Team player2Team,
+        string player1Name, string player1Colour, string player2Name, string player2Colour)
     {
         console.WriteLine();
         var table = new Table()
             .Border(TableBorder.Rounded)
-            .AddColumn($"[bold {youColour}]{Markup.Escape(youName)}[/]")
-            .AddColumn($"[bold {aiColour}]{Markup.Escape(aiName)}[/]");
+            .AddColumn($"[bold {player1Colour}]{Markup.Escape(player1Name)}[/]")
+            .AddColumn($"[bold {player2Colour}]{Markup.Escape(player2Name)}[/]");
 
         table.AddRow(
-            $"[bold]{Markup.Escape(playerOperative.Name)}[/]\n[dim]{Markup.Escape(playerTeam.Name)}[/]",
-            $"[bold]{Markup.Escape(aiOperative.Name)}[/]\n[dim]{Markup.Escape(aiTeam.Name)}[/]");
-
-        table.AddRow(
-            $"APL: [green]{playerOperative.Apl}[/] | Move: [green]{playerOperative.Move}\"[/] | Save: [green]{playerOperative.Save}+[/] | Wounds: [green]{playerOperative.Wounds}[/]",
-            $"APL: [green]{aiOperative.Apl}[/] | Move: [green]{aiOperative.Move}\"[/] | Save: [green]{aiOperative.Save}+[/] | Wounds: [green]{aiOperative.Wounds}[/]");
+            $"[bold]{Markup.Escape(player1Operative.Name)}[/]\n[dim]{Markup.Escape(player1Team.Name)}[/]",
+            $"[bold]{Markup.Escape(player2Operative.Name)}[/]\n[dim]{Markup.Escape(player2Team.Name)}[/]");
 
         console.Write(table);
+        console.WriteLine();
+
+        OperativeCardRenderer.Render(console, player1Operative);
+        OperativeCardRenderer.Render(console, player2Operative);
+
         console.WriteLine();
     }
 
     private void DisplayEncounterSummary(
-        Operative attacker, Operative defender,
-        int attackerDamage, int defenderDamage,
-        bool playerIncapacitated, bool aiIncapacitated,
-        int playerCurrentWounds, int aiCurrentWounds,
-        string youName, string youColour, string aiName, string aiColour)
+        Operative attacker, Operative target,
+        int attackerDamage, int targetDamage,
+        bool player1Incapacitated, bool player2Incapacitated,
+        int player1CurrentWounds, int player2CurrentWounds,
+        string player1Name, string player1Colour, string player2Name, string player2Colour)
     {
         console.WriteLine();
         var table = new Table()
             .Border(TableBorder.Rounded)
             .AddColumn("Result")
-            .AddColumn($"[bold {youColour}]{Markup.Escape(youName)}[/]")
-            .AddColumn($"[bold {aiColour}]{Markup.Escape(aiName)}[/]");
+            .AddColumn($"[bold {player1Colour}]{Markup.Escape(player1Name)}[/]")
+            .AddColumn($"[bold {player2Colour}]{Markup.Escape(player2Name)}[/]");
 
-        var playerWoundsColor = playerCurrentWounds > 0 ? "green" : "red";
-        var aiWoundsColor = aiCurrentWounds > 0 ? "green" : "red";
+        var player1WoundsColor = player1CurrentWounds > 0 ? "green" : "red";
+        var player2WoundsColor = player2CurrentWounds > 0 ? "green" : "red";
 
         table.AddRow("Wounds remaining",
-            $"[{playerWoundsColor}]{playerCurrentWounds}/{attacker.Wounds}[/]",
-            $"[{aiWoundsColor}]{aiCurrentWounds}/{defender.Wounds}[/]");
-        table.AddRow("Damage dealt", $"[bold]{attackerDamage}[/]", $"[bold]{defenderDamage}[/]");
+            $"[{player1WoundsColor}]{player1CurrentWounds}/{attacker.Wounds}[/]",
+            $"[{player2WoundsColor}]{player2CurrentWounds}/{target.Wounds}[/]");
+        table.AddRow("Damage dealt", $"[bold]{attackerDamage}[/]", $"[bold]{targetDamage}[/]");
         table.AddRow("Incapacitated?",
-            playerIncapacitated ? "[red]Incapacitated[/]" : "[green]Alive[/]",
-            aiIncapacitated ? "[red]Incapacitated[/]" : "[green]Alive[/]");
+            player1Incapacitated ? "[red]Incapacitated[/]" : "[green]Alive[/]",
+            player2Incapacitated ? "[red]Incapacitated[/]" : "[green]Alive[/]");
 
         console.Write(table);
         console.WriteLine();
     }
 }
-
-

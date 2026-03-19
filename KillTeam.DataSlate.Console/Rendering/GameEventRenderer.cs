@@ -1,4 +1,5 @@
 using KillTeam.DataSlate.Domain.Events;
+using KillTeam.DataSlate.Domain.Models;
 using Spectre.Console;
 
 namespace KillTeam.DataSlate.Console.Rendering;
@@ -30,8 +31,8 @@ public class GameEventRenderer(
                 columns.PrintLine(e.Participant, $"{autoNote} {e.Role.ToLower()} weapon: [bold]{Markup.Escape(e.WeaponName)}[/] (Attack: [green]{e.Attack}[/] | Hit: [green]{e.Hit}+[/] | Normal: [green]{e.NormalDmg}[/] | Crit: [green]{e.CritDmg}[/]){injuredNote}");
                 break;
 
-            case DefenderNoMeleeWeaponsEvent e:
-                columns.PrintLine($"[dim]{Markup.Escape(e.DefenderName)} has no melee weapons — rolls 0 attack dice.[/]");
+            case TargetNoMeleeWeaponsEvent e:
+                columns.PrintLine($"[dim]{Markup.Escape(e.TargetName)} has no melee weapons — rolls 0 attack dice.[/]");
                 break;
 
             case CombatWarningEvent e when e.Kind == CombatWarningKind.NoValidTargets:
@@ -55,7 +56,7 @@ public class GameEventRenderer(
                 break;
 
             case FightStrikeResolvedEvent e:
-                columns.PrintSubLine(e.Participant, $"[red]STRIKE[/] with die ({e.DieValue}) — {e.DamageDealt} damage to {Markup.Escape(e.TargetOperativeName)}");
+                columns.PrintSubLine(e.Participant, $"[red]STRIKE[/] with die ({e.DieValue}) — {e.DamageDealt} damage to {Markup.Escape(e.TargetOperativeName)} [{FormatDieResult(e.StrikeResult)}]");
                 break;
 
             case FightBlockResolvedEvent e:
@@ -121,20 +122,20 @@ public class GameEventRenderer(
         var table = new Table()
             .Border(TableBorder.Rounded)
             .AddColumn($"[bold]{Markup.Escape(e.AttackerName)}[/] (Attacker)")
-            .AddColumn($"[bold]{Markup.Escape(e.DefenderName)}[/] (Defender)");
+            .AddColumn($"[bold]{Markup.Escape(e.TargetName)}[/] (Target)");
 
         table.AddRow(
             $"Wounds: {e.AttackerWounds}/{e.AttackerMaxWounds}",
-            $"Wounds: {e.DefenderWounds}/{e.DefenderMaxWounds}");
+            $"Wounds: {e.TargetWounds}/{e.TargetMaxWounds}");
 
-        var maxRows = Math.Max(e.AttackerDice.Count, e.DefenderDice.Count);
+        var maxRows = Math.Max(e.AttackerDice.Count, e.TargetDice.Count);
 
         for (var i = 0; i < maxRows; i++)
         {
             var attackerCell = i < e.AttackerDice.Count ? FormatAttackDieSnapshot(i + 1, e.AttackerDice[i]) : string.Empty;
-            var defenderCell = i < e.DefenderDice.Count ? FormatDefenceDieSnapshot(i + 1, e.DefenderDice[i]) : string.Empty;
+            var targetCell = i < e.TargetDice.Count ? FormatDefenceDieSnapshot(i + 1, e.TargetDice[i]) : string.Empty;
 
-            table.AddRow(attackerCell, defenderCell);
+            table.AddRow(attackerCell, targetCell);
         }
 
         console.Write(table);
@@ -142,26 +143,33 @@ public class GameEventRenderer(
 
     private void RenderShootResult(ShootResultDisplayedEvent e)
     {
-        var woundsColour = e.TargetWoundsAfter > 0 ? "green" : "red";
+        var attackerWoundsColour = e.AttackerWoundsAfter > 0 ? "green" : "red";
+        var targetWoundsColour = e.TargetWoundsAfter > 0 ? "green" : "red";
+
         var table = new Table()
             .Border(TableBorder.Rounded)
-            .AddColumn("Result")
-            .AddColumn($"[bold]{Markup.Escape(e.TargetName)}[/]");
+            .AddColumn($"[bold]{Markup.Escape(e.AttackerName)}[/] (Attacker)")
+            .AddColumn($"[bold]{Markup.Escape(e.TargetName)}[/] (Target)");
 
-        table.AddRow("Wounds remaining", $"[{woundsColour}]{e.TargetWoundsAfter}/{e.TargetMaxWounds}[/]");
-        table.AddRow("Damage dealt", $"[bold red]{e.TotalDamage}[/]");
-        table.AddRow("Unblocked Crits", $"[bold]{e.UnblockedCrits}[/]");
-        table.AddRow("Unblocked Normals", $"[bold]{e.UnblockedNormals}[/]");
+        table.AddRow(
+            $"Wounds: [{attackerWoundsColour}]{e.AttackerWoundsAfter}/{e.AttackerMaxWounds}[/]",
+            $"Wounds: [{targetWoundsColour}]{e.TargetWoundsAfter}/{e.TargetMaxWounds}[/]");
+
+        var targetDetail = $"Damage dealt: [bold red]{e.TotalDamage}[/]" +
+                           $"\nUnblocked Crits: [bold]{e.UnblockedCrits}[/]" +
+                           $"\nUnblocked Normals: [bold]{e.UnblockedNormals}[/]";
 
         if (e.InCover)
         {
-            table.AddRow("Cover Save", "[green]Applied[/]");
+            targetDetail += "\nCover Save: [green]Applied[/]";
         }
 
         if (e.IsObscured)
         {
-            table.AddRow("Obscured", "[green]Crits converted[/]");
+            targetDetail += "\nObscured: [green]Crits converted[/]";
         }
+
+        table.AddRow(string.Empty, targetDetail);
 
         console.Write(table);
     }
@@ -171,18 +179,18 @@ public class GameEventRenderer(
         var table = new Table()
             .Border(TableBorder.Rounded)
             .AddColumn($"[bold]{Markup.Escape(e.AttackerName)}[/] (Attacker)")
-            .AddColumn($"[bold]{Markup.Escape(e.DefenderName)}[/] (Defender)");
+            .AddColumn($"[bold]{Markup.Escape(e.TargetName)}[/] (Defender)");
 
         table.AddRow(
             $"Wounds: {e.AttackerWounds}/{e.AttackerMaxWounds}",
-            $"Wounds: {e.DefenderWounds}/{e.DefenderMaxWounds}");
+            $"Wounds: {e.TargetWounds}/{e.TargetMaxWounds}");
 
-        var maxRows = Math.Max(e.AttackerDice.Count, e.DefenderDice.Count);
+        var maxRows = Math.Max(e.AttackerDice.Count, e.TargetDice.Count);
 
         for (var i = 0; i < maxRows; i++)
         {
             var attackerCell = i < e.AttackerDice.Count ? FormatDieSnapshot("A", i + 1, e.AttackerDice[i]) : string.Empty;
-            var defenderCell = i < e.DefenderDice.Count ? FormatDieSnapshot("D", i + 1, e.DefenderDice[i]) : string.Empty;
+            var defenderCell = i < e.TargetDice.Count ? FormatDieSnapshot("D", i + 1, e.TargetDice[i]) : string.Empty;
 
             table.AddRow(attackerCell, defenderCell);
         }
@@ -190,30 +198,29 @@ public class GameEventRenderer(
         console.Write(table);
     }
 
+    private static string FormatDieResult(DieResult result) => result switch
+    {
+        DieResult.Crit => "[bold yellow]CRIT[/]",
+        DieResult.Hit  => "[green]HIT [/]",
+        DieResult.Miss => "[dim]MISS[/]",
+        DieResult.Save => "[green]SAVE[/]",
+        DieResult.Fail => "[red]FAIL[/]",
+        _              => result.ToString(),
+    };
+
     private static string FormatDieSnapshot(string prefix, int num, FightDieSnapshot die)
     {
-        var result = die.Result == "CRIT" ? "[bold yellow]CRIT[/]" : "[green]HIT [/]";
-
-        return $"{prefix}{num}: {result} (rolled [green]{die.RolledValue}[/])";
+        return $"{prefix}{num}: {FormatDieResult(die.Result)} (rolled [green]{die.RolledValue}[/])";
     }
 
     private static string FormatAttackDieSnapshot(int num, FightDieSnapshot die)
     {
-        var result = die.Result switch
-        {
-            "CRIT" => "[bold yellow]CRIT[/]",
-            "HIT"  => "[green]HIT [/]",
-            _      => "[dim]MISS[/]",
-        };
-
-        return $"A{num}: {result} (rolled [green]{die.RolledValue}[/])";
+        return $"A{num}: {FormatDieResult(die.Result)} (rolled [green]{die.RolledValue}[/])";
     }
 
     private static string FormatDefenceDieSnapshot(int num, FightDieSnapshot die)
     {
-        var result = die.Result == "SAVE" ? "[green]SAVE[/]" : "[red]FAIL[/]";
-
-        return $"D{num}: {result} (rolled [green]{die.RolledValue}[/])";
+        return $"D{num}: {FormatDieResult(die.Result)} (rolled [green]{die.RolledValue}[/])";
     }
 }
 

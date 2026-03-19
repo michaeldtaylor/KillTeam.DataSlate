@@ -1,4 +1,5 @@
 using KillTeam.DataSlate.Domain.Engine.Input;
+using KillTeam.DataSlate.Domain.Engine.WeaponRules;
 using KillTeam.DataSlate.Domain.Events;
 using KillTeam.DataSlate.Domain.Models;
 using KillTeam.DataSlate.Domain.Repositories;
@@ -8,29 +9,26 @@ namespace KillTeam.DataSlate.Domain.Engine;
 
 public class BlastEngine(
     IBlastInputProvider inputProvider,
-    CombatResolutionService combatResolutionService,
+    ShootWeaponRuleApplicator shootWeaponRuleApplicator,
     RerollEngine rerollEngine,
-    IGameOperativeStateRepository stateRepository,
-    IActionRepository actionRepository,
-    IBlastTargetRepository blastTargetRepository)
+    IActionRepository actionRepository)
 {
     public async Task<BlastSessionResult> RunAsync(
         Operative attacker,
         GameOperativeState attackerState,
-        Operative primaryTarget,
-        GameOperativeState primaryTargetState,
+        Operative target,
+        GameOperativeState targetState,
         Weapon weapon,
         IReadOnlyList<GameOperativeState> allOperativeStates,
         IReadOnlyDictionary<Guid, Operative> allOperatives,
         Game game,
-        TurningPoint tp,
         Activation activation,
         GameEventStream? eventStream = null)
     {
         var isAttackerTeam1 = attacker.TeamId == game.Participant1.TeamId;
 
         var additionalCandidates = allOperativeStates
-            .Where(s => s.OperativeId != primaryTarget.Id && !s.IsIncapacitated && allOperatives.ContainsKey(s.OperativeId))
+            .Where(s => s.OperativeId != target.Id && !s.IsIncapacitated && allOperatives.ContainsKey(s.OperativeId))
             .ToList();
 
         var additionalTargetStates = new List<GameOperativeState>();
@@ -38,13 +36,15 @@ public class BlastEngine(
         if (additionalCandidates.Count > 0)
         {
             additionalTargetStates = await inputProvider.SelectAdditionalTargetsAsync(
-                additionalCandidates, allOperatives, attacker.TeamId);
+                additionalCandidates,
+                allOperatives,
+                attacker.TeamId);
         }
 
-        var allTargetStates = new List<GameOperativeState> { primaryTargetState }.Concat(additionalTargetStates).ToList();
+        var allTargetStates = new List<GameOperativeState> { targetState }.Concat(additionalTargetStates).ToList();
 
         var friendlyCount = allTargetStates.Count(s =>
-            allOperatives.TryGetValue(s.OperativeId, out var o) && o.TeamId == attacker.TeamId);
+            allOperatives.TryGetValue(s.OperativeId, out var operative) && operative.TeamId == attacker.TeamId);
 
         if (friendlyCount > 0)
         {
@@ -54,9 +54,14 @@ public class BlastEngine(
             }
         }
 
-        var attackDice = await inputProvider.RollOrEnterDiceAsync(weapon.Atk, $"{attacker.Name} attack dice (Attack: {weapon.Atk})");
-        attackDice = await rerollEngine.ApplyAttackerRerollsAsync(
-            attackDice, weapon.Rules.ToList(), game.Id, isAttackerTeam1, attacker.Name);
+        var attackerDice = await inputProvider.RollOrEnterDiceAsync(weapon.Atk, $"{attacker.Name} attack dice (Attack: {weapon.Atk})");
+
+        attackerDice = await rerollEngine.ApplyAttackerRerollsAsync(
+            attackerDice,
+            weapon.Rules.ToList(),
+            game.Id,
+            isAttackerTeam1,
+            attacker.Name);
 
         var effectiveHit = weapon.Hit;
 
@@ -66,102 +71,134 @@ public class BlastEngine(
             ActivationId = activation.Id,
             Type = ActionType.Shoot,
             ApCost = 1,
-            TargetOperativeId = primaryTarget.Id,
+            TargetOperativeId = target.Id,
             WeaponId = weapon.Id,
-            AttackerDice = attackDice
+            AttackerDice = attackerDice
         };
 
-        var anyIncapacitation = false;
         var totalDamage = 0;
+
+        var anyIncapacitation = false;
         var primaryActionPersisted = false;
 
-        for (var i = 0; i < allTargetStates.Count; i++)
+        foreach (var targetOperativeState in allTargetStates)
         {
-            var targetState = allTargetStates[i];
-
-            if (!allOperatives.TryGetValue(targetState.OperativeId, out var targetOp))
+            if (!allOperatives.TryGetValue(targetOperativeState.OperativeId, out var targetOperative))
             {
                 continue;
             }
 
-            var coverChoice = await inputProvider.GetCoverStatusAsync(targetOp.Name);
+            var coverChoice = await inputProvider.GetCoverStatusAsync(targetOperative.Name);
             var inCover = coverChoice == "In cover";
             var isObscured = coverChoice == "Obscured";
 
-            var defenderDiceCount = targetOp.Defence + targetState.DefenceDiceModifier;
+            var targetDiceCount = targetOperative.Defence + targetOperativeState.DefenceDiceModifier;
 
-            var defenderDice = defenderDiceCount == 0
+            var defenderDice = targetDiceCount == 0
                 ? []
-                : await inputProvider.RollOrEnterDiceAsync(defenderDiceCount, $"{targetOp.Name} defence dice");
+                : await inputProvider.RollOrEnterDiceAsync(targetDiceCount, $"{targetOperative.Name} target dice");
 
-            var isDefenderTeam1 = targetOp.TeamId == game.Participant1.TeamId;
+            var isTargetTeam1 = targetOperative.TeamId == game.Participant1.TeamId;
 
-            defenderDice = await rerollEngine.ApplyDefenderRerollAsync(defenderDice, game.Id, isDefenderTeam1, targetOp.Name);
+            defenderDice = await rerollEngine.ApplyTargetRerollAsync(defenderDice, game.Id, isTargetTeam1, targetOperative.Name);
 
-            var ctx = new ShootContext(
-                AttackDice: attackDice,
-                DefenceDice: defenderDice,
+            var context = new ShootContext(
+                AttackerDice: attackerDice,
+                TargetDice: defenderDice,
                 InCover: inCover,
                 IsObscured: isObscured,
                 HitThreshold: effectiveHit,
-                SaveThreshold: targetOp.Save,
+                SaveThreshold: targetOperative.Save,
                 NormalDmg: weapon.NormalDmg,
-                CritDmg: weapon.CriticalDmg,
-                WeaponRules: weapon.Rules.ToList()
+                CritDmg: weapon.CriticalDmg
             );
 
-            var result = combatResolutionService.ResolveShoot(ctx);
-            var dmg = result.TotalDamage;
-            var newWounds = Math.Max(0, targetState.CurrentWounds - dmg);
+            var blastResult = await shootWeaponRuleApplicator.ResolveShootAsync(weapon, context);
 
-            eventStream?.Emit((seq, ts) => new ShootResultDisplayedEvent(eventStream.GameSessionId, seq, ts, attacker.TeamId, targetOp.Name, result.UnblockedCrits, result.UnblockedNormals, result.TotalDamage, newWounds, targetOp.Wounds, inCover, isObscured));
+            var newWounds = Math.Max(0, targetOperativeState.CurrentWounds - blastResult.TotalDamage);
 
-            var causedIncap = newWounds <= 0 && !targetState.IsIncapacitated;
+            await (eventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
+                new ShootResultDisplayedEvent(
+                    gameSessionId,
+                    sequenceNumber,
+                    timestamp,
+                    attacker.TeamId,
+                    attacker.Name,
+                    attackerState.CurrentWounds,
+                    attacker.Wounds,
+                    targetOperative.Name,
+                    blastResult.UnblockedCrits,
+                    blastResult.UnblockedNormals,
+                    blastResult.TotalDamage,
+                    newWounds,
+                    targetOperative.Wounds,
+                    inCover,
+                    isObscured)) ?? ValueTask.CompletedTask);
 
-            targetState.CurrentWounds = newWounds;
-            await stateRepository.UpdateWoundsAsync(targetState.Id, newWounds);
+            var causedIncap = newWounds <= 0 && !targetOperativeState.IsIncapacitated;
+
+            targetOperativeState.CurrentWounds = newWounds;
+
+            await (eventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
+                new OperativeWoundsChangedEvent(
+                    gameSessionId,
+                    sequenceNumber,
+                    timestamp,
+                    targetOperative.TeamId,
+                    targetOperativeState.Id,
+                    newWounds)) ?? ValueTask.CompletedTask);
 
             if (causedIncap)
             {
-                targetState.IsIncapacitated = true;
-                await stateRepository.SetIncapacitatedAsync(targetState.Id, true);
-                await stateRepository.UpdateGuardAsync(targetState.Id, false);
-                targetState.IsOnGuard = false;
+                targetOperativeState.IsIncapacitated = true;
+                targetOperativeState.IsOnGuard = false;
+
+                await (eventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
+                    new OperativeIncapacitatedEvent(
+                        gameSessionId,
+                        sequenceNumber,
+                        timestamp,
+                        targetOperative.TeamId,
+                        targetOperativeState.Id)) ?? ValueTask.CompletedTask);
+
+                await (eventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
+                    new OperativeGuardClearedEvent(
+                        gameSessionId,
+                        sequenceNumber,
+                        timestamp,
+                        targetOperative.TeamId,
+                        targetOperativeState.Id)) ?? ValueTask.CompletedTask);
+
                 anyIncapacitation = true;
-                eventStream?.Emit((seq, ts) => new IncapacitationEvent(eventStream.GameSessionId, seq, ts, attacker.TeamId, targetOp.Name, "Shoot"));
+
+                await (eventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
+                    new IncapacitationEvent(
+                        gameSessionId,
+                        sequenceNumber,
+                        timestamp,
+                        attacker.TeamId,
+                        targetOperative.Name,
+                        "Shoot")) ?? ValueTask.CompletedTask);
             }
 
-            totalDamage += dmg;
+            totalDamage += blastResult.TotalDamage;
 
             if (!primaryActionPersisted)
             {
-                action.DefenderDice = defenderDice;
+                action.TargetDice = defenderDice;
                 action.TargetInCover = inCover;
                 action.IsObscured = isObscured;
-                action.NormalHits = result.UnblockedNormals;
-                action.CriticalHits = result.UnblockedCrits;
-                action.NormalDamageDealt = result.UnblockedNormals * weapon.NormalDmg;
-                action.CriticalDamageDealt = result.UnblockedCrits * weapon.CriticalDmg;
+                action.NormalHits = blastResult.UnblockedNormals;
+                action.CriticalHits = blastResult.UnblockedCrits;
+                action.NormalDamageDealt = blastResult.UnblockedNormals * weapon.NormalDmg;
+                action.CriticalDamageDealt = blastResult.UnblockedCrits * weapon.CriticalDmg;
                 action.CausedIncapacitation = causedIncap;
                 await actionRepository.CreateAsync(action);
                 primaryActionPersisted = true;
             }
             else
             {
-                var blastTarget = new BlastTarget
-                {
-                    Id = Guid.NewGuid(),
-                    ActionId = action.Id,
-                    TargetOperativeId = targetState.OperativeId,
-                    OperativeName = targetOp.Name,
-                    DefenderDice = defenderDice,
-                    NormalHits = result.UnblockedNormals,
-                    CriticalHits = result.UnblockedCrits,
-                    NormalDamageDealt = result.UnblockedNormals * weapon.NormalDmg,
-                    CriticalDamageDealt = result.UnblockedCrits * weapon.CriticalDmg,
-                    CausedIncapacitation = causedIncap
-                };
-                await blastTargetRepository.CreateAsync(blastTarget);
+                // Secondary blast targets: damage and incapacitation are tracked via events only
             }
         }
 

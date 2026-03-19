@@ -12,7 +12,7 @@ public interface IFightInputProvider
 
     Task<Weapon> SelectAttackerWeaponAsync(IList<Weapon> weapons, bool isInjured);
 
-    Task<Weapon> SelectDefenderWeaponAsync(IList<Weapon> weapons);
+    Task<Weapon> SelectTargetWeaponAsync(IList<Weapon> weapons);
 
     Task<int> GetFightAssistCountAsync();
 
@@ -21,7 +21,11 @@ public interface IFightInputProvider
     Task<string> GetNarrativeNoteAsync();
 
     Task<int[]> RollOrEnterDiceAsync(
-        int count, string label,
-        string operativeName, string role, string phase,
-        string participant, GameEventStream? eventStream);
+        int count,
+        string label,
+        string operativeName,
+        string role,
+        string phase,
+        string participant,
+        GameEventStream? eventStream);
 }

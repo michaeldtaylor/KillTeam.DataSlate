@@ -18,7 +18,7 @@ public class SchemaTests
         [
             "schema_version", "players", "teams", "operatives", "weapons",
             "games", "turning_points", "activations", "actions", "game_operative_states",
-            "ploy_uses", "action_blast_targets",
+            "ploy_uses",
             "faction_rules", "strategy_ploys", "firefight_ploys",
             "faction_equipment", "universal_equipment",
             "operative_abilities", "operative_special_actions", "operative_special_rules"
@@ -51,7 +51,7 @@ public class SchemaTests
         using var cmd = conn.CreateCommand();
         cmd.CommandText = "SELECT version FROM schema_version";
         var version = Convert.ToInt32(cmd.ExecuteScalar());
-        version.Should().Be(4);
+        version.Should().Be(1);
     }
 
     [Fact]

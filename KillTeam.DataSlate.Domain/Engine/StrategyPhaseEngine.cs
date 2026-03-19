@@ -1,4 +1,5 @@
 using KillTeam.DataSlate.Domain.Engine.Input;
+using KillTeam.DataSlate.Domain.Events;
 using KillTeam.DataSlate.Domain.Models;
 using KillTeam.DataSlate.Domain.Repositories;
 
@@ -11,7 +12,6 @@ namespace KillTeam.DataSlate.Domain.Engine;
 /// </summary>
 public class StrategyPhaseEngine(
     IStrategyPhaseInputProvider inputProvider,
-    IGameRepository gameRepository,
     ITurningPointRepository turningPointRepository,
     IPloyRepository ployRepository)
 {
@@ -19,7 +19,8 @@ public class StrategyPhaseEngine(
         Game game,
         int tpNumber,
         string team1Name,
-        string team2Name)
+        string team2Name,
+        GameEventStream? eventStream = null)
     {
         var winnerName = await inputProvider.SelectInitiativeWinnerAsync(team1Name, team2Name);
         var initiativeTeamId = winnerName == team1Name
@@ -38,7 +39,16 @@ public class StrategyPhaseEngine(
 
         var (cp1, cp2) = ApplyCpGains(game, tpNumber, initiativeTeamId);
 
-        await gameRepository.UpdateCommandPointsAsync(game.Id, cp1, cp2);
+        await (eventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
+            new GameCommandPointsChangedEvent(
+                gameSessionId,
+                sequenceNumber,
+                timestamp,
+                string.Empty,
+                game.Id,
+                cp1,
+                cp2)) ?? ValueTask.CompletedTask);
+
         game.Participant1.CommandPoints = cp1;
         game.Participant2.CommandPoints = cp2;
 
@@ -51,10 +61,10 @@ public class StrategyPhaseEngine(
             : (game.Participant2.TeamId, team2Name);
 
         (cp1, cp2) = await RunPloyLoopAsync(
-            turningPoint, game.Id, game.Participant1.TeamId, nonInitId, nonInitName, cp1, cp2);
+            turningPoint, game.Id, game.Participant1.TeamId, nonInitId, nonInitName, cp1, cp2, eventStream);
 
         (cp1, cp2) = await RunPloyLoopAsync(
-            turningPoint, game.Id, game.Participant1.TeamId, initId, initName, cp1, cp2);
+            turningPoint, game.Id, game.Participant1.TeamId, initId, initName, cp1, cp2, eventStream);
 
         await turningPointRepository.CompleteStrategyPhaseAsync(turningPoint.Id);
 
@@ -92,7 +102,8 @@ public class StrategyPhaseEngine(
         string activeTeamId,
         string activeTeamName,
         int cp1,
-        int cp2)
+        int cp2,
+        GameEventStream? eventStream)
     {
         while (true)
         {
@@ -128,7 +139,15 @@ public class StrategyPhaseEngine(
                 cp2 -= ploy.CpCost;
             }
 
-            await gameRepository.UpdateCommandPointsAsync(gameId, cp1, cp2);
+            await (eventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
+                new GameCommandPointsChangedEvent(
+                    gameSessionId,
+                    sequenceNumber,
+                    timestamp,
+                    string.Empty,
+                    gameId,
+                    cp1,
+                    cp2)) ?? ValueTask.CompletedTask);
         }
 
         return (cp1, cp2);

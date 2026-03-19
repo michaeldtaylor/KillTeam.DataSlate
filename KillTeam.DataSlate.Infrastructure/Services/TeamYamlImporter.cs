@@ -108,7 +108,7 @@ public class TeamYamlImporter
                 Save = ParseSave(dc.Stats?.Save ?? "0"),
                 Abilities = MapAbilities(dc.Abilities),
                 SpecialActions = MapSpecialActions(dc.SpecialActions),
-                SpecialRules = MapWeaponRules(dc.SpecialRules),
+                OperativeWeaponRules = MapWeaponRules(dc.SpecialRules),
             };
 
             if (dc.Weapons is not null)

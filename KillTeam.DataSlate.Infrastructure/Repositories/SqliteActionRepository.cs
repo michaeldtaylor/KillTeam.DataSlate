@@ -20,13 +20,13 @@ public class SqliteActionRepository : IActionRepository
             """
             INSERT INTO actions
             (id, activation_id, type, ap_cost, target_operative_id, weapon_id,
-             attacker_dice, defender_dice, target_in_cover, is_obscured,
+             attacker_dice, target_dice, target_in_cover, is_obscured,
              normal_hits, critical_hits, blocks,
              normal_damage_dealt, critical_damage_dealt, self_damage_dealt,
              stun_applied, caused_incapacitation, narrative_note)
             VALUES
             (@id, @activationId, @type, @apCost, @targetOperativeId, @weaponId,
-             @attackerDice, @defenderDice, @targetInCover, @isObscured,
+             @attackerDice, @targetDice, @targetInCover, @isObscured,
              @normalHits, @criticalHits, @blocks,
              @normalDamageDealt, @criticalDamageDealt, @selfDamageDealt,
              @stunApplied, @causedIncapacitation, @narrativeNote)
@@ -40,7 +40,7 @@ public class SqliteActionRepository : IActionRepository
                 ["@targetOperativeId"] = action.TargetOperativeId?.ToString(),
                 ["@weaponId"] = action.WeaponId?.ToString(),
                 ["@attackerDice"] = JsonSerializer.Serialize(action.AttackerDice),
-                ["@defenderDice"] = JsonSerializer.Serialize(action.DefenderDice),
+                ["@targetDice"] = JsonSerializer.Serialize(action.TargetDice),
                 ["@targetInCover"] = action.TargetInCover.HasValue ? (object?)(action.TargetInCover.Value ? 1 : 0) : null,
                 ["@isObscured"] = action.IsObscured.HasValue ? (object?)(action.IsObscured.Value ? 1 : 0) : null,
                 ["@normalHits"] = action.NormalHits,
@@ -67,7 +67,7 @@ public class SqliteActionRepository : IActionRepository
         return await _db.QueryAsync(
             """
             SELECT id, activation_id, type, ap_cost, target_operative_id, weapon_id,
-                   attacker_dice, defender_dice, target_in_cover, is_obscured,
+                   attacker_dice, target_dice, target_in_cover, is_obscured,
                    normal_hits, critical_hits, blocks, normal_damage_dealt,
                    critical_damage_dealt, caused_incapacitation, self_damage_dealt,
                    stun_applied, narrative_note
@@ -82,7 +82,7 @@ public class SqliteActionRepository : IActionRepository
                 TargetOperativeId = reader.IsDBNull(4) ? null : Guid.Parse(reader.GetString(4)),
                 WeaponId = reader.IsDBNull(5) ? null : Guid.Parse(reader.GetString(5)),
                 AttackerDice = reader.IsDBNull(6) ? [] : JsonSerializer.Deserialize<int[]>(reader.GetString(6)) ?? [],
-                DefenderDice = reader.IsDBNull(7) ? [] : JsonSerializer.Deserialize<int[]>(reader.GetString(7)) ?? [],
+                TargetDice = reader.IsDBNull(7) ? [] : JsonSerializer.Deserialize<int[]>(reader.GetString(7)) ?? [],
                 TargetInCover = reader.IsDBNull(8) ? null : reader.GetInt32(8) != 0,
                 IsObscured = reader.IsDBNull(9) ? null : reader.GetInt32(9) != 0,
                 NormalHits = reader.GetInt32(10),

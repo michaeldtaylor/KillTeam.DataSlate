@@ -130,21 +130,4 @@ public class InMemoryRepositoryTests
             .Should().NotThrowAsync();
     }
 
-    // ── InMemoryBlastTargetRepository ─────────────────────────────────────────
-
-    [Fact]
-    public async Task BlastTargetRepo_CreateAsync_DoesNotThrow()
-    {
-        var repo = new InMemoryBlastTargetRepository();
-        await repo.Invoking(r => r.CreateAsync(new BlastTarget()))
-            .Should().NotThrowAsync();
-    }
-
-    [Fact]
-    public async Task BlastTargetRepo_GetByActionIdAsync_ReturnsEmpty()
-    {
-        var repo = new InMemoryBlastTargetRepository();
-        var results = await repo.GetByActionIdAsync(Guid.NewGuid());
-        results.Should().BeEmpty();
-    }
 }

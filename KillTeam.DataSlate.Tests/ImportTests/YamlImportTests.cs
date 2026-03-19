@@ -104,7 +104,7 @@ public class YamlImportTests
         operative.Abilities[0].Name.Should().Be("Iron Halo");
         operative.SpecialActions.Should().HaveCount(1);
         operative.SpecialActions[0].ApCost.Should().Be(1);
-        operative.SpecialRules.Should().HaveCount(1);
+        operative.OperativeWeaponRules.Should().HaveCount(1);
 
         // Team-level data
         team.FactionRules.Should().HaveCount(2);

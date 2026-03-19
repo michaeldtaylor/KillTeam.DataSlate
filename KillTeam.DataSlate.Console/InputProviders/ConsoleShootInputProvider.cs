@@ -37,12 +37,6 @@ public class ConsoleShootInputProvider(IAnsiConsole console, ColumnContext colum
                 .Title($"{columnContext.Prefix}Select a ranged weapon:")
                 .UseConverter(w =>
                 {
-                    var rulesText = w.Rules.Count > 0
-                        ? $" | {string.Join(", ", w.Rules.Select(r => r.RawText))}"
-                        : !string.IsNullOrWhiteSpace(w.WeaponRules)
-                            ? $" | {w.WeaponRules}"
-                            : string.Empty;
-
                     var badges = new List<string>();
                     if (w.Rules.Any(r => r.Kind == WeaponRuleKind.Saturate)) { badges.Add("[yellow]Saturate[/]"); }
                     if (w.Rules.Any(r => r.Kind == WeaponRuleKind.Seek))     { badges.Add("[yellow]Seek[/]"); }
@@ -57,7 +51,7 @@ public class ConsoleShootInputProvider(IAnsiConsole console, ColumnContext colum
 
                     var badgeStr = badges.Count > 0 ? " " + string.Join(" ", badges) : string.Empty;
 
-                    return $"{Markup.Escape(w.Name)} (Attack: [green]{w.Atk}[/] | Hit: [green]{w.Hit}+[/] | Normal: [green]{w.NormalDmg}[/] | Crit: [green]{w.CriticalDmg}[/]{Markup.Escape(rulesText)}){badgeStr}";
+                    return $"{Markup.Escape(w.Name)}{badgeStr}";
                 })
                 .AddChoices(weapons)));
     }
@@ -156,7 +150,16 @@ public class ConsoleShootInputProvider(IAnsiConsole console, ColumnContext colum
         {
             var rolled = Enumerable.Range(0, count).Select(_ => Random.Shared.Next(1, 7)).ToArray();
 
-            eventStream?.Emit((seq, ts) => new DiceRolledEvent(eventStream.GameSessionId, seq, ts, participant, operativeName, role, phase, rolled));
+            await (eventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
+                new DiceRolledEvent(
+                    gameSessionId,
+                    sequenceNumber,
+                    timestamp,
+                    participant,
+                    operativeName,
+                    role,
+                    phase,
+                    rolled)) ?? ValueTask.CompletedTask);
 
             return rolled;
         }
@@ -187,7 +190,16 @@ public class ConsoleShootInputProvider(IAnsiConsole console, ColumnContext colum
             {
                 var rolled = values.ToArray();
 
-                eventStream?.Emit((seq, ts) => new DiceRolledEvent(eventStream.GameSessionId, seq, ts, participant, operativeName, role, phase, rolled));
+                await (eventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
+                    new DiceRolledEvent(
+                        gameSessionId,
+                        sequenceNumber,
+                        timestamp,
+                        participant,
+                        operativeName,
+                        role,
+                        phase,
+                        rolled)) ?? ValueTask.CompletedTask);
 
                 return rolled;
             }

@@ -16,7 +16,7 @@ public class GameAction
 
     public int[] AttackerDice { get; init; } = [];
 
-    public int[] DefenderDice { get; set; } = [];
+    public int[] TargetDice { get; set; } = [];
 
     public bool? TargetInCover { get; set; }
 

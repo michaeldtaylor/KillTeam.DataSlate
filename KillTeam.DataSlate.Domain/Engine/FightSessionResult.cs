@@ -2,7 +2,7 @@ namespace KillTeam.DataSlate.Domain.Engine;
 
 public record FightSessionResult(
     bool AttackerCausedIncapacitation,
-    bool DefenderCausedIncapacitation,
+    bool TargetCausedIncapacitation,
     int AttackerDamageDealt,
-    int DefenderDamageDealt,
+    int TargetDamageDealt,
     Guid TargetOperativeId);

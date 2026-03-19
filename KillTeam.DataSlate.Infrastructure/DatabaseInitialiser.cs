@@ -38,6 +38,8 @@ public class DatabaseInitialiser
         {
             await ApplyMigrationAsync(connection, version, sql);
         }
+
+        await EnsureInternalPlayersAsync(connection);
     }
 
     public static void ApplyAllMigrations(SqliteConnection connection)
@@ -48,6 +50,22 @@ public class DatabaseInitialiser
         {
             ApplyMigrationAsync(connection, version, sql).GetAwaiter().GetResult();
         }
+
+        EnsureInternalPlayersAsync(connection).GetAwaiter().GetResult();
+    }
+
+    private static async Task EnsureInternalPlayersAsync(SqliteConnection connection)
+    {
+        await using var command = connection.CreateCommand();
+
+        command.CommandText = """
+            INSERT OR IGNORE INTO players (id, name, colour, is_internal)
+                VALUES ('00000000-0000-0000-0000-000000000001', 'Player 1', 'cyan', 1);
+
+            INSERT OR IGNORE INTO players (id, name, colour, is_internal)
+                VALUES ('00000000-0000-0000-0000-000000000002', 'Player 2', 'red', 1);
+            """;
+        await command.ExecuteNonQueryAsync();
     }
 
     private static async Task<int> GetCurrentVersionAsync(SqliteConnection connection)
@@ -101,9 +119,6 @@ internal static class Migrations
     internal static readonly IReadOnlyList<(int Version, string Sql)> All =
     [
         (1, Migration_001),
-        (2, Migration_002),
-        (3, Migration_003),
-        (4, Migration_004),
     ];
 
     private const string Migration_001 = """
@@ -112,8 +127,10 @@ internal static class Migrations
         );
 
         CREATE TABLE IF NOT EXISTS players (
-            id   TEXT PRIMARY KEY,
-            name TEXT NOT NULL COLLATE NOCASE,
+            id          TEXT PRIMARY KEY,
+            name        TEXT NOT NULL COLLATE NOCASE,
+            colour      TEXT NOT NULL DEFAULT 'cyan',
+            is_internal INTEGER NOT NULL DEFAULT 0,
             CONSTRAINT uq_players_name UNIQUE (name)
         );
 
@@ -136,6 +153,7 @@ internal static class Migrations
             apl             INTEGER NOT NULL DEFAULT 0,
             wounds          INTEGER NOT NULL DEFAULT 0,
             save            INTEGER NOT NULL DEFAULT 0,
+            defence         INTEGER NOT NULL DEFAULT 3,
             equipment_json  TEXT NOT NULL DEFAULT '[]',
             primary_keyword TEXT NOT NULL DEFAULT '',
             keywords_json   TEXT NOT NULL DEFAULT '[]'
@@ -207,7 +225,7 @@ internal static class Migrations
             target_operative_id   TEXT REFERENCES operatives (id),
             weapon_id             TEXT REFERENCES weapons (id),
             attacker_dice         TEXT,
-            defender_dice         TEXT,
+            target_dice           TEXT,
             target_in_cover       INTEGER,
             is_obscured           INTEGER,
             normal_hits           INTEGER NOT NULL DEFAULT 0,
@@ -233,6 +251,7 @@ internal static class Migrations
             is_incapacitated                       INTEGER NOT NULL DEFAULT 0,
             has_used_counteract_this_turning_point INTEGER NOT NULL DEFAULT 0,
             apl_modifier                           INTEGER NOT NULL DEFAULT 0,
+            defence_dice_modifier                  INTEGER NOT NULL DEFAULT 0,
             CONSTRAINT uq_game_operative_states UNIQUE (game_id, operative_id)
         );
 
@@ -243,20 +262,6 @@ internal static class Migrations
             ploy_name        TEXT NOT NULL,
             description      TEXT,
             cp_cost          INTEGER NOT NULL DEFAULT 1
-        );
-
-        CREATE TABLE IF NOT EXISTS action_blast_targets (
-            id                    TEXT PRIMARY KEY,
-            action_id             TEXT NOT NULL REFERENCES actions (id) ON DELETE CASCADE,
-            target_operative_id   TEXT NOT NULL REFERENCES operatives (id),
-            operative_name        TEXT NOT NULL DEFAULT '',
-            defender_dice         TEXT NOT NULL DEFAULT '[]',
-            normal_hits           INTEGER NOT NULL DEFAULT 0,
-            critical_hits         INTEGER NOT NULL DEFAULT 0,
-            blocks                INTEGER NOT NULL DEFAULT 0,
-            normal_damage_dealt   INTEGER NOT NULL DEFAULT 0,
-            critical_damage_dealt INTEGER NOT NULL DEFAULT 0,
-            caused_incapacitation INTEGER NOT NULL DEFAULT 0
         );
 
         -- Team reference data tables
@@ -340,9 +345,6 @@ internal static class Migrations
         CREATE INDEX IF NOT EXISTS idx_ploy_uses_turning_point
             ON ploy_uses (turning_point_id, team_id);
 
-        CREATE INDEX IF NOT EXISTS idx_action_blast_targets_action
-            ON action_blast_targets (action_id);
-
         CREATE INDEX IF NOT EXISTS idx_faction_rules_team
             ON faction_rules (team_id, sort_order);
 
@@ -366,23 +368,12 @@ internal static class Migrations
 
         CREATE INDEX IF NOT EXISTS idx_operative_special_rules_op
             ON operative_special_rules (operative_id, sort_order);
-        """;
 
-    private const string Migration_002 = """
-        ALTER TABLE operatives ADD COLUMN defence INTEGER NOT NULL DEFAULT 3;
-        ALTER TABLE game_operative_states ADD COLUMN defence_dice_modifier INTEGER NOT NULL DEFAULT 0;
-        """;
-
-    private const string Migration_003 = """
-        ALTER TABLE players ADD COLUMN colour TEXT NOT NULL DEFAULT 'cyan';
-        ALTER TABLE players ADD COLUMN is_internal INTEGER NOT NULL DEFAULT 0;
         INSERT OR IGNORE INTO players (id, name, colour, is_internal)
-            VALUES ('00000000-0000-0000-0000-000000000001', 'You', 'cyan', 1);
+            VALUES ('00000000-0000-0000-0000-000000000001', 'Player 1', 'cyan', 1);
+
         INSERT OR IGNORE INTO players (id, name, colour, is_internal)
-            VALUES ('00000000-0000-0000-0000-000000000002', 'AI', 'red', 1);
+            VALUES ('00000000-0000-0000-0000-000000000002', 'Player 2', 'red', 1);
         """;
 
-    private const string Migration_004 = """
-        UPDATE players SET name = 'Player' WHERE id = '00000000-0000-0000-0000-000000000001';
-        """;
 }

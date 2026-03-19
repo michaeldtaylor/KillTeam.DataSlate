@@ -4,23 +4,26 @@ using KillTeam.DataSlate.Domain.Services;
 namespace KillTeam.DataSlate.Console.TestData;
 
 /// <summary>
-/// Builds an in-memory test team used only in Simulate mode.
-/// The operative carries one weapon per weapon rule group so every rule can be exercised.
+/// Builds in-memory test teams used only in Simulate mode.
+/// Each operative carries one weapon per weapon rule group so every rule can be exercised.
 /// </summary>
 public static class TestTeamFactory
 {
-    public const string TeamId = "00000000-0000-0000-ffff-000000000001";
-    public const string TeamName = "Test Operatives (All Rules)";
+    public const string Team1Id = "00000000-0000-0000-ffff-000000000001";
+    public const string Team1Name = "Test Team 1";
 
-    public static Team Create()
+    public const string Team2Id = "00000000-0000-0000-ffff-000000000002";
+    public const string Team2Name = "Test Team 2";
+
+    public static Team CreateTeam1()
     {
-        var operativeId = Guid.Parse("00000000-0000-0000-ffff-000000000002");
+        var operativeId = Guid.Parse("00000000-0000-0000-ffff-000000000011");
 
         var operative = new Operative
         {
             Id = operativeId,
-            TeamId = TeamId,
-            Name = "Test Operative",
+            TeamId = Team1Id,
+            Name = "Test Operative 1",
             OperativeType = "Test",
             PrimaryKeyword = "Test",
             Keywords = ["Test"],
@@ -33,13 +36,47 @@ public static class TestTeamFactory
             Weapons = BuildWeapons(operativeId),
             Abilities = [],
             SpecialActions = [],
-            SpecialRules = [],
+            OperativeWeaponRules = [],
         };
 
         return new Team
         {
-            Id = TeamId,
-            Name = TeamName,
+            Id = Team1Id,
+            Name = Team1Name,
+            Faction = "Test",
+            GrandFaction = "Test",
+            Operatives = [operative],
+        };
+    }
+
+    public static Team CreateTeam2()
+    {
+        var operativeId = Guid.Parse("00000000-0000-0000-ffff-000000000022");
+
+        var operative = new Operative
+        {
+            Id = operativeId,
+            TeamId = Team2Id,
+            Name = "Test Operative 2",
+            OperativeType = "Test",
+            PrimaryKeyword = "Test",
+            Keywords = ["Test"],
+            Move = 6,
+            Apl = 3,
+            Wounds = 12,
+            Save = 3,
+            Defence = 3,
+            Equipment = [],
+            Weapons = BuildWeapons(operativeId),
+            Abilities = [],
+            SpecialActions = [],
+            OperativeWeaponRules = [],
+        };
+
+        return new Team
+        {
+            Id = Team2Id,
+            Name = Team2Name,
             Faction = "Test",
             GrandFaction = "Test",
             Operatives = [operative],

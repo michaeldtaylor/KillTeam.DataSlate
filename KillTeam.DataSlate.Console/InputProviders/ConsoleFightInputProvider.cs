@@ -29,33 +29,19 @@ public class ConsoleFightInputProvider(IAnsiConsole console, ColumnContext colum
                 .Title($"{columnContext.Prefix}Select attacker''s melee weapon:")
                 .UseConverter(w =>
                 {
-                    var rulesText = w.Rules.Count > 0
-                        ? $" | {string.Join(", ", w.Rules.Select(r => r.RawText))}"
-                        : !string.IsNullOrWhiteSpace(w.WeaponRules)
-                            ? $" | {w.WeaponRules}"
-                            : string.Empty;
                     var injuredNote = isInjured ? $" [yellow](Injured: effective Hit {w.Hit + 1}+)[/]" : string.Empty;
 
-                    return $"{Markup.Escape(w.Name)} (Attack: [green]{w.Atk}[/] | Hit: [green]{w.Hit}+[/] | Normal: [green]{w.NormalDmg}[/] | Crit: [green]{w.CriticalDmg}[/]{Markup.Escape(rulesText)}){injuredNote}";
+                    return $"{Markup.Escape(w.Name)}{injuredNote}";
                 })
                 .AddChoices(weapons)));
     }
 
-    public async Task<Weapon> SelectDefenderWeaponAsync(IList<Weapon> weapons)
+    public async Task<Weapon> SelectTargetWeaponAsync(IList<Weapon> weapons)
     {
         return await Task.FromResult(console.Prompt(
             new SelectionPrompt<Weapon>()
                 .Title($"{columnContext.Prefix}Select defender''s melee weapon:")
-                .UseConverter(w =>
-                {
-                    var rulesText = w.Rules.Count > 0
-                        ? $" | {string.Join(", ", w.Rules.Select(r => r.RawText))}"
-                        : !string.IsNullOrWhiteSpace(w.WeaponRules)
-                            ? $" | {w.WeaponRules}"
-                            : string.Empty;
-
-                    return $"{Markup.Escape(w.Name)} (Attack: [green]{w.Atk}[/] | Hit: [green]{w.Hit}+[/] | Normal: [green]{w.NormalDmg}[/] | Crit: [green]{w.CriticalDmg}[/]{Markup.Escape(rulesText)})";
-                })
+                .UseConverter(w => Markup.Escape(w.Name))
                 .AddChoices(weapons)));
     }
 
@@ -85,7 +71,7 @@ public class ConsoleFightInputProvider(IAnsiConsole console, ColumnContext colum
                 .AllowEmpty()));
     }
 
-    public Task<int[]> RollOrEnterDiceAsync(
+    public async Task<int[]> RollOrEnterDiceAsync(
         int count,
         string label,
         string operativeName,
@@ -94,70 +80,81 @@ public class ConsoleFightInputProvider(IAnsiConsole console, ColumnContext colum
         string participant,
         GameEventStream? eventStream)
     {
-        try
+        if (count == 0)
         {
-            if (count == 0)
-            {
-                return Task.FromResult<int[]>([]);
-            }
-
-            var choice = console.Prompt(
-                new SelectionPrompt<string>()
-                    .Title($"{columnContext.Prefix}[bold]{Markup.Escape(label)}[/] ({count} dice):")
-                    .AddChoices("Roll for me", "Enter manually"));
-
-            if (choice == "Roll for me")
-            {
-                var rolled = Enumerable.Range(0, count).Select(_ => Random.Shared.Next(1, 7)).ToArray();
-
-                eventStream?.Emit((seq, ts) => new DiceRolledEvent(eventStream.GameSessionId, seq, ts, participant, operativeName, role, phase, rolled));
-
-                return Task.FromResult(rolled);
-            }
-
-            while (true)
-            {
-                var input = console.Prompt(
-                    new TextPrompt<string>($"{columnContext.Prefix}Enter {count} dice values (space or comma separated):")
-                        .AllowEmpty());
-                var parts = input.Split([' ', ','], StringSplitOptions.RemoveEmptyEntries);
-                var values = new List<int>();
-                var valid = true;
-
-                foreach (var p in parts)
-                {
-                    if (int.TryParse(p, out var v) && v is >= 1 and <= 6)
-                    {
-                        values.Add(v);
-                    }
-                    else
-                    {
-                        valid = false;
-                        break;
-                    }
-                }
-
-                if (valid && values.Count == count)
-                {
-                    var rolled = values.ToArray();
-
-                    eventStream?.Emit((seq, ts) => new DiceRolledEvent(eventStream.GameSessionId, seq, ts, participant, operativeName, role, phase, rolled));
-
-                    return Task.FromResult(rolled);
-                }
-
-                console.MarkupLine("[red]Invalid input. Enter integers 1-6 separated by spaces or commas.[/]");
-            }
+            return [];
         }
-        catch (Exception exception)
+
+        var choice = console.Prompt(
+            new SelectionPrompt<string>()
+                .Title($"{columnContext.Prefix}[bold]{Markup.Escape(label)}[/] ({count} dice):")
+                .AddChoices("Roll for me", "Enter manually"));
+
+        if (choice == "Roll for me")
         {
-            return Task.FromException<int[]>(exception);
+            var rolled = Enumerable.Range(0, count).Select(_ => Random.Shared.Next(1, 7)).ToArray();
+
+            await (eventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
+                new DiceRolledEvent(
+                    gameSessionId,
+                    sequenceNumber,
+                    timestamp,
+                    participant,
+                    operativeName,
+                    role,
+                    phase,
+                    rolled)) ?? ValueTask.CompletedTask);
+
+            return rolled;
+        }
+
+        while (true)
+        {
+            var input = console.Prompt(
+                new TextPrompt<string>($"{columnContext.Prefix}Enter {count} dice values (space or comma separated):")
+                    .AllowEmpty());
+            var parts = input.Split([' ', ','], StringSplitOptions.RemoveEmptyEntries);
+            var values = new List<int>();
+            var valid = true;
+
+            foreach (var p in parts)
+            {
+                if (int.TryParse(p, out var v) && v is >= 1 and <= 6)
+                {
+                    values.Add(v);
+                }
+                else
+                {
+                    valid = false;
+                    break;
+                }
+            }
+
+            if (valid && values.Count == count)
+            {
+                var rolled = values.ToArray();
+
+                await (eventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
+                    new DiceRolledEvent(
+                        gameSessionId,
+                        sequenceNumber,
+                        timestamp,
+                        participant,
+                        operativeName,
+                        role,
+                        phase,
+                        rolled)) ?? ValueTask.CompletedTask);
+
+                return rolled;
+            }
+
+            console.MarkupLine("[red]Invalid input. Enter integers 1-6 separated by spaces or commas.[/]");
         }
     }
 
     private static string FormatFightAction(FightAction a)
     {
-        var resultLabel = a.ActiveDie.Result == DieResult.Crit ? "CRIT" : "HIT";
+        var resultLabel = a.ActiveDie.Result == DieResult.Crit ? "[bold yellow]CRIT[/]" : "[green]HIT[/]";
         var dieInfo = $"rolled [green]{a.ActiveDie.RolledValue}[/] ({resultLabel})";
 
         if (a.Type == FightActionType.Strike)
@@ -165,8 +162,8 @@ public class ConsoleFightInputProvider(IAnsiConsole console, ColumnContext colum
             return $"[red]STRIKE[/] — {dieInfo}";
         }
 
-        var targetLabel = a.TargetDie!.Result == DieResult.Crit ? "CRIT" : "HIT";
+        var targetLabel = a.OpponentDie!.Result == DieResult.Crit ? "[bold yellow]CRIT[/]" : "[green]HIT[/]";
 
-        return $"[cyan]BLOCK[/] — {dieInfo} cancels rolled [green]{a.TargetDie.RolledValue}[/] ({targetLabel})";
+        return $"[cyan]BLOCK[/] — {dieInfo} cancels rolled [green]{a.OpponentDie.RolledValue}[/] ({targetLabel})";
     }
 }

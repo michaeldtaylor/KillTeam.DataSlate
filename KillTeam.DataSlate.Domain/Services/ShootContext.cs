@@ -1,17 +1,14 @@
-using KillTeam.DataSlate.Domain.Models;
-
 namespace KillTeam.DataSlate.Domain.Services;
 
 public record ShootContext(
-    int[] AttackDice,
-    int[] DefenceDice,
+    int[] AttackerDice,
+    int[] TargetDice,
     bool InCover,
     bool IsObscured,
     int HitThreshold,
     int SaveThreshold,
     int NormalDmg,
     int CritDmg,
-    List<WeaponRule> WeaponRules,
     int FightAssistBonus = 0
 );
 

@@ -1,4 +1,5 @@
 using FluentAssertions;
+using KillTeam.DataSlate.Domain.Engine.WeaponRules;
 using KillTeam.DataSlate.Infrastructure.Repositories;
 using KillTeam.DataSlate.Domain.Models;
 using KillTeam.DataSlate.Domain.Services;
@@ -14,8 +15,6 @@ public class GameSessionTests
     public async Task CpCalculation_TP1_BothTeamsGain1Cp()
     {
         // Arrange: game starts with 2CP each; TP1 logic adds +1 to each → 3 each
-        var teamAId = Guid.NewGuid();
-        var teamBId = Guid.NewGuid();
         var playerId = Guid.NewGuid();
         var gameId = Guid.NewGuid();
 
@@ -41,8 +40,6 @@ public class GameSessionTests
     {
         // TP2: initiative team (A) +1, other team (B) +2
         // Starting from 3CP each after TP1 → A gets 4, B gets 5
-        var teamAId = Guid.NewGuid();
-        var teamBId = Guid.NewGuid();
         var playerId = Guid.NewGuid();
         var gameId = Guid.NewGuid();
 
@@ -72,8 +69,6 @@ public class GameSessionTests
     [Fact]
     public async Task WoundReduction_AfterShoot_UpdatesCurrentWounds()
     {
-        var teamAId = Guid.NewGuid();
-        var teamBId = Guid.NewGuid();
         var playerId = Guid.NewGuid();
         var gameId = Guid.NewGuid();
         var opId = Guid.NewGuid();
@@ -126,8 +121,6 @@ public class GameSessionTests
     [Fact]
     public async Task Incapacitation_WoundsReachZero_CanMarkIncapacitated()
     {
-        var teamAId = Guid.NewGuid();
-        var teamBId = Guid.NewGuid();
         var playerId = Guid.NewGuid();
         var gameId = Guid.NewGuid();
         var opId = Guid.NewGuid();
@@ -155,24 +148,25 @@ public class GameSessionTests
     // ─── Cover Save ───────────────────────────────────────────────────────────
 
     [Fact]
-    public void CoverSave_InCover_BlocksNormalHit()
+    public async Task CoverSave_InCover_BlocksNormalHit()
     {
         // Attack: 1 normal hit (die=5 at threshold 3), no defence dice, but InCover=true
         // Cover adds 1 normal save → blocks the 1 normal hit → 0 damage
-        var svc = new CombatResolutionService();
+        var applicator = new ShootWeaponRuleApplicator();
+        var weapon = new Weapon { Name = "Test Weapon" };
         var ctx = new ShootContext(
-            AttackDice: [5],
-            DefenceDice: [],
+            AttackerDice: [5],
+            TargetDice: [],
             InCover: true,
             IsObscured: false,
             HitThreshold: 3,
             SaveThreshold: 3,
             NormalDmg: 3,
-            CritDmg: 4,
-            WeaponRules: []
+            CritDmg: 4
         );
 
-        var result = svc.ResolveShoot(ctx);
+        var result = await applicator.ResolveShootAsync(weapon, ctx);
+
         result.TotalDamage.Should().Be(0, "cover save blocks the single normal hit");
         result.UnblockedNormals.Should().Be(0);
     }
@@ -184,8 +178,6 @@ public class GameSessionTests
     {
         // A state with IsReady=false, Order=Engage, HasUsedCounteract=false
         // should be eligible for counteract (not blocked by any condition)
-        var teamAId = Guid.NewGuid();
-        var teamBId = Guid.NewGuid();
         var playerId = Guid.NewGuid();
         var gameId = Guid.NewGuid();
         var opId = Guid.NewGuid();
@@ -211,24 +203,5 @@ public class GameSessionTests
             && !state.IsIncapacitated;
 
         eligible.Should().BeTrue("operative meets all counteract eligibility criteria");
-    }
-
-    // ─── Guard Resolution Service ─────────────────────────────────────────────
-
-    [Fact]
-    public void GuardResolutionService_GetEligibleGuards_ReturnsOnGuardNonIncapacitated()
-    {
-        var svc = new GuardResolutionService();
-
-        var guard1 = new GameOperativeState { IsOnGuard = true, IsIncapacitated = false };
-        var guard2 = new GameOperativeState { IsOnGuard = true, IsIncapacitated = true };
-        var notGuard = new GameOperativeState { IsOnGuard = false, IsIncapacitated = false };
-
-        var eligible = svc.GetEligibleGuards([guard1, guard2, notGuard]);
-
-        eligible.Should().HaveCount(1);
-        eligible.Should().Contain(guard1);
-        eligible.Should().NotContain(guard2, "incapacitated guard is not eligible");
-        eligible.Should().NotContain(notGuard, "not on guard");
     }
 }

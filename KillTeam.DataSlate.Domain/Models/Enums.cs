@@ -70,3 +70,24 @@ public enum WeaponRulePhase
     Shoot,
     Both,
 }
+
+public enum DieResult
+{
+    Crit,
+    Hit,
+    Miss,
+    Save,
+    Fail,
+}
+
+public enum DieOwner
+{
+    Attacker,
+    Target,
+}
+
+public enum FightActionType
+{
+    Strike,
+    Block,
+}

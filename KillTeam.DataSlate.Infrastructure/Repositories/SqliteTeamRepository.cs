@@ -92,7 +92,7 @@ public class SqliteTeamRepository : ITeamRepository
 
                 await InsertAbilitiesAsync(connection, transaction, operative.Id, operative.Abilities);
                 await InsertSpecialActionsAsync(connection, transaction, operative.Id, operative.SpecialActions);
-                await InsertWeaponRulesAsync(connection, transaction, operative.Id, operative.SpecialRules);
+                await InsertWeaponRulesAsync(connection, transaction, operative.Id, operative.OperativeWeaponRules);
 
                 foreach (var weapon in operative.Weapons)
                 {

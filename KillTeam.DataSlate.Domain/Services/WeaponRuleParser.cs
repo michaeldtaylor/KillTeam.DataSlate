@@ -11,16 +11,9 @@ public static class WeaponRuleParser
             return [];
         }
 
-        var results = new List<WeaponRule>();
         var tokens = raw.Split([',', ';'], StringSplitOptions.RemoveEmptyEntries);
 
-        foreach (var token in tokens)
-        {
-            var t = token.Trim();
-            results.Add(ParseToken(t));
-        }
-
-        return results;
+        return tokens.Select(t => ParseToken(t.Trim())).ToList();
     }
 
     private static WeaponRule ParseToken(string token)
@@ -29,6 +22,7 @@ public static class WeaponRuleParser
         var parts = token.Split(' ', 2, StringSplitOptions.RemoveEmptyEntries);
         var name = parts[0];
         var paramRaw = parts.Length > 1 ? parts[1].TrimEnd('"', '\'') : string.Empty;
+
         int? param = !string.IsNullOrEmpty(paramRaw) && int.TryParse(paramRaw, out var p) ? p : null;
 
         // Special cases
@@ -46,7 +40,9 @@ public static class WeaponRuleParser
             token.Equals("Piercing Crits", StringComparison.OrdinalIgnoreCase))
         {
             var pcParts = token.Split(' ');
+
             int? pcParam = pcParts.Length > 2 && int.TryParse(pcParts[2], out var pcp) ? pcp : null;
+
             return new WeaponRule(WeaponRuleKind.PiercingCrits, pcParam, token);
         }
 

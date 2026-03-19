@@ -183,11 +183,11 @@ public class FirefightPhaseOrchestrator(
 
             if (selectedAction == "Shoot")
             {
-                await shootEngine.RunAsync(operative, state, allStates, allOperatives, game, turningPoint, activation, hasMovedNonDash);
+                await shootEngine.RunAsync(operative, state, allStates, allOperatives, game, activation, hasMovedNonDash);
             }
             else if (selectedAction == "Fight")
             {
-                await fightEngine.RunAsync(operative, state, allStates, allOperatives, game, turningPoint, activation);
+                await fightEngine.RunAsync(operative, state, allStates, allOperatives, game, activation);
             }
             else if (selectedAction == "Guard")
             {
@@ -232,16 +232,16 @@ public class FirefightPhaseOrchestrator(
                 await actionRepository.CreateAsync(moveAction);
 
                 if (!isDash)
-            {
-                hasMovedNonDash = true;
-            }
+                {
+                    hasMovedNonDash = true;
+                }
             }
 
             remainingAp--;
 
             if (selectedAction is "Shoot" or "Fight" or "Reposition" or "Dash" or "Fall Back" or "Charge" or "Other")
             {
-                seqCounter = await guardInterruptOrchestrator.CheckAndRunInterruptsAsync(operative, state, allStates, allOperatives, game, turningPoint, seqCounter);
+                seqCounter = await guardInterruptOrchestrator.CheckAndRunInterruptsAsync(operative, allStates, allOperatives, game, turningPoint, seqCounter);
 
                 game = (await gameRepository.GetByIdAsync(game.Id))!;
             }
@@ -336,12 +336,12 @@ public class FirefightPhaseOrchestrator(
         else if (counterChoice == "Shoot")
         {
             await shootEngine.RunAsync(
-                counterOperative, counterState, allStates, allOperatives, game, turningPoint, counterActivation);
+                counterOperative, counterState, allStates, allOperatives, game, counterActivation);
         }
         else if (counterChoice == "Fight")
         {
             await fightEngine.RunAsync(
-                counterOperative, counterState, allStates, allOperatives, game, turningPoint, counterActivation);
+                counterOperative, counterState, allStates, allOperatives, game, counterActivation);
         }
 
         counterState.HasUsedCounteractThisTurningPoint = true;

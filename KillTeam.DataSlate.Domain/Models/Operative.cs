@@ -32,5 +32,5 @@ public class Operative
 
     public List<OperativeSpecialAction> SpecialActions { get; init; } = [];
 
-    public List<OperativeWeaponRule> SpecialRules { get; init; } = [];
+    public List<OperativeWeaponRule> OperativeWeaponRules { get; init; } = [];
 }

@@ -10,7 +10,6 @@ public class HistoryTests
     public async Task Query_ReturnsCompletedGamesInOrder()
     {
         var pid1 = Guid.NewGuid(); var pid2 = Guid.NewGuid();
-        var tid1 = Guid.NewGuid(); var tid2 = Guid.NewGuid();
         var gid1 = Guid.NewGuid(); var gid2 = Guid.NewGuid();
 
         using var db = TestDbBuilder.Create()
@@ -30,7 +29,6 @@ public class HistoryTests
     public async Task Query_WithPlayerFilter_ReturnsOnlyMatchingGames()
     {
         var pid1 = Guid.NewGuid(); var pid2 = Guid.NewGuid(); var pid3 = Guid.NewGuid();
-        var tid1 = Guid.NewGuid(); var tid2 = Guid.NewGuid();
         var gid1 = Guid.NewGuid(); var gid2 = Guid.NewGuid();
 
         using var db = TestDbBuilder.Create()
@@ -66,7 +64,6 @@ public class StatsTests
     public async Task PerPlayerStats_CalculatesWinsAndGamesPlayed()
     {
         var pid1 = Guid.NewGuid(); var pid2 = Guid.NewGuid();
-        var tid1 = Guid.NewGuid(); var tid2 = Guid.NewGuid();
 
         using var db = TestDbBuilder.Create()
             .WithPlayer(pid1, "Alpha").WithPlayer(pid2, "Beta")
@@ -108,53 +105,4 @@ public class StatsTests
         r.GetInt32(1).Should().Be(2, "Alpha won 2 games");
     }
 
-    [Fact]
-    public void PerTeamStats_KillsCount_IncludesBlastTargetIncapacitations()
-    {
-        var pid = Guid.NewGuid();
-        var tid = Guid.NewGuid(); var tid2 = Guid.NewGuid();
-        var opId = Guid.NewGuid(); var targetId = Guid.NewGuid();
-        var gameId = Guid.NewGuid(); var tpId = Guid.NewGuid();
-        var actId = Guid.NewGuid(); var actionId = Guid.NewGuid();
-
-        using var db = TestDbBuilder.Create()
-            .WithPlayer(pid, "Alpha")
-            .WithTeam("team_a", "Team A", "FA").WithTeam("team_b", "Team B", "FB")
-            .WithOperative(opId, "team_a", "Shooter", wounds: 13, save: 3, apl: 3, move: 3)
-            .WithOperative(targetId, "team_b", "Target", wounds: 13, save: 3, apl: 2, move: 3)
-            .WithGame(gameId, "team_a", "Team A", "team_b", "Team B", pid, pid)
-            .WithTurningPoint(tpId, gameId, 1)
-            .WithActivation(actId, tpId, 1, opId, "team_a");
-
-        // Insert action
-        using var aCmd = db.Connection.CreateCommand();
-        aCmd.CommandText = "INSERT INTO actions (id, activation_id, type, ap_cost) VALUES (@id, @act, 'Shoot', 1)";
-        aCmd.Parameters.AddWithValue("@id", actionId.ToString());
-        aCmd.Parameters.AddWithValue("@act", actId.ToString());
-        aCmd.ExecuteNonQuery();
-
-        // Insert blast target with incapacitation
-        var btId = Guid.NewGuid();
-        using var btCmd = db.Connection.CreateCommand();
-        btCmd.CommandText = """
-            INSERT INTO action_blast_targets
-            (id, action_id, target_operative_id, operative_name, caused_incapacitation)
-            VALUES (@id, @aid, @tgt, 'Target', 1)
-            """;
-        btCmd.Parameters.AddWithValue("@id", btId.ToString());
-        btCmd.Parameters.AddWithValue("@aid", actionId.ToString());
-        btCmd.Parameters.AddWithValue("@tgt", targetId.ToString());
-        btCmd.ExecuteNonQuery();
-
-        // Verify kill count query
-        using var killCmd = db.Connection.CreateCommand();
-        killCmd.CommandText = """
-            SELECT COUNT(*) FROM action_blast_targets abt
-            JOIN actions a ON a.id = abt.action_id
-            JOIN activations act ON act.id = a.activation_id
-            WHERE abt.caused_incapacitation = 1 AND act.team_id = @tid
-            """;
-        killCmd.Parameters.AddWithValue("@tid", "team_a");
-        Convert.ToInt32(killCmd.ExecuteScalar()).Should().Be(1);
-    }
 }
