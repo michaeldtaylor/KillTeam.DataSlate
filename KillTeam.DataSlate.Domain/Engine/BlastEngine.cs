@@ -1,5 +1,6 @@
 using KillTeam.DataSlate.Domain.Engine.Input;
 using KillTeam.DataSlate.Domain.Engine.WeaponRules;
+using KillTeam.DataSlate.Domain.Engine.WeaponRules.Context;
 using KillTeam.DataSlate.Domain.Events;
 using KillTeam.DataSlate.Domain.Models;
 using KillTeam.DataSlate.Domain.Repositories;
@@ -182,23 +183,24 @@ public class BlastEngine(
 
             totalDamage += blastResult.TotalDamage;
 
-            if (!primaryActionPersisted)
-            {
-                action.TargetDice = defenderDice;
-                action.TargetInCover = inCover;
-                action.IsObscured = isObscured;
-                action.NormalHits = blastResult.UnblockedNormals;
-                action.CriticalHits = blastResult.UnblockedCrits;
-                action.NormalDamageDealt = blastResult.UnblockedNormals * weapon.NormalDmg;
-                action.CriticalDamageDealt = blastResult.UnblockedCrits * weapon.CriticalDmg;
-                action.CausedIncapacitation = causedIncap;
-                await actionRepository.CreateAsync(action);
-                primaryActionPersisted = true;
-            }
-            else
+            if (primaryActionPersisted)
             {
                 // Secondary blast targets: damage and incapacitation are tracked via events only
+                continue;
             }
+
+            action.TargetDice = defenderDice;
+            action.TargetInCover = inCover;
+            action.IsObscured = isObscured;
+            action.NormalHits = blastResult.UnblockedNormals;
+            action.CriticalHits = blastResult.UnblockedCrits;
+            action.NormalDamageDealt = blastResult.UnblockedNormals * weapon.NormalDmg;
+            action.CriticalDamageDealt = blastResult.UnblockedCrits * weapon.CriticalDmg;
+            action.CausedIncapacitation = causedIncap;
+
+            await actionRepository.CreateAsync(action);
+
+            primaryActionPersisted = true;
         }
 
         if (!primaryActionPersisted)

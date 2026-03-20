@@ -1,4 +1,4 @@
-namespace KillTeam.DataSlate.Domain.Engine;
+namespace KillTeam.DataSlate.Domain.Engine.WeaponRules.Context;
 
 public record ShootContext(
     int[] AttackerDice,
@@ -11,4 +11,3 @@ public record ShootContext(
     int CritDmg,
     int FightAssistBonus = 0
 );
-
