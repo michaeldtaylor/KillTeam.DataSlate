@@ -7,7 +7,6 @@ using KillTeam.DataSlate.Domain.Engine;
 using KillTeam.DataSlate.Domain.Engine.Input;
 using KillTeam.DataSlate.Domain.Engine.WeaponRules;
 using KillTeam.DataSlate.Domain.Repositories;
-using KillTeam.DataSlate.Domain.Services;
 using KillTeam.DataSlate.Infrastructure;
 using KillTeam.DataSlate.Infrastructure.Repositories;
 using KillTeam.DataSlate.Infrastructure.Services;

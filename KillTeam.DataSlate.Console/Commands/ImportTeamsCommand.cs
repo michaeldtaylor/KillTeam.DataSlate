@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using KillTeam.DataSlate.Domain;
+using KillTeam.DataSlate.Domain.Models;
 using KillTeam.DataSlate.Domain.Repositories;
-using KillTeam.DataSlate.Domain.Services;
 using KillTeam.DataSlate.Infrastructure.Services;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;

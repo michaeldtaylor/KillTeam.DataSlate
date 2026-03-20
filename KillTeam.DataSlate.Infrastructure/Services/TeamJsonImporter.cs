@@ -1,7 +1,6 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using KillTeam.DataSlate.Domain.Models;
-using KillTeam.DataSlate.Domain.Services;
 
 namespace KillTeam.DataSlate.Infrastructure.Services;
 

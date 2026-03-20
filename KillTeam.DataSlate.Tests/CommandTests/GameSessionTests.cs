@@ -1,8 +1,8 @@
 using FluentAssertions;
+using KillTeam.DataSlate.Domain.Engine;
 using KillTeam.DataSlate.Domain.Engine.WeaponRules;
-using KillTeam.DataSlate.Infrastructure.Repositories;
 using KillTeam.DataSlate.Domain.Models;
-using KillTeam.DataSlate.Domain.Services;
+using KillTeam.DataSlate.Infrastructure.Repositories;
 using Xunit;
 
 namespace KillTeam.DataSlate.Tests.CommandTests;

@@ -1,7 +1,6 @@
 using System.Text.Json;
 using KillTeam.DataSlate.Domain.Models;
 using KillTeam.DataSlate.Domain.Repositories;
-using KillTeam.DataSlate.Domain.Services;
 using Microsoft.Data.Sqlite;
 
 namespace KillTeam.DataSlate.Infrastructure.Repositories;

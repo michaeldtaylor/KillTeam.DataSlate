@@ -207,7 +207,7 @@ public class YamlImportTests
             """;
 
         var act = () => importer.Import(badYaml);
-        act.Should().Throw<Domain.Services.TeamValidationException>()
+        act.Should().Throw<Domain.Models.TeamValidationException>()
            .WithMessage("*id*");
     }
 
@@ -222,7 +222,7 @@ public class YamlImportTests
             """;
 
         var act = () => importer.Import(badYaml);
-        act.Should().Throw<Domain.Services.TeamValidationException>()
+        act.Should().Throw<Domain.Models.TeamValidationException>()
            .WithMessage("*datacards*");
     }
 

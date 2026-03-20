@@ -1,6 +1,6 @@
 using KillTeam.DataSlate.Domain.Models;
 
-namespace KillTeam.DataSlate.Domain.Services;
+namespace KillTeam.DataSlate.Domain.Engine;
 
 public record FightDie(int Id, int RolledValue, DieResult Result);
 
@@ -46,16 +46,16 @@ public static class FightResolution
         return die.Result == DieResult.Crit ? critDmg : normalDmg;
     }
 
-    public static (FightDicePool UpdatedBlocker, FightDicePool UpdatedOpponent) ApplySingleBlock(
+    public static (FightDicePool UpdatedBlocker, FightDicePool UpdatedBlocked) ApplySingleBlock(
         FightDie blockingDie,
         FightDie targetDie,
         FightDicePool blockerPool,
-        FightDicePool opponentPool)
+        FightDicePool blockedPool)
     {
         var newBlocker = new FightDicePool(Remaining: blockerPool.Remaining.Where(d => d.Id != blockingDie.Id).ToList());
-        var newOpponent = new FightDicePool(Remaining: opponentPool.Remaining.Where(d => d.Id != targetDie.Id).ToList());
+        var newBlocked = new FightDicePool(Remaining: blockedPool.Remaining.Where(d => d.Id != targetDie.Id).ToList());
 
-        return (newBlocker, newOpponent);
+        return (newBlocker, newBlocked);
     }
 
     /// <summary>
@@ -63,35 +63,34 @@ public static class FightResolution
     /// restrictBlocksToCrits = true: only crit dice may be used for Block actions.
     /// </summary>
     public static IReadOnlyList<FightAction> GetAvailableActions(
-        FightDicePool activePool,
-        FightDicePool opponentPool,
+        FightDicePool pool,
+        FightDicePool targetPool,
         bool restrictBlocksToCrits = false)
     {
         var actions = new List<FightAction>();
 
-        foreach (var activeDie in activePool.Remaining)
+        foreach (var die in pool.Remaining)
         {
-            // Strike: any active die can strike any opponent die
-            // (Target die is not needed for strike resolution, but we list available strikes)
-            actions.Add(new FightAction(FightActionType.Strike, activeDie, null));
+            // Strike: any die can strike
+            actions.Add(new FightAction(FightActionType.Strike, die, null));
 
-            if (restrictBlocksToCrits && activeDie.Result != DieResult.Crit)
+            if (restrictBlocksToCrits && die.Result != DieResult.Crit)
             {
                 continue;
             }
 
             // Block rules:
-            // Crit die: can block any opponent die (crit or normal)
-            // Normal die: can only block opponent normals (NOT crits)
+            // Crit die: can block any target die (crit or normal)
+            // Normal die: can only block target normals (NOT crits)
             // restrictBlocksToCrits: normal dice CANNOT block at all
-            foreach (var targetDie in opponentPool.Remaining)
+            foreach (var targetDie in targetPool.Remaining)
             {
                 // normal only blocks normals
-                var canBlock = activeDie.Result == DieResult.Crit || targetDie.Result == DieResult.Hit && !restrictBlocksToCrits;
+                var canBlock = die.Result == DieResult.Crit || targetDie.Result == DieResult.Hit && !restrictBlocksToCrits;
 
                 if (canBlock)
                 {
-                    actions.Add(new FightAction(FightActionType.Block, activeDie, targetDie));
+                    actions.Add(new FightAction(FightActionType.Block, die, targetDie));
                 }
             }
         }

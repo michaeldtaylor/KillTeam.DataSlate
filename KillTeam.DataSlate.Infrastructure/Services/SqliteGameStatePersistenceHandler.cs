@@ -1,6 +1,5 @@
 using KillTeam.DataSlate.Domain.Events;
 using KillTeam.DataSlate.Domain.Repositories;
-using KillTeam.DataSlate.Domain.Services;
 
 namespace KillTeam.DataSlate.Infrastructure.Services;
 

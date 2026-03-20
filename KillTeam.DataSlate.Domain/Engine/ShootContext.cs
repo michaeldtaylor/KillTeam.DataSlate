@@ -1,4 +1,4 @@
-namespace KillTeam.DataSlate.Domain.Services;
+namespace KillTeam.DataSlate.Domain.Engine;
 
 public record ShootContext(
     int[] AttackerDice,

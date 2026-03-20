@@ -1,5 +1,4 @@
 using KillTeam.DataSlate.Domain.Models;
-using KillTeam.DataSlate.Domain.Services;
 
 namespace KillTeam.DataSlate.Console.TestData;
 

@@ -1,6 +1,4 @@
-using KillTeam.DataSlate.Domain.Models;
-
-namespace KillTeam.DataSlate.Domain.Services;
+namespace KillTeam.DataSlate.Domain.Models;
 
 public static class WeaponRuleRegistry
 {

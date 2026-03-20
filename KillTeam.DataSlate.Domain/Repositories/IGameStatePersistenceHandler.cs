@@ -1,6 +1,6 @@
 using KillTeam.DataSlate.Domain.Events;
 
-namespace KillTeam.DataSlate.Domain.Services;
+namespace KillTeam.DataSlate.Domain.Repositories;
 
 public interface IGameStatePersistenceHandler
 {

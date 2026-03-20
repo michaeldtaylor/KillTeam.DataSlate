@@ -1,8 +1,8 @@
 using KillTeam.DataSlate.Console.Rendering;
+using KillTeam.DataSlate.Domain.Engine;
 using KillTeam.DataSlate.Domain.Engine.Input;
 using KillTeam.DataSlate.Domain.Events;
 using KillTeam.DataSlate.Domain.Models;
-using KillTeam.DataSlate.Domain.Services;
 using Spectre.Console;
 
 namespace KillTeam.DataSlate.Console.InputProviders;
