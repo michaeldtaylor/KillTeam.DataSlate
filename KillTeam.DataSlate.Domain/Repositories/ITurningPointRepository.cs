@@ -11,7 +11,5 @@ public interface ITurningPointRepository
     Task<IReadOnlyList<TurningPointSummary>> GetSummariesByGameAsync(Guid gameId);
 
     Task CompleteStrategyPhaseAsync(Guid id);
-
-    Task<bool> IsStrategyPhaseCompleteAsync(Guid id);
 }
 

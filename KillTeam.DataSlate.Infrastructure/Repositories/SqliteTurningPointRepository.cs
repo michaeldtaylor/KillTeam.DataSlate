@@ -56,15 +56,6 @@ public class SqliteTurningPointRepository : ITurningPointRepository
             new() { ["@id"] = id.ToString() });
     }
 
-    public async Task<bool> IsStrategyPhaseCompleteAsync(Guid id)
-    {
-        var result = await _db.ScalarAsync<int>(
-            "SELECT is_strategy_phase_complete FROM turning_points WHERE id = @id",
-            new() { ["@id"] = id.ToString() });
-
-        return result != 0;
-    }
-
     public async Task<IReadOnlyList<TurningPointSummary>> GetSummariesByGameAsync(Guid gameId)
     {
         return await _db.QueryAsync(

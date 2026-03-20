@@ -62,7 +62,6 @@ public static class Program
         services.AddSingleton<IPloyRepository, SqlitePloyRepository>();
         services.AddSingleton<IActionRepository, SqliteActionRepository>();
         services.AddSingleton<IOperativeRepository, SqliteOperativeRepository>();
-        services.AddSingleton<SqliteWeaponRepository>();
         services.AddSingleton<TeamJsonImporter>();
         services.AddSingleton<TeamYamlImporter>();
         services.AddSingleton<IFightInputProvider, ConsoleFightInputProvider>();
