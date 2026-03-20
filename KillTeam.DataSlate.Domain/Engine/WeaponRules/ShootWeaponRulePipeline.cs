@@ -65,7 +65,7 @@ public sealed class ShootWeaponRulePipeline
         }
     }
 
-    public async Task<ShootResolution> ResolveShootAsync(Weapon weapon, ShootContext context)
+    public async Task<ShootResolution> ResolveShootAsync(Weapon weapon, ShootResolutionContext context)
     {
         // ─── Stage 1: Pre-attack classification ─────────────────────────────────
         var attackClassificationContext = new AttackClassificationContext

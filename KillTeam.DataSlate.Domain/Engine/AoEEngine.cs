@@ -100,7 +100,7 @@ public class AoEEngine(
 
             defenderDice = await rerollEngine.ApplyTargetRerollAsync(defenderDice, context.Game.Id, isTargetTeam1, targetOperative.Name);
 
-            var shootContext = new ShootContext(
+            var ShootResolutionContext = new ShootResolutionContext(
                 AttackerDice: attackerDice,
                 TargetDice: defenderDice,
                 InCover: inCover,
@@ -111,7 +111,7 @@ public class AoEEngine(
                 CritDmg: weapon.CriticalDmg
             );
 
-            var blastResult = await shootWeaponRulePipeline.ResolveShootAsync(weapon, shootContext);
+            var blastResult = await shootWeaponRulePipeline.ResolveShootAsync(weapon, ShootResolutionContext);
 
             var newWounds = Math.Max(0, targetOperativeState.CurrentWounds - blastResult.TotalDamage);
 

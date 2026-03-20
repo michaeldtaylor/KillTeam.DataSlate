@@ -72,7 +72,9 @@ public class PlayCommand(
                 {
                     // Strategy phase was interrupted — mark complete and proceed
                     console.MarkupLine($"[yellow]Resuming TP {turningPointNumber}: marking strategy phase complete.[/]");
+
                     await turningPointRepository.CompleteStrategyPhaseAsync(currentTurningPoint.Id);
+
                     currentTurningPoint.IsStrategyPhaseComplete = true;
                 }
 

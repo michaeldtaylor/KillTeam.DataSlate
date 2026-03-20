@@ -20,7 +20,7 @@ public class ShootResolutionTests
         };
     }
 
-    private static ShootContext BaseCtx(int[] atk, int[] def, bool inCover = false,
+    private static ShootResolutionContext BaseCtx(int[] atk, int[] def, bool inCover = false,
         bool obscured = false, int hitThreshold = 3, int saveThreshold = 3,
         int normalDmg = 3, int critDmg = 4)
         => new(atk, def, inCover, obscured, hitThreshold, saveThreshold, normalDmg, critDmg);

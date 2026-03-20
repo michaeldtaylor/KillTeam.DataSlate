@@ -232,7 +232,7 @@ public class ShootEngine(
                 target.Wounds,
                 defenceSnapshots)) ?? ValueTask.CompletedTask);
 
-        var shootContext = new ShootContext(
+        var ShootResolutionContext = new ShootResolutionContext(
             attackerDice,
             targetDice,
             inCover,
@@ -244,7 +244,7 @@ public class ShootEngine(
             fightAssist
         );
 
-        var result = await shootWeaponRulePipeline.ResolveShootAsync(weapon, shootContext);
+        var result = await shootWeaponRulePipeline.ResolveShootAsync(weapon, ShootResolutionContext);
 
         var newWounds = Math.Max(0, targetState.CurrentWounds - result.TotalDamage);
 

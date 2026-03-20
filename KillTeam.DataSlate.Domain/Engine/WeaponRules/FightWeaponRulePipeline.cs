@@ -1,5 +1,6 @@
 using KillTeam.DataSlate.Domain.Engine.WeaponRules.Context;
 using KillTeam.DataSlate.Domain.Engine.WeaponRules.Visitors;
+using KillTeam.DataSlate.Domain.Events;
 using KillTeam.DataSlate.Domain.Models;
 
 namespace KillTeam.DataSlate.Domain.Engine.WeaponRules;
@@ -18,5 +19,144 @@ public sealed class FightWeaponRulePipeline
         {
             await handler.SetupAsync(weapon, context);
         }
+    }
+
+    public async Task<FightLoopResult> ResolveFightAsync(FightResolutionContext context)
+    {
+        var attackerPool = context.AttackerPool;
+        var targetPool = context.TargetPool;
+        var attackerCurrentWounds = context.AttackerCurrentWounds;
+        var targetCurrentWounds = context.TargetCurrentWounds;
+        var attackerTeamId = context.Attacker.TeamId;
+        var targetTeamId = context.Target.TeamId;
+        var totalAttackerDamageDealt = 0;
+        var totalTargetDamageDealt = 0;
+        var turnOrder = DieOwner.Attacker;
+
+        while (attackerPool.Remaining.Count > 0 || targetPool.Remaining.Count > 0)
+        {
+            var fightTurn = FightTurn.Resolve(
+                turnOrder,
+                attackerPool,
+                targetPool,
+                context.Attacker,
+                context.Target,
+                context.AttackerWeapon,
+                context.TargetWeapon,
+                context.BlockRestrictedToCrits);
+
+            var (activePool, opponentPool, currentTurn, activeOperative, opponentOperative, activeWeapon, restrictBlocksToCrits) = fightTurn;
+
+            var attackerWoundsNow = attackerCurrentWounds;
+            var targetWoundsNow = targetCurrentWounds;
+            var attackerPoolNow = attackerPool.Remaining.Select(d => new FightDieSnapshot(d.Result, d.RolledValue)).ToList();
+            var targetPoolNow = targetPool.Remaining.Select(d => new FightDieSnapshot(d.Result, d.RolledValue)).ToList();
+
+            await (context.EventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
+                new FightPoolsDisplayedEvent(
+                    gameSessionId,
+                    sequenceNumber,
+                    timestamp,
+                    attackerTeamId,
+                    context.Attacker.Name,
+                    attackerWoundsNow,
+                    context.Attacker.Wounds,
+                    attackerPoolNow,
+                    context.Target.Name,
+                    targetWoundsNow,
+                    context.Target.Wounds,
+                    targetPoolNow)) ?? ValueTask.CompletedTask);
+
+            var actions = FightResolution.GetAvailableActions(activePool, opponentPool, restrictBlocksToCrits);
+
+            var uniqueActions = actions
+                .GroupBy(a => (a.Type, a.Die.Result, TargetResult: a.TargetDie?.Result))
+                .Select(g => g.First())
+                .ToList();
+
+            var opponentHasCrits = opponentPool.Remaining.Any(d => d.Result == DieResult.Crit);
+
+            if (opponentHasCrits)
+            {
+                uniqueActions = uniqueActions
+                    .Where(a => a.Type != FightActionType.Block
+                        || a.Die.Result != DieResult.Crit
+                        || a.TargetDie?.Result != DieResult.Hit)
+                    .ToList();
+            }
+
+            if (uniqueActions.Count == 0)
+            {
+                break;
+            }
+
+            var actionChoice = await context.InputProvider.SelectActionAsync(uniqueActions, activeOperative.Name);
+
+            if (actionChoice.Type == FightActionType.Strike)
+            {
+                var damageDealt = FightResolution.ApplyStrike(actionChoice.Die, activeWeapon.NormalDmg, activeWeapon.CriticalDmg);
+
+                await (context.EventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
+                    new FightStrikeResolvedEvent(
+                        gameSessionId,
+                        sequenceNumber,
+                        timestamp,
+                        activeOperative.TeamId,
+                        activeOperative.Name,
+                        opponentOperative.Name,
+                        actionChoice.Die.RolledValue,
+                        actionChoice.Die.Result,
+                        damageDealt)) ?? ValueTask.CompletedTask);
+
+                if (currentTurn == DieOwner.Attacker)
+                {
+                    targetCurrentWounds = Math.Max(0, targetCurrentWounds - damageDealt);
+                    totalAttackerDamageDealt += damageDealt;
+                }
+                else
+                {
+                    attackerCurrentWounds = Math.Max(0, attackerCurrentWounds - damageDealt);
+                    totalTargetDamageDealt += damageDealt;
+                }
+
+                activePool = new FightDicePool(activePool.Remaining.Where(d => d.Id != actionChoice.Die.Id).ToList());
+            }
+            else
+            {
+                await (context.EventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
+                    new FightBlockResolvedEvent(
+                        gameSessionId,
+                        sequenceNumber,
+                        timestamp,
+                        activeOperative.TeamId,
+                        activeOperative.Name,
+                        actionChoice.Die.RolledValue,
+                        actionChoice.Die.Result,
+                        actionChoice.TargetDie!.RolledValue,
+                        actionChoice.TargetDie!.Result)) ?? ValueTask.CompletedTask);
+
+                (activePool, opponentPool) = FightResolution.ApplySingleBlock(
+                    actionChoice.Die,
+                    actionChoice.TargetDie!,
+                    activePool,
+                    opponentPool);
+            }
+
+            (attackerPool, targetPool) = fightTurn.Reintegrate(activePool, opponentPool);
+
+            var nextTurn = currentTurn == DieOwner.Attacker ? DieOwner.Target : DieOwner.Attacker;
+            var nextHasDice = nextTurn == DieOwner.Attacker ? attackerPool.Remaining.Count > 0 : targetPool.Remaining.Count > 0;
+
+            if (nextHasDice)
+            {
+                turnOrder = nextTurn;
+            }
+        }
+
+        return new FightLoopResult(
+            attackerCurrentWounds,
+            targetCurrentWounds,
+            totalAttackerDamageDealt,
+            totalTargetDamageDealt);
     }
 }

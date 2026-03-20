@@ -155,7 +155,7 @@ public class GameSessionTests
         // Cover adds 1 normal save → blocks the 1 normal hit → 0 damage
         var applicator = new ShootWeaponRulePipeline();
         var weapon = new Weapon { Name = "Test Weapon" };
-        var ctx = new ShootContext(
+        var ctx = new ShootResolutionContext(
             AttackerDice: [5],
             TargetDice: [],
             InCover: true,
