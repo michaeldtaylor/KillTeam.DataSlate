@@ -14,22 +14,19 @@ public class FightEngine(
     FightWeaponRulePipeline fightWeaponRulePipeline)
 {
     public async Task<FightResult> RunAsync(
-        Game game,
+        GameContext context,
         Activation activation,
         Operative attacker,
-        GameOperativeState attackerState,
-        IReadOnlyList<GameOperativeState> allOperativeStates,
-        IReadOnlyDictionary<Guid, Operative> allOperatives,
-        GameEventStream? eventStream = null)
+        GameOperativeState attackerState)
     {
-        var isAttackerTeam1 = attacker.TeamId == game.Participant1.TeamId;
+        var isAttackerTeam1 = attacker.TeamId == context.Game.Participant1.TeamId;
         var attackerTeamId = attacker.TeamId;
 
-        var targetStates = ActionHelpers.GetTargetStates(attacker, allOperativeStates, allOperatives);
+        var targetStates = ActionHelpers.GetTargetStates(attacker, context.OperativeStates, context.Operatives);
 
         if (targetStates.Length == 0)
         {
-            await (eventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
+            await (context.EventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
                 new CombatWarningEvent(
                     gameSessionId,
                     sequenceNumber,
@@ -47,9 +44,9 @@ public class FightEngine(
         {
             targetState = targetStates[0];
 
-            if (allOperatives.TryGetValue(targetState.OperativeId, out var autoTarget))
+            if (context.Operatives.TryGetValue(targetState.OperativeId, out var autoTarget))
             {
-                await (eventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
+                await (context.EventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
                     new FightTargetSelectedEvent(
                         gameSessionId,
                         sequenceNumber,
@@ -63,12 +60,12 @@ public class FightEngine(
         }
         else
         {
-            targetState = await inputProvider.SelectTargetAsync(targetStates, allOperatives);
+            targetState = await inputProvider.SelectTargetAsync(targetStates, context.Operatives);
         }
 
-        if (!allOperatives.TryGetValue(targetState.OperativeId, out var target))
+        if (!context.Operatives.TryGetValue(targetState.OperativeId, out var target))
         {
-            await (eventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
+            await (context.EventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
                 new CombatWarningEvent(
                     gameSessionId,
                     sequenceNumber,
@@ -81,13 +78,13 @@ public class FightEngine(
         }
 
         var targetTeamId = target.TeamId;
-        var isTargetTeam1 = target.TeamId == game.Participant1.TeamId;
+        var isTargetTeam1 = target.TeamId == context.Game.Participant1.TeamId;
 
         var attackerMeleeWeapons = attacker.Weapons.Where(w => w.Type == WeaponType.Melee).ToList();
 
         if (attackerMeleeWeapons.Count == 0)
         {
-            await (eventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
+            await (context.EventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
                 new CombatWarningEvent(
                     gameSessionId,
                     sequenceNumber,
@@ -107,7 +104,7 @@ public class FightEngine(
         {
             attackerWeapon = attackerMeleeWeapons[0];
 
-            await (eventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
+            await (context.EventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
                 new WeaponSelectedEvent(
                     gameSessionId,
                     sequenceNumber,
@@ -148,7 +145,7 @@ public class FightEngine(
 
                 targetEffectiveHit = targetIsInjured ? targetWeapon.Hit + 1 : targetWeapon.Hit;
 
-                await (eventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
+                await (context.EventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
                     new WeaponSelectedEvent(
                         gameSessionId,
                         sequenceNumber,
@@ -174,7 +171,7 @@ public class FightEngine(
                 break;
             }
             default:
-                await (eventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
+                await (context.EventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
                     new TargetNoMeleeWeaponsEvent(
                         gameSessionId,
                         sequenceNumber,
@@ -188,16 +185,16 @@ public class FightEngine(
 
         attackerEffectiveHit = Math.Max(2, attackerEffectiveHit - fightAssist);
 
-        var attackerRolls = await inputProvider.RollOrEnterDiceAsync(attackerWeapon.Atk, $"{attacker.Name} attack dice (Attack: {attackerWeapon.Atk})", attacker.Name, "Attacker", "Fight", attackerTeamId, eventStream);
+        var attackerRolls = await inputProvider.RollOrEnterDiceAsync(attackerWeapon.Atk, $"{attacker.Name} attack dice (Attack: {attackerWeapon.Atk})", attacker.Name, "Attacker", "Fight", attackerTeamId, context.EventStream);
 
         attackerRolls = await rerollEngine.ApplyAttackerRerollsAsync(
             attackerRolls,
             attackerWeapon.Rules.ToList(),
-            game.Id,
+            context.Game.Id,
             isAttackerTeam1,
             attacker.Name,
             attackerTeamId,
-            eventStream);
+            context.EventStream);
 
         var targetAttackCount = targetWeapon?.Atk ?? 0;
 
@@ -205,8 +202,8 @@ public class FightEngine(
 
         if (targetAttackCount > 0)
         {
-            targetRolls = await inputProvider.RollOrEnterDiceAsync(targetAttackCount, $"{target.Name} fight-back dice (Attack: {targetAttackCount})", target.Name, "Target", "Fight", targetTeamId, eventStream);
-            targetRolls = await rerollEngine.ApplyTargetRerollAsync(targetRolls, game.Id, isTargetTeam1, target.Name, targetTeamId, eventStream);
+            targetRolls = await inputProvider.RollOrEnterDiceAsync(targetAttackCount, $"{target.Name} fight-back dice (Attack: {targetAttackCount})", target.Name, "Target", "Fight", targetTeamId, context.EventStream);
+            targetRolls = await rerollEngine.ApplyTargetRerollAsync(targetRolls, context.Game.Id, isTargetTeam1, target.Name, targetTeamId, context.EventStream);
         }
 
         var attackerPool = FightResolution.CalculateDice(attackerRolls, attackerEffectiveHit);
@@ -220,7 +217,7 @@ public class FightEngine(
             Target = target,
             AttackerPool = attackerPool,
             TargetPool = targetPool,
-            EventStream = eventStream,
+            EventStream = context.EventStream,
         };
 
         await fightWeaponRulePipeline.SetupAsync(attackerWeapon, fightSetupContext);
@@ -253,7 +250,7 @@ public class FightEngine(
             var attackerPoolNow = attackerPool.Remaining.Select(d => new FightDieSnapshot(d.Result, d.RolledValue)).ToList();
             var targetPoolNow = targetPool.Remaining.Select(d => new FightDieSnapshot(d.Result, d.RolledValue)).ToList();
 
-            await (eventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
+            await (context.EventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
                 new FightPoolsDisplayedEvent(
                     gameSessionId,
                     sequenceNumber,
@@ -297,7 +294,7 @@ public class FightEngine(
             {
                 var damageDealt = FightResolution.ApplyStrike(actionChoice.Die, activeWeapon.NormalDmg, activeWeapon.CriticalDmg);
 
-                await (eventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
+                await (context.EventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
                     new FightStrikeResolvedEvent(
                         gameSessionId,
                         sequenceNumber,
@@ -324,7 +321,7 @@ public class FightEngine(
             }
             else
             {
-                await (eventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
+                await (context.EventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
                     new FightBlockResolvedEvent(
                         gameSessionId,
                         sequenceNumber,
@@ -360,7 +357,7 @@ public class FightEngine(
         attackerState.CurrentWounds = attackerCurrentWounds;
         targetState.CurrentWounds = targetCurrentWounds;
 
-        await (eventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
+        await (context.EventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
             new OperativeWoundsChangedEvent(
                 gameSessionId,
                 sequenceNumber,
@@ -369,7 +366,7 @@ public class FightEngine(
                 attackerState.Id,
                 attackerCurrentWounds)) ?? ValueTask.CompletedTask);
 
-        await (eventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
+        await (context.EventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
             new OperativeWoundsChangedEvent(
                 gameSessionId,
                 sequenceNumber,
@@ -383,7 +380,7 @@ public class FightEngine(
             targetState.IsIncapacitated = true;
             targetState.IsOnGuard = false;
 
-            await (eventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
+            await (context.EventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
                 new OperativeIncapacitatedEvent(
                     gameSessionId,
                     sequenceNumber,
@@ -391,7 +388,7 @@ public class FightEngine(
                     targetTeamId,
                     targetState.Id)) ?? ValueTask.CompletedTask);
 
-            await (eventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
+            await (context.EventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
                 new OperativeGuardClearedEvent(
                     gameSessionId,
                     sequenceNumber,
@@ -399,7 +396,7 @@ public class FightEngine(
                     targetTeamId,
                     targetState.Id)) ?? ValueTask.CompletedTask);
 
-            await (eventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
+            await (context.EventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
                 new IncapacitationEvent(
                     gameSessionId,
                     sequenceNumber,
@@ -413,7 +410,7 @@ public class FightEngine(
             attackerState.IsIncapacitated = true;
             attackerState.IsOnGuard = false;
 
-            await (eventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
+            await (context.EventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
                 new OperativeIncapacitatedEvent(
                     gameSessionId,
                     sequenceNumber,
@@ -421,7 +418,7 @@ public class FightEngine(
                     attackerTeamId,
                     attackerState.Id)) ?? ValueTask.CompletedTask);
 
-            await (eventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
+            await (context.EventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
                 new OperativeGuardClearedEvent(
                     gameSessionId,
                     sequenceNumber,
@@ -429,7 +426,7 @@ public class FightEngine(
                     attackerTeamId,
                     attackerState.Id)) ?? ValueTask.CompletedTask);
 
-            await (eventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
+            await (context.EventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
                 new IncapacitationEvent(
                     gameSessionId,
                     sequenceNumber,
@@ -456,7 +453,7 @@ public class FightEngine(
 
         await actionRepository.CreateAsync(action);
 
-        await (eventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
+        await (context.EventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
             new FightResolvedEvent(
                 gameSessionId,
                 sequenceNumber,

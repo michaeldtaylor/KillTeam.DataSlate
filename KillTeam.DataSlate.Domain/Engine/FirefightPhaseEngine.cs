@@ -21,28 +21,26 @@ public class FirefightPhaseEngine(
     IActionRepository actionRepository)
 {
     public async Task RunAsync(
-        Game game,
-        TurningPoint turningPoint,
-        List<GameOperativeState> allOperativeStates,
-        IReadOnlyDictionary<Guid, Operative> allOperatives)
+        GameContext context,
+        TurningPoint turningPoint)
     {
         await inputProvider.DisplayTurningPointHeaderAsync(turningPoint.Number);
 
-        var initiativeTeamId = turningPoint.TeamWithInitiativeId ?? game.Participant1.TeamId;
+        var initiativeTeamId = turningPoint.TeamWithInitiativeId ?? context.Game.Participant1.TeamId;
         var currentTeamId = initiativeTeamId;
 
         var existingActivations = (await activationRepository.GetByTurningPointAsync(turningPoint.Id)).ToList();
         var sequenceCounter = existingActivations.Count > 0 ? existingActivations.Max(a => a.SequenceNumber) : 0;
 
-        await inputProvider.DisplayBoardStateAsync(game, turningPoint, allOperativeStates, allOperatives);
+        await inputProvider.DisplayBoardStateAsync(context, turningPoint);
 
-        while (!IsTurningPointOver(allOperativeStates, allOperatives, game))
+        while (!IsTurningPointOver(context.OperativeStates, context.Operatives, context.Game))
         {
-            var readyThisTeam = GetReadyOperatives(currentTeamId, allOperativeStates, allOperatives);
-            var otherTeamId = currentTeamId == game.Participant1.TeamId
-                ? game.Participant2.TeamId
-                : game.Participant1.TeamId;
-            var readyOtherTeam = GetReadyOperatives(otherTeamId, allOperativeStates, allOperatives);
+            var readyThisTeam = GetReadyOperatives(currentTeamId, context.OperativeStates, context.Operatives);
+            var otherTeamId = currentTeamId == context.Game.Participant1.TeamId
+                ? context.Game.Participant2.TeamId
+                : context.Game.Participant1.TeamId;
+            var readyOtherTeam = GetReadyOperatives(otherTeamId, context.OperativeStates, context.Operatives);
 
             if (readyThisTeam.Count > 0)
             {
@@ -67,16 +65,14 @@ public class FirefightPhaseEngine(
                     state,
                     turningPoint,
                     activation,
-                    allOperativeStates,
-                    allOperatives,
-                    game,
+                    context,
                     sequenceCounter);
 
-                game = (await gameRepository.GetByIdAsync(game.Id))!;
+                context = context with { Game = (await gameRepository.GetByIdAsync(context.Game.Id))! };
 
-                if (IsGameOver(allOperativeStates, allOperatives, game, turningPoint))
+                if (IsGameOver(context.OperativeStates, context.Operatives, context.Game, turningPoint))
                 {
-                    await EndGameAsync(game, allOperativeStates, allOperatives);
+                    await EndGameAsync(context.Game, context.OperativeStates, context.Operatives);
 
                     return;
                 }
@@ -88,17 +84,15 @@ public class FirefightPhaseEngine(
                 var (counteractTaken, updatedSeqCounter) = await TryOfferCounteractAsync(
                     currentTeamId,
                     turningPoint,
-                    allOperativeStates,
-                    allOperatives,
-                    game,
+                    context,
                     sequenceCounter);
 
                 sequenceCounter = updatedSeqCounter;
-                game = (await gameRepository.GetByIdAsync(game.Id))!;
+                context = context with { Game = (await gameRepository.GetByIdAsync(context.Game.Id))! };
 
-                if (IsGameOver(allOperativeStates, allOperatives, game, turningPoint))
+                if (IsGameOver(context.OperativeStates, context.Operatives, context.Game, turningPoint))
                 {
-                    await EndGameAsync(game, allOperativeStates, allOperatives);
+                    await EndGameAsync(context.Game, context.OperativeStates, context.Operatives);
 
                     return;
                 }
@@ -129,16 +123,14 @@ public class FirefightPhaseEngine(
                         state,
                         turningPoint,
                         activation,
-                        allOperativeStates,
-                        allOperatives,
-                        game,
+                        context,
                         sequenceCounter);
 
-                    game = (await gameRepository.GetByIdAsync(game.Id))!;
+                    context = context with { Game = (await gameRepository.GetByIdAsync(context.Game.Id))! };
 
-                    if (IsGameOver(allOperativeStates, allOperatives, game, turningPoint))
+                    if (IsGameOver(context.OperativeStates, context.Operatives, context.Game, turningPoint))
                     {
-                        await EndGameAsync(game, allOperativeStates, allOperatives);
+                        await EndGameAsync(context.Game, context.OperativeStates, context.Operatives);
 
                         return;
                     }
@@ -152,7 +144,7 @@ public class FirefightPhaseEngine(
             }
         }
 
-        await EndTurningPointAsync(game, turningPoint, allOperativeStates, allOperatives);
+        await EndTurningPointAsync(context.Game, turningPoint, context.OperativeStates, context.Operatives);
     }
 
     private async Task<int> RunActivationAsync(
@@ -160,9 +152,7 @@ public class FirefightPhaseEngine(
         GameOperativeState state,
         TurningPoint turningPoint,
         Activation activation,
-        IReadOnlyList<GameOperativeState> allOperativeStates,
-        IReadOnlyDictionary<Guid, Operative> allOperatives,
-        Game game,
+        GameContext context,
         int seqCounter)
     {
         await inputProvider.DisplayActivationHeaderAsync(operative.Name);
@@ -178,7 +168,7 @@ public class FirefightPhaseEngine(
 
         while (remainingAp > 0 && !state.IsIncapacitated)
         {
-            await inputProvider.DisplayBoardStateAsync(game, turningPoint, allOperativeStates, allOperatives);
+            await inputProvider.DisplayBoardStateAsync(context, turningPoint);
 
             var availableActions = BuildActionMenu(operative, state, remainingAp);
             var selectedAction = await inputProvider.SelectActionAsync(operative.Name, remainingAp, availableActions);
@@ -190,11 +180,11 @@ public class FirefightPhaseEngine(
 
             if (selectedAction == "Shoot")
             {
-                await shootEngine.RunAsync(game, activation, operative, state, allOperativeStates, allOperatives, hasMovedNonDash);
+                await shootEngine.RunAsync(context, activation, operative, state, hasMovedNonDash);
             }
             else if (selectedAction == "Fight")
             {
-                await fightEngine.RunAsync(game, activation, operative, state, allOperativeStates, allOperatives);
+                await fightEngine.RunAsync(context, activation, operative, state);
             }
             else if (selectedAction == "Guard")
             {
@@ -247,9 +237,9 @@ public class FirefightPhaseEngine(
 
             if (selectedAction is "Shoot" or "Fight" or "Reposition" or "Dash" or "Fall Back" or "Charge" or "Other")
             {
-                seqCounter = await guardInterruptEngine.CheckAndRunInterruptsAsync(game, turningPoint, operative, allOperativeStates, allOperatives, seqCounter);
+                seqCounter = await guardInterruptEngine.CheckAndRunInterruptsAsync(context, turningPoint, operative, seqCounter);
 
-                game = (await gameRepository.GetByIdAsync(game.Id))!;
+                context = context with { Game = (await gameRepository.GetByIdAsync(context.Game.Id))! };
             }
 
             if (state.IsIncapacitated)
@@ -267,17 +257,15 @@ public class FirefightPhaseEngine(
     private async Task<(bool taken, int seqCounter)> TryOfferCounteractAsync(
         string exhaustedTeamId,
         TurningPoint turningPoint,
-        IReadOnlyList<GameOperativeState> allOperativeStates,
-        IReadOnlyDictionary<Guid, Operative> allOperatives,
-        Game game,
+        GameContext context,
         int seqCounter)
     {
-        var eligibles = allOperativeStates
+        var eligibles = context.OperativeStates
             .Where(s => !s.IsReady
                 && s.Order == Order.Engage
                 && !s.HasUsedCounteractThisTurningPoint
                 && !s.IsIncapacitated
-                && allOperatives.TryGetValue(s.OperativeId, out var o)
+                && context.Operatives.TryGetValue(s.OperativeId, out var o)
                 && o.TeamId == exhaustedTeamId)
             .ToList();
 
@@ -287,8 +275,8 @@ public class FirefightPhaseEngine(
         }
 
         var candidateNames = eligibles
-            .Where(s => allOperatives.ContainsKey(s.OperativeId))
-            .Select(s => allOperatives[s.OperativeId].Name)
+            .Where(s => context.Operatives.ContainsKey(s.OperativeId))
+            .Select(s => context.Operatives[s.OperativeId].Name)
             .ToList();
 
         var selectedName = await inputProvider.SelectCounteractOperativeAsync(candidateNames);
@@ -299,8 +287,8 @@ public class FirefightPhaseEngine(
         }
 
         var counterState = eligibles.First(s =>
-            allOperatives.TryGetValue(s.OperativeId, out var o) && o.Name == selectedName);
-        var counterOperative = allOperatives[counterState.OperativeId];
+            context.Operatives.TryGetValue(s.OperativeId, out var o) && o.Name == selectedName);
+        var counterOperative = context.Operatives[counterState.OperativeId];
 
         seqCounter++;
 
@@ -337,22 +325,18 @@ public class FirefightPhaseEngine(
         else if (counterChoice == "Shoot")
         {
             await shootEngine.RunAsync(
-                game,
+                context,
                 counterActivation,
                 counterOperative,
-                counterState,
-                allOperativeStates,
-                allOperatives);
+                counterState);
         }
         else if (counterChoice == "Fight")
         {
             await fightEngine.RunAsync(
-                game,
+                context,
                 counterActivation,
                 counterOperative,
-                counterState,
-                allOperativeStates,
-                allOperatives);
+                counterState);
         }
 
         counterState.HasUsedCounteractThisTurningPoint = true;

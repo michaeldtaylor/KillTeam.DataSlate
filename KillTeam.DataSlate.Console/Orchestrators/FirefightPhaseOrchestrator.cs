@@ -27,9 +27,8 @@ public class FirefightPhaseOrchestrator(
 
         var allStates = (await stateRepository.GetByGameAsync(game.Id)).ToList();
 
-        await firefightPhaseEngine.RunAsync(
-            game,
-            currentTurningPoint,
-            allStates, allOperatives);
+        var context = new GameContext(game, allStates, allOperatives);
+
+        await firefightPhaseEngine.RunAsync(context, currentTurningPoint);
     }
 }

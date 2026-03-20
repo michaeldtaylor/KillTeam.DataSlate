@@ -100,6 +100,8 @@ public class SimulateEncounterEngine(
         var stream = new GameEventStream(game.Id, persistenceHandler.HandleAsync);
         configureStream?.Invoke(stream);
 
+        var context = new GameContext(game, allStates, allOperatives, stream);
+
         if (actionType == ActionType.Fight)
         {
             var rerollEngine = new RerollEngine(rerollInputProvider, gameRepository);
@@ -110,13 +112,10 @@ public class SimulateEncounterEngine(
                 new FightWeaponRulePipeline());
 
             var result = await fightEngine.RunAsync(
-                game,
+                context,
                 activation,
                 attacker,
-                attackerState,
-                allStates,
-                allOperatives,
-                stream);
+                attackerState);
 
             return new SimulateEncounterResult(
                 AttackerDamageDealt: result.AttackerDamageDealt,
@@ -143,14 +142,11 @@ public class SimulateEncounterEngine(
                 shootWeaponRulePipeline);
 
             var result = await shootEngine.RunAsync(
-                game,
+                context,
                 activation,
                 attacker,
                 attackerState,
-                allStates,
-                allOperatives,
-                false,
-                stream);
+                false);
 
             return new SimulateEncounterResult(
                 AttackerDamageDealt: result.DamageDealt,

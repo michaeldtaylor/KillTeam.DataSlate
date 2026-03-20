@@ -1,3 +1,4 @@
+using KillTeam.DataSlate.Domain.Engine;
 using KillTeam.DataSlate.Domain.Engine.Input;
 using KillTeam.DataSlate.Domain.Models;
 using Spectre.Console;
@@ -14,10 +15,8 @@ public class ConsoleFirefightInputProvider(IAnsiConsole console) : IFirefightInp
     }
 
     public Task DisplayBoardStateAsync(
-        Game game,
-        TurningPoint turningPoint,
-        IReadOnlyList<GameOperativeState> allStates,
-        IReadOnlyDictionary<Guid, Operative> allOperatives)
+        GameContext context,
+        TurningPoint turningPoint)
     {
         var table = new Table()
             .Title($"[bold]TP {turningPoint.Number} — Board State[/]")
@@ -28,14 +27,14 @@ public class ConsoleFirefightInputProvider(IAnsiConsole console) : IFirefightInp
             .AddColumn("Status")
             .AddColumn("Guard");
 
-        foreach (var state in allStates)
+        foreach (var state in context.OperativeStates)
         {
-            if (!allOperatives.TryGetValue(state.OperativeId, out var operative))
+            if (!context.Operatives.TryGetValue(state.OperativeId, out var operative))
             {
                 continue;
             }
 
-            var teamTag = operative.TeamId == game.Participant1.TeamId ? "[blue]A[/]" : "[red]B[/]";
+            var teamTag = operative.TeamId == context.Game.Participant1.TeamId ? "[blue]A[/]" : "[red]B[/]";
             var name = $"{teamTag} {Markup.Escape(operative.Name)}";
 
             var injured = state.CurrentWounds < operative.Wounds / 2;
@@ -53,7 +52,7 @@ public class ConsoleFirefightInputProvider(IAnsiConsole console) : IFirefightInp
         }
 
         console.Write(table);
-        console.MarkupLine($"  CP → A:[yellow]{game.Participant1.CommandPoints}[/]  B:[yellow]{game.Participant2.CommandPoints}[/]");
+        console.MarkupLine($"  CP → A:[yellow]{context.Game.Participant1.CommandPoints}[/]  B:[yellow]{context.Game.Participant2.CommandPoints}[/]");
 
         return Task.CompletedTask;
     }

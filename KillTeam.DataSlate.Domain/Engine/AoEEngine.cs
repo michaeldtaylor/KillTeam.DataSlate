@@ -14,20 +14,17 @@ public class AoEEngine(
     IActionRepository actionRepository)
 {
     public async Task<AoEResult> RunAsync(
-        Game game,
+        GameContext context,
         Activation activation,
         Operative attacker,
         GameOperativeState attackerState,
         Operative target,
         GameOperativeState targetState,
-        Weapon weapon,
-        IReadOnlyList<GameOperativeState> allOperativeStates,
-        IReadOnlyDictionary<Guid, Operative> allOperatives,
-        GameEventStream? eventStream = null)
+        Weapon weapon)
     {
-        var isAttackerTeam1 = attacker.TeamId == game.Participant1.TeamId;
+        var isAttackerTeam1 = attacker.TeamId == context.Game.Participant1.TeamId;
 
-        var aoeCandidateStates = ActionHelpers.GetAoECandidateStates(target, allOperativeStates, allOperatives);
+        var aoeCandidateStates = ActionHelpers.GetAoECandidateStates(target, context.OperativeStates, context.Operatives);
 
         var additionalTargetStates = new List<GameOperativeState>();
 
@@ -35,7 +32,7 @@ public class AoEEngine(
         {
             additionalTargetStates = await inputProvider.SelectAdditionalTargetsAsync(
                 aoeCandidateStates,
-                allOperatives,
+                context.Operatives,
                 weapon,
                 attacker.Name,
                 target.Name,
@@ -45,7 +42,7 @@ public class AoEEngine(
         var allTargetStates = new List<GameOperativeState> { targetState }.Concat(additionalTargetStates).ToList();
 
         var friendlyCount = allTargetStates.Count(s =>
-            allOperatives.TryGetValue(s.OperativeId, out var operative) && operative.TeamId == attacker.TeamId);
+            context.Operatives.TryGetValue(s.OperativeId, out var operative) && operative.TeamId == attacker.TeamId);
 
         if (friendlyCount > 0)
         {
@@ -60,7 +57,7 @@ public class AoEEngine(
         attackerDice = await rerollEngine.ApplyAttackerRerollsAsync(
             attackerDice,
             weapon.Rules.ToList(),
-            game.Id,
+            context.Game.Id,
             isAttackerTeam1,
             attacker.Name);
 
@@ -84,7 +81,7 @@ public class AoEEngine(
 
         foreach (var targetOperativeState in allTargetStates)
         {
-            if (!allOperatives.TryGetValue(targetOperativeState.OperativeId, out var targetOperative))
+            if (!context.Operatives.TryGetValue(targetOperativeState.OperativeId, out var targetOperative))
             {
                 continue;
             }
@@ -99,11 +96,11 @@ public class AoEEngine(
                 ? []
                 : await inputProvider.RollOrEnterDiceAsync(targetDiceCount, $"{targetOperative.Name} target dice");
 
-            var isTargetTeam1 = targetOperative.TeamId == game.Participant1.TeamId;
+            var isTargetTeam1 = targetOperative.TeamId == context.Game.Participant1.TeamId;
 
-            defenderDice = await rerollEngine.ApplyTargetRerollAsync(defenderDice, game.Id, isTargetTeam1, targetOperative.Name);
+            defenderDice = await rerollEngine.ApplyTargetRerollAsync(defenderDice, context.Game.Id, isTargetTeam1, targetOperative.Name);
 
-            var context = new ShootContext(
+            var shootContext = new ShootContext(
                 AttackerDice: attackerDice,
                 TargetDice: defenderDice,
                 InCover: inCover,
@@ -114,11 +111,11 @@ public class AoEEngine(
                 CritDmg: weapon.CriticalDmg
             );
 
-            var blastResult = await shootWeaponRulePipeline.ResolveShootAsync(weapon, context);
+            var blastResult = await shootWeaponRulePipeline.ResolveShootAsync(weapon, shootContext);
 
             var newWounds = Math.Max(0, targetOperativeState.CurrentWounds - blastResult.TotalDamage);
 
-            await (eventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
+            await (context.EventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
                 new ShootResultDisplayedEvent(
                     gameSessionId,
                     sequenceNumber,
@@ -140,7 +137,7 @@ public class AoEEngine(
 
             targetOperativeState.CurrentWounds = newWounds;
 
-            await (eventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
+            await (context.EventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
                 new OperativeWoundsChangedEvent(
                     gameSessionId,
                     sequenceNumber,
@@ -154,7 +151,7 @@ public class AoEEngine(
                 targetOperativeState.IsIncapacitated = true;
                 targetOperativeState.IsOnGuard = false;
 
-                await (eventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
+                await (context.EventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
                     new OperativeIncapacitatedEvent(
                         gameSessionId,
                         sequenceNumber,
@@ -162,7 +159,7 @@ public class AoEEngine(
                         targetOperative.TeamId,
                         targetOperativeState.Id)) ?? ValueTask.CompletedTask);
 
-                await (eventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
+                await (context.EventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
                     new OperativeGuardClearedEvent(
                         gameSessionId,
                         sequenceNumber,
@@ -172,7 +169,7 @@ public class AoEEngine(
 
                 anyIncapacitation = true;
 
-                await (eventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
+                await (context.EventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
                     new IncapacitationEvent(
                         gameSessionId,
                         sequenceNumber,

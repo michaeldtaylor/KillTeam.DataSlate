@@ -7,10 +7,8 @@ public interface IFirefightInputProvider
     Task DisplayTurningPointHeaderAsync(int tpNumber);
 
     Task DisplayBoardStateAsync(
-        Game game,
-        TurningPoint turningPoint,
-        IReadOnlyList<GameOperativeState> allStates,
-        IReadOnlyDictionary<Guid, Operative> allOperatives);
+        GameContext context,
+        TurningPoint turningPoint);
 
     Task DisplayActivationHeaderAsync(string operativeName);
 

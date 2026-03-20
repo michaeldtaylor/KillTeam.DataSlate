@@ -23,20 +23,17 @@ public class GuardInterruptEngine(
     /// Returns the updated sequence counter after any guard interrupt activations.
     /// </summary>
     public async Task<int> CheckAndRunInterruptsAsync(
-        Game game,
+        GameContext context,
         TurningPoint turningPoint,
         Operative actingEnemy,
-        IReadOnlyList<GameOperativeState> allOperativeStates,
-        IReadOnlyDictionary<Guid, Operative> allOperatives,
-        int sequenceCounter,
-        GameEventStream? eventStream = null)
+        int sequenceCounter)
     {
-        logger.LogDebug("Checking guard interrupts for game {GameId}", game.Id);
+        logger.LogDebug("Checking guard interrupts for game {GameId}", context.Game.Id);
 
         var enemyTeamId = actingEnemy.TeamId;
 
-        var friendlyStates = allOperativeStates
-            .Where(s => allOperatives.TryGetValue(s.OperativeId, out var o) && o.TeamId != enemyTeamId)
+        var friendlyStates = context.OperativeStates
+            .Where(s => context.Operatives.TryGetValue(s.OperativeId, out var o) && o.TeamId != enemyTeamId)
             .ToList();
 
         var eligibleGuards = friendlyStates
@@ -50,7 +47,7 @@ public class GuardInterruptEngine(
 
         foreach (var guardState in eligibleGuards)
         {
-            if (!allOperatives.TryGetValue(guardState.OperativeId, out var guardOp))
+            if (!context.Operatives.TryGetValue(guardState.OperativeId, out var guardOp))
             {
                 continue;
             }
@@ -60,7 +57,7 @@ public class GuardInterruptEngine(
 
             if (inControlRange)
             {
-                await (eventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
+                await (context.EventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
                     new OperativeGuardClearedEvent(
                         gameSessionId,
                         sequenceNumber,
@@ -101,14 +98,14 @@ public class GuardInterruptEngine(
 
             if (action == "Shoot")
             {
-                await shootEngine.RunAsync(game, interruptActivation, guardOp, guardState, allOperativeStates, allOperatives, eventStream: eventStream);
+                await shootEngine.RunAsync(context, interruptActivation, guardOp, guardState);
             }
             else
             {
-                await fightEngine.RunAsync(game, interruptActivation, guardOp, guardState, allOperativeStates, allOperatives, eventStream);
+                await fightEngine.RunAsync(context, interruptActivation, guardOp, guardState);
             }
 
-            await (eventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
+            await (context.EventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
                 new OperativeGuardClearedEvent(
                     gameSessionId,
                     sequenceNumber,
