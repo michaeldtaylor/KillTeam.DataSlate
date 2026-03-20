@@ -24,6 +24,7 @@ public class SimulateOrchestrator(
     public async Task RunAsync()
     {
         logger.LogInformation("Simulate session started");
+
         console.Write(new Rule("[bold cyan]Simulate Mode[/]"));
         console.MarkupLine("[dim]Test fight and shoot encounters without a full game session. Nothing is saved.[/]");
         console.WriteLine();
