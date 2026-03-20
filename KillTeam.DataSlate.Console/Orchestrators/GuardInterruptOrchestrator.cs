@@ -23,7 +23,12 @@ public class GuardInterruptOrchestrator(GuardInterruptEngine engine, ILogger<Gua
         logger.LogDebug("Checking guard interrupts for game {GameId}", game.Id);
 
         return await engine.CheckAndRunInterruptsAsync(
-            actingEnemy, allOperativeStates, allOperatives,
-            game, turningPoint, sequenceCounter, eventStream);
+            actingEnemy,
+            allOperativeStates,
+            allOperatives,
+            game,
+            turningPoint,
+            sequenceCounter,
+            eventStream);
     }
 }

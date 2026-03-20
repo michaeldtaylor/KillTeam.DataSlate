@@ -25,7 +25,7 @@ public class SimulateSessionOrchestrator(
     IShootInputProvider shootInputProvider,
     IRerollInputProvider rerollInputProvider,
     IAoEInputProvider aoeInputProvider,
-    ShootWeaponRulePipeline ShootWeaponRulePipeline,
+    ShootWeaponRulePipeline shootWeaponRulePipeline,
     IGameStatePersistenceHandler persistenceHandler,
     ColumnContext columnContext,
     ILogger<SimulateSessionOrchestrator> logger)
@@ -53,8 +53,22 @@ public class SimulateSessionOrchestrator(
             return;
         }
 
-        DisplayMatchup(player1Operative, player1Team!, player2Operative, player2Team!, player1.Name, player1.Colour, player2.Name, player2.Colour);
-        await RunSessionLoopAsync(player1Operative, player2Operative, player1Team!, player2Team!, player1, player2);
+        DisplayMatchup(
+            player1Operative,
+            player1Team!,
+            player2Operative,
+            player2Team!,
+            player1.Name,
+            player1.Colour,
+            player2.Name,
+            player2.Colour);
+        await RunSessionLoopAsync(
+            player1Operative,
+            player2Operative,
+            player1Team!,
+            player2Team!,
+            player1,
+            player2);
         logger.LogInformation("Simulate session ended");
     }
 
@@ -140,9 +154,12 @@ public class SimulateSessionOrchestrator(
     // --- Session loop --------------------------------------------------------
 
     private async Task RunSessionLoopAsync(
-        Operative player1Operative, Operative player2Operative,
-        Team player1Team, Team player2Team,
-        Player player1, Player player2)
+        Operative player1Operative,
+        Operative player2Operative,
+        Team player1Team,
+        Team player2Team,
+        Player player1,
+        Player player2)
     {
         while (true)
         {
@@ -154,11 +171,25 @@ public class SimulateSessionOrchestrator(
             switch (choice)
             {
                 case "Fight":
-                    await RunEncounterAsync(player1Operative, player2Operative, player1Team, player2Team, ActionType.Fight, player1, player2);
+                    await RunEncounterAsync(
+                        player1Operative,
+                        player2Operative,
+                        player1Team,
+                        player2Team,
+                        ActionType.Fight,
+                        player1,
+                        player2);
                     break;
 
                 case "Shoot":
-                    await RunEncounterAsync(player1Operative, player2Operative, player1Team, player2Team, ActionType.Shoot, player1, player2);
+                    await RunEncounterAsync(
+                        player1Operative,
+                        player2Operative,
+                        player1Team,
+                        player2Team,
+                        ActionType.Shoot,
+                        player1,
+                        player2);
                     break;
 
                 case "Change operatives":
@@ -170,7 +201,15 @@ public class SimulateSessionOrchestrator(
                         player2Operative = result.player2Operative!;
                         player1Team = result.player1Team!;
                         player2Team = result.player2Team!;
-                        DisplayMatchup(player1Operative, player1Team, player2Operative, player2Team, player1.Name, player1.Colour, player2.Name, player2.Colour);
+                        DisplayMatchup(
+                            player1Operative,
+                            player1Team,
+                            player2Operative,
+                            player2Team,
+                            player1.Name,
+                            player1.Colour,
+                            player2.Name,
+                            player2.Colour);
                     }
                     break;
 
@@ -184,10 +223,13 @@ public class SimulateSessionOrchestrator(
     // --- Single encounter ----------------------------------------------------
 
     private async Task RunEncounterAsync(
-        Operative player1Operative, Operative player2Operative,
-        Team player1Team, Team player2Team,
+        Operative player1Operative,
+        Operative player2Operative,
+        Team player1Team,
+        Team player2Team,
         ActionType actionType,
-        Player player1, Player player2)
+        Player player1,
+        Player player2)
     {
         // Synthetic domain objects - no DB interaction
         var game = new Game
@@ -273,12 +315,26 @@ public class SimulateSessionOrchestrator(
         if (actionType == ActionType.Fight)
         {
             var rerollEngine = new RerollEngine(rerollInputProvider, gameRepository);
-            var fightEngine = new FightEngine(fightInputProvider, rerollEngine, actionRepo, new FightWeaponRulePipeline());
+            var fightEngine = new FightEngine(
+                fightInputProvider,
+                rerollEngine,
+                actionRepo,
+                new FightWeaponRulePipeline());
 
-            var fightResult = await fightEngine.RunAsync(game, activation, player1Operative, player1State, allStates, allOperatives, stream);
+            var fightResult = await fightEngine.RunAsync(
+                game,
+                activation,
+                player1Operative,
+                player1State,
+                allStates,
+                allOperatives,
+                stream);
 
-            DisplayEncounterSummary(player1Operative, player2Operative,
-                fightResult.AttackerDamageDealt, fightResult.TargetDamageDealt,
+            DisplayEncounterSummary(
+                player1Operative,
+                player2Operative,
+                fightResult.AttackerDamageDealt,
+                fightResult.TargetDamageDealt,
                 player1Incapacitated: fightResult.TargetCausedIncapacitation,
                 player2Incapacitated: fightResult.AttackerCausedIncapacitation,
                 player1CurrentWounds: player1State.CurrentWounds,
@@ -301,13 +357,29 @@ public class SimulateSessionOrchestrator(
             activation.OrderSelected = order;
 
             var rerollEngine = new RerollEngine(rerollInputProvider, gameRepository);
-            var aoeEngine = new AoEEngine(aoeInputProvider, ShootWeaponRulePipeline, rerollEngine, actionRepo);
-            var shootEngine = new ShootEngine(shootInputProvider, rerollEngine, aoeEngine, actionRepo, ShootWeaponRulePipeline);
+            var aoeEngine = new AoEEngine(aoeInputProvider, shootWeaponRulePipeline, rerollEngine, actionRepo);
+            var shootEngine = new ShootEngine(
+                shootInputProvider,
+                rerollEngine,
+                aoeEngine,
+                actionRepo,
+                shootWeaponRulePipeline);
 
-            var shootResult = await shootEngine.RunAsync(game, activation, player1Operative, player1State, allStates, allOperatives, false, stream);
+            var shootResult = await shootEngine.RunAsync(
+                game,
+                activation,
+                player1Operative,
+                player1State,
+                allStates,
+                allOperatives,
+                false,
+                stream);
 
-            DisplayEncounterSummary(player1Operative, player2Operative,
-                shootResult.DamageDealt, 0,
+            DisplayEncounterSummary(
+                player1Operative,
+                player2Operative,
+                shootResult.DamageDealt,
+                0,
                 player1Incapacitated: false,
                 player2Incapacitated: shootResult.CausedIncapacitation,
                 player1CurrentWounds: player1State.CurrentWounds,
@@ -344,9 +416,14 @@ public class SimulateSessionOrchestrator(
         $"APL: [green]{o.Apl}[/] | Move: [green]{o.Move}\"[/] | Save: [green]{o.Save}+[/] | Wounds: [green]{o.Wounds}[/]";
 
     private void DisplayMatchup(
-        Operative player1Operative, Team player1Team,
-        Operative player2Operative, Team player2Team,
-        string player1Name, string player1Colour, string player2Name, string player2Colour)
+        Operative player1Operative,
+        Team player1Team,
+        Operative player2Operative,
+        Team player2Team,
+        string player1Name,
+        string player1Colour,
+        string player2Name,
+        string player2Colour)
     {
         console.WriteLine();
         var table = new Table()
@@ -368,11 +445,18 @@ public class SimulateSessionOrchestrator(
     }
 
     private void DisplayEncounterSummary(
-        Operative attacker, Operative target,
-        int attackerDamage, int targetDamage,
-        bool player1Incapacitated, bool player2Incapacitated,
-        int player1CurrentWounds, int player2CurrentWounds,
-        string player1Name, string player1Colour, string player2Name, string player2Colour)
+        Operative attacker,
+        Operative target,
+        int attackerDamage,
+        int targetDamage,
+        bool player1Incapacitated,
+        bool player2Incapacitated,
+        int player1CurrentWounds,
+        int player2CurrentWounds,
+        string player1Name,
+        string player1Colour,
+        string player2Name,
+        string player2Colour)
     {
         console.WriteLine();
         var table = new Table()

@@ -518,6 +518,18 @@ eventStream?.Emit((gameSessionId, seq, ts) => new ShootResolvedEvent(
     attacker.Name, targetOp.Name, result.TotalDamage, causedIncap));
 ```
 
+// ❌ Wrong — partial multi-line: once broken, every arg must have its own line
+return await engine.ProcessAsync(
+    actingEnemy, allOperativeStates, allOperatives,
+    game, turningPoint, sequenceCounter, eventStream);
+
+// ❌ Wrong — first arg on the same line as the call
+DisplaySummary(player1Operative, player2Operative,
+    attackerDamage, targetDamage,
+    player1Incapacitated: causedIncap1,
+    player2Incapacitated: causedIncap2);
+```
+
 The same rule applies to record primary constructor definitions:
 
 ```csharp
