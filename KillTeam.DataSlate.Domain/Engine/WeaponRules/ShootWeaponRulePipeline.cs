@@ -182,6 +182,7 @@ public sealed class ShootWeaponRulePipeline
 
         var totalNormalSavesLeft = critSaves + normalSaves;
         var normalSavesToUse = Math.Min(totalNormalSavesLeft, unblockedNormals);
+
         unblockedNormals -= normalSavesToUse;
 
         // ─── Stage 5: Post-blocking ───────────────────────────────────────────────
@@ -193,7 +194,7 @@ public sealed class ShootWeaponRulePipeline
         }
 
         // ─── Core: Calculate damage ───────────────────────────────────────────────
-        var totalDamage = (afterBlockingContext.UnblockedCrits * afterBlockingContext.EffectiveCritDmg) + (afterBlockingContext.UnblockedNormals * context.NormalDmg);
+        var totalDamage = afterBlockingContext.UnblockedCrits * afterBlockingContext.EffectiveCritDmg + afterBlockingContext.UnblockedNormals * context.NormalDmg;
 
         return new ShootResolution(
             afterBlockingContext.UnblockedCrits,

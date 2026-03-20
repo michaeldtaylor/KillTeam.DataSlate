@@ -108,7 +108,7 @@ public class ShootResolutionTests
     {
         // Attack: normal(5), defence: [4, 3] but Piercing 1 removes 1 die
         // Remaining defence: [3] → save threshold 3 → 1 normal save blocks the normal
-        var rules = new List<WeaponRule> { new(WeaponRuleKind.Piercing, 1, "Piercing 1") };
+        var rules = new List<WeaponRule> { new(WeaponRuleKind.Piercing, 1) };
         var weapon = MakeWeapon(rules);
         var ctx = BaseCtx([5], [4, 3]);
 
@@ -125,7 +125,7 @@ public class ShootResolutionTests
         // Lethal 5: rolls of 5 or 6 are crits
         // Attack: [5], defence: [6] (1 crit save)
         // 5 >= 5 = crit. Crit save blocks crit.
-        var rules = new List<WeaponRule> { new(WeaponRuleKind.Lethal, 5, "Lethal 5") };
+        var rules = new List<WeaponRule> { new(WeaponRuleKind.Lethal, 5) };
         var weapon = MakeWeapon(rules);
         var ctx = BaseCtx([5], [6]);
 
@@ -140,7 +140,7 @@ public class ShootResolutionTests
     {
         // Rending: if any crit, convert 1 normal → crit
         // Attack: [6, 5] → crit + normal; with Rending → 2 crits
-        var rules = new List<WeaponRule> { new(WeaponRuleKind.Rending, null, "Rending") };
+        var rules = new List<WeaponRule> { new(WeaponRuleKind.Rending, null) };
         var weapon = MakeWeapon(rules);
         var ctx = BaseCtx([6, 5], []);
 
@@ -154,7 +154,7 @@ public class ShootResolutionTests
     {
         // Accurate 1: adds 1 bonus normal hit regardless of dice
         // Attack: [1] (miss), but +1 bonus normal from Accurate
-        var rules = new List<WeaponRule> { new(WeaponRuleKind.Accurate, 1, "Accurate 1") };
+        var rules = new List<WeaponRule> { new(WeaponRuleKind.Accurate, 1) };
         var weapon = MakeWeapon(rules);
         var ctx = BaseCtx([1], []);
 
@@ -166,7 +166,7 @@ public class ShootResolutionTests
     [Fact]
     public async Task ResolveShoot_Stun_AppliesWhenCritRetained()
     {
-        var rules = new List<WeaponRule> { new(WeaponRuleKind.Stun, null, "Stun") };
+        var rules = new List<WeaponRule> { new(WeaponRuleKind.Stun, null) };
         var weapon = MakeWeapon(rules);
         var ctx = BaseCtx([6], []);
 

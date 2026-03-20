@@ -21,7 +21,7 @@ public class FightEngineTests
             Hit = hit,
             NormalDmg = normalDmg,
             CriticalDmg = critDmg,
-            Rules = rules?.Select(k => new WeaponRule(k, null, k.ToString())).ToList() ?? [],
+            Rules = rules?.Select(k => new WeaponRule(k, null)).ToList() ?? [],
         };
 
     private static Operative MakeOperative(string name, string teamId, int wounds = 12, List<Weapon>? weapons = null) =>

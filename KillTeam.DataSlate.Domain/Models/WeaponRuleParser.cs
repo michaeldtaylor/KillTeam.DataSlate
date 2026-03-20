@@ -26,30 +26,29 @@ public static class WeaponRuleParser
         // Special cases
         if (token.Equals("Heavy (Dash only)", StringComparison.OrdinalIgnoreCase))
         {
-            return new WeaponRule(WeaponRuleKind.HeavyDashOnly, null, token);
+            return new WeaponRule(WeaponRuleKind.HeavyDashOnly, null);
         }
 
         if (token.StartsWith("Seek Light", StringComparison.OrdinalIgnoreCase))
         {
-            return new WeaponRule(WeaponRuleKind.SeekLight, null, token);
+            return new WeaponRule(WeaponRuleKind.SeekLight, null);
         }
 
-        if (token.Equals("PiercingCrits", StringComparison.OrdinalIgnoreCase) ||
-            token.Equals("Piercing Crits", StringComparison.OrdinalIgnoreCase))
+        if (token.StartsWith("Piercing Crits", StringComparison.OrdinalIgnoreCase))
         {
             var pcParts = token.Split(' ');
 
             int? pcParam = pcParts.Length > 2 && int.TryParse(pcParts[2], out var pcp) ? pcp : null;
 
-            return new WeaponRule(WeaponRuleKind.PiercingCrits, pcParam, token);
+            return new WeaponRule(WeaponRuleKind.PiercingCrits, pcParam);
         }
 
         // Try direct enum parse
         if (Enum.TryParse<WeaponRuleKind>(name, ignoreCase: true, out var kind))
         {
-            return new WeaponRule(kind, param, token);
+            return new WeaponRule(kind, param);
         }
 
-        return new WeaponRule(WeaponRuleKind.Unknown, null, token);
+        return new WeaponRule(WeaponRuleKind.Unknown, null);
     }
 }

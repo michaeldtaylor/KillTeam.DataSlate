@@ -79,7 +79,7 @@ extends those with Brutal, Shock, Stun, Severe, and Rending enforcement.
 /// All recognised Kill Team V3.0 weapon special rules.
 /// Unknown covers roster entries that have no V3.0 reference card definition (e.g. Poison, Toxic).
 /// </summary>
-public enum SpecialRuleKind
+public enum WeaponRuleKind
 {
     Accurate,           // Accurate x        — retain x normal hits without rolling
     Balanced,           // Balanced          — re-roll one attack die
@@ -87,9 +87,8 @@ public enum SpecialRuleKind
     Brutal,             // Brutal            — opponent can only block with Crits
     Ceaseless,          // Ceaseless         — re-roll all dice showing one specific value
     Devastating,        // Devastating x     — crits inflict x damage
-    DevastatingAoE,     // D″ Devastating x  — crits inflict x dmg to operatives within D″
     Heavy,              // Heavy             — cannot shoot if moved this activation
-    HeavyRestricted,    // Heavy (x only)    — can move at most x″ in same activation as shooting
+    HeavyDashOnly,      // Heavy (Dash only) — can only Dash in same activation as shooting
     Hot,                // Hot               — post-shoot self-damage roll
     Lethal,             // Lethal x          — crit threshold lowered to x+
     Limited,            // Limited x         — x uses per battle
@@ -111,25 +110,20 @@ public enum SpecialRuleKind
 }
 
 /// <summary>
-/// A parsed weapon special rule. Parameter holds the numeric argument (e.g. 3 for "Devastating 3")
-/// where applicable. RawText preserves the original string for Unknown rules.
+/// A parsed weapon rule. Param holds the numeric argument (e.g. 3 for "Devastating 3")
+/// where applicable.
 /// </summary>
-public record WeaponSpecialRule(
-    SpecialRuleKind Kind,
-    int?    Parameter = null,
-    string? RawText   = null
-);
+public record WeaponRule(WeaponRuleKind Kind, int? Param = null);
 ```
 
 **Parameter mapping per kind:**
 
-| Kind | Parameter meaning | Example source string |
+| Kind | Param meaning | Example source string |
 |---|---|---|
 | `Accurate` | x (1 or 2) | `"Accurate 2"` |
 | `Blast` | distance in inches | `"Blast 1\""` |
 | `Devastating` | damage per crit | `"Devastating 3"` |
-| `DevastatingAoE` | damage per crit (range = D, implicit) | `"D\" Devastating 2"` |
-| `HeavyRestricted` | max move (inches) when shooting; `RawText` holds activity label | `"Heavy (Dash only)"` |
+| `HeavyDashOnly` | *null* (Dash-only is the only supported variant) | `"Heavy (Dash only)"` |
 | `Hot` | *null* (no parameter) | `"Hot"` |
 | `Lethal` | crit threshold | `"Lethal 5+"` |
 | `Limited` | uses per battle | `"Limited 2"` |
@@ -146,124 +140,53 @@ public record WeaponSpecialRule(
 
 ```csharp
 /// <summary>
-/// Parses the comma-separated specialRules field from the roster JSON into a typed list.
+/// Parses the comma-separated WeaponRules field from the roster JSON into a typed list.
 /// Input examples:
 ///   "Brutal, Severe, Shock, Poison"
 ///   "Range 8\", Piercing 1"
 ///   "Devastating 3, Heavy (Dash only), Piercing 1, Silent"
 ///   ""  (empty — returns empty list)
 /// </summary>
-public static class SpecialRuleParser
+public static class WeaponRuleParser
 {
-    public static IReadOnlyList<WeaponSpecialRule> Parse(string? input)
+    public static List<WeaponRule> Parse(string raw)
     {
-        if (string.IsNullOrWhiteSpace(input))
-            return Array.Empty<WeaponSpecialRule>();
+        if (string.IsNullOrWhiteSpace(raw))
+            return [];
 
-        return SplitRuleTokens(input)
-            .Select(ParseSingleRule)
-            .ToList();
+        var tokens = raw.Split([',', ';'], StringSplitOptions.RemoveEmptyEntries);
+
+        return tokens.Select(t => ParseToken(t.Trim())).ToList();
     }
 
-    // Splits on commas but respects quoted inch marks (e.g. Range 8", Torrent 2").
-    // The inch mark " is a literal character in JSON strings after deserialization.
-    private static IEnumerable<string> SplitRuleTokens(string input)
+    private static WeaponRule ParseToken(string token)
     {
-        // Simple split on comma then trim; inch marks do not contain commas so no quoting needed.
-        return input.Split(',').Select(t => t.Trim()).Where(t => t.Length > 0);
-    }
+        // Try to match "Name N" patterns (e.g. "Lethal 5", "Piercing 1", "Range 8\"")
+        var parts    = token.Split(' ', 2, StringSplitOptions.RemoveEmptyEntries);
+        var name     = parts[0];
+        var paramRaw = parts.Length > 1 ? parts[1].TrimEnd('"', '\'') : string.Empty;
 
-    private static WeaponSpecialRule ParseSingleRule(string token)
-    {
-        // Normalise for matching: lowercase, strip trailing inch marks and "+"
-        var normalized = token.TrimEnd('"').Trim().ToLowerInvariant();
+        int? param = !string.IsNullOrEmpty(paramRaw) && int.TryParse(paramRaw, out var p) ? p : null;
 
-        // Patterns with numeric parameter
-        if (TryParseParametered("accurate", normalized, token, out var r)) return r!;
-        if (TryParseParametered("blast", normalized, token, out r)) return r!;
-        if (TryParseParametered("devastating", normalized, token, out r)) return r!;
-        if (TryParseParametered("limited", normalized, token, out r)) return r!;
-        if (TryParseParametered("piercing crits", normalized, token, out r)) return r!;
-        if (TryParseParametered("piercing", normalized, token, out r)) return r!;
-        if (TryParseParametered("range", normalized, token, out r)) return r!;
-        if (TryParseParametered("torrent", normalized, token, out r)) return r!;
+        // Special cases that cannot be resolved by simple first-word enum parsing
+        if (token.Equals("Heavy (Dash only)", StringComparison.OrdinalIgnoreCase))
+            return new WeaponRule(WeaponRuleKind.HeavyDashOnly, null);
 
-        // Lethal x+ — strip "+" from the number
-        if (normalized.StartsWith("lethal "))
+        if (token.StartsWith("Seek Light", StringComparison.OrdinalIgnoreCase))
+            return new WeaponRule(WeaponRuleKind.SeekLight, null);
+
+        if (token.StartsWith("Piercing Crits", StringComparison.OrdinalIgnoreCase))
         {
-            var numStr = normalized["lethal ".Length..].TrimEnd('+');
-            return int.TryParse(numStr, out var n)
-                ? new WeaponSpecialRule(SpecialRuleKind.Lethal, n, token)
-                : new WeaponSpecialRule(SpecialRuleKind.Unknown, null, token);
+            var pcParts = token.Split(' ');
+            int? pcParam = pcParts.Length > 2 && int.TryParse(pcParts[2], out var pcp) ? pcp : null;
+            return new WeaponRule(WeaponRuleKind.PiercingCrits, pcParam);
         }
 
-        // D" Devastating x
-        if (normalized.StartsWith("d\"") || normalized.StartsWith("d\" devastating") ||
-            normalized.StartsWith("d devastating"))
-        {
-            var parts = normalized.Split(' ');
-            var last  = parts.Last().TrimEnd('+');
-            return int.TryParse(last, out var n)
-                ? new WeaponSpecialRule(SpecialRuleKind.DevastatingAoE, n, token)
-                : new WeaponSpecialRule(SpecialRuleKind.Unknown, null, token);
-        }
+        // General case: first word must match a WeaponRuleKind enum value
+        if (Enum.TryParse<WeaponRuleKind>(name, ignoreCase: true, out var kind))
+            return new WeaponRule(kind, param);
 
-        // Heavy (x only) — parameterless but with activity label in parentheses
-        if (normalized.StartsWith("heavy ("))
-        {
-            // Extract the inner label e.g. "Dash only" from "Heavy (Dash only)"
-            var rawLabel = token.Contains('(')
-                ? token[(token.IndexOf('(') + 1)..token.LastIndexOf(')')]
-                : null;
-            return new WeaponSpecialRule(SpecialRuleKind.HeavyRestricted, null, rawLabel?.Trim());
-        }
-
-        // Simple keyword rules (no parameter)
-        return normalized switch
-        {
-            "balanced"   => new WeaponSpecialRule(SpecialRuleKind.Balanced),
-            "brutal"     => new WeaponSpecialRule(SpecialRuleKind.Brutal),
-            "ceaseless"  => new WeaponSpecialRule(SpecialRuleKind.Ceaseless),
-            "heavy"      => new WeaponSpecialRule(SpecialRuleKind.Heavy),
-            "hot"        => new WeaponSpecialRule(SpecialRuleKind.Hot),
-            "punishing"  => new WeaponSpecialRule(SpecialRuleKind.Punishing),
-            "relentless" => new WeaponSpecialRule(SpecialRuleKind.Relentless),
-            "rending"    => new WeaponSpecialRule(SpecialRuleKind.Rending),
-            "saturate"   => new WeaponSpecialRule(SpecialRuleKind.Saturate),
-            "seek light" => new WeaponSpecialRule(SpecialRuleKind.SeekLight),
-            "seek"       => new WeaponSpecialRule(SpecialRuleKind.Seek),
-            "severe"     => new WeaponSpecialRule(SpecialRuleKind.Severe),
-            "shock"      => new WeaponSpecialRule(SpecialRuleKind.Shock),
-            "silent"     => new WeaponSpecialRule(SpecialRuleKind.Silent),
-            "stun"       => new WeaponSpecialRule(SpecialRuleKind.Stun),
-            _            => new WeaponSpecialRule(SpecialRuleKind.Unknown, null, token),
-        };
-    }
-
-    private static bool TryParseParametered(
-        string prefix, string normalized, string original,
-        out WeaponSpecialRule? result)
-    {
-        if (!normalized.StartsWith(prefix + " ")) { result = null; return false; }
-
-        var rest   = normalized[(prefix.Length + 1)..].TrimEnd('"').Trim();
-        var kind   = prefix switch
-        {
-            "accurate"      => SpecialRuleKind.Accurate,
-            "blast"         => SpecialRuleKind.Blast,
-            "devastating"   => SpecialRuleKind.Devastating,
-            "limited"       => SpecialRuleKind.Limited,
-            "piercing crits"=> SpecialRuleKind.PiercingCrits,
-            "piercing"      => SpecialRuleKind.Piercing,
-            "range"         => SpecialRuleKind.Range,
-            "torrent"       => SpecialRuleKind.Torrent,
-            _               => SpecialRuleKind.Unknown,
-        };
-
-        result = int.TryParse(rest, out var n)
-            ? new WeaponSpecialRule(kind, n, original)
-            : new WeaponSpecialRule(SpecialRuleKind.Unknown, null, original);
-        return true;
+        return new WeaponRule(WeaponRuleKind.Unknown, null);
     }
 }
 ```
@@ -353,281 +276,108 @@ loop in the orchestrator.
 
 ---
 
-## 3. Updated Service Signatures
+## 3. Rule Enforcement Architecture — Visitor + Pipeline
 
-### 3.1 ShootContext
+Rule enforcement is implemented as a **Visitor pattern** over a multi-stage pipeline. There are no
+monolithic `CombatResolutionService` or `FightResolutionService` classes. Instead, each rule is
+encapsulated in its own `*RuleVisitor` class; the pipelines dispatch visitor calls at each stage.
 
-Rather than expanding `ResolveShoot` with many individual flags, all Shoot inputs are bundled into a
-`ShootContext` record. This keeps the signature stable as new rules are added.
+### 3.1 Interfaces
 
 ```csharp
-/// <summary>
-/// All inputs required to resolve a Shoot action, including parsed weapon special rules.
-/// </summary>
-public record ShootContext(
-    int[]                          AttackDice,      // raw D6 results (including misses)
-    int[]                          DefenceDice,     // raw D6 results (before Piercing removal)
-    bool                           InCover,         // true if target is in cover
-    int                            HitThreshold,    // effective hit threshold (post-Injured adjustment)
-    int                            SaveThreshold,   // defender's save stat (e.g. 3)
-    int                            NormalDmg,
-    int                            CritDmg,         // base; overridden by Devastating x if present
-    IReadOnlyList<WeaponSpecialRule> WeaponRules     // parsed from weapon.SpecialRules
-)
+/// Eight pipeline stages for shoot resolution.
+public interface IShootWeaponRuleVisitor
 {
-    // Convenience helpers — avoid scattering LINQ in the service
-    public bool HasRule(SpecialRuleKind kind) =>
-        WeaponRules.Any(r => r.Kind == kind);
+    bool  IsAvailable(Weapon weapon, AvailabilityContext context)                         => true;
+    Task  ApplyBeforeCoverPromptAsync(Weapon weapon, CoverContext context)                => Task.CompletedTask;
+    Task  ApplyAfterCoverPromptAsync(Weapon weapon, CoverContext context)                 => Task.CompletedTask;
+    Task  ApplyEffectsAsync(Weapon weapon, EffectsContext context)                        => Task.CompletedTask;
+    Task  ApplyBeforeAttackClassificationAsync(Weapon weapon, AttackClassificationContext context) => Task.CompletedTask;
+    Task  ApplyAfterAttackClassificationAsync(Weapon weapon, ClassifiedAttackContext context)      => Task.CompletedTask;
+    Task  ApplyBeforeDefenceClassificationAsync(Weapon weapon, DefenceClassificationContext context) => Task.CompletedTask;
+    Task  ApplyAfterDefenceClassificationAsync(Weapon weapon, ClassifiedDefenceContext context)     => Task.CompletedTask;
+    Task  ApplyAfterBlockingAsync(Weapon weapon, BlockingContext context)                 => Task.CompletedTask;
+}
 
-    public WeaponSpecialRule? GetRule(SpecialRuleKind kind) =>
-        WeaponRules.FirstOrDefault(r => r.Kind == kind);
-
-    public int EffectiveCritDmg =>
-        GetRule(SpecialRuleKind.Devastating)?.Parameter ?? CritDmg;
+/// One pipeline stage for fight pre-resolution (Brutal, Shock).
+public interface IFightWeaponRuleVisitor
+{
+    Task ApplyPreResolutionAsync(Weapon weapon, FightSetupContext context) => Task.CompletedTask;
 }
 ```
 
-### 3.2 Updated CombatResolutionService
+All methods have default no-op implementations. A visitor only overrides the stages it needs.
+
+### 3.2 Rule Detection Helpers
 
 ```csharp
-public class CombatResolutionService
+/// Extension methods on Weapon — standardise rule detection across all visitors.
+public static class WeaponExtensions
 {
-    // ── Shoot ────────────────────────────────────────────────────────────────
+    public static bool HasRule(this Weapon weapon, WeaponRuleKind kind)
+        => weapon.Rules.Any(r => r.Kind == kind);
 
-    /// <summary>
-    /// Full shoot resolution using a ShootContext.
-    /// Applies Lethal, Accurate, Punishing, Rending, Severe, Piercing, PiercingCrits,
-    /// Devastating, and Saturate automatically from context.WeaponRules.
-    /// </summary>
-    public CombatResult ResolveShoot(ShootContext context);
-
-    // Legacy overload — delegates to ResolveShoot(ShootContext) with empty rules.
-    // Kept for backward-compatibility with existing tests; do not add new callers.
-    public CombatResult ResolveShoot(
-        int[] attackDice, int[] defenceDice, bool inCover,
-        int hitThreshold, int saveThreshold, int normalDmg, int critDmg)
-        => ResolveShoot(new ShootContext(
-               attackDice, defenceDice, inCover,
-               hitThreshold, saveThreshold, normalDmg, critDmg,
-               Array.Empty<WeaponSpecialRule>()));
-
-    // ── Fight (roll phase only — unchanged from spec.md) ──────────────────
-
-    public FightRollResult ResolveFightRolls(
-        int[] attackerDice, int[] defenderDice,
-        int   attackerHitThreshold, int defenderHitThreshold);
-
-    // ── Die classification helpers (Lethal support) ──────────────────────
-
-    /// <summary>
-    /// Classify a single raw D6 roll.
-    /// Roll == 6 → Crit. Roll >= effectiveCritThreshold → Crit. Roll >= hitThreshold → Hit. Else Miss.
-    /// effectiveCritThreshold defaults to 6 (standard); set lower for Lethal x weapons.
-    /// </summary>
-    public DieResult CalculateDie(int roll, int hitThreshold, int effectiveCritThreshold = 6);
-
-    // ── Internal pipeline steps (accessible for unit testing) ────────────
-
-    /// <summary>
-    /// Apply Piercing/PiercingCrits: returns the number of defence dice to discard before rolling.
-    /// piercingX: base Piercing parameter. piercingCritsX: PiercingCrits parameter. attackerCritCount:
-    /// crits retained after attacker dice classification.
-    /// </summary>
-    public int CalculatePiercingReduction(
-        int piercingX, int piercingCritsX, int attackerCritCount);
-
-    /// <summary>
-    /// Apply Rending post-classification: if any crits in pool, convert first HIT → CRIT.
-    /// Returns updated counts.
-    /// </summary>
-    public (int normals, int crits) ApplyRending(int normals, int crits);
-
-    /// <summary>
-    /// Apply Severe post-classification: if zero crits, convert first HIT → CRIT.
-    /// Returns updated counts.
-    /// </summary>
-    public (int normals, int crits) ApplySevere(int normals, int crits);
-
-    /// <summary>
-    /// Apply Punishing post-classification: if any crits, add 1 to normals (a fail retained as success).
-    /// Returns updated normal count.
-    /// </summary>
-    public int ApplyPunishing(int normals, int crits, int failCount);
+    public static WeaponRule? GetRule(this Weapon weapon, WeaponRuleKind kind)
+        => weapon.Rules.FirstOrDefault(r => r.Kind == kind);
 }
 ```
 
-#### ResolveShoot Internal Pipeline
+### 3.3 Visitors
 
-```
-1. Lethal: compute effectiveCritThreshold = Lethal?.Parameter ?? 6
-2. Accurate: prepend Accurate.Parameter synthetic HIT dice (count as normal successes, not rolled)
-3. Classify each attacker die: CalculateDie(roll, hitThreshold, effectiveCritThreshold)
-   → collect (normals, crits, fails)
-4. Punishing: if HasRule(Punishing) && crits > 0 && fails > 0 → normals += 1
-5. Rending:   if HasRule(Rending) && crits > 0 && normals > 0  → crits += 1; normals -= 1
-6. Severe:    if HasRule(Severe)  && crits == 0 && normals > 0 → crits += 1; normals -= 1
-7. Piercing: piercingReduction = CalculatePiercingReduction(...)
-   effectiveDefenceCount = Max(0, defenceDice.Length - piercingReduction)
-8. Cover save:
-   effectiveInCover = HasRule(Saturate) || HasRule(Seek) ? false : context.InCover
-   if effectiveInCover → prepend 1 synthetic normal-save die to the defence pool
-9. Classify defence dice (save): each die >= saveThreshold → save; else fail
-   (up to effectiveDefenceCount dice, plus the synthetic cover die if applicable)
-10. Blocking algorithm (Shoot — app-allocated, optimal):
-    (a) 1 crit save cancels 1 crit attack
-    (b) 2 normal saves cancel 1 crit attack (if crits remain)
-    (c) 1 normal save cancels 1 normal attack
-11. Effective critDmg = context.EffectiveCritDmg
-    Damage = unblocked_crits × effectiveCritDmg + unblocked_normals × normalDmg
-12. Return CombatResult
-```
+One visitor class per rule, implementing only the relevant stage(s):
+
+| Visitor | Interface | Stage(s) |
+|---|---|---|
+| `AccurateRuleVisitor` | `IShootWeaponRuleVisitor` | `ApplyBeforeAttackClassification` |
+| `BrutalRuleVisitor` | `IFightWeaponRuleVisitor` | `ApplyPreResolution` |
+| `DevastatingRuleVisitor` | `IShootWeaponRuleVisitor` | `ApplyAfterBlocking` |
+| `HeavyRuleVisitor` | `IShootWeaponRuleVisitor` | `IsAvailable` |
+| `HotRuleVisitor` | `IShootWeaponRuleVisitor` | `ApplyAfterBlocking`, `ApplyEffects` |
+| `LethalRuleVisitor` | `IShootWeaponRuleVisitor` | `ApplyBeforeAttackClassification` |
+| `PiercingCritsRuleVisitor` | `IShootWeaponRuleVisitor` | `ApplyAfterDefenceClassification` |
+| `PiercingRuleVisitor` | `IShootWeaponRuleVisitor` | `ApplyBeforeDefenceClassification` |
+| `PunishingRuleVisitor` | `IShootWeaponRuleVisitor` | `ApplyAfterAttackClassification` |
+| `RangeRuleVisitor` | `IShootWeaponRuleVisitor` | `IsAvailable` |
+| `RendingRuleVisitor` | `IShootWeaponRuleVisitor` | `ApplyAfterAttackClassification` |
+| `SaturateRuleVisitor` | `IShootWeaponRuleVisitor` | `ApplyAfterCoverPrompt` |
+| `SeekLightRuleVisitor` | `IShootWeaponRuleVisitor` | `ApplyBeforeCoverPrompt`, `ApplyAfterCoverPrompt` |
+| `SeekRuleVisitor` | `IShootWeaponRuleVisitor` | `ApplyBeforeCoverPrompt` |
+| `SevereRuleVisitor` | `IShootWeaponRuleVisitor` | `ApplyAfterAttackClassification` |
+| `ShockRuleVisitor` | `IFightWeaponRuleVisitor` | `ApplyPreResolution` |
+| `SilentRuleVisitor` | `IShootWeaponRuleVisitor` | `IsAvailable` |
+| `StunRuleVisitor` | `IShootWeaponRuleVisitor` | `ApplyAfterBlocking` |
+
+### 3.4 Pipeline Context Types
+
+Each pipeline stage receives a mutable context object. Visitors read inputs and write outputs into it.
+
+| Context | Stage |
+|---|---|
+| `AvailabilityContext` | `IsAvailable` |
+| `CoverContext` | `ApplyBeforeCoverPromptAsync`, `ApplyAfterCoverPromptAsync` |
+| `EffectsContext` | `ApplyEffectsAsync` |
+| `AttackClassificationContext` | `ApplyBeforeAttackClassificationAsync` |
+| `ClassifiedAttackContext` | `ApplyAfterAttackClassificationAsync` |
+| `DefenceClassificationContext` | `ApplyBeforeDefenceClassificationAsync` |
+| `ClassifiedDefenceContext` | `ApplyAfterDefenceClassificationAsync` |
+| `BlockingContext` | `ApplyAfterBlockingAsync` |
+| `FightSetupContext` | `ApplyPreResolutionAsync` |
+
+### 3.5 Pipelines
 
 ```csharp
-public record CombatResult(
-    int  AttackerNormalHits,
-    int  AttackerCritHits,
-    int  DefenderSaves,         // total saves retained (including cover)
-    int  NormalDamageDealt,
-    int  CritDamageDealt,
-    bool CausedIncapacitation   // caller provides current wounds to compute this
-);
-```
-
-### 3.3 Updated FightResolutionService
-
-The fight resolution service from `spike-fight-ui.md` gains the following additions.
-
-```csharp
-public class FightResolutionService
+// Orchestrates all 16 IShootWeaponRuleVisitors through 8 stages.
+public class ShootWeaponRulePipeline
 {
-    // ── Existing methods (unchanged) ────────────────────────────────────
+    public async Task<ShootResolution> ResolveShootAsync(Weapon weapon, ShootContext context);
+}
 
-    public DieResult  CalculateDie(int roll, int hitThreshold);
-    public FightDicePool CalculateDice(IEnumerable<int> rolls, int hitThreshold, DieOwner owner);
-    public FightDicePool AutoRoll(int atkDice, int hitThreshold, DieOwner owner);
-    public int ApplyStrike(FightDie die, int normalDmg, int critDmg);
-    public (FightDicePool UpdatedActivePool, FightDicePool UpdatedOpponentPool) ApplySingleBlock(
-        FightDicePool activePool, FightDicePool opponentPool,
-        FightDie spendDie, FightDie targetDie);
-    public bool IsFightOver(
-        FightDicePool attackerPool, FightDicePool defenderPool,
-        GameOperativeState attackerState, GameOperativeState defenderState);
-
-    // ── Updated: Brutal changes block eligibility ────────────────────
-
-    /// <summary>
-    /// Returns available actions for the active player given both pools.
-    /// brutalWeapon: set to true when the OPPONENT's weapon has Brutal — i.e. the active player
-    /// is the defender and the attacker's weapon is Brutal. When true, only CRIT dice may Block.
-    /// </summary>
-    public IReadOnlyList<FightActionChoice> GetAvailableActions(
-        FightDicePool activePool,
-        FightDicePool opponentPool,
-        bool          brutalWeapon = false);
-
-    // ── New: Shock ────────────────────────────────────────────────────
-
-    /// <summary>
-    /// Discards the opponent's worst remaining success die (lowest RolledValue).
-    /// Called by the orchestrator on the first CRIT Strike made with a Shock weapon.
-    /// Returns the updated opponent pool. No-ops if opponentPool is empty.
-    /// </summary>
-    public FightDicePool ApplyShock(FightDicePool opponentPool);
-
-    // ── New: Post-fight state effects ────────────────────────────────
-
-    /// <summary>
-    /// Returns true if Stun should be applied: weapon has Stun AND active player retained any crits.
-    /// The orchestrator applies the APL reduction to GameOperativeState after the fight.
-    /// </summary>
-    public bool ShouldApplyStun(IReadOnlyList<WeaponSpecialRule> weaponRules, int attackerCrits);
-
-    // ── New: Lethal support for fights ───────────────────────────────
-
-    /// <summary>
-    /// Fight variant of CalculateDie with Lethal x support.
-    /// If weapon has Lethal x, roll >= x counts as Crit (instead of only 6).
-    /// </summary>
-    public DieResult CalculateDie(int roll, int hitThreshold, int effectiveCritThreshold);
-
-    // ── New: Post-roll transforms (Rending, Severe) ──────────────────
-
-    /// <summary>
-    /// Apply Rending to a completed FightDicePool: if any Crits remain, convert the first HIT die
-    /// to a CRIT die. Returns the (potentially) updated pool.
-    /// </summary>
-    public FightDicePool ApplyRending(FightDicePool pool);
-
-    /// <summary>
-    /// Apply Severe to a completed FightDicePool: if zero Crits remain, convert the first HIT die
-    /// to a CRIT die. Returns the (potentially) updated pool.
-    /// </summary>
-    public FightDicePool ApplySevere(FightDicePool pool);
+// Orchestrates BrutalRuleVisitor and ShockRuleVisitor through 1 stage.
+public class FightWeaponRulePipeline
+{
+    public async Task ApplyPreResolutionAsync(Weapon weapon, FightSetupContext context);
 }
 ```
-
-#### Brutal — Block Eligibility Change
-
-When the **attacker's** weapon is Brutal, the **defender** can only use CRIT dice to Block. In
-`GetAvailableActions`, when `brutalWeapon = true`:
-
-```
-Normal Block pairings (HIT die → HIT die) are excluded entirely.
-Only Crit Block pairings (CRIT die → any die) are generated.
-```
-
-The orchestrator passes `brutalWeapon: true` when building the *defender's* available actions:
-
-```csharp
-// In FightSessionOrchestrator.RunDefenderTurn():
-bool brutalWeapon = attackerWeapon.ParsedRules.HasRule(SpecialRuleKind.Brutal);
-var actions = _resolutionService.GetAvailableActions(defenderPool, attackerPool, brutalWeapon);
-```
-
-#### Shock — First Crit Strike Discards Worst Opponent Die
-
-Shock triggers once per fight, on the first CRIT Strike by the Shock weapon's user. The
-orchestrator tracks `shockTriggered` as a local bool:
-
-```csharp
-// In FightSessionOrchestrator.RunAttackerTurn():
-if (attackerWeapon.ParsedRules.HasRule(SpecialRuleKind.Shock)
-    && !_shockTriggered
-    && chosenAction.ActionType == FightActionType.Strike
-    && chosenAction.SpendDie.Result == DieResult.Crit)
-{
-    defenderPool = _resolutionService.ApplyShock(defenderPool);
-    _shockTriggered = true;
-    _console.MarkupLine("[yellow]⚡ Shock! Defender's worst die discarded![/]");
-}
-```
-
-`ApplyShock` removes the die with the lowest `RolledValue` from the opponent pool (ties broken by
-lowest `Id`):
-
-```csharp
-public FightDicePool ApplyShock(FightDicePool opponentPool)
-{
-    if (opponentPool.IsEmpty) return opponentPool;
-    var worst = opponentPool.Remaining.OrderBy(d => d.RolledValue).ThenBy(d => d.Id).First();
-    return opponentPool.CancelDie(worst.Id);
-}
-```
-
-#### Stun — Post-Fight State Effect
-
-Stun is not a damage modifier. After `FightSessionOrchestrator.Run()` returns, the calling command
-handler checks:
-
-```csharp
-if (_resolutionService.ShouldApplyStun(attackerWeapon.ParsedRules, result.AttackerCritHits))
-{
-    defenderState.StunnedUntilEndOfNextActivation = true;  // APL -= 1 applied during activation
-}
-```
-
-`GameOperativeState` gains a `StunnedUntilEndOfNextActivation` flag. At the start of the defender's
-next activation, APL is temporarily reduced by 1 and the flag cleared.
 
 ---
 

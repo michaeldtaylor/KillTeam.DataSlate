@@ -25,7 +25,7 @@ public class RerollEngineTests
             Hit = 3,
             NormalDmg = 3,
             CriticalDmg = 4,
-            Rules = ruleKinds.Select(k => new WeaponRule(k, null, k.ToString())).ToList(),
+            Rules = ruleKinds.Select(k => new WeaponRule(k, null)).ToList(),
         };
 
     [Fact]

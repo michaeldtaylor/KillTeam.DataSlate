@@ -23,7 +23,7 @@ public class ShockRuleVisitorTests
             Hit = 3,
             NormalDmg = 3,
             CriticalDmg = 4,
-            Rules = hasShock ? [new WeaponRule(WeaponRuleKind.Shock, null, "Shock")] : [],
+            Rules = hasShock ? [new WeaponRule(WeaponRuleKind.Shock, null)] : [],
         };
 
     private static FightSetupContext MakeContext(

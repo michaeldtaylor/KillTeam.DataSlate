@@ -59,15 +59,14 @@ Operative
 
 Weapon
   - Id, Name, Type (Ranged/Melee), Atk, Hit, NormalDmg, CriticalDmg
-  - SpecialRules (TEXT, raw string as imported — e.g. "Piercing 1, Heavy (Dash only)")
-  - ParsedRules: List<WeaponSpecialRule>  ← parsed at use time via SpecialRuleParser (not stored separately)
+  - WeaponRules (TEXT, raw string as imported — e.g. "Piercing 1, Heavy (Dash only)")
+  - Rules: List<WeaponRule>  ← parsed at load time via WeaponRuleParser
 
-WeaponSpecialRule (value type / record, not a DB entity)
-  - Kind (SpecialRuleKind enum)
+WeaponRule (value type / record, not a DB entity)
+  - Kind (WeaponRuleKind enum)
   - Param (int?, e.g. 1 for Piercing 1, 5 for Lethal 5+, 2 for Blast 2")
-  - RawText (string — original token from SpecialRules string)
 
-SpecialRuleKind enum: Accurate, Balanced, Blast, Brutal, Ceaseless, Devastating,
+WeaponRuleKind enum: Accurate, Balanced, Blast, Brutal, Ceaseless, Devastating,
   Heavy, HeavyDashOnly, Hot, Lethal, Limited, Piercing, PiercingCrits, Punishing, Range,
   Relentless, Rending, Saturate, Seek, SeekLight, Severe, Shock, Silent, Stun, Torrent, Unknown
 

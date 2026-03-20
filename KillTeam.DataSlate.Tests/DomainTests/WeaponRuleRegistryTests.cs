@@ -42,7 +42,7 @@ public class WeaponRuleRegistryTests
     [Fact]
     public void WeaponRule_Definition_ReturnsRegistryEntry_ForKnownKind()
     {
-        var rule = new WeaponRule(WeaponRuleKind.Range, 8, "Range 8\"");
+        var rule = new WeaponRule(WeaponRuleKind.Range, 8);
 
         rule.Definition.Should().NotBeNull();
         rule.Definition!.Kind.Should().Be(WeaponRuleKind.Range);
@@ -52,7 +52,7 @@ public class WeaponRuleRegistryTests
     [Fact]
     public void WeaponRule_Definition_ReturnsNull_ForUnknownKind()
     {
-        var rule = new WeaponRule(WeaponRuleKind.Unknown, null, "Poison 2");
+        var rule = new WeaponRule(WeaponRuleKind.Unknown, null);
 
         rule.Definition.Should().BeNull();
     }
