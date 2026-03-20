@@ -8,14 +8,14 @@ namespace KillTeam.DataSlate.Console.InputProviders;
 public class ConsoleAoEInputProvider(IAnsiConsole console, ColumnContext columnContext) : IAoEInputProvider
 {
     public async Task<List<GameOperativeState>> SelectAdditionalTargetsAsync(
-        IList<GameOperativeState> candidates,
+        IList<GameOperativeState> aoeCandidateStates,
         IReadOnlyDictionary<Guid, Operative> allOperatives,
         Weapon weapon,
         string attackerName,
         string targetName,
         string attackerTeamId)
     {
-        if (candidates.Count == 0)
+        if (aoeCandidateStates.Count == 0)
         {
             return [];
         }
@@ -42,7 +42,7 @@ public class ConsoleAoEInputProvider(IAnsiConsole console, ColumnContext columnC
 
                     return $"{Markup.Escape(o.Name)} (Wounds: {s.CurrentWounds}/{o.Wounds}){friendly}";
                 })
-                .AddChoices(candidates)
+                .AddChoices(aoeCandidateStates)
                 .NotRequired()));
     }
 

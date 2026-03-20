@@ -5,7 +5,7 @@ namespace KillTeam.DataSlate.Domain.Engine.Input;
 public interface IAoEInputProvider
 {
     Task<List<GameOperativeState>> SelectAdditionalTargetsAsync(
-        IList<GameOperativeState> candidates,
+        IList<GameOperativeState> aoeCandidateStates,
         IReadOnlyDictionary<Guid, Operative> allOperatives,
         Weapon weapon,
         string attackerName,

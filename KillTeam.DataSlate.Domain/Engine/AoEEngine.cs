@@ -27,14 +27,14 @@ public class AoEEngine(
     {
         var isAttackerTeam1 = attacker.TeamId == game.Participant1.TeamId;
 
-        var additionalTargetOperativeStates = ActionHelpers.GetAoECandidateOperativeStates(target, allOperativeStates, allOperatives);
+        var aoeCandidateStates = ActionHelpers.GetAoECandidateStates(target, allOperativeStates, allOperatives);
 
         var additionalTargetStates = new List<GameOperativeState>();
 
-        if (additionalTargetOperativeStates.Length > 0)
+        if (aoeCandidateStates.Length > 0)
         {
             additionalTargetStates = await inputProvider.SelectAdditionalTargetsAsync(
-                additionalTargetOperativeStates,
+                aoeCandidateStates,
                 allOperatives,
                 weapon,
                 attacker.Name,

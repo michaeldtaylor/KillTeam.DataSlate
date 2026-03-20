@@ -25,9 +25,9 @@ public class FightEngine(
         var isAttackerTeam1 = attacker.TeamId == game.Participant1.TeamId;
         var attackerTeamId = attacker.TeamId;
 
-        var targetOperativeStates = ActionHelpers.GetTargetOperativeStates(attacker, allOperativeStates, allOperatives);
+        var targetStates = ActionHelpers.GetTargetStates(attacker, allOperativeStates, allOperatives);
 
-        if (targetOperativeStates.Length == 0)
+        if (targetStates.Length == 0)
         {
             await (eventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
                 new CombatWarningEvent(
@@ -43,9 +43,9 @@ public class FightEngine(
 
         GameOperativeState targetState;
 
-        if (targetOperativeStates.Length == 1)
+        if (targetStates.Length == 1)
         {
-            targetState = targetOperativeStates[0];
+            targetState = targetStates[0];
 
             if (allOperatives.TryGetValue(targetState.OperativeId, out var autoTarget))
             {
@@ -63,7 +63,7 @@ public class FightEngine(
         }
         else
         {
-            targetState = await inputProvider.SelectTargetAsync(targetOperativeStates, allOperatives);
+            targetState = await inputProvider.SelectTargetAsync(targetStates, allOperatives);
         }
 
         if (!allOperatives.TryGetValue(targetState.OperativeId, out var target))

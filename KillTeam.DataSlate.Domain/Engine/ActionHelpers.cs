@@ -4,7 +4,7 @@ namespace KillTeam.DataSlate.Domain.Engine;
 
 public static class ActionHelpers
 {
-    public static GameOperativeState[] GetTargetOperativeStates(
+    public static GameOperativeState[] GetTargetStates(
         Operative attacker,
         IReadOnlyList<GameOperativeState> allOperativeStates,
         IReadOnlyDictionary<Guid, Operative> allOperatives)
@@ -14,7 +14,7 @@ public static class ActionHelpers
             .ToArray();
     }
 
-    public static GameOperativeState[] GetAoECandidateOperativeStates(
+    public static GameOperativeState[] GetAoECandidateStates(
         Operative target,
         IReadOnlyList<GameOperativeState> allOperativeStates,
         IReadOnlyDictionary<Guid, Operative> allOperatives)
