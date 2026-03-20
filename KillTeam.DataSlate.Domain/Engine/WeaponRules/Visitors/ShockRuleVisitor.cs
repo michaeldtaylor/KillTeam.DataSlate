@@ -6,7 +6,7 @@ namespace KillTeam.DataSlate.Domain.Engine.WeaponRules.Visitors;
 
 public sealed class ShockRuleVisitor : IFightWeaponRuleVisitor
 {
-    public async Task ApplyPreResolutionAsync(
+    public async Task SetupAsync(
         Weapon weapon,
         FightSetupContext context)
     {

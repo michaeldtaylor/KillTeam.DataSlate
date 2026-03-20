@@ -186,7 +186,7 @@ public class FightEngineTests
         result.AttackerCausedIncapacitation.Should().BeFalse();
         result.TargetCausedIncapacitation.Should().BeFalse();
         result.AttackerDamageDealt.Should().Be(0);
-        result.TargetOperativeId.Should().Be(Guid.Empty);
+        result.TargetOperativeId.Should().BeNull();
     }
 
     // ── Stubs ─────────────────────────────────────────────────────────────────

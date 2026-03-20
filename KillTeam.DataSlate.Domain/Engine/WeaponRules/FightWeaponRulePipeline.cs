@@ -12,11 +12,11 @@ public sealed class FightWeaponRulePipeline
         new ShockRuleVisitor(),
     ];
 
-    public async Task ApplyPreResolutionAsync(Weapon weapon, FightSetupContext context)
+    public async Task SetupAsync(Weapon weapon, FightSetupContext context)
     {
         foreach (var handler in _handlers)
         {
-            await handler.ApplyPreResolutionAsync(weapon, context);
+            await handler.SetupAsync(weapon, context);
         }
     }
 }

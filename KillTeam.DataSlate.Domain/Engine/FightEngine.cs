@@ -38,7 +38,7 @@ public class FightEngine(
                     CombatWarningKind.NoValidTargets,
                     "No valid fight targets available.")) ?? ValueTask.CompletedTask);
 
-            return new FightResult(false, false, 0, 0, Guid.Empty);
+            return new FightResult(false, false, 0, 0, null);
         }
 
         GameOperativeState targetState;
@@ -77,7 +77,7 @@ public class FightEngine(
                     CombatWarningKind.TargetNotFound,
                     "Target operative not found.")) ?? ValueTask.CompletedTask);
 
-            return new FightResult(false, false, 0, 0, Guid.Empty);
+            return new FightResult(false, false, 0, 0, null);
         }
 
         var targetTeamId = target.TeamId;
@@ -223,7 +223,7 @@ public class FightEngine(
             TargetPool = targetPool,
         };
 
-        await fightWeaponRulePipeline.ApplyPreResolutionAsync(attackerWeapon, preResolutionContext);
+        await fightWeaponRulePipeline.SetupAsync(attackerWeapon, preResolutionContext);
 
         attackerPool = preResolutionContext.AttackerPool;
         targetPool = preResolutionContext.TargetPool;

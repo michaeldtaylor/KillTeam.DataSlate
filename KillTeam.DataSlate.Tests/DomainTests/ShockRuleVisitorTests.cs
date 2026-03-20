@@ -49,7 +49,7 @@ public class ShockRuleVisitorTests
 
         var context = MakeContext(attackerPool, targetPool);
 
-        await _handler.ApplyPreResolutionAsync(MakeWeapon(hasShock: true), context);
+        await _handler.SetupAsync(MakeWeapon(hasShock: true), context);
 
         context.TargetPool.Remaining.Should().HaveCount(1, "lowest success die discarded");
         context.TargetPool.Remaining.Single().RolledValue.Should().Be(5, "die with value 3 was the lowest and was discarded");
@@ -63,7 +63,7 @@ public class ShockRuleVisitorTests
 
         var context = MakeContext(attackerPool, targetPool);
 
-        await _handler.ApplyPreResolutionAsync(MakeWeapon(hasShock: true), context);
+        await _handler.SetupAsync(MakeWeapon(hasShock: true), context);
 
         context.TargetPool.Remaining.Should().HaveCount(1, "Shock only triggers on attacker crit");
     }
@@ -76,7 +76,7 @@ public class ShockRuleVisitorTests
 
         var context = MakeContext(attackerPool, targetPool);
 
-        await _handler.ApplyPreResolutionAsync(MakeWeapon(hasShock: true), context);
+        await _handler.SetupAsync(MakeWeapon(hasShock: true), context);
 
         context.TargetPool.Remaining.Should().BeEmpty("no target successes to remove");
     }
@@ -89,7 +89,7 @@ public class ShockRuleVisitorTests
 
         var context = MakeContext(attackerPool, targetPool);
 
-        await _handler.ApplyPreResolutionAsync(MakeWeapon(hasShock: false), context);
+        await _handler.SetupAsync(MakeWeapon(hasShock: false), context);
 
         context.TargetPool.Remaining.Should().HaveCount(1, "weapon has no Shock rule");
     }

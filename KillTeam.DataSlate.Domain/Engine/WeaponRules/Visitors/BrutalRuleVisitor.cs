@@ -5,7 +5,7 @@ namespace KillTeam.DataSlate.Domain.Engine.WeaponRules.Visitors;
 
 public sealed class BrutalRuleVisitor : IFightWeaponRuleVisitor
 {
-    public Task ApplyPreResolutionAsync(Weapon weapon, FightSetupContext context)
+    public Task SetupAsync(Weapon weapon, FightSetupContext context)
     {
         if (weapon.HasRule(WeaponRuleKind.Brutal))
         {

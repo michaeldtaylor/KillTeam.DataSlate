@@ -5,4 +5,4 @@ public record FightResult(
     bool TargetCausedIncapacitation,
     int AttackerDamageDealt,
     int TargetDamageDealt,
-    Guid TargetOperativeId);
+    Guid? TargetOperativeId);

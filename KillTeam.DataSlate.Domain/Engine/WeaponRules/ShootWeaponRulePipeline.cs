@@ -68,7 +68,7 @@ public sealed class ShootWeaponRulePipeline
     public async Task<ShootResolution> ResolveShootAsync(Weapon weapon, ShootContext context)
     {
         // ─── Stage 1: Pre-attack classification ─────────────────────────────────
-        var preClassificationContext = new AttackClassificationContext
+        var attackClassificationContext = new AttackClassificationContext
         {
             CritThreshold = 6,
             NormalThreshold = context.HitThreshold - context.FightAssistBonus,
@@ -77,37 +77,37 @@ public sealed class ShootWeaponRulePipeline
 
         foreach (var handler in _handlers)
         {
-            await handler.ApplyBeforeAttackClassificationAsync(weapon, preClassificationContext);
+            await handler.ApplyBeforeAttackClassificationAsync(weapon, attackClassificationContext);
         }
 
         // ─── Core: Classify attack dice ──────────────────────────────────────────
         var rawCrits = 0;
         var critHits = 0;
-        var normalHits = preClassificationContext.BonusNormals;
+        var normalHits = attackClassificationContext.BonusNormals;
 
         foreach (var die in context.AttackerDice)
         {
-            if (die >= preClassificationContext.CritThreshold)
+            if (die >= attackClassificationContext.CritThreshold)
             {
                 critHits++;
                 rawCrits++;
             }
-            else if (die >= preClassificationContext.NormalThreshold)
+            else if (die >= attackClassificationContext.NormalThreshold)
             {
                 normalHits++;
             }
         }
 
         // ─── Stage 2: Post-attack classification ─────────────────────────────────
-        var attackClassifiedContext = new ClassifiedAttackContext(critHits, normalHits, rawCrits);
+        var classifiedAttackContext = new ClassifiedAttackContext(critHits, normalHits, rawCrits);
 
         foreach (var handler in _handlers)
         {
-            await handler.ApplyAfterAttackClassificationAsync(weapon, attackClassifiedContext);
+            await handler.ApplyAfterAttackClassificationAsync(weapon, classifiedAttackContext);
         }
 
-        critHits = attackClassifiedContext.CritHits;
-        normalHits = attackClassifiedContext.NormalHits;
+        critHits = classifiedAttackContext.CritHits;
+        normalHits = classifiedAttackContext.NormalHits;
 
         // ─── Obscured: convert crits → normals, discard 1 normal ────────────────
         if (context.IsObscured)
@@ -122,21 +122,21 @@ public sealed class ShootWeaponRulePipeline
         }
 
         // ─── Stage 3: Pre-defence classification ─────────────────────────────────
-        var beforeDefenceContext = new DefenceClassificationContext
+        var defenceClassificationContext = new DefenceClassificationContext
         {
             DefenceDice = context.TargetDice.ToList(),
         };
 
         foreach (var handler in _handlers)
         {
-            await handler.ApplyBeforeDefenceClassificationAsync(weapon, beforeDefenceContext);
+            await handler.ApplyBeforeDefenceClassificationAsync(weapon, defenceClassificationContext);
         }
 
         // ─── Core: Classify defence dice ─────────────────────────────────────────
         var critSaves = 0;
         var normalSaves = 0;
 
-        foreach (var die in beforeDefenceContext.DefenceDice)
+        foreach (var die in defenceClassificationContext.DefenceDice)
         {
             if (die == 6)
             {
@@ -155,15 +155,15 @@ public sealed class ShootWeaponRulePipeline
         }
 
         // ─── Stage 4: Post-defence classification ─────────────────────────────────
-        var defenceClassifiedContext = new ClassifiedDefenceContext(critSaves, normalSaves, rawCrits);
+        var classifiedDefenceContext = new ClassifiedDefenceContext(critSaves, normalSaves, rawCrits);
 
         foreach (var handler in _handlers)
         {
-            await handler.ApplyAfterDefenceClassificationAsync(weapon, defenceClassifiedContext);
+            await handler.ApplyAfterDefenceClassificationAsync(weapon, classifiedDefenceContext);
         }
 
-        critSaves = defenceClassifiedContext.CritSaves;
-        normalSaves = defenceClassifiedContext.NormalSaves;
+        critSaves = classifiedDefenceContext.CritSaves;
+        normalSaves = classifiedDefenceContext.NormalSaves;
 
         // ─── Core: Blocking algorithm ─────────────────────────────────────────────
         var unblockedCrits = critHits;
@@ -186,22 +186,22 @@ public sealed class ShootWeaponRulePipeline
         unblockedNormals -= normalSavesToUse;
 
         // ─── Stage 5: Post-blocking ───────────────────────────────────────────────
-        var afterBlockingContext = new BlockingContext(unblockedCrits, unblockedNormals, context.HitThreshold, context.CritDmg);
+        var blockingContext = new BlockingContext(unblockedCrits, unblockedNormals, context.HitThreshold, context.CritDmg);
 
         foreach (var handler in _handlers)
         {
-            await handler.ApplyAfterBlockingAsync(weapon, afterBlockingContext);
+            await handler.ApplyAfterBlockingAsync(weapon, blockingContext);
         }
 
         // ─── Core: Calculate damage ───────────────────────────────────────────────
-        var totalDamage = afterBlockingContext.UnblockedCrits * afterBlockingContext.EffectiveCritDmg + afterBlockingContext.UnblockedNormals * context.NormalDmg;
+        var totalDamage = blockingContext.UnblockedCrits * blockingContext.EffectiveCritDmg + blockingContext.UnblockedNormals * context.NormalDmg;
 
         return new ShootResolution(
-            afterBlockingContext.UnblockedCrits,
-            afterBlockingContext.UnblockedNormals,
+            blockingContext.UnblockedCrits,
+            blockingContext.UnblockedNormals,
             totalDamage,
             rawCrits,
-            afterBlockingContext.StunApplied,
-            afterBlockingContext.SelfDamage);
+            blockingContext.StunApplied,
+            blockingContext.SelfDamage);
     }
 }
