@@ -23,12 +23,12 @@ public class GuardInterruptEngine(
     /// Returns the updated sequence counter after any guard interrupt activations.
     /// </summary>
     public async Task<int> CheckAndRunInterruptsAsync(
+        Game game,
+        TurningPoint turningPoint,
         Operative actingEnemy,
         IReadOnlyList<GameOperativeState> allOperativeStates,
         IReadOnlyDictionary<Guid, Operative> allOperatives,
-        Game game,
-        TurningPoint tp,
-        int seqCounter,
+        int sequenceCounter,
         GameEventStream? eventStream = null)
     {
         logger.LogDebug("Checking guard interrupts for game {GameId}", game.Id);
@@ -45,7 +45,7 @@ public class GuardInterruptEngine(
 
         if (eligibleGuards.Count == 0)
         {
-            return seqCounter;
+            return sequenceCounter;
         }
 
         foreach (var guardState in eligibleGuards)
@@ -86,12 +86,12 @@ public class GuardInterruptEngine(
                 continue;
             }
 
-            seqCounter++;
+            sequenceCounter++;
             var interruptActivation = new Activation
             {
                 Id = Guid.NewGuid(),
-                TurningPointId = tp.Id,
-                SequenceNumber = seqCounter,
+                TurningPointId = turningPoint.Id,
+                SequenceNumber = sequenceCounter,
                 OperativeId = guardOp.Id,
                 TeamId = guardOp.TeamId,
                 OrderSelected = guardState.Order,
@@ -115,9 +115,10 @@ public class GuardInterruptEngine(
                     timestamp,
                     guardOp.Name,
                     guardState.Id)) ?? ValueTask.CompletedTask);
+
             guardState.IsOnGuard = false;
         }
 
-        return seqCounter;
+        return sequenceCounter;
     }
 }

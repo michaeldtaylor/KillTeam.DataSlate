@@ -30,7 +30,6 @@ public class FirefightPhaseOrchestrator(
         await firefightPhaseEngine.RunAsync(
             game,
             currentTurningPoint,
-            allOperatives,
-            allStates);
+            allStates, allOperatives);
     }
 }
