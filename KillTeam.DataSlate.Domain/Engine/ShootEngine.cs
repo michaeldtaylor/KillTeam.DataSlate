@@ -17,18 +17,17 @@ public class ShootEngine(
     public async Task<ShootResult> RunAsync(
         GameContext context,
         Activation activation,
-        Operative attacker,
-        GameOperativeState attackerState,
+        OperativeContext attacker,
         bool hasMovedNonDash = false)
     {
-        var isAttackerTeam1 = attacker.TeamId == context.Game.Participant1.Team.Id;
-        var attackerTeamId = attacker.TeamId;
+        var isAttackerTeam1 = attacker.Operative.TeamId == context.Game.Participant1.Team.Id;
+        var attackerTeamId = attacker.Operative.TeamId;
 
-        var isOnConceal = attackerState.Order == Order.Conceal;
+        var isOnConceal = attacker.State.Order == Order.Conceal;
 
-        var targetStates = ActionHelpers.GetTargetStates(attacker, context.OperativeStates, context.Operatives);
+        var targets = ActionHelpers.GetTargets(attacker, context.Operatives);
 
-        if (targetStates.Length == 0)
+        if (targets.Length == 0)
         {
             await (context.EventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
                 new CombatWarningEvent(
@@ -42,47 +41,30 @@ public class ShootEngine(
             return new ShootResult(false, 0, null);
         }
 
-        GameOperativeState targetState;
+        OperativeContext target;
 
-        if (targetStates.Length == 1)
+        if (targets.Length == 1)
         {
-            targetState = targetStates[0];
+            target = targets[0];
 
-            if (context.Operatives.TryGetValue(targetState.OperativeId, out var autoTarget))
-            {
-                await (context.EventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
-                    new ShootTargetSelectedEvent(
-                        gameSessionId,
-                        sequenceNumber,
-                        timestamp,
-                        attackerTeamId,
-                        autoTarget.Name,
-                        targetState.CurrentWounds,
-                        autoTarget.Wounds,
-                        true)) ?? ValueTask.CompletedTask);
-            }
-        }
-        else
-        {
-            targetState = await inputProvider.SelectTargetAsync(targetStates, context.Operatives);
-        }
-
-        if (!context.Operatives.TryGetValue(targetState.OperativeId, out var target))
-        {
             await (context.EventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
-                new CombatWarningEvent(
+                new ShootTargetSelectedEvent(
                     gameSessionId,
                     sequenceNumber,
                     timestamp,
                     attackerTeamId,
-                    CombatWarningKind.TargetNotFound,
-                    "Target operative not found.")) ?? ValueTask.CompletedTask);
-
-            return new ShootResult(false, 0, null);
+                    target.Operative.Name,
+                    target.State.CurrentWounds,
+                    target.Operative.Wounds,
+                    true)) ?? ValueTask.CompletedTask);
+        }
+        else
+        {
+            target = await inputProvider.SelectTargetAsync(targets);
         }
 
-        var targetTeamId = target.TeamId;
-        var targetDistance = await inputProvider.GetTargetDistanceAsync(target.Name);
+        var targetTeamId = target.Operative.TeamId;
+        var targetDistance = await inputProvider.GetTargetDistanceAsync(target.Operative.Name);
 
         if (targetDistance <= 1)
         {
@@ -100,7 +82,7 @@ public class ShootEngine(
 
         var availabilityContext = new AvailabilityContext(hasMovedNonDash, isOnConceal, targetDistance);
         var rangedWeapons = shootWeaponRulePipeline
-            .FilterAvailableWeapons(attacker.Weapons.Where(w => w.Type == WeaponType.Ranged).ToList(), availabilityContext)
+            .FilterAvailableWeapons(attacker.Operative.Weapons.Where(w => w.Type == WeaponType.Ranged).ToList(), availabilityContext)
             .Where(w => inputProvider.HasRemainingUses(w))
             .ToList();
 
@@ -108,7 +90,7 @@ public class ShootEngine(
         {
             var noWeaponsMessage = isOnConceal
                 ? "Cannot shoot — operative is on a Conceal order and no weapons have the Silent rule."
-                : $"No ranged weapons can reach {target.Name} at {targetDistance}\".";
+                : $"No ranged weapons can reach {target.Operative.Name} at {targetDistance}\".";
 
             await (context.EventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
                 new CombatWarningEvent(
@@ -157,19 +139,17 @@ public class ShootEngine(
                 context,
                 activation,
                 attacker,
-                attackerState,
                 target,
-                targetState,
                 weapon);
 
-            return new ShootResult(aoeResult.AnyIncapacitation, aoeResult.TotalDamage, targetState.OperativeId);
+            return new ShootResult(aoeResult.AnyIncapacitation, aoeResult.TotalDamage, target.Operative.Id);
         }
 
         // ── Cover status ──────────────────────────────────────────────────────────
         var coverContext = new CoverContext
         {
-            Attacker = attacker,
-            Target = target,
+            Attacker = attacker.Operative,
+            Target = target.Operative,
             InputProvider = inputProvider,
             EventStream = context.EventStream,
         };
@@ -181,18 +161,18 @@ public class ShootEngine(
 
         var fightAssist = await inputProvider.GetFriendlyAllyCountAsync();
 
-        var attackerDice = await inputProvider.RollOrEnterDiceAsync(weapon.Atk, $"{attacker.Name} attack dice (Attack: {weapon.Atk})", attacker.Name, "Attacker", "Shoot", attackerTeamId, context.EventStream);
+        var attackerDice = await inputProvider.RollOrEnterDiceAsync(weapon.Atk, $"{attacker.Operative.Name} attack dice (Attack: {weapon.Atk})", attacker.Operative.Name, "Attacker", "Shoot", attackerTeamId, context.EventStream);
 
         attackerDice = await rerollEngine.ApplyAttackerRerollsAsync(
             attackerDice,
             weapon.Rules.ToList(),
             context.Game.Id,
             isAttackerTeam1,
-            attacker.Name,
+            attacker.Operative.Name,
             attackerTeamId,
             context.EventStream);
 
-        var targetDiceCount = target.Defence + targetState.DefenceDiceModifier;
+        var targetDiceCount = target.Operative.Defence + target.State.DefenceDiceModifier;
 
         if (inCover)
         {
@@ -202,18 +182,18 @@ public class ShootEngine(
                     sequenceNumber,
                     timestamp,
                     attackerTeamId,
-                    target.Name)) ?? ValueTask.CompletedTask);
+                    target.Operative.Name)) ?? ValueTask.CompletedTask);
         }
 
         var targetDice = targetDiceCount == 0
             ? []
-            : await inputProvider.RollOrEnterDiceAsync(targetDiceCount, $"{target.Name} defence dice", target.Name, "Target", "Shoot", targetTeamId, context.EventStream);
+            : await inputProvider.RollOrEnterDiceAsync(targetDiceCount, $"{target.Operative.Name} defence dice", target.Operative.Name, "Target", "Shoot", targetTeamId, context.EventStream);
 
-        var isTargetTeam1 = target.TeamId == context.Game.Participant1.Team.Id;
+        var isTargetTeam1 = target.Operative.TeamId == context.Game.Participant1.Team.Id;
 
-        targetDice = await rerollEngine.ApplyTargetRerollAsync(targetDice, context.Game.Id, isTargetTeam1, target.Name, targetTeamId, context.EventStream);
+        targetDice = await rerollEngine.ApplyTargetRerollAsync(targetDice, context.Game.Id, isTargetTeam1, target.Operative.Name, targetTeamId, context.EventStream);
 
-        var effectiveSave = inCover ? target.Save - 1 : target.Save;
+        var effectiveSave = inCover ? target.Operative.Save - 1 : target.Operative.Save;
         var attackSnapshots = attackerDice.Select(d => new FightDieSnapshot(d >= 6 ? DieResult.Crit : d >= weapon.Hit ? DieResult.Hit : DieResult.Miss, d)).ToList();
         var defenceSnapshots = targetDice.Select(d => new FightDieSnapshot(d >= effectiveSave ? DieResult.Save : DieResult.Fail, d)).ToList();
 
@@ -223,13 +203,13 @@ public class ShootEngine(
                 sequenceNumber,
                 timestamp,
                 attackerTeamId,
-                attacker.Name,
-                attackerState.CurrentWounds,
-                attacker.Wounds,
+                attacker.Operative.Name,
+                attacker.State.CurrentWounds,
+                attacker.Operative.Wounds,
                 attackSnapshots,
-                target.Name,
-                targetState.CurrentWounds,
-                target.Wounds,
+                target.Operative.Name,
+                target.State.CurrentWounds,
+                target.Operative.Wounds,
                 defenceSnapshots)) ?? ValueTask.CompletedTask);
 
         var ShootResolutionContext = new ShootResolutionContext(
@@ -238,7 +218,7 @@ public class ShootEngine(
             inCover,
             isObscured,
             weapon.Hit,
-            target.Save,
+            target.Operative.Save,
             weapon.NormalDmg,
             weapon.CriticalDmg,
             fightAssist
@@ -246,7 +226,7 @@ public class ShootEngine(
 
         var result = await shootWeaponRulePipeline.ResolveShootAsync(weapon, ShootResolutionContext);
 
-        var newWounds = Math.Max(0, targetState.CurrentWounds - result.TotalDamage);
+        var newWounds = Math.Max(0, target.State.CurrentWounds - result.TotalDamage);
 
         await (context.EventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
             new ShootResultDisplayedEvent(
@@ -254,21 +234,21 @@ public class ShootEngine(
                 sequenceNumber,
                 timestamp,
                 attackerTeamId,
-                attacker.Name,
-                attackerState.CurrentWounds,
-                attacker.Wounds,
-                target.Name,
+                attacker.Operative.Name,
+                attacker.State.CurrentWounds,
+                attacker.Operative.Wounds,
+                target.Operative.Name,
                 result.UnblockedCrits,
                 result.UnblockedNormals,
                 result.TotalDamage,
                 newWounds,
-                target.Wounds,
+                target.Operative.Wounds,
                 inCover,
                 isObscured)) ?? ValueTask.CompletedTask);
 
-        var causedIncap = newWounds <= 0 && !targetState.IsIncapacitated;
+        var causedIncap = newWounds <= 0 && !target.State.IsIncapacitated;
 
-        targetState.CurrentWounds = newWounds;
+        target.State.CurrentWounds = newWounds;
 
         await (context.EventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
             new OperativeWoundsChangedEvent(
@@ -276,13 +256,13 @@ public class ShootEngine(
                 sequenceNumber,
                 timestamp,
                 targetTeamId,
-                targetState.Id,
+                target.State.Id,
                 newWounds)) ?? ValueTask.CompletedTask);
 
         if (causedIncap)
         {
-            targetState.IsIncapacitated = true;
-            targetState.IsOnGuard = false;
+            target.State.IsIncapacitated = true;
+            target.State.IsOnGuard = false;
 
             await (context.EventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
                 new OperativeIncapacitatedEvent(
@@ -290,7 +270,7 @@ public class ShootEngine(
                     sequenceNumber,
                     timestamp,
                     targetTeamId,
-                    targetState.Id)) ?? ValueTask.CompletedTask);
+                    target.State.Id)) ?? ValueTask.CompletedTask);
 
             await (context.EventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
                 new OperativeGuardClearedEvent(
@@ -298,7 +278,7 @@ public class ShootEngine(
                     sequenceNumber,
                     timestamp,
                     targetTeamId,
-                    targetState.Id)) ?? ValueTask.CompletedTask);
+                    target.State.Id)) ?? ValueTask.CompletedTask);
 
             await (context.EventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
                 new IncapacitationEvent(
@@ -306,7 +286,7 @@ public class ShootEngine(
                     sequenceNumber,
                     timestamp,
                     attackerTeamId,
-                    target.Name,
+                    target.Operative.Name,
                     "Shoot")) ?? ValueTask.CompletedTask);
         }
 
@@ -314,7 +294,7 @@ public class ShootEngine(
 
         if (stunApplied)
         {
-            targetState.AplModifier -= 1;
+            target.State.AplModifier -= 1;
 
             await (context.EventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
                 new OperativeAplModifiedEvent(
@@ -322,8 +302,8 @@ public class ShootEngine(
                     sequenceNumber,
                     timestamp,
                     targetTeamId,
-                    targetState.Id,
-                    targetState.AplModifier)) ?? ValueTask.CompletedTask);
+                    target.State.Id,
+                    target.State.AplModifier)) ?? ValueTask.CompletedTask);
 
             await (context.EventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
                 new StunAppliedEvent(
@@ -331,14 +311,13 @@ public class ShootEngine(
                     sequenceNumber,
                     timestamp,
                     attackerTeamId,
-                    target.Name,
+                    target.Operative.Name,
                     1)) ?? ValueTask.CompletedTask);
         }
 
         var effectContext = new EffectsContext
         {
             Attacker = attacker,
-            AttackerState = attackerState,
             ResolutionResult = result,
             EventStream = context.EventStream,
         };
@@ -355,8 +334,8 @@ public class ShootEngine(
                     sequenceNumber,
                     timestamp,
                     attackerTeamId,
-                    attackerState.Id,
-                    attackerState.CurrentWounds)) ?? ValueTask.CompletedTask);
+                    attacker.State.Id,
+                    attacker.State.CurrentWounds)) ?? ValueTask.CompletedTask);
 
             if (effectContext.AttackerBecameIncapacitated)
             {
@@ -366,7 +345,7 @@ public class ShootEngine(
                         sequenceNumber,
                         timestamp,
                         attackerTeamId,
-                        attackerState.Id)) ?? ValueTask.CompletedTask);
+                        attacker.State.Id)) ?? ValueTask.CompletedTask);
             }
         }
 
@@ -376,7 +355,7 @@ public class ShootEngine(
             ActivationId = activation.Id,
             Type = ActionType.Shoot,
             ApCost = 1,
-            TargetOperativeId = targetState.OperativeId,
+            TargetOperativeId = target.Operative.Id,
             WeaponId = weapon.Id,
             AttackerDice = attackerDice,
             TargetDice = targetDice,
@@ -399,8 +378,8 @@ public class ShootEngine(
                 sequenceNumber,
                 timestamp,
                 attackerTeamId,
-                attacker.Name,
-                target.Name,
+                attacker.Operative.Name,
+                target.Operative.Name,
                 result.TotalDamage,
                 causedIncap)) ?? ValueTask.CompletedTask);
 
@@ -411,6 +390,6 @@ public class ShootEngine(
             await actionRepository.UpdateNarrativeAsync(action.Id, note);
         }
 
-        return new ShootResult(causedIncap, result.TotalDamage, targetState.OperativeId);
+        return new ShootResult(causedIncap, result.TotalDamage, target.Operative.Id);
     }
 }

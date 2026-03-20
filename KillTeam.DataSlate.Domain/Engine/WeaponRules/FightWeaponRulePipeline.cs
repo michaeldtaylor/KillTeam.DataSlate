@@ -25,9 +25,9 @@ public sealed class FightWeaponRulePipeline
     {
         var attackerPool = context.AttackerPool;
         var targetPool = context.TargetPool;
-        var attackerCurrentWounds = context.AttackerCurrentWounds;
-        var targetCurrentWounds = context.TargetCurrentWounds;
-        var attackerTeamId = context.Attacker.TeamId;
+        var attackerCurrentWounds = context.Attacker.State.CurrentWounds;
+        var targetCurrentWounds = context.Target.State.CurrentWounds;
+        var attackerTeamId = context.Attacker.Operative.TeamId;
         var totalAttackerDamageDealt = 0;
         var totalTargetDamageDealt = 0;
         var turnOrder = DieOwner.Attacker;
@@ -38,8 +38,8 @@ public sealed class FightWeaponRulePipeline
                 turnOrder,
                 attackerPool,
                 targetPool,
-                context.Attacker,
-                context.Target,
+                context.Attacker.Operative,
+                context.Target.Operative,
                 context.AttackerWeapon,
                 context.TargetWeapon,
                 context.BlockRestrictedToCrits);
@@ -57,13 +57,13 @@ public sealed class FightWeaponRulePipeline
                     sequenceNumber,
                     timestamp,
                     attackerTeamId,
-                    context.Attacker.Name,
+                    context.Attacker.Operative.Name,
                     attackerWoundsNow,
-                    context.Attacker.Wounds,
+                    context.Attacker.Operative.Wounds,
                     attackerPoolNow,
-                    context.Target.Name,
+                    context.Target.Operative.Name,
                     targetWoundsNow,
-                    context.Target.Wounds,
+                    context.Target.Operative.Wounds,
                     targetPoolNow)) ?? ValueTask.CompletedTask);
 
             var actions = FightResolution.GetAvailableActions(actingPool, opposingPool, restrictBlocksToCrits);

@@ -7,15 +7,14 @@ namespace KillTeam.DataSlate.Console.InputProviders;
 
 public class ConsoleAoEInputProvider(IAnsiConsole console, ColumnContext columnContext) : IAoEInputProvider
 {
-    public async Task<List<GameOperativeState>> SelectAdditionalTargetsAsync(
-        IList<GameOperativeState> aoeCandidateStates,
-        IReadOnlyDictionary<Guid, Operative> allOperatives,
+    public async Task<List<OperativeContext>> SelectAdditionalTargetsAsync(
+        IList<OperativeContext> aoeCandidates,
         Weapon weapon,
         string attackerName,
         string targetName,
         string attackerTeamId)
     {
-        if (aoeCandidateStates.Count == 0)
+        if (aoeCandidates.Count == 0)
         {
             return [];
         }
@@ -27,22 +26,17 @@ public class ConsoleAoEInputProvider(IAnsiConsole console, ColumnContext columnC
         var ruleName = isBlast ? "Blast" : "Torrent";
         var title = $"{columnContext.Prefix}[bold]{ruleName} {radius}\"[/]: select operatives within {radius}\" of {Markup.Escape(targetName)} — visible to {visibleTo} (space to toggle, enter to confirm):";
 
-        return await Task.FromResult<List<GameOperativeState>>(console.Prompt(
-            new MultiSelectionPrompt<GameOperativeState>()
+        return await Task.FromResult<List<OperativeContext>>(console.Prompt(
+            new MultiSelectionPrompt<OperativeContext>()
                 .Title(title)
-                .UseConverter(s =>
+                .UseConverter(oc =>
                 {
-                    if (!allOperatives.TryGetValue(s.OperativeId, out var o))
-                    {
-                        return s.OperativeId.ToString();
-                    }
-
-                    var isFriendly = o.TeamId == attackerTeamId;
+                    var isFriendly = oc.Operative.TeamId == attackerTeamId;
                     var friendly = isFriendly ? " [red][FRIENDLY FIRE!][/]" : string.Empty;
 
-                    return $"{Markup.Escape(o.Name)} (Wounds: {s.CurrentWounds}/{o.Wounds}){friendly}";
+                    return $"{Markup.Escape(oc.Operative.Name)} (Wounds: {oc.State.CurrentWounds}/{oc.Operative.Wounds}){friendly}";
                 })
-                .AddChoices(aoeCandidateStates)
+                .AddChoices(aoeCandidates)
                 .NotRequired()));
     }
 

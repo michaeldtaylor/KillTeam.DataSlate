@@ -5,9 +5,7 @@ namespace KillTeam.DataSlate.Domain.Engine.WeaponRules.Context;
 
 public class EffectsContext
 {
-    public required Operative Attacker { get; init; }
-
-    public required GameOperativeState AttackerState { get; init; }
+    public required OperativeContext Attacker { get; init; }
 
     public required ShootResolution ResolutionResult { get; init; }
 

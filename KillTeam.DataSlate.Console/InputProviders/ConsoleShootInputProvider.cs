@@ -10,16 +10,12 @@ public class ConsoleShootInputProvider(IAnsiConsole console, ColumnContext colum
 {
     private readonly Dictionary<Guid, int> _limitedUsesRemaining = [];
 
-    public async Task<GameOperativeState> SelectTargetAsync(
-        IList<GameOperativeState> candidates,
-        IReadOnlyDictionary<Guid, Operative> allOperatives)
+    public async Task<OperativeContext> SelectTargetAsync(IList<OperativeContext> candidates)
     {
         return await Task.FromResult(console.Prompt(
-            new SelectionPrompt<GameOperativeState>()
+            new SelectionPrompt<OperativeContext>()
                 .Title($"{columnContext.Prefix}Select a target to shoot:")
-                .UseConverter(s => allOperatives.TryGetValue(s.OperativeId, out var o)
-                    ? $"{Markup.Escape(o.Name)} (Wounds: {s.CurrentWounds}/{o.Wounds})"
-                    : s.OperativeId.ToString())
+                .UseConverter(oc => $"{Markup.Escape(oc.Operative.Name)} (Wounds: {oc.State.CurrentWounds}/{oc.Operative.Wounds})")
                 .AddChoices(candidates)));
     }
 

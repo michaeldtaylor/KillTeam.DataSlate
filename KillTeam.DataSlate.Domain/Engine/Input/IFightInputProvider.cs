@@ -5,9 +5,7 @@ namespace KillTeam.DataSlate.Domain.Engine.Input;
 
 public interface IFightInputProvider
 {
-    Task<GameOperativeState> SelectTargetAsync(
-        IList<GameOperativeState> candidates,
-        IReadOnlyDictionary<Guid, Operative> allOperatives);
+    Task<OperativeContext> SelectTargetAsync(IList<OperativeContext> candidates);
 
     Task<Weapon> SelectAttackerWeaponAsync(IList<Weapon> weapons, bool isInjured);
 

@@ -32,12 +32,12 @@ public class GuardInterruptEngine(
 
         var activatingTeamId = activatingOperative.TeamId;
 
-        var friendlyStates = context.OperativeStates
-            .Where(s => context.Operatives.TryGetValue(s.OperativeId, out var o) && o.TeamId != activatingTeamId)
+        var friendlyOperatives = context.Operatives.Values
+            .Where(oc => oc.Operative.TeamId != activatingTeamId)
             .ToList();
 
-        var eligibleGuards = friendlyStates
-            .Where(s => s is { IsOnGuard: true, IsIncapacitated: false })
+        var eligibleGuards = friendlyOperatives
+            .Where(oc => oc.State is { IsOnGuard: true, IsIncapacitated: false })
             .ToList();
 
         if (eligibleGuards.Count == 0)
@@ -45,15 +45,10 @@ public class GuardInterruptEngine(
             return sequenceCounter;
         }
 
-        foreach (var guardState in eligibleGuards)
+        foreach (var guardOperative in eligibleGuards)
         {
-            if (!context.Operatives.TryGetValue(guardState.OperativeId, out var guardOp))
-            {
-                continue;
-            }
-
             var inControlRange = await inputProvider.ConfirmInControlRangeAsync(
-                activatingOperative.Name, guardOp.Name);
+                activatingOperative.Name, guardOperative.Operative.Name);
 
             if (inControlRange)
             {
@@ -62,21 +57,21 @@ public class GuardInterruptEngine(
                         gameSessionId,
                         sequenceNumber,
                         timestamp,
-                        guardOp.Name,
-                        guardState.Id)) ?? ValueTask.CompletedTask);
-                guardState.IsOnGuard = false;
+                        guardOperative.Operative.Name,
+                        guardOperative.State.Id)) ?? ValueTask.CompletedTask);
+                guardOperative.State.IsOnGuard = false;
                 continue;
             }
 
             var isVisible = await inputProvider.ConfirmVisibleAsync(
-                activatingOperative.Name, guardOp.Name);
+                activatingOperative.Name, guardOperative.Operative.Name);
 
             if (!isVisible)
             {
                 continue;
             }
 
-            var action = await inputProvider.SelectGuardActionAsync(guardOp.Name);
+            var action = await inputProvider.SelectGuardActionAsync(guardOperative.Operative.Name);
 
             if (action == "Skip")
             {
@@ -89,20 +84,20 @@ public class GuardInterruptEngine(
                 Id = Guid.NewGuid(),
                 TurningPointId = turningPoint.Id,
                 SequenceNumber = sequenceCounter,
-                OperativeId = guardOp.Id,
-                TeamId = guardOp.TeamId,
-                OrderSelected = guardState.Order,
+                OperativeId = guardOperative.Operative.Id,
+                TeamId = guardOperative.Operative.TeamId,
+                OrderSelected = guardOperative.State.Order,
                 IsGuardInterrupt = true,
             };
             await activationRepository.CreateAsync(interruptActivation);
 
             if (action == "Shoot")
             {
-                await shootEngine.RunAsync(context, interruptActivation, guardOp, guardState);
+                await shootEngine.RunAsync(context, interruptActivation, guardOperative);
             }
             else
             {
-                await fightEngine.RunAsync(context, interruptActivation, guardOp, guardState);
+                await fightEngine.RunAsync(context, interruptActivation, guardOperative);
             }
 
             await (context.EventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
@@ -110,10 +105,10 @@ public class GuardInterruptEngine(
                     gameSessionId,
                     sequenceNumber,
                     timestamp,
-                    guardOp.Name,
-                    guardState.Id)) ?? ValueTask.CompletedTask);
+                    guardOperative.Operative.Name,
+                    guardOperative.State.Id)) ?? ValueTask.CompletedTask);
 
-            guardState.IsOnGuard = false;
+            guardOperative.State.IsOnGuard = false;
         }
 
         return sequenceCounter;

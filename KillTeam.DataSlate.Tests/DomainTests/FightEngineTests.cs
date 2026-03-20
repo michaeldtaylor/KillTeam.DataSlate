@@ -88,13 +88,19 @@ public class FightEngineTests
         var allStates = SeedStates(game, attacker, target, attackerWounds: 12, targetWounds: 12);
 
         var targetState = allStates.Single(s => s.OperativeId == target.Id);
-        var allOperatives = new Dictionary<Guid, Operative> { [attacker.Id] = attacker, [target.Id] = target };
+        var attackerState = allStates.Single(s => s.OperativeId == attacker.Id);
+        var operatives = new Dictionary<Guid, OperativeContext>
+        {
+            [attacker.Id] = new OperativeContext(attacker, attackerState),
+            [target.Id] = new OperativeContext(target, targetState),
+        };
         var activation = new Activation { TurningPointId = Guid.NewGuid(), TeamId = attackerTeamId, SequenceNumber = 1 };
 
         var fightInput = new StubFightInputProvider(attackerDice: [6], targetDice: []);
         var engine = MakeEngine(fightInput, new NoCpRerollInputProvider(), new StubGameRepository(game));
 
-        var result = await engine.RunAsync(new GameContext(game, allStates, allOperatives), activation, attacker, allStates.Single(s => s.OperativeId == attacker.Id));
+        var context = new GameContext(game, operatives);
+        var result = await engine.RunAsync(context, activation, operatives[attacker.Id]);
 
         result.AttackerCausedIncapacitation.Should().BeTrue("crit dealt 12 damage to a 12-wound target");
         result.TargetCausedIncapacitation.Should().BeFalse("target had no melee weapon");
@@ -117,7 +123,13 @@ public class FightEngineTests
         var game = MakeGame(attackerTeamId, targetTeamId);
         var allStates = SeedStates(game, attacker, target, attackerWounds: 12, targetWounds: 12);
 
-        var allOperatives = new Dictionary<Guid, Operative> { [attacker.Id] = attacker, [target.Id] = target };
+        var attackerState2 = allStates.Single(s => s.OperativeId == attacker.Id);
+        var targetState2 = allStates.Single(s => s.OperativeId == target.Id);
+        var operatives2 = new Dictionary<Guid, OperativeContext>
+        {
+            [attacker.Id] = new OperativeContext(attacker, attackerState2),
+            [target.Id] = new OperativeContext(target, targetState2),
+        };
         var activation = new Activation { TurningPointId = Guid.NewGuid(), TeamId = attackerTeamId, SequenceNumber = 1 };
         var stream = new GameEventStream(game.Id);
         var emittedEvents = new List<GameEvent>();
@@ -126,7 +138,8 @@ public class FightEngineTests
         var fightInput = new StubFightInputProvider(attackerDice: [4], targetDice: []);
         var engine = MakeEngine(fightInput, new NoCpRerollInputProvider(), new StubGameRepository(game));
 
-        await engine.RunAsync(new GameContext(game, allStates, allOperatives, stream), activation, attacker, allStates.Single(s => s.OperativeId == attacker.Id));
+        var context2 = new GameContext(game, operatives2, stream);
+        await engine.RunAsync(context2, activation, operatives2[attacker.Id]);
 
         emittedEvents.OfType<TargetNoMeleeWeaponsEvent>().Should().ContainSingle(
             "target has no melee weapons — event must be emitted");
@@ -146,7 +159,13 @@ public class FightEngineTests
         var game = MakeGame(attackerTeamId, targetTeamId);
         var allStates = SeedStates(game, attacker, target, attackerWounds: 12, targetWounds: 12);
 
-        var allOperatives = new Dictionary<Guid, Operative> { [attacker.Id] = attacker, [target.Id] = target };
+        var attackerState3 = allStates.Single(s => s.OperativeId == attacker.Id);
+        var targetState3 = allStates.Single(s => s.OperativeId == target.Id);
+        var operatives3 = new Dictionary<Guid, OperativeContext>
+        {
+            [attacker.Id] = new OperativeContext(attacker, attackerState3),
+            [target.Id] = new OperativeContext(target, targetState3),
+        };
         var activation = new Activation { TurningPointId = Guid.NewGuid(), TeamId = attackerTeamId, SequenceNumber = 1 };
         var stream = new GameEventStream(game.Id);
         var emittedEvents = new List<GameEvent>();
@@ -156,7 +175,8 @@ public class FightEngineTests
         var fightInput = new StubFightInputProvider(attackerDice: [6], targetDice: [5]);
         var engine = MakeEngine(fightInput, new NoCpRerollInputProvider(), new StubGameRepository(game));
 
-        await engine.RunAsync(new GameContext(game, allStates, allOperatives, stream), activation, attacker, allStates.Single(s => s.OperativeId == attacker.Id));
+        var context3 = new GameContext(game, operatives3, stream);
+        await engine.RunAsync(context3, activation, operatives3[attacker.Id]);
 
         emittedEvents.OfType<ShockAppliedEvent>().Should().ContainSingle(
             "Shock fires when attacker has a crit and target has a success die");
@@ -173,15 +193,14 @@ public class FightEngineTests
 
         var game = MakeGame(attackerTeamId, targetTeamId);
         var attackerState = new GameOperativeState { GameId = game.Id, OperativeId = attacker.Id, CurrentWounds = 12 };
-        IReadOnlyList<GameOperativeState> allStates = [attackerState];
-
-        var allOperatives = new Dictionary<Guid, Operative> { [attacker.Id] = attacker };
+        var operatives4 = new Dictionary<Guid, OperativeContext> { [attacker.Id] = new OperativeContext(attacker, attackerState) };
         var activation = new Activation { TurningPointId = Guid.NewGuid(), TeamId = attackerTeamId, SequenceNumber = 1 };
 
         var fightInput = new StubFightInputProvider(attackerDice: [], targetDice: []);
         var engine = MakeEngine(fightInput, new NoCpRerollInputProvider(), new StubGameRepository(game));
 
-        var result = await engine.RunAsync(new GameContext(game, allStates, allOperatives), activation, attacker, attackerState);
+        var context4 = new GameContext(game, operatives4);
+        var result = await engine.RunAsync(context4, activation, operatives4[attacker.Id]);
 
         result.AttackerCausedIncapacitation.Should().BeFalse();
         result.TargetCausedIncapacitation.Should().BeFalse();
@@ -193,9 +212,7 @@ public class FightEngineTests
 
     private sealed class StubFightInputProvider(int[] attackerDice, int[] targetDice) : IFightInputProvider
     {
-        public Task<GameOperativeState> SelectTargetAsync(
-            IList<GameOperativeState> candidates,
-            IReadOnlyDictionary<Guid, Operative> allOperatives)
+        public Task<OperativeContext> SelectTargetAsync(IList<OperativeContext> candidates)
         {
             return Task.FromResult(candidates.First());
         }

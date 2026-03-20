@@ -19,9 +19,9 @@ public sealed class HotRuleVisitor : IShootWeaponRuleVisitor
         }
 
         var selfDamage = context.ResolutionResult.SelfDamageDealt;
-        var newWounds = Math.Max(0, context.AttackerState.CurrentWounds - selfDamage);
+        var newWounds = Math.Max(0, context.Attacker.State.CurrentWounds - selfDamage);
 
-        context.AttackerState.CurrentWounds = newWounds;
+        context.Attacker.State.CurrentWounds = newWounds;
         context.SelfDamageApplied = selfDamage;
 
         await (context.EventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
@@ -29,14 +29,14 @@ public sealed class HotRuleVisitor : IShootWeaponRuleVisitor
                 gameSessionId,
                 sequenceNumber,
                 timestamp,
-                context.Attacker.TeamId,
-                context.Attacker.Name,
+                context.Attacker.Operative.TeamId,
+                context.Attacker.Operative.Name,
                 selfDamage,
                 newWounds)) ?? ValueTask.CompletedTask);
 
-        if (newWounds <= 0 && !context.AttackerState.IsIncapacitated)
+        if (newWounds <= 0 && !context.Attacker.State.IsIncapacitated)
         {
-            context.AttackerState.IsIncapacitated = true;
+            context.Attacker.State.IsIncapacitated = true;
             context.AttackerBecameIncapacitated = true;
 
             await (context.EventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
@@ -44,8 +44,8 @@ public sealed class HotRuleVisitor : IShootWeaponRuleVisitor
                     gameSessionId,
                     sequenceNumber,
                     timestamp,
-                    context.Attacker.TeamId,
-                    context.Attacker.Name,
+                    context.Attacker.Operative.TeamId,
+                    context.Attacker.Operative.Name,
                     "SelfDamage")) ?? ValueTask.CompletedTask);
         }
     }

@@ -28,8 +28,8 @@ public interface IFirefightInputProvider
         string team2Name,
         int team2Vp);
 
-    Task<(Operative operative, GameOperativeState state)> SelectActivatingOperativeAsync(
-        IReadOnlyList<(Operative operative, GameOperativeState state)> candidates);
+    Task<OperativeContext> SelectActivatingOperativeAsync(
+        IReadOnlyList<OperativeContext> candidates);
 
     Task<Order> SelectOrderAsync(string operativeName);
 

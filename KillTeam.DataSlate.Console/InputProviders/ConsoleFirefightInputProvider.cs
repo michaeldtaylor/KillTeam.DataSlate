@@ -27,12 +27,10 @@ public class ConsoleFirefightInputProvider(IAnsiConsole console) : IFirefightInp
             .AddColumn("Status")
             .AddColumn("Guard");
 
-        foreach (var state in context.OperativeStates)
+        foreach (var operativeContext in context.Operatives.Values)
         {
-            if (!context.Operatives.TryGetValue(state.OperativeId, out var operative))
-            {
-                continue;
-            }
+            var operative = operativeContext.Operative;
+            var state = operativeContext.State;
 
             var teamTag = operative.TeamId == context.Game.Participant1.Team.Id ? "[blue]A[/]" : "[red]B[/]";
             var name = $"{teamTag} {Markup.Escape(operative.Name)}";
@@ -107,8 +105,8 @@ public class ConsoleFirefightInputProvider(IAnsiConsole console) : IFirefightInp
         return Task.CompletedTask;
     }
 
-    public Task<(Operative operative, GameOperativeState state)> SelectActivatingOperativeAsync(
-        IReadOnlyList<(Operative operative, GameOperativeState state)> candidates)
+    public Task<OperativeContext> SelectActivatingOperativeAsync(
+        IReadOnlyList<OperativeContext> candidates)
     {
         if (candidates.Count == 1)
         {
@@ -116,10 +114,10 @@ public class ConsoleFirefightInputProvider(IAnsiConsole console) : IFirefightInp
         }
 
         var selected = console.Prompt(
-            new SelectionPrompt<(Operative operative, GameOperativeState state)>()
+            new SelectionPrompt<OperativeContext>()
                 .Title("Select an operative to activate:")
-                .UseConverter(pair =>
-                    $"{Markup.Escape(pair.operative.Name)} (Wounds: {pair.state.CurrentWounds}/{pair.operative.Wounds}, {pair.state.Order})")
+                .UseConverter(oc =>
+                    $"{Markup.Escape(oc.Operative.Name)} (Wounds: {oc.State.CurrentWounds}/{oc.Operative.Wounds}, {oc.State.Order})")
                 .AddChoices(candidates));
 
         return Task.FromResult(selected);

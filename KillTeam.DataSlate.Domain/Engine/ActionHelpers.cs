@@ -4,23 +4,21 @@ namespace KillTeam.DataSlate.Domain.Engine;
 
 public static class ActionHelpers
 {
-    public static GameOperativeState[] GetTargetStates(
-        Operative attacker,
-        IReadOnlyList<GameOperativeState> allOperativeStates,
-        IReadOnlyDictionary<Guid, Operative> allOperatives)
+    public static OperativeContext[] GetTargets(
+        OperativeContext attacker,
+        IReadOnlyDictionary<Guid, OperativeContext> allOperatives)
     {
-        return allOperativeStates
-            .Where(s => !s.IsIncapacitated && allOperatives.TryGetValue(s.OperativeId, out var operative) && operative.TeamId != attacker.TeamId)
+        return allOperatives.Values
+            .Where(oc => !oc.State.IsIncapacitated && oc.Operative.TeamId != attacker.Operative.TeamId)
             .ToArray();
     }
 
-    public static GameOperativeState[] GetAoECandidateStates(
-        Operative target,
-        IReadOnlyList<GameOperativeState> allOperativeStates,
-        IReadOnlyDictionary<Guid, Operative> allOperatives)
+    public static OperativeContext[] GetAoECandidates(
+        OperativeContext target,
+        IReadOnlyDictionary<Guid, OperativeContext> allOperatives)
     {
-        return allOperativeStates
-            .Where(s => s.OperativeId != target.Id && !s.IsIncapacitated && allOperatives.ContainsKey(s.OperativeId))
+        return allOperatives.Values
+            .Where(oc => oc.Operative.Id != target.Operative.Id && !oc.State.IsIncapacitated)
             .ToArray();
     }
 }

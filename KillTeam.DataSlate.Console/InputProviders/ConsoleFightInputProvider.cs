@@ -9,16 +9,12 @@ namespace KillTeam.DataSlate.Console.InputProviders;
 
 public class ConsoleFightInputProvider(IAnsiConsole console, ColumnContext columnContext) : IFightInputProvider
 {
-    public async Task<GameOperativeState> SelectTargetAsync(
-        IList<GameOperativeState> candidates,
-        IReadOnlyDictionary<Guid, Operative> allOperatives)
+    public async Task<OperativeContext> SelectTargetAsync(IList<OperativeContext> candidates)
     {
         return await Task.FromResult(console.Prompt(
-            new SelectionPrompt<GameOperativeState>()
+            new SelectionPrompt<OperativeContext>()
                 .Title($"{columnContext.Prefix}Select an enemy to fight (must be within control range):")
-                .UseConverter(s => allOperatives.TryGetValue(s.OperativeId, out var o)
-                    ? $"{Markup.Escape(o.Name)} (Wounds: {s.CurrentWounds}/{o.Wounds})"
-                    : s.OperativeId.ToString())
+                .UseConverter(oc => $"{Markup.Escape(oc.Operative.Name)} (Wounds: {oc.State.CurrentWounds}/{oc.Operative.Wounds})")
                 .AddChoices(candidates)));
     }
 

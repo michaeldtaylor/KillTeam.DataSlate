@@ -5,9 +5,7 @@ namespace KillTeam.DataSlate.Domain.Engine.Input;
 
 public interface IShootInputProvider
 {
-    Task<GameOperativeState> SelectTargetAsync(
-        IList<GameOperativeState> candidates,
-        IReadOnlyDictionary<Guid, Operative> allOperatives);
+    Task<OperativeContext> SelectTargetAsync(IList<OperativeContext> candidates);
 
     Task<int> GetTargetDistanceAsync(string targetName);
 

@@ -87,18 +87,17 @@ public class SimulateEncounterEngine(
         stateRepo.Seed([attackerState, targetState]);
 
         var actionRepo = new InMemoryActionRepository();
-        var allStates = stateRepo.GetAll();
 
-        var allOperatives = new Dictionary<Guid, Operative>
+        var operatives = new Dictionary<Guid, OperativeContext>
         {
-            [attacker.Id] = attacker,
-            [target.Id] = target,
+            [attacker.Id] = new OperativeContext(attacker, attackerState),
+            [target.Id] = new OperativeContext(target, targetState),
         };
 
         var stream = new GameEventStream(game.Id, persistenceHandler.HandleAsync);
         eventStream?.Invoke(stream);
 
-        var context = new GameContext(game, allStates, allOperatives, stream);
+        var context = new GameContext(game, operatives, stream);
 
         if (actionType == ActionType.Fight)
         {
@@ -112,8 +111,7 @@ public class SimulateEncounterEngine(
             var result = await fightEngine.RunAsync(
                 context,
                 activation,
-                attacker,
-                attackerState);
+                context.Operatives[attacker.Id]);
 
             return new SimulateEncounterResult(
                 AttackerDamageDealt: result.AttackerDamageDealt,
@@ -142,8 +140,7 @@ public class SimulateEncounterEngine(
             var result = await shootEngine.RunAsync(
                 context,
                 activation,
-                attacker,
-                attackerState);
+                context.Operatives[attacker.Id]);
 
             return new SimulateEncounterResult(
                 AttackerDamageDealt: result.DamageDealt,

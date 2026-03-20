@@ -6,9 +6,9 @@ namespace KillTeam.DataSlate.Domain.Engine.WeaponRules.Context;
 
 public class FightResolutionContext
 {
-    public required Operative Attacker { get; init; }
+    public required OperativeContext Attacker { get; init; }
 
-    public required Operative Target { get; init; }
+    public required OperativeContext Target { get; init; }
 
     public required Weapon AttackerWeapon { get; init; }
 
@@ -19,10 +19,6 @@ public class FightResolutionContext
     public required FightDicePool TargetPool { get; init; }
 
     public required bool BlockRestrictedToCrits { get; init; }
-
-    public required int AttackerCurrentWounds { get; init; }
-
-    public required int TargetCurrentWounds { get; init; }
 
     public required IFightInputProvider InputProvider { get; init; }
 

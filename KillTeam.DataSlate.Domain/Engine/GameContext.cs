@@ -5,6 +5,5 @@ namespace KillTeam.DataSlate.Domain.Engine;
 
 public record GameContext(
     Game Game,
-    IReadOnlyList<GameOperativeState> OperativeStates,
-    IReadOnlyDictionary<Guid, Operative> Operatives,
+    IReadOnlyDictionary<Guid, OperativeContext> Operatives,
     GameEventStream? EventStream = null);

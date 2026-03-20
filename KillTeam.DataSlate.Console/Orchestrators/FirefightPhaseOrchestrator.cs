@@ -23,11 +23,15 @@ public class FirefightPhaseOrchestrator(
 
         var allOperatives = (team1?.Operatives ?? [])
             .Concat(team2?.Operatives ?? [])
-            .ToDictionary(o => o.Id);
+            .ToList();
 
-        var allStates = (await stateRepository.GetByGameAsync(game.Id)).ToList();
+        var statesByOperativeId = (await stateRepository.GetByGameAsync(game.Id))
+            .ToDictionary(s => s.OperativeId);
 
-        var context = new GameContext(game, allStates, allOperatives);
+        var operatives = allOperatives
+            .ToDictionary(o => o.Id, o => new OperativeContext(o, statesByOperativeId[o.Id]));
+
+        var context = new GameContext(game, operatives);
 
         await firefightPhaseEngine.RunAsync(context, currentTurningPoint);
     }
