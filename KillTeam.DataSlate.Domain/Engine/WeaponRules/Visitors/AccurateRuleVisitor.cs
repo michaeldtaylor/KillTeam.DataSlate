@@ -7,7 +7,7 @@ public sealed class AccurateRuleVisitor : IShootWeaponRuleVisitor
 {
     public Task ApplyBeforeAttackClassificationAsync(Weapon weapon, AttackClassificationContext context)
     {
-        var rule = weapon.Rules.FirstOrDefault(r => r.Kind == WeaponRuleKind.Accurate);
+        var rule = weapon.GetRule(WeaponRuleKind.Accurate);
 
         if (rule is null)
         {

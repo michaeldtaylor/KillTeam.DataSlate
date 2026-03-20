@@ -7,7 +7,7 @@ public sealed class BrutalRuleVisitor : IFightWeaponRuleVisitor
 {
     public Task ApplyPreResolutionAsync(Weapon weapon, FightSetupContext context)
     {
-        if (weapon.Rules.Any(r => r.Kind == WeaponRuleKind.Brutal))
+        if (weapon.HasRule(WeaponRuleKind.Brutal))
         {
             context.BlockRestrictedToCrits = true;
         }

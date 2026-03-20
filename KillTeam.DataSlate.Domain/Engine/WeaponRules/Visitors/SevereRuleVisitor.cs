@@ -7,7 +7,7 @@ public sealed class SevereRuleVisitor : IShootWeaponRuleVisitor
 {
     public Task ApplyAfterAttackClassificationAsync(Weapon weapon, ClassifiedAttackContext context)
     {
-        if (weapon.Rules.All(r => r.Kind != WeaponRuleKind.Severe))
+        if (!weapon.HasRule(WeaponRuleKind.Severe))
         {
             return Task.CompletedTask;
         }

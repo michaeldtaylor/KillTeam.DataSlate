@@ -8,7 +8,7 @@ public sealed class SeekLightRuleVisitor : IShootWeaponRuleVisitor
 {
     public Task ApplyBeforeCoverPromptAsync(Weapon weapon, CoverContext context)
     {
-        if (weapon.Rules.Any(r => r.Kind == WeaponRuleKind.SeekLight))
+        if (weapon.HasRule(WeaponRuleKind.SeekLight))
         {
             context.LightCoverBlocked = true;
         }
@@ -18,7 +18,7 @@ public sealed class SeekLightRuleVisitor : IShootWeaponRuleVisitor
 
     public async Task ApplyAfterCoverPromptAsync(Weapon weapon, CoverContext context)
     {
-        if (weapon.Rules.All(r => r.Kind != WeaponRuleKind.SeekLight))
+        if (!weapon.HasRule(WeaponRuleKind.SeekLight))
         {
             return;
         }

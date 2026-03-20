@@ -10,7 +10,7 @@ public sealed class ShockRuleVisitor : IFightWeaponRuleVisitor
         Weapon weapon,
         FightSetupContext context)
     {
-        if (weapon.Rules.All(r => r.Kind != WeaponRuleKind.Shock))
+        if (!weapon.HasRule(WeaponRuleKind.Shock))
         {
             return;
         }

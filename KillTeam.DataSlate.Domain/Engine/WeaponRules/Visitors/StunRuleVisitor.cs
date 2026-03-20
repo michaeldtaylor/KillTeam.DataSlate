@@ -7,7 +7,7 @@ public sealed class StunRuleVisitor : IShootWeaponRuleVisitor
 {
     public Task ApplyAfterBlockingAsync(Weapon weapon, BlockingContext context)
     {
-        if (weapon.Rules.All(r => r.Kind != WeaponRuleKind.Stun))
+        if (!weapon.HasRule(WeaponRuleKind.Stun))
         {
             return Task.CompletedTask;
         }

@@ -7,7 +7,7 @@ public sealed class DevastatingRuleVisitor : IShootWeaponRuleVisitor
 {
     public Task ApplyAfterBlockingAsync(Weapon weapon, BlockingContext context)
     {
-        var rule = weapon.Rules.FirstOrDefault(r => r.Kind == WeaponRuleKind.Devastating);
+        var rule = weapon.GetRule(WeaponRuleKind.Devastating);
 
         if (rule?.Param is null)
         {

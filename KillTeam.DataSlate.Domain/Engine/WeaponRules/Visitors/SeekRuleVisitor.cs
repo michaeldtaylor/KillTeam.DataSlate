@@ -8,7 +8,7 @@ public sealed class SeekRuleVisitor : IShootWeaponRuleVisitor
 {
     public async Task ApplyBeforeCoverPromptAsync(Weapon weapon, CoverContext context)
     {
-        if (weapon.Rules.All(r => r.Kind != WeaponRuleKind.Seek))
+        if (!weapon.HasRule(WeaponRuleKind.Seek))
         {
             return;
         }

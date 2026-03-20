@@ -7,7 +7,7 @@ public sealed class PiercingCritsRuleVisitor : IShootWeaponRuleVisitor
 {
     public Task ApplyAfterDefenceClassificationAsync(Weapon weapon, ClassifiedDefenceContext context)
     {
-        var rule = weapon.Rules.FirstOrDefault(r => r.Kind == WeaponRuleKind.PiercingCrits);
+        var rule = weapon.GetRule(WeaponRuleKind.PiercingCrits);
 
         if (rule?.Param is not > 0 || context.RawCrits < 1)
         {

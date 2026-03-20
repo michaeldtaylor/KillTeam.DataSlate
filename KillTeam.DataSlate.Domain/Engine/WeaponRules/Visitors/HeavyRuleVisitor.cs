@@ -7,6 +7,6 @@ public sealed class HeavyRuleVisitor : IShootWeaponRuleVisitor
 {
     public bool IsAvailable(Weapon weapon, AvailabilityContext context)
     {
-        return weapon.Rules.All(r => r.Kind != WeaponRuleKind.Heavy) || !context.HasMovedNonDash;
+        return !weapon.HasRule(WeaponRuleKind.Heavy) || !context.HasMovedNonDash;
     }
 }

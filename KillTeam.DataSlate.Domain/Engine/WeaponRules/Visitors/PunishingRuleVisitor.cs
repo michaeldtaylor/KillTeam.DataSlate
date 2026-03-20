@@ -7,7 +7,7 @@ public sealed class PunishingRuleVisitor : IShootWeaponRuleVisitor
 {
     public Task ApplyAfterAttackClassificationAsync(Weapon weapon, ClassifiedAttackContext context)
     {
-        if (weapon.Rules.All(r => r.Kind != WeaponRuleKind.Punishing))
+        if (!weapon.HasRule(WeaponRuleKind.Punishing))
         {
             return Task.CompletedTask;
         }

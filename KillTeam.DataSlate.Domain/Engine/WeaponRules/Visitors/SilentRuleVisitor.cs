@@ -7,6 +7,6 @@ public sealed class SilentRuleVisitor : IShootWeaponRuleVisitor
 {
     public bool IsAvailable(Weapon weapon, AvailabilityContext context)
     {
-        return !context.IsOnConceal || weapon.Rules.Any(r => r.Kind == WeaponRuleKind.Silent);
+        return !context.IsOnConceal || weapon.HasRule(WeaponRuleKind.Silent);
     }
 }

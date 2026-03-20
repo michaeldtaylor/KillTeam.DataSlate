@@ -8,7 +8,7 @@ public sealed class HotRuleVisitor : IShootWeaponRuleVisitor
 {
     public async Task ApplyEffectsAsync(Weapon weapon, EffectsContext context)
     {
-        if (weapon.Rules.All(r => r.Kind != WeaponRuleKind.Hot))
+        if (!weapon.HasRule(WeaponRuleKind.Hot))
         {
             return;
         }
@@ -52,7 +52,7 @@ public sealed class HotRuleVisitor : IShootWeaponRuleVisitor
 
     public Task ApplyAfterBlockingAsync(Weapon weapon, BlockingContext context)
     {
-        if (weapon.Rules.All(r => r.Kind != WeaponRuleKind.Hot))
+        if (!weapon.HasRule(WeaponRuleKind.Hot))
         {
             return Task.CompletedTask;
         }

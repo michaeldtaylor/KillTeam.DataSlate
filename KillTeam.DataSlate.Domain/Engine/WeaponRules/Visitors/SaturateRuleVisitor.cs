@@ -8,7 +8,7 @@ public sealed class SaturateRuleVisitor : IShootWeaponRuleVisitor
 {
     public async Task ApplyAfterCoverPromptAsync(Weapon weapon, CoverContext context)
     {
-        if (weapon.Rules.All(r => r.Kind != WeaponRuleKind.Saturate))
+        if (!weapon.HasRule(WeaponRuleKind.Saturate))
         {
             return;
         }

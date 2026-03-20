@@ -7,7 +7,7 @@ public sealed class RendingRuleVisitor : IShootWeaponRuleVisitor
 {
     public Task ApplyAfterAttackClassificationAsync(Weapon weapon, ClassifiedAttackContext context)
     {
-        if (weapon.Rules.All(r => r.Kind != WeaponRuleKind.Rending))
+        if (!weapon.HasRule(WeaponRuleKind.Rending))
         {
             return Task.CompletedTask;
         }

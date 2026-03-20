@@ -7,7 +7,7 @@ public sealed class LethalRuleVisitor : IShootWeaponRuleVisitor
 {
     public Task ApplyBeforeAttackClassificationAsync(Weapon weapon, AttackClassificationContext context)
     {
-        var rule = weapon.Rules.FirstOrDefault(r => r.Kind == WeaponRuleKind.Lethal);
+        var rule = weapon.GetRule(WeaponRuleKind.Lethal);
 
         if (rule?.Param is null)
         {
