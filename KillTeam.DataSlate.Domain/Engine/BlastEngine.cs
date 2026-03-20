@@ -12,7 +12,7 @@ public class BlastEngine(
     RerollEngine rerollEngine,
     IActionRepository actionRepository)
 {
-    public async Task<BlastSessionResult> RunAsync(
+    public async Task<BlastResult> RunAsync(
         Operative attacker,
         GameOperativeState attackerState,
         Operative target,
@@ -49,7 +49,7 @@ public class BlastEngine(
         {
             if (!await inputProvider.ConfirmFriendlyFireAsync(friendlyCount))
             {
-                return new BlastSessionResult(false, 0);
+                return new BlastResult(false, 0);
             }
         }
 
@@ -213,6 +213,6 @@ public class BlastEngine(
             await actionRepository.UpdateNarrativeAsync(action.Id, note);
         }
 
-        return new BlastSessionResult(anyIncapacitation, totalDamage);
+        return new BlastResult(anyIncapacitation, totalDamage);
     }
 }

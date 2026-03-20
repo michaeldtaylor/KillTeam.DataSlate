@@ -1,4 +1,3 @@
-using KillTeam.DataSlate.Domain.Engine;
 using KillTeam.DataSlate.Domain.Events;
 using KillTeam.DataSlate.Domain.Models;
 
@@ -10,7 +9,7 @@ public class WeaponEffectContext
 
     public required GameOperativeState AttackerState { get; init; }
 
-    public required ShootResult ResolutionResult { get; init; }
+    public required ShootResolution ResolutionResult { get; init; }
 
     public GameEventStream? EventStream { get; init; }
 

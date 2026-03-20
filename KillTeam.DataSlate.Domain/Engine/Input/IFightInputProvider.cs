@@ -1,4 +1,3 @@
-using KillTeam.DataSlate.Domain.Engine;
 using KillTeam.DataSlate.Domain.Events;
 using KillTeam.DataSlate.Domain.Models;
 

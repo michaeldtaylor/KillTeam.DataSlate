@@ -12,11 +12,3 @@ public record ShootContext(
     int FightAssistBonus = 0
 );
 
-public record ShootResult(
-    int UnblockedCrits,
-    int UnblockedNormals,
-    int TotalDamage,
-    int AttackerRawCritHits,
-    bool StunApplied,
-    int SelfDamageDealt
-);

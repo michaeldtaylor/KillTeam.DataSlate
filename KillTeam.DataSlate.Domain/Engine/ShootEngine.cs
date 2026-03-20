@@ -14,7 +14,7 @@ public class ShootEngine(
     IActionRepository actionRepository,
     ShootWeaponRuleApplicator weaponRuleApplicator)
 {
-    public async Task<ShootSessionResult> RunAsync(
+    public async Task<ShootResult> RunAsync(
         Game game,
         Activation activation,
         Operative attacker,
@@ -43,7 +43,7 @@ public class ShootEngine(
                     CombatWarningKind.NoValidTargets,
                     "No valid targets available.")) ?? ValueTask.CompletedTask);
 
-            return new ShootSessionResult(false, 0, null);
+            return new ShootResult(false, 0, null);
         }
 
         GameOperativeState targetOperativeState;
@@ -82,7 +82,7 @@ public class ShootEngine(
                     CombatWarningKind.TargetNotFound,
                     "Target operative not found.")) ?? ValueTask.CompletedTask);
 
-            return new ShootSessionResult(false, 0, null);
+            return new ShootResult(false, 0, null);
         }
 
         var targetTeamId = target.TeamId;
@@ -99,7 +99,7 @@ public class ShootEngine(
                     CombatWarningKind.NoWeaponsAvailable,
                     "Cannot shoot — operative is within Engagement Range of an enemy.")) ?? ValueTask.CompletedTask);
 
-            return new ShootSessionResult(false, 0, null);
+            return new ShootResult(false, 0, null);
         }
 
         var availabilityContext = new ShootWeaponAvailabilityContext(hasMovedNonDash, isOnConceal, targetDistance);
@@ -123,7 +123,7 @@ public class ShootEngine(
                     CombatWarningKind.NoWeaponsAvailable,
                     noWeaponsMsg)) ?? ValueTask.CompletedTask);
 
-            return new ShootSessionResult(false, 0, null);
+            return new ShootResult(false, 0, null);
         }
 
         Weapon weapon;
@@ -169,7 +169,7 @@ public class ShootEngine(
                 activation,
                 eventStream);
 
-            return new ShootSessionResult(blastResult.AnyIncapacitation, blastResult.TotalDamage, targetOperativeState.OperativeId);
+            return new ShootResult(blastResult.AnyIncapacitation, blastResult.TotalDamage, targetOperativeState.OperativeId);
         }
 
         // ── Cover status ──────────────────────────────────────────────────────────
@@ -418,6 +418,6 @@ public class ShootEngine(
             await actionRepository.UpdateNarrativeAsync(action.Id, note);
         }
 
-        return new ShootSessionResult(causedIncap, result.TotalDamage, targetOperativeState.OperativeId);
+        return new ShootResult(causedIncap, result.TotalDamage, targetOperativeState.OperativeId);
     }
 }

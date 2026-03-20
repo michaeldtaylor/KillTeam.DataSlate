@@ -1,4 +1,3 @@
-using KillTeam.DataSlate.Domain.Engine;
 using KillTeam.DataSlate.Domain.Engine.WeaponRules.Context;
 using KillTeam.DataSlate.Domain.Engine.WeaponRules.Handlers;
 using KillTeam.DataSlate.Domain.Models;
@@ -66,7 +65,7 @@ public sealed class ShootWeaponRuleApplicator
         }
     }
 
-    public async Task<ShootResult> ResolveShootAsync(Weapon weapon, ShootContext context)
+    public async Task<ShootResolution> ResolveShootAsync(Weapon weapon, ShootContext context)
     {
         // ─── Stage 1: Pre-attack classification ─────────────────────────────────
         var preClassificationContext = new ShootBeforeClassificationContext
@@ -196,7 +195,7 @@ public sealed class ShootWeaponRuleApplicator
         // ─── Core: Calculate damage ───────────────────────────────────────────────
         var totalDamage = (afterBlockingContext.UnblockedCrits * afterBlockingContext.EffectiveCritDmg) + (afterBlockingContext.UnblockedNormals * context.NormalDmg);
 
-        return new ShootResult(
+        return new ShootResolution(
             afterBlockingContext.UnblockedCrits,
             afterBlockingContext.UnblockedNormals,
             totalDamage,

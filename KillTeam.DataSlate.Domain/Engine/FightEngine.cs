@@ -13,7 +13,7 @@ public class FightEngine(
     IActionRepository actionRepository,
     FightWeaponRuleApplicator weaponRuleApplicator)
 {
-    public async Task<FightSessionResult> RunAsync(
+    public async Task<FightResult> RunAsync(
         Game game,
         Activation activation,
         Operative attacker,
@@ -38,7 +38,7 @@ public class FightEngine(
                     CombatWarningKind.NoValidTargets,
                     "No valid fight targets available.")) ?? ValueTask.CompletedTask);
 
-            return new FightSessionResult(false, false, 0, 0, Guid.Empty);
+            return new FightResult(false, false, 0, 0, Guid.Empty);
         }
 
         GameOperativeState targetOperativeState;
@@ -77,7 +77,7 @@ public class FightEngine(
                     CombatWarningKind.TargetNotFound,
                     "Target operative not found.")) ?? ValueTask.CompletedTask);
 
-            return new FightSessionResult(false, false, 0, 0, Guid.Empty);
+            return new FightResult(false, false, 0, 0, Guid.Empty);
         }
 
         var targetTeamId = target.TeamId;
@@ -96,7 +96,7 @@ public class FightEngine(
                     CombatWarningKind.NoWeaponsAvailable,
                     $"{attacker.Name} has no melee weapons!")) ?? ValueTask.CompletedTask);
 
-            return new FightSessionResult(false, false, 0, 0, targetOperativeState.OperativeId);
+            return new FightResult(false, false, 0, 0, targetOperativeState.OperativeId);
         }
 
         var attackerIsInjured = attackerState.CurrentWounds < attacker.Wounds / 2;
@@ -476,7 +476,7 @@ public class FightEngine(
             await actionRepository.UpdateNarrativeAsync(action.Id, note);
         }
 
-        return new FightSessionResult(
+        return new FightResult(
             attackerCausedIncapacitation,
             targetCausedIncapacitation,
             totalAttackerDamageDealt,
