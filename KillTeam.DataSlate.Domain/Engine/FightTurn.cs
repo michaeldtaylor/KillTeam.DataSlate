@@ -3,12 +3,12 @@ using KillTeam.DataSlate.Domain.Models;
 namespace KillTeam.DataSlate.Domain.Engine;
 
 internal record FightTurn(
-    FightDicePool ActivePool,
-    FightDicePool OpponentPool,
+    FightDicePool ActingPool,
+    FightDicePool OpposingPool,
     DieOwner CurrentTurn,
-    Operative ActiveOperative,
-    Operative OpponentOperative,
-    Weapon ActiveWeapon,
+    Operative ActingOperative,
+    Operative OpposingOperative,
+    Weapon ActingWeapon,
     bool RestrictBlocksToCrits)
 {
     public static FightTurn Resolve(
@@ -33,12 +33,10 @@ internal record FightTurn(
             : new FightTurn(targetPool, attackerPool, currentTurn, target, attacker, targetWeapon!, blockRestrictedToCrits && currentTurn == DieOwner.Attacker);
     }
 
-    public (FightDicePool AttackerPool, FightDicePool TargetPool) Reintegrate(
-        FightDicePool activePool,
-        FightDicePool opponentPool)
+    public (FightDicePool AttackerPool, FightDicePool TargetPool) Reintegrate(FightDicePool actingPool, FightDicePool opposingPool)
     {
         return CurrentTurn == DieOwner.Attacker
-            ? (activePool, opponentPool)
-            : (opponentPool, activePool);
+            ? (actingPool, opposingPool)
+            : (opposingPool, actingPool);
     }
 }

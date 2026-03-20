@@ -28,7 +28,6 @@ public sealed class FightWeaponRulePipeline
         var attackerCurrentWounds = context.AttackerCurrentWounds;
         var targetCurrentWounds = context.TargetCurrentWounds;
         var attackerTeamId = context.Attacker.TeamId;
-        var targetTeamId = context.Target.TeamId;
         var totalAttackerDamageDealt = 0;
         var totalTargetDamageDealt = 0;
         var turnOrder = DieOwner.Attacker;
@@ -45,7 +44,7 @@ public sealed class FightWeaponRulePipeline
                 context.TargetWeapon,
                 context.BlockRestrictedToCrits);
 
-            var (activePool, opponentPool, currentTurn, activeOperative, opponentOperative, activeWeapon, restrictBlocksToCrits) = fightTurn;
+            var (actingPool, opposingPool, currentTurn, actingOperative, opposingOperative, actingWeapon, restrictBlocksToCrits) = fightTurn;
 
             var attackerWoundsNow = attackerCurrentWounds;
             var targetWoundsNow = targetCurrentWounds;
@@ -67,16 +66,16 @@ public sealed class FightWeaponRulePipeline
                     context.Target.Wounds,
                     targetPoolNow)) ?? ValueTask.CompletedTask);
 
-            var actions = FightResolution.GetAvailableActions(activePool, opponentPool, restrictBlocksToCrits);
+            var actions = FightResolution.GetAvailableActions(actingPool, opposingPool, restrictBlocksToCrits);
 
             var uniqueActions = actions
                 .GroupBy(a => (a.Type, a.Die.Result, TargetResult: a.TargetDie?.Result))
                 .Select(g => g.First())
                 .ToList();
 
-            var opponentHasCrits = opponentPool.Remaining.Any(d => d.Result == DieResult.Crit);
+            var opposingHasCrits = opposingPool.Remaining.Any(d => d.Result == DieResult.Crit);
 
-            if (opponentHasCrits)
+            if (opposingHasCrits)
             {
                 uniqueActions = uniqueActions
                     .Where(a => a.Type != FightActionType.Block
@@ -90,20 +89,20 @@ public sealed class FightWeaponRulePipeline
                 break;
             }
 
-            var actionChoice = await context.InputProvider.SelectActionAsync(uniqueActions, activeOperative.Name);
+            var actionChoice = await context.InputProvider.SelectActionAsync(uniqueActions, actingOperative.Name);
 
             if (actionChoice.Type == FightActionType.Strike)
             {
-                var damageDealt = FightResolution.ApplyStrike(actionChoice.Die, activeWeapon.NormalDmg, activeWeapon.CriticalDmg);
+                var damageDealt = FightResolution.ApplyStrike(actionChoice.Die, actingWeapon.NormalDmg, actingWeapon.CriticalDmg);
 
                 await (context.EventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
                     new FightStrikeResolvedEvent(
                         gameSessionId,
                         sequenceNumber,
                         timestamp,
-                        activeOperative.TeamId,
-                        activeOperative.Name,
-                        opponentOperative.Name,
+                        actingOperative.TeamId,
+                        actingOperative.Name,
+                        opposingOperative.Name,
                         actionChoice.Die.RolledValue,
                         actionChoice.Die.Result,
                         damageDealt)) ?? ValueTask.CompletedTask);
@@ -119,7 +118,7 @@ public sealed class FightWeaponRulePipeline
                     totalTargetDamageDealt += damageDealt;
                 }
 
-                activePool = new FightDicePool(activePool.Remaining.Where(d => d.Id != actionChoice.Die.Id).ToList());
+                actingPool = new FightDicePool(actingPool.Remaining.Where(d => d.Id != actionChoice.Die.Id).ToList());
             }
             else
             {
@@ -128,21 +127,21 @@ public sealed class FightWeaponRulePipeline
                         gameSessionId,
                         sequenceNumber,
                         timestamp,
-                        activeOperative.TeamId,
-                        activeOperative.Name,
+                        actingOperative.TeamId,
+                        actingOperative.Name,
                         actionChoice.Die.RolledValue,
                         actionChoice.Die.Result,
                         actionChoice.TargetDie!.RolledValue,
                         actionChoice.TargetDie!.Result)) ?? ValueTask.CompletedTask);
 
-                (activePool, opponentPool) = FightResolution.ApplySingleBlock(
+                (actingPool, opposingPool) = FightResolution.ApplySingleBlock(
                     actionChoice.Die,
                     actionChoice.TargetDie!,
-                    activePool,
-                    opponentPool);
+                    actingPool,
+                    opposingPool);
             }
 
-            (attackerPool, targetPool) = fightTurn.Reintegrate(activePool, opponentPool);
+            (attackerPool, targetPool) = fightTurn.Reintegrate(actingPool, opposingPool);
 
             var nextTurn = currentTurn == DieOwner.Attacker ? DieOwner.Target : DieOwner.Attacker;
             var nextHasDice = nextTurn == DieOwner.Attacker ? attackerPool.Remaining.Count > 0 : targetPool.Remaining.Count > 0;

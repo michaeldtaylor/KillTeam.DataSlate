@@ -299,6 +299,7 @@ public class FightEngine(
                     target.Name,
                     "Fight")) ?? ValueTask.CompletedTask);
         }
+
         if (targetCausedIncapacitation)
         {
             attackerState.IsIncapacitated = true;
