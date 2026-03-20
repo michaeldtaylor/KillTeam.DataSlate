@@ -1,17 +1,10 @@
 namespace KillTeam.DataSlate.Domain.Engine.WeaponRules.Context;
 
-public class ClassifiedDefenceContext
+public class ClassifiedDefenceContext(int critSaves, int normalSaves, int rawCrits)
 {
-    public int CritSaves { get; set; }
+    public int CritSaves { get; set; } = critSaves;
 
-    public int NormalSaves { get; set; }
+    public int NormalSaves { get; set; } = normalSaves;
 
-    public int RawCrits { get; }
-
-    public ClassifiedDefenceContext(int critSaves, int normalSaves, int rawCrits)
-    {
-        CritSaves = critSaves;
-        NormalSaves = normalSaves;
-        RawCrits = rawCrits;
-    }
+    public int RawCrits { get; } = rawCrits;
 }

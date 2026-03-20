@@ -290,6 +290,16 @@ public class SimulateSessionOrchestrator(
         }
         else
         {
+            var orderChoice = console.Prompt(
+                new SelectionPrompt<string>()
+                    .Title($"Set order for {Markup.Escape(player1Operative.Name)}:")
+                    .AddChoices("Engage", "Conceal"));
+
+            var order = orderChoice == "Engage" ? Order.Engage : Order.Conceal;
+
+            player1State.Order = order;
+            activation.OrderSelected = order;
+
             var rerollEngine = new RerollEngine(rerollInputProvider, gameRepository);
             var aoeEngine = new AoEEngine(aoeInputProvider, ShootWeaponRulePipeline, rerollEngine, actionRepo);
             var shootEngine = new ShootEngine(shootInputProvider, rerollEngine, aoeEngine, actionRepo, ShootWeaponRulePipeline);

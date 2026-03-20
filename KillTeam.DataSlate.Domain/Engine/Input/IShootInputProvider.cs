@@ -5,8 +5,6 @@ namespace KillTeam.DataSlate.Domain.Engine.Input;
 
 public interface IShootInputProvider
 {
-    Task<bool> IsOnConcealOrderAsync();
-
     Task<GameOperativeState> SelectTargetAsync(
         IList<GameOperativeState> candidates,
         IReadOnlyDictionary<Guid, Operative> allOperatives);

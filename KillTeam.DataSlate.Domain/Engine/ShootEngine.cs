@@ -27,8 +27,7 @@ public class ShootEngine(
         var isAttackerTeam1 = attacker.TeamId == game.Participant1.TeamId;
         var attackerTeamId = attacker.TeamId;
 
-        // ── Conceal order check (Silent rule) ────────────────────────────────────
-        var isOnConceal = await inputProvider.IsOnConcealOrderAsync();
+        var isOnConceal = attackerState.Order == Order.Conceal;
 
         var targetStates = ActionHelpers.GetTargetStates(attacker, allOperativeStates, allOperatives);
 
@@ -110,7 +109,7 @@ public class ShootEngine(
 
         if (rangedWeapons.Count == 0)
         {
-            var noWeaponsMsg = isOnConceal
+            var noWeaponsMessage = isOnConceal
                 ? "Cannot shoot — operative is on a Conceal order and no weapons have the Silent rule."
                 : $"No ranged weapons can reach {target.Name} at {targetDistance}\".";
 
@@ -121,7 +120,7 @@ public class ShootEngine(
                     timestamp,
                     attackerTeamId,
                     CombatWarningKind.NoWeaponsAvailable,
-                    noWeaponsMsg)) ?? ValueTask.CompletedTask);
+                    noWeaponsMessage)) ?? ValueTask.CompletedTask);
 
             return new ShootResult(false, 0, null);
         }
@@ -157,7 +156,17 @@ public class ShootEngine(
 
         if (shootWeaponRulePipeline.RequiresAoEResolution(weapon))
         {
-            var aoeResult = await aoeEngine.RunAsync(game, activation, attacker, attackerState, target, targetState, weapon, allOperativeStates, allOperatives, eventStream);
+            var aoeResult = await aoeEngine.RunAsync(
+                game,
+                activation,
+                attacker,
+                attackerState,
+                target,
+                targetState,
+                weapon,
+                allOperativeStates,
+                allOperatives,
+                eventStream);
 
             return new ShootResult(aoeResult.AnyIncapacitation, aoeResult.TotalDamage, targetState.OperativeId);
         }
@@ -178,10 +187,10 @@ public class ShootEngine(
 
         var fightAssist = await inputProvider.GetFriendlyAllyCountAsync();
 
-        var attackDice = await inputProvider.RollOrEnterDiceAsync(weapon.Atk, $"{attacker.Name} attack dice (Attack: {weapon.Atk})", attacker.Name, "Attacker", "Shoot", attackerTeamId, eventStream);
+        var attackerDice = await inputProvider.RollOrEnterDiceAsync(weapon.Atk, $"{attacker.Name} attack dice (Attack: {weapon.Atk})", attacker.Name, "Attacker", "Shoot", attackerTeamId, eventStream);
 
-        attackDice = await rerollEngine.ApplyAttackerRerollsAsync(
-            attackDice,
+        attackerDice = await rerollEngine.ApplyAttackerRerollsAsync(
+            attackerDice,
             weapon.Rules.ToList(),
             game.Id,
             isAttackerTeam1,
@@ -211,7 +220,7 @@ public class ShootEngine(
         targetDice = await rerollEngine.ApplyTargetRerollAsync(targetDice, game.Id, isTargetTeam1, target.Name, targetTeamId, eventStream);
 
         var effectiveSave = inCover ? target.Save - 1 : target.Save;
-        var attackSnapshots = attackDice.Select(d => new FightDieSnapshot(d >= 6 ? DieResult.Crit : d >= weapon.Hit ? DieResult.Hit : DieResult.Miss, d)).ToList();
+        var attackSnapshots = attackerDice.Select(d => new FightDieSnapshot(d >= 6 ? DieResult.Crit : d >= weapon.Hit ? DieResult.Hit : DieResult.Miss, d)).ToList();
         var defenceSnapshots = targetDice.Select(d => new FightDieSnapshot(d >= effectiveSave ? DieResult.Save : DieResult.Fail, d)).ToList();
 
         await (eventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
@@ -230,15 +239,15 @@ public class ShootEngine(
                 defenceSnapshots)) ?? ValueTask.CompletedTask);
 
         var shootContext = new ShootContext(
-            AttackerDice: attackDice,
-            TargetDice: targetDice,
-            InCover: inCover,
-            IsObscured: isObscured,
-            HitThreshold: weapon.Hit,
-            SaveThreshold: target.Save,
-            NormalDmg: weapon.NormalDmg,
-            CritDmg: weapon.CriticalDmg,
-            FightAssistBonus: fightAssist
+            attackerDice,
+            targetDice,
+            inCover,
+            isObscured,
+            weapon.Hit,
+            target.Save,
+            weapon.NormalDmg,
+            weapon.CriticalDmg,
+            fightAssist
         );
 
         var result = await shootWeaponRulePipeline.ResolveShootAsync(weapon, shootContext);
@@ -375,7 +384,7 @@ public class ShootEngine(
             ApCost = 1,
             TargetOperativeId = targetState.OperativeId,
             WeaponId = weapon.Id,
-            AttackerDice = attackDice,
+            AttackerDice = attackerDice,
             TargetDice = targetDice,
             TargetInCover = inCover,
             IsObscured = isObscured,

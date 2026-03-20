@@ -10,13 +10,6 @@ public class ConsoleShootInputProvider(IAnsiConsole console, ColumnContext colum
 {
     private readonly Dictionary<Guid, int> _limitedUsesRemaining = [];
 
-    public Task<bool> IsOnConcealOrderAsync()
-    {
-        return Task.FromResult(console.Confirm(
-            $"{columnContext.Prefix}Is your operative on a Conceal order?",
-            defaultValue: false));
-    }
-
     public async Task<GameOperativeState> SelectTargetAsync(
         IList<GameOperativeState> candidates,
         IReadOnlyDictionary<Guid, Operative> allOperatives)

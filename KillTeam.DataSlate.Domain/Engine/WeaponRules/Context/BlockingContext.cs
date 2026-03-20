@@ -1,24 +1,16 @@
 namespace KillTeam.DataSlate.Domain.Engine.WeaponRules.Context;
 
-public class BlockingContext
+public class BlockingContext(int unblockedCrits, int unblockedNormals, int hitThreshold, int effectiveCritDmg)
 {
-    public int UnblockedCrits { get; }
+    public int UnblockedCrits { get; } = unblockedCrits;
 
-    public int UnblockedNormals { get; }
+    public int UnblockedNormals { get; } = unblockedNormals;
 
-    public int HitThreshold { get; }
+    public int HitThreshold { get; } = hitThreshold;
 
-    public int EffectiveCritDmg { get; set; }
+    public int EffectiveCritDmg { get; set; } = effectiveCritDmg;
 
     public int SelfDamage { get; set; }
 
     public bool StunApplied { get; set; }
-
-    public BlockingContext(int unblockedCrits, int unblockedNormals, int hitThreshold, int effectiveCritDmg)
-    {
-        UnblockedCrits = unblockedCrits;
-        UnblockedNormals = unblockedNormals;
-        HitThreshold = hitThreshold;
-        EffectiveCritDmg = effectiveCritDmg;
-    }
 }
