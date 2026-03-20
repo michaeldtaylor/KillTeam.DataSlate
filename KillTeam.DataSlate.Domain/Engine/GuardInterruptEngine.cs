@@ -2,7 +2,6 @@ using KillTeam.DataSlate.Domain.Engine.Input;
 using KillTeam.DataSlate.Domain.Events;
 using KillTeam.DataSlate.Domain.Models;
 using KillTeam.DataSlate.Domain.Repositories;
-using KillTeam.DataSlate.Domain.Services;
 
 namespace KillTeam.DataSlate.Domain.Engine;
 
@@ -98,15 +97,11 @@ public class GuardInterruptEngine(
 
             if (action == "Shoot")
             {
-                await shootEngine.RunAsync(
-                    guardOp, guardState, allOperativeStates, allOperatives,
-                    game, interruptActivation, eventStream: eventStream);
+                await shootEngine.RunAsync(game, interruptActivation, guardOp, guardState, allOperativeStates, allOperatives, eventStream: eventStream);
             }
             else
             {
-                await fightEngine.RunAsync(
-                    guardOp, guardState, allOperativeStates, allOperatives,
-                    game, interruptActivation, eventStream);
+                await fightEngine.RunAsync(game, interruptActivation, guardOp, guardState, allOperativeStates, allOperatives, eventStream);
             }
 
             await (eventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>

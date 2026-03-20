@@ -87,28 +87,28 @@ public class FightResolutionTests
     }
 
     [Fact]
-    public void GetAvailableActions_BrutalWeapon_NormalDieCannotBlock()
+    public void GetAvailableActions_RestrictBlocksToCrits_NormalDieCannotBlock()
     {
         var attacker = new FightDicePool([new FightDie(0, 4, DieResult.Hit)]); // 1 normal attacking die
         var defender = new FightDicePool([new FightDie(0, 4, DieResult.Hit)]); // 1 normal defending die
 
-        // Brutal: normal dice cannot block at all
-        var actions = FightResolution.GetAvailableActions(attacker, defender, brutalWeapon: true);
+        // Restrict blocks to crits: normal dice cannot block at all
+        var actions = FightResolution.GetAvailableActions(attacker, defender, restrictBlocksToCrits: true);
 
         actions.Should().NotContain(a => a.Type == FightActionType.Block,
-            "Brutal weapon prevents normal dice from blocking");
+            "restricting blocks to crits prevents normal dice from blocking");
     }
 
     [Fact]
-    public void GetAvailableActions_BrutalWeapon_CritCanStillBlock()
+    public void GetAvailableActions_RestrictBlocksToCrits_CritCanStillBlock()
     {
         var attacker = new FightDicePool([new FightDie(0, 6, DieResult.Crit)]); // crit die
         var defender = new FightDicePool([new FightDie(0, 4, DieResult.Hit)]); // normal die
 
-        // Even with Brutal, crits can still block
-        var actions = FightResolution.GetAvailableActions(attacker, defender, brutalWeapon: true);
+        // Even with restriction, crits can still block
+        var actions = FightResolution.GetAvailableActions(attacker, defender, restrictBlocksToCrits: true);
 
         actions.Should().Contain(a => a.Type == FightActionType.Block,
-            "crit die can still block even with Brutal weapon");
+            "crit die can still block even when blocks are restricted to crits");
     }
 }

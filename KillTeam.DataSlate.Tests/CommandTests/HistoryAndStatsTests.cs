@@ -1,5 +1,4 @@
 using FluentAssertions;
-using Microsoft.Data.Sqlite;
 using Xunit;
 
 namespace KillTeam.DataSlate.Tests.CommandTests;

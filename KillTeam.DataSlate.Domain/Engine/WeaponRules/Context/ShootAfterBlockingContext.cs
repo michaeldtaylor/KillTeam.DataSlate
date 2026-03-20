@@ -1,4 +1,4 @@
-namespace KillTeam.DataSlate.Domain.Engine.WeaponRules;
+namespace KillTeam.DataSlate.Domain.Engine.WeaponRules.Context;
 
 public class ShootAfterBlockingContext
 {

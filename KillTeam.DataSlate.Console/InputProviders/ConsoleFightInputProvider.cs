@@ -154,16 +154,16 @@ public class ConsoleFightInputProvider(IAnsiConsole console, ColumnContext colum
 
     private static string FormatFightAction(FightAction a)
     {
-        var resultLabel = a.ActiveDie.Result == DieResult.Crit ? "[bold yellow]CRIT[/]" : "[green]HIT[/]";
-        var dieInfo = $"rolled [green]{a.ActiveDie.RolledValue}[/] ({resultLabel})";
+        var resultLabel = a.Die.Result == DieResult.Crit ? "[bold yellow]CRIT[/]" : "[green]HIT[/]";
+        var dieInfo = $"rolled [green]{a.Die.RolledValue}[/] ({resultLabel})";
 
         if (a.Type == FightActionType.Strike)
         {
             return $"[red]STRIKE[/] — {dieInfo}";
         }
 
-        var targetLabel = a.OpponentDie!.Result == DieResult.Crit ? "[bold yellow]CRIT[/]" : "[green]HIT[/]";
+        var targetLabel = a.TargetDie!.Result == DieResult.Crit ? "[bold yellow]CRIT[/]" : "[green]HIT[/]";
 
-        return $"[cyan]BLOCK[/] — {dieInfo} cancels rolled [green]{a.OpponentDie.RolledValue}[/] ({targetLabel})";
+        return $"[cyan]BLOCK[/] — {dieInfo} cancels rolled [green]{a.TargetDie.RolledValue}[/] ({targetLabel})";
     }
 }

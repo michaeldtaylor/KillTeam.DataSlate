@@ -8,8 +8,8 @@ public record FightDicePool(IReadOnlyList<FightDie> Remaining);
 
 public record FightAction(
     FightActionType Type,
-    FightDie ActiveDie,
-    FightDie? OpponentDie // null for Strike (no specific target die required)
+    FightDie Die,
+    FightDie? TargetDie // null for Strike (no specific target die required)
 );
 
 public static class FightResolution
@@ -48,24 +48,24 @@ public static class FightResolution
 
     public static (FightDicePool UpdatedBlocker, FightDicePool UpdatedOpponent) ApplySingleBlock(
         FightDie blockingDie,
-        FightDie opponentDie,
+        FightDie targetDie,
         FightDicePool blockerPool,
         FightDicePool opponentPool)
     {
         var newBlocker = new FightDicePool(Remaining: blockerPool.Remaining.Where(d => d.Id != blockingDie.Id).ToList());
-        var newOpponent = new FightDicePool(Remaining: opponentPool.Remaining.Where(d => d.Id != opponentDie.Id).ToList());
+        var newOpponent = new FightDicePool(Remaining: opponentPool.Remaining.Where(d => d.Id != targetDie.Id).ToList());
 
         return (newBlocker, newOpponent);
     }
 
     /// <summary>
     /// Returns all legal actions for the active pool given the current state.
-    /// brutalWeapon = true: opponent's normal dice cannot be used for Block at all.
+    /// restrictBlocksToCrits = true: only crit dice may be used for Block actions.
     /// </summary>
     public static IReadOnlyList<FightAction> GetAvailableActions(
         FightDicePool activePool,
         FightDicePool opponentPool,
-        bool brutalWeapon = false)
+        bool restrictBlocksToCrits = false)
     {
         var actions = new List<FightAction>();
 
@@ -75,7 +75,7 @@ public static class FightResolution
             // (Target die is not needed for strike resolution, but we list available strikes)
             actions.Add(new FightAction(FightActionType.Strike, activeDie, null));
 
-            if (brutalWeapon && activeDie.Result != DieResult.Crit)
+            if (restrictBlocksToCrits && activeDie.Result != DieResult.Crit)
             {
                 continue;
             }
@@ -83,11 +83,11 @@ public static class FightResolution
             // Block rules:
             // Crit die: can block any opponent die (crit or normal)
             // Normal die: can only block opponent normals (NOT crits)
-            // Brutal: normal dice CANNOT block at all
+            // restrictBlocksToCrits: normal dice CANNOT block at all
             foreach (var targetDie in opponentPool.Remaining)
             {
                 // normal only blocks normals
-                var canBlock = activeDie.Result == DieResult.Crit || targetDie.Result == DieResult.Hit && !brutalWeapon;
+                var canBlock = activeDie.Result == DieResult.Crit || targetDie.Result == DieResult.Hit && !restrictBlocksToCrits;
 
                 if (canBlock)
                 {

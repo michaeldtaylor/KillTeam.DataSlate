@@ -2,7 +2,7 @@ using KillTeam.DataSlate.Domain.Events;
 using KillTeam.DataSlate.Domain.Models;
 using KillTeam.DataSlate.Domain.Services;
 
-namespace KillTeam.DataSlate.Domain.Engine.WeaponRules;
+namespace KillTeam.DataSlate.Domain.Engine.WeaponRules.Context;
 
 public class FightPreResolutionContext
 {
@@ -16,5 +16,5 @@ public class FightPreResolutionContext
 
     public required FightDicePool TargetPool { get; set; }
 
-    public bool IsBrutal { get; set; }
+    public bool BlockRestrictedToCrits { get; set; }
 }

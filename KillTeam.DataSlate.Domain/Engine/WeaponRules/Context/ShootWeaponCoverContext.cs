@@ -2,7 +2,7 @@ using KillTeam.DataSlate.Domain.Engine.Input;
 using KillTeam.DataSlate.Domain.Events;
 using KillTeam.DataSlate.Domain.Models;
 
-namespace KillTeam.DataSlate.Domain.Engine.WeaponRules;
+namespace KillTeam.DataSlate.Domain.Engine.WeaponRules.Context;
 
 public class WeaponCoverContext
 {

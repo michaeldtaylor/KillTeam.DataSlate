@@ -95,7 +95,7 @@ public class FightEngineTests
         var fightInput = new StubFightInputProvider(attackerDice: [6], targetDice: []);
         var engine = MakeEngine(fightInput, new NoCpRerollInputProvider(), new StubGameRepository(game));
 
-        var result = await engine.RunAsync(attacker, allStates.Single(s => s.OperativeId == attacker.Id), allStates, allOperatives, game, activation);
+        var result = await engine.RunAsync(game, activation, attacker, allStates.Single(s => s.OperativeId == attacker.Id), allStates, allOperatives);
 
         result.AttackerCausedIncapacitation.Should().BeTrue("crit dealt 12 damage to a 12-wound target");
         result.TargetCausedIncapacitation.Should().BeFalse("target had no melee weapon");
@@ -127,7 +127,7 @@ public class FightEngineTests
         var fightInput = new StubFightInputProvider(attackerDice: [4], targetDice: []);
         var engine = MakeEngine(fightInput, new NoCpRerollInputProvider(), new StubGameRepository(game));
 
-        await engine.RunAsync(attacker, allStates.Single(s => s.OperativeId == attacker.Id), allStates, allOperatives, game, activation, stream);
+        await engine.RunAsync(game, activation, attacker, allStates.Single(s => s.OperativeId == attacker.Id), allStates, allOperatives, stream);
 
         emittedEvents.OfType<TargetNoMeleeWeaponsEvent>().Should().ContainSingle(
             "target has no melee weapons — event must be emitted");
@@ -157,7 +157,7 @@ public class FightEngineTests
         var fightInput = new StubFightInputProvider(attackerDice: [6], targetDice: [5]);
         var engine = MakeEngine(fightInput, new NoCpRerollInputProvider(), new StubGameRepository(game));
 
-        await engine.RunAsync(attacker, allStates.Single(s => s.OperativeId == attacker.Id), allStates, allOperatives, game, activation, stream);
+        await engine.RunAsync(game, activation, attacker, allStates.Single(s => s.OperativeId == attacker.Id), allStates, allOperatives, stream);
 
         emittedEvents.OfType<ShockAppliedEvent>().Should().ContainSingle(
             "Shock fires when attacker has a crit and target has a success die");
@@ -182,7 +182,7 @@ public class FightEngineTests
         var fightInput = new StubFightInputProvider(attackerDice: [], targetDice: []);
         var engine = MakeEngine(fightInput, new NoCpRerollInputProvider(), new StubGameRepository(game));
 
-        var result = await engine.RunAsync(attacker, attackerState, allStates, allOperatives, game, activation);
+        var result = await engine.RunAsync(game, activation, attacker, attackerState, allStates, allOperatives);
 
         result.AttackerCausedIncapacitation.Should().BeFalse();
         result.TargetCausedIncapacitation.Should().BeFalse();

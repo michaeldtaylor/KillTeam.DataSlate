@@ -276,8 +276,7 @@ public class SimulateSessionOrchestrator(
             var rerollEngine = new RerollEngine(rerollInputProvider, gameRepository);
             var fightEngine = new FightEngine(fightInputProvider, rerollEngine, actionRepo, new FightWeaponRuleApplicator());
 
-            var fightResult = await fightEngine.RunAsync(
-                player1Operative, player1State, allStates, allOperatives, game, activation, stream);
+            var fightResult = await fightEngine.RunAsync(game, activation, player1Operative, player1State, allStates, allOperatives, stream);
 
             DisplayEncounterSummary(player1Operative, player2Operative,
                 fightResult.AttackerDamageDealt, fightResult.TargetDamageDealt,
@@ -296,8 +295,7 @@ public class SimulateSessionOrchestrator(
             var blastEngine = new BlastEngine(blastInputProvider, shootWeaponRuleApplicator, rerollEngine, actionRepo);
             var shootEngine = new ShootEngine(shootInputProvider, rerollEngine, blastEngine, actionRepo, shootWeaponRuleApplicator);
 
-            var shootResult = await shootEngine.RunAsync(
-                player1Operative, player1State, allStates, allOperatives, game, activation, false, stream);
+            var shootResult = await shootEngine.RunAsync(game, activation, player1Operative, player1State, allStates, allOperatives, false, stream);
 
             DisplayEncounterSummary(player1Operative, player2Operative,
                 shootResult.DamageDealt, 0,

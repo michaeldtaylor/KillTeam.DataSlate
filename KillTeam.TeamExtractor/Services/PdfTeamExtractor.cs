@@ -2,7 +2,6 @@ using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
 using KillTeam.TeamExtractor.Models;
-using KillTeam.TeamExtractor;
 using UglyToad.PdfPig;
 using UglyToad.PdfPig.Content;
 using UglyToad.PdfPig.Core;

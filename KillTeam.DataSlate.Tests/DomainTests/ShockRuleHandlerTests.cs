@@ -1,5 +1,5 @@
 using FluentAssertions;
-using KillTeam.DataSlate.Domain.Engine.WeaponRules;
+using KillTeam.DataSlate.Domain.Engine.WeaponRules.Context;
 using KillTeam.DataSlate.Domain.Engine.WeaponRules.Handlers;
 using KillTeam.DataSlate.Domain.Models;
 using KillTeam.DataSlate.Domain.Services;

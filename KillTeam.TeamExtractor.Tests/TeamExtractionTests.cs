@@ -1,5 +1,4 @@
 using KillTeam.TeamExtractor.Services;
-using VerifyXunit;
 
 namespace KillTeam.TeamExtractor.Tests;
 

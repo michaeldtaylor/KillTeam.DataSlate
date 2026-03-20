@@ -1,7 +1,6 @@
 using KillTeam.DataSlate.Domain.Engine;
 using KillTeam.DataSlate.Domain.Models;
 using KillTeam.DataSlate.Domain.Repositories;
-using KillTeam.DataSlate.Domain.Services;
 using Microsoft.Extensions.Logging;
 using Spectre.Console;
 
@@ -183,11 +182,11 @@ public class FirefightPhaseOrchestrator(
 
             if (selectedAction == "Shoot")
             {
-                await shootEngine.RunAsync(operative, state, allStates, allOperatives, game, activation, hasMovedNonDash);
+                await shootEngine.RunAsync(game, activation, operative, state, allStates, allOperatives, hasMovedNonDash);
             }
             else if (selectedAction == "Fight")
             {
-                await fightEngine.RunAsync(operative, state, allStates, allOperatives, game, activation);
+                await fightEngine.RunAsync(game, activation, operative, state, allStates, allOperatives);
             }
             else if (selectedAction == "Guard")
             {
@@ -335,13 +334,11 @@ public class FirefightPhaseOrchestrator(
         }
         else if (counterChoice == "Shoot")
         {
-            await shootEngine.RunAsync(
-                counterOperative, counterState, allStates, allOperatives, game, counterActivation);
+            await shootEngine.RunAsync(game, counterActivation, counterOperative, counterState, allStates, allOperatives);
         }
         else if (counterChoice == "Fight")
         {
-            await fightEngine.RunAsync(
-                counterOperative, counterState, allStates, allOperatives, game, counterActivation);
+            await fightEngine.RunAsync(game, counterActivation, counterOperative, counterState, allStates, allOperatives);
         }
 
         counterState.HasUsedCounteractThisTurningPoint = true;

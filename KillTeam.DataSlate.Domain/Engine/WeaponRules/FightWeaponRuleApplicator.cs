@@ -1,3 +1,4 @@
+using KillTeam.DataSlate.Domain.Engine.WeaponRules.Context;
 using KillTeam.DataSlate.Domain.Engine.WeaponRules.Handlers;
 using KillTeam.DataSlate.Domain.Models;
 
@@ -11,11 +12,11 @@ public sealed class FightWeaponRuleApplicator
         new ShockRuleHandler(),
     ];
 
-    public async Task ApplyPreResolutionAsync(Weapon attackerWeapon, FightPreResolutionContext context)
+    public async Task ApplyPreResolutionAsync(Weapon weapon, FightPreResolutionContext context)
     {
         foreach (var handler in _handlers)
         {
-            await handler.ApplyPreResolutionAsync(attackerWeapon, context);
+            await handler.ApplyPreResolutionAsync(weapon, context);
         }
     }
 }

@@ -1,6 +1,5 @@
 using FluentAssertions;
 using KillTeam.DataSlate.Infrastructure.Repositories;
-using KillTeam.DataSlate.Domain.Models;
 using Xunit;
 
 namespace KillTeam.DataSlate.Tests.CommandTests;

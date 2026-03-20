@@ -1,3 +1,4 @@
+using KillTeam.DataSlate.Domain.Engine.WeaponRules.Context;
 using KillTeam.DataSlate.Domain.Models;
 
 namespace KillTeam.DataSlate.Domain.Engine.WeaponRules.Handlers;
@@ -8,7 +9,7 @@ public sealed class BrutalRuleHandler : IFightWeaponRuleHandler
     {
         if (weapon.Rules.Any(r => r.Kind == WeaponRuleKind.Brutal))
         {
-            context.IsBrutal = true;
+            context.BlockRestrictedToCrits = true;
         }
 
         return Task.CompletedTask;
