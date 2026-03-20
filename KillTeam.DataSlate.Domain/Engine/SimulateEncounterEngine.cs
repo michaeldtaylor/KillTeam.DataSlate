@@ -29,7 +29,7 @@ public class SimulateEncounterEngine(
         Operative target,
         Team targetTeam,
         ActionType actionType,
-        Action<GameEventStream>? configureStream = null)
+        Action<GameEventStream>? eventStream = null)
     {
         var game = new Game
         {
@@ -98,7 +98,7 @@ public class SimulateEncounterEngine(
         };
 
         var stream = new GameEventStream(game.Id, persistenceHandler.HandleAsync);
-        configureStream?.Invoke(stream);
+        eventStream?.Invoke(stream);
 
         var context = new GameContext(game, allStates, allOperatives, stream);
 
@@ -145,8 +145,7 @@ public class SimulateEncounterEngine(
                 context,
                 activation,
                 attacker,
-                attackerState,
-                false);
+                attackerState);
 
             return new SimulateEncounterResult(
                 AttackerDamageDealt: result.DamageDealt,

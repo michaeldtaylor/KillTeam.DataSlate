@@ -17,12 +17,12 @@ public class StrategyPhaseEngine(
 {
     public async Task<TurningPoint> RunAsync(
         Game game,
-        int tpNumber,
+        int turningPointNumber,
         string team1Name,
         string team2Name,
         GameEventStream? eventStream = null)
     {
-        await inputProvider.DisplayPhaseHeaderAsync(tpNumber);
+        await inputProvider.DisplayPhaseHeaderAsync(turningPointNumber);
 
         var winnerName = await inputProvider.SelectInitiativeWinnerAsync(team1Name, team2Name);
         var initiativeTeamId = winnerName == team1Name
@@ -33,13 +33,13 @@ public class StrategyPhaseEngine(
         {
             Id = Guid.NewGuid(),
             GameId = game.Id,
-            Number = tpNumber,
+            Number = turningPointNumber,
             TeamWithInitiativeId = initiativeTeamId,
         };
 
         await turningPointRepository.CreateAsync(turningPoint);
 
-        var (cp1, cp2) = ApplyCpGains(game, tpNumber, initiativeTeamId);
+        var (commandPoints1, commandPoints2) = ApplyCommandPointGains(game, turningPointNumber, initiativeTeamId);
 
         await (eventStream?.EmitAsync((gameSessionId, sequenceNumber, timestamp) =>
             new GameCommandPointsChangedEvent(
@@ -48,11 +48,11 @@ public class StrategyPhaseEngine(
                 timestamp,
                 string.Empty,
                 game.Id,
-                cp1,
-                cp2)) ?? ValueTask.CompletedTask);
+                commandPoints1,
+                commandPoints2)) ?? ValueTask.CompletedTask);
 
-        game.Participant1.CommandPoints = cp1;
-        game.Participant2.CommandPoints = cp2;
+        game.Participant1.CommandPoints = commandPoints1;
+        game.Participant2.CommandPoints = commandPoints2;
 
         var (nonInitId, nonInitName) = initiativeTeamId == game.Participant1.TeamId
             ? (game.Participant2.TeamId, team2Name)
@@ -62,20 +62,20 @@ public class StrategyPhaseEngine(
             ? (game.Participant1.TeamId, team1Name)
             : (game.Participant2.TeamId, team2Name);
 
-        (cp1, cp2) = await RunPloyLoopAsync(
-            turningPoint, game.Id, game.Participant1.TeamId, nonInitId, nonInitName, cp1, cp2, eventStream);
+        (commandPoints1, commandPoints2) = await RunPloyLoopAsync(
+            turningPoint, game.Id, game.Participant1.TeamId, nonInitId, nonInitName, commandPoints1, commandPoints2, eventStream);
 
-        (cp1, cp2) = await RunPloyLoopAsync(
-            turningPoint, game.Id, game.Participant1.TeamId, initId, initName, cp1, cp2, eventStream);
+        (commandPoints1, commandPoints2) = await RunPloyLoopAsync(
+            turningPoint, game.Id, game.Participant1.TeamId, initId, initName, commandPoints1, commandPoints2, eventStream);
 
         await turningPointRepository.CompleteStrategyPhaseAsync(turningPoint.Id);
 
-        await inputProvider.DisplayPhaseCompleteAsync(team1Name, cp1, team2Name, cp2);
+        await inputProvider.DisplayPhaseCompleteAsync(team1Name, commandPoints1, team2Name, commandPoints2);
 
         return turningPoint;
     }
 
-    private static (int cp1, int cp2) ApplyCpGains(Game game, int tpNumber, string initiativeTeamId)
+    private static (int cp1, int cp2) ApplyCommandPointGains(Game game, int tpNumber, string initiativeTeamId)
     {
         var cp1 = game.Participant1.CommandPoints;
         var cp2 = game.Participant2.CommandPoints;
