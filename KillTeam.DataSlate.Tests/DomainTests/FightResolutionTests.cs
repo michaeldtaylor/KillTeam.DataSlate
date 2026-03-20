@@ -51,24 +51,24 @@ public class FightResolutionTests
         var a3 = new FightDie(3, 4, DieResult.Hit);
         var d1 = new FightDie(1, 4, DieResult.Hit);
 
-        var attackerPool = new FightDicePool([a2, a3]);
-        var defenderPool = new FightDicePool([d1]);
+        var blockedPool = new FightDicePool([a2, a3]);
+        var blockerPool = new FightDicePool([d1]);
 
-        var (newDef, newAtk) = FightResolution.ApplySingleBlock(d1, a3, defenderPool, attackerPool);
+        var (updatedBlocker, updatedBlocked) = FightResolution.ApplySingleBlock(d1, a3, blockerPool, blockedPool);
 
-        newDef.Remaining.Should().BeEmpty("D1 was spent blocking");
-        newAtk.Remaining.Should().ContainSingle(d => d.Id == a2.Id, "A2 crit should remain");
-        newAtk.Remaining.Should().NotContain(d => d.Id == a3.Id, "A3 was blocked");
+        updatedBlocker.Remaining.Should().BeEmpty("D1 was spent blocking");
+        updatedBlocked.Remaining.Should().ContainSingle(d => d.Id == a2.Id, "A2 crit should remain");
+        updatedBlocked.Remaining.Should().NotContain(d => d.Id == a3.Id, "A3 was blocked");
     }
 
     [Fact]
     public void GetAvailableActions_NormalDie_DoesNotOfferBlockAgainstCrit()
     {
-        var defender = new FightDicePool([new FightDie(0, 4, DieResult.Hit)]); // 1 normal die
-        var attacker = new FightDicePool([new FightDie(0, 6, DieResult.Crit)]); // 1 crit die in attacker pool
+        var pool = new FightDicePool([new FightDie(0, 4, DieResult.Hit)]); // 1 normal die
+        var targetPool = new FightDicePool([new FightDie(0, 6, DieResult.Crit)]); // 1 crit die in attacker pool
 
         // Defender's normal die cannot block attacker's crit
-        var actions = FightResolution.GetAvailableActions(defender, attacker);
+        var actions = FightResolution.GetAvailableActions(pool, targetPool);
 
         actions.Should().NotContain(a => a.Type == FightActionType.Block,
             "a normal die cannot block a crit");
@@ -77,11 +77,11 @@ public class FightResolutionTests
     [Fact]
     public void GetAvailableActions_CritDie_OffersBlockAgainstCritAndNormal()
     {
-        var attacker = new FightDicePool([new FightDie(0, 6, DieResult.Crit)]); // 1 crit attacking die
-        var defender = new FightDicePool([new FightDie(0, 6, DieResult.Crit), new FightDie(1, 4, DieResult.Hit)]);
+        var pool = new FightDicePool([new FightDie(0, 6, DieResult.Crit)]); // 1 crit die
+        var targetPool = new FightDicePool([new FightDie(0, 6, DieResult.Crit), new FightDie(1, 4, DieResult.Hit)]);
 
         // Attacker's crit can block both opponent dice
-        var actions = FightResolution.GetAvailableActions(attacker, defender);
+        var actions = FightResolution.GetAvailableActions(pool, targetPool);
 
         actions.Count(a => a.Type == FightActionType.Block).Should().Be(2);
     }
@@ -89,11 +89,11 @@ public class FightResolutionTests
     [Fact]
     public void GetAvailableActions_RestrictBlocksToCrits_NormalDieCannotBlock()
     {
-        var attacker = new FightDicePool([new FightDie(0, 4, DieResult.Hit)]); // 1 normal attacking die
-        var defender = new FightDicePool([new FightDie(0, 4, DieResult.Hit)]); // 1 normal defending die
+        var pool = new FightDicePool([new FightDie(0, 4, DieResult.Hit)]); // 1 normal die
+        var targetPool = new FightDicePool([new FightDie(0, 4, DieResult.Hit)]); // 1 normal die
 
         // Restrict blocks to crits: normal dice cannot block at all
-        var actions = FightResolution.GetAvailableActions(attacker, defender, restrictBlocksToCrits: true);
+        var actions = FightResolution.GetAvailableActions(pool, targetPool, restrictBlocksToCrits: true);
 
         actions.Should().NotContain(a => a.Type == FightActionType.Block,
             "restricting blocks to crits prevents normal dice from blocking");
@@ -102,11 +102,11 @@ public class FightResolutionTests
     [Fact]
     public void GetAvailableActions_RestrictBlocksToCrits_CritCanStillBlock()
     {
-        var attacker = new FightDicePool([new FightDie(0, 6, DieResult.Crit)]); // crit die
-        var defender = new FightDicePool([new FightDie(0, 4, DieResult.Hit)]); // normal die
+        var pool = new FightDicePool([new FightDie(0, 6, DieResult.Crit)]); // crit die
+        var targetPool = new FightDicePool([new FightDie(0, 4, DieResult.Hit)]); // normal die
 
         // Even with restriction, crits can still block
-        var actions = FightResolution.GetAvailableActions(attacker, defender, restrictBlocksToCrits: true);
+        var actions = FightResolution.GetAvailableActions(pool, targetPool, restrictBlocksToCrits: true);
 
         actions.Should().Contain(a => a.Type == FightActionType.Block,
             "crit die can still block even when blocks are restricted to crits");

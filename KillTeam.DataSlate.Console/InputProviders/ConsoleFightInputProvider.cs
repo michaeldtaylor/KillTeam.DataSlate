@@ -26,7 +26,7 @@ public class ConsoleFightInputProvider(IAnsiConsole console, ColumnContext colum
     {
         return await Task.FromResult(console.Prompt(
             new SelectionPrompt<Weapon>()
-                .Title($"{columnContext.Prefix}Select attacker''s melee weapon:")
+                .Title($"{columnContext.Prefix}Select attacker's melee weapon:")
                 .UseConverter(w =>
                 {
                     var injuredNote = isInjured ? $" [yellow](Injured: effective Hit {w.Hit + 1}+)[/]" : string.Empty;
@@ -40,7 +40,7 @@ public class ConsoleFightInputProvider(IAnsiConsole console, ColumnContext colum
     {
         return await Task.FromResult(console.Prompt(
             new SelectionPrompt<Weapon>()
-                .Title($"{columnContext.Prefix}Select defender''s melee weapon:")
+                .Title($"{columnContext.Prefix}Select defender's melee weapon:")
                 .UseConverter(w => Markup.Escape(w.Name))
                 .AddChoices(weapons)));
     }
