@@ -9,7 +9,7 @@ namespace KillTeam.DataSlate.Domain.Engine;
 
 public class BlastEngine(
     IBlastInputProvider inputProvider,
-    ShootWeaponRuleApplicator shootWeaponRuleApplicator,
+    ShootWeaponRulePipeline ShootWeaponRulePipeline,
     RerollEngine rerollEngine,
     IActionRepository actionRepository)
 {
@@ -113,7 +113,7 @@ public class BlastEngine(
                 CritDmg: weapon.CriticalDmg
             );
 
-            var blastResult = await shootWeaponRuleApplicator.ResolveShootAsync(weapon, context);
+            var blastResult = await ShootWeaponRulePipeline.ResolveShootAsync(weapon, context);
 
             var newWounds = Math.Max(0, targetOperativeState.CurrentWounds - blastResult.TotalDamage);
 

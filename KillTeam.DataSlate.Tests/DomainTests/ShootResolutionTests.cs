@@ -9,7 +9,7 @@ namespace KillTeam.DataSlate.Tests.DomainTests;
 
 public class ShootResolutionTests
 {
-    private readonly ShootWeaponRuleApplicator _applicator = new();
+    private readonly ShootWeaponRulePipeline _applicator = new();
 
     private static Weapon MakeWeapon(List<WeaponRule>? rules = null)
     {

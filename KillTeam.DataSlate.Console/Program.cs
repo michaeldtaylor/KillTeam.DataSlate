@@ -73,8 +73,8 @@ public static class Program
         services.AddSingleton<IGuardInterruptInputProvider, ConsoleGuardInterruptInputProvider>();
         services.AddSingleton<RerollEngine>();
         services.AddSingleton<BlastEngine>();
-        services.AddSingleton<ShootWeaponRuleApplicator>();
-        services.AddSingleton<FightWeaponRuleApplicator>();
+        services.AddSingleton<ShootWeaponRulePipeline>();
+        services.AddSingleton<FightWeaponRulePipeline>();
         services.AddSingleton<ShootEngine>();
         services.AddSingleton<FightEngine>();
         services.AddSingleton<StrategyPhaseEngine>();

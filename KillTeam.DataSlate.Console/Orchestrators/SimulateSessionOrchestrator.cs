@@ -25,7 +25,7 @@ public class SimulateSessionOrchestrator(
     IShootInputProvider shootInputProvider,
     IRerollInputProvider rerollInputProvider,
     IBlastInputProvider blastInputProvider,
-    ShootWeaponRuleApplicator shootWeaponRuleApplicator,
+    ShootWeaponRulePipeline ShootWeaponRulePipeline,
     IGameStatePersistenceHandler persistenceHandler,
     ColumnContext columnContext,
     ILogger<SimulateSessionOrchestrator> logger)
@@ -273,7 +273,7 @@ public class SimulateSessionOrchestrator(
         if (actionType == ActionType.Fight)
         {
             var rerollEngine = new RerollEngine(rerollInputProvider, gameRepository);
-            var fightEngine = new FightEngine(fightInputProvider, rerollEngine, actionRepo, new FightWeaponRuleApplicator());
+            var fightEngine = new FightEngine(fightInputProvider, rerollEngine, actionRepo, new FightWeaponRulePipeline());
 
             var fightResult = await fightEngine.RunAsync(game, activation, player1Operative, player1State, allStates, allOperatives, stream);
 
@@ -291,8 +291,8 @@ public class SimulateSessionOrchestrator(
         else
         {
             var rerollEngine = new RerollEngine(rerollInputProvider, gameRepository);
-            var blastEngine = new BlastEngine(blastInputProvider, shootWeaponRuleApplicator, rerollEngine, actionRepo);
-            var shootEngine = new ShootEngine(shootInputProvider, rerollEngine, blastEngine, actionRepo, shootWeaponRuleApplicator);
+            var blastEngine = new BlastEngine(blastInputProvider, ShootWeaponRulePipeline, rerollEngine, actionRepo);
+            var shootEngine = new ShootEngine(shootInputProvider, rerollEngine, blastEngine, actionRepo, ShootWeaponRulePipeline);
 
             var shootResult = await shootEngine.RunAsync(game, activation, player1Operative, player1State, allStates, allOperatives, false, stream);
 

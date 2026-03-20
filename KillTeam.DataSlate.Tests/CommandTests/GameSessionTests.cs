@@ -153,7 +153,7 @@ public class GameSessionTests
     {
         // Attack: 1 normal hit (die=5 at threshold 3), no defence dice, but InCover=true
         // Cover adds 1 normal save → blocks the 1 normal hit → 0 damage
-        var applicator = new ShootWeaponRuleApplicator();
+        var applicator = new ShootWeaponRulePipeline();
         var weapon = new Weapon { Name = "Test Weapon" };
         var ctx = new ShootContext(
             AttackerDice: [5],

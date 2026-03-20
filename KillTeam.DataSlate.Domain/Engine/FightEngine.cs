@@ -11,7 +11,7 @@ public class FightEngine(
     IFightInputProvider inputProvider,
     RerollEngine rerollEngine,
     IActionRepository actionRepository,
-    FightWeaponRuleApplicator weaponRuleApplicator)
+    FightWeaponRulePipeline weaponRuleApplicator)
 {
     public async Task<FightResult> RunAsync(
         Game game,
@@ -214,7 +214,7 @@ public class FightEngine(
             ? FightResolution.CalculateDice(targetRolls, targetEffectiveHit)
             : new FightDicePool([]);
 
-        var preResolutionContext = new FightPreResolutionContext
+        var preResolutionContext = new FightSetupContext
         {
             Attacker = attacker,
             Target = target,

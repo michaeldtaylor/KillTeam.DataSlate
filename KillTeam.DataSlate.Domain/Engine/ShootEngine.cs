@@ -12,7 +12,7 @@ public class ShootEngine(
     RerollEngine rerollEngine,
     BlastEngine blastEngine,
     IActionRepository actionRepository,
-    ShootWeaponRuleApplicator weaponRuleApplicator)
+    ShootWeaponRulePipeline weaponRuleApplicator)
 {
     public async Task<ShootResult> RunAsync(
         Game game,
@@ -102,7 +102,7 @@ public class ShootEngine(
             return new ShootResult(false, 0, null);
         }
 
-        var availabilityContext = new ShootWeaponAvailabilityContext(hasMovedNonDash, isOnConceal, targetDistance);
+        var availabilityContext = new AvailabilityContext(hasMovedNonDash, isOnConceal, targetDistance);
         var rangedWeapons = weaponRuleApplicator
             .FilterAvailableWeapons(attacker.Weapons.Where(w => w.Type == WeaponType.Ranged).ToList(), availabilityContext)
             .Where(w => inputProvider.HasRemainingUses(w))
@@ -173,7 +173,7 @@ public class ShootEngine(
         }
 
         // ── Cover status ──────────────────────────────────────────────────────────
-        var coverContext = new WeaponCoverContext
+        var coverContext = new CoverContext
         {
             Attacker = attacker,
             Target = target,
@@ -342,7 +342,7 @@ public class ShootEngine(
                     1)) ?? ValueTask.CompletedTask);
         }
 
-        var effectContext = new WeaponEffectContext
+        var effectContext = new EffectsContext
         {
             Attacker = attacker,
             AttackerState = attackerState,

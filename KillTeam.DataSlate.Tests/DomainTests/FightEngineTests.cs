@@ -71,7 +71,7 @@ public class FightEngineTests
         var rerollEngine = new RerollEngine(rerollInputProvider, gameRepo);
         var actionRepo = new InMemoryActionRepository();
 
-        return new FightEngine(fightInputProvider, rerollEngine, actionRepo, new FightWeaponRuleApplicator());
+        return new FightEngine(fightInputProvider, rerollEngine, actionRepo, new FightWeaponRulePipeline());
     }
 
     [Fact]
