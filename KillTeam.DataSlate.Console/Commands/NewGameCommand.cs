@@ -1,4 +1,4 @@
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using KillTeam.DataSlate.Domain.Models;
 using KillTeam.DataSlate.Domain.Repositories;
 using Microsoft.Extensions.Logging;
@@ -35,7 +35,7 @@ public class NewGameCommand(
             return 1;
         }
 
-        // Team A selection
+        // Team 1 selection
         var team1 = console.Prompt(
             new SelectionPrompt<Team>()
                 .Title("Select [green]Team A[/]:")
@@ -130,10 +130,12 @@ public class NewGameCommand(
 
         console.MarkupLine($"[green]Game {game.Id}[/]");
         console.MarkupLine($"  {Markup.Escape(player1.Name)} ([green]{Markup.Escape(team1.Name)}[/]) vs {Markup.Escape(player2.Name)} ([blue]{Markup.Escape(team2.Name)}[/])");
+
         if (!string.IsNullOrEmpty(missionName))
         {
             console.MarkupLine($"  Mission: {Markup.Escape(missionName)}");
         }
+
         console.MarkupLine($"  {allOperatives.Count} operative state(s) initialized.");
 
         return 0;
