@@ -12,26 +12,38 @@ public class StrategyPhaseOrchestrator(IAnsiConsole console, StrategyPhaseEngine
     /// Creates the TurningPoint record, handles initiative, CP gains, and ploy recording.
     /// Returns the created TurningPoint.
     /// </summary>
-    public async Task<TurningPoint> RunAsync(Game game, int tpNumber,
-        string team1Name, string team2Name)
+    public async Task<TurningPoint> RunAsync(
+        Game game,
+        int turningPointNumber,
+        string team1Name,
+        string team2Name)
     {
-        logger.LogDebug("Strategy phase TP{TpNumber} started for game {GameId}", tpNumber, game.Id);
-        console.Write(new Rule($"[bold]Turning Point {tpNumber} — Strategy Phase[/]"));
+        logger.LogDebug("Strategy phase TP{TpNumber} started for game {GameId}", turningPointNumber, game.Id);
 
-        var turningPoint = await engine.RunAsync(game, tpNumber, team1Name, team2Name);
+        console.Write(new Rule($"[bold]Turning Point {turningPointNumber} — Strategy Phase[/]"));
 
-        var cp1 = game.Participant1.CommandPoints;
-        var cp2 = game.Participant2.CommandPoints;
-        console.MarkupLine(FormatCp(team1Name, cp1) + "  " + FormatCp(team2Name, cp2));
+        var turningPoint = await engine.RunAsync(game, turningPointNumber, team1Name, team2Name);
+
+        var commandPoints1 = game.Participant1.CommandPoints;
+        var commandPoints2 = game.Participant2.CommandPoints;
+
+        console.MarkupLine(FormatCommandPoint(team1Name, commandPoints1) + "  " + FormatCommandPoint(team2Name, commandPoints2));
         console.MarkupLine("[dim]Strategy Phase complete.[/]");
-        logger.LogDebug("Strategy phase TP{TpNumber} complete", tpNumber);
+
+        logger.LogDebug("Strategy phase TP{TpNumber} complete", turningPointNumber);
 
         return turningPoint;
     }
 
-    private static string FormatCp(string teamName, int cp)
+    private static string FormatCommandPoint(string teamName, int commandPoint)
     {
-        var color = cp switch { >= 3 => "white", 1 or 2 => "yellow", _ => "red" };
-        return $"{Markup.Escape(teamName)}: [{color}][{cp}CP][/{color}]";
+        var color = commandPoint switch
+        {
+            >= 3 => "white",
+            1 or 2 => "yellow",
+            _ => "red",
+        };
+
+        return $"{Markup.Escape(teamName)}: [{color}][{commandPoint}CP][/{color}]";
     }
 }

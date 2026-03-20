@@ -558,4 +558,57 @@ public sealed record ShootResolvedEvent(
 
 ---
 
+## 19. Blank line after multi-line constructs
+
+A blank line must follow the closing delimiter (`};`, `);`, `])`) of any multi-line
+construct — object initialiser, collection initialiser, or multi-line method call —
+before the next statement in the same block.
+
+**Exception:** no blank line required when the next line is the enclosing block's
+closing `}`.
+
+```csharp
+// ✅ Correct
+var activation = new Activation
+{
+    Id = Guid.NewGuid(),
+    TurningPointId = turningPoint.Id,
+    IsCounteract = false
+};
+
+await activationRepository.CreateAsync(activation);
+
+// ✅ Correct — consecutive multi-line initialisers
+var player1State = new GameOperativeState
+{
+    GameId = game.Id,
+    CurrentWounds = player1Operative.Wounds
+};
+
+var player2State = new GameOperativeState
+{
+    GameId = game.Id,
+    CurrentWounds = player2Operative.Wounds
+};
+
+// ❌ Wrong — no blank line after multi-line initialiser
+var activation = new Activation
+{
+    Id = Guid.NewGuid(),
+    TurningPointId = turningPoint.Id,
+    IsCounteract = false
+};
+await activationRepository.CreateAsync(activation);
+
+// ❌ Wrong — two consecutive multi-line initialisers with no blank line
+var player1State = new GameOperativeState { GameId = game.Id, CurrentWounds = 10 };
+var player2State = new GameOperativeState
+{
+    GameId = game.Id,
+    CurrentWounds = player2Operative.Wounds
+};
+```
+
+---
+
 *More conventions will be added here as the project evolves.*

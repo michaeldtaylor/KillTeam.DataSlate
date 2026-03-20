@@ -67,6 +67,7 @@ public class FirefightPhaseOrchestrator(
                     TeamId = operative.TeamId,
                     IsCounteract = false
                 };
+
                 await activationRepository.CreateAsync(activation);
 
                 seqCounter = await RunActivation(operative, state, turningPoint, activation, allStates, allOperatives, game, seqCounter);
@@ -117,6 +118,7 @@ public class FirefightPhaseOrchestrator(
                         TeamId = operative.TeamId,
                         IsCounteract = false
                     };
+
                     await activationRepository.CreateAsync(activation);
 
                     seqCounter = await RunActivation(operative, state, turningPoint, activation, allStates, allOperatives, game, seqCounter);
@@ -201,6 +203,7 @@ public class FirefightPhaseOrchestrator(
                     Type = ActionType.Guard,
                     ApCost = 1
                 };
+
                 await actionRepository.CreateAsync(guardAction);
             }
             else
@@ -310,6 +313,7 @@ public class FirefightPhaseOrchestrator(
             OrderSelected = counterState.Order,
             IsCounteract = true
         };
+
         await activationRepository.CreateAsync(counterActivation);
 
         console.MarkupLine($"[yellow]Counteract! {Markup.Escape(counterOperative.Name)} gets 1 AP (max 2\" movement).[/]");
@@ -330,6 +334,7 @@ public class FirefightPhaseOrchestrator(
                 ApCost = 1,
                 NarrativeNote = "Counteract move (max 2\")"
             };
+
             await actionRepository.CreateAsync(action);
         }
         else if (counterChoice == "Shoot")

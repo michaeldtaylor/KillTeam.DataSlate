@@ -62,6 +62,7 @@ public class SimulateSessionOrchestrator(
             player1.Colour,
             player2.Name,
             player2.Colour);
+
         await RunSessionLoopAsync(
             player1Operative,
             player2Operative,
@@ -69,6 +70,7 @@ public class SimulateSessionOrchestrator(
             player2Team!,
             player1,
             player2);
+
         logger.LogInformation("Simulate session ended");
     }
 
@@ -100,6 +102,7 @@ public class SimulateSessionOrchestrator(
 
         // Step 2 - Player 1's operative (auto-select if only one)
         Operative player1Operative;
+
         if (player1Team.Operatives.Count == 1)
         {
             player1Operative = player1Team.Operatives[0];
@@ -278,6 +281,7 @@ public class SimulateSessionOrchestrator(
             CurrentWounds = player1Operative.Wounds,
             Order = Order.Engage
         };
+
         var player2State = new GameOperativeState
         {
             GameId = game.Id,
@@ -285,6 +289,7 @@ public class SimulateSessionOrchestrator(
             CurrentWounds = player2Operative.Wounds,
             Order = Order.Engage
         };
+
         stateRepo.Seed([player1State, player2State]);
 
         var actionRepo = new InMemoryActionRepository();
@@ -302,11 +307,13 @@ public class SimulateSessionOrchestrator(
             [player1Team.Id] = player1.Name,
             [player2Team.Id] = player2.Name,
         };
+
         var participantColours = new Dictionary<string, string>
         {
             [player1Team.Id] = player1.Colour,
             [player2Team.Id] = player2.Colour,
         };
+
         var columns = new TwoColumnRenderer(console, participantLabels, participantColours, columnContext);
         var renderer = new GameEventRenderer(console, columns);
 
@@ -426,6 +433,7 @@ public class SimulateSessionOrchestrator(
         string player2Colour)
     {
         console.WriteLine();
+
         var table = new Table()
             .Border(TableBorder.Rounded)
             .AddColumn($"[bold {player1Colour}]{Markup.Escape(player1Name)}[/]")
@@ -471,6 +479,7 @@ public class SimulateSessionOrchestrator(
         table.AddRow("Wounds remaining",
             $"[{player1WoundsColor}]{player1CurrentWounds}/{attacker.Wounds}[/]",
             $"[{player2WoundsColor}]{player2CurrentWounds}/{target.Wounds}[/]");
+
         table.AddRow("Damage dealt", $"[bold]{attackerDamage}[/]", $"[bold]{targetDamage}[/]");
         table.AddRow("Incapacitated?",
             player1Incapacitated ? "[red]Incapacitated[/]" : "[green]Alive[/]",

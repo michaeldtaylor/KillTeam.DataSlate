@@ -1,17 +1,10 @@
 namespace KillTeam.DataSlate.Domain.Engine.WeaponRules.Context;
 
-public class ClassifiedAttackContext
+public class ClassifiedAttackContext(int critHits, int normalHits, int rawCrits)
 {
-    public int CritHits { get; set; }
+    public int CritHits { get; set; } = critHits;
 
-    public int NormalHits { get; set; }
+    public int NormalHits { get; set; } = normalHits;
 
-    public int RawCrits { get; }
-
-    public ClassifiedAttackContext(int critHits, int normalHits, int rawCrits)
-    {
-        CritHits = critHits;
-        NormalHits = normalHits;
-        RawCrits = rawCrits;
-    }
+    public int RawCrits { get; } = rawCrits;
 }

@@ -214,19 +214,19 @@ public class FightEngine(
             ? FightResolution.CalculateDice(targetRolls, targetEffectiveHit)
             : new FightDicePool([]);
 
-        var preResolutionContext = new FightSetupContext
+        var fightSetupContext = new FightSetupContext
         {
             Attacker = attacker,
             Target = target,
-            EventStream = eventStream,
             AttackerPool = attackerPool,
             TargetPool = targetPool,
+            EventStream = eventStream,
         };
 
-        await fightWeaponRulePipeline.SetupAsync(attackerWeapon, preResolutionContext);
+        await fightWeaponRulePipeline.SetupAsync(attackerWeapon, fightSetupContext);
 
-        attackerPool = preResolutionContext.AttackerPool;
-        targetPool = preResolutionContext.TargetPool;
+        attackerPool = fightSetupContext.AttackerPool;
+        targetPool = fightSetupContext.TargetPool;
 
         var attackerCurrentWounds = attackerState.CurrentWounds;
         var targetCurrentWounds = targetState.CurrentWounds;
@@ -244,7 +244,7 @@ public class FightEngine(
                 target,
                 attackerWeapon,
                 targetWeapon,
-                preResolutionContext.BlockRestrictedToCrits);
+                fightSetupContext.BlockRestrictedToCrits);
 
             var (activePool, opponentPool, currentTurn, activeOperative, opponentOperative, activeWeapon, restrictBlocksToCrits) = fightTurn;
 

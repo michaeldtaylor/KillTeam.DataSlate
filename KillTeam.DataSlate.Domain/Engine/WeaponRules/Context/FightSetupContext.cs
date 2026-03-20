@@ -9,11 +9,11 @@ public class FightSetupContext
 
     public required Operative Target { get; init; }
 
-    public required GameEventStream? EventStream { get; init; }
-
     public required FightDicePool AttackerPool { get; set; }
 
     public required FightDicePool TargetPool { get; set; }
+
+    public required GameEventStream? EventStream { get; init; }
 
     public bool BlockRestrictedToCrits { get; set; }
 }
