@@ -71,6 +71,7 @@ public static class Program
         services.AddSingleton<IStrategyPhaseInputProvider, ConsoleStrategyPhaseInputProvider>();
         services.AddSingleton<IGuardInterruptInputProvider, ConsoleGuardInterruptInputProvider>();
         services.AddSingleton<IFirefightInputProvider, ConsoleFirefightInputProvider>();
+        services.AddSingleton<ISimulateEncounterInputProvider, ConsoleSimulateEncounterInputProvider>();
         services.AddSingleton<RerollEngine>();
         services.AddSingleton<AoEEngine>();
         services.AddSingleton<ShootWeaponRulePipeline>();
@@ -79,11 +80,12 @@ public static class Program
         services.AddSingleton<FightEngine>();
         services.AddSingleton<StrategyPhaseEngine>();
         services.AddSingleton<GuardInterruptEngine>();
+        services.AddSingleton<SimulateEncounterEngine>();
         services.AddSingleton<FirefightPhaseEngine>();
         services.AddSingleton<IGameStatePersistenceHandler, SqliteGameStatePersistenceHandler>();
         services.AddSingleton<StrategyPhaseOrchestrator>();
         services.AddSingleton<FirefightPhaseOrchestrator>();
-        services.AddSingleton<SimulateSessionOrchestrator>();
+        services.AddSingleton<SimulateOrchestrator>();
 
         var registrar = new MyTypeRegistrar(services);
         var app = new CommandApp(registrar);

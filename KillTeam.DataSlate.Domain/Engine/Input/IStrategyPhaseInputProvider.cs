@@ -13,4 +13,12 @@ public interface IStrategyPhaseInputProvider
     /// Returns null when the team is done recording ploys.
     /// </summary>
     Task<PloyEntry?> GetPloyDetailsAsync(string teamName, int currentCp);
+
+    Task DisplayPhaseHeaderAsync(int tpNumber);
+
+    Task DisplayPhaseCompleteAsync(
+        string team1Name,
+        int team1CommandPoints,
+        string team2Name,
+        int team2CommandPoints);
 }

@@ -22,6 +22,8 @@ public class StrategyPhaseEngine(
         string team2Name,
         GameEventStream? eventStream = null)
     {
+        await inputProvider.DisplayPhaseHeaderAsync(tpNumber);
+
         var winnerName = await inputProvider.SelectInitiativeWinnerAsync(team1Name, team2Name);
         var initiativeTeamId = winnerName == team1Name
             ? game.Participant1.TeamId
@@ -67,6 +69,8 @@ public class StrategyPhaseEngine(
             turningPoint, game.Id, game.Participant1.TeamId, initId, initName, cp1, cp2, eventStream);
 
         await turningPointRepository.CompleteStrategyPhaseAsync(turningPoint.Id);
+
+        await inputProvider.DisplayPhaseCompleteAsync(team1Name, cp1, team2Name, cp2);
 
         return turningPoint;
     }
