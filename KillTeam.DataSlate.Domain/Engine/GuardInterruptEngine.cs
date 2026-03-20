@@ -19,21 +19,21 @@ public class GuardInterruptEngine(
     ILogger<GuardInterruptEngine> logger)
 {
     /// <summary>
-    /// Checks each eligible guard operative on the friendly side (i.e. not the acting enemy's team).
+    /// Checks each eligible guard operative on the side opposing the activating operative.
     /// Returns the updated sequence counter after any guard interrupt activations.
     /// </summary>
     public async Task<int> CheckAndRunInterruptsAsync(
         GameContext context,
         TurningPoint turningPoint,
-        Operative actingEnemy,
+        Operative activatingOperative,
         int sequenceCounter)
     {
         logger.LogDebug("Checking guard interrupts for game {GameId}", context.Game.Id);
 
-        var enemyTeamId = actingEnemy.TeamId;
+        var activatingTeamId = activatingOperative.TeamId;
 
         var friendlyStates = context.OperativeStates
-            .Where(s => context.Operatives.TryGetValue(s.OperativeId, out var o) && o.TeamId != enemyTeamId)
+            .Where(s => context.Operatives.TryGetValue(s.OperativeId, out var o) && o.TeamId != activatingTeamId)
             .ToList();
 
         var eligibleGuards = friendlyStates
@@ -53,7 +53,7 @@ public class GuardInterruptEngine(
             }
 
             var inControlRange = await inputProvider.ConfirmInControlRangeAsync(
-                actingEnemy.Name, guardOp.Name);
+                activatingOperative.Name, guardOp.Name);
 
             if (inControlRange)
             {
@@ -69,7 +69,7 @@ public class GuardInterruptEngine(
             }
 
             var isVisible = await inputProvider.ConfirmVisibleAsync(
-                actingEnemy.Name, guardOp.Name);
+                activatingOperative.Name, guardOp.Name);
 
             if (!isVisible)
             {
