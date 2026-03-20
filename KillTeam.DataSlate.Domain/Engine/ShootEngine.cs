@@ -30,7 +30,7 @@ public class ShootEngine(
         // ── Conceal order check (Silent rule) ────────────────────────────────────
         var isOnConceal = await inputProvider.IsOnConcealOrderAsync();
 
-        var targetOperativeStates = ActionHelpers.GetActiveTargetOperativeStates(attacker, allOperativeStates, allOperatives);
+        var targetOperativeStates = ActionHelpers.GetTargetOperativeStates(attacker, allOperativeStates, allOperatives);
 
         if (targetOperativeStates.Length == 0)
         {

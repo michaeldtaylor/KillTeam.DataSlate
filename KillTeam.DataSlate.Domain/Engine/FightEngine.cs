@@ -25,7 +25,7 @@ public class FightEngine(
         var isAttackerTeam1 = attacker.TeamId == game.Participant1.TeamId;
         var attackerTeamId = attacker.TeamId;
 
-        var targetOperativeStates = ActionHelpers.GetActiveTargetOperativeStates(attacker, allOperativeStates, allOperatives);
+        var targetOperativeStates = ActionHelpers.GetTargetOperativeStates(attacker, allOperativeStates, allOperatives);
 
         if (targetOperativeStates.Length == 0)
         {

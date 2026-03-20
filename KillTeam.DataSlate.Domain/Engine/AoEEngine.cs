@@ -27,16 +27,14 @@ public class AoEEngine(
     {
         var isAttackerTeam1 = attacker.TeamId == game.Participant1.TeamId;
 
-        var additionalCandidates = allOperativeStates
-            .Where(s => s.OperativeId != target.Id && !s.IsIncapacitated && allOperatives.ContainsKey(s.OperativeId))
-            .ToList();
+        var additionalTargetOperativeStates = ActionHelpers.GetAoECandidateOperativeStates(target, allOperativeStates, allOperatives);
 
         var additionalTargetStates = new List<GameOperativeState>();
 
-        if (additionalCandidates.Count > 0)
+        if (additionalTargetOperativeStates.Length > 0)
         {
             additionalTargetStates = await inputProvider.SelectAdditionalTargetsAsync(
-                additionalCandidates,
+                additionalTargetOperativeStates,
                 allOperatives,
                 weapon,
                 attacker.Name,
