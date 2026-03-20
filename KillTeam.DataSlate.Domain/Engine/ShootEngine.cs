@@ -10,7 +10,7 @@ namespace KillTeam.DataSlate.Domain.Engine;
 public class ShootEngine(
     IShootInputProvider inputProvider,
     RerollEngine rerollEngine,
-    BlastEngine blastEngine,
+    AoEEngine aoeEngine,
     IActionRepository actionRepository,
     ShootWeaponRulePipeline shootWeaponRulePipeline)
 {
@@ -157,9 +157,9 @@ public class ShootEngine(
 
         if (shootWeaponRulePipeline.RequiresAoEResolution(weapon))
         {
-            var blastResult = await blastEngine.RunAsync(game, activation, attacker, attackerState, target, targetState, weapon, allOperativeStates, allOperatives, eventStream);
+            var aoeResult = await aoeEngine.RunAsync(game, activation, attacker, attackerState, target, targetState, weapon, allOperativeStates, allOperatives, eventStream);
 
-            return new ShootResult(blastResult.AnyIncapacitation, blastResult.TotalDamage, targetState.OperativeId);
+            return new ShootResult(aoeResult.AnyIncapacitation, aoeResult.TotalDamage, targetState.OperativeId);
         }
 
         // ── Cover status ──────────────────────────────────────────────────────────

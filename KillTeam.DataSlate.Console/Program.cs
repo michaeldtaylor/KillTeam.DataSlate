@@ -67,11 +67,11 @@ public static class Program
         services.AddSingleton<IFightInputProvider, ConsoleFightInputProvider>();
         services.AddSingleton<IShootInputProvider, ConsoleShootInputProvider>();
         services.AddSingleton<IRerollInputProvider, ConsoleRerollInputProvider>();
-        services.AddSingleton<IBlastInputProvider, ConsoleBlastInputProvider>();
+        services.AddSingleton<IAoEInputProvider, ConsoleAoEInputProvider>();
         services.AddSingleton<IStrategyPhaseInputProvider, ConsoleStrategyPhaseInputProvider>();
         services.AddSingleton<IGuardInterruptInputProvider, ConsoleGuardInterruptInputProvider>();
         services.AddSingleton<RerollEngine>();
-        services.AddSingleton<BlastEngine>();
+        services.AddSingleton<AoEEngine>();
         services.AddSingleton<ShootWeaponRulePipeline>();
         services.AddSingleton<FightWeaponRulePipeline>();
         services.AddSingleton<ShootEngine>();

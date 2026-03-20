@@ -7,13 +7,13 @@ using KillTeam.DataSlate.Domain.Repositories;
 
 namespace KillTeam.DataSlate.Domain.Engine;
 
-public class BlastEngine(
-    IBlastInputProvider inputProvider,
+public class AoEEngine(
+    IAoEInputProvider inputProvider,
     ShootWeaponRulePipeline shootWeaponRulePipeline,
     RerollEngine rerollEngine,
     IActionRepository actionRepository)
 {
-    public async Task<BlastResult> RunAsync(
+    public async Task<AoEResult> RunAsync(
         Game game,
         Activation activation,
         Operative attacker,
@@ -38,6 +38,9 @@ public class BlastEngine(
             additionalTargetStates = await inputProvider.SelectAdditionalTargetsAsync(
                 additionalCandidates,
                 allOperatives,
+                weapon,
+                attacker.Name,
+                target.Name,
                 attacker.TeamId);
         }
 
@@ -50,7 +53,7 @@ public class BlastEngine(
         {
             if (!await inputProvider.ConfirmFriendlyFireAsync(friendlyCount))
             {
-                return new BlastResult(false, 0);
+                return new AoEResult(false, 0);
             }
         }
 
@@ -215,6 +218,6 @@ public class BlastEngine(
             await actionRepository.UpdateNarrativeAsync(action.Id, note);
         }
 
-        return new BlastResult(anyIncapacitation, totalDamage);
+        return new AoEResult(anyIncapacitation, totalDamage);
     }
 }

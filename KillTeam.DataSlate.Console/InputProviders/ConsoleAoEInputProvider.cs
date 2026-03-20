@@ -5,11 +5,14 @@ using Spectre.Console;
 
 namespace KillTeam.DataSlate.Console.InputProviders;
 
-public class ConsoleBlastInputProvider(IAnsiConsole console, ColumnContext columnContext) : IBlastInputProvider
+public class ConsoleAoEInputProvider(IAnsiConsole console, ColumnContext columnContext) : IAoEInputProvider
 {
     public async Task<List<GameOperativeState>> SelectAdditionalTargetsAsync(
         IList<GameOperativeState> candidates,
         IReadOnlyDictionary<Guid, Operative> allOperatives,
+        Weapon weapon,
+        string attackerName,
+        string targetName,
         string attackerTeamId)
     {
         if (candidates.Count == 0)
@@ -17,9 +20,16 @@ public class ConsoleBlastInputProvider(IAnsiConsole console, ColumnContext colum
             return [];
         }
 
+        var isBlast = weapon.HasRule(WeaponRuleKind.Blast);
+        var rule = isBlast ? weapon.GetRule(WeaponRuleKind.Blast) : weapon.GetRule(WeaponRuleKind.Torrent);
+        var radius = rule?.Param ?? 0;
+        var visibleTo = isBlast ? Markup.Escape(targetName) : Markup.Escape(attackerName);
+        var ruleName = isBlast ? "Blast" : "Torrent";
+        var title = $"{columnContext.Prefix}[bold]{ruleName} {radius}\"[/]: select operatives within {radius}\" of {Markup.Escape(targetName)} — visible to {visibleTo} (space to toggle, enter to confirm):";
+
         return await Task.FromResult<List<GameOperativeState>>(console.Prompt(
             new MultiSelectionPrompt<GameOperativeState>()
-                .Title($"{columnContext.Prefix}Select additional targets (space to toggle, enter to confirm):")
+                .Title(title)
                 .UseConverter(s =>
                 {
                     if (!allOperatives.TryGetValue(s.OperativeId, out var o))

@@ -24,7 +24,7 @@ public class SimulateSessionOrchestrator(
     IFightInputProvider fightInputProvider,
     IShootInputProvider shootInputProvider,
     IRerollInputProvider rerollInputProvider,
-    IBlastInputProvider blastInputProvider,
+    IAoEInputProvider aoeInputProvider,
     ShootWeaponRulePipeline ShootWeaponRulePipeline,
     IGameStatePersistenceHandler persistenceHandler,
     ColumnContext columnContext,
@@ -291,8 +291,8 @@ public class SimulateSessionOrchestrator(
         else
         {
             var rerollEngine = new RerollEngine(rerollInputProvider, gameRepository);
-            var blastEngine = new BlastEngine(blastInputProvider, ShootWeaponRulePipeline, rerollEngine, actionRepo);
-            var shootEngine = new ShootEngine(shootInputProvider, rerollEngine, blastEngine, actionRepo, ShootWeaponRulePipeline);
+            var aoeEngine = new AoEEngine(aoeInputProvider, ShootWeaponRulePipeline, rerollEngine, actionRepo);
+            var shootEngine = new ShootEngine(shootInputProvider, rerollEngine, aoeEngine, actionRepo, ShootWeaponRulePipeline);
 
             var shootResult = await shootEngine.RunAsync(game, activation, player1Operative, player1State, allStates, allOperatives, false, stream);
 
