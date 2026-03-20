@@ -119,7 +119,7 @@ public class TeamYamlImporter
                         continue;
                     }
 
-                    if (!Enum.TryParse<WeaponType>(w.Type, ignoreCase: true, out var wt))
+                    if (!Enum.TryParse<WeaponType>(w.WeaponType, ignoreCase: true, out var wt))
                     {
                         wt = WeaponType.Ranged;
                     }
@@ -268,7 +268,7 @@ internal class YamlStats
 internal class YamlWeapon
 {
     public string? Name { get; set; }
-    public string? Type { get; set; }
+    public string? WeaponType { get; set; }
     public int Atk { get; set; }
     public string? Hit { get; set; }
     public YamlDmg? Dmg { get; set; }

@@ -1,4 +1,4 @@
-﻿id: nemesis-claw
+id: nemesis-claw
 name: Nemesis Claw
 grandFaction: Chaos
 faction: Heretic Astartes
@@ -20,7 +20,7 @@ datacards:
       wounds: 15
     weapons:
       - name: Bolt pistol
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -29,7 +29,7 @@ datacards:
         weaponRules:
           - Range 8"
       - name: Plasma pistol (standard)
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -39,7 +39,7 @@ datacards:
           - Range 8"
           - Piercing 1
       - name: Plasma pistol (supercharge)
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -51,7 +51,7 @@ datacards:
           - Lethal 5+
           - Piercing 1
       - name: Nostraman chainblade
-        type: Melee
+        weaponType: Melee
         atk: 5
         hit: '3+'
         dmg:
@@ -60,7 +60,7 @@ datacards:
         weaponRules:
           - Rending
       - name: Power fist
-        type: Melee
+        weaponType: Melee
         atk: 5
         hit: '4+'
         dmg:
@@ -69,7 +69,7 @@ datacards:
         weaponRules:
           - Brutal
       - name: Power maul
-        type: Melee
+        weaponType: Melee
         atk: 5
         hit: '3+'
         dmg:
@@ -78,7 +78,7 @@ datacards:
         weaponRules:
           - Shock
       - name: Power weapon
-        type: Melee
+        weaponType: Melee
         atk: 5
         hit: '3+'
         dmg:
@@ -113,7 +113,7 @@ datacards:
       wounds: 14
     weapons:
       - name: Scoped bolt pistol (short range)
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -123,14 +123,14 @@ datacards:
           - Range 8"
           - Lethal 5+
       - name: Scoped bolt pistol (long range)
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
           normal: 3
           crit: 4
       - name: Terrorchem vial
-        type: Ranged
+        weaponType: Ranged
         atk: 5
         hit: '3+'
         dmg:
@@ -144,7 +144,7 @@ datacards:
           - Saturate
           - Terrorchem*
       - name: Tainted blade
-        type: Melee
+        weaponType: Melee
         atk: 5
         hit: '3+'
         dmg:
@@ -176,7 +176,7 @@ datacards:
       wounds: 14
     weapons:
       - name: Bolt pistol
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -185,7 +185,7 @@ datacards:
         weaponRules:
           - Range 8"
       - name: Flamer
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '2+'
         dmg:
@@ -196,7 +196,7 @@ datacards:
           - Saturate
           - Torrent 2"
       - name: Meltagun
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -207,7 +207,7 @@ datacards:
           - Devastating 4
           - Piercing 2
       - name: Plasma gun (standard)
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -216,7 +216,7 @@ datacards:
         weaponRules:
           - Piercing 1
       - name: Plasma gun (supercharge)
-        type: Melee
+        weaponType: Melee
         atk: 4
         hit: '3+'
         dmg:
@@ -227,7 +227,7 @@ datacards:
           - Lethal 5+
           - Piercing 1
       - name: Fists
-        type: Melee
+        weaponType: Melee
         atk: 4
         hit: '3+'
         dmg:
@@ -248,7 +248,7 @@ datacards:
       wounds: 14
     weapons:
       - name: Bolt pistol
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -257,7 +257,7 @@ datacards:
         weaponRules:
           - Range 8"
       - name: Heavy bolter (focused)
-        type: Ranged
+        weaponType: Ranged
         atk: 5
         hit: '3+'
         dmg:
@@ -267,7 +267,7 @@ datacards:
           - Heavy (Reposition only)
           - Piercing Crits 1
       - name: Heavy bolter (sweeping)
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -278,7 +278,7 @@ datacards:
           - Piercing Crits 1
           - Torrent 1"
       - name: Missile launcher (frag)
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -288,7 +288,7 @@ datacards:
           - Blast 2"
           - Heavy (Reposition only)
       - name: Missile launcher (krak)
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -298,7 +298,7 @@ datacards:
           - Heavy (Reposition only)
           - Piercing 1
       - name: Fists
-        type: Melee
+        weaponType: Melee
         atk: 4
         hit: '3+'
         dmg:
@@ -319,7 +319,7 @@ datacards:
       wounds: 14
     weapons:
       - name: Lightning claws
-        type: Melee
+        weaponType: Melee
         atk: 5
         hit: '3+'
         dmg:
@@ -348,7 +348,7 @@ datacards:
       wounds: 14
     weapons:
       - name: Bolt pistol
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -357,7 +357,7 @@ datacards:
         weaponRules:
           - Range 8"
       - name: Nostraman chainglaive
-        type: Melee
+        weaponType: Melee
         atk: 5
         hit: '3+'
         dmg:
@@ -386,7 +386,7 @@ datacards:
       wounds: 14
     weapons:
       - name: Bolt pistol
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -395,7 +395,7 @@ datacards:
         weaponRules:
           - Range 8"
       - name: Chainsword
-        type: Melee
+        weaponType: Melee
         atk: 5
         hit: '3+'
         dmg:
@@ -428,7 +428,7 @@ datacards:
       wounds: 14
     weapons:
       - name: Bolt pistol
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -437,21 +437,21 @@ datacards:
         weaponRules:
           - Range 8"
       - name: Boltgun
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
           normal: 3
           crit: 4
       - name: Chainsword
-        type: Melee
+        weaponType: Melee
         atk: 5
         hit: '3+'
         dmg:
           normal: 4
           crit: 5
       - name: Fists
-        type: Melee
+        weaponType: Melee
         atk: 4
         hit: '3+'
         dmg:

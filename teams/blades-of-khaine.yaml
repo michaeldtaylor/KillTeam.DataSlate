@@ -1,4 +1,4 @@
-﻿id: blades-of-khaine
+id: blades-of-khaine
 name: Blades of Khaine
 grandFaction: Aeldari
 faction: Asuryani
@@ -20,7 +20,7 @@ datacards:
       wounds: 9
     weapons:
       - name: Shuriken catapult
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -29,7 +29,7 @@ datacards:
         weaponRules:
           - Rending
       - name: Shuriken pistol
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -39,7 +39,7 @@ datacards:
           - Range 8"
           - Rending
       - name: Twin shuriken catapult
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -49,7 +49,7 @@ datacards:
           - Ceaseless
           - Rending
       - name: Diresword
-        type: Melee
+        weaponType: Melee
         atk: 5
         hit: '3+'
         dmg:
@@ -59,21 +59,21 @@ datacards:
           - Lethal 5+
           - Rending
       - name: Fists
-        type: Melee
+        weaponType: Melee
         atk: 4
         hit: '3+'
         dmg:
           normal: 2
           crit: 4
       - name: Gun butts
-        type: Melee
+        weaponType: Melee
         atk: 3
         hit: '4+'
         dmg:
           normal: 2
           crit: 3
       - name: Power weapon
-        type: Melee
+        weaponType: Melee
         atk: 5
         hit: '3+'
         dmg:
@@ -104,7 +104,7 @@ datacards:
       wounds: 8
     weapons:
       - name: Shuriken catapult
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -113,7 +113,7 @@ datacards:
         weaponRules:
           - Rending
       - name: Fists
-        type: Melee
+        weaponType: Melee
         atk: 4
         hit: '3+'
         dmg:
@@ -139,7 +139,7 @@ datacards:
       wounds: 9
     weapons:
       - name: Shuriken pistol
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -149,7 +149,7 @@ datacards:
           - Range 8"
           - Rending
       - name: Triskele (throw)
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -160,7 +160,7 @@ datacards:
           - Rending
           - Torrent 2"
       - name: Executioner
-        type: Melee
+        weaponType: Melee
         atk: 5
         hit: '3+'
         dmg:
@@ -169,7 +169,7 @@ datacards:
         weaponRules:
           - Lethal 5+
       - name: Mirrorswords
-        type: Melee
+        weaponType: Melee
         atk: 5
         hit: '3+'
         dmg:
@@ -179,7 +179,7 @@ datacards:
           - Ceaseless
           - Lethal 5+
       - name: Power weapon
-        type: Melee
+        weaponType: Melee
         atk: 5
         hit: '3+'
         dmg:
@@ -188,7 +188,7 @@ datacards:
         weaponRules:
           - Lethal 5+
       - name: Triskele (slice)
-        type: Melee
+        weaponType: Melee
         atk: 5
         hit: '3+'
         dmg:
@@ -217,7 +217,7 @@ datacards:
       wounds: 8
     weapons:
       - name: Shuriken pistol
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -227,7 +227,7 @@ datacards:
           - Range 8"
           - Rending
       - name: Power weapon
-        type: Melee
+        weaponType: Melee
         atk: 4
         hit: '3+'
         dmg:
@@ -255,7 +255,7 @@ datacards:
       wounds: 9
     weapons:
       - name: Shuriken pistol
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -265,7 +265,7 @@ datacards:
           - Range 8"
           - Rending
       - name: Twin shuriken pistols
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '4+'
         dmg:
@@ -276,7 +276,7 @@ datacards:
           - Ceaseless
           - Rending
       - name: Biting blade
-        type: Melee
+        weaponType: Melee
         atk: 5
         hit: '3+'
         dmg:
@@ -285,7 +285,7 @@ datacards:
         weaponRules:
           - Rending
       - name: Scorpion's claw and chainsword
-        type: Melee
+        weaponType: Melee
         atk: 5
         hit: '3+'
         dmg:
@@ -295,7 +295,7 @@ datacards:
           - Brutal
           - Lethal 5+
       - name: Twin chainswords
-        type: Melee
+        weaponType: Melee
         atk: 5
         hit: '3+'
         dmg:
@@ -325,7 +325,7 @@ datacards:
       wounds: 8
     weapons:
       - name: Shuriken pistol
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -335,7 +335,7 @@ datacards:
           - Range 8"
           - Rending
       - name: Chainsword
-        type: Melee
+        weaponType: Melee
         atk: 4
         hit: '3+'
         dmg:

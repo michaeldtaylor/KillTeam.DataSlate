@@ -1,4 +1,4 @@
-﻿id: corsair-voidscarred
+id: corsair-voidscarred
 name: Corsair Voidscarred
 grandFaction: Aeldari
 faction: Anhrathe
@@ -19,7 +19,7 @@ datacards:
       wounds: 9
     weapons:
       - name: Neuro disruptor
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -30,7 +30,7 @@ datacards:
           - Piercing 1
           - Stun
       - name: Shuriken pistol
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -40,7 +40,7 @@ datacards:
           - Range 8"
           - Rending
       - name: Shuriken rifle
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -49,7 +49,7 @@ datacards:
         weaponRules:
           - Rending
       - name: Power weapon
-        type: Melee
+        weaponType: Melee
         atk: 4
         hit: '3+'
         dmg:
@@ -77,14 +77,14 @@ datacards:
       wounds: 8
     weapons:
       - name: Ranger long rifle (mobile)
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
           normal: 3
           crit: 4
       - name: Ranger long rifle (stationary)
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '2+'
         dmg:
@@ -95,7 +95,7 @@ datacards:
           - Heavy
           - Silent
       - name: Shuriken pistol
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -105,7 +105,7 @@ datacards:
           - Range 8"
           - Rending
       - name: Fists
-        type: Melee
+        weaponType: Melee
         atk: 3
         hit: '3+'
         dmg:
@@ -132,7 +132,7 @@ datacards:
       wounds: 8
     weapons:
       - name: Blaster
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -141,7 +141,7 @@ datacards:
         weaponRules:
           - Piercing 2
       - name: Shredder
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -151,7 +151,7 @@ datacards:
           - Rending
           - Torrent 2"
       - name: Shuriken pistol
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -161,7 +161,7 @@ datacards:
           - Range 8"
           - Rending
       - name: Fists
-        type: Melee
+        weaponType: Melee
         atk: 3
         hit: '3+'
         dmg:
@@ -182,7 +182,7 @@ datacards:
       wounds: 8
     weapons:
       - name: Shuriken cannon (focused)
-        type: Ranged
+        weaponType: Ranged
         atk: 5
         hit: '3+'
         dmg:
@@ -192,7 +192,7 @@ datacards:
           - Heavy (Dash only)
           - Rending
       - name: Shuriken cannon (sweeping)
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -203,7 +203,7 @@ datacards:
           - Rending
           - Torrent 1"
       - name: Shuriken pistol
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -213,7 +213,7 @@ datacards:
           - Range 8"
           - Rending
       - name: Wraithcannon
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -224,7 +224,7 @@ datacards:
           - Heavy (Dash only)
           - Piercing 2
       - name: Fists
-        type: Melee
+        weaponType: Melee
         atk: 3
         hit: '3+'
         dmg:
@@ -245,7 +245,7 @@ datacards:
       wounds: 8
     weapons:
       - name: Shuriken pistol
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -255,7 +255,7 @@ datacards:
           - Range 8"
           - Rending
       - name: Dual power weapons
-        type: Melee
+        weaponType: Melee
         atk: 4
         hit: '3+'
         dmg:
@@ -284,7 +284,7 @@ datacards:
       wounds: 8
     weapons:
       - name: Faolchú
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -296,7 +296,7 @@ datacards:
           - Seek Light
           - Silent
       - name: Shuriken pistol
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -306,7 +306,7 @@ datacards:
           - Range 8"
           - Rending
       - name: Power weapon
-        type: Melee
+        weaponType: Melee
         atk: 4
         hit: '3+'
         dmg:
@@ -334,7 +334,7 @@ datacards:
       wounds: 8
     weapons:
       - name: Shuriken pistol
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -344,7 +344,7 @@ datacards:
           - Range 8"
           - Rending
       - name: Throwing blades
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -354,7 +354,7 @@ datacards:
           - Range 6"
           - Silent
       - name: Hekatarii blades
-        type: Melee
+        weaponType: Melee
         atk: 4
         hit: '3+'
         dmg:
@@ -385,7 +385,7 @@ datacards:
       wounds: 8
     weapons:
       - name: Shuriken pistol
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -395,7 +395,7 @@ datacards:
           - Range 8"
           - Rending
       - name: Power weapon
-        type: Melee
+        weaponType: Melee
         atk: 4
         hit: '3+'
         dmg:
@@ -429,7 +429,7 @@ datacards:
       wounds: 8
     weapons:
       - name: Fusion pistol
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -440,7 +440,7 @@ datacards:
           - Devastating 3
           - Piercing 2
       - name: Shuriken pistol
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -450,7 +450,7 @@ datacards:
           - Range 8"
           - Rending
       - name: Fists
-        type: Melee
+        weaponType: Melee
         atk: 3
         hit: '3+'
         dmg:
@@ -480,7 +480,7 @@ datacards:
       wounds: 8
     weapons:
       - name: Shuriken pistol
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -490,7 +490,7 @@ datacards:
           - Range 8"
           - Rending
       - name: Shuriken rifle
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -499,7 +499,7 @@ datacards:
         weaponRules:
           - Rending
       - name: Power weapon
-        type: Melee
+        weaponType: Melee
         atk: 4
         hit: '3+'
         dmg:
@@ -508,7 +508,7 @@ datacards:
         weaponRules:
           - Lethal 5+
       - name: Fists
-        type: Melee
+        weaponType: Melee
         atk: 3
         hit: '3+'
         dmg:
@@ -533,7 +533,7 @@ datacards:
       wounds: 8
     weapons:
       - name: Freezing grasp
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -545,7 +545,7 @@ datacards:
           - Silent
           - Stun
       - name: Lightning strike
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -555,7 +555,7 @@ datacards:
           - PSYCHIC
           - 2" Devastating 2
       - name: Shuriken pistol
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -565,7 +565,7 @@ datacards:
           - Range 8"
           - Rending
       - name: Witch staff
-        type: Melee
+        weaponType: Melee
         atk: 4
         hit: '3+'
         dmg:

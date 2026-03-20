@@ -1,4 +1,4 @@
-﻿id: plague-marines
+id: plague-marines
 name: Plague Marines
 grandFaction: Chaos
 faction: Heretic Astartes
@@ -19,7 +19,7 @@ datacards:
       wounds: 15
     weapons:
       - name: Plasma pistol (standard)
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -29,7 +29,7 @@ datacards:
           - Range 8"
           - Piercing 1
       - name: Plasma pistol (supercharge)
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -41,7 +41,7 @@ datacards:
           - Lethal 5+
           - Piercing 1
       - name: Plague sword
-        type: Melee
+        weaponType: Melee
         atk: 5
         hit: '3+'
         dmg:
@@ -72,14 +72,14 @@ datacards:
       wounds: 14
     weapons:
       - name: Boltgun
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
           normal: 3
           crit: 4
       - name: Fists
-        type: Melee
+        weaponType: Melee
         atk: 4
         hit: '3+'
         dmg:
@@ -106,7 +106,7 @@ datacards:
       wounds: 14
     weapons:
       - name: Flail of Corruption
-        type: Melee
+        weaponType: Melee
         atk: 5
         hit: '3+'
         dmg:
@@ -138,7 +138,7 @@ datacards:
       wounds: 14
     weapons:
       - name: Plague spewer
-        type: Ranged
+        weaponType: Ranged
         atk: 5
         hit: '2+'
         dmg:
@@ -151,7 +151,7 @@ datacards:
           - Torrent 2"
           - Poison*
       - name: Fists
-        type: Melee
+        weaponType: Melee
         atk: 4
         hit: '3+'
         dmg:
@@ -172,7 +172,7 @@ datacards:
       wounds: 14
     weapons:
       - name: Bolt pistol
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -181,7 +181,7 @@ datacards:
         weaponRules:
           - Range 8"
       - name: Plague knife
-        type: Melee
+        weaponType: Melee
         atk: 5
         hit: '3+'
         dmg:
@@ -211,7 +211,7 @@ datacards:
       wounds: 14
     weapons:
       - name: Entropy
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -224,7 +224,7 @@ datacards:
           - Severe
           - Poison*
       - name: Plague wind
-        type: Ranged
+        weaponType: Ranged
         atk: 6
         hit: '3+'
         dmg:
@@ -237,7 +237,7 @@ datacards:
           - Torrent 1"
           - Poison*
       - name: Corrupted staff
-        type: Melee
+        weaponType: Melee
         atk: 4
         hit: '3+'
         dmg:
@@ -275,7 +275,7 @@ datacards:
       wounds: 14
     weapons:
       - name: Boltgun
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -284,7 +284,7 @@ datacards:
         weaponRules:
           - Toxic*
       - name: Plague knife
-        type: Melee
+        weaponType: Melee
         atk: 4
         hit: '3+'
         dmg:

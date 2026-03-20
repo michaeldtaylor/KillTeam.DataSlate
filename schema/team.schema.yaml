@@ -171,13 +171,12 @@ $defs:
         pattern: '^[2-6]\+$'
   weapon:
     type: object
-    required: [name, type, atk, hit, dmg]
+    required: [name, weaponType, atk, hit, dmg]
     additionalProperties: false
     properties:
       name:
         type: string
-      type:
-        type: string
+      weaponType:
         enum: [Ranged, Melee]
       atk:
         type: integer
@@ -198,6 +197,6 @@ $defs:
             minimum: 0
       weaponRules:
         type: array
-        description: 'Individual special rule names (e.g. "Range 8\"", "Piercing 1"). Omitted when empty.'
+        description: 'Individual weapon rules (e.g. "Range 8\"", "Piercing 1"). Omitted when empty.'
         items:
           type: string

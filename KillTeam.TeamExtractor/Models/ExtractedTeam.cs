@@ -247,7 +247,7 @@ public class ExtractedTeam
     private static void WriteWeapon(StringBuilder sb, ExtractedWeapon w)
     {
         sb.AppendLine("      - name: " + YamlWriter.Scalar(N(w.Name)));
-        sb.AppendLine("        type: " + YamlWriter.Scalar(w.Type.ToString()));
+        sb.AppendLine("        weaponType: " + YamlWriter.Scalar(w.Type.ToString()));
         YamlWriter.WriteKeyInt(sb, 8, "atk", w.Atk);
         sb.AppendLine("        hit: " + YamlWriter.Scalar(N(w.Hit)));
         sb.AppendLine("        dmg:");

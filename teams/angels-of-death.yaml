@@ -1,4 +1,4 @@
-﻿id: angels-of-death
+id: angels-of-death
 name: Angels of Death
 grandFaction: Imperium
 faction: Adeptus Astartes
@@ -19,7 +19,7 @@ datacards:
       wounds: 15
     weapons:
       - name: Plasma pistol (standard)
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -29,7 +29,7 @@ datacards:
           - Range 8"
           - Piercing 1
       - name: Plasma pistol (supercharge)
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -41,7 +41,7 @@ datacards:
           - Lethal 5+
           - Piercing 1
       - name: Power fist
-        type: Melee
+        weaponType: Melee
         atk: 5
         hit: '3+'
         dmg:
@@ -75,7 +75,7 @@ datacards:
       wounds: 15
     weapons:
       - name: Hand flamer
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '2+'
         dmg:
@@ -86,7 +86,7 @@ datacards:
           - Saturate
           - Torrent 1"
       - name: Heavy bolt pistol
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -96,7 +96,7 @@ datacards:
           - Range 8"
           - Piercing Crits 1
       - name: Plasma pistol (standard)
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -106,7 +106,7 @@ datacards:
           - Range 8"
           - Piercing 1
       - name: Plasma pistol (supercharge)
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -118,14 +118,14 @@ datacards:
           - Lethal 5+
           - Piercing 1
       - name: Chainsword
-        type: Melee
+        weaponType: Melee
         atk: 5
         hit: '3+'
         dmg:
           normal: 4
           crit: 5
       - name: Power fist
-        type: Melee
+        weaponType: Melee
         atk: 5
         hit: '4+'
         dmg:
@@ -134,7 +134,7 @@ datacards:
         weaponRules:
           - Brutal
       - name: Power weapon
-        type: Melee
+        weaponType: Melee
         atk: 5
         hit: '3+'
         dmg:
@@ -143,7 +143,7 @@ datacards:
         weaponRules:
           - Lethal 5+
       - name: Thunder hammer
-        type: Melee
+        weaponType: Melee
         atk: 5
         hit: '4+'
         dmg:
@@ -177,7 +177,7 @@ datacards:
       wounds: 15
     weapons:
       - name: Auto bolt rifle
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -186,7 +186,7 @@ datacards:
         weaponRules:
           - Torrent 1"
       - name: Bolt rifle
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -195,7 +195,7 @@ datacards:
         weaponRules:
           - Piercing Crits 1
       - name: Stalker bolt rifle (heavy)
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -206,28 +206,28 @@ datacards:
           - Lethal 5+
           - Piercing Crits 1
       - name: Stalker bolt rifle (mobile)
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
           normal: 3
           crit: 4
       - name: Chainsword
-        type: Melee
+        weaponType: Melee
         atk: 4
         hit: '3+'
         dmg:
           normal: 4
           crit: 5
       - name: Fists
-        type: Melee
+        weaponType: Melee
         atk: 4
         hit: '3+'
         dmg:
           normal: 3
           crit: 4
       - name: Power fist
-        type: Melee
+        weaponType: Melee
         atk: 4
         hit: '4+'
         dmg:
@@ -236,7 +236,7 @@ datacards:
         weaponRules:
           - Brutal
       - name: Power weapon
-        type: Melee
+        weaponType: Melee
         atk: 4
         hit: '3+'
         dmg:
@@ -245,7 +245,7 @@ datacards:
         weaponRules:
           - Lethal 5+
       - name: Thunder hammer
-        type: Melee
+        weaponType: Melee
         atk: 4
         hit: '4+'
         dmg:
@@ -278,7 +278,7 @@ datacards:
       wounds: 14
     weapons:
       - name: Heavy bolt pistol
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -288,7 +288,7 @@ datacards:
           - Range 8"
           - Piercing Crits 1
       - name: Chainsword
-        type: Melee
+        weaponType: Melee
         atk: 5
         hit: '3+'
         dmg:
@@ -313,7 +313,7 @@ datacards:
       wounds: 14
     weapons:
       - name: Heavy bolt pistol
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -323,7 +323,7 @@ datacards:
           - Range 8"
           - Piercing Crits 1
       - name: Chainsword
-        type: Melee
+        weaponType: Melee
         atk: 5
         hit: '3+'
         dmg:
@@ -345,7 +345,7 @@ datacards:
       wounds: 18
     weapons:
       - name: Bolt pistol
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -354,7 +354,7 @@ datacards:
         weaponRules:
           - Range 8"
       - name: Heavy bolter (focused)
-        type: Ranged
+        weaponType: Ranged
         atk: 5
         hit: '3+'
         dmg:
@@ -363,7 +363,7 @@ datacards:
         weaponRules:
           - Piercing Crits 1
       - name: Heavy bolter (sweeping)
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -373,7 +373,7 @@ datacards:
           - Piercing Crits 1
           - Torrent 1"
       - name: Fists
-        type: Melee
+        weaponType: Melee
         atk: 4
         hit: '3+'
         dmg:
@@ -395,7 +395,7 @@ datacards:
       wounds: 14
     weapons:
       - name: Auto bolt rifle
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -404,7 +404,7 @@ datacards:
         weaponRules:
           - Torrent 1"
       - name: Auxiliary grenade launcher (frag)
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -413,7 +413,7 @@ datacards:
         weaponRules:
           - Blast 2"
       - name: Auxiliary grenade launcher (krak)
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -422,7 +422,7 @@ datacards:
         weaponRules:
           - Piercing 1
       - name: Bolt rifle
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -431,7 +431,7 @@ datacards:
         weaponRules:
           - Piercing Crits 1
       - name: Stalker bolt rifle (heavy)
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -442,14 +442,14 @@ datacards:
           - Lethal 5+
           - Piercing Crits 1
       - name: Stalker bolt rifle (mobile)
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
           normal: 3
           crit: 4
       - name: Fists
-        type: Melee
+        weaponType: Melee
         atk: 4
         hit: '3+'
         dmg:
@@ -471,7 +471,7 @@ datacards:
       wounds: 14
     weapons:
       - name: Auto bolt rifle
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -480,7 +480,7 @@ datacards:
         weaponRules:
           - Torrent 1"
       - name: Bolt rifle
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -489,7 +489,7 @@ datacards:
         weaponRules:
           - Piercing Crits 1
       - name: Stalker bolt rifle (heavy)
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -500,14 +500,14 @@ datacards:
           - Lethal 5+
           - Piercing Crits 1
       - name: Stalker bolt rifle (mobile)
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
           normal: 3
           crit: 4
       - name: Fists
-        type: Melee
+        weaponType: Melee
         atk: 4
         hit: '3+'
         dmg:
@@ -529,7 +529,7 @@ datacards:
       wounds: 12
     weapons:
       - name: Bolt pistol
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '3+'
         dmg:
@@ -538,7 +538,7 @@ datacards:
         weaponRules:
           - Range 8"
       - name: Bolt sniper rifle (executioner)
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '2+'
         dmg:
@@ -550,7 +550,7 @@ datacards:
           - Seek Light
           - Silent
       - name: Bolt sniper rifle (hyperfrag)
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '2+'
         dmg:
@@ -561,7 +561,7 @@ datacards:
           - Heavy (Dash only)
           - Silent
       - name: Bolt sniper rifle (mortis)
-        type: Ranged
+        weaponType: Ranged
         atk: 4
         hit: '2+'
         dmg:
@@ -573,7 +573,7 @@ datacards:
           - Piercing 1
           - Silent
       - name: Fists
-        type: Melee
+        weaponType: Melee
         atk: 4
         hit: '3+'
         dmg:

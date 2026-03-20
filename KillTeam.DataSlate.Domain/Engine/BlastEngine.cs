@@ -9,11 +9,13 @@ namespace KillTeam.DataSlate.Domain.Engine;
 
 public class BlastEngine(
     IBlastInputProvider inputProvider,
-    ShootWeaponRulePipeline ShootWeaponRulePipeline,
+    ShootWeaponRulePipeline shootWeaponRulePipeline,
     RerollEngine rerollEngine,
     IActionRepository actionRepository)
 {
     public async Task<BlastResult> RunAsync(
+        Game game,
+        Activation activation,
         Operative attacker,
         GameOperativeState attackerState,
         Operative target,
@@ -21,8 +23,6 @@ public class BlastEngine(
         Weapon weapon,
         IReadOnlyList<GameOperativeState> allOperativeStates,
         IReadOnlyDictionary<Guid, Operative> allOperatives,
-        Game game,
-        Activation activation,
         GameEventStream? eventStream = null)
     {
         var isAttackerTeam1 = attacker.TeamId == game.Participant1.TeamId;
@@ -113,7 +113,7 @@ public class BlastEngine(
                 CritDmg: weapon.CriticalDmg
             );
 
-            var blastResult = await ShootWeaponRulePipeline.ResolveShootAsync(weapon, context);
+            var blastResult = await shootWeaponRulePipeline.ResolveShootAsync(weapon, context);
 
             var newWounds = Math.Max(0, targetOperativeState.CurrentWounds - blastResult.TotalDamage);
 
