@@ -14,7 +14,6 @@ public class PlayCommand(
     IAnsiConsole console,
     IGameRepository gameRepository,
     ITurningPointRepository turningPointRepository,
-    ITeamRepository teamRepository,
     StrategyPhaseOrchestrator strategyPhaseOrchestrator,
     FirefightPhaseOrchestrator firefightPhaseOrchestrator,
     ILogger<PlayCommand> logger) : AsyncCommand<PlayCommand.Settings>
@@ -52,11 +51,8 @@ public class PlayCommand(
             return 0;
         }
 
-        var team1 = await teamRepository.GetByIdAsync(game.Participant1.TeamId);
-        var team2 = await teamRepository.GetByIdAsync(game.Participant2.TeamId);
-
-        var team1Name = team1?.Name ?? game.Participant1.TeamName;
-        var team2Name = team2?.Name ?? game.Participant2.TeamName;
+        var team1Name = game.Participant1.TeamName;
+        var team2Name = game.Participant2.TeamName;
 
         console.Write(new Rule($"[bold]Team Game[/]  {Markup.Escape(team1Name)} vs {Markup.Escape(team2Name)}"));
 
