@@ -402,23 +402,23 @@ public class FirefightPhaseEngine(
     {
         await inputProvider.DisplayGameOverAsync();
 
-        var teamAAllIncap = allStates
+        var participant1AllIncap = allStates
             .Where(s => allOperatives.TryGetValue(s.OperativeId, out var o) && o.TeamId == game.Participant1.TeamId)
             .All(s => s.IsIncapacitated);
-        var teamBAllIncap = allStates
+        var participant2AllIncap = allStates
             .Where(s => allOperatives.TryGetValue(s.OperativeId, out var o) && o.TeamId == game.Participant2.TeamId)
             .All(s => s.IsIncapacitated);
 
-        var vp1 = await inputProvider.GetFinalVpAsync("Team A");
-        var vp2 = await inputProvider.GetFinalVpAsync("Team B");
+        var vp1 = await inputProvider.GetFinalVpAsync(game.Participant1.TeamName);
+        var vp2 = await inputProvider.GetFinalVpAsync(game.Participant2.TeamName);
 
         string? winnerTeamId;
 
-        if (teamAAllIncap && !teamBAllIncap)
+        if (participant1AllIncap && !participant2AllIncap)
         {
             winnerTeamId = game.Participant2.TeamId;
         }
-        else if (teamBAllIncap && !teamAAllIncap)
+        else if (participant2AllIncap && !participant1AllIncap)
         {
             winnerTeamId = game.Participant1.TeamId;
         }
@@ -433,11 +433,21 @@ public class FirefightPhaseEngine(
 
         await gameRepository.UpdateStatusAsync(game.Id, GameStatus.Completed, winnerTeamId, vp1, vp2);
 
-        var winnerLabel = winnerTeamId is null
+        var winnerTeamName = winnerTeamId is null
             ? null
-            : winnerTeamId == game.Participant1.TeamId ? "Team A" : "Team B";
+            : winnerTeamId == game.Participant1.TeamId
+                ? game.Participant1.TeamName
+                : game.Participant2.TeamName;
 
-        await inputProvider.DisplayWinnerAsync(winnerLabel, vp1, vp2);
+        var winnerVp = winnerTeamId == game.Participant1.TeamId ? vp1 : vp2;
+
+        await inputProvider.DisplayWinnerAsync(
+            winnerTeamName,
+            winnerVp,
+            game.Participant1.TeamName,
+            vp1,
+            game.Participant2.TeamName,
+            vp2);
     }
 
     private static bool IsTurningPointOver(
@@ -458,10 +468,10 @@ public class FirefightPhaseEngine(
         }
 
         var teamAReady = allStates.Any(s =>
-            !s.IsIncapacitated && s.IsReady
+            s is { IsIncapacitated: false, IsReady: true }
             && allOperatives.TryGetValue(s.OperativeId, out var o) && o.TeamId == game.Participant1.TeamId);
         var teamBReady = allStates.Any(s =>
-            !s.IsIncapacitated && s.IsReady
+            s is { IsIncapacitated: false, IsReady: true }
             && allOperatives.TryGetValue(s.OperativeId, out var o) && o.TeamId == game.Participant2.TeamId);
 
         return !teamAReady && !teamBReady;

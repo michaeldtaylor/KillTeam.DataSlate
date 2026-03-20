@@ -22,7 +22,13 @@ public interface IFirefightInputProvider
 
     Task DisplayGameOverAsync();
 
-    Task DisplayWinnerAsync(string? winnerLabel, int vp1, int vp2);
+    Task DisplayWinnerAsync(
+        string? winnerTeamName,
+        int winnerVp,
+        string team1Name,
+        int team1Vp,
+        string team2Name,
+        int team2Vp);
 
     Task<(Operative operative, GameOperativeState state)> SelectActivatingOperativeAsync(
         IReadOnlyList<(Operative operative, GameOperativeState state)> candidates);

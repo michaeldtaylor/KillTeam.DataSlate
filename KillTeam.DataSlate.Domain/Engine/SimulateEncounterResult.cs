@@ -2,8 +2,8 @@ namespace KillTeam.DataSlate.Domain.Engine;
 
 public record SimulateEncounterResult(
     int AttackerDamageDealt,
-    int DefenderDamageDealt,
+    int TargetDamageDealt,
     bool AttackerIncapacitated,
-    bool DefenderIncapacitated,
+    bool TargetIncapacitated,
     int AttackerCurrentWounds,
-    int DefenderCurrentWounds);
+    int TargetCurrentWounds);

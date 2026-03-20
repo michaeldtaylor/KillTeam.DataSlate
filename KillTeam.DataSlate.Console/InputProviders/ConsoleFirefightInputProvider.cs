@@ -93,11 +93,17 @@ public class ConsoleFirefightInputProvider(IAnsiConsole console) : IFirefightInp
         return Task.CompletedTask;
     }
 
-    public Task DisplayWinnerAsync(string? winnerLabel, int vp1, int vp2)
+    public Task DisplayWinnerAsync(
+        string? winnerTeamName,
+        int winnerVp,
+        string team1Name,
+        int team1Vp,
+        string team2Name,
+        int team2Vp)
     {
-        console.MarkupLine(winnerLabel is not null
-            ? $"[bold green]Winner: {winnerLabel} — {(winnerLabel == "Team A" ? vp1 : vp2)} VP[/]"
-            : $"[yellow]Draw! Team A: {vp1} VP  |  Team B: {vp2} VP[/]");
+        console.MarkupLine(winnerTeamName is not null
+            ? $"[bold green]Winner: {Markup.Escape(winnerTeamName)} — {winnerVp} VP[/]"
+            : $"[yellow]Draw! {Markup.Escape(team1Name)}: {team1Vp} VP  |  {Markup.Escape(team2Name)}: {team2Vp} VP[/]");
 
         return Task.CompletedTask;
     }

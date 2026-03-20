@@ -26,8 +26,8 @@ public class SimulateEncounterEngine(
     public async Task<SimulateEncounterResult> RunAsync(
         Operative attacker,
         Team attackerTeam,
-        Operative defender,
-        Team defenderTeam,
+        Operative target,
+        Team targetTeam,
         ActionType actionType,
         Action<GameEventStream>? configureStream = null)
     {
@@ -44,8 +44,8 @@ public class SimulateEncounterEngine(
             },
             Participant2 = new GameParticipant
             {
-                TeamId = defenderTeam.Id,
-                TeamName = defenderTeam.Name,
+                TeamId = targetTeam.Id,
+                TeamName = targetTeam.Name,
                 PlayerId = Guid.Empty,
                 CommandPoints = 0,
             },
@@ -77,16 +77,16 @@ public class SimulateEncounterEngine(
             Order = Order.Engage,
         };
 
-        var defenderState = new GameOperativeState
+        var targetState = new GameOperativeState
         {
             GameId = game.Id,
-            OperativeId = defender.Id,
-            CurrentWounds = defender.Wounds,
+            OperativeId = target.Id,
+            CurrentWounds = target.Wounds,
             Order = Order.Engage,
         };
 
         var stateRepo = new InMemoryGameOperativeStateRepository();
-        stateRepo.Seed([attackerState, defenderState]);
+        stateRepo.Seed([attackerState, targetState]);
 
         var actionRepo = new InMemoryActionRepository();
         var allStates = stateRepo.GetAll();
@@ -94,7 +94,7 @@ public class SimulateEncounterEngine(
         var allOperatives = new Dictionary<Guid, Operative>
         {
             [attacker.Id] = attacker,
-            [defender.Id] = defender,
+            [target.Id] = target,
         };
 
         var stream = new GameEventStream(game.Id, persistenceHandler.HandleAsync);
@@ -120,11 +120,11 @@ public class SimulateEncounterEngine(
 
             return new SimulateEncounterResult(
                 AttackerDamageDealt: result.AttackerDamageDealt,
-                DefenderDamageDealt: result.TargetDamageDealt,
+                TargetDamageDealt: result.TargetDamageDealt,
                 AttackerIncapacitated: result.TargetCausedIncapacitation,
-                DefenderIncapacitated: result.AttackerCausedIncapacitation,
+                TargetIncapacitated: result.AttackerCausedIncapacitation,
                 AttackerCurrentWounds: attackerState.CurrentWounds,
-                DefenderCurrentWounds: defenderState.CurrentWounds);
+                TargetCurrentWounds: targetState.CurrentWounds);
         }
         else
         {
@@ -154,11 +154,11 @@ public class SimulateEncounterEngine(
 
             return new SimulateEncounterResult(
                 AttackerDamageDealt: result.DamageDealt,
-                DefenderDamageDealt: 0,
+                TargetDamageDealt: 0,
                 AttackerIncapacitated: false,
-                DefenderIncapacitated: result.CausedIncapacitation,
+                TargetIncapacitated: result.CausedIncapacitation,
                 AttackerCurrentWounds: attackerState.CurrentWounds,
-                DefenderCurrentWounds: defenderState.CurrentWounds);
+                TargetCurrentWounds: targetState.CurrentWounds);
         }
     }
 }
