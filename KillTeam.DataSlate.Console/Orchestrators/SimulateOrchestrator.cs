@@ -79,19 +79,19 @@ public class SimulateOrchestrator(
             return (null, null, null, null);
         }
 
-        var team1TestTeam = TestTeamFactory.CreateTeam1();
-        var team2TestTeam = TestTeamFactory.CreateTeam2();
+        var team1TestSummary = new TeamSummary(TestTeamFactory.Team1Id, TestTeamFactory.Team1Name, "", "");
+        var team2TestSummary = new TeamSummary(TestTeamFactory.Team2Id, TestTeamFactory.Team2Name, "", "");
 
         // Step 1 - Player 1's team (Test Team 1 appears first)
-        var player1TeamStub = console.Prompt(
-            new SelectionPrompt<Team>()
+        var player1TeamSummary = console.Prompt(
+            new SelectionPrompt<TeamSummary>()
                 .Title("Select [bold]Player 1's[/] team:")
                 .UseConverter(FormatTeam)
-                .AddChoices([team1TestTeam, .. allTeams]));
+                .AddChoices([team1TestSummary, .. allTeams]));
 
-        var player1Team = player1TeamStub.Id == TestTeamFactory.Team1Id
-            ? team1TestTeam
-            : (await teamRepository.GetByIdAsync(player1TeamStub.Id))!;
+        var player1Team = player1TeamSummary.Id == TestTeamFactory.Team1Id
+            ? TestTeamFactory.CreateTeam1()
+            : (await teamRepository.GetByIdAsync(player1TeamSummary.Id))!;
 
         // Step 2 - Player 1's operative (auto-select if only one)
         Operative player1Operative;
@@ -110,8 +110,8 @@ public class SimulateOrchestrator(
         }
 
         // Step 3 - Player 2's team (Test Team 2 appears first; exclude Player 1's real team)
-        var player2TeamChoices = allTeams.Where(t => t.Name != player1TeamStub.Name).ToList();
-        var player2TeamOptions = (IEnumerable<Team>)[team2TestTeam, .. player2TeamChoices];
+        var player2TeamChoices = allTeams.Where(t => t.Name != player1TeamSummary.Name).ToList();
+        var player2TeamOptions = (IEnumerable<TeamSummary>)[team2TestSummary, .. player2TeamChoices];
 
         if (!player2TeamOptions.Any())
         {
@@ -120,15 +120,15 @@ public class SimulateOrchestrator(
             return (null, null, null, null);
         }
 
-        var player2TeamStub = console.Prompt(
-            new SelectionPrompt<Team>()
+        var player2TeamSummary = console.Prompt(
+            new SelectionPrompt<TeamSummary>()
                 .Title("Select [bold]Player 2's[/] team:")
                 .UseConverter(FormatTeam)
                 .AddChoices(player2TeamOptions));
 
-        var player2Team = player2TeamStub.Id == TestTeamFactory.Team2Id
-            ? team2TestTeam
-            : (await teamRepository.GetByIdAsync(player2TeamStub.Id))!;
+        var player2Team = player2TeamSummary.Id == TestTeamFactory.Team2Id
+            ? TestTeamFactory.CreateTeam2()
+            : (await teamRepository.GetByIdAsync(player2TeamSummary.Id))!;
 
         // Step 4 - Player 2's operative (auto-select if only one)
         Operative player2Operative;
@@ -271,7 +271,7 @@ public class SimulateOrchestrator(
 
     // --- Display helpers -----------------------------------------------------
 
-    private static string FormatTeam(Team team)
+    private static string FormatTeam(TeamSummary team)
     {
         var display = Markup.Escape(team.Name);
 

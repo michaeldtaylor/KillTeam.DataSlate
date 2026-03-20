@@ -6,7 +6,7 @@ public interface ITeamRepository
 {
     Task UpsertAsync(Team team);
 
-    Task<IEnumerable<Team>> GetAllAsync();
+    Task<IEnumerable<TeamSummary>> GetAllAsync();
 
     Task<Team?> GetByIdAsync(string id);
 

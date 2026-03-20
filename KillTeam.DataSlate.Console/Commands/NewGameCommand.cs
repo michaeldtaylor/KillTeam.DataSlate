@@ -37,7 +37,7 @@ public class NewGameCommand(
 
         // Team 1 selection
         var team1 = console.Prompt(
-            new SelectionPrompt<Team>()
+            new SelectionPrompt<TeamSummary>()
                 .Title("Select [green]Team 1[/]:")
                 .UseConverter(FormatTeam)
                 .AddChoices(allTeams));
@@ -49,17 +49,17 @@ public class NewGameCommand(
                 .AddChoices(allPlayers));
 
         // Team 2 selection (exclude Team 1)
-        var team2Choices = allTeams.Where(t => t.Name != team1.Name).ToList();
-        var team2 = console.Prompt(
-            new SelectionPrompt<Team>()
+        var team2 = allTeams.Where(t => t.Name != team1.Name).ToList();
+        var team2Selection = console.Prompt(
+            new SelectionPrompt<TeamSummary>()
                 .Title("Select [blue]Team 2[/]:")
                 .UseConverter(FormatTeam)
-                .AddChoices(team2Choices));
+                .AddChoices(team2));
 
         var player2Choices = allPlayers.Where(p => p.Id != player1.Id).ToList();
         var player2 = console.Prompt(
             new SelectionPrompt<Player>()
-                .Title($"Select player for [blue]{Markup.Escape(team2.Name)}[/]:")
+                .Title($"Select player for [blue]{Markup.Escape(team2Selection.Name)}[/]:")
                 .UseConverter(p => p.Name)
                 .AddChoices(player2Choices.Count > 0 ? player2Choices : allPlayers));
 
@@ -68,7 +68,7 @@ public class NewGameCommand(
 
         // Load full team data with operatives
         var fullTeam1 = await teams.GetByIdAsync(team1.Id);
-        var fullTeam2 = await teams.GetByIdAsync(team2.Id);
+        var fullTeam2 = await teams.GetByIdAsync(team2Selection.Id);
 
         var game = new Game
         {
@@ -77,15 +77,15 @@ public class NewGameCommand(
             MissionName = string.IsNullOrWhiteSpace(missionName) ? null : missionName,
             Participant1 = new GameParticipant
             {
-                Team = new TeamSummary(team1.Id, team1.Name, team1.Faction, team1.GrandFaction),
                 PlayerId = player1.Id,
+                Team = team1,
                 CommandPoints = 2,
                 VictoryPoints = 0
             },
             Participant2 = new GameParticipant
             {
-                Team = new TeamSummary(team2.Id, team2.Name, team2.Faction, team2.GrandFaction),
                 PlayerId = player2.Id,
+                Team = team2Selection,
                 CommandPoints = 2,
                 VictoryPoints = 0
             },
@@ -94,7 +94,7 @@ public class NewGameCommand(
 
         await games.CreateAsync(game);
 
-        logger.LogInformation("New game {GameId} created: {Team1} vs {Team2}", game.Id, team1.Name, team2.Name);
+        logger.LogInformation("New game {GameId} created: {Team1} vs {Team2}", game.Id, team1.Name, team2Selection.Name);
 
         // Create operative states for both teams
         var allOperatives = new List<Operative>();
@@ -127,7 +127,7 @@ public class NewGameCommand(
         }
 
         console.MarkupLine($"[green]Game {game.Id}[/]");
-        console.MarkupLine($"  {Markup.Escape(player1.Name)} ([green]{Markup.Escape(team1.Name)}[/]) vs {Markup.Escape(player2.Name)} ([blue]{Markup.Escape(team2.Name)}[/])");
+        console.MarkupLine($"  {Markup.Escape(player1.Name)} ([green]{Markup.Escape(team1.Name)}[/]) vs {Markup.Escape(player2.Name)} ([blue]{Markup.Escape(team2Selection.Name)}[/])");
 
         if (!string.IsNullOrEmpty(missionName))
         {
@@ -139,7 +139,7 @@ public class NewGameCommand(
         return 0;
     }
 
-    private static string FormatTeam(Team t)
+    private static string FormatTeam(TeamSummary t)
     {
         var display = Markup.Escape(t.Name);
 

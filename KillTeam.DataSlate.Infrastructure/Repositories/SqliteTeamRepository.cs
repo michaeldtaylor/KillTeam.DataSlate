@@ -240,17 +240,15 @@ public class SqliteTeamRepository : ITeamRepository
         }
     }
 
-    public async Task<IEnumerable<Team>> GetAllAsync()
+    public async Task<IEnumerable<TeamSummary>> GetAllAsync()
     {
         return await _db.QueryAsync(
             "SELECT id, name, faction, grand_faction FROM teams",
-            reader => new Team
-            {
-                Id = reader.GetString(0),
-                Name = reader.GetString(1),
-                Faction = reader.GetString(2),
-                GrandFaction = reader.GetString(3),
-            });
+            reader => new TeamSummary(
+                reader.GetString(0),
+                reader.GetString(1),
+                reader.GetString(2),
+                reader.GetString(3)));
     }
 
     public async Task<Team?> GetByIdAsync(string id)
