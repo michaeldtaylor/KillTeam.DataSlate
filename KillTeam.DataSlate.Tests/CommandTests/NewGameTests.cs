@@ -41,15 +41,13 @@ public class NewGameTests
             StartedAt = DateTime.UtcNow,
             Participant1 = new GameParticipant
             {
-                TeamId = "angels_of_death",
-                TeamName = team1Name,
+                Team = new TeamSummary("angels_of_death", team1Name, "", ""),
                 PlayerId = playerId1,
                 CommandPoints = 2
             },
             Participant2 = new GameParticipant
             {
-                TeamId = "plague_marines",
-                TeamName = team2Name,
+                Team = new TeamSummary("plague_marines", team2Name, "", ""),
                 PlayerId = playerId2,
                 CommandPoints = 2
             },

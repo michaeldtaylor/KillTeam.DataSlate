@@ -22,7 +22,7 @@ public class AoEEngine(
         GameOperativeState targetState,
         Weapon weapon)
     {
-        var isAttackerTeam1 = attacker.TeamId == context.Game.Participant1.TeamId;
+        var isAttackerTeam1 = attacker.TeamId == context.Game.Participant1.Team.Id;
 
         var aoeCandidateStates = ActionHelpers.GetAoECandidateStates(target, context.OperativeStates, context.Operatives);
 
@@ -96,7 +96,7 @@ public class AoEEngine(
                 ? []
                 : await inputProvider.RollOrEnterDiceAsync(targetDiceCount, $"{targetOperative.Name} target dice");
 
-            var isTargetTeam1 = targetOperative.TeamId == context.Game.Participant1.TeamId;
+            var isTargetTeam1 = targetOperative.TeamId == context.Game.Participant1.Team.Id;
 
             defenderDice = await rerollEngine.ApplyTargetRerollAsync(defenderDice, context.Game.Id, isTargetTeam1, targetOperative.Name);
 

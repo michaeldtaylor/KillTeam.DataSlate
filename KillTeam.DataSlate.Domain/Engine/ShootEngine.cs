@@ -21,7 +21,7 @@ public class ShootEngine(
         GameOperativeState attackerState,
         bool hasMovedNonDash = false)
     {
-        var isAttackerTeam1 = attacker.TeamId == context.Game.Participant1.TeamId;
+        var isAttackerTeam1 = attacker.TeamId == context.Game.Participant1.Team.Id;
         var attackerTeamId = attacker.TeamId;
 
         var isOnConceal = attackerState.Order == Order.Conceal;
@@ -209,7 +209,7 @@ public class ShootEngine(
             ? []
             : await inputProvider.RollOrEnterDiceAsync(targetDiceCount, $"{target.Name} defence dice", target.Name, "Target", "Shoot", targetTeamId, context.EventStream);
 
-        var isTargetTeam1 = target.TeamId == context.Game.Participant1.TeamId;
+        var isTargetTeam1 = target.TeamId == context.Game.Participant1.Team.Id;
 
         targetDice = await rerollEngine.ApplyTargetRerollAsync(targetDice, context.Game.Id, isTargetTeam1, target.Name, targetTeamId, context.EventStream);
 

@@ -13,10 +13,10 @@ public class HistoryTests
 
         using var db = TestDbBuilder.Create()
             .WithPlayer(pid1, "Alpha").WithPlayer(pid2, "Beta")
-            .WithTeam("team_a", "Team A", "Faction A")
-            .WithTeam("team_b", "Team B", "Faction B")
-            .WithGame(gid1, "team_a", "Team A", "team_b", "Team B", pid1, pid2, "Completed")
-            .WithGame(gid2, "team_b", "Team B", "team_a", "Team A", pid2, pid1, "Completed");
+            .WithTeam("team_1", "Team 1", "Faction 1")
+            .WithTeam("team_2", "Team 2", "Faction 2")
+            .WithGame(gid1, "team_1", "Team 1", "team_2", "Team 2", pid1, pid2, "Completed")
+            .WithGame(gid2, "team_2", "Team 2", "team_1", "Team 1", pid2, pid1, "Completed");
 
         using var cmd = db.Connection.CreateCommand();
         cmd.CommandText = "SELECT COUNT(*) FROM games WHERE status='Completed'";
@@ -66,9 +66,9 @@ public class StatsTests
 
         using var db = TestDbBuilder.Create()
             .WithPlayer(pid1, "Alpha").WithPlayer(pid2, "Beta")
-            .WithTeam("team_a", "Team A", "FA").WithTeam("team_b", "Team B", "FB");
+            .WithTeam("team_1", "Team 1", "FA").WithTeam("team_2", "Team 2", "FB");
 
-        // 2 completed games, both won by Team A (player Alpha is player_a)
+        // 2 completed games, both won by Team 1 (player Alpha is player_1)
         for (var i = 0; i < 2; i++)
         {
             var gid = Guid.NewGuid();
@@ -76,17 +76,17 @@ public class StatsTests
             insertCmd.CommandText = """
                 INSERT INTO games (id, played_at, participant1_team_id, participant1_team_name, participant2_team_id, participant2_team_name,
                     participant1_player_id, participant2_player_id, status, winner_team_id, participant1_victory_points, participant2_victory_points)
-                VALUES (@id, @at, @ta_id, @ta, @tb_id, @tb, @pa, @pb, 'Completed', @winner_id, 5, 3)
+                VALUES (@id, @at, @ta_id, @t1, @tb_id, @t2, @pa, @pb, 'Completed', @winner_id, 5, 3)
                 """;
             insertCmd.Parameters.AddWithValue("@id", gid.ToString());
             insertCmd.Parameters.AddWithValue("@at", DateTime.UtcNow.ToString("o"));
-            insertCmd.Parameters.AddWithValue("@ta_id", "team_a");
-            insertCmd.Parameters.AddWithValue("@ta", "Team A");
-            insertCmd.Parameters.AddWithValue("@tb_id", "team_b");
-            insertCmd.Parameters.AddWithValue("@tb", "Team B");
+            insertCmd.Parameters.AddWithValue("@ta_id", "team_1");
+            insertCmd.Parameters.AddWithValue("@t1", "Team 1");
+            insertCmd.Parameters.AddWithValue("@tb_id", "team_2");
+            insertCmd.Parameters.AddWithValue("@t2", "Team 2");
             insertCmd.Parameters.AddWithValue("@pa", pid1.ToString());
             insertCmd.Parameters.AddWithValue("@pb", pid2.ToString());
-            insertCmd.Parameters.AddWithValue("@winner_id", "team_a");
+            insertCmd.Parameters.AddWithValue("@winner_id", "team_1");
             insertCmd.ExecuteNonQuery();
         }
 

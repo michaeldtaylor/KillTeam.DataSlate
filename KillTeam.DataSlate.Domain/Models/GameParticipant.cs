@@ -2,9 +2,7 @@ namespace KillTeam.DataSlate.Domain.Models;
 
 public class GameParticipant
 {
-    public required string TeamId { get; init; }
-
-    public required string TeamName { get; init; }
+    public required TeamSummary Team { get; init; }
 
     public required Guid PlayerId { get; init; }
 

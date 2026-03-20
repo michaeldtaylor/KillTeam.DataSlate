@@ -34,7 +34,7 @@ public class ConsoleFirefightInputProvider(IAnsiConsole console) : IFirefightInp
                 continue;
             }
 
-            var teamTag = operative.TeamId == context.Game.Participant1.TeamId ? "[blue]A[/]" : "[red]B[/]";
+            var teamTag = operative.TeamId == context.Game.Participant1.Team.Id ? "[blue]A[/]" : "[red]B[/]";
             var name = $"{teamTag} {Markup.Escape(operative.Name)}";
 
             var injured = state.CurrentWounds < operative.Wounds / 2;

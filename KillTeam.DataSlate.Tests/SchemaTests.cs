@@ -125,15 +125,13 @@ public class SchemaTests
             StartedAt = DateTime.UtcNow,
             Participant1 = new GameParticipant
             {
-                TeamId = "angels_of_death",
-                TeamName = "Angels of Death",
+                Team = new TeamSummary("angels_of_death", "Angels of Death", "", ""),
                 PlayerId = playerId1,
                 CommandPoints = 2
             },
             Participant2 = new GameParticipant
             {
-                TeamId = "plague_marines",
-                TeamName = "Plague Marines",
+                Team = new TeamSummary("plague_marines", "Plague Marines", "", ""),
                 PlayerId = playerId2,
                 CommandPoints = 2
             },

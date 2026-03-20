@@ -26,7 +26,7 @@ public class FirefightPhaseEngine(
     {
         await inputProvider.DisplayTurningPointHeaderAsync(turningPoint.Number);
 
-        var initiativeTeamId = turningPoint.TeamWithInitiativeId ?? context.Game.Participant1.TeamId;
+        var initiativeTeamId = turningPoint.TeamWithInitiativeId ?? context.Game.Participant1.Team.Id;
         var currentTeamId = initiativeTeamId;
 
         var existingActivations = (await activationRepository.GetByTurningPointAsync(turningPoint.Id)).ToList();
@@ -37,9 +37,9 @@ public class FirefightPhaseEngine(
         while (!IsTurningPointOver(context.OperativeStates, context.Operatives, context.Game))
         {
             var readyThisTeam = GetReadyOperatives(currentTeamId, context.OperativeStates, context.Operatives);
-            var otherTeamId = currentTeamId == context.Game.Participant1.TeamId
-                ? context.Game.Participant2.TeamId
-                : context.Game.Participant1.TeamId;
+            var otherTeamId = currentTeamId == context.Game.Participant1.Team.Id
+                ? context.Game.Participant2.Team.Id
+                : context.Game.Participant1.Team.Id;
             var readyOtherTeam = GetReadyOperatives(otherTeamId, context.OperativeStates, context.Operatives);
 
             if (readyThisTeam.Count > 0)
@@ -382,31 +382,31 @@ public class FirefightPhaseEngine(
         await inputProvider.DisplayGameOverAsync();
 
         var participant1AllIncap = allOperativeStates
-            .Where(s => allOperatives.TryGetValue(s.OperativeId, out var o) && o.TeamId == game.Participant1.TeamId)
+            .Where(s => allOperatives.TryGetValue(s.OperativeId, out var o) && o.TeamId == game.Participant1.Team.Id)
             .All(s => s.IsIncapacitated);
         var participant2AllIncap = allOperativeStates
-            .Where(s => allOperatives.TryGetValue(s.OperativeId, out var o) && o.TeamId == game.Participant2.TeamId)
+            .Where(s => allOperatives.TryGetValue(s.OperativeId, out var o) && o.TeamId == game.Participant2.Team.Id)
             .All(s => s.IsIncapacitated);
 
-        var vp1 = await inputProvider.GetFinalVpAsync(game.Participant1.TeamName);
-        var vp2 = await inputProvider.GetFinalVpAsync(game.Participant2.TeamName);
+        var vp1 = await inputProvider.GetFinalVpAsync(game.Participant1.Team.Name);
+        var vp2 = await inputProvider.GetFinalVpAsync(game.Participant2.Team.Name);
 
         string? winnerTeamId;
 
         if (participant1AllIncap && !participant2AllIncap)
         {
-            winnerTeamId = game.Participant2.TeamId;
+            winnerTeamId = game.Participant2.Team.Id;
         }
         else if (participant2AllIncap && !participant1AllIncap)
         {
-            winnerTeamId = game.Participant1.TeamId;
+            winnerTeamId = game.Participant1.Team.Id;
         }
         else
         {
             winnerTeamId = vp1 > vp2
-                ? game.Participant1.TeamId
+                ? game.Participant1.Team.Id
                 : vp2 > vp1
-                    ? game.Participant2.TeamId
+                    ? game.Participant2.Team.Id
                     : null;
         }
 
@@ -414,18 +414,18 @@ public class FirefightPhaseEngine(
 
         var winnerTeamName = winnerTeamId is null
             ? null
-            : winnerTeamId == game.Participant1.TeamId
-                ? game.Participant1.TeamName
-                : game.Participant2.TeamName;
+            : winnerTeamId == game.Participant1.Team.Id
+                ? game.Participant1.Team.Name
+                : game.Participant2.Team.Name;
 
-        var winnerVp = winnerTeamId == game.Participant1.TeamId ? vp1 : vp2;
+        var winnerVp = winnerTeamId == game.Participant1.Team.Id ? vp1 : vp2;
 
         await inputProvider.DisplayWinnerAsync(
             winnerTeamName,
             winnerVp,
-            game.Participant1.TeamName,
+            game.Participant1.Team.Name,
             vp1,
-            game.Participant2.TeamName,
+            game.Participant2.Team.Name,
             vp2);
     }
 
@@ -434,26 +434,26 @@ public class FirefightPhaseEngine(
         IReadOnlyDictionary<Guid, Operative> allOperatives,
         Game game)
     {
-        var teamAAllIncap = allOperativeStates
-            .Where(s => allOperatives.TryGetValue(s.OperativeId, out var o) && o.TeamId == game.Participant1.TeamId)
+        var participant1AllIncap = allOperativeStates
+            .Where(s => allOperatives.TryGetValue(s.OperativeId, out var o) && o.TeamId == game.Participant1.Team.Id)
             .All(s => s.IsIncapacitated);
-        var teamBAllIncap = allOperativeStates
-            .Where(s => allOperatives.TryGetValue(s.OperativeId, out var o) && o.TeamId == game.Participant2.TeamId)
+        var participant2AllIncap = allOperativeStates
+            .Where(s => allOperatives.TryGetValue(s.OperativeId, out var o) && o.TeamId == game.Participant2.Team.Id)
             .All(s => s.IsIncapacitated);
 
-        if (teamAAllIncap || teamBAllIncap)
+        if (participant1AllIncap || participant2AllIncap)
         {
             return true;
         }
 
-        var teamAReady = allOperativeStates.Any(s =>
+        var participant1Ready = allOperativeStates.Any(s =>
             s is { IsIncapacitated: false, IsReady: true }
-            && allOperatives.TryGetValue(s.OperativeId, out var o) && o.TeamId == game.Participant1.TeamId);
-        var teamBReady = allOperativeStates.Any(s =>
+            && allOperatives.TryGetValue(s.OperativeId, out var o) && o.TeamId == game.Participant1.Team.Id);
+        var participant2Ready = allOperativeStates.Any(s =>
             s is { IsIncapacitated: false, IsReady: true }
-            && allOperatives.TryGetValue(s.OperativeId, out var o) && o.TeamId == game.Participant2.TeamId);
+            && allOperatives.TryGetValue(s.OperativeId, out var o) && o.TeamId == game.Participant2.Team.Id);
 
-        return !teamAReady && !teamBReady;
+        return !participant1Ready && !participant2Ready;
     }
 
     private static bool IsGameOver(
@@ -462,14 +462,14 @@ public class FirefightPhaseEngine(
         Game game,
         TurningPoint turningPoint)
     {
-        var teamAAllIncap = allOperativeStates
-            .Where(s => allOperatives.TryGetValue(s.OperativeId, out var o) && o.TeamId == game.Participant1.TeamId)
+        var participant1AllIncap = allOperativeStates
+            .Where(s => allOperatives.TryGetValue(s.OperativeId, out var o) && o.TeamId == game.Participant1.Team.Id)
             .All(s => s.IsIncapacitated);
-        var teamBAllIncap = allOperativeStates
-            .Where(s => allOperatives.TryGetValue(s.OperativeId, out var o) && o.TeamId == game.Participant2.TeamId)
+        var participant2AllIncap = allOperativeStates
+            .Where(s => allOperatives.TryGetValue(s.OperativeId, out var o) && o.TeamId == game.Participant2.Team.Id)
             .All(s => s.IsIncapacitated);
 
-        if (teamAAllIncap || teamBAllIncap)
+        if (participant1AllIncap || participant2AllIncap)
         {
             return true;
         }

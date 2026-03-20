@@ -12,7 +12,7 @@ public class ShockRuleVisitorTests
     private readonly ShockRuleVisitor _handler = new();
 
     private static Operative MakeOperative(string name = "Operative") =>
-        new() { TeamId = "team-a", Name = name, OperativeType = "Test", Wounds = 12 };
+        new() { TeamId = "team-1", Name = name, OperativeType = "Test", Wounds = 12 };
 
     private static Weapon MakeWeapon(bool hasShock = false) =>
         new()

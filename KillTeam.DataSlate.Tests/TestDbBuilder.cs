@@ -70,20 +70,21 @@ public sealed class TestDbBuilder : IDisposable
         return this;
     }
 
-    public TestDbBuilder WithGame(Guid id, string teamAId, string team1Name,
-        string teamBId, string team2Name,
-        Guid playerAId, Guid playerBId, string status = "InProgress")
+    public TestDbBuilder WithGame(Guid id, string team1Id, string team1Name,
+        string team2Id, string team2Name,
+        Guid player1Id, Guid player2Id, string status = "InProgress")
     {
         Exec("""
             INSERT INTO games
-                (id, played_at, participant1_team_id, participant1_team_name, participant2_team_id, participant2_team_name,
+                (id, played_at, participant1_team_id, participant1_team_name,
+                 participant2_team_id, participant2_team_name,
                  participant1_player_id, participant2_player_id, status)
-            VALUES (@id, @at, @taId, @taName, @tbId, @tbName, @pa, @pb, @st)
+            VALUES (@id, @at, @t1Id, @t1Name, @t2Id, @t2Name, @p1, @p2, @st)
             """,
             ("@id", id.ToString()), ("@at", DateTime.UtcNow.ToString("o")),
-            ("@taId", teamAId), ("@taName", team1Name),
-            ("@tbId", teamBId), ("@tbName", team2Name),
-            ("@pa", playerAId.ToString()), ("@pb", playerBId.ToString()),
+            ("@t1Id", team1Id), ("@t1Name", team1Name),
+            ("@t2Id", team2Id), ("@t2Name", team2Name),
+            ("@p1", player1Id.ToString()), ("@p2", player2Id.ToString()),
             ("@st", status));
 
         return this;

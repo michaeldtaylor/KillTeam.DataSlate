@@ -38,7 +38,7 @@ public class NewGameCommand(
         // Team 1 selection
         var team1 = console.Prompt(
             new SelectionPrompt<Team>()
-                .Title("Select [green]Team A[/]:")
+                .Title("Select [green]Team 1[/]:")
                 .UseConverter(FormatTeam)
                 .AddChoices(allTeams));
 
@@ -48,20 +48,20 @@ public class NewGameCommand(
                 .UseConverter(p => p.Name)
                 .AddChoices(allPlayers));
 
-        // Team B selection (exclude Team A)
-        var teamBChoices = allTeams.Where(t => t.Name != team1.Name).ToList();
+        // Team 2 selection (exclude Team 1)
+        var team2Choices = allTeams.Where(t => t.Name != team1.Name).ToList();
         var team2 = console.Prompt(
             new SelectionPrompt<Team>()
-                .Title("Select [blue]Team B[/]:")
+                .Title("Select [blue]Team 2[/]:")
                 .UseConverter(FormatTeam)
-                .AddChoices(teamBChoices));
+                .AddChoices(team2Choices));
 
-        var playerBChoices = allPlayers.Where(p => p.Id != player1.Id).ToList();
+        var player2Choices = allPlayers.Where(p => p.Id != player1.Id).ToList();
         var player2 = console.Prompt(
             new SelectionPrompt<Player>()
                 .Title($"Select player for [blue]{Markup.Escape(team2.Name)}[/]:")
                 .UseConverter(p => p.Name)
-                .AddChoices(playerBChoices.Count > 0 ? playerBChoices : allPlayers));
+                .AddChoices(player2Choices.Count > 0 ? player2Choices : allPlayers));
 
         var missionName = console.Prompt(
             new TextPrompt<string>("Mission name [dim](optional)[/]:").AllowEmpty());
@@ -77,16 +77,14 @@ public class NewGameCommand(
             MissionName = string.IsNullOrWhiteSpace(missionName) ? null : missionName,
             Participant1 = new GameParticipant
             {
-                TeamId = team1.Id,
-                TeamName = team1.Name,
+                Team = new TeamSummary(team1.Id, team1.Name, team1.Faction, team1.GrandFaction),
                 PlayerId = player1.Id,
                 CommandPoints = 2,
                 VictoryPoints = 0
             },
             Participant2 = new GameParticipant
             {
-                TeamId = team2.Id,
-                TeamName = team2.Name,
+                Team = new TeamSummary(team2.Id, team2.Name, team2.Faction, team2.GrandFaction),
                 PlayerId = player2.Id,
                 CommandPoints = 2,
                 VictoryPoints = 0

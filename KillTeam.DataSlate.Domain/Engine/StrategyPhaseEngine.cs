@@ -18,16 +18,17 @@ public class StrategyPhaseEngine(
     public async Task<TurningPoint> RunAsync(
         Game game,
         int turningPointNumber,
-        string team1Name,
-        string team2Name,
         GameEventStream? eventStream = null)
     {
+        var team1Name = game.Participant1.Team.Name;
+        var team2Name = game.Participant2.Team.Name;
+
         await inputProvider.DisplayPhaseHeaderAsync(turningPointNumber);
 
         var winnerName = await inputProvider.SelectInitiativeWinnerAsync(team1Name, team2Name);
         var initiativeTeamId = winnerName == team1Name
-            ? game.Participant1.TeamId
-            : game.Participant2.TeamId;
+            ? game.Participant1.Team.Id
+            : game.Participant2.Team.Id;
 
         var turningPoint = new TurningPoint
         {
@@ -54,19 +55,19 @@ public class StrategyPhaseEngine(
         game.Participant1.CommandPoints = commandPoints1;
         game.Participant2.CommandPoints = commandPoints2;
 
-        var (nonInitId, nonInitName) = initiativeTeamId == game.Participant1.TeamId
-            ? (game.Participant2.TeamId, team2Name)
-            : (game.Participant1.TeamId, team1Name);
+        var (nonInitId, nonInitName) = initiativeTeamId == game.Participant1.Team.Id
+            ? (game.Participant2.Team.Id, team2Name)
+            : (game.Participant1.Team.Id, team1Name);
 
-        var (initId, initName) = initiativeTeamId == game.Participant1.TeamId
-            ? (game.Participant1.TeamId, team1Name)
-            : (game.Participant2.TeamId, team2Name);
-
-        (commandPoints1, commandPoints2) = await RunPloyLoopAsync(
-            turningPoint, game.Id, game.Participant1.TeamId, nonInitId, nonInitName, commandPoints1, commandPoints2, eventStream);
+        var (initId, initName) = initiativeTeamId == game.Participant1.Team.Id
+            ? (game.Participant1.Team.Id, team1Name)
+            : (game.Participant2.Team.Id, team2Name);
 
         (commandPoints1, commandPoints2) = await RunPloyLoopAsync(
-            turningPoint, game.Id, game.Participant1.TeamId, initId, initName, commandPoints1, commandPoints2, eventStream);
+            turningPoint, game.Id, game.Participant1.Team.Id, nonInitId, nonInitName, commandPoints1, commandPoints2, eventStream);
+
+        (commandPoints1, commandPoints2) = await RunPloyLoopAsync(
+            turningPoint, game.Id, game.Participant1.Team.Id, initId, initName, commandPoints1, commandPoints2, eventStream);
 
         await turningPointRepository.CompleteStrategyPhaseAsync(turningPoint.Id);
 
@@ -85,7 +86,7 @@ public class StrategyPhaseEngine(
             cp1 += 1;
             cp2 += 1;
         }
-        else if (initiativeTeamId == game.Participant1.TeamId)
+        else if (initiativeTeamId == game.Participant1.Team.Id)
         {
             cp1 += 1;
             cp2 += 2;
@@ -102,7 +103,7 @@ public class StrategyPhaseEngine(
     private async Task<(int cp1, int cp2)> RunPloyLoopAsync(
         TurningPoint turningPoint,
         Guid gameId,
-        string teamAId,
+        string participant1Id,
         string activeTeamId,
         string activeTeamName,
         int cp1,
@@ -111,7 +112,7 @@ public class StrategyPhaseEngine(
     {
         while (true)
         {
-            var currentCp = activeTeamId == teamAId ? cp1 : cp2;
+            var currentCp = activeTeamId == participant1Id ? cp1 : cp2;
             var ploy = await inputProvider.GetPloyDetailsAsync(activeTeamName, currentCp);
 
             if (ploy is null)
@@ -134,7 +135,7 @@ public class StrategyPhaseEngine(
                 CpCost = ploy.CpCost,
             });
 
-            if (activeTeamId == teamAId)
+            if (activeTeamId == participant1Id)
             {
                 cp1 -= ploy.CpCost;
             }

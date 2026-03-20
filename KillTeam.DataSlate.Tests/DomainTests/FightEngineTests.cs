@@ -37,8 +37,8 @@ public class FightEngineTests
     private static Game MakeGame(string teamId1, string teamId2) =>
         new()
         {
-            Participant1 = new GameParticipant { TeamId = teamId1, TeamName = "Team A", PlayerId = Guid.NewGuid(), CommandPoints = 0 },
-            Participant2 = new GameParticipant { TeamId = teamId2, TeamName = "Team B", PlayerId = Guid.NewGuid(), CommandPoints = 0 },
+            Participant1 = new GameParticipant { Team = new TeamSummary(teamId1, "Team 1", "", ""), PlayerId = Guid.NewGuid(), CommandPoints = 0 },
+            Participant2 = new GameParticipant { Team = new TeamSummary(teamId2, "Team 2", "", ""), PlayerId = Guid.NewGuid(), CommandPoints = 0 },
         };
 
     private static IReadOnlyList<GameOperativeState> SeedStates(
@@ -77,8 +77,8 @@ public class FightEngineTests
     [Fact]
     public async Task RunAsync_AttackerCrit_IncapacitatesLowHealthTarget()
     {
-        const string attackerTeamId = "team-a";
-        const string targetTeamId = "team-b";
+        const string attackerTeamId = "team-1";
+        const string targetTeamId = "team-2";
 
         var meleeWeapon = MakeMeleeWeapon(atk: 1, normalDmg: 3, critDmg: 12);
         var attacker = MakeOperative("Veteran", attackerTeamId, wounds: 12, weapons: [meleeWeapon]);
@@ -107,8 +107,8 @@ public class FightEngineTests
     [Fact]
     public async Task RunAsync_TargetHasNoMeleeWeapons_EmitsTargetNoMeleeWeaponsEvent()
     {
-        const string attackerTeamId = "team-a";
-        const string targetTeamId = "team-b";
+        const string attackerTeamId = "team-1";
+        const string targetTeamId = "team-2";
 
         var meleeWeapon = MakeMeleeWeapon(atk: 1, normalDmg: 3, critDmg: 4);
         var attacker = MakeOperative("Veteran", attackerTeamId, wounds: 12, weapons: [meleeWeapon]);
@@ -135,8 +135,8 @@ public class FightEngineTests
     [Fact]
     public async Task RunAsync_ShockRule_RemovesTargetSuccessBeforeResolution()
     {
-        const string attackerTeamId = "team-a";
-        const string targetTeamId = "team-b";
+        const string attackerTeamId = "team-1";
+        const string targetTeamId = "team-2";
 
         var shockWeapon = MakeMeleeWeapon(atk: 1, normalDmg: 3, critDmg: 12, rules: [WeaponRuleKind.Shock]);
         var targetWeapon = MakeMeleeWeapon(name: "Claws", atk: 1, normalDmg: 3, critDmg: 3);
@@ -165,8 +165,8 @@ public class FightEngineTests
     [Fact]
     public async Task RunAsync_NoEnemyOperatives_ReturnsEmptyResult()
     {
-        const string attackerTeamId = "team-a";
-        const string targetTeamId = "team-b";
+        const string attackerTeamId = "team-1";
+        const string targetTeamId = "team-2";
 
         var meleeWeapon = MakeMeleeWeapon();
         var attacker = MakeOperative("Veteran", attackerTeamId, wounds: 12, weapons: [meleeWeapon]);

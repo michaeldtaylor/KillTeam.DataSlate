@@ -172,22 +172,26 @@ internal static class Migrations
         );
 
         CREATE TABLE IF NOT EXISTS games (
-            id                          TEXT PRIMARY KEY,
-            played_at                   TEXT NOT NULL,
-            mission_name                TEXT,
-            participant1_team_id        TEXT NOT NULL,
-            participant1_team_name      TEXT NOT NULL,
-            participant2_team_id        TEXT NOT NULL,
-            participant2_team_name      TEXT NOT NULL,
-            participant1_player_id      TEXT NOT NULL REFERENCES players (id),
-            participant2_player_id      TEXT NOT NULL REFERENCES players (id),
-            status                      TEXT NOT NULL DEFAULT 'InProgress'
-                                            CHECK (status IN ('InProgress', 'Completed')),
-            participant1_command_points INTEGER NOT NULL DEFAULT 2,
-            participant2_command_points INTEGER NOT NULL DEFAULT 2,
-            winner_team_id              TEXT,
-            participant1_victory_points INTEGER NOT NULL DEFAULT 0,
-            participant2_victory_points INTEGER NOT NULL DEFAULT 0
+            id                              TEXT PRIMARY KEY,
+            played_at                       TEXT NOT NULL,
+            mission_name                    TEXT,
+            participant1_team_id            TEXT NOT NULL,
+            participant1_team_name          TEXT NOT NULL,
+            participant1_faction            TEXT NOT NULL DEFAULT '',
+            participant1_grand_faction      TEXT NOT NULL DEFAULT '',
+            participant2_team_id            TEXT NOT NULL,
+            participant2_team_name          TEXT NOT NULL,
+            participant2_faction            TEXT NOT NULL DEFAULT '',
+            participant2_grand_faction      TEXT NOT NULL DEFAULT '',
+            participant1_player_id          TEXT NOT NULL REFERENCES players (id),
+            participant2_player_id          TEXT NOT NULL REFERENCES players (id),
+            status                          TEXT NOT NULL DEFAULT 'InProgress'
+                                                CHECK (status IN ('InProgress', 'Completed')),
+            participant1_command_points     INTEGER NOT NULL DEFAULT 2,
+            participant2_command_points     INTEGER NOT NULL DEFAULT 2,
+            winner_team_id                  TEXT,
+            participant1_victory_points     INTEGER NOT NULL DEFAULT 0,
+            participant2_victory_points     INTEGER NOT NULL DEFAULT 0
         );
 
         CREATE TABLE IF NOT EXISTS turning_points (

@@ -18,12 +18,18 @@ public class SqliteGameRepository : IGameRepository
         await _db.ExecuteAsync(
             """
             INSERT INTO games
-            (id, played_at, mission_name, participant1_team_id, participant1_team_name, participant2_team_id, participant2_team_name,
-             participant1_player_id, participant2_player_id, status, participant1_command_points, participant2_command_points,
+            (id, played_at, mission_name,
+             participant1_team_id, participant1_team_name, participant1_faction, participant1_grand_faction,
+             participant2_team_id, participant2_team_name, participant2_faction, participant2_grand_faction,
+             participant1_player_id, participant2_player_id, status,
+             participant1_command_points, participant2_command_points,
              winner_team_id, participant1_victory_points, participant2_victory_points)
             VALUES
-            (@id, @playedAt, @missionName, @team1Id, @team1Name, @team2Id, @team2Name,
-             @player1Id, @player2Id, @status, @cpTeam1, @cpTeam2,
+            (@id, @playedAt, @missionName,
+             @team1Id, @team1Name, @team1Faction, @team1GrandFaction,
+             @team2Id, @team2Name, @team2Faction, @team2GrandFaction,
+             @player1Id, @player2Id, @status,
+             @cpTeam1, @cpTeam2,
              @winnerTeamId, @vpTeam1, @vpTeam2)
             """,
             new()
@@ -31,10 +37,14 @@ public class SqliteGameRepository : IGameRepository
                 ["@id"] = game.Id.ToString(),
                 ["@playedAt"] = game.StartedAt.ToUniversalTime().ToString("o"),
                 ["@missionName"] = game.MissionName,
-                ["@team1Id"] = game.Participant1.TeamId,
-                ["@team1Name"] = game.Participant1.TeamName,
-                ["@team2Id"] = game.Participant2.TeamId,
-                ["@team2Name"] = game.Participant2.TeamName,
+                ["@team1Id"] = game.Participant1.Team.Id,
+                ["@team1Name"] = game.Participant1.Team.Name,
+                ["@team1Faction"] = game.Participant1.Team.Faction,
+                ["@team1GrandFaction"] = game.Participant1.Team.GrandFaction,
+                ["@team2Id"] = game.Participant2.Team.Id,
+                ["@team2Name"] = game.Participant2.Team.Name,
+                ["@team2Faction"] = game.Participant2.Team.Faction,
+                ["@team2GrandFaction"] = game.Participant2.Team.GrandFaction,
                 ["@player1Id"] = game.Participant1.PlayerId.ToString(),
                 ["@player2Id"] = game.Participant2.PlayerId.ToString(),
                 ["@status"] = game.Status.ToString(),
@@ -51,8 +61,10 @@ public class SqliteGameRepository : IGameRepository
         return await _db.QuerySingleAsync(
             """
             SELECT id, played_at, mission_name,
-                   participant1_team_id, participant1_team_name, participant1_player_id, participant1_command_points, participant1_victory_points,
-                   participant2_team_id, participant2_team_name, participant2_player_id, participant2_command_points, participant2_victory_points,
+                   participant1_team_id, participant1_team_name, participant1_faction, participant1_grand_faction,
+                   participant1_player_id, participant1_command_points, participant1_victory_points,
+                   participant2_team_id, participant2_team_name, participant2_faction, participant2_grand_faction,
+                   participant2_player_id, participant2_command_points, participant2_victory_points,
                    status, winner_team_id
             FROM games WHERE id = @id
             """,
@@ -161,21 +173,19 @@ public class SqliteGameRepository : IGameRepository
         MissionName = reader.IsDBNull(2) ? null : reader.GetString(2),
         Participant1 = new GameParticipant
         {
-            TeamId = reader.GetString(3),
-            TeamName = reader.GetString(4),
-            PlayerId = Guid.Parse(reader.GetString(5)),
-            CommandPoints = reader.GetInt32(6),
-            VictoryPoints = reader.GetInt32(7)
+            Team = new TeamSummary(reader.GetString(3), reader.GetString(4), reader.GetString(5), reader.GetString(6)),
+            PlayerId = Guid.Parse(reader.GetString(7)),
+            CommandPoints = reader.GetInt32(8),
+            VictoryPoints = reader.GetInt32(9)
         },
         Participant2 = new GameParticipant
         {
-            TeamId = reader.GetString(8),
-            TeamName = reader.GetString(9),
-            PlayerId = Guid.Parse(reader.GetString(10)),
-            CommandPoints = reader.GetInt32(11),
-            VictoryPoints = reader.GetInt32(12)
+            Team = new TeamSummary(reader.GetString(10), reader.GetString(11), reader.GetString(12), reader.GetString(13)),
+            PlayerId = Guid.Parse(reader.GetString(14)),
+            CommandPoints = reader.GetInt32(15),
+            VictoryPoints = reader.GetInt32(16)
         },
-        Status = Enum.Parse<GameStatus>(reader.GetString(13)),
-        WinnerTeamId = reader.IsDBNull(14) ? null : reader.GetString(14)
+        Status = Enum.Parse<GameStatus>(reader.GetString(17)),
+        WinnerTeamId = reader.IsDBNull(18) ? null : reader.GetString(18)
     };
 }

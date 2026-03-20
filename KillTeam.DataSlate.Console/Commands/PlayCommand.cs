@@ -51,8 +51,8 @@ public class PlayCommand(
             return 0;
         }
 
-        var team1Name = game.Participant1.TeamName;
-        var team2Name = game.Participant2.TeamName;
+        var team1Name = game.Participant1.Team.Name;
+        var team2Name = game.Participant2.Team.Name;
 
         console.Write(new Rule($"[bold]Team Game[/]  {Markup.Escape(team1Name)} vs {Markup.Escape(team2Name)}"));
 
@@ -81,7 +81,7 @@ public class PlayCommand(
             else
             {
                 // Run strategy phase — creates a new TP
-                activeTurningPoint = await strategyPhaseOrchestrator.RunAsync(game, turningPointNumber, team1Name, team2Name);
+                activeTurningPoint = await strategyPhaseOrchestrator.RunAsync(game, turningPointNumber);
                 game = (await gameRepository.GetByIdAsync(game.Id))!;
             }
 
@@ -110,7 +110,7 @@ public class PlayCommand(
         console.Write(new Rule("[bold green]Game Complete![/]"));
         var winner = game.WinnerTeamId is null
             ? "Draw"
-            : game.WinnerTeamId == game.Participant1.TeamId
+            : game.WinnerTeamId == game.Participant1.Team.Id
                 ? $"{team1Name} wins"
                 : $"{team2Name} wins";
 

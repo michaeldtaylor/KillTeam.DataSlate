@@ -8,13 +8,11 @@ public class StrategyPhaseOrchestrator(StrategyPhaseEngine engine, ILogger<Strat
 {
     public async Task<TurningPoint> RunAsync(
         Game game,
-        int turningPointNumber,
-        string team1Name,
-        string team2Name)
+        int turningPointNumber)
     {
         logger.LogDebug("Strategy phase TP{TpNumber} started for game {GameId}", turningPointNumber, game.Id);
 
-        var turningPoint = await engine.RunAsync(game, turningPointNumber, team1Name, team2Name);
+        var turningPoint = await engine.RunAsync(game, turningPointNumber);
 
         logger.LogDebug("Strategy phase TP{TpNumber} complete", turningPointNumber);
 

@@ -19,7 +19,7 @@ public class FightEngine(
         Operative attacker,
         GameOperativeState attackerState)
     {
-        var isAttackerTeam1 = attacker.TeamId == context.Game.Participant1.TeamId;
+        var isAttackerTeam1 = attacker.TeamId == context.Game.Participant1.Team.Id;
         var attackerTeamId = attacker.TeamId;
 
         var targetStates = ActionHelpers.GetTargetStates(attacker, context.OperativeStates, context.Operatives);
@@ -78,7 +78,7 @@ public class FightEngine(
         }
 
         var targetTeamId = target.TeamId;
-        var isTargetTeam1 = target.TeamId == context.Game.Participant1.TeamId;
+        var isTargetTeam1 = target.TeamId == context.Game.Participant1.Team.Id;
 
         var attackerMeleeWeapons = attacker.Weapons.Where(w => w.Type == WeaponType.Melee).ToList();
 

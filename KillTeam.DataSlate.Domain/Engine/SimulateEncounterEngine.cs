@@ -36,16 +36,14 @@ public class SimulateEncounterEngine(
             Id = Guid.NewGuid(),
             Participant1 = new GameParticipant
             {
-                TeamId = attackerTeam.Id,
-                TeamName = attackerTeam.Name,
+                Team = new TeamSummary(attackerTeam.Id, attackerTeam.Name, attackerTeam.Faction, attackerTeam.GrandFaction),
                 PlayerId = Guid.Empty,
                 // CommandPoints = 0 suppresses CP re-roll prompts (RerollEngine skips when game not in DB)
                 CommandPoints = 0,
             },
             Participant2 = new GameParticipant
             {
-                TeamId = targetTeam.Id,
-                TeamName = targetTeam.Name,
+                Team = new TeamSummary(targetTeam.Id, targetTeam.Name, targetTeam.Faction, targetTeam.GrandFaction),
                 PlayerId = Guid.Empty,
                 CommandPoints = 0,
             },

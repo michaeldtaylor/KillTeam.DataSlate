@@ -18,8 +18,8 @@ public class FirefightPhaseOrchestrator(
             currentTurningPoint.Number,
             game.Id);
 
-        var team1 = await teamRepository.GetByIdAsync(game.Participant1.TeamId);
-        var team2 = await teamRepository.GetByIdAsync(game.Participant2.TeamId);
+        var team1 = await teamRepository.GetByIdAsync(game.Participant1.Team.Id);
+        var team2 = await teamRepository.GetByIdAsync(game.Participant2.Team.Id);
 
         var allOperatives = (team1?.Operatives ?? [])
             .Concat(team2?.Operatives ?? [])

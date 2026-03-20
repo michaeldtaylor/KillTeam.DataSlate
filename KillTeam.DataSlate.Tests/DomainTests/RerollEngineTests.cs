@@ -12,8 +12,8 @@ public class RerollEngineTests
     private static Game MakeGame(int cp1 = 0, int cp2 = 0) =>
         new()
         {
-            Participant1 = new GameParticipant { TeamId = "team-a", TeamName = "Team A", PlayerId = Guid.NewGuid(), CommandPoints = cp1 },
-            Participant2 = new GameParticipant { TeamId = "team-b", TeamName = "Team B", PlayerId = Guid.NewGuid(), CommandPoints = cp2 },
+            Participant1 = new GameParticipant { Team = new TeamSummary("team-1", "Team 1", "", ""), PlayerId = Guid.NewGuid(), CommandPoints = cp1 },
+            Participant2 = new GameParticipant { Team = new TeamSummary("team-2", "Team 2", "", ""), PlayerId = Guid.NewGuid(), CommandPoints = cp2 },
         };
 
     private static Weapon MakeWeaponWith(params WeaponRuleKind[] ruleKinds) =>
