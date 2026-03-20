@@ -2,6 +2,7 @@ using KillTeam.DataSlate.Domain.Engine.Input;
 using KillTeam.DataSlate.Domain.Events;
 using KillTeam.DataSlate.Domain.Models;
 using KillTeam.DataSlate.Domain.Repositories;
+using Microsoft.Extensions.Logging;
 
 namespace KillTeam.DataSlate.Domain.Engine;
 
@@ -14,7 +15,8 @@ public class GuardInterruptEngine(
     IGuardInterruptInputProvider inputProvider,
     ShootEngine shootEngine,
     FightEngine fightEngine,
-    IActivationRepository activationRepository)
+    IActivationRepository activationRepository,
+    ILogger<GuardInterruptEngine> logger)
 {
     /// <summary>
     /// Checks each eligible guard operative on the friendly side (i.e. not the acting enemy's team).
@@ -29,6 +31,8 @@ public class GuardInterruptEngine(
         int seqCounter,
         GameEventStream? eventStream = null)
     {
+        logger.LogDebug("Checking guard interrupts for game {GameId}", game.Id);
+
         var enemyTeamId = actingEnemy.TeamId;
 
         var friendlyStates = allOperativeStates

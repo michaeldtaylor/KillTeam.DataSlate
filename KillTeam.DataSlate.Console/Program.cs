@@ -70,6 +70,7 @@ public static class Program
         services.AddSingleton<IAoEInputProvider, ConsoleAoEInputProvider>();
         services.AddSingleton<IStrategyPhaseInputProvider, ConsoleStrategyPhaseInputProvider>();
         services.AddSingleton<IGuardInterruptInputProvider, ConsoleGuardInterruptInputProvider>();
+        services.AddSingleton<IFirefightInputProvider, ConsoleFirefightInputProvider>();
         services.AddSingleton<RerollEngine>();
         services.AddSingleton<AoEEngine>();
         services.AddSingleton<ShootWeaponRulePipeline>();
@@ -78,9 +79,9 @@ public static class Program
         services.AddSingleton<FightEngine>();
         services.AddSingleton<StrategyPhaseEngine>();
         services.AddSingleton<GuardInterruptEngine>();
+        services.AddSingleton<FirefightPhaseEngine>();
         services.AddSingleton<IGameStatePersistenceHandler, SqliteGameStatePersistenceHandler>();
         services.AddSingleton<StrategyPhaseOrchestrator>();
-        services.AddSingleton<GuardInterruptOrchestrator>();
         services.AddSingleton<FirefightPhaseOrchestrator>();
         services.AddSingleton<SimulateSessionOrchestrator>();
 
