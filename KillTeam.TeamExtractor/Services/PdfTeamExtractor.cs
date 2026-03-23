@@ -22,18 +22,6 @@ public partial class PdfTeamExtractor
     };
 
     /// <summary>
-    /// Operative selection-role keywords that appear in the Kill Team keyword line but
-    /// are NOT faction names (e.g. "Leader", "Fighter", "Scout"). When the third keyword
-    /// on a datacard is one of these, the team has no distinct faction keyword and the
-    /// primary keyword (index 0) is used as the faction instead.
-    /// </summary>
-    private static readonly HashSet<string> OperativeRoleKeywords = new(StringComparer.OrdinalIgnoreCase)
-    {
-        "Leader", "Fighter", "Scout", "Sniper", "Gunner", "Heavy",
-        "Medic", "Demolitions", "Spec Ops", "Strain", "Warrior", "Veteran",
-    };
-
-    /// <summary>
     /// ALL-CAPS tokens that appear in content-order PDF text but are stats labels or
     /// page markers, not operative names.  These must be excluded when scanning for
     /// operative name boundaries in <see cref="BuildRawBackCardSections"/>.
@@ -134,8 +122,9 @@ public partial class PdfTeamExtractor
         // Tracks operative instances for back-of-card lookup
         var operativeMap = new Dictionary<string, ExtractedOperative>(StringComparer.OrdinalIgnoreCase);
         var processed = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-        string? faction = null;
         string? grandFaction = null;
+        var index2Counts = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+        string? primaryKeywordFallback = null;
         var i = 0;
 
         while (i < count)
@@ -376,15 +365,16 @@ public partial class PdfTeamExtractor
 
                 primaryKeyword = keywords.FirstOrDefault() ?? string.Empty;
 
-                // Third keyword (index 2) is the faction; second (index 1) is the grand faction.
-                // Exception: if index 2 is an operative role keyword (e.g. "Leader"), the team
-                // has no distinct faction keyword and the primary keyword (index 0) is the faction.
-                if (faction == null && keywords.Count >= 3)
+                // Collect keywords[1] (grand faction) and keywords[2] (faction or operative type)
+                // across all operatives. After the loop, the most-repeated keywords[2] is the faction;
+                // if every operative has a unique keywords[2] (all type labels differ), the team has
+                // no distinct faction keyword and keywords[0] (always consistent) is used instead.
+                if (keywords.Count >= 3)
                 {
-                    grandFaction = keywords[1];
-                    faction = OperativeRoleKeywords.Contains(keywords[2])
-                        ? keywords[0]
-                        : keywords[2];
+                    grandFaction ??= keywords[1];
+                    index2Counts.TryGetValue(keywords[2], out var existing);
+                    index2Counts[keywords[2]] = existing + 1;
+                    primaryKeywordFallback ??= keywords[0];
                 }
             }
 
@@ -415,6 +405,14 @@ public partial class PdfTeamExtractor
                 operativeMap[operativeName] = operative;
             }
         }
+
+        // The most-repeated keywords[2] appears more than once → consistent faction keyword.
+        // All keywords[2] values are unique (max count == 1) → per-operative type labels;
+        // fall back to keywords[0] which is always consistent across the kill team.
+        var maxCount = index2Counts.Count > 0 ? index2Counts.Values.Max() : 0;
+        var faction = maxCount > 1
+            ? index2Counts.OrderByDescending(kv => kv.Value).First().Key
+            : primaryKeywordFallback;
 
         return (operatives, faction, grandFaction);
     }
