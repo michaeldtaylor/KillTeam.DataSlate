@@ -53,6 +53,8 @@ public class TeamYamlTests
     [InlineData("corsair-voidscarred")]
     [InlineData("nemesis-claw")]
     [InlineData("plague-marines")]
+    [InlineData("tempestus-aquilons")]
+    [InlineData("vespid-stingwings")]
     [InlineData("void-dancer-troupe")]
     public void When_team_yaml_loaded_then_has_all_required_top_level_fields(string slug)
     {
@@ -73,6 +75,8 @@ public class TeamYamlTests
     [InlineData("corsair-voidscarred")]
     [InlineData("nemesis-claw")]
     [InlineData("plague-marines")]
+    [InlineData("tempestus-aquilons")]
+    [InlineData("vespid-stingwings")]
     [InlineData("void-dancer-troupe")]
     public void When_team_yaml_loaded_then_has_faction_rules_and_ploys(string slug)
     {
@@ -95,6 +99,8 @@ public class TeamYamlTests
     [InlineData("corsair-voidscarred")]
     [InlineData("nemesis-claw")]
     [InlineData("plague-marines")]
+    [InlineData("tempestus-aquilons")]
+    [InlineData("vespid-stingwings")]
     [InlineData("void-dancer-troupe")]
     public void When_team_yaml_loaded_then_equipment_items_have_descriptions(string slug)
     {
@@ -135,6 +141,8 @@ public class TeamYamlTests
     [InlineData("corsair-voidscarred")]
     [InlineData("nemesis-claw")]
     [InlineData("plague-marines")]
+    [InlineData("tempestus-aquilons")]
+    [InlineData("vespid-stingwings")]
     [InlineData("void-dancer-troupe")]
     public void When_team_yaml_loaded_then_all_datacards_have_keywords(string slug)
     {
@@ -348,6 +356,54 @@ public class TeamYamlTests
             because: "Humbling Cruelty is a custom weapon rule on the Death Jester datacard");
     }
 
+    [Fact]
+    public void When_vespid_stingwings_loaded_then_strain_leader_has_correct_keywords()
+    {
+        using var doc = LoadTeam("vespid-stingwings");
+
+        doc.RootElement.GetProperty("grandFaction").GetString().Should().Be("T'au Empire");
+        doc.RootElement.GetProperty("faction").GetString().Should().Be("Vespid Stingwing");
+
+        var leader = doc.RootElement
+            .GetProperty("datacards")
+            .EnumerateArray()
+            .Single(o => o.GetProperty("name").GetString() == "Vespid Strain Leader");
+
+        leader.GetProperty("primaryKeyword").GetString().Should().Be("Vespid Stingwing");
+
+        var keywords = leader.GetProperty("keywords")
+            .EnumerateArray()
+            .Select(k => k.GetString())
+            .ToList();
+
+        keywords.Should().Contain("Vespid Stingwing");
+        keywords.Should().Contain("T'au Empire");
+        keywords.Should().Contain("Strain");
+        keywords.Should().Contain("Leader");
+    }
+
+    [Fact]
+    public void When_vespid_stingwings_loaded_then_commune_ability_text_has_no_keyword_line_leak()
+    {
+        using var doc = LoadTeam("vespid-stingwings");
+
+        var leader = doc.RootElement
+            .GetProperty("datacards")
+            .EnumerateArray()
+            .Single(o => o.GetProperty("name").GetString() == "Vespid Strain Leader");
+
+        var commune = leader.GetProperty("abilities")
+            .EnumerateArray()
+            .Single(a => a.GetProperty("name").GetString() == "Commune");
+
+        commune.GetProperty("text").GetString().Should()
+            .NotContain("T'AU EMPIRE",
+                because: "the faction keyword line must not bleed into the Commune ability text");
+        commune.GetProperty("text").GetString().Should()
+            .NotContain("STRAIN",
+                because: "the faction keyword line must not bleed into the Commune ability text");
+    }
+
     // ─── 8 PDFs completeness ─────────────────────────────────────────────────────
 
     [Theory]
@@ -356,6 +412,8 @@ public class TeamYamlTests
     [InlineData("corsair-voidscarred")]
     [InlineData("nemesis-claw")]
     [InlineData("plague-marines")]
+    [InlineData("tempestus-aquilons")]
+    [InlineData("vespid-stingwings")]
     [InlineData("void-dancer-troupe")]
     public void When_all_8_pdfs_captured_then_all_fields_present(string slug)
     {
@@ -401,6 +459,8 @@ public class TeamYamlTests
     [InlineData("corsair-voidscarred")]
     [InlineData("nemesis-claw")]
     [InlineData("plague-marines")]
+    [InlineData("tempestus-aquilons")]
+    [InlineData("vespid-stingwings")]
     [InlineData("void-dancer-troupe")]
     public void When_team_yaml_validated_against_schema_then_no_errors(string slug)
     {

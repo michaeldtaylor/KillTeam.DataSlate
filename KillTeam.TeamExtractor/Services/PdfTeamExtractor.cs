@@ -22,6 +22,18 @@ public partial class PdfTeamExtractor
     };
 
     /// <summary>
+    /// Operative selection-role keywords that appear in the Kill Team keyword line but
+    /// are NOT faction names (e.g. "Leader", "Fighter", "Scout"). When the third keyword
+    /// on a datacard is one of these, the team has no distinct faction keyword and the
+    /// primary keyword (index 0) is used as the faction instead.
+    /// </summary>
+    private static readonly HashSet<string> OperativeRoleKeywords = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "Leader", "Fighter", "Scout", "Sniper", "Gunner", "Heavy",
+        "Medic", "Demolitions", "Spec Ops", "Strain", "Warrior", "Veteran",
+    };
+
+    /// <summary>
     /// ALL-CAPS tokens that appear in content-order PDF text but are stats labels or
     /// page markers, not operative names.  These must be excluded when scanning for
     /// operative name boundaries in <see cref="BuildRawBackCardSections"/>.
@@ -364,11 +376,15 @@ public partial class PdfTeamExtractor
 
                 primaryKeyword = keywords.FirstOrDefault() ?? string.Empty;
 
-                // Third keyword (index 2) is the faction; second (index 1) is the grand faction
+                // Third keyword (index 2) is the faction; second (index 1) is the grand faction.
+                // Exception: if index 2 is an operative role keyword (e.g. "Leader"), the team
+                // has no distinct faction keyword and the primary keyword (index 0) is the faction.
                 if (faction == null && keywords.Count >= 3)
                 {
                     grandFaction = keywords[1];
-                    faction = keywords[2];
+                    faction = OperativeRoleKeywords.Contains(keywords[2])
+                        ? keywords[0]
+                        : keywords[2];
                 }
             }
 
@@ -3016,7 +3032,7 @@ public partial class PdfTeamExtractor
     [GeneratedRegex(@"\bNAME\b.*\bATK\b.*\bHIT\b.*\bDMG\b")]
     private static partial Regex WeaponTableHeaderRegex();
 
-    [GeneratedRegex(@"^[A-Z0-9\s,\-]+$")]
+    [GeneratedRegex(@"^[A-Z0-9\s,\-']+$")]
     private static partial Regex FactionKeywordLineRegex();
 
     [GeneratedRegex(@"\s*\d+\s*$")]

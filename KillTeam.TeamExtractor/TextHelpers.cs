@@ -211,7 +211,6 @@ internal static partial class TextHelpers
         // When multiple patterns match, split at the EARLIEST one only — later patterns
         // are part of the same constraint section (e.g. "For the purposes... This operative cannot...").
         var bestConstraintPos = -1;
-        var bestConstraintLen = 0;
 
         foreach (var pattern in ConstraintSentencePatterns)
         {
@@ -221,7 +220,6 @@ internal static partial class TextHelpers
             if (pos >= 0 && (bestConstraintPos < 0 || pos < bestConstraintPos))
             {
                 bestConstraintPos = pos;
-                bestConstraintLen = search.Length;
             }
         }
 
@@ -467,7 +465,7 @@ internal static partial class TextHelpers
     /// An ALL-CAPS phrase (4+ chars) immediately followed by a colon — a sub-section label.
     /// Leading alternative skips already-bolded spans so they are not double-processed.
     /// </summary>
-    [GeneratedRegex(@"\*\*[^*]+\*\*|([A-Z][A-Z'\-]{3,}(?:\s+[A-Z][A-Z'\-]+)*):")] 
+    [GeneratedRegex(@"\*\*[^*]+\*\*|([A-Z][A-Z'\-]{3,}(?:\s+[A-Z][A-Z'\-]+)*):")]
     private static partial Regex AllCapsWithColonRegex();
 
     /// <summary>

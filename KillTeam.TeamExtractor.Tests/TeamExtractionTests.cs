@@ -43,6 +43,8 @@ public class TeamExtractionTests
     [InlineData("Corsair Voidscarred")]
     [InlineData("Nemesis Claw")]
     [InlineData("Plague Marines")]
+    [InlineData("Tempestus Aquilons")]
+    [InlineData("Vespid Stingwings")]
     [InlineData("Void-Dancer Troupe")]
     public Task When_team_extracted_then_yaml_matches_snapshot(string teamFolderName)
     {

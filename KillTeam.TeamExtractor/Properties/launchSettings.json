@@ -1,0 +1,10 @@
+{
+  "$schema": "http://json.schemastore.org/launchsettings.json",
+  "profiles": {
+    "extract-teams": {
+      "commandName": "Project",
+      "commandLineArgs": "D:\\Projects\\KillTeam.DataSlate\\references\\kill-teams",
+      "workingDirectory": "$(ProjectDir)"
+    }
+  }
+}
