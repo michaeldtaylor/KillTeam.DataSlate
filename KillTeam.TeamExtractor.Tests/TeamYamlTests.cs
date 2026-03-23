@@ -362,7 +362,7 @@ public class TeamYamlTests
         using var doc = LoadTeam("vespid-stingwings");
 
         doc.RootElement.GetProperty("grandFaction").GetString().Should().Be("T'au Empire");
-        doc.RootElement.GetProperty("faction").GetString().Should().Be("Vespid Stingwing");
+        doc.RootElement.GetProperty("faction").GetString().Should().Be("Vespid Stingwings");
 
         var leader = doc.RootElement
             .GetProperty("datacards")

@@ -1,7 +1,7 @@
 ﻿id: tempestus-aquilons
 name: Tempestus Aquilons
 grandFaction: Imperium
-faction: Tempestus Aquilon
+faction: Tempestus Aquilons
 datacards:
   - name: Aquilon Tempestor
     operativeType: Aquilon Tempestor

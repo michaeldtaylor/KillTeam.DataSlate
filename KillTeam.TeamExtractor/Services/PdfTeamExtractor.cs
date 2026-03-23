@@ -66,7 +66,7 @@ public partial class PdfTeamExtractor
         }
 
         var weaponTypes = _weaponTypeDetector.Detect(datacardsPath);
-        var (operatives, faction, grandFaction) = ParseDatacards(datacardsPath, weaponTypes);
+        var (operatives, faction, grandFaction) = ParseDatacards(datacardsPath, weaponTypes, teamName);
 
         var factionEquipment = factionEquipmentPath != null
             ? ParseEquipmentWithDescriptions([factionEquipmentPath])
@@ -108,7 +108,8 @@ public partial class PdfTeamExtractor
 
     private (List<ExtractedOperative> Operatives, string? Faction, string? GrandFaction) ParseDatacards(
         string pdfPath,
-        Dictionary<string, WeaponType> weaponTypes)
+        Dictionary<string, WeaponType> weaponTypes,
+        string teamName)
     {
         // Layout mode is required for the weapon-stats regex (column-aligned positions).
         var lines = GetPdfLines(pdfPath);
@@ -124,7 +125,6 @@ public partial class PdfTeamExtractor
         var processed = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         string? grandFaction = null;
         var index2Counts = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
-        string? primaryKeywordFallback = null;
         var i = 0;
 
         while (i < count)
@@ -374,7 +374,6 @@ public partial class PdfTeamExtractor
                     grandFaction ??= keywords[1];
                     index2Counts.TryGetValue(keywords[2], out var existing);
                     index2Counts[keywords[2]] = existing + 1;
-                    primaryKeywordFallback ??= keywords[0];
                 }
             }
 
@@ -408,11 +407,11 @@ public partial class PdfTeamExtractor
 
         // The most-repeated keywords[2] appears more than once → consistent faction keyword.
         // All keywords[2] values are unique (max count == 1) → per-operative type labels;
-        // fall back to keywords[0] which is always consistent across the kill team.
+        // the team has no distinct faction keyword so the team name (plural) is used.
         var maxCount = index2Counts.Count > 0 ? index2Counts.Values.Max() : 0;
         var faction = maxCount > 1
             ? index2Counts.OrderByDescending(kv => kv.Value).First().Key
-            : primaryKeywordFallback;
+            : teamName;
 
         return (operatives, faction, grandFaction);
     }

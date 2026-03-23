@@ -1,7 +1,7 @@
 id: vespid-stingwings
 name: Vespid Stingwings
 grandFaction: T'au Empire
-faction: Vespid Stingwing
+faction: Vespid Stingwings
 datacards:
   - name: Vespid Strain Leader
     operativeType: Vespid Strain Leader
