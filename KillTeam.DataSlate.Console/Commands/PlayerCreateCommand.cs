@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using KillTeam.DataSlate.Console.Extensions;
 using KillTeam.DataSlate.Domain.Models;
 using KillTeam.DataSlate.Domain.Repositories;
 using Microsoft.Extensions.Logging;
@@ -44,9 +45,10 @@ public class PlayerCreateCommand(IAnsiConsole console, IPlayerRepository players
         var lastName = console.Ask<string>("Last name:");
 
         var colour = console.Prompt(
-            new SelectionPrompt<string>()
+            new SelectionPrompt<PlayerColour>()
                 .Title("Select your colour:")
-                .AddChoices("cyan", "green", "blue", "magenta", "yellow", "white"));
+                .UseConverter(c => c.ToMarkupString())
+                .AddChoices(Enum.GetValues<PlayerColour>()));
 
         await players.CreateAsync(new Player
         {

@@ -10,5 +10,5 @@ public class Player
 
     public required string LastName { get; init; }
 
-    public string Colour { get; init; } = "cyan";
+    public PlayerColour Colour { get; init; } = PlayerColour.Cyan;
 }

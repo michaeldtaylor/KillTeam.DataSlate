@@ -23,7 +23,7 @@ public class SqlitePlayerRepository : IPlayerRepository
                 ["@username"] = player.Username,
                 ["@firstName"] = player.FirstName,
                 ["@lastName"] = player.LastName,
-                ["@colour"] = player.Colour,
+                ["@colour"] = player.Colour.ToString().ToLowerInvariant(),
             });
     }
 
@@ -37,7 +37,7 @@ public class SqlitePlayerRepository : IPlayerRepository
                 Username = reader.GetString(1),
                 FirstName = reader.GetString(2),
                 LastName = reader.GetString(3),
-                Colour = reader.GetString(4),
+                Colour = Enum.Parse<PlayerColour>(reader.GetString(4), ignoreCase: true),
             });
     }
 
@@ -58,7 +58,7 @@ public class SqlitePlayerRepository : IPlayerRepository
                 Username = reader.GetString(1),
                 FirstName = reader.GetString(2),
                 LastName = reader.GetString(3),
-                Colour = reader.GetString(4),
+                Colour = Enum.Parse<PlayerColour>(reader.GetString(4), ignoreCase: true),
             },
             new() { ["@username"] = username });
     }

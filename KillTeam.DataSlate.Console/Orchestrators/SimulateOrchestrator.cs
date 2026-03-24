@@ -1,3 +1,4 @@
+using KillTeam.DataSlate.Console.Extensions;
 using KillTeam.DataSlate.Console.Rendering;
 using KillTeam.DataSlate.Console.TestData;
 using KillTeam.DataSlate.Domain.Engine;
@@ -28,8 +29,8 @@ public class SimulateOrchestrator(
         console.MarkupLine("[dim]Test fight and shoot encounters without a full game session. Nothing is saved.[/]");
         console.WriteLine();
 
-        var player1 = new Player { Username = "player1", FirstName = "Player", LastName = "One", Colour = "cyan" };
-        var player2 = new Player { Username = "player2", FirstName = "Player", LastName = "Two", Colour = "red" };
+        var player1 = new Player { Username = "player1", FirstName = "Player", LastName = "One", Colour = PlayerColour.Cyan };
+        var player2 = new Player { Username = "player2", FirstName = "Player", LastName = "Two", Colour = PlayerColour.Red };
 
         var (player1Operative, player2Operative, player1Team, player2Team) = await SelectOperativesAsync();
 
@@ -44,9 +45,9 @@ public class SimulateOrchestrator(
             player2Operative,
             player2Team!,
             player1.Username,
-            player1.Colour,
+            player1.Colour.ToMarkupString(),
             player2.Username,
-            player2.Colour);
+            player2.Colour.ToMarkupString());
 
         await RunSessionLoopAsync(
             player1Operative,
@@ -198,9 +199,9 @@ public class SimulateOrchestrator(
                             player2Operative,
                             player2Team,
                             player1.Username,
-                            player1.Colour,
+                            player1.Colour.ToMarkupString(),
                             player2.Username,
-                            player2.Colour);
+                            player2.Colour.ToMarkupString());
                     }
 
                     break;
@@ -232,8 +233,8 @@ public class SimulateOrchestrator(
 
         var participantColours = new Dictionary<string, string>
         {
-            [player1Team.Id] = player1.Colour,
-            [player2Team.Id] = player2.Colour,
+            [player1Team.Id] = player1.Colour.ToMarkupString(),
+            [player2Team.Id] = player2.Colour.ToMarkupString(),
         };
 
         var columns = new TwoColumnRenderer(console, participantLabels, participantColours, columnContext);
@@ -257,9 +258,9 @@ public class SimulateOrchestrator(
             player1CurrentWounds: encounterResult.AttackerCurrentWounds,
             player2CurrentWounds: encounterResult.TargetCurrentWounds,
             player1Name: player1.Username,
-            player1Colour: player1.Colour,
+            player1Colour: player1.Colour.ToMarkupString(),
             player2Name: player2.Username,
-            player2Colour: player2.Colour);
+            player2Colour: player2.Colour.ToMarkupString());
     }
 
     // --- Display helpers -----------------------------------------------------

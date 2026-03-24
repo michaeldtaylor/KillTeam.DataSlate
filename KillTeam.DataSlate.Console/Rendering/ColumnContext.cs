@@ -1,3 +1,4 @@
+using KillTeam.DataSlate.Console.Extensions;
 using KillTeam.DataSlate.Domain.Models;
 using Spectre.Console;
 
@@ -27,7 +28,7 @@ public class ColumnContext
                 var label = $"[{CurrentPlayer.Username}]";
                 var padding = new string(' ', width - label.Length);
 
-                return $"[bold {CurrentPlayer.Colour}]{Markup.Escape(label)}[/]{padding} │ ";
+                return $"[bold {CurrentPlayer.Colour.ToMarkupString()}]{Markup.Escape(label)}[/]{padding} │ ";
             }
 
             var systemPadding = new string(' ', width - SystemLabel.Length);
