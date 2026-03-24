@@ -22,14 +22,14 @@ public class KillTeamPromptCallbacks(string? context = null) : PrettyPrompt.Prom
         "quit",
     ];
 
-    private static readonly Dictionary<string, string[]> ContextVerbs = new()
+    internal static readonly Dictionary<string, string[]> ContextVerbs = new()
     {
         ["player"] = ["create", "list", "delete"],
         ["team"] = ["import"],
         ["game"] = ["new", "play", "view", "annotate", "history", "stats", "simulate"],
     };
 
-    private static readonly Dictionary<string, string> Descriptions = new()
+    internal static readonly Dictionary<string, string> Descriptions = new()
     {
         ["/player"]  = "Enter the player context.",
         ["/team"]    = "Enter the team context.",
@@ -52,22 +52,34 @@ public class KillTeamPromptCallbacks(string? context = null) : PrettyPrompt.Prom
     protected override Task<TextSpan> GetSpanToReplaceByCompletionAsync(
         string text, int caret, CancellationToken cancellationToken)
     {
+        if (context is null && TryParseNounVerbPrefix(text, caret, out _, out _, out var verbStart, out var verbLength))
+        {
+            return Task.FromResult(new TextSpan(verbStart, verbLength));
+        }
+
         return Task.FromResult(new TextSpan(0, caret));
     }
 
     protected override Task<IReadOnlyList<CompletionItem>> GetCompletionItemsAsync(
         string text, int caret, TextSpan spanToBeReplaced, CancellationToken cancellationToken)
     {
-        var prefix = text[..caret];
         IEnumerable<string> candidates;
+        string prefix;
 
-        if (context is null)
+        if (context is null && TryParseNounVerbPrefix(text, caret, out var detectedNoun, out var verbPrefix, out _, out _))
+        {
+            candidates = ContextVerbs.TryGetValue(detectedNoun, out var nounVerbs) ? nounVerbs : [];
+            prefix = verbPrefix;
+        }
+        else if (context is null)
         {
             candidates = RootCommands;
+            prefix = text[..caret];
         }
         else
         {
             candidates = ContextVerbs.TryGetValue(context, out var verbs) ? verbs : [];
+            prefix = text[..caret];
         }
 
         var items = candidates
@@ -86,6 +98,47 @@ public class KillTeamPromptCallbacks(string? context = null) : PrettyPrompt.Prom
             .ToList();
 
         return Task.FromResult<IReadOnlyList<CompletionItem>>(items);
+    }
+
+    /// <summary>
+    /// Detects the "/noun verbPrefix" pattern at root level (e.g. "/game cr").
+    /// Returns false if the pattern doesn't match or the noun is not a valid context.
+    /// </summary>
+    private static bool TryParseNounVerbPrefix(
+        string text, int caret,
+        out string noun, out string verbPrefix, out int verbStart, out int verbLength)
+    {
+        noun = string.Empty;
+        verbPrefix = string.Empty;
+        verbStart = 0;
+        verbLength = 0;
+
+        if (!text.StartsWith('/'))
+        {
+            return false;
+        }
+
+        var beforeCaret = text[1..caret];
+        var spaceIndex = beforeCaret.IndexOf(' ');
+
+        if (spaceIndex < 0)
+        {
+            return false;
+        }
+
+        var potentialNoun = beforeCaret[..spaceIndex].ToLowerInvariant();
+
+        if (!ContextVerbs.ContainsKey(potentialNoun))
+        {
+            return false;
+        }
+
+        noun = potentialNoun;
+        verbStart = spaceIndex + 2; // +1 for leading slash, +1 for the space
+        verbPrefix = beforeCaret[(spaceIndex + 1)..];
+        verbLength = verbPrefix.Length;
+
+        return true;
     }
 
     protected override async Task<KeyPress> TransformKeyPressAsync(

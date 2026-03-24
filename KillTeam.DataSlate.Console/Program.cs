@@ -168,74 +168,124 @@ public static class Program
         string? context = null;
         var prompt = BuildPrompt(null, historyPath);
 
-        while (true)
+        try
         {
-            var response = await prompt.ReadLineAsync();
-
-            if (!response.IsSuccess)
+            while (true)
             {
-                if (context is not null)
+                var response = await prompt.ReadLineAsync();
+
+                if (!response.IsSuccess)
                 {
-                    context = null;
-                    prompt = BuildPrompt(null, historyPath);
-                    AnsiConsole.WriteLine();
-
-                    continue;
-                }
-
-                AnsiConsole.MarkupLine("[dim]Goodbye.[/]");
-
-                return 0;
-            }
-
-            var line = response.Text.Trim();
-
-            if (line.Length == 0)
-            {
-                continue;
-            }
-
-            if (line is "exit" or "quit")
-            {
-                AnsiConsole.MarkupLine("[dim]Goodbye.[/]");
-
-                return 0;
-            }
-
-            if (line.StartsWith('/') && context is null)
-            {
-                var parts = ParseReplArgs(line[1..]).ToArray();
-                var noun = parts.Length > 0 ? parts[0].ToLowerInvariant() : string.Empty;
-
-                if (ValidContexts.Contains(noun))
-                {
-                    if (parts.Length == 1)
+                    if (context is not null)
                     {
-                        context = noun;
-                        prompt = BuildPrompt(noun, historyPath);
+                        context = null;
+                        await prompt.DisposeAsync();
+                        prompt = BuildPrompt(null, historyPath);
                         AnsiConsole.WriteLine();
 
                         continue;
                     }
 
-                    await RunCommandSafeAsync(app, parts);
+                    AnsiConsole.MarkupLine("[dim]Goodbye.[/]");
+
+                    return 0;
+                }
+
+                var line = response.Text.Trim();
+
+                if (line.Length == 0)
+                {
+                    continue;
+                }
+
+                if (line is "exit" or "quit")
+                {
+                    AnsiConsole.MarkupLine("[dim]Goodbye.[/]");
+
+                    return 0;
+                }
+
+                if (line.StartsWith('/') && context is null)
+                {
+                    var parts = ParseReplArgs(line[1..]).ToArray();
+                    var noun = parts.Length > 0 ? parts[0].ToLowerInvariant() : string.Empty;
+
+                    if (ValidContexts.Contains(noun))
+                    {
+                        if (parts.Length == 1)
+                        {
+                            context = noun;
+                            await prompt.DisposeAsync();
+                            prompt = BuildPrompt(noun, historyPath);
+                            AnsiConsole.WriteLine();
+
+                            continue;
+                        }
+
+                        if (!IsKnownVerb(noun, parts.Length > 1 ? parts[1] : string.Empty))
+                        {
+                            PrintContextHelp(noun);
+                            AnsiConsole.WriteLine();
+
+                            continue;
+                        }
+
+                        await RunCommandSafeAsync(app, parts);
+                        AnsiConsole.WriteLine();
+
+                        continue;
+                    }
+
+                    AnsiConsole.MarkupLine($"[red]Unknown context '{Markup.Escape(noun)}'. Try /player, /game or /team.[/]");
                     AnsiConsole.WriteLine();
 
                     continue;
                 }
 
-                AnsiConsole.MarkupLine($"[red]Unknown context '{Markup.Escape(noun)}'. Try /player, /game or /team.[/]");
+                IEnumerable<string> commandArgs = context is not null
+                    ? new[] { context }.Concat(ParseReplArgs(line))
+                    : ParseReplArgs(line);
+
+                var argArray = commandArgs.ToArray();
+
+                if (context is not null && argArray.Length >= 2 && !IsKnownVerb(argArray[0], argArray[1]))
+                {
+                    PrintContextHelp(context);
+                    AnsiConsole.WriteLine();
+
+                    continue;
+                }
+
+                await RunCommandSafeAsync(app, argArray);
                 AnsiConsole.WriteLine();
-
-                continue;
             }
+        }
+        finally
+        {
+            await prompt.DisposeAsync();
+        }
+    }
 
-            IEnumerable<string> commandArgs = context is not null
-                ? new[] { context }.Concat(ParseReplArgs(line))
-                : ParseReplArgs(line);
+    private static bool IsKnownVerb(string noun, string verb)
+    {
+        return Completion.KillTeamPromptCallbacks.ContextVerbs.TryGetValue(noun, out var verbs)
+            && verbs.Contains(verb, StringComparer.OrdinalIgnoreCase);
+    }
 
-            await RunCommandSafeAsync(app, commandArgs);
-            AnsiConsole.WriteLine();
+    private static void PrintContextHelp(string noun)
+    {
+        AnsiConsole.MarkupLine($"[yellow]{noun}[/] commands:");
+
+        if (!Completion.KillTeamPromptCallbacks.ContextVerbs.TryGetValue(noun, out var verbs))
+        {
+            return;
+        }
+
+        foreach (var verb in verbs)
+        {
+            var description = Completion.KillTeamPromptCallbacks.Descriptions.TryGetValue(verb, out var desc) ? desc : string.Empty;
+
+            AnsiConsole.MarkupLine($"  [cyan]{verb,-12}[/] {Markup.Escape(description)}");
         }
     }
 
