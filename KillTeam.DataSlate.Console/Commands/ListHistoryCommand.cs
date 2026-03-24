@@ -8,7 +8,7 @@ namespace KillTeam.DataSlate.Console.Commands;
 
 /// <summary>Lists completed games, optionally filtered by player name.</summary>
 [Description("List completed games, optionally filtered by player.")]
-public class HistoryCommand(IAnsiConsole console, IGameRepository games, ILogger<HistoryCommand> logger) : AsyncCommand<HistoryCommand.Settings>
+public class ListHistoryCommand(IAnsiConsole console, IGameRepository games, ILogger<ListHistoryCommand> logger) : AsyncCommand<ListHistoryCommand.Settings>
 {
     public class Settings : CommandSettings
     {

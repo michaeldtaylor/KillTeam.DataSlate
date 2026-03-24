@@ -8,7 +8,7 @@ namespace KillTeam.DataSlate.Console.Commands;
 
 /// <summary>Deletes a registered player (blocked if they have recorded games).</summary>
 [Description("Delete a player (blocked if they have recorded games).")]
-public class PlayerDeleteCommand(IAnsiConsole console, IPlayerRepository players, ILogger<PlayerDeleteCommand> logger) : AsyncCommand<PlayerDeleteCommand.Settings>
+public class DeletePlayerCommand(IAnsiConsole console, IPlayerRepository players, ILogger<DeletePlayerCommand> logger) : AsyncCommand<DeletePlayerCommand.Settings>
 {
     public class Settings : CommandSettings
     {

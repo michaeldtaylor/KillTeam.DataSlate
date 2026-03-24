@@ -94,11 +94,11 @@ public static class Program
         {
             cfg.AddBranch("player", player =>
             {
-                player.AddCommand<PlayerCreateCommand>("create")
+                player.AddCommand<CreatePlayerCommand>("create")
                       .WithDescription("Register a new player.");
-                player.AddCommand<PlayerListCommand>("list")
+                player.AddCommand<ListPlayersCommand>("list")
                       .WithDescription("List all players with stats.");
-                player.AddCommand<PlayerDeleteCommand>("delete")
+                player.AddCommand<DeletePlayerCommand>("delete")
                       .WithDescription("Remove a player (blocked if they have games).");
             });
 
@@ -110,19 +110,19 @@ public static class Program
 
             cfg.AddBranch("game", game =>
             {
-                game.AddCommand<NewGameCommand>("new")
+                game.AddCommand<CreateGameCommand>("new")
                     .WithDescription("Start a new team game.");
-                game.AddCommand<PlayCommand>("play")
+                game.AddCommand<PlayGameCommand>("play")
                     .WithDescription("Play a team game (strategy + firefight phases).");
                 game.AddCommand<ViewGameCommand>("view")
                     .WithDescription("View full detail of a game.");
-                game.AddCommand<AnnotateCommand>("annotate")
+                game.AddCommand<AnnotateGameCommand>("annotate")
                     .WithDescription("Add narrative notes to activations and actions.");
-                game.AddCommand<HistoryCommand>("history")
+                game.AddCommand<ListHistoryCommand>("history")
                     .WithDescription("View completed game history.");
-                game.AddCommand<StatsCommand>("stats")
+                game.AddCommand<ListStatsCommand>("stats")
                     .WithDescription("View player and team statistics.");
-                game.AddCommand<SimulateCommand>("simulate")
+                game.AddCommand<SimulateGameCommand>("simulate")
                     .WithDescription("Simulate fight/shoot encounters without a saved game.");
             });
         });

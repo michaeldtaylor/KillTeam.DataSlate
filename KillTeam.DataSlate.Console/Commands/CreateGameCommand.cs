@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using KillTeam.DataSlate.Domain.Models;
 using KillTeam.DataSlate.Domain.Repositories;
 using Microsoft.Extensions.Logging;
@@ -9,13 +9,13 @@ namespace KillTeam.DataSlate.Console.Commands;
 
 /// <summary>Creates a new game session, prompting for players, teams, and mission.</summary>
 [Description("Start a new game — select players, teams, and mission.")]
-public class NewGameCommand(
+public class CreateGameCommand(
     IAnsiConsole console,
     IPlayerRepository players,
     ITeamRepository teams,
     IGameRepository games,
     IGameOperativeStateRepository gameStates,
-    ILogger<NewGameCommand> logger) : AsyncCommand
+    ILogger<CreateGameCommand> logger) : AsyncCommand
 {
     public override async Task<int> ExecuteAsync(CommandContext context)
     {

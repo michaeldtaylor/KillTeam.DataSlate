@@ -34,7 +34,7 @@ public class NewGameTests
         var stateRepo = new SqliteGameOperativeStateRepository(db.Connection);
         var teamRepo = new SqliteTeamRepository(db.Connection);
 
-        // Act — simulate what NewGameCommand does
+        // Act — simulate what CreateGameCommand does
         var game = new Game
         {
             Id = Guid.NewGuid(),
@@ -99,7 +99,7 @@ public class NewGameTests
         var teamRepo = new SqliteTeamRepository(db.Connection);
         var teams = (await teamRepo.GetAllAsync()).ToList();
 
-        teams.Should().HaveCount(1, "NewGameCommand would reject this with < 2 teams");
+        teams.Should().HaveCount(1, "CreateGameCommand would reject this with < 2 teams");
     }
 
     [Fact]
@@ -109,7 +109,7 @@ public class NewGameTests
         var playerRepo = new SqlitePlayerRepository(db.Connection);
         var players = (await playerRepo.GetAllAsync()).ToList();
 
-        players.Should().BeEmpty("NewGameCommand would reject this with no players");
+        players.Should().BeEmpty("CreateGameCommand would reject this with no players");
     }
 }
 
