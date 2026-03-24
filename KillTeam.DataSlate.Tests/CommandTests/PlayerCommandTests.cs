@@ -13,10 +13,10 @@ public class PlayerCommandTests
         using var db = TestDbBuilder.Create();
         var repo = new SqlitePlayerRepository(db.Connection);
 
-        await repo.CreateAsync(new Player { Id = Guid.NewGuid(), Name = "Michael" });
+        await repo.CreateAsync(new Player { Id = Guid.NewGuid(), Username = "michael", FirstName = "Michael", LastName = "Smith" });
 
         var all = (await repo.GetAllAsync()).ToList();
-        all.Should().ContainSingle(p => p.Name == "Michael");
+        all.Should().ContainSingle(p => p.Username == "michael");
     }
 
     [Fact]
@@ -24,9 +24,9 @@ public class PlayerCommandTests
     {
         using var db = TestDbBuilder.Create();
         var repo = new SqlitePlayerRepository(db.Connection);
-        await repo.CreateAsync(new Player { Id = Guid.NewGuid(), Name = "Solomon" });
+        await repo.CreateAsync(new Player { Id = Guid.NewGuid(), Username = "solomon", FirstName = "Solomon", LastName = "Jones" });
 
-        var act = () => repo.CreateAsync(new Player { Id = Guid.NewGuid(), Name = "Solomon" });
+        var act = () => repo.CreateAsync(new Player { Id = Guid.NewGuid(), Username = "solomon", FirstName = "Solomon", LastName = "Jones" });
 
         await act.Should().ThrowAsync<Exception>();
     }
@@ -36,14 +36,14 @@ public class PlayerCommandTests
     {
         using var db = TestDbBuilder.Create();
         var repo = new SqlitePlayerRepository(db.Connection);
-        await repo.CreateAsync(new Player { Id = Guid.NewGuid(), Name = "Zara" });
-        await repo.CreateAsync(new Player { Id = Guid.NewGuid(), Name = "Aaron" });
+        await repo.CreateAsync(new Player { Id = Guid.NewGuid(), Username = "zara", FirstName = "Zara", LastName = "Ali" });
+        await repo.CreateAsync(new Player { Id = Guid.NewGuid(), Username = "aaron", FirstName = "Aaron", LastName = "Brown" });
 
         var all = (await repo.GetAllAsync()).ToList();
 
         all.Should().HaveCount(2);
-        all[0].Name.Should().Be("Aaron");
-        all[1].Name.Should().Be("Zara");
+        all[0].Username.Should().Be("aaron");
+        all[1].Username.Should().Be("zara");
     }
 
     [Fact]
@@ -51,12 +51,12 @@ public class PlayerCommandTests
     {
         using var db = TestDbBuilder.Create();
         var repo = new SqlitePlayerRepository(db.Connection);
-        var player = new Player { Id = Guid.NewGuid(), Name = "Doomed" };
+        var player = new Player { Id = Guid.NewGuid(), Username = "doomed", FirstName = "Doomed", LastName = "Player" };
         await repo.CreateAsync(player);
 
         await repo.DeleteAsync(player.Id);
 
-        var found = await repo.FindByNameAsync("Doomed");
+        var found = await repo.FindByUsernameAsync("doomed");
         found.Should().BeNull();
     }
 
@@ -69,7 +69,7 @@ public class PlayerCommandTests
         var gameId = Guid.NewGuid();
 
         using var db = TestDbBuilder.Create()
-            .WithPlayer(playerId, "Veteran")
+            .WithPlayer(playerId, "veteran", "Vet", "Player")
             .WithTeam("angels_of_death", "Angels of Death", "Adeptus Astartes")
             .WithGame(gameId, "angels_of_death", "Angels of Death", "angels_of_death", "Angels of Death", playerId, playerId);
 

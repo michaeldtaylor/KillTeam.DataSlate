@@ -94,7 +94,7 @@ public static class Program
         {
             cfg.AddBranch("player", player =>
             {
-                player.AddCommand<PlayerAddCommand>("add")
+                player.AddCommand<PlayerCreateCommand>("create")
                       .WithDescription("Register a new player.");
                 player.AddCommand<PlayerListCommand>("list")
                       .WithDescription("List all players with stats.");

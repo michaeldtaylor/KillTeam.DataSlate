@@ -38,8 +38,6 @@ public class DatabaseInitialiser
         {
             await ApplyMigrationAsync(connection, version, sql);
         }
-
-        await EnsureInternalPlayersAsync(connection);
     }
 
     public static void ApplyAllMigrations(SqliteConnection connection)
@@ -50,22 +48,6 @@ public class DatabaseInitialiser
         {
             ApplyMigrationAsync(connection, version, sql).GetAwaiter().GetResult();
         }
-
-        EnsureInternalPlayersAsync(connection).GetAwaiter().GetResult();
-    }
-
-    private static async Task EnsureInternalPlayersAsync(SqliteConnection connection)
-    {
-        await using var command = connection.CreateCommand();
-
-        command.CommandText = """
-            INSERT OR IGNORE INTO players (id, name, colour, is_internal)
-                VALUES ('00000000-0000-0000-0000-000000000001', 'Player 1', 'cyan', 1);
-
-            INSERT OR IGNORE INTO players (id, name, colour, is_internal)
-                VALUES ('00000000-0000-0000-0000-000000000002', 'Player 2', 'red', 1);
-            """;
-        await command.ExecuteNonQueryAsync();
     }
 
     private static async Task<int> GetCurrentVersionAsync(SqliteConnection connection)
@@ -127,11 +109,12 @@ internal static class Migrations
         );
 
         CREATE TABLE IF NOT EXISTS players (
-            id          TEXT PRIMARY KEY,
-            name        TEXT NOT NULL COLLATE NOCASE,
-            colour      TEXT NOT NULL DEFAULT 'cyan',
-            is_internal INTEGER NOT NULL DEFAULT 0,
-            CONSTRAINT uq_players_name UNIQUE (name)
+            id         TEXT PRIMARY KEY,
+            username   TEXT NOT NULL COLLATE NOCASE,
+            first_name TEXT NOT NULL,
+            last_name  TEXT NOT NULL,
+            colour     TEXT NOT NULL DEFAULT 'cyan',
+            CONSTRAINT uq_players_username UNIQUE (username)
         );
 
         CREATE TABLE IF NOT EXISTS teams (
@@ -372,12 +355,6 @@ internal static class Migrations
 
         CREATE INDEX IF NOT EXISTS idx_operative_special_rules_op
             ON operative_special_rules (operative_id, sort_order);
-
-        INSERT OR IGNORE INTO players (id, name, colour, is_internal)
-            VALUES ('00000000-0000-0000-0000-000000000001', 'Player 1', 'cyan', 1);
-
-        INSERT OR IGNORE INTO players (id, name, colour, is_internal)
-            VALUES ('00000000-0000-0000-0000-000000000002', 'Player 2', 'red', 1);
         """;
 
 }

@@ -102,7 +102,7 @@ public class StatsCommand(
         {
             var winPercentage = stat.GamesPlayed > 0 ? $"{stat.Wins * 100 / stat.GamesPlayed}%" : "—";
 
-            table.AddRow(Markup.Escape(stat.Name), stat.GamesPlayed.ToString(), stat.Wins.ToString(), winPercentage);
+            table.AddRow(Markup.Escape(stat.Username), stat.GamesPlayed.ToString(), stat.Wins.ToString(), winPercentage);
         }
 
         console.Write(table);

@@ -59,14 +59,14 @@ public class SchemaTests
     {
         using var db = TestDbBuilder.Create();
         var repo = new SqlitePlayerRepository(db.Connection);
-        var player = new Player { Id = Guid.NewGuid(), Name = "Michael" };
+        var player = new Player { Id = Guid.NewGuid(), Username = "michael", FirstName = "Michael", LastName = "Smith" };
 
         await repo.CreateAsync(player);
 
-        var found = await repo.FindByNameAsync("Michael");
+        var found = await repo.FindByUsernameAsync("michael");
         found.Should().NotBeNull();
         found!.Id.Should().Be(player.Id);
-        found.Name.Should().Be("Michael");
+        found.Username.Should().Be("michael");
     }
 
     [Fact]
@@ -74,22 +74,22 @@ public class SchemaTests
     {
         using var db = TestDbBuilder.Create();
         var repo = new SqlitePlayerRepository(db.Connection);
-        await repo.CreateAsync(new Player { Id = Guid.NewGuid(), Name = "Solomon" });
+        await repo.CreateAsync(new Player { Id = Guid.NewGuid(), Username = "solomon", FirstName = "Solomon", LastName = "Jones" });
 
         await Assert.ThrowsAsync<SqliteException>(
-            () => repo.CreateAsync(new Player { Id = Guid.NewGuid(), Name = "Solomon" }));
+            () => repo.CreateAsync(new Player { Id = Guid.NewGuid(), Username = "solomon", FirstName = "Solomon", LastName = "Jones" }));
     }
 
     [Fact]
-    public async Task PlayerRepository_FindByName_IsCaseInsensitive()
+    public async Task PlayerRepository_FindByUsername_IsCaseInsensitive()
     {
         using var db = TestDbBuilder.Create();
         var repo = new SqlitePlayerRepository(db.Connection);
-        await repo.CreateAsync(new Player { Id = Guid.NewGuid(), Name = "Michael" });
+        await repo.CreateAsync(new Player { Id = Guid.NewGuid(), Username = "michael", FirstName = "Michael", LastName = "Smith" });
 
-        var found = await repo.FindByNameAsync("michael");
+        var found = await repo.FindByUsernameAsync("MICHAEL");
         found.Should().NotBeNull();
-        found!.Name.Should().Be("Michael");
+        found!.Username.Should().Be("michael");
     }
 
     [Fact]
@@ -97,12 +97,12 @@ public class SchemaTests
     {
         using var db = TestDbBuilder.Create();
         var repo = new SqlitePlayerRepository(db.Connection);
-        var player = new Player { Id = Guid.NewGuid(), Name = "Doomed" };
+        var player = new Player { Id = Guid.NewGuid(), Username = "doomed", FirstName = "Doomed", LastName = "Player" };
         await repo.CreateAsync(player);
 
         await repo.DeleteAsync(player.Id);
 
-        var found = await repo.FindByNameAsync("Doomed");
+        var found = await repo.FindByUsernameAsync("doomed");
         found.Should().BeNull();
     }
 
@@ -113,8 +113,8 @@ public class SchemaTests
         var playerId2 = Guid.NewGuid();
 
         using var db = TestDbBuilder.Create()
-            .WithPlayer(playerId1, "Michael")
-            .WithPlayer(playerId2, "Solomon")
+            .WithPlayer(playerId1, "michael", "Michael", "Smith")
+            .WithPlayer(playerId2, "solomon", "Solomon", "Jones")
             .WithTeam("angels_of_death", "Angels of Death", "Adeptus Astartes")
             .WithTeam("plague_marines", "Plague Marines", "Heretic Astartes");
 
@@ -152,13 +152,13 @@ public class SchemaTests
         var playerId = Guid.NewGuid();
 
         using var db = TestDbBuilder.Create()
-            .WithPlayer(playerId, "Michael");
+            .WithPlayer(playerId, "michael", "Michael", "Smith");
 
         using var cmd = db.Connection.CreateCommand();
-        cmd.CommandText = "SELECT name FROM players WHERE id = @id";
+        cmd.CommandText = "SELECT username FROM players WHERE id = @id";
         cmd.Parameters.AddWithValue("@id", playerId.ToString());
-        var name = cmd.ExecuteScalar() as string;
-        name.Should().Be("Michael");
+        var username = cmd.ExecuteScalar() as string;
+        username.Should().Be("michael");
     }
 
     [Fact]
@@ -169,7 +169,7 @@ public class SchemaTests
         var tpId = Guid.NewGuid();
 
         using var db = TestDbBuilder.Create()
-            .WithPlayer(playerId, "Michael")
+            .WithPlayer(playerId, "michael", "Michael", "Smith")
             .WithTeam("angels_of_death", "Angels of Death", "Adeptus Astartes")
             .WithGame(gameId, "angels_of_death", "Angels of Death", "angels_of_death", "Angels of Death", playerId, playerId)
             .WithTurningPoint(tpId, gameId, 1, false);

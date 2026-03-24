@@ -16,26 +16,28 @@ public class SqlitePlayerRepository : IPlayerRepository
     public async Task CreateAsync(Player player)
     {
         await _db.ExecuteAsync(
-            "INSERT INTO players (id, name, colour, is_internal) VALUES (@id, @name, @colour, @isInternal)",
+            "INSERT INTO players (id, username, first_name, last_name, colour) VALUES (@id, @username, @firstName, @lastName, @colour)",
             new()
             {
                 ["@id"] = player.Id.ToString(),
-                ["@name"] = player.Name,
+                ["@username"] = player.Username,
+                ["@firstName"] = player.FirstName,
+                ["@lastName"] = player.LastName,
                 ["@colour"] = player.Colour,
-                ["@isInternal"] = player.IsInternal ? 1 : 0,
             });
     }
 
     public async Task<IEnumerable<Player>> GetAllAsync()
     {
         return await _db.QueryAsync(
-            "SELECT id, name, colour, is_internal FROM players WHERE is_internal = 0 ORDER BY name",
+            "SELECT id, username, first_name, last_name, colour FROM players ORDER BY username",
             reader => new Player
             {
                 Id = Guid.Parse(reader.GetString(0)),
-                Name = reader.GetString(1),
-                Colour = reader.GetString(2),
-                IsInternal = reader.GetInt32(3) != 0,
+                Username = reader.GetString(1),
+                FirstName = reader.GetString(2),
+                LastName = reader.GetString(3),
+                Colour = reader.GetString(4),
             });
     }
 
@@ -46,18 +48,19 @@ public class SqlitePlayerRepository : IPlayerRepository
             new() { ["@id"] = id.ToString() });
     }
 
-    public async Task<Player?> FindByNameAsync(string name)
+    public async Task<Player?> FindByUsernameAsync(string username)
     {
         return await _db.QuerySingleAsync(
-            "SELECT id, name, colour, is_internal FROM players WHERE name = @name COLLATE NOCASE LIMIT 1",
+            "SELECT id, username, first_name, last_name, colour FROM players WHERE username = @username COLLATE NOCASE LIMIT 1",
             reader => new Player
             {
                 Id = Guid.Parse(reader.GetString(0)),
-                Name = reader.GetString(1),
-                Colour = reader.GetString(2),
-                IsInternal = reader.GetInt32(3) != 0,
+                Username = reader.GetString(1),
+                FirstName = reader.GetString(2),
+                LastName = reader.GetString(3),
+                Colour = reader.GetString(4),
             },
-            new() { ["@name"] = name });
+            new() { ["@username"] = username });
     }
 
     public async Task<int> CountGamesAsync(Guid playerId)
@@ -67,10 +70,10 @@ public class SqlitePlayerRepository : IPlayerRepository
             new() { ["@id"] = playerId.ToString() });
     }
 
-    public async Task<IReadOnlyList<PlayerStats>> GetAllWithStatsAsync(string? nameFilter = null)
+    public async Task<IReadOnlyList<PlayerStats>> GetAllWithStatsAsync(string? usernameFilter = null)
     {
         var sql = """
-            SELECT p.id, p.name,
+            SELECT p.id, p.username, p.first_name, p.last_name,
                    COUNT(g.id) AS games_played,
                    COALESCE(SUM(CASE
                        WHEN g.participant1_player_id = p.id AND g.winner_team_id = g.participant1_team_id THEN 1
@@ -83,23 +86,25 @@ public class SqlitePlayerRepository : IPlayerRepository
 
         Dictionary<string, object?> parameters = new();
 
-        sql += " WHERE p.is_internal = 0";
+        sql += " WHERE 1=1";
 
-        if (!string.IsNullOrWhiteSpace(nameFilter))
+        if (!string.IsNullOrWhiteSpace(usernameFilter))
         {
-            sql += " AND p.name LIKE @filter COLLATE NOCASE";
-            parameters["@filter"] = $"%{nameFilter}%";
+            sql += " AND p.username LIKE @filter COLLATE NOCASE";
+            parameters["@filter"] = $"%{usernameFilter}%";
         }
 
-        sql += " GROUP BY p.id, p.name ORDER BY p.name";
+        sql += " GROUP BY p.id, p.username, p.first_name, p.last_name ORDER BY p.username";
 
         return await _db.QueryAsync(
             sql,
             reader => new PlayerStats(
                 Guid.Parse(reader.GetString(0)),
                 reader.GetString(1),
-                reader.GetInt32(2),
-                reader.GetInt32(3)),
+                reader.GetString(2),
+                reader.GetString(3),
+                reader.GetInt32(4),
+                reader.GetInt32(5)),
             parameters);
     }
 }

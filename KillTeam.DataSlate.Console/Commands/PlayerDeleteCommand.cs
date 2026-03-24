@@ -12,20 +12,20 @@ public class PlayerDeleteCommand(IAnsiConsole console, IPlayerRepository players
 {
     public class Settings : CommandSettings
     {
-        [Description("The name of the player to delete.")]
-        [CommandArgument(0, "<name>")]
-        public string Name { get; set; } = string.Empty;
+        [Description("The username of the player to delete.")]
+        [CommandArgument(0, "<username>")]
+        public string Username { get; set; } = string.Empty;
     }
 
     public override async Task<int> ExecuteAsync(CommandContext context, Settings settings)
     {
-        var name = settings.Name.Trim();
-        var player = await players.FindByNameAsync(name);
+        var username = settings.Username.Trim();
+        var player = await players.FindByUsernameAsync(username);
 
         if (player is null)
         {
-            logger.LogWarning("Player {Name} not found for delete", name);
-            console.MarkupLine($"[yellow]Player '{Markup.Escape(name)}' not found.[/]");
+            logger.LogWarning("Player {Username} not found for delete", username);
+            console.MarkupLine($"[yellow]Player '{Markup.Escape(username)}' not found.[/]");
 
             return 1;
         }
@@ -34,20 +34,20 @@ public class PlayerDeleteCommand(IAnsiConsole console, IPlayerRepository players
 
         if (gameCount > 0)
         {
-            logger.LogWarning("Cannot delete player {Name} — has {GameCount} games", name, gameCount);
-            console.MarkupLine($"[red]Cannot delete '{Markup.Escape(name)}' — they have {gameCount} recorded game(s).[/]");
+            logger.LogWarning("Cannot delete player {Username} — has {GameCount} games", username, gameCount);
+            console.MarkupLine($"[red]Cannot delete '{Markup.Escape(username)}' — they have {gameCount} recorded game(s).[/]");
 
             return 1;
         }
 
-        if (!console.Confirm($"Delete player '{name}'?"))
+        if (!console.Confirm($"Delete player '{username}'?"))
         {
             return 0;
         }
 
         await players.DeleteAsync(player.Id);
-        logger.LogInformation("Player {Name} deleted", name);
-        console.MarkupLine($"[green]Player '{Markup.Escape(name)}' deleted.[/]");
+        logger.LogInformation("Player {Username} deleted", username);
+        console.MarkupLine($"[green]Player '{Markup.Escape(username)}' deleted.[/]");
 
         return 0;
     }

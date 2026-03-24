@@ -41,7 +41,7 @@ public class HistoryTests
             SELECT COUNT(*) FROM games g
             JOIN players pa ON pa.id=g.participant1_player_id
             JOIN players pb ON pb.id=g.participant2_player_id
-            WHERE g.status='Completed' AND (pa.name LIKE '%Michael%' OR pb.name LIKE '%Michael%')
+            WHERE g.status='Completed' AND (pa.username LIKE '%Michael%' OR pb.username LIKE '%Michael%')
             """;
         var count = Convert.ToInt32(cmd.ExecuteScalar());
         count.Should().Be(1, "only Michael's game should be returned");

@@ -16,7 +16,6 @@ namespace KillTeam.DataSlate.Console.Orchestrators;
 public class SimulateOrchestrator(
     IAnsiConsole console,
     ITeamRepository teamRepository,
-    IPlayerRepository playerRepository,
     SimulateEncounterEngine simulateEncounterEngine,
     ColumnContext columnContext,
     ILogger<SimulateOrchestrator> logger)
@@ -29,15 +28,8 @@ public class SimulateOrchestrator(
         console.MarkupLine("[dim]Test fight and shoot encounters without a full game session. Nothing is saved.[/]");
         console.WriteLine();
 
-        var player1 = await playerRepository.FindByNameAsync("Player 1");
-        var player2 = await playerRepository.FindByNameAsync("Player 2");
-
-        if (player1 is null || player2 is null)
-        {
-            console.MarkupLine("[red]Internal simulate players not found. Re-initialise the database.[/]");
-
-            return;
-        }
+        var player1 = new Player { Username = "player1", FirstName = "Player", LastName = "One", Colour = "cyan" };
+        var player2 = new Player { Username = "player2", FirstName = "Player", LastName = "Two", Colour = "red" };
 
         var (player1Operative, player2Operative, player1Team, player2Team) = await SelectOperativesAsync();
 
@@ -51,9 +43,9 @@ public class SimulateOrchestrator(
             player1Team!,
             player2Operative,
             player2Team!,
-            player1.Name,
+            player1.Username,
             player1.Colour,
-            player2.Name,
+            player2.Username,
             player2.Colour);
 
         await RunSessionLoopAsync(
@@ -205,9 +197,9 @@ public class SimulateOrchestrator(
                             player1Team,
                             player2Operative,
                             player2Team,
-                            player1.Name,
+                            player1.Username,
                             player1.Colour,
-                            player2.Name,
+                            player2.Username,
                             player2.Colour);
                     }
 
@@ -234,8 +226,8 @@ public class SimulateOrchestrator(
     {
         var participantLabels = new Dictionary<string, string>
         {
-            [player1Team.Id] = player1.Name,
-            [player2Team.Id] = player2.Name,
+            [player1Team.Id] = player1.Username,
+            [player2Team.Id] = player2.Username,
         };
 
         var participantColours = new Dictionary<string, string>
@@ -264,9 +256,9 @@ public class SimulateOrchestrator(
             player2Incapacitated: encounterResult.TargetIncapacitated,
             player1CurrentWounds: encounterResult.AttackerCurrentWounds,
             player2CurrentWounds: encounterResult.TargetCurrentWounds,
-            player1Name: player1.Name,
+            player1Name: player1.Username,
             player1Colour: player1.Colour,
-            player2Name: player2.Name,
+            player2Name: player2.Username,
             player2Colour: player2.Colour);
     }
 

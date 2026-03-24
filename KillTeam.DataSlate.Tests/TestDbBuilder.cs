@@ -25,10 +25,10 @@ public sealed class TestDbBuilder : IDisposable
 
     public void Dispose() => _connection.Dispose();
 
-    public TestDbBuilder WithPlayer(Guid id, string name)
+    public TestDbBuilder WithPlayer(Guid id, string username, string firstName = "First", string lastName = "Last")
     {
-        Exec("INSERT INTO players (id, name) VALUES (@id, @name)",
-            ("@id", id.ToString()), ("@name", name));
+        Exec("INSERT INTO players (id, username, first_name, last_name) VALUES (@id, @username, @firstName, @lastName)",
+            ("@id", id.ToString()), ("@username", username), ("@firstName", firstName), ("@lastName", lastName));
 
         return this;
     }

@@ -23,7 +23,9 @@ public class PlayerListCommand(IAnsiConsole console, IPlayerRepository players, 
         }
 
         var table = new Table()
-            .AddColumn("Name")
+            .AddColumn("Username")
+            .AddColumn("First Name")
+            .AddColumn("Last Name")
             .AddColumn(new TableColumn("Games Played").Centered())
             .AddColumn(new TableColumn("Wins").Centered())
             .AddColumn(new TableColumn("Win %").Centered());
@@ -32,7 +34,7 @@ public class PlayerListCommand(IAnsiConsole console, IPlayerRepository players, 
         {
             var winPercentage = stat.GamesPlayed == 0 ? "—" : $"{stat.Wins * 100 / stat.GamesPlayed}%";
 
-            table.AddRow(Markup.Escape(stat.Name), stat.GamesPlayed.ToString(), stat.Wins.ToString(), winPercentage);
+            table.AddRow(Markup.Escape(stat.Username), Markup.Escape(stat.FirstName), Markup.Escape(stat.LastName), stat.GamesPlayed.ToString(), stat.Wins.ToString(), winPercentage);
         }
 
         console.Write(table);

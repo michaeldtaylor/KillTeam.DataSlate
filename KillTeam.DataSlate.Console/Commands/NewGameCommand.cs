@@ -45,7 +45,7 @@ public class NewGameCommand(
         var player1 = console.Prompt(
             new SelectionPrompt<Player>()
                 .Title($"Select player for [green]{Markup.Escape(team1.Name)}[/]:")
-                .UseConverter(p => p.Name)
+                .UseConverter(p => p.Username)
                 .AddChoices(allPlayers));
 
         // Team 2 selection (exclude Team 1)
@@ -60,7 +60,7 @@ public class NewGameCommand(
         var player2 = console.Prompt(
             new SelectionPrompt<Player>()
                 .Title($"Select player for [blue]{Markup.Escape(team2.Name)}[/]:")
-                .UseConverter(p => p.Name)
+                .UseConverter(p => p.Username)
                 .AddChoices(player2Choices.Count > 0 ? player2Choices : allPlayers));
 
         var missionName = console.Prompt(
@@ -127,7 +127,7 @@ public class NewGameCommand(
         }
 
         console.MarkupLine($"[green]Game {game.Id}[/]");
-        console.MarkupLine($"  {Markup.Escape(player1.Name)} ([green]{Markup.Escape(team1.Name)}[/]) vs {Markup.Escape(player2.Name)} ([blue]{Markup.Escape(team2.Name)}[/])");
+        console.MarkupLine($"  {Markup.Escape(player1.Username)} ([green]{Markup.Escape(team1.Name)}[/]) vs {Markup.Escape(player2.Username)} ([blue]{Markup.Escape(team2.Name)}[/])");
 
         if (!string.IsNullOrEmpty(missionName))
         {

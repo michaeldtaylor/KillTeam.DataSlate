@@ -24,7 +24,7 @@ public class ColumnContext
 
             if (CurrentPlayer is not null)
             {
-                var label = $"[{CurrentPlayer.Name}]";
+                var label = $"[{CurrentPlayer.Username}]";
                 var padding = new string(' ', width - label.Length);
 
                 return $"[bold {CurrentPlayer.Colour}]{Markup.Escape(label)}[/]{padding} │ ";

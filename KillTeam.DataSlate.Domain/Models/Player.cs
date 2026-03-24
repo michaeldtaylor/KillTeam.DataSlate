@@ -4,9 +4,11 @@ public class Player
 {
     public Guid Id { get; init; } = Guid.NewGuid();
 
-    public required string Name { get; init; }
+    public required string Username { get; init; }
+
+    public required string FirstName { get; init; }
+
+    public required string LastName { get; init; }
 
     public string Colour { get; init; } = "cyan";
-
-    public bool IsInternal { get; init; }
 }
