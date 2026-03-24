@@ -23,6 +23,7 @@ public class ViewGameCommand(
     {
         [Description("The ID of the game to view.")]
         [CommandArgument(0, "<game-id>")]
+        // Spectre.Console CommandSettings — required omitted intentionally
         public string GameId { get; set; } = string.Empty;
     }
 

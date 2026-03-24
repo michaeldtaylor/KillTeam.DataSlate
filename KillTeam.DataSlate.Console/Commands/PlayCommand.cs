@@ -22,6 +22,7 @@ public class PlayCommand(
     {
         [Description("The ID of the game to play or resume.")]
         [CommandArgument(0, "<game-id>")]
+        // Spectre.Console CommandSettings — required omitted intentionally
         public string GameId { get; set; } = string.Empty;
     }
 

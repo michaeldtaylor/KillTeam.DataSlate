@@ -16,9 +16,9 @@
       "commandLineArgs": "new-game",
       "workingDirectory": "$(ProjectDir)"
     },
-    "player-add": {
+    "create-player": {
       "commandName": "Project",
-      "commandLineArgs": "player add",
+      "commandLineArgs": "player create",
       "workingDirectory": "$(ProjectDir)"
     }
   }

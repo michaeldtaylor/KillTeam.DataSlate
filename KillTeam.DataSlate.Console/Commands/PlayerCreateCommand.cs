@@ -16,6 +16,7 @@ public class PlayerCreateCommand(IAnsiConsole console, IPlayerRepository players
     {
         [Description("The username of the player to register (unique in-game handle).")]
         [CommandArgument(0, "<username>")]
+        // Spectre.Console CommandSettings — required omitted intentionally
         public string Username { get; set; } = string.Empty;
     }
 

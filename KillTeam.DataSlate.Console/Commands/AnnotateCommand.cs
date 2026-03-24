@@ -22,6 +22,7 @@ public class AnnotateCommand(
     {
         [Description("The ID of the game to annotate.")]
         [CommandArgument(0, "<game-id>")]
+        // Spectre.Console CommandSettings — required omitted intentionally
         public string GameId { get; set; } = string.Empty;
     }
 

@@ -151,6 +151,13 @@ public class Game
 public string? Name { get; set; }
 ```
 
+**Exception — Spectre.Console CommandSettings:** Properties on `CommandSettings` subclasses must use `set` (not `init`) and cannot use `required` because Spectre.Console constructs the object via `Activator.CreateInstance` (reflection) and populates properties after construction. Add a brief comment:
+
+```csharp
+// Spectre.Console CommandSettings — required omitted intentionally
+public string GameId { get; set; } = string.Empty;
+```
+
 ---
 
 ---
