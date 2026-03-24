@@ -135,26 +135,38 @@ public static class Program
         return await app.RunAsync(args);
     }
 
+    private static readonly HashSet<string> ValidContexts = ["player", "team", "game"];
+
+    private static PrettyPrompt.Prompt BuildPrompt(string? context, string historyPath)
+    {
+        var promptText = context is null ? "ktds> " : $"{context}> ";
+
+        return new PrettyPrompt.Prompt(
+            persistentHistoryFilepath: historyPath,
+            callbacks: new Completion.KillTeamPromptCallbacks(context),
+            configuration: new PrettyPrompt.PromptConfiguration(
+                prompt: new PrettyPrompt.Highlighting.FormattedString(
+                    promptText,
+                    new PrettyPrompt.Highlighting.ConsoleFormat(
+                        Foreground: PrettyPrompt.Highlighting.AnsiColor.Cyan,
+                        Bold: true))));
+    }
+
     private static async Task<int> RunReplAsync(CommandApp app)
     {
         AnsiConsole.Write(new FigletText("KTDS").Color(Color.Cyan1));
-        AnsiConsole.MarkupLine("[dim]Type a command (e.g. [bold]game new[/], [bold]player create <username>[/]) or [bold]exit[/] to quit.[/]");
+        AnsiConsole.MarkupLine("[dim]Type [bold]/player[/], [bold]/game[/] or [bold]/team[/] to enter a context, or [bold]exit[/] to quit.[/]");
         AnsiConsole.WriteLine();
 
         // Prevent Ctrl-C from terminating the process; commands handle it as OperationCanceledException.
         System.Console.CancelKeyPress += (_, e) => e.Cancel = true;
 
-        var prompt = new PrettyPrompt.Prompt(
-            persistentHistoryFilepath: Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
-                ".ktds_history"),
-            callbacks: new KillTeam.DataSlate.Console.Completion.KillTeamPromptCallbacks(),
-            configuration: new PrettyPrompt.PromptConfiguration(
-                prompt: new PrettyPrompt.Highlighting.FormattedString(
-                    "ktds> ",
-                    new PrettyPrompt.Highlighting.ConsoleFormat(
-                        Foreground: PrettyPrompt.Highlighting.AnsiColor.Cyan,
-                        Bold: true))));
+        var historyPath = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+            ".ktds_history");
+
+        string? context = null;
+        var prompt = BuildPrompt(null, historyPath);
 
         while (true)
         {
@@ -162,7 +174,17 @@ public static class Program
 
             if (!response.IsSuccess)
             {
+                if (context is not null)
+                {
+                    context = null;
+                    prompt = BuildPrompt(null, historyPath);
+                    AnsiConsole.WriteLine();
+
+                    continue;
+                }
+
                 AnsiConsole.MarkupLine("[dim]Goodbye.[/]");
+
                 return 0;
             }
 
@@ -176,19 +198,56 @@ public static class Program
             if (line is "exit" or "quit")
             {
                 AnsiConsole.MarkupLine("[dim]Goodbye.[/]");
+
                 return 0;
             }
 
-            try
+            if (line.StartsWith('/') && context is null)
             {
-                await app.RunAsync(ParseReplArgs(line));
-            }
-            catch (OperationCanceledException)
-            {
-                AnsiConsole.MarkupLine("[dim](cancelled)[/]");
+                var parts = ParseReplArgs(line[1..]).ToArray();
+                var noun = parts.Length > 0 ? parts[0].ToLowerInvariant() : string.Empty;
+
+                if (ValidContexts.Contains(noun))
+                {
+                    if (parts.Length == 1)
+                    {
+                        context = noun;
+                        prompt = BuildPrompt(noun, historyPath);
+                        AnsiConsole.WriteLine();
+
+                        continue;
+                    }
+
+                    await RunCommandSafeAsync(app, parts);
+                    AnsiConsole.WriteLine();
+
+                    continue;
+                }
+
+                AnsiConsole.MarkupLine($"[red]Unknown context '{Markup.Escape(noun)}'. Try /player, /game or /team.[/]");
+                AnsiConsole.WriteLine();
+
+                continue;
             }
 
+            IEnumerable<string> commandArgs = context is not null
+                ? new[] { context }.Concat(ParseReplArgs(line))
+                : ParseReplArgs(line);
+
+            await RunCommandSafeAsync(app, commandArgs);
             AnsiConsole.WriteLine();
+        }
+    }
+
+    private static async Task RunCommandSafeAsync(CommandApp app, IEnumerable<string> args)
+    {
+        try
+        {
+            await app.RunAsync(args);
+        }
+        catch (OperationCanceledException)
+        {
+            AnsiConsole.MarkupLine("[dim](cancelled)[/]");
         }
     }
 
@@ -200,21 +259,24 @@ public static class Program
 
         foreach (var ch in line)
         {
-            if (ch == '"')
+            switch (ch)
             {
-                inQuotes = !inQuotes;
-            }
-            else if (ch == ' ' && !inQuotes)
-            {
-                if (current.Length > 0)
+                case '"':
+                    inQuotes = !inQuotes;
+                    break;
+                case ' ' when !inQuotes:
                 {
-                    args.Add(current.ToString());
-                    current.Clear();
+                    if (current.Length > 0)
+                    {
+                        args.Add(current.ToString());
+                        current.Clear();
+                    }
+
+                    break;
                 }
-            }
-            else
-            {
-                current.Append(ch);
+                default:
+                    current.Append(ch);
+                    break;
             }
         }
 

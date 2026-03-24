@@ -6,27 +6,26 @@ namespace KillTeam.DataSlate.Console.Completion;
 
 /// <summary>
 /// Provides context-aware tab completion for the interactive REPL.
-/// Completions are full command strings (e.g. "game new") matched from position zero,
-/// so the entire typed prefix is replaced with the chosen command.
+/// At the root context completions are slash-prefixed nouns (/player, /game, /team).
+/// Inside a noun context completions are the verbs for that context.
 /// </summary>
-public class KillTeamPromptCallbacks : PrettyPrompt.PromptCallbacks
+public class KillTeamPromptCallbacks(string? context = null) : PrettyPrompt.PromptCallbacks
 {
-    private static readonly string[] Commands =
+    private static readonly string[] RootCommands =
     [
-        "player create",
-        "player list",
-        "player delete",
-        "team import",
-        "game new",
-        "game play",
-        "game view",
-        "game annotate",
-        "game history",
-        "game stats",
-        "game simulate",
+        "/player",
+        "/team",
+        "/game",
         "exit",
         "quit",
     ];
+
+    private static readonly Dictionary<string, string[]> ContextVerbs = new()
+    {
+        ["player"] = ["create", "list", "delete"],
+        ["team"] = ["import"],
+        ["game"] = ["new", "play", "view", "annotate", "history", "stats", "simulate"],
+    };
 
     protected override Task<TextSpan> GetSpanToReplaceByCompletionAsync(
         string text, int caret, CancellationToken cancellationToken)
@@ -38,8 +37,18 @@ public class KillTeamPromptCallbacks : PrettyPrompt.PromptCallbacks
         string text, int caret, TextSpan spanToBeReplaced, CancellationToken cancellationToken)
     {
         var prefix = text[..caret];
+        IEnumerable<string> candidates;
 
-        var items = Commands
+        if (context is null)
+        {
+            candidates = RootCommands;
+        }
+        else
+        {
+            candidates = ContextVerbs.TryGetValue(context, out var verbs) ? verbs : [];
+        }
+
+        var items = candidates
             .Where(cmd => cmd.StartsWith(prefix, StringComparison.OrdinalIgnoreCase) && cmd.Length > prefix.Length)
             .Select(cmd => new CompletionItem(
                 replacementText: cmd,
