@@ -137,30 +137,36 @@ public static class Program
 
     private static async Task<int> RunReplAsync(CommandApp app)
     {
-        AnsiConsole.Write(new FigletText("Kill Team").Color(Color.Cyan1));
+        AnsiConsole.Write(new FigletText("KTDS").Color(Color.Cyan1));
         AnsiConsole.MarkupLine("[dim]Type a command (e.g. [bold]game new[/], [bold]player create <username>[/]) or [bold]exit[/] to quit.[/]");
         AnsiConsole.WriteLine();
 
         // Prevent Ctrl-C from terminating the process; commands handle it as OperationCanceledException.
         System.Console.CancelKeyPress += (_, e) => e.Cancel = true;
 
+        var prompt = new PrettyPrompt.Prompt(
+            persistentHistoryFilepath: Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+                ".ktds_history"),
+            callbacks: new KillTeam.DataSlate.Console.Completion.KillTeamPromptCallbacks(),
+            configuration: new PrettyPrompt.PromptConfiguration(
+                prompt: new PrettyPrompt.Highlighting.FormattedString(
+                    "ktds> ",
+                    new PrettyPrompt.Highlighting.ConsoleFormat(
+                        Foreground: PrettyPrompt.Highlighting.AnsiColor.Cyan,
+                        Bold: true))));
+
         while (true)
         {
-            string line;
+            var response = await prompt.ReadLineAsync();
 
-            try
-            {
-                line = AnsiConsole.Prompt(
-                    new TextPrompt<string>("[bold cyan]ktds[/][grey]>[/]")
-                        .AllowEmpty());
-            }
-            catch (OperationCanceledException)
+            if (!response.IsSuccess)
             {
                 AnsiConsole.MarkupLine("[dim]Goodbye.[/]");
                 return 0;
             }
 
-            line = line.Trim();
+            var line = response.Text.Trim();
 
             if (line.Length == 0)
             {

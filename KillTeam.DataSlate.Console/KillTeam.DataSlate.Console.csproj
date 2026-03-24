@@ -26,6 +26,7 @@
         <PackageReference Include="Microsoft.Extensions.Options.DataAnnotations" Version="10.0.5" />
         <PackageReference Include="NLog" Version="5.*" />
         <PackageReference Include="NLog.Extensions.Logging" Version="5.*" />
+        <PackageReference Include="PrettyPrompt" Version="4.1.1" />
         <PackageReference Include="Spectre.Console" Version="0.50.0" />
         <PackageReference Include="Spectre.Console.Cli" Version="0.50.0" />
     </ItemGroup>
