@@ -1,24 +1,29 @@
 {
   "$schema": "http://json.schemastore.org/launchsettings.json",
   "profiles": {
-    "simulate": {
+    "game simulate": {
       "commandName": "Project",
-      "commandLineArgs": "simulate",
+      "commandLineArgs": "game simulate",
       "workingDirectory": "$(ProjectDir)"
     },
-    "import-teams": {
+    "team import": {
       "commandName": "Project",
-      "commandLineArgs": "import-teams",
+      "commandLineArgs": "team import",
       "workingDirectory": "$(ProjectDir)"
     },
-    "new-game": {
+    "game new": {
       "commandName": "Project",
-      "commandLineArgs": "new-game",
+      "commandLineArgs": "game new",
       "workingDirectory": "$(ProjectDir)"
     },
     "create-player-tyridan": {
       "commandName": "Project",
       "commandLineArgs": "player create Tyridan",
+      "workingDirectory": "$(ProjectDir)"
+    },
+    "create-player-solwolfman": {
+      "commandName": "Project",
+      "commandLineArgs": "player create SolWolfMan",
       "workingDirectory": "$(ProjectDir)"
     }
   }

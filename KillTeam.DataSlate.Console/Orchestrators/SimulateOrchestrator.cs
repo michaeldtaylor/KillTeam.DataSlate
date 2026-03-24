@@ -68,7 +68,7 @@ public class SimulateOrchestrator(
 
         if (allTeams.Count == 0)
         {
-            console.MarkupLine("[red]No teams imported. Run [bold]import-teams[/] first.[/]");
+            console.MarkupLine("[red]No teams imported. Run [bold]team import[/] first.[/]");
 
             return (null, null, null, null);
         }

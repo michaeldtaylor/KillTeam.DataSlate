@@ -29,7 +29,7 @@ public class ImportTeamsCommand(
 
     public override async Task<int> ExecuteAsync(CommandContext context, Settings settings)
     {
-        logger.LogDebug("import-teams started. Path={Path}", settings.FilePath ?? "(folder scan)");
+        logger.LogDebug("team import started. Path={Path}", settings.FilePath ?? "(folder scan)");
         if (!string.IsNullOrWhiteSpace(settings.FilePath))
         {
             return await ImportSingleFile(settings.FilePath);

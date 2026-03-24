@@ -101,21 +101,28 @@ public static class Program
                 player.AddCommand<PlayerDeleteCommand>("delete")
                       .WithDescription("Remove a player (blocked if they have games).");
             });
-            cfg.AddCommand<ImportTeamsCommand>("import-teams")
-               .WithDescription("Import team files (YAML or JSON) from a file or folder.");
-            cfg.AddCommand<NewGameCommand>("new-game").WithDescription("Start a new team game.");
-            cfg.AddCommand<HistoryCommand>("history")
-               .WithDescription("View completed game history.");
-            cfg.AddCommand<StatsCommand>("stats")
-               .WithDescription("View player and team statistics.");
-            cfg.AddCommand<ViewGameCommand>("view-game")
-               .WithDescription("View full detail of a game.");
-            cfg.AddCommand<AnnotateCommand>("annotate")
-               .WithDescription("Add narrative notes to activations and actions.");
-            cfg.AddCommand<PlayCommand>("play")
-               .WithDescription("Play a team game (strategy + firefight phases).");
-            cfg.AddCommand<SimulateCommand>("simulate")
-               .WithDescription("Simulate fight/shoot encounters without a saved game.");
+            cfg.AddBranch("team", team =>
+            {
+                team.AddCommand<ImportTeamsCommand>("import")
+                    .WithDescription("Import team files (YAML or JSON) from a file or folder.");
+            });
+            cfg.AddBranch("game", game =>
+            {
+                game.AddCommand<NewGameCommand>("new")
+                    .WithDescription("Start a new team game.");
+                game.AddCommand<PlayCommand>("play")
+                    .WithDescription("Play a team game (strategy + firefight phases).");
+                game.AddCommand<ViewGameCommand>("view")
+                    .WithDescription("View full detail of a game.");
+                game.AddCommand<AnnotateCommand>("annotate")
+                    .WithDescription("Add narrative notes to activations and actions.");
+                game.AddCommand<HistoryCommand>("history")
+                    .WithDescription("View completed game history.");
+                game.AddCommand<StatsCommand>("stats")
+                    .WithDescription("View player and team statistics.");
+                game.AddCommand<SimulateCommand>("simulate")
+                    .WithDescription("Simulate fight/shoot encounters without a saved game.");
+            });
         });
 
         return await app.RunAsync(args);

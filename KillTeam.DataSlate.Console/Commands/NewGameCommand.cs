@@ -31,7 +31,7 @@ public class NewGameCommand(
 
         if (allTeams.Count < 2)
         {
-            console.MarkupLine("[red]Not enough teams imported — run `import-teams` first.[/]");
+            console.MarkupLine("[red]Not enough teams imported — run `team import` first.[/]");
             return 1;
         }
 
