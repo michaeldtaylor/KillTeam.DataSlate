@@ -101,11 +101,13 @@ public static class Program
                 player.AddCommand<PlayerDeleteCommand>("delete")
                       .WithDescription("Remove a player (blocked if they have games).");
             });
+
             cfg.AddBranch("team", team =>
             {
                 team.AddCommand<ImportTeamsCommand>("import")
                     .WithDescription("Import team files (YAML or JSON) from a file or folder.");
             });
+
             cfg.AddBranch("game", game =>
             {
                 game.AddCommand<NewGameCommand>("new")
@@ -125,7 +127,97 @@ public static class Program
             });
         });
 
+        if (args.Length == 0)
+        {
+            return await RunReplAsync(app);
+        }
+
         return await app.RunAsync(args);
+    }
+
+    private static async Task<int> RunReplAsync(CommandApp app)
+    {
+        AnsiConsole.Write(new FigletText("Kill Team").Color(Color.Cyan1));
+        AnsiConsole.MarkupLine("[dim]Type a command (e.g. [bold]game new[/], [bold]player create <username>[/]) or [bold]exit[/] to quit.[/]");
+        AnsiConsole.WriteLine();
+
+        // Prevent Ctrl-C from terminating the process; commands handle it as OperationCanceledException.
+        System.Console.CancelKeyPress += (_, e) => e.Cancel = true;
+
+        while (true)
+        {
+            string line;
+
+            try
+            {
+                line = AnsiConsole.Prompt(
+                    new TextPrompt<string>("[bold cyan]ktds[/][grey]>[/]")
+                        .AllowEmpty());
+            }
+            catch (OperationCanceledException)
+            {
+                AnsiConsole.MarkupLine("[dim]Goodbye.[/]");
+                return 0;
+            }
+
+            line = line.Trim();
+
+            if (line.Length == 0)
+            {
+                continue;
+            }
+
+            if (line is "exit" or "quit")
+            {
+                AnsiConsole.MarkupLine("[dim]Goodbye.[/]");
+                return 0;
+            }
+
+            try
+            {
+                await app.RunAsync(ParseReplArgs(line));
+            }
+            catch (OperationCanceledException)
+            {
+                AnsiConsole.MarkupLine("[dim](cancelled)[/]");
+            }
+
+            AnsiConsole.WriteLine();
+        }
+    }
+
+    private static IEnumerable<string> ParseReplArgs(string line)
+    {
+        var args = new List<string>();
+        var current = new System.Text.StringBuilder();
+        var inQuotes = false;
+
+        foreach (var ch in line)
+        {
+            if (ch == '"')
+            {
+                inQuotes = !inQuotes;
+            }
+            else if (ch == ' ' && !inQuotes)
+            {
+                if (current.Length > 0)
+                {
+                    args.Add(current.ToString());
+                    current.Clear();
+                }
+            }
+            else
+            {
+                current.Append(ch);
+            }
+        }
+
+        if (current.Length > 0)
+        {
+            args.Add(current.ToString());
+        }
+
+        return args;
     }
 }
 
