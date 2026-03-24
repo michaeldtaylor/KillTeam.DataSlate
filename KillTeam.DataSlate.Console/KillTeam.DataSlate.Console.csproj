@@ -35,4 +35,8 @@
         <ProjectReference Include="..\KillTeam.DataSlate.Infrastructure\KillTeam.DataSlate.Infrastructure.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="data\" />
+    </ItemGroup>
+
 </Project>

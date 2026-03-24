@@ -48,7 +48,7 @@ public class PlayerCreateCommand(IAnsiConsole console, IPlayerRepository players
         var colour = console.Prompt(
             new SelectionPrompt<PlayerColour>()
                 .Title("Select your colour:")
-                .UseConverter(c => c.ToMarkupString())
+                .UseConverter(c => $"[bold {c.ToMarkupString()}]{c.ToMarkupString()}[/]")
                 .AddChoices(Enum.GetValues<PlayerColour>()));
 
         await players.CreateAsync(new Player

@@ -23,7 +23,7 @@ public class NewGameCommand(
 
         if (allPlayers.Count < 2)
         {
-            console.MarkupLine("[red]Need at least 2 registered players. Run `player add <name>` first.[/]");
+            console.MarkupLine("[red]Need at least 2 registered players. Run `player create <username>` first.[/]");
             return 1;
         }
 

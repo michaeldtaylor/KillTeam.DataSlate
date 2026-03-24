@@ -16,9 +16,9 @@
       "commandLineArgs": "new-game",
       "workingDirectory": "$(ProjectDir)"
     },
-    "create-player": {
+    "create-player-tyridan": {
       "commandName": "Project",
-      "commandLineArgs": "player create",
+      "commandLineArgs": "player create Tyridan",
       "workingDirectory": "$(ProjectDir)"
     }
   }
