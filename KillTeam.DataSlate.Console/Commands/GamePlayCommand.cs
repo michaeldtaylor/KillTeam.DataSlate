@@ -10,13 +10,13 @@ namespace KillTeam.DataSlate.Console.Commands;
 
 /// <summary>Plays (or resumes) a game session, running all four Turning Points interactively.</summary>
 [Description("Play or resume a game session by ID.")]
-public class PlayGameCommand(
+public class GamePlayCommand(
     IAnsiConsole console,
     IGameRepository gameRepository,
     ITurningPointRepository turningPointRepository,
     StrategyPhaseOrchestrator strategyPhaseOrchestrator,
     FirefightPhaseOrchestrator firefightPhaseOrchestrator,
-    ILogger<PlayGameCommand> logger) : AsyncCommand<PlayGameCommand.Settings>
+    ILogger<GamePlayCommand> logger) : AsyncCommand<GamePlayCommand.Settings>
 {
     public class Settings : CommandSettings
     {

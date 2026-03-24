@@ -12,13 +12,13 @@ namespace KillTeam.DataSlate.Console.Commands;
 
 /// <summary>Imports team data from YAML or JSON files, or scans a folder for all team files.</summary>
 [Description("Import a team from a YAML/JSON file (or scan the team folder).")]
-public class ImportTeamsCommand(
+public class TeamImportCommand(
     IAnsiConsole console,
     TeamYamlImporter yamlImporter,
     TeamJsonImporter jsonImporter,
     ITeamRepository teams,
     IOptions<DataSlateOptions> options,
-    ILogger<ImportTeamsCommand> logger) : AsyncCommand<ImportTeamsCommand.Settings>
+    ILogger<TeamImportCommand> logger) : AsyncCommand<TeamImportCommand.Settings>
 {
     public class Settings : CommandSettings
     {

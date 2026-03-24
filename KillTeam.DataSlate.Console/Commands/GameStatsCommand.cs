@@ -8,11 +8,11 @@ namespace KillTeam.DataSlate.Console.Commands;
 
 /// <summary>Displays win/loss statistics per player or per team.</summary>
 [Description("Show win/loss statistics per player or per team.")]
-public class ListStatsCommand(
+public class GameStatsCommand(
     IAnsiConsole console,
     ITeamRepository teams,
     IPlayerRepository players,
-    ILogger<ListStatsCommand> logger) : AsyncCommand<ListStatsCommand.Settings>
+    ILogger<GameStatsCommand> logger) : AsyncCommand<GameStatsCommand.Settings>
 {
     public class Settings : CommandSettings
     {

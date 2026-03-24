@@ -94,35 +94,35 @@ public static class Program
         {
             cfg.AddBranch("player", player =>
             {
-                player.AddCommand<CreatePlayerCommand>("create")
+                player.AddCommand<PlayerCreateCommand>("create")
                       .WithDescription("Register a new player.");
-                player.AddCommand<ListPlayersCommand>("list")
+                player.AddCommand<PlayerListCommand>("list")
                       .WithDescription("List all players with stats.");
-                player.AddCommand<DeletePlayerCommand>("delete")
+                player.AddCommand<PlayerDeleteCommand>("delete")
                       .WithDescription("Remove a player (blocked if they have games).");
             });
 
             cfg.AddBranch("team", team =>
             {
-                team.AddCommand<ImportTeamsCommand>("import")
+                team.AddCommand<TeamImportCommand>("import")
                     .WithDescription("Import team files (YAML or JSON) from a file or folder.");
             });
 
             cfg.AddBranch("game", game =>
             {
-                game.AddCommand<CreateGameCommand>("new")
+                game.AddCommand<GameNewCommand>("new")
                     .WithDescription("Start a new team game.");
-                game.AddCommand<PlayGameCommand>("play")
+                game.AddCommand<GamePlayCommand>("play")
                     .WithDescription("Play a team game (strategy + firefight phases).");
-                game.AddCommand<ViewGameCommand>("view")
+                game.AddCommand<GameViewCommand>("view")
                     .WithDescription("View full detail of a game.");
-                game.AddCommand<AnnotateGameCommand>("annotate")
+                game.AddCommand<GameAnnotateCommand>("annotate")
                     .WithDescription("Add narrative notes to activations and actions.");
-                game.AddCommand<ListHistoryCommand>("history")
+                game.AddCommand<GameHistoryCommand>("history")
                     .WithDescription("View completed game history.");
-                game.AddCommand<ListStatsCommand>("stats")
+                game.AddCommand<GameStatsCommand>("stats")
                     .WithDescription("View player and team statistics.");
-                game.AddCommand<SimulateGameCommand>("simulate")
+                game.AddCommand<GameSimulateCommand>("simulate")
                     .WithDescription("Simulate fight/shoot encounters without a saved game.");
             });
         });

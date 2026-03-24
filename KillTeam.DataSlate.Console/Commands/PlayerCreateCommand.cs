@@ -10,7 +10,7 @@ namespace KillTeam.DataSlate.Console.Commands;
 
 /// <summary>Registers a new player by username.</summary>
 [Description("Register a new player.")]
-public class CreatePlayerCommand(IAnsiConsole console, IPlayerRepository players, ILogger<CreatePlayerCommand> logger) : AsyncCommand<CreatePlayerCommand.Settings>
+public class PlayerCreateCommand(IAnsiConsole console, IPlayerRepository players, ILogger<PlayerCreateCommand> logger) : AsyncCommand<PlayerCreateCommand.Settings>
 {
     public class Settings : CommandSettings
     {

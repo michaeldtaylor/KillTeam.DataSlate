@@ -9,7 +9,7 @@ namespace KillTeam.DataSlate.Console.Commands;
 
 /// <summary>Displays the full detail of a game: turning points, activations, actions, dice, and narrative notes.</summary>
 [Description("View full details of a game — turning points, activations, actions, and notes.")]
-public class ViewGameCommand(
+public class GameViewCommand(
     IAnsiConsole console,
     IGameRepository games,
     IActivationRepository activations,
@@ -17,7 +17,7 @@ public class ViewGameCommand(
     IPloyRepository ploys,
     ITurningPointRepository turningPoints,
     IOperativeRepository operatives,
-    ILogger<ViewGameCommand> logger) : AsyncCommand<ViewGameCommand.Settings>
+    ILogger<GameViewCommand> logger) : AsyncCommand<GameViewCommand.Settings>
 {
     public class Settings : CommandSettings
     {

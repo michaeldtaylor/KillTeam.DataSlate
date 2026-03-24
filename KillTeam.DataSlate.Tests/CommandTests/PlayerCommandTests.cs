@@ -63,7 +63,7 @@ public class PlayerCommandTests
     [Fact]
     public void DeletePlayer_WithGameHistory_IsBlockedByQuery()
     {
-        // This test verifies the guard query used by DeletePlayerCommand returns > 0 when
+        // This test verifies the guard query used by PlayerDeleteCommand returns > 0 when
         // the player has games — the command reads this value before calling DeleteAsync.
         var playerId = Guid.NewGuid();
         var gameId = Guid.NewGuid();

@@ -6,7 +6,7 @@ namespace KillTeam.DataSlate.Console.Commands;
 
 /// <summary>Run ad-hoc fight or shoot encounters to test operatives and weapons without starting a full game.</summary>
 [Description("Simulate fight/shoot encounters without a saved game.")]
-public class SimulateGameCommand(SimulateOrchestrator orchestrator) : AsyncCommand
+public class GameSimulateCommand(SimulateOrchestrator orchestrator) : AsyncCommand
 {
     public override async Task<int> ExecuteAsync(CommandContext context)
     {

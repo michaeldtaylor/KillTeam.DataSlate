@@ -8,7 +8,7 @@ namespace KillTeam.DataSlate.Console.Commands;
 
 /// <summary>Lists all registered players with their win/loss statistics.</summary>
 [Description("List all registered players with win/loss stats.")]
-public class ListPlayersCommand(IAnsiConsole console, IPlayerRepository players, ILogger<ListPlayersCommand> logger) : AsyncCommand
+public class PlayerListCommand(IAnsiConsole console, IPlayerRepository players, ILogger<PlayerListCommand> logger) : AsyncCommand
 {
     public override async Task<int> ExecuteAsync(CommandContext context)
     {

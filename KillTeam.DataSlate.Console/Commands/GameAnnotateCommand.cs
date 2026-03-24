@@ -9,14 +9,14 @@ namespace KillTeam.DataSlate.Console.Commands;
 
 /// <summary>Adds or edits narrative notes on activations and actions within a game.</summary>
 [Description("Add or edit narrative notes on activations and actions for a game.")]
-public class AnnotateGameCommand(
+public class GameAnnotateCommand(
     IAnsiConsole console,
     IGameRepository games,
     IActivationRepository activations,
     IActionRepository actions,
     ITurningPointRepository turningPoints,
     IOperativeRepository operatives,
-    ILogger<AnnotateGameCommand> logger) : AsyncCommand<AnnotateGameCommand.Settings>
+    ILogger<GameAnnotateCommand> logger) : AsyncCommand<GameAnnotateCommand.Settings>
 {
     public class Settings : CommandSettings
     {
